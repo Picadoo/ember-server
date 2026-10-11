@@ -611,3 +611,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D10657–D10720: GemCraftCostSoft + GemPityNudge + VaultDepositBonus. STOP densify those + rush-reward + priors. Talent HOLD. Six-slot HOLD.
 - D10721–D10784: DropQualityNudge + DropCraftNudge + FailRefundFlatBoost. STOP densify those + gem-vault + priors. Talent HOLD. Six-slot HOLD.
 - D10785–D10848: GemHoleUnlockSoft + AbyssNewBestShard + ChallengeShardBoost. STOP densify those + drop-fail-nudge + gem-vault + priors. Talent HOLD. Six-slot HOLD.
+- D10849–D10912: SigStampNudge + AwakenBlankGift + EnhanceWinBone. STOP densify those + hole-abyss-chal + priors. Talent HOLD. Six-slot HOLD.

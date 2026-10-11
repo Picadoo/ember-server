@@ -447,9 +447,11 @@ public final class EmberForgeService implements Listener {
             Plan plan = EmberUpgradeRules.enhance(d, ThreadLocalRandom.current().nextDouble());
             commit(p, "enhance", rr, pay, Arrays.asList(new TxnItem(d, plan.after, null)), plan.note);
             try {
+                PlayerData pdB = plugin.getDataStore().get(p.getUniqueId());
                 if (plan.after != null && plan.after.enhance == d.enhance) {
-                    PlayerData pdB = plugin.getDataStore().get(p.getUniqueId());
                     EmberEnhanceFailBone.maybeGift(p, pdB); // D8209
+                } else if (plan.after != null && plan.after.enhance > d.enhance) {
+                    EmberEnhanceWinBone.maybeGift(p, pdB); // D10881
                 }
             } catch (Throwable ignored) { }
         });

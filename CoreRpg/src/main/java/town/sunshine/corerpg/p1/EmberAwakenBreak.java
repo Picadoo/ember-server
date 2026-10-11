@@ -87,6 +87,7 @@ public final class EmberAwakenBreak {
             try {
                 p.sendActionBar("§a觉醒" + roman + " · §f" + after.setLabel());
             } catch (Throwable ignored) { }
+            try { EmberAwakenBlankGift.maybeGift(p, d); } catch (Throwable ignored) { } // D10865
         }
         EmberItemData step = findStepPiece(p, after, loadouts);
         if (step == null || runs == null) return false;

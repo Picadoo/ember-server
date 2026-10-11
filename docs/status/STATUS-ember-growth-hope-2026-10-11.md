@@ -1,3 +1,4 @@
+Live jar: **1.65.701-d10912.local** · D10849–D10912 SigStampNudge + AwakenBlankGift + EnhanceWinBone
 Live jar: **1.65.700-d10848.local** · D10785–D10848 GemHoleUnlockSoft + AbyssNewBestShard + ChallengeShardBoost
 Live jar: **1.65.699-d10784.local** · D10721–D10784 DropQualityNudge + DropCraftNudge + FailRefundFlatBoost
 Live jar: **1.65.698-d10720.local** · D10657–D10720 GemCraftCostSoft + GemPityNudge + VaultDepositBonus

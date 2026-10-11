@@ -2228,6 +2228,13 @@ public boolean pathForceOpenDoor(Player p) {
         tidyHotbar(p, hbEmpty);
         if (acqRepeatMark && !acqStamp && !quietDeliver) { // D456: miss clarity (no STAMP_RATE raise)
             EmberSigStampDry.onMiss(d); // D690 dry streak
+            try {
+                int extra = EmberSigStampNudge.maybeExtra(d); // D10849
+                if (extra > 0) {
+                    p.sendMessage(P + "§a签名连空加码 · +" + extra + "（今日一次）");
+                    try { p.sendActionBar("§a签名连空加码"); } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
             String miss = EmberSigAcq.missLine(acqMarkMap);
             miss += EmberSigChase.missAppend(d, acqMarkMap); // D464
             miss += EmberSigStampDry.missAppend(d); // D690
