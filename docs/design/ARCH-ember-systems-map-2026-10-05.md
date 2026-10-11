@@ -537,3 +537,6 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - BagSeat D5665–D5728: 空刃/护符槽背包自动入座
 - EnhancePityChase D5793–D5856: 强化失败后保底追击直办（可先撤销）
 - ConvertSure D5857–D5920: 每周转化 enhance=0 料齐直办
+- RerollKeepSure D5985–D6048: 更优档自动保留新
+- DropQPity short D6049–D6112: 短征共用成色软保底
+- UpgradeSure D6113–D6176: 工坊目标=升阶且料齐直办

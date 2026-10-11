@@ -2251,9 +2251,15 @@ public final class EmberGrowthService implements Listener {
         } else {
             pendingRoll.put(id, new Object[]{t.uid, t.slot, pl.enc, pl.old, quality, pl.lock});
             p.sendMessage(P + "原来：" + affixText(pl.old, quality));
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
-                    new String[]{"[保留新]", "/corerpg p1 reroll keep new", "换成：" + affixText(pl.enc, quality).replaceAll("§.", ""), "GREEN"},
-                    new String[]{"[保留旧]", "/corerpg p1 reroll keep old", "不换（不选也等于保留旧，花费不退）", "GRAY"});
+            if (EmberRerollKeepSure.autoKeepNew(pl.old, pl.enc, quality, r.forced, reroll)) { // D5985
+                p.sendMessage(P + "§a更优档直留 · 自动保留新（零改 pity）");
+                try { p.sendActionBar("§a洗练 · 直留新档"); } catch (Throwable ignored) { }
+                keep(p, data(id), true);
+            } else {
+                town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
+                        new String[]{"[保留新]", "/corerpg p1 reroll keep new", "换成：" + affixText(pl.enc, quality).replaceAll("§.", ""), "GREEN"},
+                        new String[]{"[保留旧]", "/corerpg p1 reroll keep old", "不换（不选也等于保留旧，花费不退）", "GRAY"});
+            }
         }
         if (!recovered) openMenu(p, REROLL_MENU);
     }

@@ -488,10 +488,19 @@ public final class EmberForgeService implements Listener {
                         new String[]{"[仓库]", "/corerpg p1 vault", "看仓", "AQUA"});
                 return true;
             }
-            // D4417: 成色/精工确定成功 → 预览直办（升阶仍确认，花费更大）
+            // D4417: 成色/精工确定成功 → 预览直办（升阶默认仍确认）
             if ("quality".equals(kind) || "refine".equals(kind)) {
                 p.sendMessage(P + ChatColor.GREEN + "确定成功 · 预览直办…");
                 return simple(p, it, kind, plan, true, rid);
+            }
+            // D6113: 升阶仅当本周工坊目标=升阶且料齐 → 直办
+            if ("upgrade".equals(kind)) {
+                PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
+                if (EmberUpgradeSure.goalReady(pd)) {
+                    p.sendMessage(P + ChatColor.GREEN + "本周目标·升阶 · 料齐 · 预览直办");
+                    try { p.sendActionBar("§a升阶直办 · 工坊目标"); } catch (Throwable ignored) { }
+                    return simple(p, it, kind, plan, true, rid);
+                }
             }
             ConfirmTokens.sendButtons(p, P + "手里拿着这件再点：",
                     new String[]{label, cmd, "按上面的预览执行", "GREEN"},

@@ -79,7 +79,9 @@ public final class EmberDropQualityPity {
     public static boolean applicable(EmberRunSession s, EmberRunMaps.MapDef m) {
         if (s == null || m == null) return false;
         if (s.challenge || s.abyss > 0) return false;
-        if (m.raid || m.event || m.rush || m.shortExpedition) return false;
+        if (m.raid || m.event || m.rush) return false;
+        // D6049: short expedition shares soft floor (zero NEED change)
+        if (m.shortExpedition) return true;
         String k = m.key == null ? "" : m.key.toLowerCase(Locale.ROOT);
         return k.startsWith("q0") && k.length() == 3;
     }
