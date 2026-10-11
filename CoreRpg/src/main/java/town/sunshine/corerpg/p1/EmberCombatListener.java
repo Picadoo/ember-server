@@ -363,6 +363,34 @@ public final class EmberCombatListener implements Listener {
                 } catch (Throwable ignored) { }
             }
         }
+        if (e.getCause() == DamageCause.DROWNING) {
+            try {
+                PlayerData pdW = plugin.getDataStore().get(p.getUniqueId());
+                if (EmberDrownSoft.consumeCancel(pdW)) { // D8641
+                    e.setCancelled(true);
+                    EmberDamageTrace.note(e, before, "首溺免除");
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a溺水免除（今日一次）");
+                        p.sendActionBar("§a溺水免除");
+                    } catch (Throwable ignored) { }
+                    return;
+                }
+            } catch (Throwable ignored) { }
+        }
+        if (e.getCause() == DamageCause.THORNS) {
+            try {
+                PlayerData pdT = plugin.getDataStore().get(p.getUniqueId());
+                double soft = EmberThornsSoft.consume(pdT, base); // D8657
+                if (soft < base) {
+                    base = soft;
+                    pipe += " · 荆棘软化 ×0.5";
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a荆棘软化 · ×0.5（今日一次）");
+                        p.sendActionBar("§a荆棘软化");
+                    } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
         if (e.getCause() == DamageCause.POISON || e.getCause() == DamageCause.WITHER) {
             try {
                 PlayerData pdD = plugin.getDataStore().get(p.getUniqueId());

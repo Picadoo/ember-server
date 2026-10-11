@@ -3439,6 +3439,7 @@ final class EmberRunDirector {
     void finish() {
         try { EmberKillStreakSpeed.clear(s == null ? null : s.runId); } catch (Throwable ignored) { }
         try { EmberSplitCountSoft.clear(s == null ? null : s.runId); } catch (Throwable ignored) { }
+        try { EmberPledgePotSoft.clear(s == null ? null : s.runId); } catch (Throwable ignored) { }
         doorPending = null;
         doorOpenAt = 0;
         finished = true;

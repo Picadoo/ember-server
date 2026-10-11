@@ -4172,7 +4172,18 @@ public boolean pathForceOpenDoor(Player p) {
         EmberRunMaps.Modifier mod = maps.modifier(s.modifier);
         if (mod == null || mod.potionCap <= 0) return false;
         Integer used = s.potions.get(u);
-        return used != null && used >= mod.potionCap;
+        if (used == null || used < mod.potionCap) return false;
+        try {
+            if (EmberPledgePotSoft.consumeForgive(s.runId)) { // D8609
+                Player pp = Bukkit.getPlayer(u);
+                if (pp != null && pp.isOnline()) {
+                    pp.sendMessage(P + "§a限药容错 · 额外 1 瓶（本局一次）");
+                    try { pp.sendActionBar("§a限药容错"); } catch (Throwable ignored) { }
+                }
+                return false;
+            }
+        } catch (Throwable ignored) { }
+        return true;
     }
 
     public int potionCap(UUID u) {

@@ -1,3 +1,6 @@
+Live jar: **1.65.666-d8672.local** · D8609–D8672 PledgePotSoft + DrownSoft + ThornsSoft
+Prior: Ticket/Bank/ShortSpeed
+
 Live jar: **1.65.665-d8608.local** · D8545–D8608 TicketConvertBoost + BankDrawBoost + ShortEnterSpeed
 Prior: Stamina/Poison/Fee
 
