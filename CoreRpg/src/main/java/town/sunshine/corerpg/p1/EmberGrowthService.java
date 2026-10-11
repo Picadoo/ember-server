@@ -2130,6 +2130,10 @@ public final class EmberGrowthService implements Listener {
                 p.sendMessage(P + "§a临上限锁洗 · 本次必出上限档（零改 pity 表）");
                 try { p.sendActionBar("§a锁洗 · 临上限必出"); } catch (Throwable ignored) { }
             }
+            if (lock && EmberLockTierFloor.ready(d)) {
+                p.sendMessage(P + "§a锁洗保档 · 今日首锁不降档（零改 lock_shard 表）");
+                try { p.sendActionBar("§a锁洗 · 首锁不降档"); } catch (Throwable ignored) { }
+            }
             String dupWhere = !dup ? "" : di >= 0 ? " §a（背包）" : libDup != null ? " §a（装备库）"
                     : " §c（背包或装备库里没有：要掉落来的、没强化 / 成色 / 精工 / 词条、未锁定/收藏的 T" + t.tier + name + "）§7";
             String pay = (dup ? "一件同部位同阶的重复件" + dupWhere
@@ -2207,6 +2211,7 @@ public final class EmberGrowthService implements Listener {
         EmberAffix.Roll r = EmberAffix.roll(reroll, t.slot, t.quality, pity, new java.util.Random(EmberPayRules.seed(salt(), id.toString(), rid)), lockId);
         if (r == null) return null;
         r = EmberLockNearCap.apply(r, old, t.quality, reroll, lock); // D6689
+        r = EmberLockTierFloor.apply(r, old, t.quality, reroll, lock, d); // D11809
         r = EmberFirstAffixFloor.apply(r, old, t.quality, reroll); // D6945
         int pityUse = r.pityAfter;
         try {

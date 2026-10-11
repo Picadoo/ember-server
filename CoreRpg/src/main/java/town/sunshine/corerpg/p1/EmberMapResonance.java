@@ -62,10 +62,14 @@ public final class EmberMapResonance {
         String key = C_ENTER + base;
         if (d.periodCount(key, "all") > 0) return;
         d.addPeriodCount(key, "all", 1);
+        boolean day = false;
+        try { day = EmberMapResonanceDayBoost.maybeLatch(d); } catch (Throwable ignored) { } // D11857
         p.sendMessage(EmberRunService.P + "§a图源共鸣 · §f" + base.toUpperCase(Locale.ROOT)
-                + " §7· 本图掉落件加宽烬斩（零伤乘）");
+                + " §7· 本图掉落件加宽烬斩（零伤乘）"
+                + (day ? " §a· 今日共鸣加宽已开" : ""));
         try {
-            p.sendActionBar("§a图源共鸣 · §f" + base.toUpperCase(Locale.ROOT));
+            p.sendActionBar(day ? ("§a图源共鸣·日加宽 · §f" + base.toUpperCase(Locale.ROOT))
+                    : ("§a图源共鸣 · §f" + base.toUpperCase(Locale.ROOT)));
         } catch (Throwable ignored) { }
     }
 }

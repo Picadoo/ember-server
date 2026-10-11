@@ -1047,7 +1047,9 @@ public final class EmberSkillKit {
         int id = shapeId(d, runs);
         boolean posture = EmberPosturePath.aligned(d, runs); // D5089
         boolean reso = EmberMapResonance.active(player, runs, mapKey); // D6305
-        return geometryFor(id, baseRange, baseArc, baseMax, setShapeSynced(activeSetFamily, id), roomShape, mapKey, posture, reso);
+        boolean dayBoost = false;
+        try { dayBoost = EmberMapResonanceDayBoost.boost(d, reso); } catch (Throwable ignored) { } // D11857
+        return geometryFor(id, baseRange, baseArc, baseMax, setShapeSynced(activeSetFamily, id), roomShape, mapKey, posture, reso, dayBoost);
     }
 
     /** Pure: 2pc family prefers this rune shape. */
@@ -1117,12 +1119,12 @@ public final class EmberSkillKit {
 
     /** D3122: Q04 kit identity — thin geometry in Q04 (not Shape-native land / Shape×Room). */
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync, boolean roomShape, String mapKey) {
-        return geometryFor(id, baseRange, baseArc, baseMax, setSync, roomShape, mapKey, false, false);
+        return geometryFor(id, baseRange, baseArc, baseMax, setSync, roomShape, mapKey, false, false, false);
     }
 
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync,
                                     boolean roomShape, String mapKey, boolean postureAligned) {
-        return geometryFor(id, baseRange, baseArc, baseMax, setSync, roomShape, mapKey, postureAligned, false);
+        return geometryFor(id, baseRange, baseArc, baseMax, setSync, roomShape, mapKey, postureAligned, false, false);
     }
 
     /**
@@ -1130,15 +1132,24 @@ public final class EmberSkillKit {
      */
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync,
                                     boolean roomShape, String mapKey, boolean postureAligned, boolean mapResonance) {
+        return geometryFor(id, baseRange, baseArc, baseMax, setSync, roomShape, mapKey, postureAligned, mapResonance, false);
+    }
+
+    /** D11857: mapResonance day boost — thin extra widen (zero skill_mult). */
+    public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync,
+                                    boolean roomShape, String mapKey, boolean postureAligned, boolean mapResonance,
+                                    boolean dayBoost) {
         boolean bonus = setSync && roomShape;
         boolean q04 = mapKey != null && "q04".equalsIgnoreCase(mapKey);
         boolean q01 = mapKey != null && "q01".equalsIgnoreCase(mapKey);
+        boolean day = mapResonance && dayBoost;
         if (id == SHAPE_LINE) {
             double lw = setSync ? 0.95 : 0.7;
             int max = setSync ? 4 : 3;
             double range = Math.max(baseRange, 6.0) + (bonus ? 0.35 : 0) + (q04 ? 0.2 : 0) + (q01 ? 0.15 : 0);
             if (postureAligned) { range += 0.25; lw = Math.min(lw + 0.08, 1.15); }
             if (mapResonance) { range += 0.2; lw = Math.min(lw + 0.05, 1.2); }
+            if (day) { range += EmberMapResonanceDayBoost.EXTRA_LINE; lw = Math.min(lw + EmberMapResonanceDayBoost.EXTRA_LINE_W, 1.25); }
             return new Shape(id, range, baseArc, 6.0, lw, max, false, shapeName(id));
         }
         if (id == SHAPE_RING) {
@@ -1146,6 +1157,7 @@ public final class EmberSkillKit {
             int max = setSync ? 5 : 4;
             if (postureAligned) range = Math.min(range + 0.2, 4.4);
             if (mapResonance) range = Math.min(range + 0.15, 4.5);
+            if (day) range = Math.min(range + EmberMapResonanceDayBoost.EXTRA_RANGE, 4.6);
             return new Shape(id, range, 360.0, 0, 0.0, max, false, shapeName(id));
         }
         double arc = Math.max(baseArc, 110.0);
@@ -1154,6 +1166,7 @@ public final class EmberSkillKit {
         if (q04) arc += 4.0;
         if (postureAligned) arc += 8.0;
         if (mapResonance) arc += 6.0;
+        if (day) arc += 3.0;
         int fanMax = baseMax + (q01 ? 1 : 0); // D3153 Q01 clear trash
         return new Shape(SHAPE_FAN, baseRange, arc, 0, 0.0, fanMax, false, shapeName(SHAPE_FAN));
     }

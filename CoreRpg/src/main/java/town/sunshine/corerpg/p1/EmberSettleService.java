@@ -840,6 +840,7 @@ public final class EmberSettleService {
                     if (hit != null) {
                         p.sendMessage(EmberRunService.P + hit);
                         try { p.sendActionBar("§a图装追到 · §f" + EmberItemData.familyName(g.item.family)); } catch (Throwable ignored) { }
+                        try { EmberMapFarmHitBone.maybeGift(p, pd); } catch (Throwable ignored) { } // D11841
                         // D789: farm hit → equip chase if focus/loadout gap
                         if (runs.loadouts() != null) {
                             EmberLoadout hitLo = runs.loadouts().get(p);
