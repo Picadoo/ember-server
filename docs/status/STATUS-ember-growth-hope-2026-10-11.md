@@ -1,4 +1,5 @@
 # STATUS · growth · 2026-10-11
-- Live: `1.65.616-d5344.local`
-- D5281–D5344 gem path + directed forge T2/T3 enter unlocks
-- Talent HOLD · no Path assist densify
+- Live: `1.65.617-d5408.local`
+- D5345–D5408 Season/Abyss enter via endgameUnlocked (attune)
+- Featured late mark bonus KEEP clear · no economy raise
+- Talent HOLD

@@ -441,7 +441,7 @@ public final class EmberSeason {
     /** settlement hook: n more toward goal g this week; pays when it completes */
     void addGoal(UUID u, PlayerData d, String g, int n) {
         int t = target(d, g);
-        if (d == null || t <= 0 || n <= 0 || !runs.progressFlag(d, "q07")) return;
+        if (d == null || t <= 0 || n <= 0 || !EmberSkillKit.endgameUnlocked(d, runs)) return;
         String wk = weekKey(today());
         int before = d.periodCount(C_GOAL + g, wk);
         if (before >= t) return;
@@ -509,8 +509,8 @@ public final class EmberSeason {
                     ? ("§6周目标 · §f" + gd + "/" + gc + " §8· 还差" + gLeft)
                     : ("§a周目标 · 全清 · 徽 §f" + badges(d)));
         } catch (Throwable ignored) { }
-        if (!runs.progressFlag(d, "q07")) { p.sendMessage(P + "§8首通 Q07 后才计数（挑战版、深渊、团本都在 Q07 之后）。"); return true; }
-        p.sendMessage(P + "§8首通 Q07 后才计数；首通 Q07 当天已做满的每日委托也算；毕业那周的委托目标按剩下的天数算（周六毕业要 2 天，周日 1 天）");
+        if (!EmberSkillKit.endgameUnlocked(d, runs)) { p.sendMessage(P + "§8首进或首通 Q07 后才计数（挑战版、深渊、团本都在 Q07 之后）。"); return true; }
+        p.sendMessage(P + "§8首进或首通 Q07 后才计数；首通 Q07 当天已做满的每日委托也算；毕业那周的委托目标按剩下的天数算（周六毕业要 2 天，周日 1 天）");
         List<String> shown = new ArrayList<String>(GOALS);
         shown.addAll(OPTIONAL);
         // D521: pin sticky weekly-goal focus to the top
@@ -591,10 +591,10 @@ public final class EmberSeason {
         LocalDate t = today();
         if ("season".equals(key)) return seasonLabel();
         if ("badges".equals(key)) return String.valueOf(badges(d));
-        if ("goals".equals(key)) return runs.progressFlag(d, "q07") ? goalsDone(d) + "/" + goalCount() : "首通 Q07 后开放";
+        if ("goals".equals(key)) return EmberSkillKit.endgameUnlocked(d, runs) ? goalsDone(d) + "/" + goalCount() : "首进或首通 Q07 后开放";
         if (key.startsWith("goal_")) {
             String g = key.substring(5);
-            if (!runs.progressFlag(d, "q07")) return "§8首通 Q07 后开放";
+            if (!EmberSkillKit.endgameUnlocked(d, runs)) return "§8首进或首通 Q07 后开放";
             String l = goalLine(d, g);
             return l.isEmpty() ? "—" : l;
         }

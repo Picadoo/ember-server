@@ -4018,7 +4018,7 @@ public boolean pathForceOpenDoor(Player p) {
 
     /** F-review #3: extra join buttons after graduation (null = the default three) */
     public String[][] joinButtons(PlayerData d) {
-        if (d == null || !progressFlag(d, "q07")) return null;
+        if (d == null || !EmberSkillKit.endgameUnlocked(d, this)) return null; // D5345
         return new String[][]{{"[主菜单]", "/ember", "冒险 · 装备 · 工坊 · 帮助都在这里", "GOLD"},
                 {"[冒险页]", "/ember_p1_adventure", "挑战版 / 深渊 / 团本", "GREEN"},
                 {"[赛季 · 周目标]", "/ember_p1_season", "本周目标、排行榜、赛季奖励", "LIGHT_PURPLE"},
@@ -4026,9 +4026,9 @@ public boolean pathForceOpenDoor(Player p) {
     }
 
     public List<String> joinLines(PlayerData d) {
-        if (d == null || (!progressFlag(d, "q01") && !progressFlag(d, "q07"))) return null;
+        if (d == null || (!EmberSkillKit.gemPathUnlocked(d, this) && !EmberSkillKit.endgameUnlocked(d, this))) return null; // D5345
         List<String> out = new ArrayList<String>();
-        if (progressFlag(d, "q07")) {
+        if (EmberSkillKit.endgameUnlocked(d, this)) {
             out.add("§6§l[余烬服] §e欢迎回来 · 本周精选 §f" + featuredLabel(d));
             out.add("§7" + EmberSeason.abyssMine(abyssBest(d)) + "（可开第 1～" + abyssMaxStart(d) + " 层）"
                     + (season != null && season.goalsOn() ? "§7 · " + goalsShort(d) : ""));

@@ -300,7 +300,7 @@ public final class EmberRunPapi {
 
     static String abyssStateLine(boolean configured, boolean open, String requires, int best, int maxStart) {
         if (!configured) return "未配置";
-        if (!open) return "需本人首通 " + requires.toUpperCase(Locale.ROOT);
+        if (!open) return "需本人首进或首通 " + requires.toUpperCase(Locale.ROOT);
         return "最高第 " + best + " 层 · 可开 1～" + maxStart + " 层";
     }
 
@@ -546,7 +546,7 @@ public final class EmberRunPapi {
         if ("vbounty".equals(key)) { String l = runs.varietyBountyLine(d); return l.isEmpty() ? "—" : l; } // D144 花样委托
         if ("rush".equals(key)) { // D144 余烬连战 menu line
             if (maps.rush.isEmpty()) return "未配置";
-            if (!runs.progressFlag(d, "q07")) return "§8需本人首进/首通 Q07";
+            if (!EmberSkillKit.endgameUnlocked(d, runs)) return "§8需本人首进或首通 Q07";
             int used = runs.rushWeek(d, p.getUniqueId()); // D160
             return rushLine(EmberRunRules.rushPaysReward(used, EmberRunService.RUSH_WEEKLY));
         }

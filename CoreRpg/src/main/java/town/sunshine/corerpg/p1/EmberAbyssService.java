@@ -34,7 +34,11 @@ public final class EmberAbyssService {
 
     public boolean open(PlayerData d) {
         EmberRunMaps maps = runs.maps();
-        return maps.challenge != null && !maps.abyss.isEmpty() && runs.progressFlag(d, maps.abyssRequires);
+        if (maps.challenge == null || maps.abyss.isEmpty()) return false;
+        // D5345: q07 → enter OR clear (same as attune/challenge); other requires stay clear-only
+        if ("q07".equalsIgnoreCase(maps.abyssRequires))
+            return EmberSkillKit.endgameUnlocked(d, runs);
+        return runs.progressFlag(d, maps.abyssRequires);
     }
 
     /** highest fully cleared abyss tier of this character (0 = none) */
@@ -200,7 +204,7 @@ public final class EmberAbyssService {
 
     /** D235: abyss gate wording (Bukkit-free) — same text as the pre-extract {@code enter}. */
     static String lockedText(String name, String requires) {
-        return name + " 未开放深渊（需本人首通 " + requires.toUpperCase(Locale.ROOT) + "）";
+        return name + " 未开放深渊（需本人首进或首通 " + requires.toUpperCase(Locale.ROOT) + "）";
     }
 
     static String tierTooHighText(String name, int maxStart, int best) {
@@ -248,7 +252,7 @@ public final class EmberAbyssService {
         p.sendMessage(P() + "§5深渊 · 余烬层 §7— 每层 = 随机一张主线图打一局（3 房 + 首领），打赢第 N 层开放第 N+1 层；共 "
                 + maps.abyss.size() + " 层封顶");
         p.sendMessage(P() + "§7每层单独确认：" + maps.cost + " 体力 + 层费（余烬币）；没开打就退出（含服务器重启）全额退还；打完首领才结算，失败只丢这一层的花费（每天第一次失败退一半体力，层费不退），不掉装备不降强化");
-        if (!open(d)) { p.sendMessage(P() + "§c需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT)); return true; }
+        if (!open(d)) { p.sendMessage(P() + "§c需本人首进或首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT)); return true; }
         p.sendMessage(P() + "最高通关 第 " + best(d) + " 层 · 可开 1～" + maxStart(d) + " 层 · 余烬币 " + d.getCoin());
         for (EmberRunMaps.AbyssTier t : maps.abyss) p.sendMessage(P() + line(d, t));
         p.sendMessage(P() + "§7开始：冒险页 → 深渊，点要下潜的层");

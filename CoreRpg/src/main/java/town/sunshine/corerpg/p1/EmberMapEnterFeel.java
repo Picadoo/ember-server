@@ -85,7 +85,8 @@ public final class EmberMapEnterFeel {
                 } else if ("q07".equals(k) && EmberSkillKit.markAttuneEnter(pd)) {
                     p.sendMessage(EmberRunService.P + "§a签名调律+挑战版已开放 · §f/corerpg p1 attunepath · challengepath §7（首进 Q07）");
                     p.sendMessage(EmberRunService.P + "§aT3 定向锻造已开放 · §f印记兑换 §7（首进 Q07 · 不锁通关）");
-                    p.sendActionBar("§a调律+T3定向 · §fattunepath");
+                    p.sendMessage(EmberRunService.P + "§a深渊·周目标已开放 · §f/ember_p1_abyss · /ember_p1_season §7（首进 Q07 · 不锁通关 · 不改经济表）");
+                    p.sendActionBar("§a调律+深渊+周目标 · §fQ07");
                     EmberChallengePath.scheduleOfferAfterEnter(p); // D2420
                 }
             } catch (Throwable ignored) { }

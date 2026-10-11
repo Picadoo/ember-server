@@ -545,6 +545,11 @@ public final class EmberSkillKit {
         return false;
     }
 
+    /** D5345: Q07 clear OR first-enter — abyss / season goals / late hub (challenge already uses attune). */
+    public static boolean endgameUnlocked(PlayerData d, EmberRunService runs) {
+        return attuneUnlocked(d, runs);
+    }
+
     /** D2292: step land slow ticks (synced with set-shape). */
     public static int stepLandSlowTicks(boolean setShapeSync) {
         return stepLandSlowTicks(setShapeSync, false);
