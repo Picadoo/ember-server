@@ -296,7 +296,17 @@ public final class EmberSessionService {
         // reserve
         List<Player> reserved = new ArrayList<Player>();
         for (Player p : party) {
-            StaminaService.ConsumeResult r = st.reserveFlat(p, cost);
+            int payCost = cost;
+            try {
+                PlayerData pdS = runs.dataOf(p.getUniqueId());
+                int soft = EmberStaminaFirstSoft.consumeCost(pdS, cost); // D8481
+                if (soft < cost) {
+                    payCost = soft;
+                    p.sendMessage(P() + ChatColor.GREEN + "首发减负 · 体力 −" + (cost - soft) + "（今日一次 · 现 " + soft + "）");
+                    try { p.sendActionBar("§a首发减负 · 体力−" + (cost - soft)); } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+            StaminaService.ConsumeResult r = st.reserveFlat(p, payCost);
             if (!r.ok) {
                 for (Player q : reserved) release(s, q.getUniqueId(), "预留失败回滚");
                 for (Player q : party) q.sendMessage(P() + ChatColor.RED + (r.failMessage == null ? "体力不足" : r.failMessage));
@@ -305,9 +315,17 @@ public final class EmberSessionService {
             s.cost.put(p.getUniqueId(), r.cost);
             runs.ledgerRow(p.getUniqueId(), s.runId, "cost", "stamina:" + r.cost, EmberRunRules.ST_RESERVED);
             reserved.add(p);
-            final int pfee = at == null ? 0 : runs.feeFor(p, at.fee); // D142 深渊行者: own fee per player
+            int pfee = at == null ? 0 : runs.feeFor(p, at.fee); // D142 深渊行者: own fee per player
             if (at != null && pfee > 0) { // P2-2: the segment fee rides with the stamina reservation (D231 → EmberAbyssService)
                 PlayerData pd = runs.dataOf(p.getUniqueId());
+                try {
+                    int feeSoft = EmberAbyssFeeSoft.consumeFee(pd, pfee); // D8529
+                    if (feeSoft < pfee) {
+                        p.sendMessage(P() + ChatColor.GREEN + "层费减负 · ×0.8（今日一次 · " + pfee + "→" + feeSoft + "）");
+                        try { p.sendActionBar("§a层费减负"); } catch (Throwable ignored) { }
+                        pfee = feeSoft;
+                    }
+                } catch (Throwable ignored) { }
                 int feePath = EmberFeePath.get(pd);
                 EmberAbyssService.FeeSpendResult spent = EmberAbyssService.applyFeeSpend(pd, pfee, maps.abyssFeeMarkCoin, feePath);
                 if (spent.ok && EmberFeePath.valid(feePath) && EmberFeePath.preferMark(feePath) && spent.marksSpent > 0) {

@@ -1,3 +1,6 @@
+Live jar: **1.65.664-d8544.local** · D8481–D8544 StaminaFirstSoft + PoisonDotSoft + AbyssFeeSoft
+Prior: MainCoin/Explosion/RaidCoin
+
 Live jar: **1.65.663-d8480.local** · D8417–D8480 MainlineCoinBoost + ExplosionSoft + RaidCoinBoost
 Prior: PotSip/GemShard/Iframe
 
