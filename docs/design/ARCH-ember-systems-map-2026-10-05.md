@@ -584,3 +584,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D8929–D8992: StarvationSoft + CookXpBoost + BreadBuySoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D8993–D9056: AnvilRepairSoft + LightningSoft + HotFloorSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D9057–D9120: LifeDailyCapSoft + SoulDustCoinSoft + FlyIntoWallSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D9121–D9184: LifeWeeklyCapSoft + DragonBreathSoft + MeltingSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.

@@ -426,9 +426,19 @@ public final class LifeService implements Listener {
         }
         String wk = DailyService.weekId(), td = DailyService.today();
         if (o.weekly > 0 && d.periodCount("life_" + o.id, wk) >= o.weekly) {
-            p.sendMessage(ChatColor.RED + "[生活] 本周次数已用完（" + o.weekly + "）。");
-            try { p.sendActionBar("§e生活 · 本周帽满 · " + o.id); } catch (Throwable ignored) { }
-            return false;
+            try {
+                if (town.sunshine.corerpg.p1.EmberLifeWeeklyCapSoft.consume(d)) { // D9121
+                    p.sendMessage(ChatColor.GREEN + "[生活] 周次容错 · 额外 1 次（本周一次 · " + o.id + "）");
+                    try { p.sendActionBar("§a生活 · 周次容错"); } catch (Throwable ignored) { }
+                } else {
+                    p.sendMessage(ChatColor.RED + "[生活] 本周次数已用完（" + o.weekly + "）。");
+                    try { p.sendActionBar("§e生活 · 本周帽满 · " + o.id); } catch (Throwable ignored) { }
+                    return false;
+                }
+            } catch (Throwable ignored) {
+                p.sendMessage(ChatColor.RED + "[生活] 本周次数已用完（" + o.weekly + "）。");
+                return false;
+            }
         }
         if (o.daily > 0 && d.periodCount("life_" + o.id, td) >= o.daily) {
             try {

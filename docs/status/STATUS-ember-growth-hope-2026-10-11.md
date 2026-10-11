@@ -1,3 +1,6 @@
+Live jar: **1.65.674-d9184.local** · D9121–D9184 LifeWeeklyCapSoft + DragonBreathSoft + MeltingSoft
+Prior: LifeDaily/SoulDust/FlyWall
+
 Live jar: **1.65.673-d9120.local** · D9057–D9120 LifeDailyCapSoft + SoulDustCoinSoft + FlyIntoWallSoft
 Prior: Anvil/Lightning/HotFloor
 

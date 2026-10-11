@@ -377,6 +377,34 @@ public final class EmberCombatListener implements Listener {
                 }
             } catch (Throwable ignored) { }
         }
+        if (e.getCause() == DamageCause.DRAGON_BREATH) {
+            try {
+                PlayerData pdDb = plugin.getDataStore().get(p.getUniqueId());
+                double soft = EmberDragonBreathSoft.consume(pdDb, base); // D9153
+                if (soft < base) {
+                    base = soft;
+                    pipe += " · 龙息软化 ×0.5";
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a龙息软化 · ×0.5（今日一次）");
+                        p.sendActionBar("§a龙息软化");
+                    } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
+        if (e.getCause() == DamageCause.MELTING) {
+            try {
+                PlayerData pdM = plugin.getDataStore().get(p.getUniqueId());
+                double soft = EmberMeltingSoft.consume(pdM, base); // D9169
+                if (soft < base) {
+                    base = soft;
+                    pipe += " · 熔化软化 ×0.5";
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a熔化软化 · ×0.5（今日一次）");
+                        p.sendActionBar("§a熔化软化");
+                    } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
         if (e.getCause() == DamageCause.STARVATION) {
             try {
                 PlayerData pdSt = plugin.getDataStore().get(p.getUniqueId());
