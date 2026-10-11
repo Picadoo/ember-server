@@ -1,0 +1,3 @@
+# RESEARCH · ParrySlashArm + HuohenRadiusBoost · 2026-10-11
+Outside StepBlock/ArmorTenths/SetLand/StepSlash/ParryMiss…
+Continuous: 招架成功 → 下次烬斩 +0.30 射程；本日首次火痕点燃半径 +0.35。

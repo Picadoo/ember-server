@@ -1,3 +1,6 @@
+Live jar: **1.65.644-d7264.local** · D7201–D7264 ParrySlashArm + HuohenRadiusBoost
+Prior: StepBlock+ArmorTenths
+
 Live jar: **1.65.643-d7200.local** · D7137–D7200 StepBlockRetry + ArmorTenthsBoost
 Prior: SetLand/Bulk/Ignite/FirstAffix/StepSlash
 

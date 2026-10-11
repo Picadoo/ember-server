@@ -459,9 +459,21 @@ public final class FlexSkillService implements Listener {
         town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
         if (sets == null) return true;
         boolean postureH = stepPostureAligned(player); // D5153
-        LivingEntity target = nearestEnemy(player, at,
-                town.sunshine.corerpg.p1.EmberSkillKit.stepIgniteRadius(postureH));
+        double huoR = town.sunshine.corerpg.p1.EmberSkillKit.stepIgniteRadius(postureH);
+        boolean huoBoostReady = false;
+        try { huoBoostReady = town.sunshine.corerpg.p1.EmberHuohenRadiusBoost.ready(data); } catch (Throwable ignored) { }
+        if (huoBoostReady) huoR += town.sunshine.corerpg.p1.EmberHuohenRadiusBoost.EXTRA;
+        LivingEntity target = nearestEnemy(player, at, huoR);
         if (target == null) return true;
+        if (huoBoostReady) {
+            try {
+                double extra = town.sunshine.corerpg.p1.EmberHuohenRadiusBoost.consume(data); // D7233 on hit only
+                if (extra > 0) {
+                    player.sendMessage(PREFIX + "§6火痕加距 · 点燃半径 +" + String.format(java.util.Locale.ROOT, "%.2f", extra) + "（本日一次）");
+                    try { player.sendActionBar("§6火痕加距 · +" + String.format(java.util.Locale.ROOT, "%.2f", extra)); } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
         sets.skillIgnite(player, target, town.sunshine.corerpg.p1.EmberSkillKit.STEP_BURN_MULT);
         at.getWorld().spawnParticle(Particle.FLAME, at.clone().add(0, 0.3, 0), 18, 0.4, 0.2, 0.4, 0.02);
         return true;

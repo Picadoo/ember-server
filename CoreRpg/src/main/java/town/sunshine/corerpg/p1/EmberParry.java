@@ -178,6 +178,7 @@ public final class EmberParry implements Listener {
         try {
             PlayerData pdHit = plugin.getDataStore().get(id);
             EmberParryMissBreak.onHit(pdHit); // D6721
+            EmberParrySlashArm.arm(id); // D7201
         } catch (Throwable ignored) { }
         player.sendMessage(P + ChatColor.GREEN + EmberSkillKit.DISPLAY_PARRY + "成功 · 反打 "
                 + ChatColor.WHITE + String.format(java.util.Locale.ROOT, "%.0f", flat)
