@@ -610,6 +610,15 @@ public final class LifeService implements Listener {
         if (town.sunshine.corerpg.p1.EmberOffhandBuySoft.isOffhandOffer(o.id)) {
             try { town.sunshine.corerpg.p1.EmberOffhandWinBone.maybeGift(p, d); } catch (Throwable ignored) { } // D11345
         }
+        if (town.sunshine.corerpg.p1.EmberStableCharmSoft.OFFER_ID.equals(o.id)) {
+            try { town.sunshine.corerpg.p1.EmberStableCharmWinShard.maybeGift(p, d); } catch (Throwable ignored) { } // D11361
+        }
+        if (BREAD_OFFER_ID.equals(o.id)) {
+            try { town.sunshine.corerpg.p1.EmberBreadWinBone.maybeGift(p, d); } catch (Throwable ignored) { } // D11393
+        }
+        if (ROD_OFFER_ID.equals(o.id)) {
+            try { town.sunshine.corerpg.p1.EmberRodWinBlank.maybeGift(p, d); } catch (Throwable ignored) { } // D11409
+        }
         return true;
     }
 

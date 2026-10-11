@@ -619,3 +619,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D11169–D11232: AnvilRepairWinShard + ReforgeStoneWinBone + PetHatchWinBlank. STOP densify those + swap-petfeed-souldust-win + priors. Talent HOLD. Six-slot HOLD.
 - D11233–D11296: CookWinBone + BrewWinShard + FishWinBlank. STOP densify those + anvil-reforge-hatch-win + priors. Talent HOLD. Six-slot HOLD.
 - D11297–D11360: PartCraftWinShard + MarkExchangeWinBlank + OffhandWinBone. STOP densify those + cook-brew-fish-win + priors. Talent HOLD. Six-slot HOLD.
+- D11361–D11424: StableCharmWinShard + BreadWinBone + RodWinBlank. STOP densify those + part-mark-offhand-win + priors. Talent HOLD. Six-slot HOLD.
