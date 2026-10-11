@@ -191,6 +191,10 @@ public final class EmberSettleService {
             runs.log().info("[P1 run] fail refund " + u + " " + day + ": already used today (" + r.result + ")");
             return 0;
         }
+        try {
+            int boosted = EmberFailRefundFlatBoost.apply(pd, back); // D10753
+            if (boosted > back) back = boosted;
+        } catch (Throwable ignored) { }
         runs.store().saveLedger(u, Collections.singletonList(r));
         if (back > 0) st.releaseFlat(u, back);
         if (EmberFailPath.valid(path) && share != table) {

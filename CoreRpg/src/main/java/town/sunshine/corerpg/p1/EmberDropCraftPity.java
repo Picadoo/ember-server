@@ -43,6 +43,10 @@ public final class EmberDropCraftPity {
                 if (cur > 0) pd.addPeriodCount(C_PITY, "all", -cur);
             } else {
                 pd.addPeriodCount(C_PITY, "all", 1);
+                try {
+                    int extra = EmberDropCraftNudge.consumeExtra(pd); // D10737
+                    if (extra > 0) pd.addPeriodCount(C_PITY, "all", extra);
+                } catch (Throwable ignored) { }
             }
             break;
         }

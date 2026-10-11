@@ -69,6 +69,10 @@ public final class EmberDropQualityPity {
                 if (cur > 0) pd.addPeriodCount(C_PITY, "all", -cur);
             } else {
                 pd.addPeriodCount(C_PITY, "all", 1);
+                try {
+                    int extra = EmberDropQualityNudge.consumeExtra(pd); // D10721
+                    if (extra > 0) pd.addPeriodCount(C_PITY, "all", extra);
+                } catch (Throwable ignored) { }
             }
             break; // one base_item per clear
         }

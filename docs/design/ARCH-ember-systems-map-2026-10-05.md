@@ -609,3 +609,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D10529–D10592: ShortClearCoin/Shard/BoneBoost. STOP densify those + fc-mat-coin + priors. Talent HOLD. Six-slot HOLD.
 - D10593–D10656: RushMarkBoost + RushSigBoost + RushBadgeBoost. STOP densify those + short-clear + priors. Talent HOLD. Six-slot HOLD.
 - D10657–D10720: GemCraftCostSoft + GemPityNudge + VaultDepositBonus. STOP densify those + rush-reward + priors. Talent HOLD. Six-slot HOLD.
+- D10721–D10784: DropQualityNudge + DropCraftNudge + FailRefundFlatBoost. STOP densify those + gem-vault + priors. Talent HOLD. Six-slot HOLD.
