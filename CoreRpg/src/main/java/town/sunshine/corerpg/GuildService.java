@@ -880,6 +880,7 @@ public final class GuildService {
                     ? ("§a捐献 +" + gain + " §8· Boss还差 §f" + bossGap)
                     : ("§a捐献 +" + gain + " · Boss贡献够"));
         } catch (Throwable ignored) { }
+        try { town.sunshine.corerpg.p1.EmberGuildDonateWinShard.maybeGift(p, data); } catch (Throwable ignored) { } // D11521
     }
 
     private void cmdBoss(Player p) {

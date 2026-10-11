@@ -655,6 +655,7 @@ public final class ArenaService implements Listener {
                         + ChatColor.GRAY + "（" + reason + "）"
                         + ChatColor.YELLOW + " +" + winPoints + " 积分 · 余烬币 ×" + coin + coinNote(d, coin, winCoin)
                         + ChatColor.GRAY + "（积分 " + d.getArenaPoints() + " · " + rank.name + "）");
+                try { town.sunshine.corerpg.p1.EmberArenaWinBlank.maybeGift(pl, d); } catch (Throwable ignored) { } // D11537
             }
         }
         for (UUID id : losers) {

@@ -621,3 +621,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D11297–D11360: PartCraftWinShard + MarkExchangeWinBlank + OffhandWinBone. STOP densify those + cook-brew-fish-win + priors. Talent HOLD. Six-slot HOLD.
 - D11361–D11424: StableCharmWinShard + BreadWinBone + RodWinBlank. STOP densify those + part-mark-offhand-win + priors. Talent HOLD. Six-slot HOLD.
 - D11425–D11488: AttuneUnlockWinBone + SignWinShard + MailClaimWinBlank. STOP densify those + stable-bread-rod-win + priors. Talent HOLD. Six-slot HOLD.
+- D11489–D11552: OnlineClaimWinBone + GuildDonateWinShard + ArenaWinBlank. STOP densify those + attune-sign-mail-win + priors. Talent HOLD. Six-slot HOLD.

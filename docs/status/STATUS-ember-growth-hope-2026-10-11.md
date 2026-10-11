@@ -1,3 +1,4 @@
+Live jar: **1.65.711-d11552.local** · D11489–D11552 OnlineClaimWinBone + GuildDonateWinShard + ArenaWinBlank
 Live jar: **1.65.710-d11488.local** · D11425–D11488 AttuneUnlockWinBone + SignWinShard + MailClaimWinBlank
 Live jar: **1.65.709-d11424.local** · D11361–D11424 StableCharmWinShard + BreadWinBone + RodWinBlank
 Live jar: **1.65.708-d11360.local** · D11297–D11360 PartCraftWinShard + MarkExchangeWinBlank + OffhandWinBone

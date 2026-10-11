@@ -554,6 +554,7 @@ public final class EmberSignService implements Listener {
         plugin.getLogger().info("[P1 online] " + p.getName() + " claim " + day + " " + pay.size() + " milestone(s) at " + mins + "m");
         p.sendMessage(PO + "§a领取 · §f" + String.join("§7；§f", g));
         try { p.sendActionBar("§a在线奖励 · 已领"); } catch (Throwable ignored) { }
+        try { EmberOnlineClaimWinBone.maybeGift(p, d); } catch (Throwable ignored) { } // D11489
         // D805 next milestone + path
         Milestone next = null;
         int claimed2 = d.periodCount(C_OCLAIM, day);
