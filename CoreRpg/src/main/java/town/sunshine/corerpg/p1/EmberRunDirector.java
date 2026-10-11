@@ -62,6 +62,8 @@ import town.sunshine.corerpg.p1.encounter.AffixDraw;
 import town.sunshine.corerpg.p1.encounter.AffixTarn;
 import town.sunshine.corerpg.p1.encounter.AffixHew;
 import town.sunshine.corerpg.p1.encounter.AffixDell;
+import town.sunshine.corerpg.p1.encounter.AffixChip;
+import town.sunshine.corerpg.p1.encounter.AffixGlen;
 import town.sunshine.corerpg.p1.encounter.AffixMolten;
 import town.sunshine.corerpg.p1.encounter.AffixMortar;
 import town.sunshine.corerpg.p1.encounter.AffixRegen;
@@ -110,7 +112,7 @@ final class EmberRunDirector {
         long castAt;
         Vector castDir;
         Location castOrigin;
-        String affix;               // D138..D196/D12207/D12211–D12222: blazing..cleave/ripple/mirror/bloom/lance/nova/shear/brace/hook/skew/fan/sink/crest/pond/edge/well/seam/mire/ridge/marsh/spur/fen/gleam/bog/slash/basin/draw/tarn/hew/dell (null = plain)
+        String affix;               // D138..D196/D12207/D12211–D12222: blazing..cleave/ripple/mirror/bloom/lance/nova/shear/brace/hook/skew/fan/sink/crest/pond/edge/well/seam/mire/ridge/marsh/spur/fen/gleam/bog/slash/basin/draw/tarn/hew/dell/chip/glen (null = plain)
         boolean splitAdd;           // D141: spawned by a split elite (counts as the affixed elite for 破缀 / 守缀 / 破甲)
         boolean varietyEscort;      // D171: escort rabbit — must not pay treasure coin; excluded from room-clear count
         long affixNext, affixAt;
@@ -195,6 +197,8 @@ final class EmberRunDirector {
         java.util.Set<UUID> tarnHit = new java.util.HashSet<UUID>();
         java.util.Set<UUID> hewHit = new java.util.HashSet<UUID>();
         java.util.Set<UUID> dellHit = new java.util.HashSet<UUID>();
+        java.util.Set<UUID> chipHit = new java.util.HashSet<UUID>();
+        java.util.Set<UUID> glenHit = new java.util.HashSet<UUID>();
         EmberRunMaps.Skill twist;   // D182 Extra.ELITE light move (null = plain stump)
         EmberRunMaps.Skill twistAlt; // D185 Pack 2 second light move (null = Pack 1 only)
         boolean twistUseAlt;         // D185: true → fire twistAlt next
@@ -4303,6 +4307,80 @@ final class EmberRunDirector {
             w.playSound(t.affixOrigin, Sound.BLOCK_NOTE_PLING, 0.45f, 0.68f);
             return;
         }
+
+        if ("chip".equals(t.affix)) {
+            // D12230 削斩: thin strip through player feet, 8-dir snapped player look yaw + 90°; once per cast
+            EmberRunMaps.Skill arm = chipSkill(t, v);
+            if (AffixCycle.armed(t.affixAt)) {
+                Vector d = t.affixDir == null ? new Vector(1.0, 0, 0) : t.affixDir;
+                drawShape(arm, t.affixOrigin, d, 0.0, EmberAffixTelegraph.warnParticle(t.affix));
+                if (AffixCycle.lands(now, t.affixAt)) {
+                    int hit = 0;
+                    for (Player p : participantsHere()) {
+                        if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                        if (t.chipHit.contains(p.getUniqueId())) continue;
+                        if (!inShape(arm, t.affixOrigin, d, p.getLocation())) continue;
+                        t.chipHit.add(p.getUniqueId());
+                        if (arm.dmg > 0) svc.skillHit(s, p, t.le, arm.dmg, "mob");
+                        hit++;
+                    }
+                    w.spawnParticle(Particle.CRIT, t.affixOrigin.clone().add(0, 0.4, 0), 14, v.chipLength * 0.2, 0.2, v.chipLength * 0.2, 0.02);
+                    w.spawnParticle(Particle.SWEEP_ATTACK, t.affixOrigin.clone().add(0, 0.3, 0), 4, v.chipLength * 0.15, 0.1, v.chipLength * 0.15, 0.0);
+                    w.playSound(t.affixOrigin, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.5f, 0.95f);
+                    svc.log().info(String.format(Locale.ROOT, "[P1 run] %s chip hit=%d", s.runId, hit));
+                    t.chipHit.clear();
+                    t.affixAt = 0;
+                    t.affixNext = AffixCycle.after(now, v.chipEvery);
+                }
+                return;
+            }
+            if (!AffixCycle.ready(now, t.affixNext)) return;
+            Player tgt = nearest(t.le.getLocation(), AffixChip.ENGAGE);
+            if (tgt == null) return;
+            t.affixOrigin = AffixChip.origin(tgt.getLocation());
+            t.affixDir = AffixChip.dir(tgt.getLocation());
+            t.chipHit.clear();
+            t.affixAt = AffixCycle.after(now, v.chipWarn);
+            w.playSound(t.affixOrigin, Sound.BLOCK_NOTE_PLING, 0.45f, 1.25f);
+            return;
+        }
+        if ("glen".equals(t.affix)) {
+            // D12230 峡洼: circle at 0.875 along elite→player from elite feet; once per cast; NO root
+            if (AffixCycle.armed(t.affixAt)) {
+                Particle glenFx = EmberAffixTelegraph.warnParticle(t.affix);
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.glenRadius, glenFx);
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.glenRadius * 0.55, Particle.SMOKE_NORMAL);
+                if (AffixCycle.lands(now, t.affixAt)) {
+                    EmberRunMaps.Skill sk = glenSkill(t, v);
+                    int hit = 0;
+                    w.spawnParticle(Particle.SMOKE_NORMAL, t.affixOrigin.clone().add(0, 0.4, 0), 16, v.glenRadius * 0.3, 0.2, v.glenRadius * 0.3, 0.0);
+                    w.spawnParticle(Particle.CRIT_MAGIC, t.affixOrigin.clone().add(0, 0.3, 0), 10, v.glenRadius * 0.25, 0.1, v.glenRadius * 0.25, 0.01);
+                    for (Player p : participantsHere()) {
+                        if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                        if (t.glenHit.contains(p.getUniqueId())) continue;
+                        if (!inShape(sk, t.affixOrigin, new Vector(1, 0, 0), p.getLocation())) continue;
+                        t.glenHit.add(p.getUniqueId());
+                        if (sk.dmg > 0) svc.skillHit(s, p, t.le, sk.dmg, "mob");
+                        hit++;
+                    }
+                    w.playSound(t.affixOrigin, Sound.BLOCK_FIRE_EXTINGUISH, 0.45f, 1.05f);
+                    svc.log().info(String.format(Locale.ROOT, "[P1 run] %s glen hit=%d", s.runId, hit));
+                    t.glenHit.clear();
+                    t.affixAt = 0;
+                    t.affixNext = AffixCycle.after(now, v.glenEvery);
+                }
+                return;
+            }
+            if (!AffixCycle.ready(now, t.affixNext)) return;
+            Player tgt = nearest(t.le.getLocation(), AffixGlen.ENGAGE);
+            if (tgt == null) return;
+            Location el = t.le.getLocation().clone();
+            t.affixOrigin = AffixGlen.origin(el, tgt.getLocation());
+            t.glenHit.clear();
+            t.affixAt = AffixCycle.after(now, v.glenWarn);
+            w.playSound(t.affixOrigin, Sound.BLOCK_NOTE_PLING, 0.45f, 0.68f);
+            return;
+        }
     }
 
     /** D196 旋光: beam angle (rad) {@code elapsed} s into the spin; stops at the end of the sweep. */
@@ -4453,6 +4531,8 @@ final class EmberRunDirector {
     static EmberRunMaps.Skill tarnSkill(Tracked t, EmberRunMaps.Variety v) { return AffixTarn.skill(t.atk, v); }
     static EmberRunMaps.Skill hewSkill(Tracked t, EmberRunMaps.Variety v) { return AffixHew.skill(t.atk, v); }
     static EmberRunMaps.Skill dellSkill(Tracked t, EmberRunMaps.Variety v) { return AffixDell.skill(t.atk, v); }
+    static EmberRunMaps.Skill chipSkill(Tracked t, EmberRunMaps.Variety v) { return AffixChip.skill(t.atk, v); }
+    static EmberRunMaps.Skill glenSkill(Tracked t, EmberRunMaps.Variety v) { return AffixGlen.skill(t.atk, v); }
 
     /** D138 炽热 circle. D241: {@link AffixBlazing#skill}. */
     static EmberRunMaps.Skill blazeSkill(Tracked t, EmberRunMaps.Variety v) { return AffixBlazing.skill(t.atk, v); }

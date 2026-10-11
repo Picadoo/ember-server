@@ -2453,3 +2453,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack25-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack25.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack25-d12229-2026-10-12.md` |
+
+### 13.138 Affix Pack 26 削斩/峡洼（CoreRpg 1.65.748，D12230，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12230 |
+| jar | CoreRpg **1.65.748-d12230.local** |
+| balance_version | 112 → **113** |
+| 行为 | 词缀池 52→54：+`chip` 削斩 / `glen` 峡洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack26-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack26.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack26-d12230-2026-10-12.md` |
