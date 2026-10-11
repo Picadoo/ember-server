@@ -82,7 +82,7 @@ public final class EmberChallengePath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8硬本路径：首通 Q07 后可选";
+        if (!unlocked) return "§8硬本路径：首进/首通 Q07 后可选";
         if (!valid(id)) return "§8硬本路径：未选 · /corerpg p1 challengepath";
         return "§e硬本路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -120,6 +120,9 @@ public final class EmberChallengePath {
         return true;
     }
 
+    /** D2420: first-enter Q07 (same latch as clear offer). */
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ07(p); }
+
     public static void scheduleOfferAfterQ07(Player p) {
         if (p == null) return;
         Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
@@ -143,8 +146,8 @@ public final class EmberChallengePath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q07")) {
-            p.sendMessage(EmberRunService.P + "§c硬本路径需本人首通 Q07。");
+        if (!EmberSkillKit.attuneUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c硬本路径需本人首进或首通 Q07。");
             return;
         }
         String P = EmberRunService.P;

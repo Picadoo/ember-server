@@ -92,7 +92,7 @@ public final class EmberEntryService {
     }
 
     static String challengeLockedText(String name, String requires) {
-        return name + " 未开放挑战版（需本人首通 " + requires.toUpperCase(Locale.ROOT) + "）";
+        return name + " 未开放挑战版（需本人首进/首通 " + requires.toUpperCase(Locale.ROOT) + "）";
     }
 
     /** {@code reqKey/reqName} = the resolved required map (null = unknown key, the raw {@code requires} is shown) */

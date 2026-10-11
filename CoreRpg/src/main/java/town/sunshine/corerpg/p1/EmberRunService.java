@@ -316,7 +316,8 @@ public final class EmberRunService implements Listener {
 
     /** §18.1 challenge: open for every map once the player has their own Q07 first clear. */
     public boolean challengeOpen(PlayerData d) {
-        return maps.challenge != null && progressFlag(d, maps.challenge.requires);
+        // D2419: Q07 first-enter OR clear (same latch as attune)
+        return maps.challenge != null && EmberSkillKit.attuneUnlocked(d, this);
     }
 
     /**
@@ -3859,7 +3860,7 @@ public final class EmberRunService implements Listener {
         }
         String t = target(d);
         p.sendMessage(P + "挑战版（七图）：" + (challengeOpen(d) ? "§a已开放 §7· 冒险页「挑战版」选图 · 掉落 T3"
-                : "§7需本人首通 " + (maps.challenge == null ? "Q07" : maps.challenge.requires.toUpperCase(Locale.ROOT))));
+                : "§7需本人首进/首通 Q07"));
         raid.menuButtons(p, d); // D233 → EmberRaidService
         p.sendMessage(P + "§e每日委托 §7" + bountyLabel(d)); // P2-7
         p.sendMessage(P + "本周精选：§b" + featuredLabel(d) + " §7（前 " + maps.rotationWeeklyCap + " 次精选通关各多 1 枚印记：挑战版给 T3，Q01–Q06 首通后的普通版重打给本图阶）");

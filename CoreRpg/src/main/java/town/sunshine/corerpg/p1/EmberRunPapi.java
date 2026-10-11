@@ -546,7 +546,7 @@ public final class EmberRunPapi {
         if ("vbounty".equals(key)) { String l = runs.varietyBountyLine(d); return l.isEmpty() ? "—" : l; } // D144 花样委托
         if ("rush".equals(key)) { // D144 余烬连战 menu line
             if (maps.rush.isEmpty()) return "未配置";
-            if (!runs.progressFlag(d, "q07")) return "§8需本人首通 Q07";
+            if (!runs.progressFlag(d, "q07")) return "§8需本人首进/首通 Q07";
             int used = runs.rushWeek(d, p.getUniqueId()); // D160
             return rushLine(EmberRunRules.rushPaysReward(used, EmberRunService.RUSH_WEEKLY));
         }
@@ -572,8 +572,8 @@ public final class EmberRunPapi {
 
     private String gate(PlayerData d, String key) {
         if ("forge_t2".equals(key)) return runs.progressFlag(d, "q04") ? "已开放" : "需本人首通 Q04";
-        if ("forge_t3".equals(key)) return runs.progressFlag(d, "q07") ? "已开放" : "需本人首通 Q07";
-        if ("challenge".equals(key)) return runs.challengeOpen(d) ? "已开放" : "需本人首通 Q07";
+        if ("forge_t3".equals(key)) return runs.progressFlag(d, "q07") ? "已开放" : "需本人首进/首通 Q07";
+        if ("challenge".equals(key)) return runs.challengeOpen(d) ? "已开放" : "需本人首进/首通 Q07";
         if ("q07done".equals(key)) return runs.progressFlag(d, "q07") ? "1" : "0"; // D99 menu condition (post-Q07 icons)
         return runs.progressFlag(d, key.substring(0, 3)) ? "1" : "0"; // D174 stage 2b: q04done / q05done / q06done
     }

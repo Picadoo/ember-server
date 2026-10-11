@@ -458,3 +458,8 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - Kit enter: Q02 dash / Q03 parry / Q05 step / Q07 attune (enter OR clear)
 - set×shape land: slash+step+dash Slow/heal; sig shield secs×1.25
 - Talent HOLD · no skill_mult
+
+## PS pivot · D2417–D2432
+- Sig sync NEAR-SAT; sig override gains set×shape geometry
+- Challenge / ModePath / Posture unlock variety on Q enter (OR clear)
+- Talent HOLD · no K3/ConfirmTokens twin

@@ -70,16 +70,21 @@ public final class EmberMapEnterFeel {
                     p.sendMessage(EmberRunService.P + "§a烬斩符文已解锁 · §f扇/直/环 §7（首进 Q04 · 不锁通关 · /corerpg skill shape）");
                     p.sendActionBar("§a符文解锁 · §f/corerpg skill shape");
                     EmberSkillUnlock.scheduleShapePick(p); // D2354 enter pick · no ConfirmTokens twin
+                    EmberModePath.scheduleOffer(p, "q04"); // D2420 enter mode variety
                 } else if ("q05".equals(k) && EmberSkillKit.markStepEnter(pd)) {
                     p.sendMessage(EmberRunService.P + "§a身法变体已解锁 · §f套装踏步 §7（首进 Q05 · 不锁通关）");
                     p.sendActionBar("§a身法解锁 · §f两件套自动变");
                     EmberSkillUnlock.scheduleStepPick(p); // D2354
+                    EmberModePath.scheduleOffer(p, "q05"); // D2420
+                    EmberPosturePath.scheduleOfferAfterEnter(p); // D2420 posture variety
                 } else if ("q06".equals(k) && EmberSkillKit.markPledgeEnter(pd)) {
                     p.sendMessage(EmberRunService.P + "§a誓约/试炼路径已开放 · §f/corerpg p1 pledgepath §7（首进 Q06 · 不锁通关）");
                     p.sendActionBar("§a誓约开放 · §fpledgepath");
+                    EmberModePath.scheduleOffer(p, "q06"); // D2420
                 } else if ("q07".equals(k) && EmberSkillKit.markAttuneEnter(pd)) {
-                    p.sendMessage(EmberRunService.P + "§a签名调律已开放 · §f/corerpg p1 attunepath §7（首进 Q07 · 不锁通关）");
-                    p.sendActionBar("§a调律开放 · §fattunepath");
+                    p.sendMessage(EmberRunService.P + "§a签名调律+挑战版已开放 · §f/corerpg p1 attunepath · challengepath §7（首进 Q07）");
+                    p.sendActionBar("§a调律/挑战 · §fattunepath");
+                    EmberChallengePath.scheduleOfferAfterEnter(p); // D2420
                 }
             } catch (Throwable ignored) { }
         }

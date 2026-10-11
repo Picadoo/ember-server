@@ -86,7 +86,7 @@ public final class EmberPosturePath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8姿态路径：首通 Q05 后可选（需符文+身法）";
+        if (!unlocked) return "§8姿态路径：首进/首通 Q05 后可选（需符文+身法）";
         if (!valid(id)) return "§8姿态路径：未选 · /corerpg p1 posturepath";
         return "§e姿态路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -127,6 +127,9 @@ public final class EmberPosturePath {
     }
 
     /** After Q05 — both shape (Q04) and step (Q05) unlock. Delay past steppath. */
+    /** D2420: first-enter Q05. */
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ05(p); }
+
     public static void scheduleOfferAfterQ05(Player p) {
         if (p == null) return;
         Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
@@ -153,7 +156,7 @@ public final class EmberPosturePath {
         boolean shapeOk = EmberSkillKit.shapeUnlocked(d, runs);
         boolean stepOk = EmberSkillKit.stepVariantUnlocked(d, runs);
         if (!shapeOk || !stepOk) {
-            p.sendMessage(EmberRunService.P + "§c姿态需本人首通 Q04（符文）与 Q05（身法）。"
+            p.sendMessage(EmberRunService.P + "§c姿态需本人首进/首通 Q04（符文）与 Q05（身法）。"
                     + (!shapeOk ? " §8· 缺 Q04" : "") + (!stepOk ? " §8· 缺 Q05" : ""));
             return;
         }

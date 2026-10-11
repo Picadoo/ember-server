@@ -517,8 +517,7 @@ public final class EmberSkillKit {
     }
 
     /**
-     * D2252: when 2pc activeSet preferred shape matches rune, widen geometry (zero skill_mult).
-     * Signature override path unchanged.
+     * D2252/D2418: when 2pc preferred shape matches rune (or signature implied shape), widen geometry (zero skill_mult).
      */
     public static Shape resolve(Player player, PlayerData d, EmberRunService runs, EmberMode mode,
                                 EmberGrowth.Mods gmods, String activeSetFamily) {
@@ -534,13 +533,22 @@ public final class EmberSkillKit {
         boolean sigShape = sigLine > 0 || sigRing > 0 || sigPlus || sigCharge;
         if (sigShape) {
             double range = baseRange, arc = baseArc, line = 0;
+            double lineW = 1.0;
             int max = baseMax;
             if (sigPlus) arc = 360.0;
             if (sigRing > 0) { arc = 360.0; range = sigRing; }
             if (m.get("skill_cap") > 0) max = Math.max(1, Math.min(max, (int) Math.round(m.get("skill_cap"))));
             if (sigLine > 0) { line = sigLine; range = Math.max(range, sigLine); }
+            // D2418: leftover hole — signature override also eats set×shape geometry (zero skill_mult)
+            int implied = sigLine > 0 ? SHAPE_LINE : SHAPE_RING;
+            boolean sync = setShapeSynced(activeSetFamily, implied);
+            if (sync) {
+                if (sigLine > 0) { lineW = 1.2; line = line + 0.5; max = Math.min(max + 1, 5); }
+                else { range = Math.min(range + 0.4, 4.5); max = Math.min(max + 1, 5); }
+            }
             String label = sigLine > 0 ? "签名·直线" : (sigRing > 0 || sigPlus || sigCharge ? "签名·环斩" : "签名");
-            return new Shape(shapeId(d, runs), range, arc, line, max, true, label);
+            if (sync) label = label + "·形同";
+            return new Shape(shapeId(d, runs), range, arc, line, lineW, max, true, label);
         }
         int id = shapeId(d, runs);
         return geometryFor(id, baseRange, baseArc, baseMax, setShapeSynced(activeSetFamily, id));
