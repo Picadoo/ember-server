@@ -682,6 +682,7 @@ public final class EmberRunService implements Listener {
             tellRun(s, "§a" + r.label + " 已清空" + (r.door != null ? " · 门已打开" : "") + (last ? "" : ""));
         }
         if (!last) EmberRallyPath.maybeAfterClear(s); // D562
+        EmberRoomPath.pulsePreferredClear(s, r, this); // D2530
     }
 
     void onBossSpawned(EmberRunSession s, EmberRunMaps.Boss b) {

@@ -1,13 +1,13 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.539-d2528.local**
-- D2513–D2528 room/press real behavior
+- jar **1.65.540-d2544.local**
+- D2513–D2544 room/press real behavior
 
 ## Shipped
-- Room: applyBias harden (eventKind-only pin); preferred-room open → Speed I 3s
-- Press: Q01 enter unlock; press warp → boss Slow I 1s + self Speed I 1.5s
+- D2513–28: bias harden; preferred open Speed 3s; press enter; press land Slow/Speed
+- D2529–44: preferred clear Speed 2s; ASK path ask CD 5s vs default 8s
 
-No HeldNext/ConfirmTokens/remain/sig ICD/posture twin. Talent HOLD.
+Talent HOLD. No twin spam axes.
 
-Updated 2026-10-11 08:17 CST
+Updated 2026-10-11 08:18 CST

@@ -122,6 +122,32 @@ public final class EmberRoomPath {
      * D2515: preferred-room open → party Speed I 3s (footwork, zero skill_mult).
      * Call from run room-start when variety pinned this room.
      */
+    /** D2530: preferred variety room clear → party Speed I 2s (push to next). */
+    public static void pulsePreferredClear(EmberRunSession s, EmberRunMaps.Room r, EmberRunService runs) {
+        if (s == null || r == null || runs == null || r.id == null) return;
+        try {
+            org.bukkit.entity.Player leader = null;
+            for (java.util.UUID u : s.committed) {
+                org.bukkit.entity.Player p = org.bukkit.Bukkit.getPlayer(u);
+                if (p != null && p.isOnline()) { leader = p; break; }
+            }
+            if (leader == null) return;
+            PlayerData ld = runs.dataOf(leader.getUniqueId());
+            int path = get(ld);
+            if (!valid(path) || !isPreferredRoom(path, r.id)) return;
+            boolean varietyHere = (r.id.equals(s.affixRoom) && s.affix != null && !s.affix.isEmpty())
+                    || (r.id.equals(s.eventRoom) && s.eventRoom != null && !s.eventRoom.isEmpty());
+            if (!varietyHere) return;
+            for (java.util.UUID u : s.committed) {
+                org.bukkit.entity.Player p = org.bukkit.Bukkit.getPlayer(u);
+                if (p == null || !p.isOnline() || p.isDead()) continue;
+                p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                        org.bukkit.potion.PotionEffectType.SPEED, 40, 0, false, true), true);
+                try { p.sendActionBar("§a优房清 · §fSpeed I 2s"); } catch (Throwable ignored) { }
+            }
+        } catch (Throwable ignored) { }
+    }
+
     public static void pulsePreferredRoom(EmberRunSession s, EmberRunMaps.Room r, EmberRunService runs) {
         if (s == null || r == null || runs == null || r.id == null) return;
         try {

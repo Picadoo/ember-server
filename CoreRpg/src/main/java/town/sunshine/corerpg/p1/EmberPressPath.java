@@ -32,6 +32,13 @@ public final class EmberPressPath {
     public static final int MUTE = 3;
 
     private static final long ASK_COOLDOWN_MS = 8000L;
+    /** D2531: explicit ASK path polls faster than unset default. */
+    private static final long ASK_PATH_COOLDOWN_MS = 5000L;
+
+    static long askCooldownMs(int path) {
+        return path == ASK ? ASK_PATH_COOLDOWN_MS : ASK_COOLDOWN_MS;
+    }
+
     private static final Map<UUID, Long> lastAsk = new ConcurrentHashMap<UUID, Long>();
 
     private EmberPressPath() {}
@@ -120,7 +127,7 @@ public final class EmberPressPath {
             if (shouldMute(path)) continue;
             long now = System.currentTimeMillis();
             Long last = lastAsk.get(p.getUniqueId());
-            if (last != null && now - last < ASK_COOLDOWN_MS) continue;
+            if (last != null && now - last < askCooldownMs(path)) continue;
             lastAsk.put(p.getUniqueId(), now);
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§b破招 ",
                     new String[]{"[压伤]", "/corerpg p1 press", "传至首领猛打破招", "GREEN"},

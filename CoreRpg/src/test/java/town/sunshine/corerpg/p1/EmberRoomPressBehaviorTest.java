@@ -42,4 +42,11 @@ public class EmberRoomPressBehaviorTest {
         assertFalse(EmberSkillKit.markPressEnter(d));
         assertTrue(EmberSkillKit.pressPathUnlocked(d, null));
     }
+
+    @Test
+    public void askCooldownFasterOnAskPath() {
+        assertEquals(5000L, EmberPressPath.askCooldownMs(EmberPressPath.ASK));
+        assertEquals(8000L, EmberPressPath.askCooldownMs(EmberPressPath.NONE));
+        assertEquals(8000L, EmberPressPath.askCooldownMs(EmberPressPath.AUTO));
+    }
 }
