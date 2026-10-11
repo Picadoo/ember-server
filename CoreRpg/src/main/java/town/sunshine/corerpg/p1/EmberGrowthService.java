@@ -2762,6 +2762,17 @@ public final class EmberGrowthService implements Listener {
         String flag = EmberRunRules.directedForgeFlag(t == null ? 1 : t.tier);
         boolean gate = t == null || t.tier <= 1 || (flag == null) || runs.progressFlag(d, flag);
         String refuse = EmberConvertRules.refusal(t, toFam, used, gate);
+        if (refuse != null && used >= EmberConvertRules.WEEKLY_CAP) {
+            try {
+                if (EmberConvertCapSoft.consume(d)) { // D9249
+                    refuse = EmberConvertRules.refusal(t, toFam, used - 1, gate);
+                    if (refuse == null) {
+                        p.sendMessage(P + "§a转化周次容错 · 额外 1 次（本周一次）");
+                        try { p.sendActionBar("§a转化 · 周次容错"); } catch (Throwable ignored) { }
+                    }
+                }
+            } catch (Throwable ignored) { }
+        }
         if (refuse != null) {
             p.sendMessage(P + "§c" + refuse);
             try { // D1312

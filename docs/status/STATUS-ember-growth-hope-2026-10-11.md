@@ -1,3 +1,6 @@
+Live jar: **1.65.676-d9312.local** · D9249–D9312 ConvertCapSoft + ReforgeStoneSoft + MagicDotSoft
+Prior: Void/Cram/Falling
+
 Live jar: **1.65.675-d9248.local** · D9185–D9248 VoidSoft + CrammingSoft + FallingBlockSoft
 Prior: LifeWeekly/Dragon/Melting
 
