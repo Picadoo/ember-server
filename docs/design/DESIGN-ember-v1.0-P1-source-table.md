@@ -2441,3 +2441,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack24-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack24.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack24-d12228-2026-10-12.md` |
+
+### 13.137 Affix Pack 25 斫斩/谷洼（CoreRpg 1.65.747，D12229，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12229 |
+| jar | CoreRpg **1.65.747-d12229.local** |
+| balance_version | 111 → **112** |
+| 行为 | 词缀池 50→52：+`hew` 斫斩 / `dell` 谷洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack25-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack25.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack25-d12229-2026-10-12.md` |

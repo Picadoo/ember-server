@@ -1,0 +1,1 @@
+MAX_ABS_DPP (p2econ % columns, new 52 vs old 50 pool) = 1.0 at (('4', 'P2-1 轮换'), 5) (cap 3.0) → WITHIN RANGE
