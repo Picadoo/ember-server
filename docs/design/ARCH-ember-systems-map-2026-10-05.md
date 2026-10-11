@@ -518,3 +518,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - GemSeatLive D4289–D4352 + AFK stable death-clear（零抬 flat/日表）
 - AwakenBreak D4385–D4448 + forge sure/quality/refine 预览直办（非 K3 · 少 ConfirmTokens）
 - Awaken swap-track D4449–D4512 + forge swap 预览直办（非 K3）
+- MarksBreak D4513–D4576: 印记够数→觉醒缺口自动兑换换上（零产量抬）

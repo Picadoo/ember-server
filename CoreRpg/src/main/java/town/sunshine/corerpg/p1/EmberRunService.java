@@ -1953,6 +1953,9 @@ public boolean pathForceOpenDoor(Player p) {
                     else if (cr == EmberEconomy.Credit.UNTAGGED)
                         log().info("[P1 run] untagged mark row " + r.runId + "/" + g.key + " T" + tier + " " + g.amount + " for " + p.getName());
                     got.add("T" + tier + " 锻造印记 " + g.amount + "（共 " + marks(d, tier) + "）");
+                    try { // D4513 marks → awaken-gap auto-redeem
+                        EmberMarksBreak.maybeAfterMarkGain(p, d, tier, loadouts, this);
+                    } catch (Throwable ignored) { }
                     done = true;
                     break;
                 }
@@ -2260,7 +2263,7 @@ public boolean pathForceOpenDoor(Player p) {
         }
     }
 
-    private static int freeSlots(Player p) {
+    static int freeSlots(Player p) {
         int n = 0;
         ItemStack[] st = p.getInventory().getStorageContents();
         for (ItemStack i : st) if (i == null || i.getType() == org.bukkit.Material.AIR) n++;
@@ -3463,6 +3466,33 @@ public boolean pathForceOpenDoor(Player p) {
                 + EmberItemData.slotName(slot) + "（剩余 " + marks(d, tier) + "）");
         deliver(p);
         return true;
+    }
+
+    /**
+     * D4513: auto mark redeem for awaken gap — confirm-equivalent, no ConfirmTokens.
+     * @return item uid when sync path; empty string when durable async kicked; null on refuse
+     */
+    String autoRedeemMarks(Player p, String fam, String slot, int tier) {
+        if (p == null || fam == null || slot == null || tier < 1 || tier > 3) return null;
+        if (blocksLegacy(p.getWorld())) return null;
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) return null;
+        boolean gate = progressFlag(d, EmberRunRules.directedForgeFlag(tier));
+        String err = EmberRunRules.exchangeCheck(marks(d, tier), tier, tier, fam, slot, gate);
+        if (err != null) return null;
+        if (freeSlots(p) <= 0) return null;
+        EmberPay pay = EmberPay.get();
+        if (pay != null && pay.durable()) {
+            redeemDurable(p, pay, fam, slot, tier);
+            return ""; // async — caller matches fam/slot/tier in bag
+        }
+        if (!EmberEconomy.spendMark(d, "C07", tier, EmberEconomy.amount("C07", "marks"))) return null;
+        String run = "mark-auto-" + Long.toString(System.currentTimeMillis(), 36) + "-" + Integer.toString(rnd.nextInt(1296), 36);
+        String uid = EmberRunRules.rewardUid(rnd.nextLong(), p.getUniqueId().toString(), run, "mark_item");
+        ledgerRow(p.getUniqueId(), run, "mark_item", "item:" + uid + ":" + fam + ":" + slot + ":" + tier + ":0:0", EmberRunRules.ST_PENDING);
+        plugin.getDataStore().flushMutation(p.getUniqueId());
+        deliver(p);
+        return uid;
     }
 
     private final java.util.Set<UUID> redeemBusy = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>());
