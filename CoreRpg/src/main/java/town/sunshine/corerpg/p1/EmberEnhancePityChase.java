@@ -54,17 +54,16 @@ public final class EmberEnhancePityChase {
         EmberEnhanceUndo.Snap cur = EmberEnhanceUndo.peek(id);
         if (cur == null) return; // already undone or cleared by success
         if (cur.at != snapAt || !uid.equals(cur.uid)) return;
-        // still the same fail snap — discard undo (no refund; pity stays), then sure-enhance
-        EmberEnhanceUndo.clear(id);
+        // validate held + mats BEFORE discarding undo (D5921)
         ItemStack held = p.getInventory().getItemInMainHand();
         EmberLoadoutService los = pl.getEmberRuns() == null ? null : pl.getEmberRuns().loadouts();
         if (los == null || held == null || !los.items().hasData(held)) {
-            p.sendMessage(EmberRunService.P + "§e保底追击取消 · §7请手持该件后再强化");
+            p.sendMessage(EmberRunService.P + "§e保底追击取消 · §7请手持该件后再强化（撤销窗仍开）");
             return;
         }
         EmberItems.Read r = los.items().read(held);
         if (r == null || !r.ok() || r.data == null || !uid.equals(r.data.uid)) {
-            p.sendMessage(EmberRunService.P + "§e保底追击取消 · §7手持件已变");
+            p.sendMessage(EmberRunService.P + "§e保底追击取消 · §7手持件已变（撤销窗仍开）");
             return;
         }
         if (!EmberUpgradeRules.guaranteed(r.data)) return;
@@ -75,9 +74,12 @@ public final class EmberEnhancePityChase {
         }
         java.util.List<String> lack = pl.getEmberForge().lackingFor(p, chk.cost);
         if (lack != null && !lack.isEmpty()) {
-            p.sendMessage(EmberRunService.P + "§e保底追击取消 · 缺料 §f" + String.join("，", lack));
+            p.sendMessage(EmberRunService.P + "§e保底追击取消 · 缺料 §f" + String.join("，", lack)
+                    + " §7（撤销窗仍开）");
             return;
         }
+        // discard undo (no refund; pity stays), then sure-enhance
+        EmberEnhanceUndo.clear(id);
         PlayerData d = pl.getDataStore().get(id);
         if (d != null) d.addPeriodCount(C_CHASE, "day", 1);
         p.sendMessage(EmberRunService.P + "§a保底追击 · 必成直办…");
