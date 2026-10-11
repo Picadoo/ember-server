@@ -2292,3 +2292,16 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | jar | 1.65.734-d12216.local |
 | 门禁 | affixpack12 within range（stress vs venom；p2econ CRN 26vs24） |
 | STATUS | `docs/status/STATUS-ember-affix-pack12-d12216-2026-10-11.md` |
+
+### 13.125 Affix Pack 13 枪刺/新星（CoreRpg 1.65.735，D12217，2026-10-11）
+
+| 项 | 值 |
+|---|---|
+| 决策 | D12217 |
+| jar | CoreRpg **1.65.735-d12217.local** |
+| balance_version | 99 → **100** |
+| 行为 | 词缀池 26→28：+`lance` 枪刺 / `nova` 新星；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack13-2026-10-11.md` |
+| 门禁 | `tools/p1sim/affixpack13.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack13-d12217-2026-10-11.md` |
+

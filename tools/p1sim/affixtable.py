@@ -16,8 +16,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import rules
 
 MODELLED = ('shield', 'split', 'blazing', 'venom', 'jailer', 'arcane', 'firechain',
-            'charge', 'mortar', 'frost', 'regen', 'molten', 'hail', 'tether', 'pulse', 'mines', 'spore', 'flank', 'pierce', 'scatter', 'rift', 'cascade', 'cleave', 'ripple', 'mirror', 'bloom')
-PERIODIC = ('blazing', 'venom', 'jailer', 'arcane', 'charge', 'mortar', 'hail', 'tether', 'pulse', 'mines', 'spore', 'flank', 'pierce', 'scatter', 'rift', 'cascade', 'cleave', 'ripple', 'mirror', 'bloom')
+            'charge', 'mortar', 'frost', 'regen', 'molten', 'hail', 'tether', 'pulse', 'mines', 'spore', 'flank', 'pierce', 'scatter', 'rift', 'cascade', 'cleave', 'ripple', 'mirror', 'bloom', 'lance', 'nova')
+PERIODIC = ('blazing', 'venom', 'jailer', 'arcane', 'charge', 'mortar', 'hail', 'tether', 'pulse', 'mines', 'spore', 'flank', 'pierce', 'scatter', 'rift', 'cascade', 'cleave', 'ripple', 'mirror', 'bloom', 'lance', 'nova')
 # gate-only: promoted elite, no combat pressure (not in the live variety pool)
 PLAIN = '_plain'
 

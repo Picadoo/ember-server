@@ -626,9 +626,9 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9 + D12214 Pack 10 + D12215 Pack 11 + D12216 Pack 12. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
+        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9 + D12214 Pack 10 + D12215 Pack 11 + D12216 Pack 12 + D12217 Pack 13. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
-                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom"));
+                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom", "lance", "nova"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
                 "timed", "crystal", "escort", "hold", "beacon", "relay", "breach", "chain", "unscathed"));
         public final double affixRate, eventRate;
@@ -679,6 +679,9 @@ public final class EmberRunMaps {
         public final double mirrorEvery, mirrorWarn, mirrorRadius, mirrorDmg;
         public final double bloomEvery, bloomWarn, bloomOrbit, bloomRadius, bloomDmg;
         public final int bloomCount;
+        // D12217 lance (枪刺: thin forward strip locked at warn) / nova (新星: thin ring annulus)
+        public final double lanceEvery, lanceWarn, lanceLength, lanceWidth, lanceDmg;
+        public final double novaEvery, novaWarn, novaRadius, novaHalfW, novaDmg;
         // D171 crystal / escort / timed
         public final int crystalCount, crystalSecs, timedSecs;
         public final double escortHp;
@@ -884,6 +887,18 @@ public final class EmberRunMaps {
             bloomRadius = Math.max(0.5, Math.min(1.2, num(bm.get("radius"), 1.2))); // ≤ 1.2
             bloomCount = Math.max(4, Math.min(4, (int) num(bm.get("count"), 4))); // fixed 4
             bloomDmg = Math.max(0.0, Math.min(0.5, num(bm.get("dmg"), 0.5)));      // ≤ 0.5 atk
+            Map<?, ?> ln = m.get("lance") instanceof Map ? (Map<?, ?>) m.get("lance") : Collections.emptyMap();
+            lanceEvery = Math.max(6.5, num(ln.get("every"), 6.5));         // D12217: every ≥ 6.5
+            lanceWarn = Math.max(1.4, num(ln.get("warn"), 1.4));
+            lanceLength = Math.max(1.0, Math.min(6.0, num(ln.get("length"), 6.0))); // ≤ 6
+            lanceWidth = Math.max(0.5, Math.min(1.4, num(ln.get("width"), 1.4)));   // ≤ 1.4
+            lanceDmg = Math.max(0.0, Math.min(0.55, num(ln.get("dmg"), 0.55)));     // ≤ 0.55 atk
+            Map<?, ?> nv = m.get("nova") instanceof Map ? (Map<?, ?>) m.get("nova") : Collections.emptyMap();
+            novaEvery = Math.max(7.0, num(nv.get("every"), 7.0));         // D12217: every ≥ 7
+            novaWarn = Math.max(1.3, num(nv.get("warn"), 1.3));
+            novaRadius = Math.max(1.0, Math.min(3.5, num(nv.get("radius"), 3.5))); // ≤ 3.5
+            novaHalfW = Math.max(0.3, Math.min(0.7, num(nv.get("half_w"), 0.7)));  // band ≤ 0.7
+            novaDmg = Math.max(0.0, Math.min(0.5, num(nv.get("dmg"), 0.5)));       // ≤ 0.5 atk
             Map<?, ?> tm = m.get("timed") instanceof Map ? (Map<?, ?>) m.get("timed") : Collections.emptyMap();
             timedSecs = Math.max(5, (int) num(tm.get("secs"), eventSecs));
             Map<?, ?> cr = m.get("crystal") instanceof Map ? (Map<?, ?>) m.get("crystal") : Collections.emptyMap();
@@ -948,6 +963,8 @@ public final class EmberRunMaps {
             if ("ripple".equals(id)) return "涟漪";
             if ("mirror".equals(id)) return "残影";
             if ("bloom".equals(id)) return "绽放";
+            if ("lance".equals(id)) return "枪刺";
+            if ("nova".equals(id)) return "新星";
             return id;
         }
 
