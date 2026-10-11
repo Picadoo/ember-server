@@ -1,17 +1,13 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.544-d2608.local**
-- D2513–D2608 room/press/cut/rally pressure-family
+- jar **1.65.545-d2640.local**
+- D2609–D2640 Gate + Shape×Room
 
-## Ship summary
-| 轴 | 行为 |
-|----|------|
-| Room | bias harden · FRONT/MID/BACK Speed open/clear · event Resist |
-| Press | Q01 enter · land Slow/Speed · AUTO/ASK cadence |
-| Cut | Q01 enter · land Slow/Speed · AUTO/ASK cadence |
-| Rally | Q01 enter · AUTO Speed 5s vs 4s |
+## Shipped
+- Gate: Q01 enter unlock · open land Speed 2s + Resist 1s · ASK CD 5s
+- Shape×Room: preferred variety room + set×shape → geometry thin + dash radius +0.15
 
-Talent HOLD. Twin axes STOPPED.
+Pressure/HeldNext/ConfirmTokens/remain/sig ICD/posture twins STOPPED. Talent HOLD.
 
-Updated 2026-10-11 08:22 CST
+Updated 2026-10-11 08:24 CST

@@ -80,13 +80,36 @@ public final class EmberGatePath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8开门路径：首通 Q01 后可选";
+        if (!unlocked) return "§8开门路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8开门路径：未选 · /corerpg p1 gatepath";
         return "§e开门路径：§f" + label(id) + " §8· " + tip(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
     public static boolean shouldMute(int path) { return path == MUTE; }
+
+    private static final long ASK_COOLDOWN_MS = 8000L;
+    private static final long ASK_PATH_COOLDOWN_MS = 5000L;
+    private static final java.util.Map<UUID, Long> lastAsk = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
+
+    static long askCooldownMs(int path) {
+        return path == ASK ? ASK_PATH_COOLDOWN_MS : ASK_COOLDOWN_MS;
+    }
+
+    /** D2612: after force-open — Speed I 2s + Resist I 1s. */
+    public static void applyGateLand(Player p) {
+        if (p == null || !p.isOnline()) return;
+        try {
+            p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.SPEED, 40, 0, false, true), true);
+            p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE, 20, 0, false, true), true);
+            try { p.sendActionBar("§a开门推进 · §fSpeed 2s · Resist 1s"); } catch (Throwable ignored) { }
+        } catch (Throwable ignored) { }
+    }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
+
 
     /** After door_delay pending is armed. */
     public static void maybeAfterPending(EmberRunSession s) {
@@ -104,13 +127,19 @@ public final class EmberGatePath {
             if (shouldAuto(path)) {
                 if (!autoOpened && runs.pathForceOpenDoor(p)) {
                     autoOpened = true;
+                    applyGateLand(p);
                     p.sendMessage(EmberRunService.P + "§a开门·自动 §7已提前开启门扇");
                 } else if (autoOpened) {
+                    applyGateLand(p);
                     p.sendMessage(EmberRunService.P + "§a开门·自动 §7门扇已开启");
                 }
                 continue;
             }
             if (shouldMute(path)) continue;
+            long now = System.currentTimeMillis();
+            Long last = lastAsk.get(p.getUniqueId());
+            if (last != null && now - last < askCooldownMs(path)) continue;
+            lastAsk.put(p.getUniqueId(), now);
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§e门扇缓缓开启… ",
                     new String[]{"[开门]", "/corerpg p1 gate", "立即开门推进", "GREEN"},
                     new String[]{"[改路径]", "/corerpg p1 gatepath", "自动/提醒/静默", "GRAY"});
@@ -126,6 +155,7 @@ public final class EmberGatePath {
         int path = get(d);
         if (shouldAuto(path)) {
             if (runs != null && runs.pathForceOpenDoor(p)) {
+                applyGateLand(p);
                 p.sendMessage(EmberRunService.P + "§a开门·自动 §7已提前开启门扇");
             } else {
                 p.sendMessage(EmberRunService.P + "§a开门·自动 §7待命（门扇缓开时立即开门）");
@@ -182,8 +212,8 @@ public final class EmberGatePath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c开门路径需本人首通 Q01。");
+        if (!EmberSkillKit.gatePathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c开门路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;

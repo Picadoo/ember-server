@@ -103,6 +103,8 @@ public final class EmberSkillKit {
     public static final String C_CUT_ENTER = "p1_cut_enter";
     /** D2594: entered Q01 → rally path without clear-gate. */
     public static final String C_RALLY_ENTER = "p1_rally_enter";
+    /** D2610: entered Q01 → gate path without clear-gate. */
+    public static final String C_GATE_ENTER = "p1_gate_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -262,6 +264,19 @@ public final class EmberSkillKit {
         return runs != null && runs.firstClearedKey(d, "q01");
     }
 
+    public static boolean markGateEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_GATE_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_GATE_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean gatePathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_GATE_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
     /** D2378: Q01 clear OR first-enter unlocks stride path (still needs Q05 step). */
     public static boolean strideMapUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
@@ -344,7 +359,13 @@ public final class EmberSkillKit {
 
     /** D2342: dash path hit radius when set-shape synced. */
     public static double dashHitRadius(boolean setShapeSync) {
-        return setShapeSync ? DASH_HIT_RADIUS + 0.20 : DASH_HIT_RADIUS;
+        return dashHitRadius(setShapeSync, false);
+    }
+
+    /** D2618: preferred variety room + set×shape → +0.15 dash radius. */
+    public static double dashHitRadius(boolean setShapeSync, boolean roomShape) {
+        double r = setShapeSync ? DASH_HIT_RADIUS + 0.20 : DASH_HIT_RADIUS;
+        return (setShapeSync && roomShape) ? r + 0.15 : r;
     }
 
     /** D2343: parry window ms when set-shape synced. */
@@ -626,6 +647,7 @@ public final class EmberSkillKit {
         double baseArc = mode == null ? 100.0 : mode.d("skill.arc_degrees", 100.0);
         int baseMax = Math.max(1, mode == null ? 5 : mode.i("skill.max_targets", 5));
         EmberGrowth.Mods m = gmods == null ? EmberGrowth.Mods.NONE : gmods;
+        boolean roomShape = player != null && runs != null && runs.inPreferredVarietyRoom(player);
         boolean variant = m.get("skill_var") > 0;
         double sigLine = variant ? m.get("skill_line") : 0;
         double sigRing = variant ? m.get("skill_ring") : 0;
@@ -647,12 +669,17 @@ public final class EmberSkillKit {
                 if (sigLine > 0) { lineW = 1.2; line = line + 0.5; max = Math.min(max + 1, 5); }
                 else { range = Math.min(range + 0.4, 4.5); max = Math.min(max + 1, 5); }
             }
+            if (sync && roomShape) {
+                if (sigLine > 0) { line = line + 0.25; }
+                else { range = Math.min(range + 0.25, 4.7); }
+            }
             String label = sigLine > 0 ? "签名·直线" : (sigRing > 0 || sigPlus || sigCharge ? "签名·环斩" : "签名");
             if (sync) label = label + "·形同";
+            if (sync && roomShape) label = label + "·优房";
             return new Shape(shapeId(d, runs), range, arc, line, lineW, max, true, label);
         }
         int id = shapeId(d, runs);
-        return geometryFor(id, baseRange, baseArc, baseMax, setShapeSynced(activeSetFamily, id));
+        return geometryFor(id, baseRange, baseArc, baseMax, setShapeSynced(activeSetFamily, id), roomShape);
     }
 
     /** Pure: 2pc family prefers this rune shape. */
@@ -688,18 +715,26 @@ public final class EmberSkillKit {
         return postureAligned ? v * 1.1 : v;
     }
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync) {
+        return geometryFor(id, baseRange, baseArc, baseMax, setSync, false);
+    }
+
+    /** D2619: room×shape thin geometry (zero skill_mult / no ICD). */
+    public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync, boolean roomShape) {
+        boolean bonus = setSync && roomShape;
         if (id == SHAPE_LINE) {
             double lw = setSync ? 0.95 : 0.7;
             int max = setSync ? 4 : 3;
-            return new Shape(id, Math.max(baseRange, 6.0), baseArc, 6.0, lw, max, false, shapeName(id));
+            double range = Math.max(baseRange, 6.0) + (bonus ? 0.35 : 0);
+            return new Shape(id, range, baseArc, 6.0, lw, max, false, shapeName(id));
         }
         if (id == SHAPE_RING) {
-            double range = setSync ? 3.9 : 3.5;
+            double range = (setSync ? 3.9 : 3.5) + (bonus ? 0.25 : 0);
             int max = setSync ? 5 : 4;
             return new Shape(id, range, 360.0, 0, 0.0, max, false, shapeName(id));
         }
         double arc = Math.max(baseArc, 110.0);
         if (setSync) arc += 12.0;
+        if (bonus) arc += 8.0;
         return new Shape(SHAPE_FAN, baseRange, arc, 0, 0.0, baseMax, false, shapeName(SHAPE_FAN));
     }
 

@@ -1909,6 +1909,18 @@ final class EmberRunDirector {
     }
 
     /** D556: open the pending door immediately (AUTO / ASK). */
+    boolean inPreferredVarietyRoom() {
+        if (s == null || !s.open() || activeRoom == null) return false;
+        PlayerData ld = null;
+        for (java.util.UUID u : s.committed) {
+            ld = svc.dataOf(u);
+            if (ld != null) break;
+        }
+        int path = EmberRoomPath.get(ld);
+        if (!EmberRoomPath.valid(path) || !EmberRoomPath.isPreferredRoom(path, activeRoom)) return false;
+        return activeRoom.equals(s.affixRoom) || activeRoom.equals(s.eventRoom);
+    }
+
     boolean pathForceOpenDoor() {
         if (!hasPendingDoor()) return false;
         EmberRunMaps.Room r = doorPending;

@@ -596,7 +596,10 @@ public final class EmberCommand {
             Player p = (Player) s;
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             if (!runs.pathForceOpenDoor(p)) p.sendMessage(P + "无法开门（无缓开中的门扇/未进本）");
-            else p.sendMessage(P + "§a开门·手点 §7已开启门扇");
+            else {
+                EmberGatePath.applyGateLand(p);
+                p.sendMessage(P + "§a开门·手点 §7已开启门扇");
+            }
             return true;
         }
         if ("packpath".equals(sub) || "腾包路径".equals(sub)) { // D555 mid-run pack relief path

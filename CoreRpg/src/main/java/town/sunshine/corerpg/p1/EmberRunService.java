@@ -1480,7 +1480,14 @@ public boolean pathCutRegen(Player p) {
                 && d.s.committed.contains(p.getUniqueId());
     }
 
-    public boolean pathForceOpenDoor(Player p) {
+        /** D2617: fighting preferred room-path variety room (affix/event). */
+    public boolean inPreferredVarietyRoom(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.inPreferredVarietyRoom();
+    }
+
+public boolean pathForceOpenDoor(Player p) {
         if (p == null) return false;
         EmberRunDirector d = byWorld.get(p.getWorld().getName());
         if (d == null || d.s == null || !d.s.open()) return false;

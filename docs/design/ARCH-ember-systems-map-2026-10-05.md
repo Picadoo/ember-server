@@ -479,3 +479,7 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 ## Cut enter + event resist · D2561–D2576
 - Cut Q01 enter unlock + cut-land Slow/Speed
 - Preferred event room open Resistance I 1s
+
+## Gate + Shape×Room · D2609–D2640
+- Gate enter unlock + open land Speed/Resist + ASK CD
+- Preferred variety room × set×shape geometry/dash radius

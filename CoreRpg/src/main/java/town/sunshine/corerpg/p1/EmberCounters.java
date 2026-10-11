@@ -129,6 +129,7 @@ public final class EmberCounters {
         x("p1_press_enter", "EmberSkillKit", A, SE, OW, "D2516 entered Q01 → press path unlock without clear");
         x("p1_cut_enter", "EmberSkillKit", A, SE, OW, "D2562 entered Q01 → cut path unlock without clear");
         x("p1_rally_enter", "EmberSkillKit", A, SE, OW, "D2594 entered Q01 → rally path unlock without clear");
+        x("p1_gate_enter", "EmberSkillKit", A, SE, OW, "D2610 entered Q01 → gate path unlock without clear");
         x("p1_convert_path", "EmberConvertPath", A, SE, OW, "D469 convert path 0=none 1=scorch 2=burst 3=sustain");
         x("p1_convert_path_offer", "EmberConvertPath", W, CL, RL, "D469 once-per-week offer latch");
         x("p1_echo_path", "EmberEchoPath", A, SE, OW, "D468 echo path 0=none 1..7=q01..q07");
