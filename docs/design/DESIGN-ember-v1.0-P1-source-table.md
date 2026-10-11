@@ -2118,3 +2118,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 菜单 | `ember_talent` · `ember_shop` · `ember_storage` · `ember_settings` · `ember_character` · `ember_mail` · `ember_friends` · `ember_flex_skill` · `ember_socket` · `ember_part` · `ember_arena` · `ember_auction` · `ember_bestiary` · `ember_vip` · `ember_weekly_rewards` · `ember_raid_rewards` · `ember_enchant_guide` · `ember_pass` · `ember_covenant` · `ember_guild` · `ember_calamity` · `ember_calamity_rewards` lore ≤3（砍空白与说明墙；PAPI/费用/➥ 保留；不含 pet/gacha/hub_legacy） |
 | jar | 未改（live 仍 1.65.723-d12194.local） |
 | STATUS | `docs/status/STATUS-ember-trmenu-lore-talent-shop-storage-d12200-2026-10-11.md` |
+
+### 13.109 Watchdog spark 关背景采样 + TrMenu lore 压缩 sign（D12201，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| spark | `plugins/spark/config.json` `backgroundProfiler: false`（16:13 堆栈 `BukkitWorldInfoProvider.pollCounts`；live 已 `spark profiler cancel`；无 config reload，下次重启生效持久） |
+| fire | `ember_afk` / `ember_hub` `doFireTick false`（曾 true；缓解 15:18 BlockFire） |
+| 菜单 | `ember_p1_sign.yml` lore ≤3（砍空行与说明墙；保留 `%corerpg_p1_sign_*%` / `online_*` 与点击动作；gen 同步） |
+| jar | 未改（live 仍 1.65.723-d12194.local） |
+| STATUS | `docs/status/STATUS-ember-watchdog-spark-sign-lore-d12201-2026-10-11.md` |
+

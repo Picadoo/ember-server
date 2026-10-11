@@ -40,41 +40,26 @@ Icons:
       material: book
       name: '§6本月签到'
       lore:
-        - ''
         - '%corerpg_p1_sign_head%'
         - '%corerpg_p1_sign_next%'
         - '%corerpg_p1_sign_hope%'
-        - '§7本月漏签 §f%corerpg_p1_sign_missed% §7天 · 补签剩余 §f%corerpg_p1_sign_mkleft% §7次'
-        - ''
-        - '§7第 29–31 次：§f%corerpg_p1_sign_r29% §8（长月份的尾巴）'
-        - '§8每月 1 日 0 点换新月历；奖励账号绑定，直接到账'
   I:
     display:
       material: paper
       name: '§f规则'
       lore:
-        - ''
-        - '§7· 每天点一次「今天」那格签到（0 点换天，服务器时间）'
-        - '§7· 按本月第几次签到发奖：漏了不清零，下次接着下一格'
-        - '§7· 第 7 / 14 / 21 / 28 次是大格（首领徽记 / 锻造印记）'
-        - '§7· 补签：每月 3 次、每天 1 次，先签今天，今天有效在线满 60 分钟'
-        - '§7· 在线时长：有效在线（5 分钟没操作就停表；挂机庭自动战斗算在线）'
-        - '§7· 只发余烬币、经验、锻造印记、首领徽记（都绑定账号）'
-        - '§8变强的主路还是主线本：这里一天的币不到一次通关的三分之一'
+        - '§7每天点「今天」格 · 按本月第 n 次发奖（漏签不清零）'
+        - '§7第7/14/21/28大格 · 补签月3次（先签今天+在线60分）'
+        - '§7在线15/30/60/120可领 · 挂机庭也计时'
   O:
     update: 20
     display:
       material: clock
       name: '§a今日在线'
       lore:
-        - ''
-        - '§7有效在线：§f%corerpg_p1_online_min% §7分钟'
-        - '§7%corerpg_p1_online_state%'
+        - '§7有效在线：§f%corerpg_p1_online_min% §7分 · %corerpg_p1_online_state%'
         - '%corerpg_p1_online_next%'
-        - '%corerpg_p1_online_hope%'
-        - '§7可领：§f%corerpg_p1_online_can% §7档'
-        - ''
-        - '§e➥ §f点击一次领完所有已到的档'
+        - '§e➥ §f一键领完 · 可领 §f%corerpg_p1_online_can% §7档'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -89,10 +74,8 @@ Icons:
           name: '§a补签'
           shiny: true
           lore:
-            - ''
             - '%corerpg_p1_sign_mk%'
             - '§7本月剩余 §f%corerpg_p1_sign_mkleft% §7次'
-            - ''
             - '§e➥ §f点击补签'
         actions:
           all:
@@ -102,7 +85,6 @@ Icons:
       material: name tag
       name: '§7补签'
       lore:
-        - ''
         - '%corerpg_p1_sign_mk%'
         - '§7本月剩余 §f%corerpg_p1_sign_mkleft% §7次'
         - '§8规则：先签今天 · 今天有效在线满 60 分钟 · 每天 1 次'
@@ -119,7 +101,6 @@ Icons:
           amount: 1
           name: '§a第 1 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r1%'
       - condition: 'check papi %corerpg_p1_sign_k1% > 0'
         priority: 1
@@ -129,9 +110,7 @@ Icons:
           shiny: true
           name: '§e第 1 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r1%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -142,7 +121,6 @@ Icons:
       amount: 1
       name: '§7第 1 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r1%'
     actions:
       all:
@@ -157,7 +135,6 @@ Icons:
           amount: 2
           name: '§a第 2 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r2%'
       - condition: 'check papi %corerpg_p1_sign_k2% > 0'
         priority: 1
@@ -167,9 +144,7 @@ Icons:
           shiny: true
           name: '§e第 2 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r2%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -180,7 +155,6 @@ Icons:
       amount: 2
       name: '§7第 2 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r2%'
     actions:
       all:
@@ -195,7 +169,6 @@ Icons:
           amount: 3
           name: '§a第 3 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r3%'
       - condition: 'check papi %corerpg_p1_sign_k3% > 0'
         priority: 1
@@ -205,9 +178,7 @@ Icons:
           shiny: true
           name: '§e第 3 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r3%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -218,7 +189,6 @@ Icons:
       amount: 3
       name: '§7第 3 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r3%'
     actions:
       all:
@@ -233,7 +203,6 @@ Icons:
           amount: 4
           name: '§a第 4 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r4%'
       - condition: 'check papi %corerpg_p1_sign_k4% > 0'
         priority: 1
@@ -243,9 +212,7 @@ Icons:
           shiny: true
           name: '§e第 4 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r4%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -256,7 +223,6 @@ Icons:
       amount: 4
       name: '§7第 4 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r4%'
     actions:
       all:
@@ -271,7 +237,6 @@ Icons:
           amount: 5
           name: '§a第 5 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r5%'
       - condition: 'check papi %corerpg_p1_sign_k5% > 0'
         priority: 1
@@ -281,9 +246,7 @@ Icons:
           shiny: true
           name: '§e第 5 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r5%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -294,7 +257,6 @@ Icons:
       amount: 5
       name: '§7第 5 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r5%'
     actions:
       all:
@@ -309,7 +271,6 @@ Icons:
           amount: 6
           name: '§a第 6 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r6%'
       - condition: 'check papi %corerpg_p1_sign_k6% > 0'
         priority: 1
@@ -319,9 +280,7 @@ Icons:
           shiny: true
           name: '§e第 6 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r6%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -332,7 +291,6 @@ Icons:
       amount: 6
       name: '§7第 6 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r6%'
     actions:
       all:
@@ -347,7 +305,6 @@ Icons:
           amount: 7
           name: '§a第 7 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r7%'
       - condition: 'check papi %corerpg_p1_sign_k7% > 0'
         priority: 1
@@ -357,9 +314,7 @@ Icons:
           shiny: true
           name: '§e§6大格 · 第 7 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r7%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -370,7 +325,6 @@ Icons:
       amount: 7
       name: '§7§6大格 · 第 7 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r7%'
     actions:
       all:
@@ -385,7 +339,6 @@ Icons:
           amount: 8
           name: '§a第 8 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r8%'
       - condition: 'check papi %corerpg_p1_sign_k8% > 0'
         priority: 1
@@ -395,9 +348,7 @@ Icons:
           shiny: true
           name: '§e第 8 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r8%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -408,7 +359,6 @@ Icons:
       amount: 8
       name: '§7第 8 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r8%'
     actions:
       all:
@@ -423,7 +373,6 @@ Icons:
           amount: 9
           name: '§a第 9 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r9%'
       - condition: 'check papi %corerpg_p1_sign_k9% > 0'
         priority: 1
@@ -433,9 +382,7 @@ Icons:
           shiny: true
           name: '§e第 9 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r9%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -446,7 +393,6 @@ Icons:
       amount: 9
       name: '§7第 9 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r9%'
     actions:
       all:
@@ -461,7 +407,6 @@ Icons:
           amount: 10
           name: '§a第 10 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r10%'
       - condition: 'check papi %corerpg_p1_sign_k10% > 0'
         priority: 1
@@ -471,9 +416,7 @@ Icons:
           shiny: true
           name: '§e第 10 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r10%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -484,7 +427,6 @@ Icons:
       amount: 10
       name: '§7第 10 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r10%'
     actions:
       all:
@@ -499,7 +441,6 @@ Icons:
           amount: 11
           name: '§a第 11 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r11%'
       - condition: 'check papi %corerpg_p1_sign_k11% > 0'
         priority: 1
@@ -509,9 +450,7 @@ Icons:
           shiny: true
           name: '§e第 11 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r11%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -522,7 +461,6 @@ Icons:
       amount: 11
       name: '§7第 11 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r11%'
     actions:
       all:
@@ -537,7 +475,6 @@ Icons:
           amount: 12
           name: '§a第 12 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r12%'
       - condition: 'check papi %corerpg_p1_sign_k12% > 0'
         priority: 1
@@ -547,9 +484,7 @@ Icons:
           shiny: true
           name: '§e第 12 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r12%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -560,7 +495,6 @@ Icons:
       amount: 12
       name: '§7第 12 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r12%'
     actions:
       all:
@@ -575,7 +509,6 @@ Icons:
           amount: 13
           name: '§a第 13 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r13%'
       - condition: 'check papi %corerpg_p1_sign_k13% > 0'
         priority: 1
@@ -585,9 +518,7 @@ Icons:
           shiny: true
           name: '§e第 13 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r13%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -598,7 +529,6 @@ Icons:
       amount: 13
       name: '§7第 13 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r13%'
     actions:
       all:
@@ -613,7 +543,6 @@ Icons:
           amount: 14
           name: '§a第 14 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r14%'
       - condition: 'check papi %corerpg_p1_sign_k14% > 0'
         priority: 1
@@ -623,9 +552,7 @@ Icons:
           shiny: true
           name: '§e§6大格 · 第 14 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r14%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -636,7 +563,6 @@ Icons:
       amount: 14
       name: '§7§6大格 · 第 14 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r14%'
     actions:
       all:
@@ -651,7 +577,6 @@ Icons:
           amount: 15
           name: '§a第 15 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r15%'
       - condition: 'check papi %corerpg_p1_sign_k15% > 0'
         priority: 1
@@ -661,9 +586,7 @@ Icons:
           shiny: true
           name: '§e第 15 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r15%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -674,7 +597,6 @@ Icons:
       amount: 15
       name: '§7第 15 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r15%'
     actions:
       all:
@@ -689,7 +611,6 @@ Icons:
           amount: 16
           name: '§a第 16 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r16%'
       - condition: 'check papi %corerpg_p1_sign_k16% > 0'
         priority: 1
@@ -699,9 +620,7 @@ Icons:
           shiny: true
           name: '§e第 16 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r16%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -712,7 +631,6 @@ Icons:
       amount: 16
       name: '§7第 16 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r16%'
     actions:
       all:
@@ -727,7 +645,6 @@ Icons:
           amount: 17
           name: '§a第 17 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r17%'
       - condition: 'check papi %corerpg_p1_sign_k17% > 0'
         priority: 1
@@ -737,9 +654,7 @@ Icons:
           shiny: true
           name: '§e第 17 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r17%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -750,7 +665,6 @@ Icons:
       amount: 17
       name: '§7第 17 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r17%'
     actions:
       all:
@@ -765,7 +679,6 @@ Icons:
           amount: 18
           name: '§a第 18 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r18%'
       - condition: 'check papi %corerpg_p1_sign_k18% > 0'
         priority: 1
@@ -775,9 +688,7 @@ Icons:
           shiny: true
           name: '§e第 18 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r18%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -788,7 +699,6 @@ Icons:
       amount: 18
       name: '§7第 18 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r18%'
     actions:
       all:
@@ -803,7 +713,6 @@ Icons:
           amount: 19
           name: '§a第 19 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r19%'
       - condition: 'check papi %corerpg_p1_sign_k19% > 0'
         priority: 1
@@ -813,9 +722,7 @@ Icons:
           shiny: true
           name: '§e第 19 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r19%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -826,7 +733,6 @@ Icons:
       amount: 19
       name: '§7第 19 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r19%'
     actions:
       all:
@@ -841,7 +747,6 @@ Icons:
           amount: 20
           name: '§a第 20 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r20%'
       - condition: 'check papi %corerpg_p1_sign_k20% > 0'
         priority: 1
@@ -851,9 +756,7 @@ Icons:
           shiny: true
           name: '§e第 20 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r20%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -864,7 +767,6 @@ Icons:
       amount: 20
       name: '§7第 20 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r20%'
     actions:
       all:
@@ -879,7 +781,6 @@ Icons:
           amount: 21
           name: '§a第 21 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r21%'
       - condition: 'check papi %corerpg_p1_sign_k21% > 0'
         priority: 1
@@ -889,9 +790,7 @@ Icons:
           shiny: true
           name: '§e§6大格 · 第 21 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r21%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -902,7 +801,6 @@ Icons:
       amount: 21
       name: '§7§6大格 · 第 21 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r21%'
     actions:
       all:
@@ -917,7 +815,6 @@ Icons:
           amount: 22
           name: '§a第 22 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r22%'
       - condition: 'check papi %corerpg_p1_sign_k22% > 0'
         priority: 1
@@ -927,9 +824,7 @@ Icons:
           shiny: true
           name: '§e第 22 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r22%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -940,7 +835,6 @@ Icons:
       amount: 22
       name: '§7第 22 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r22%'
     actions:
       all:
@@ -955,7 +849,6 @@ Icons:
           amount: 23
           name: '§a第 23 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r23%'
       - condition: 'check papi %corerpg_p1_sign_k23% > 0'
         priority: 1
@@ -965,9 +858,7 @@ Icons:
           shiny: true
           name: '§e第 23 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r23%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -978,7 +869,6 @@ Icons:
       amount: 23
       name: '§7第 23 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r23%'
     actions:
       all:
@@ -993,7 +883,6 @@ Icons:
           amount: 24
           name: '§a第 24 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r24%'
       - condition: 'check papi %corerpg_p1_sign_k24% > 0'
         priority: 1
@@ -1003,9 +892,7 @@ Icons:
           shiny: true
           name: '§e第 24 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r24%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -1016,7 +903,6 @@ Icons:
       amount: 24
       name: '§7第 24 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r24%'
     actions:
       all:
@@ -1031,7 +917,6 @@ Icons:
           amount: 25
           name: '§a第 25 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r25%'
       - condition: 'check papi %corerpg_p1_sign_k25% > 0'
         priority: 1
@@ -1041,9 +926,7 @@ Icons:
           shiny: true
           name: '§e第 25 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r25%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -1054,7 +937,6 @@ Icons:
       amount: 25
       name: '§7第 25 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r25%'
     actions:
       all:
@@ -1069,7 +951,6 @@ Icons:
           amount: 26
           name: '§a第 26 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r26%'
       - condition: 'check papi %corerpg_p1_sign_k26% > 0'
         priority: 1
@@ -1079,9 +960,7 @@ Icons:
           shiny: true
           name: '§e第 26 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r26%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -1092,7 +971,6 @@ Icons:
       amount: 26
       name: '§7第 26 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r26%'
     actions:
       all:
@@ -1107,7 +985,6 @@ Icons:
           amount: 27
           name: '§a第 27 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r27%'
       - condition: 'check papi %corerpg_p1_sign_k27% > 0'
         priority: 1
@@ -1117,9 +994,7 @@ Icons:
           shiny: true
           name: '§e第 27 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r27%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -1130,7 +1005,6 @@ Icons:
       amount: 27
       name: '§7第 27 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r27%'
     actions:
       all:
@@ -1145,7 +1019,6 @@ Icons:
           amount: 28
           name: '§a第 28 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r28%'
       - condition: 'check papi %corerpg_p1_sign_k28% > 0'
         priority: 1
@@ -1155,9 +1028,7 @@ Icons:
           shiny: true
           name: '§e§6大格 · 第 28 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r28%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -1168,7 +1039,6 @@ Icons:
       amount: 28
       name: '§7§6大格 · 第 28 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r28%'
     actions:
       all:
@@ -1182,7 +1052,6 @@ Icons:
           material: lime stained glass pane
           name: '§a在线 %corerpg_p1_online_m1% 分钟 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_online_r1%'
       - condition: 'check papi %corerpg_p1_online_k1% > 0'
         priority: 1
@@ -1191,9 +1060,7 @@ Icons:
           shiny: true
           name: '§e在线 %corerpg_p1_online_m1% 分钟 · 可领取'
           lore:
-            - ''
             - '§f%corerpg_p1_online_r1%'
-            - ''
             - '§e➥ §f点击领取'
         actions:
           all:
@@ -1203,7 +1070,6 @@ Icons:
       material: coal
       name: '§7在线 %corerpg_p1_online_m1% 分钟'
       lore:
-        - ''
         - '§7%corerpg_p1_online_r1%'
         - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟'
     actions:
@@ -1218,7 +1084,6 @@ Icons:
           material: lime stained glass pane
           name: '§a在线 %corerpg_p1_online_m2% 分钟 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_online_r2%'
       - condition: 'check papi %corerpg_p1_online_k2% > 0'
         priority: 1
@@ -1227,9 +1092,7 @@ Icons:
           shiny: true
           name: '§e在线 %corerpg_p1_online_m2% 分钟 · 可领取'
           lore:
-            - ''
             - '§f%corerpg_p1_online_r2%'
-            - ''
             - '§e➥ §f点击领取'
         actions:
           all:
@@ -1239,7 +1102,6 @@ Icons:
       material: coal
       name: '§7在线 %corerpg_p1_online_m2% 分钟'
       lore:
-        - ''
         - '§7%corerpg_p1_online_r2%'
         - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟'
     actions:
@@ -1254,7 +1116,6 @@ Icons:
           material: lime stained glass pane
           name: '§a在线 %corerpg_p1_online_m3% 分钟 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_online_r3%'
       - condition: 'check papi %corerpg_p1_online_k3% > 0'
         priority: 1
@@ -1263,9 +1124,7 @@ Icons:
           shiny: true
           name: '§e在线 %corerpg_p1_online_m3% 分钟 · 可领取'
           lore:
-            - ''
             - '§f%corerpg_p1_online_r3%'
-            - ''
             - '§e➥ §f点击领取'
         actions:
           all:
@@ -1275,7 +1134,6 @@ Icons:
       material: coal
       name: '§7在线 %corerpg_p1_online_m3% 分钟'
       lore:
-        - ''
         - '§7%corerpg_p1_online_r3%'
         - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟'
     actions:
@@ -1290,7 +1148,6 @@ Icons:
           material: lime stained glass pane
           name: '§a在线 %corerpg_p1_online_m4% 分钟 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_online_r4%'
       - condition: 'check papi %corerpg_p1_online_k4% > 0'
         priority: 1
@@ -1299,9 +1156,7 @@ Icons:
           shiny: true
           name: '§e在线 %corerpg_p1_online_m4% 分钟 · 可领取'
           lore:
-            - ''
             - '§f%corerpg_p1_online_r4%'
-            - ''
             - '§e➥ §f点击领取'
         actions:
           all:
@@ -1311,7 +1166,6 @@ Icons:
       material: coal
       name: '§7在线 %corerpg_p1_online_m4% 分钟'
       lore:
-        - ''
         - '§7%corerpg_p1_online_r4%'
         - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟'
     actions:

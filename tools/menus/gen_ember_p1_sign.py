@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""D180: generates plugins/TrMenu/menus/ember_p1_sign.yml (28 calendar cells + 4 online milestones).
+"""D180/D12201: generates plugins/TrMenu/menus/ember_p1_sign.yml (28 calendar cells + 4 online milestones).
 Rewards are NOT hard-coded here: every label comes from PAPI (%corerpg_p1_sign_r<n>% / %corerpg_p1_online_r<i>%),
 i.e. from ember-v1.yml signin / online, so the page never drifts from the config. Run from the repo root."""
 import os
@@ -19,7 +19,7 @@ w("  - '#H# I #O#'")
 for r in range(4):
     w("  - '#" + ''.join(CELLS[r * 7:(r + 1) * 7]) + "#'")
 w("  - ' M abcd B'")
-w("Events:\n  Open:\n    - 'sound: BLOCK_CHEST_OPEN-1-0'")
+w("Events:\n  Open:\n    - 'sound: BLOCK_CHEST_OPEN-1-0'\n    - 'command: corerpg p1 onlinepath'\n    - 'command: corerpg p1 signpath'")
 w("Icons:")
 w("  '#':\n    display:\n      material: gray stained glass pane\n      name: '§8 '")
 w("""  B:
@@ -36,39 +36,26 @@ w("""  H:
       material: book
       name: '§6本月签到'
       lore:
-        - ''
         - '%corerpg_p1_sign_head%'
         - '%corerpg_p1_sign_next%'
-        - '§7本月漏签 §f%corerpg_p1_sign_missed% §7天 · 补签剩余 §f%corerpg_p1_sign_mkleft% §7次'
-        - ''
-        - '§7第 29–31 次：§f%corerpg_p1_sign_r29% §8（长月份的尾巴）'
-        - '§8每月 1 日 0 点换新月历；奖励账号绑定，直接到账'""")
+        - '%corerpg_p1_sign_hope%'""")
 w("""  I:
     display:
       material: paper
       name: '§f规则'
       lore:
-        - ''
-        - '§7· 每天点一次「今天」那格签到（0 点换天，服务器时间）'
-        - '§7· 按本月第几次签到发奖：漏了不清零，下次接着下一格'
-        - '§7· 第 7 / 14 / 21 / 28 次是大格（首领徽记 / 锻造印记）'
-        - '§7· 补签：每月 3 次、每天 1 次，先签今天，今天有效在线满 60 分钟'
-        - '§7· 在线时长：有效在线（5 分钟没操作就停表；挂机庭自动战斗算在线）'
-        - '§7· 只发余烬币、经验、锻造印记、首领徽记（都绑定账号）'
-        - '§8变强的主路还是主线本：这里一天的币不到一次通关的三分之一'""")
+        - '§7每天点「今天」格 · 按本月第 n 次发奖（漏签不清零）'
+        - '§7第7/14/21/28大格 · 补签月3次（先签今天+在线60分）'
+        - '§7在线15/30/60/120可领 · 挂机庭也计时'""")
 w("""  O:
     update: 20
     display:
       material: clock
       name: '§a今日在线'
       lore:
-        - ''
-        - '§7有效在线：§f%corerpg_p1_online_min% §7分钟'
-        - '§7%corerpg_p1_online_state%'
+        - '§7有效在线：§f%corerpg_p1_online_min% §7分 · %corerpg_p1_online_state%'
         - '%corerpg_p1_online_next%'
-        - '§7可领：§f%corerpg_p1_online_can% §7档'
-        - ''
-        - '§e➥ §f点击一次领完所有已到的档'
+        - '§e➥ §f一键领完 · 可领 §f%corerpg_p1_online_can% §7档'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -83,10 +70,8 @@ w("""  M:
           name: '§a补签'
           shiny: true
           lore:
-            - ''
             - '%corerpg_p1_sign_mk%'
             - '§7本月剩余 §f%corerpg_p1_sign_mkleft% §7次'
-            - ''
             - '§e➥ §f点击补签'
         actions:
           all:
@@ -96,7 +81,6 @@ w("""  M:
       material: name tag
       name: '§7补签'
       lore:
-        - ''
         - '%corerpg_p1_sign_mk%'
         - '§7本月剩余 §f%corerpg_p1_sign_mkleft% §7次'
         - '§8规则：先签今天 · 今天有效在线满 60 分钟 · 每天 1 次'
@@ -118,7 +102,6 @@ for i, n in enumerate(range(1, 29)):
           amount: {n}
           name: '§a第 {n} 次 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_sign_r{n}%'
       - condition: 'check papi %corerpg_p1_sign_k{n}% > 0'
         priority: 1
@@ -128,9 +111,7 @@ for i, n in enumerate(range(1, 29)):
           shiny: true
           name: '§e{tag}第 {n} 次 · 今天可签'
           lore:
-            - ''
             - '§f%corerpg_p1_sign_r{n}%'
-            - ''
             - '§e➥ §f点击签到'
         actions:
           all:
@@ -141,7 +122,6 @@ for i, n in enumerate(range(1, 29)):
       amount: {n}
       name: '§7{tag}第 {n} 次'
       lore:
-        - ''
         - '§7%corerpg_p1_sign_r{n}%'
     actions:
       all:
@@ -156,7 +136,6 @@ for i, k in enumerate('abcd', 1):
           material: lime stained glass pane
           name: '§a在线 %corerpg_p1_online_m{i}% 分钟 · 已领'
           lore:
-            - ''
             - '§7%corerpg_p1_online_r{i}%'
       - condition: 'check papi %corerpg_p1_online_k{i}% > 0'
         priority: 1
@@ -165,9 +144,7 @@ for i, k in enumerate('abcd', 1):
           shiny: true
           name: '§e在线 %corerpg_p1_online_m{i}% 分钟 · 可领取'
           lore:
-            - ''
             - '§f%corerpg_p1_online_r{i}%'
-            - ''
             - '§e➥ §f点击领取'
         actions:
           all:
@@ -177,7 +154,6 @@ for i, k in enumerate('abcd', 1):
       material: coal
       name: '§7在线 %corerpg_p1_online_m{i}% 分钟'
       lore:
-        - ''
         - '§7%corerpg_p1_online_r{i}%'
         - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟'
     actions:
