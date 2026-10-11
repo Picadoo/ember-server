@@ -24,6 +24,7 @@ public final class EmberUpgradeLoop {
     /** D2062: with PlayerData for forgegoal + lock eligibility. */
     public static void afterUpgrade(Player p, PlayerData d, List<TxnItem> list) {
         if (p == null) return;
+        EmberGemSharpLive.maybeAfterUpgrade(p, d, list); // D4209 sharp T2 live
         String piece = pieceHint(list);
         String P = EmberRunService.P;
         EmberItemData after = firstAfter(list);

@@ -101,7 +101,8 @@ public final class EmberGemAcquire {
             if (ok) {
                 p.sendMessage(P + "§a宝石保底！§f" + EmberItemData.gemName(code) + " §7×1（通关 " + PITY_NEED + " 次）");
                 EmberLoadoutService lo = plugin.getEmberRuns() == null ? null : plugin.getEmberRuns().loadouts();
-                EmberGemInsertChase.afterAcquire(p, code, lo, plugin); // D727
+                if (!EmberGemHoleSeat.maybeAutoSeatOnAcquire(p, code, lo, plugin)) // D4161
+                    EmberGemInsertChase.afterAcquire(p, code, lo, plugin); // D727
             } else p.sendMessage(P + "§c保底石发放失败（NI）· 计数已重置，请联系管理");
         }
         return ok;
@@ -180,7 +181,8 @@ public final class EmberGemAcquire {
                     new String[]{"[再合成]", "/corerpg p1 gem craft " + EmberGemPath.key(code), "同款再做", "LIGHT_PURPLE"},
                     new String[]{"[去镶嵌]", "/ember_p1_gem", "空孔镶石", "AQUA"});
         }
-        EmberGemInsertChase.afterAcquire(p, code, loadouts, plugin); // D727 chase empty hole (replaces fixed 孔0 twin)
+        if (!EmberGemHoleSeat.maybeAutoSeatOnAcquire(p, code, loadouts, plugin)) // D4161 craft→seat
+            EmberGemInsertChase.afterAcquire(p, code, loadouts, plugin); // D727 chase empty hole
         return true;
     }
 }

@@ -28,7 +28,10 @@ public final class EmberEnhanceLoop {
         boolean won = leveled(list);
         String P = EmberRunService.P;
         celebrate(p, list, won);
-        if (won) maybeGemHoleChase(p, d, list); // D731
+        if (won) {
+            boolean seated = EmberGemHoleSeat.maybeAutoSeat(p, d, list); // D4097 real seat
+            if (!seated) maybeGemHoleChase(p, d, list); // D731 chase only if no auto-seat
+        }
         boolean goalHit = won && d != null && EmberForgeGoal.get(d) == EmberForgeGoal.ENHANCE;
         if (goalHit) { // D660
             p.sendMessage(P + "§a本周工坊目标完成：§f强化+1");
