@@ -64,10 +64,8 @@ Icons:
       name: '§6烙到手里拿着的那件'
       lore:
         - '%corerpg_p1_sig_p_held%'
-        - ''
-        - '§7先把要烙的件拿在主手，再打开这页'
-        - '§8（刃：主手那把就是正在用的刃；护符：可以烙没选定的那件）'
-        - '§e➥ 点击选这件'
+        - '§7主手拿着要烙的件'
+        - '§e➥ §f点击选这件'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
@@ -79,12 +77,9 @@ Icons:
       material: blaze powder
       name: '§6确认烙印'
       lore:
-        - '§e希望：§f%corerpg_p1_sig_imprint_hope%'
         - '%corerpg_p1_sig_p_cost%'
         - '%corerpg_p1_sig_p_warn%'
-        - '%corerpg_p1_sig_p_check%'
-        - ''
-        - '%corerpg_p1_sig_p_go%'
+        - '§e➥ §f确认 · Shift覆盖 %corerpg_p1_sig_imprint_hope%'
     actions:
       left:
         - 'sound: UI_BUTTON_CLICK-1-1'

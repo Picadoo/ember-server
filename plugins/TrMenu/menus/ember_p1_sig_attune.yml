@@ -42,20 +42,15 @@ Icons:
       name: '§d签名调律 · 说明'
       lore:
         - '%corerpg_p1_sig_alt_head%'
-        - '§e希望 · 解锁：§f%corerpg_p1_sig_attune_hope%'
-        - '%corerpg_p1_sig_marks%'
-        - ''
-        - '§7好处不变，只换代价那一半；同一件签名同时只有一个版本生效'
-        - '§7解锁：那张图的 10 枚首领徽记，一次、永久（Shift+点击）'
-        - '§7切换：点击；只能在城里，下一局起生效'
-        - '§8没有调律版：L03 / L04 / L05 / L07 / L09 / Q07 三件'
+        - '§7点切换 · Shift解锁（10徽记）· 城内下局生效'
+        - '§e希望：§f%corerpg_p1_sig_attune_hope% §8· %corerpg_p1_sig_marks%'
 
   '1':
     update: 20
     display:
       material: iron axe
       name: '%corerpg_p1_sig_n_1%'
-      lore: ['%corerpg_p1_sig_k_1%', '%corerpg_p1_sig_g_1%', '%corerpg_p1_sig_b_1%', '%corerpg_p1_sig_o_1%', '', '%corerpg_p1_sig_t_1%']
+      lore: ['%corerpg_p1_sig_k_1%', '%corerpg_p1_sig_g_1%', '%corerpg_p1_sig_t_1%']
     actions:
       left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L01']
       shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L01 unlock']
@@ -65,7 +60,7 @@ Icons:
     display:
       material: totem
       name: '%corerpg_p1_sig_n_2%'
-      lore: ['%corerpg_p1_sig_k_2%', '%corerpg_p1_sig_g_2%', '%corerpg_p1_sig_b_2%', '%corerpg_p1_sig_o_2%', '', '%corerpg_p1_sig_t_2%']
+      lore: ['%corerpg_p1_sig_k_2%', '%corerpg_p1_sig_g_2%', '%corerpg_p1_sig_t_2%']
     actions:
       left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L02']
       shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L02 unlock']
@@ -75,7 +70,7 @@ Icons:
     display:
       material: totem
       name: '%corerpg_p1_sig_n_6%'
-      lore: ['%corerpg_p1_sig_k_6%', '%corerpg_p1_sig_g_6%', '%corerpg_p1_sig_b_6%', '%corerpg_p1_sig_o_6%', '', '%corerpg_p1_sig_t_6%']
+      lore: ['%corerpg_p1_sig_k_6%', '%corerpg_p1_sig_g_6%', '%corerpg_p1_sig_t_6%']
     actions:
       left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L06']
       shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L06 unlock']
@@ -85,7 +80,7 @@ Icons:
     display:
       material: totem
       name: '%corerpg_p1_sig_n_8%'
-      lore: ['%corerpg_p1_sig_k_8%', '%corerpg_p1_sig_g_8%', '%corerpg_p1_sig_b_8%', '%corerpg_p1_sig_o_8%', '', '%corerpg_p1_sig_t_8%']
+      lore: ['%corerpg_p1_sig_k_8%', '%corerpg_p1_sig_g_8%', '%corerpg_p1_sig_t_8%']
     actions:
       left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L08']
       shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L08 unlock']
@@ -95,7 +90,7 @@ Icons:
     display:
       material: totem
       name: '%corerpg_p1_sig_n_10%'
-      lore: ['%corerpg_p1_sig_k_10%', '%corerpg_p1_sig_g_10%', '%corerpg_p1_sig_b_10%', '%corerpg_p1_sig_o_10%', '', '%corerpg_p1_sig_t_10%']
+      lore: ['%corerpg_p1_sig_k_10%', '%corerpg_p1_sig_g_10%', '%corerpg_p1_sig_t_10%']
     actions:
       left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L10']
       shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L10 unlock']
@@ -105,7 +100,7 @@ Icons:
     display:
       material: totem
       name: '%corerpg_p1_sig_n_12%'
-      lore: ['%corerpg_p1_sig_k_12%', '%corerpg_p1_sig_g_12%', '%corerpg_p1_sig_b_12%', '%corerpg_p1_sig_o_12%', '', '%corerpg_p1_sig_t_12%']
+      lore: ['%corerpg_p1_sig_k_12%', '%corerpg_p1_sig_g_12%', '%corerpg_p1_sig_t_12%']
     actions:
       left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L12']
       shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L12 unlock']

@@ -39,10 +39,7 @@ Icons:
       lore:
         - '%corerpg_p1_sig_run%'
         - '%corerpg_p1_sig_run_cost%'
-        - ''
-        - '§7本周首次进日刷/挑战前确认一次'
-        - '§7可先去调律页换代价，或直接进本'
-        - '§8同周不再打断 · 城内有效 · 非战斗热换'
+        - '§7本周首次确认 · 可先调律再进'
 
   A:
     update: 20
@@ -68,9 +65,6 @@ Icons:
       lore:
         - '%corerpg_p1_sig_run%'
         - '%corerpg_p1_sig_run_cost%'
-        - ''
-        - '§7按当前原版/调律直接进本'
-        - ''
         - '§e➥ §f点击进本'
     actions:
       all:
