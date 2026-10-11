@@ -299,7 +299,20 @@ public final class EmberSettleService {
                 && !runs.progressFlag(pd, "q07") // E-review #7: after the own Q07 first clear a normal repeat neither pays nor uses a challenge slot
                 && pd.periodCount(EmberRunService.C_ROTATION, week) < runs.maps().rotationWeeklyCap;
         if (featNormal) rotation = true;
-        final int rotMarks = rotationMarkAmount(s.challenge, runs.maps().rotationBonusMarks, runs.maps().rotationNormalBonusMarks);
+        int rotMarks = rotationMarkAmount(s.challenge, runs.maps().rotationBonusMarks, runs.maps().rotationNormalBonusMarks);
+        try {
+            if (rotation) {
+                int soft = EmberRotMarkBoost.apply(pd, rotMarks); // D10161
+                if (soft > rotMarks) {
+                    rotMarks = soft;
+                    Player tip = Bukkit.getPlayer(u);
+                    if (tip != null && tip.isOnline()) {
+                        tip.sendMessage(EmberRunService.P + "§a精选加码 · 印记 +" + EmberRotMarkBoost.BONUS + "（今日一次）");
+                        try { tip.sendActionBar("§a精选加码"); } catch (Throwable ignored) { }
+                    }
+                }
+            }
+        } catch (Throwable ignored) { }
         if (m.raid) // P2-5 + P2-9 (D82): one targeted T3 roll (floor 精良) + 1 T3 mark; titles / trail are cosmetic (D233 → EmberRaidService)
             grants.addAll(EmberRaidService.settleGrants(in, m, runs.maps().raidItemQualityFloor, s.tier));
         if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), rotMarks, null));
@@ -329,7 +342,20 @@ public final class EmberSettleService {
         final int pledged = runs.pledge().count(s.modifier);
         if (sigRun && in.firstClear == null && runs.progressFlag(pd, m.key) && pledged > 0) { // D174 stage 2b 自选誓约: +1 insignia per pledged rule (D232 → EmberPledgeService)
             EmberRunRules.Grant pg = EmberPledgeService.settleGrant(m.key, pledged);
-            if (pg != null) grants.add(pg);
+            if (pg != null) {
+                try {
+                    int boosted = EmberPledgeSettleBoost.apply(pd, pg.amount); // D10177
+                    if (boosted > pg.amount) {
+                        pg = new EmberRunRules.Grant(pg.key, pg.kind, pg.id, boosted, pg.item);
+                        Player tip = Bukkit.getPlayer(u);
+                        if (tip != null && tip.isOnline()) {
+                            tip.sendMessage(EmberRunService.P + "§a誓约加码 · 徽记 +" + EmberPledgeSettleBoost.BONUS + "（今日一次）");
+                            try { tip.sendActionBar("§a誓约加码"); } catch (Throwable ignored) { }
+                        }
+                    }
+                } catch (Throwable ignored) { }
+                grants.add(pg);
+            }
         }
         final boolean sigFc = sigRun && in.firstClear != null && pd.periodCount(EmberSignature.C_FC + m.key, "all") <= 0;
         if (sigFc) grants.add(new EmberRunRules.Grant("fc_sigmark", EmberRunRules.Kind.SIGMARK, m.key, EmberSignature.fcMarks(), null));
@@ -337,6 +363,15 @@ public final class EmberSettleService {
         if (!s.challenge && s.abyss == 0 && !m.raid) { // D138 repeat-run variety (rolled only when every member had the first clear)
             grants.addAll(EmberRunRules.varietyGrants(in.firstClear != null, s.affixDone, runs.maps().variety.affixShard, s.eventDone, runs.maps().variety.eventCore, s.eventKind));
             affixBoost = EmberAffixShardBoost.apply(pd, s.affixDone, grants); // D7585
+            try {
+                if (EmberEventCoreBoost.apply(pd, s.eventDone, grants)) { // D10145
+                    Player tip = Bukkit.getPlayer(u);
+                    if (tip != null && tip.isOnline()) {
+                        tip.sendMessage(EmberRunService.P + "§a事件加赠 · 核心 +" + EmberEventCoreBoost.BONUS + "（今日一次）");
+                        try { tip.sendActionBar("§a事件加赠"); } catch (Throwable ignored) { }
+                    }
+                }
+            } catch (Throwable ignored) { }
         }
         EmberRunRules.Ledger l = runs.store().ledger(u);
         // P2-7 daily bounty (D79): the n-th settled clear of the stamina day; counted once per run (fresh = no base row yet)
