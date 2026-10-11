@@ -528,3 +528,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - BrandSure D4961–D5024: 烙纹合成/定向料齐直办（零价改；非 forge sure twin）
 - BrandSure edges D5025–D5088: craft→path auto-pin；同类型 cap 拒
 - PostureGeom D5089–D5152: 姿态对齐烬斩几何加宽（零 skill_mult）
+- PostureGeom edges D5153–D5216: dash+0.12 / step ignite+0.35 / parry非守+25ms

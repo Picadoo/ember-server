@@ -251,7 +251,7 @@ public final class FlexSkillService implements Listener {
         } catch (Throwable ignored) { }
         double dist = town.sunshine.corerpg.p1.EmberSkillKit.stepTravelDistance(
                 def.distance, back, stepPostureAligned(player),
-                town.sunshine.corerpg.p1.EmberPosturePath.get(data), mapKey);
+                town.sunshine.corerpg.p1.EmberPosturePath.get(data), mapKey, stepShapeSynced(player));
         String igniteNote = stepEffectNote(stepVar, back);
         player.sendMessage(ChatColor.GRAY + "  冷却 " + def.cooldownSeconds + "s · 位移约 "
                 + (int) Math.round(dist) + " 格 · 零体力" + igniteNote
@@ -325,13 +325,14 @@ public final class FlexSkillService implements Listener {
         PlayerData data = dataStore.get(player.getUniqueId());
         boolean back = town.sunshine.corerpg.p1.EmberSkillKit.stepBackward(data);
         boolean posture = stepPostureAligned(player);
+        boolean syncStep = stepShapeSynced(player); // D5153
         int pid = town.sunshine.corerpg.p1.EmberPosturePath.get(data);
         String mapKey2 = null;
         try {
             town.sunshine.corerpg.p1.EmberRunService runs2 = plugin.getEmberRuns();
             mapKey2 = runs2 == null ? null : runs2.activeMapKey(player);
         } catch (Throwable ignored) { }
-        double dist = town.sunshine.corerpg.p1.EmberSkillKit.stepTravelDistance(def.distance, back, posture, pid, mapKey2);
+        double dist = town.sunshine.corerpg.p1.EmberSkillKit.stepTravelDistance(def.distance, back, posture, pid, mapKey2, syncStep);
         Location best = town.sunshine.corerpg.p1.EmberDash.tryDash(player, dist, back, back);
         if (best == null) {
             String fail = from.getWorld() == null ? "无法踏步"
@@ -431,8 +432,9 @@ public final class FlexSkillService implements Listener {
         if (!town.sunshine.corerpg.p1.EmberSkillKit.huohenActive(data, runs, fam)) return false;
         town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
         if (sets == null) return true;
+        boolean postureH = stepPostureAligned(player); // D5153
         LivingEntity target = nearestEnemy(player, at,
-                town.sunshine.corerpg.p1.EmberSkillKit.STEP_IGNITE_RADIUS);
+                town.sunshine.corerpg.p1.EmberSkillKit.stepIgniteRadius(postureH));
         if (target == null) return true;
         sets.skillIgnite(player, target, town.sunshine.corerpg.p1.EmberSkillKit.STEP_BURN_MULT);
         at.getWorld().spawnParticle(Particle.FLAME, at.clone().add(0, 0.3, 0), 18, 0.4, 0.2, 0.4, 0.02);
@@ -444,11 +446,11 @@ public final class FlexSkillService implements Listener {
         if (player == null || at == null || at.getWorld() == null) return false;
         if (!town.sunshine.corerpg.p1.EmberMode.isP1(player)) return false;
         if (stepVariantOf(player) != town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN) return false;
+        boolean posture = stepPostureAligned(player); // D5153
         LivingEntity target = nearestEnemy(player, at,
-                town.sunshine.corerpg.p1.EmberSkillKit.STEP_IGNITE_RADIUS);
+                town.sunshine.corerpg.p1.EmberSkillKit.stepIgniteRadius(posture));
         if (target == null) return true;
         boolean sync = stepShapeSynced(player);
-        boolean posture = stepPostureAligned(player);
         target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
                 town.sunshine.corerpg.p1.EmberSkillKit.stepLandSlowTicks(sync, posture), 0, false, true), true);
         at.getWorld().spawnParticle(Particle.CRIT_MAGIC, at.clone().add(0, 0.3, 0), 16, 0.35, 0.2, 0.35, 0.02);

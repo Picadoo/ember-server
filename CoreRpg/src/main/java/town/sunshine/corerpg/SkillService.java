@@ -780,6 +780,7 @@ public final class SkillService implements Listener {
         java.util.LinkedHashSet<LivingEntity> hitSet = new java.util.LinkedHashSet<LivingEntity>();
         boolean dashSyncR = false;
         boolean dashRoomR = false;
+        boolean dashPosture = false;
         int dashShapeId = town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_FAN;
         String dashMap = null;
         try {
@@ -791,8 +792,9 @@ public final class SkillService implements Listener {
             town.sunshine.corerpg.PlayerData pdR = dataStore.get(player.getUniqueId());
             dashShapeId = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(pdR, runsR);
             dashMap = runsR == null ? null : runsR.activeMapKey(player);
+            dashPosture = town.sunshine.corerpg.p1.EmberPosturePath.aligned(pdR, runsR); // D5153
         } catch (Throwable ignored) { }
-        double dashR = town.sunshine.corerpg.p1.EmberSkillKit.dashHitRadius(dashSyncR, dashRoomR, dashShapeId, dashMap);
+        double dashR = town.sunshine.corerpg.p1.EmberSkillKit.dashHitRadius(dashSyncR, dashRoomR, dashShapeId, dashMap, dashPosture);
         for (Location sample : town.sunshine.corerpg.p1.EmberDash.pathSamples(from, dest)) {
             if (sample.getWorld() == null) continue;
             double r = dashR;

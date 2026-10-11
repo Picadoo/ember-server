@@ -516,11 +516,18 @@ public final class EmberSkillKit {
 
     /** D3100: Q05 kit identity — step +0.35 in Q05 (zero skill_mult). */
     public static double stepTravelDistance(double forwardDist, boolean back, boolean postureAligned, int postureId, String mapKey) {
+        return stepTravelDistance(forwardDist, back, postureAligned, postureId, mapKey, false);
+    }
+
+    /** D5153: set×shape sync + posture → +0.2 travel (zero skill_mult). */
+    public static double stepTravelDistance(double forwardDist, boolean back, boolean postureAligned, int postureId,
+                                            String mapKey, boolean setShapeSync) {
         double base = back ? BACKSTEP_DISTANCE : forwardDist;
         if (postureAligned && postureId > 0) {
             if (back && postureId == EmberPosturePath.GUARD) base += 0.5;
             else if (!back && (postureId == EmberPosturePath.STRIKE || postureId == EmberPosturePath.SWEEP))
                 base += 0.5;
+            if (setShapeSync) base += 0.2; // D5153 geom feel
         }
         if (mapKey != null && "q05".equalsIgnoreCase(mapKey)) base += 0.35;
         return base;
@@ -570,11 +577,23 @@ public final class EmberSkillKit {
 
     /** D3097: Q02 kit identity — dash radius +0.08 in Q02 (not Shape-native twin). */
     public static double dashHitRadius(boolean setShapeSync, boolean roomShape, int shapeId, String mapKey) {
+        return dashHitRadius(setShapeSync, roomShape, shapeId, mapKey, false);
+    }
+
+    /** D5153: posture aligned → dash hit +0.12 (zero skill_mult). */
+    public static double dashHitRadius(boolean setShapeSync, boolean roomShape, int shapeId, String mapKey,
+                                       boolean postureAligned) {
         double r = setShapeSync ? DASH_HIT_RADIUS + 0.20 : DASH_HIT_RADIUS;
         if (setShapeSync && roomShape) r += 0.15;
         if (shapeId == SHAPE_RING) r += 0.10;
         if (mapKey != null && "q02".equalsIgnoreCase(mapKey)) r += 0.08;
+        if (postureAligned) r += 0.12;
         return r;
+    }
+
+    /** D5153: step ignite radius when posture aligned. */
+    public static double stepIgniteRadius(boolean postureAligned) {
+        return STEP_IGNITE_RADIUS + (postureAligned ? 0.35 : 0);
     }
 
     /** D2343: parry window ms when set-shape synced. */
@@ -589,8 +608,18 @@ public final class EmberSkillKit {
 
     /** D3098: Q03 kit identity — parry window +30ms in Q03 (zero skill_mult). */
     public static long parryWindowMs(boolean setShapeSync, boolean guardPosture, String mapKey) {
+        return parryWindowMs(setShapeSync, guardPosture, mapKey, false);
+    }
+
+    /**
+     * D5153: postureAligned (non-GUARD) +25ms; GUARD keeps +50 via guardPosture.
+     * Zero skill_mult / flat damage.
+     */
+    public static long parryWindowMs(boolean setShapeSync, boolean guardPosture, String mapKey,
+                                     boolean postureAligned) {
         long ms = setShapeSync ? PARRY_WINDOW_MS + 50L : PARRY_WINDOW_MS;
         if (guardPosture) ms += 50L;
+        else if (postureAligned) ms += 25L;
         if (mapKey != null && "q03".equalsIgnoreCase(mapKey)) ms += 30L;
         return ms;
     }
