@@ -2344,3 +2344,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 门禁 | `tools/p1sim/affixpack16.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack16-d12220-2026-10-12.md` |
 
+### 13.129 Affix Pack 17 浪脊/积潭（CoreRpg 1.65.739，D12221，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12221 |
+| jar | CoreRpg **1.65.739-d12221.local** |
+| balance_version | 103 → **104** |
+| 行为 | 词缀池 34→36：+`crest` 浪脊 / `pond` 积潭；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack17-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack17.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack17-d12221-2026-10-12.md` |
+
