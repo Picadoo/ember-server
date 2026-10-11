@@ -331,6 +331,7 @@ public final class LifeService implements Listener {
         dataStore.flushMutation(p.getUniqueId());
         p.sendMessage(ChatColor.GRAY + "[铁砧] 修理手续费 -" + fee + " 余烬币");
         try { p.sendActionBar("§a铁砧 · 修理 -" + fee + "币"); } catch (Throwable ignored) { } // D1575
+        try { town.sunshine.corerpg.p1.EmberAnvilRepairWinShard.maybeGift(p, d); } catch (Throwable ignored) { } // D11169
     }
 
     // ---------------- command ----------------
@@ -593,6 +594,12 @@ public final class LifeService implements Listener {
             town.sunshine.corerpg.p1.EmberBrewPath.afterBrew(p);
         if (town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.isSoulDustOffer(o.id)) {
             try { town.sunshine.corerpg.p1.EmberSoulDustWinBlank.maybeGift(p, d); } catch (Throwable ignored) { } // D11153
+        }
+        if (town.sunshine.corerpg.p1.EmberReforgeStoneSoft.OFFER_ID.equals(o.id)) {
+            try { town.sunshine.corerpg.p1.EmberReforgeStoneWinBone.maybeGift(p, d); } catch (Throwable ignored) { } // D11201
+        }
+        if (town.sunshine.corerpg.p1.EmberPetHatchSoft.isPetOffer(o.id)) {
+            try { town.sunshine.corerpg.p1.EmberPetHatchWinBlank.maybeGift(p, d); } catch (Throwable ignored) { } // D11217
         }
         return true;
     }
