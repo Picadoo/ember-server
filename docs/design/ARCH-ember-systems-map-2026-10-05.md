@@ -514,3 +514,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - Quiet economy NEAR-SAT D4009–D4064 (quality/refine/attune/codex quiet)
 - Imprint next map pin D4065–D4096
 - Gem hole auto-seat D4097–D4144: enhance unlock → preferred gem auto-insert (zero flat raise)
+- AFK stable forgive D4241–D4288: 够稳首次阵亡不计入 death_stop（零日表）

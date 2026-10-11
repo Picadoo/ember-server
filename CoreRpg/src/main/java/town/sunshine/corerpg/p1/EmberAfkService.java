@@ -858,15 +858,30 @@ public final class EmberAfkService implements Listener {
         if (f == null) return;
         long now = System.currentTimeMillis();
         clearMobs(f);
-        f.deaths.addLast(now);
-        while (!f.deaths.isEmpty() && now - f.deaths.peekFirst() > deathWindowMin * 60000L) f.deaths.removeFirst();
-        if (f.deaths.size() >= deathStop) {
+        // D4241: 够稳首次容错 — 不计入 death_stop
+        boolean forgiven = false;
+        try {
+            PlayerData pd = data(p.getUniqueId());
+            EmberLoadoutService ls = plugin.getEmberLoadouts();
+            EmberLoadout lo = ls == null ? null : ls.get(p);
+            if (pd != null && lo != null) {
+                forgiven = EmberAfkGearFeel.maybeStableDeathForgive(p, pd, f.tier, lo.b, lo.h);
+                if (forgiven) plugin.getDataStore().flushMutation(p.getUniqueId());
+            }
+        } catch (Throwable ignored) { }
+        if (!forgiven) {
+            f.deaths.addLast(now);
+            while (!f.deaths.isEmpty() && now - f.deaths.peekFirst() > deathWindowMin * 60000L) f.deaths.removeFirst();
+        }
+        if (!forgiven && f.deaths.size() >= deathStop) {
             autoOff.add(p.getUniqueId());
             stop(p, f, "§c" + deathWindowMin + " 分钟内阵亡 " + f.deaths.size() + " 次，自动战斗已停止。§7这一层对你现在的装备太难："
                     + "去低一层挂，或回主线本刷装备/强化后再来（菜单里可重新开始）。");
         } else {
             f.nextWave = now + 5000L;
-            p.sendMessage(P + "§e阵亡（" + f.deaths.size() + "/" + deathStop + "）· 自动复活后继续。§7装备不够时死得多，连续 " + deathStop + " 次会停下。");
+            if (!forgiven) {
+                p.sendMessage(P + "§e阵亡（" + f.deaths.size() + "/" + deathStop + "）· 自动复活后继续。§7装备不够时死得多，连续 " + deathStop + " 次会停下。");
+            }
         }
         Bukkit.getScheduler().runTaskLater(plugin, () -> { if (p.isOnline() && p.isDead()) p.spigot().respawn(); }, 20L);
     }

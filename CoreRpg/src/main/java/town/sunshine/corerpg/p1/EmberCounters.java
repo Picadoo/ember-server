@@ -529,6 +529,7 @@ public final class EmberCounters {
         x("p1_abyss_layer_target", "EmberAbyssTarget", A, SE, OW, "D694 abyss next-layer target");
         x("p1_afk_forge_path_told", "EmberAfkForgePath", A, HI, OW, "AFK forge path tip latch");
         px("p1_afk_gear_stable_t", "EmberAfkGearFeel", D, HI, OW, "D2230 AFK gear-stable rising-edge latch per tier@day");
+        px("p1_afk_gear_forgive_t", "EmberAfkGearFeel", D, HI, OW, "D4241 AFK gear-stable first-death forgive per tier@day");
         px("p1_afk_gear_weak_t", "EmberAfkGearFeel", D, HI, OW, "D2242 AFK gear-weak+deaths latch per tier@day");
         x("p1_forge_mat_ready", "EmberForgeMatReady", A, HI, OW, "D478 enhance mat-ready latch = target enhance");
         x("p1_forge_mat_quiet", "EmberForgeMatReady", A, HI, OW, "D3977 quiet held mat tip latch = target enhance");
