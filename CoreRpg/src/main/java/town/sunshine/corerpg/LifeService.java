@@ -187,6 +187,10 @@ public final class LifeService implements Listener {
             }
         } catch (Throwable ignored) { }
         addXp(e.getPlayer(), xp);
+        try {
+            PlayerData pdW = dataStore.get(e.getPlayer().getUniqueId());
+            town.sunshine.corerpg.p1.EmberFishWinBlank.maybeGift(e.getPlayer(), pdW); // D11281
+        } catch (Throwable ignored) { }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -590,8 +594,10 @@ public final class LifeService implements Listener {
             p.sendActionBar(bar);
         } catch (Throwable ignored) { }
         addXp(p, o.xp);
-        if (BREW_OFFER_ID.equals(o.id)) // D844
+        if (BREW_OFFER_ID.equals(o.id)) { // D844
             town.sunshine.corerpg.p1.EmberBrewPath.afterBrew(p);
+            try { town.sunshine.corerpg.p1.EmberBrewWinShard.maybeGift(p, d); } catch (Throwable ignored) { } // D11265
+        }
         if (town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.isSoulDustOffer(o.id)) {
             try { town.sunshine.corerpg.p1.EmberSoulDustWinBlank.maybeGift(p, d); } catch (Throwable ignored) { } // D11153
         }
@@ -826,6 +832,7 @@ public final class LifeService implements Listener {
         } catch (Throwable ignored) { }
         addXp(p, cXp);
         town.sunshine.corerpg.p1.EmberCookPath.afterCook(p, cooked); // D843
+        try { town.sunshine.corerpg.p1.EmberCookWinBone.maybeGift(p, d); } catch (Throwable ignored) { } // D11233
     }
 
     // ---------------- fishing diagnostics (op) ----------------
