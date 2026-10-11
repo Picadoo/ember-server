@@ -210,6 +210,11 @@ public final class EmberLoadoutService implements Listener {
         // D695 set completion chase on form / awakening bump
         if ((setChanged || prevAwk != l.awakening) && EmberMode.isP1(p)) {
             PlayerData pdChase = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
+            if (l.awakening > prevAwk) { // D4385 awaken break auto-step (no ConfirmTokens)
+                EmberRunService runs = plugin.getEmberRuns();
+                EmberAwakenBreak.maybeAfterAwkUp(p, pdChase, prevAwk, l, this, runs);
+                if (pdChase != null) plugin.getDataStore().flushMutation(p.getUniqueId());
+            }
             EmberSetChase.maybeAfterSetChange(p, pdChase, prevSet, prevAwk, l);
         }
         // D607 shape-fork S0: soft-prefer set shape when 2pc forms (zero skill_mult)

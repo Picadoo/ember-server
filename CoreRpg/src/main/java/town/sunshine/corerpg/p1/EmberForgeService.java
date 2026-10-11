@@ -397,8 +397,8 @@ public final class EmberForgeService implements Listener {
                     : "  本档第 " + attempt + "/" + max + " 次 · 含本次≤" + EmberGearNextHint.enhanceAttemptsUntilSure(d) + " 次必成";
             p.sendMessage(P + "强化预览: +" + d.enhance + " → +" + target + "  成功率 " + ratePct + "%" + pityChat);
             if (sure) {
-                p.sendMessage(P + ChatColor.GREEN + "下次必成已就绪 · 点确认即可升档（不改保底规则）");
-                try { p.sendActionBar("§a下次必成 · 确认即升 +" + target); } catch (Throwable ignored) { }
+                p.sendMessage(P + ChatColor.GREEN + "下次必成已就绪 · 材料齐则预览直办（不改保底规则）");
+                try { p.sendActionBar("§a下次必成 · 直办 +" + target); } catch (Throwable ignored) { }
             } else { // D849 / D1175
                 try { p.sendActionBar("§e强化 · §f+" + d.enhance + "→+" + target
                         + " §7· " + ratePct + "% · ≤" + EmberGearNextHint.enhanceAttemptsUntilSure(d) + "次必成"); } catch (Throwable ignored) { }
@@ -413,12 +413,17 @@ public final class EmberForgeService implements Listener {
                 ConfirmTokens.sendButtons(p, P + "§7材料不够：",
                         new String[]{"[冒险刷料]", "/ember_p1_adventure", "图装/材料本", "GREEN"},
                         new String[]{"[仓库]", "/corerpg p1 vault", "看材料仓", "AQUA"});
-            } else {
-                ConfirmTokens.sendButtons(p, P + "手里拿着这件再点：", // D849
-                        new String[]{"[确认强化]", "/corerpg p1 enhance confirm", "扣材料强化一次", "GREEN"},
-                        new String[]{"[成色预览]", "/corerpg p1 quality", "先看成色", "GOLD"},
-                        new String[]{"[精工预览]", "/corerpg p1 refine", "先看精工", "AQUA"});
+                EmberEnhanceUndo.forgeGlance(p); // D717 preview while fail-undo open
+                return true;
             }
+            if (sure) { // D4417: 必成直办 — skip ConfirmTokens
+                p.sendMessage(P + ChatColor.GREEN + "必成直办 · 正在强化…");
+                return enhance(p, it, true, rid);
+            }
+            ConfirmTokens.sendButtons(p, P + "手里拿着这件再点：", // D849
+                    new String[]{"[确认强化]", "/corerpg p1 enhance confirm", "扣材料强化一次", "GREEN"},
+                    new String[]{"[成色预览]", "/corerpg p1 quality", "先看成色", "GOLD"},
+                    new String[]{"[精工预览]", "/corerpg p1 refine", "先看精工", "AQUA"});
             EmberEnhanceUndo.forgeGlance(p); // D717 preview while fail-undo open
             return true;
         }
@@ -481,12 +486,17 @@ public final class EmberForgeService implements Listener {
                 ConfirmTokens.sendButtons(p, P + "§7材料不够：",
                         new String[]{"[冒险刷料]", "/ember_p1_adventure", "开本", "GREEN"},
                         new String[]{"[仓库]", "/corerpg p1 vault", "看仓", "AQUA"});
-            } else {
-                ConfirmTokens.sendButtons(p, P + "手里拿着这件再点：",
-                        new String[]{label, cmd, "按上面的预览执行", "GREEN"},
-                        new String[]{"[强化预览]", "/corerpg p1 enhance", "看强化", "GOLD"},
-                        new String[]{"[工坊]", "/corerpg p1 forge", "总页", "GRAY"});
+                return true;
             }
+            // D4417: 成色/精工确定成功 → 预览直办（升阶仍确认，花费更大）
+            if ("quality".equals(kind) || "refine".equals(kind)) {
+                p.sendMessage(P + ChatColor.GREEN + "确定成功 · 预览直办…");
+                return simple(p, it, kind, plan, true, rid);
+            }
+            ConfirmTokens.sendButtons(p, P + "手里拿着这件再点：",
+                    new String[]{label, cmd, "按上面的预览执行", "GREEN"},
+                    new String[]{"[强化预览]", "/corerpg p1 enhance", "看强化", "GOLD"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "总页", "GRAY"});
             return true;
         }
         String r = rid != null ? rid : kind + ":" + it.data.uid + ":" + it.data.rev;

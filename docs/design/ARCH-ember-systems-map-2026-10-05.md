@@ -516,3 +516,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - Gem hole auto-seat D4097–D4144: enhance unlock → preferred gem auto-insert (zero flat raise)
 - AFK stable forgive D4241–D4288: 够稳首次阵亡不计入 death_stop（零日表）
 - GemSeatLive D4289–D4352 + AFK stable death-clear（零抬 flat/日表）
+- AwakenBreak D4385–D4448 + forge sure/quality/refine 预览直办（非 K3 · 少 ConfirmTokens）
