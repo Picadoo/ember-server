@@ -626,9 +626,9 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9 + D12214 Pack 10 + D12215 Pack 11. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
+        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9 + D12214 Pack 10 + D12215 Pack 11 + D12216 Pack 12. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
-                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple"));
+                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
                 "timed", "crystal", "escort", "hold", "beacon", "relay", "breach", "chain", "unscathed"));
         public final double affixRate, eventRate;
@@ -675,6 +675,10 @@ public final class EmberRunMaps {
         // D12215 cleave (劈斩: frontal cone toward player) / ripple (涟漪: expanding ring annulus)
         public final double cleaveEvery, cleaveWarn, cleaveAngle, cleaveRange, cleaveDmg;
         public final double rippleEvery, rippleWarn, rippleRadius, rippleHalfW, rippleDmg;
+        // D12216 mirror (残影: delayed circle at player feet at warn start) / bloom (绽放: 4 petals at 90°)
+        public final double mirrorEvery, mirrorWarn, mirrorRadius, mirrorDmg;
+        public final double bloomEvery, bloomWarn, bloomOrbit, bloomRadius, bloomDmg;
+        public final int bloomCount;
         // D171 crystal / escort / timed
         public final int crystalCount, crystalSecs, timedSecs;
         public final double escortHp;
@@ -868,6 +872,18 @@ public final class EmberRunMaps {
             rippleRadius = Math.max(1.0, Math.min(4.0, num(rp.get("radius"), 4.0))); // ≤ 4
             rippleHalfW = Math.max(0.3, Math.min(1.0, num(rp.get("half_w"), 1.0)));  // band ≤ 1.0
             rippleDmg = Math.max(0.0, Math.min(0.5, num(rp.get("dmg"), 0.5)));       // ≤ 0.5 atk
+            Map<?, ?> mi2 = m.get("mirror") instanceof Map ? (Map<?, ?>) m.get("mirror") : Collections.emptyMap();
+            mirrorEvery = Math.max(6.5, num(mi2.get("every"), 6.5));         // D12216: every ≥ 6.5
+            mirrorWarn = Math.max(1.4, num(mi2.get("warn"), 1.4));
+            mirrorRadius = Math.max(0.5, Math.min(2.0, num(mi2.get("radius"), 2.0))); // ≤ 2.0
+            mirrorDmg = Math.max(0.0, Math.min(0.55, num(mi2.get("dmg"), 0.55)));     // ≤ 0.55 atk
+            Map<?, ?> bm = m.get("bloom") instanceof Map ? (Map<?, ?>) m.get("bloom") : Collections.emptyMap();
+            bloomEvery = Math.max(7.0, num(bm.get("every"), 7.0));         // D12216: every ≥ 7
+            bloomWarn = Math.max(1.3, num(bm.get("warn"), 1.3));
+            bloomOrbit = Math.max(2.0, Math.min(4.0, num(bm.get("orbit"), 3.0))); // 2.0–4.0
+            bloomRadius = Math.max(0.5, Math.min(1.2, num(bm.get("radius"), 1.2))); // ≤ 1.2
+            bloomCount = Math.max(4, Math.min(4, (int) num(bm.get("count"), 4))); // fixed 4
+            bloomDmg = Math.max(0.0, Math.min(0.5, num(bm.get("dmg"), 0.5)));      // ≤ 0.5 atk
             Map<?, ?> tm = m.get("timed") instanceof Map ? (Map<?, ?>) m.get("timed") : Collections.emptyMap();
             timedSecs = Math.max(5, (int) num(tm.get("secs"), eventSecs));
             Map<?, ?> cr = m.get("crystal") instanceof Map ? (Map<?, ?>) m.get("crystal") : Collections.emptyMap();
@@ -930,6 +946,8 @@ public final class EmberRunMaps {
             if ("cascade".equals(id)) return "连落";
             if ("cleave".equals(id)) return "劈斩";
             if ("ripple".equals(id)) return "涟漪";
+            if ("mirror".equals(id)) return "残影";
+            if ("bloom".equals(id)) return "绽放";
             return id;
         }
 

@@ -2281,3 +2281,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | jar | 1.65.733-d12215.local |
 | 门禁 | affixpack11 within range（stress vs venom；p2econ CRN 24vs22） |
 | STATUS | `docs/status/STATUS-ember-affix-pack11-d12215-2026-10-11.md` |
+
+
+### 13.124 Affix Pack 12 残影/绽放（CoreRpg 1.65.734，D12216，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 行为 | 词缀池 24→26：+`mirror` 残影 / `bloom` 绽放；affix_shard 仍 2 |
+| bv | 98→99 |
+| jar | 1.65.734-d12216.local |
+| 门禁 | affixpack12 within range（stress vs venom；p2econ CRN 26vs24） |
+| STATUS | `docs/status/STATUS-ember-affix-pack12-d12216-2026-10-11.md` |

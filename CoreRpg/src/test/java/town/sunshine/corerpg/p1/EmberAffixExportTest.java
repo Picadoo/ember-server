@@ -235,6 +235,18 @@ public final class EmberAffixExportTest {
                 periodic(o, b, v, k.warn, v.rippleEvery);
                 o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1);
                 o.put("shape", shape(k));
+            } else if ("mirror".equals(id)) {
+                EmberRunMaps.Skill k = AffixMirror.skill(1.0, v);
+                o.put("engage", AffixMirror.ENGAGE); o.put("reach", AffixMirror.REACH);
+                periodic(o, b, v, k.warn, v.mirrorEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1);
+                o.put("shape", shape(k));
+            } else if ("bloom".equals(id)) {
+                EmberRunMaps.Skill k = AffixBloom.skill(1.0, v);
+                o.put("engage", AffixBloom.ENGAGE); o.put("reach", AffixBloom.REACH);
+                periodic(o, b, v, k.warn, v.bloomEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1); o.put("pops", v.bloomCount);
+                o.put("shape", shape(k));
             }
             Object raw = yml.get(id);
             Map<String, Object> in = new TreeMap<String, Object>();
@@ -303,7 +315,7 @@ public final class EmberAffixExportTest {
         Map<?, ?> yml = liveVariety();
         EmberRunMaps.Variety v = new EmberRunMaps.Variety(yml);
         Map<?, ?> aff = (Map<?, ?>) table(yml, balanceVersion()).get("affixes");
-        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple"}) {
+        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom"}) {
             List<String> log = AffixReplay.run(new PrimitiveAffixPath(), id, AffixReplay.Script.of(1L), v);
             String promote = null;
             for (String l : log) if (l.contains("PROMOTE")) { promote = l; break; }
