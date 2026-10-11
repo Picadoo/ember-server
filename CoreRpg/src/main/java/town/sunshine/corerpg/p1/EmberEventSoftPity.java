@@ -8,7 +8,7 @@ import town.sunshine.corerpg.PlayerData;
 
 /**
  * D623 · mustfeel R · W2a soft pity：账户连续 {@link #NEED} 次合格花样局 {@code eventRoom} 空
- * → 下一合格局强制抽事件（房/kind 仍由 seed 定）。禁止叠第二事件；禁挑战/首通/团本/连战/深渊保底。
+ * → 下一合格局强制抽事件（房走 D12206 W2b 中段权重，kind 仍由 seed 定）。禁止叠第二事件；禁挑战/首通/团本/连战/深渊保底。
  * 纯逻辑，无 Bukkit。不改 {@code event_rate} / balance_version。
  */
 public final class EmberEventSoftPity {
@@ -17,8 +17,6 @@ public final class EmberEventSoftPity {
     public static final String C_DRY = "p1_ev_dry";
     /** consecutive empty-event variety settles before next force */
     public static final int NEED = 1;
-
-    private static final String[] ROOMS = {"r1", "r2", "r3"};
 
     private EmberEventSoftPity() {}
 
@@ -45,7 +43,8 @@ public final class EmberEventSoftPity {
         if (v[2] != null && !v[2].isEmpty()) return false; // already has event — no stack
         if (events == null || events.isEmpty()) return false;
         Random r = new Random(seed);
-        String room = ROOMS[Math.floorMod(r.nextInt(), ROOMS.length)];
+        // D12206 W2b: same mid-room weight as Variety.roll
+        String room = EmberRunMaps.Variety.pickEventRoom(r);
         String kind = pick(events, r);
         if (kind == null) return false;
         v[2] = room;

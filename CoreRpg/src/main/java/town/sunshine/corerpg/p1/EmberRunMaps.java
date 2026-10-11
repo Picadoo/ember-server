@@ -834,6 +834,18 @@ public final class EmberRunMaps {
          * {affix room, affix id, event room, event kind} for this seed; entries are "" when not rolled.
          * Deterministic. Slot [3] defaults to "timed" when an event room is rolled (D138 callers that ignore it stay safe).
          */
+        /**
+         * D12206 W2b · mustfeel R：事件房权重 r2 > r1 ≈ r3（袋装 2:1:1）。
+         * 词缀房仍均匀。纯 Random，无 Bukkit。
+         */
+        public static String pickEventRoom(java.util.Random r) {
+            // bag: r1, r2, r2, r3 → P(r2)=1/2, P(r1)=P(r3)=1/4
+            int x = Math.floorMod(r.nextInt(), 4);
+            if (x == 0) return "r1";
+            if (x == 3) return "r3";
+            return "r2";
+        }
+
         public String[] roll(long seed) {
             java.util.Random r = new java.util.Random(seed);
             String[] rooms = {"r1", "r2", "r3"};
@@ -843,7 +855,7 @@ public final class EmberRunMaps {
                 at = affixes.get(r.nextInt(affixes.size()));
             }
             if (r.nextDouble() < eventRate && !events.isEmpty()) {
-                er = rooms[r.nextInt(3)];
+                er = pickEventRoom(r);
                 ek = events.get(r.nextInt(events.size()));
             }
             return new String[]{ar, at, er, ek};

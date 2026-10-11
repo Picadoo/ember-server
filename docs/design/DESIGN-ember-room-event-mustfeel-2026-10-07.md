@@ -68,7 +68,7 @@
 
 ### 3.2.1 D623 SHIP（2026-10-11）
 
-**W2a 软保底已上线**（CoreRpg **1.65.312-d623**）：`EmberEventSoftPity` · `p1_ev_dry@all` · NEED=1 · Session `ensureEvent`（`subSeed(…,"evpity")`）· Settle `onSettle`。**W2b 未做。** 禁 Pack6 / 叠第二事件 / 挑战·首通·团本·连战·深渊保底。详见 `STATUS-ember-room-event-soft-pity-d623-2026-10-11.md`。
+**W2a 软保底已上线**（CoreRpg **1.65.312-d623**）：`EmberEventSoftPity` · `p1_ev_dry@all` · NEED=1 · Session `ensureEvent`（`subSeed(…,"evpity")`）· Settle `onSettle`。**W2b 已上线**（CoreRpg **1.65.724-d12206**）：`Variety.pickEventRoom` 袋装 2:1:1（r2>r1≈r3）；软保底同权重；词缀房仍均匀；不抬 `event_rate` / `event_core` / bv。禁 Pack6 / 叠第二事件。详见 `STATUS-ember-event-room-mid-weight-d12206-2026-10-11.md`。
 
 ### 3.3 可选轻量 · 方案 W（权重，仍 9 kind）
 

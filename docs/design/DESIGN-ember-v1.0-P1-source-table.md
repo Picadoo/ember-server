@@ -2170,3 +2170,12 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | STATUS | `docs/status/STATUS-ember-trmenu-lore-hub-legacy-d12205-2026-10-11.md` |
 
 
+### 13.114 房间事件中段房偏好 W2b（CoreRpg 1.65.724，D12206，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 行为 | `Variety.pickEventRoom` 袋装 2:1:1（r2>r1≈r3）；`roll` 事件房改用；`EmberEventSoftPity.ensureEvent` 同权重；词缀房仍 `nextInt(3)` |
+| 经济 | 不改 event_rate / event_core / balance_version |
+| 设计 | mustfeel R 续窗 W2b；禁 Pack6 |
+| jar | 1.65.724-d12206.local |
+| STATUS | `docs/status/STATUS-ember-event-room-mid-weight-d12206-2026-10-11.md` |
