@@ -1455,6 +1455,8 @@ public final class EmberGrowthService implements Listener {
 
 
     /** D766: chase first, else first unlocked-map alt with marks ≥ ALT_MARKS. */
+    EmberSignature.Def pickAttuneReadyPublic(PlayerData d) { return pickAttuneReady(d); }
+
     private EmberSignature.Def pickAttuneReady(PlayerData d) {
         EmberSignature.Def chase = EmberSigChase.get(d);
         if (chase != null && EmberSignature.alt(chase) != null && !altUnlocked(d, chase)
@@ -1475,6 +1477,40 @@ public final class EmberGrowthService implements Listener {
      * D761: rising-edge attune unlock ready (chase target, marks ≥ ALT_MARKS, not unlocked, Q07 done).
      * One-click → sig attune &lt;id&gt; unlock. Zero ALT_MARKS / PAPI twin.
      */
+
+    /**
+     * D4769: auto unlock attune + switch to alt version. Town/hold gated. Zero ALT_MARKS raise.
+     * @return true when unlock committed
+     */
+    boolean autoAttuneUnlock(Player p, EmberSignature.Def sd) {
+        if (p == null || sd == null || EmberSignature.alt(sd) == null) return false;
+        if (inRun(p)) return false;
+        String hold = EmberAssetGuard.hold(p);
+        if (hold != null) return false;
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) return false;
+        if (altUnlocked(d, sd)) return false;
+        int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
+        String why = EmberSignature.attuneCheck(sd, EmberSkillKit.attuneUnlocked(d, runs),
+                runs.progressFlag(d, sd.map), false, marks);
+        if (why != null) return false;
+        if (!EmberEconomy.spendInsignia(d, "C13", sd.map, EmberSignature.altMarks())) return false;
+        d.addPeriodCount(EmberSignature.C_ALTU + sd.id, "all", 1);
+        d.addPeriodCount(EmberSignature.C_ALT + sd.id, "all", 1 - d.periodCount(EmberSignature.C_ALT + sd.id, "all"));
+        int ar = d.periodCount(C_ATTUNE_READY, "all");
+        if (ar > 0) d.addPeriodCount(C_ATTUNE_READY, "all", -ar);
+        boolean saved = plugin.getDataStore().flushMutationChecked(p.getUniqueId());
+        plugin.getLogger().info("[P1 sig] " + p.getName() + " attune unlock AUTO " + sd.id
+                + " (-" + EmberSignature.altMarks() + " " + sd.map + " marks, saved=" + saved + ")");
+        p.sendMessage(P + "§a调律自动解锁 · §6" + sd.name + " §7→ 调律版（代价："
+                + EmberSignature.alt(sd).bad + "）· 剩 "
+                + d.periodCount(EmberSignature.C_MARK + sd.map, "all") + " 枚徽记"
+                + " §8（不改徽记门槛）");
+        try { p.sendActionBar("§d调律自动 · §f" + sd.name); } catch (Throwable ignored) { }
+        EmberSigChase.maybeReadyCue(p, d);
+        return true;
+    }
+
     public boolean maybeAttuneReadyCue(Player p, PlayerData d) {
         if (p == null || d == null) return false;
         if (!runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return false;
@@ -1484,6 +1520,7 @@ public final class EmberGrowthService implements Listener {
             if (latched > 0) { d.addPeriodCount(C_ATTUNE_READY, "all", -latched); runs.flushData(p.getUniqueId()); }
             return false;
         }
+        if (EmberAttuneBreak.maybeAuto(p, d, this)) return true; // D4769 auto before button
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
         int latched = d.periodCount(C_ATTUNE_READY, "all");
         if (latched == def.code) return false;
