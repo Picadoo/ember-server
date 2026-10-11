@@ -1,3 +1,4 @@
+Live jar: **1.65.693-d10400.local** · D10337–D10400 BaseXpBoost + BaseMarkBoost + ExtraEliteBoost
 Live jar: **1.65.692-d10336.local** · D10273–D10336 BaseShardBoost + BaseBoneBoost + BaseCoreBoost
 Live jar: **1.65.691-d10272.local** · D10209–D10272 SigMarkBoost + FcSigMarkBoost + RaidMarkBoost
 Live jar: **1.65.690-d10208.local** · D10145–D10208 EventCoreBoost + RotMarkBoost + PledgeSettleBoost

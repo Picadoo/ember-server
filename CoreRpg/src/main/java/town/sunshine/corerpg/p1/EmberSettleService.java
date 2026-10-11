@@ -299,6 +299,24 @@ public final class EmberSettleService {
                     try { tip.sendActionBar("§a结算加码 · 核心"); } catch (Throwable ignored) { }
                 }
             }
+            if (EmberBaseXpBoost.apply(pd, grants)) { // D10337
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a结算加码 · 经验 +" + EmberBaseXpBoost.BONUS + "（今日一次）");
+                    try { tip.sendActionBar("§a结算加码 · 经验"); } catch (Throwable ignored) { }
+                }
+            }
+            if (EmberBaseMarkBoost.apply(pd, grants)) { // D10353
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a结算加码 · 印记 +" + EmberBaseMarkBoost.BONUS + "（今日一次）");
+                    try { tip.sendActionBar("§a结算加码 · 印记"); } catch (Throwable ignored) { }
+                }
+            }
+            if (EmberExtraEliteBoost.apply(pd, grants)) { // D10369
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a额外精英加码 · 奖励 ×2（今日一次）");
+                    try { tip.sendActionBar("§a额外精英加码"); } catch (Throwable ignored) { }
+                }
+            }
         } catch (Throwable ignored) { }
         boolean dropQForced = false;
         boolean dropCForced = false;
