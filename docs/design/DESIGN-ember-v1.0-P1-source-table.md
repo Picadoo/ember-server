@@ -2356,3 +2356,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 门禁 | `tools/p1sim/affixpack17.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack17-d12221-2026-10-12.md` |
 
+### 13.130 Affix Pack 18 刃边/浅井（CoreRpg 1.65.740，D12222，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12222 |
+| jar | CoreRpg **1.65.740-d12222.local** |
+| balance_version | 104 → **105** |
+| 行为 | 词缀池 36→38：+`edge` 刃边 / `well` 浅井；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack18-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack18.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack18-d12222-2026-10-12.md` |
+
