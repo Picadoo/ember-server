@@ -54,7 +54,7 @@ public final class CoreWorldRulesPlugin extends JavaPlugin implements Listener {
     private boolean clearItemDrops = true;
     private boolean clearXp = true;
     private boolean removeExperienceOrbs = true;
-    private int orbSweepIntervalTicks = 100;
+    private int orbSweepIntervalTicks = 1200;
     private boolean disableNaturalSpawns = true;
     private boolean disableSpawners = true;
     private boolean allowCustomSpawns = true;
@@ -68,6 +68,8 @@ public final class CoreWorldRulesPlugin extends JavaPlugin implements Listener {
     private int cancelledOrbSpawns;
     private int sweptOrbs;
     private BukkitTask orbSweepTask;
+    /** Round-robin world index for orb sweep (one world per tick). */
+    private int orbSweepWorldIndex;
 
     /** Reasons treated as natural / ecosystem (not CUSTOM / SPAWNER / egg / build). */
     private static final Set<SpawnReason> NATURAL_ECOSYSTEM = EnumSet.of(
@@ -189,7 +191,7 @@ public final class CoreWorldRulesPlugin extends JavaPlugin implements Listener {
         clearItemDrops = getConfig().getBoolean("mob_loot.clear_item_drops", true);
         clearXp = getConfig().getBoolean("mob_loot.clear_xp", true);
         removeExperienceOrbs = getConfig().getBoolean("experience_orbs.remove", true);
-        orbSweepIntervalTicks = getConfig().getInt("experience_orbs.sweep_interval_ticks", 100);
+        orbSweepIntervalTicks = getConfig().getInt("experience_orbs.sweep_interval_ticks", 1200);
         if (orbSweepIntervalTicks < 0) {
             orbSweepIntervalTicks = 0;
         }
@@ -229,13 +231,20 @@ public final class CoreWorldRulesPlugin extends JavaPlugin implements Listener {
     }
 
     private int sweepExperienceOrbs() {
+        // One world per invocation to avoid multi-world main-thread spikes (Watchdog).
+        // NMS World.addEntity + EntitySpawnEvent already reject/cancel orbs; this is edge-case cleanup.
+        java.util.List<World> worlds = Bukkit.getWorlds();
+        if (worlds.isEmpty()) {
+            return 0;
+        }
+        int idx = orbSweepWorldIndex % worlds.size();
+        orbSweepWorldIndex = idx + 1;
+        World world = worlds.get(idx);
         int removed = 0;
-        for (World world : Bukkit.getWorlds()) {
-            for (Entity entity : world.getEntitiesByClass(ExperienceOrb.class)) {
-                if (entity != null && entity.isValid()) {
-                    entity.remove();
-                    removed++;
-                }
+        for (Entity entity : world.getEntitiesByClass(ExperienceOrb.class)) {
+            if (entity != null && entity.isValid()) {
+                entity.remove();
+                removed++;
             }
         }
         sweptOrbs += removed;

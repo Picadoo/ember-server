@@ -2149,3 +2149,24 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | jar | 未改（live 仍 1.65.723-d12194.local） |
 | STATUS | `docs/status/STATUS-ember-trmenu-lore-p1-hub-rewards-d12202-2026-10-11.md` |
 
+### 13.112 Watchdog CoreWorldRules orb 扫 + MV persist（D12204，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 根因 | `CoreWorldRules` L226 `sweepExperienceOrbs` 全图扫 orb（默认每 100 tick）；MV 重启把 keepSpawn/autoLoad 写回 true |
+| CWR | config `sweep_interval_ticks: 0` + live reload；源码 1.2.1 round-robin（下次重启生效） |
+| MV | `mvm set memory/autoload` 仅 hub/afk true；其余 false 且已 unload；`worlds.yml` 与 live 一致 |
+| live | doFireTick false；timings off；spark profiler 未跑 |
+| jar | CoreRpg 未改（仍 1.65.723-d12194.local）；CoreWorldRules 1.2.1 已落盘 |
+| STATUS | `docs/status/STATUS-ember-watchdog-cwr-mv-d12204-2026-10-11.md` |
+
+
+### 13.113 TrMenu lore 压缩 ember_hub_legacy（D12205，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 菜单 | `ember_hub_legacy` 45 lore ≤3（保留 PAPI/➥/command；跳过 pet/gacha） |
+| jar | CoreRpg 未改 |
+| STATUS | `docs/status/STATUS-ember-trmenu-lore-hub-legacy-d12205-2026-10-11.md` |
+
+

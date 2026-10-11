@@ -19,8 +19,9 @@ mob_loot:
 # Enchant table / anvil still use the player's stored XP levels if already earned.
 experience_orbs:
   remove: true
-  # Sweep worlds every N ticks to remove any leftover orbs (chunk edge cases). 0 = disable sweep.
-  sweep_interval_ticks: 100
+  # Sweep leftover orbs every N ticks (0=off). Prefer 0: NMS+EntitySpawnEvent already block orbs.
+  # Non-zero uses round-robin one-world-per-tick (CoreWorldRules 1.2.1+) to avoid Watchdog spikes.
+  sweep_interval_ticks: 0
 
 # Vanilla CreatureSpawnEvent bans (MythicMobs / plugins use CUSTOM).
 spawns:
