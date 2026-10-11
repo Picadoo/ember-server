@@ -1,3 +1,6 @@
+Live jar: **1.65.672-d9056.local** · D8993–D9056 AnvilRepairSoft + LightningSoft + HotFloorSoft
+Prior: Starve/CookXp/Bread
+
 Live jar: **1.65.671-d8992.local** · D8929–D8992 StarvationSoft + CookXpBoost + BreadBuySoft
 Prior: Fish/Rod/Suffocate
 

@@ -307,22 +307,30 @@ public final class LifeService implements Listener {
         try { lv = inv.getRepairCost(); } catch (Throwable ignored) { }
         if (p.getLevel() < lv) return; // vanilla refuses the take anyway
         PlayerData d = dataStore.get(p.getUniqueId());
-        if (d.getCoin() < repairFee) {
+        int fee = repairFee;
+        try {
+            int soft = town.sunshine.corerpg.p1.EmberAnvilRepairSoft.consumeFee(d, fee); // D8993
+            if (soft < fee) {
+                p.sendMessage(ChatColor.GREEN + "[铁砧] 修理减负 · 币 ×0.5（今日一次 · " + fee + "→" + soft + "）");
+                fee = soft;
+            }
+        } catch (Throwable ignored) { }
+        if (d.getCoin() < fee) {
             e.setCancelled(true);
-            int gap = repairFee - d.getCoin();
-            p.sendMessage(ChatColor.RED + "[铁砧] 修理手续费 " + repairFee + " 余烬币，你只有 " + d.getCoin()
+            int gap = fee - d.getCoin();
+            p.sendMessage(ChatColor.RED + "[铁砧] 修理手续费 " + fee + " 余烬币，你只有 " + d.getCoin()
                     + " · 还差 " + gap + "。");
             try { p.sendActionBar("§e铁砧 · 还差币 §f" + gap); } catch (Throwable ignored) { }
             return;
         }
-        if (!town.sunshine.corerpg.p1.EmberEconomy.spendCoin(d, "C17", repairFee)) {
+        if (!town.sunshine.corerpg.p1.EmberEconomy.spendCoin(d, "C17", fee)) {
             e.setCancelled(true);
             p.sendMessage(ChatColor.RED + "[铁砧] 扣币失败");
             return;
         } // D1020
         dataStore.flushMutation(p.getUniqueId());
-        p.sendMessage(ChatColor.GRAY + "[铁砧] 修理手续费 -" + repairFee + " 余烬币");
-        try { p.sendActionBar("§a铁砧 · 修理 -" + repairFee + "币"); } catch (Throwable ignored) { } // D1575
+        p.sendMessage(ChatColor.GRAY + "[铁砧] 修理手续费 -" + fee + " 余烬币");
+        try { p.sendActionBar("§a铁砧 · 修理 -" + fee + "币"); } catch (Throwable ignored) { } // D1575
     }
 
     // ---------------- command ----------------
