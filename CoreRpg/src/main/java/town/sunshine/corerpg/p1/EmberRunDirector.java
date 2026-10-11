@@ -1852,7 +1852,7 @@ final class EmberRunDirector {
         return true;
     }
 
-    /** D2867: path-align highlight — Glow mob 5s or chest particle ping. */
+    /** D2867/D2898: path-align highlight — type-diff Glow/Slow or denser chest ping. */
     void highlightExtra(Player p, EmberRunRules.Extra ex) {
         if (p == null || ex == null) return;
         try {
@@ -1860,18 +1860,23 @@ final class EmberRunDirector {
                 if (extraMob == null) return;
                 Tracked tr = mobs.get(extraMob);
                 if (tr == null || tr.le == null || tr.le.isDead()) return;
+                int glow = ex == EmberRunRules.Extra.ELITE ? 120 : 100; // elite 6s / treasure 5s
                 tr.le.addPotionEffect(new org.bukkit.potion.PotionEffect(
-                        org.bukkit.potion.PotionEffectType.GLOWING, 100, 0, false, true), true);
+                        org.bukkit.potion.PotionEffectType.GLOWING, glow, 0, false, true), true);
+                if (ex == EmberRunRules.Extra.TREASURE) {
+                    tr.le.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                            org.bukkit.potion.PotionEffectType.SLOW, 15, 0, false, true), true);
+                }
                 return;
             }
             if (ex == EmberRunRules.Extra.CHEST && chest != null) {
                 Location c = chest.clone().add(0.5, 1.0, 0.5);
                 try {
-                    p.spawnParticle(org.bukkit.Particle.END_ROD, c, 18, 0.35, 0.5, 0.35, 0.01);
+                    p.spawnParticle(org.bukkit.Particle.END_ROD, c, 28, 0.4, 0.55, 0.4, 0.015);
                 } catch (Throwable ignored) {
-                    try { p.spawnParticle(org.bukkit.Particle.CRIT_MAGIC, c, 16, 0.3, 0.4, 0.3, 0.02); } catch (Throwable ignored2) { }
+                    try { p.spawnParticle(org.bukkit.Particle.CRIT_MAGIC, c, 24, 0.35, 0.45, 0.35, 0.025); } catch (Throwable ignored2) { }
                 }
-                w.playSound(c, Sound.BLOCK_ENDERCHEST_OPEN, 0.45f, 1.35f);
+                w.playSound(c, Sound.BLOCK_ENDERCHEST_OPEN, 0.55f, 1.4f);
             }
         } catch (Throwable ignored) { }
     }

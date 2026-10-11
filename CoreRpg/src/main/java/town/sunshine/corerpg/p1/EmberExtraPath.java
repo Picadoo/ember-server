@@ -88,6 +88,17 @@ public final class EmberExtraPath {
         return "§e加料路径：§f" + label(id) + " §8· " + tip(id);
     }
 
+    /** D2898: Bukkit-free highlight ticks for tests. */
+    public static int glowTicksFor(EmberRunRules.Extra ex) {
+        if (ex == EmberRunRules.Extra.ELITE) return 120;
+        if (ex == EmberRunRules.Extra.TREASURE) return 100;
+        return 0;
+    }
+
+    public static boolean treasureGetsSlow(EmberRunRules.Extra ex) {
+        return ex == EmberRunRules.Extra.TREASURE;
+    }
+
     public static EmberRunRules.Extra toExtra(int id) {
         if (id == TREASURE) return EmberRunRules.Extra.TREASURE;
         if (id == ELITE) return EmberRunRules.Extra.ELITE;

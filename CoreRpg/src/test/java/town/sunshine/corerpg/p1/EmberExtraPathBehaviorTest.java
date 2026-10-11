@@ -32,4 +32,12 @@ public class EmberExtraPathBehaviorTest {
         assertEquals(EmberRunRules.Extra.TREASURE, EmberExtraPath.toExtra(EmberExtraPath.TREASURE));
         assertEquals(EmberRunRules.Extra.NONE, EmberExtraPath.toExtra(EmberExtraPath.NONE));
     }
+
+    @Test
+    public void typeHighlightDiff() {
+        assertEquals(120, EmberExtraPath.glowTicksFor(EmberRunRules.Extra.ELITE));
+        assertEquals(100, EmberExtraPath.glowTicksFor(EmberRunRules.Extra.TREASURE));
+        assertTrue(EmberExtraPath.treasureGetsSlow(EmberRunRules.Extra.TREASURE));
+        assertFalse(EmberExtraPath.treasureGetsSlow(EmberRunRules.Extra.ELITE));
+    }
 }
