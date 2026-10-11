@@ -1082,16 +1082,19 @@ public final class SkillService implements Listener {
         // D2266: set-shape sync boosts land CC/heal (zero skill_mult)
         boolean sync = false;
         boolean posture = false;
+        boolean roomShape = false;
         try {
             town.sunshine.corerpg.PlayerData pd = dataStore.get(player.getUniqueId());
             town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
             int sid = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(pd, runs);
             sync = town.sunshine.corerpg.p1.EmberSkillKit.setShapeSynced(fam, sid);
             posture = town.sunshine.corerpg.p1.EmberPosturePath.aligned(pd, runs);
+            roomShape = runs != null && runs.inPreferredVarietyRoom(player);
         } catch (Throwable ignored) { }
         String tag = "";
         if (sync) tag += "·形同";
         if (posture) tag += "·姿态";
+        if (sync && roomShape) tag += "·优房";
         if ("scorch".equals(fam)) {
             if (!hit.isEmpty()) {
                 spawnParticles(hit.get(0).getLocation().add(0, 1.0, 0), "FLAME", sync || posture ? 12 : 8);
@@ -1100,7 +1103,7 @@ public final class SkillService implements Listener {
         }
         if ("burst".equals(fam)) {
             if (town.sunshine.corerpg.p1.EmberMode.isP1(player) && !hit.isEmpty()) {
-                int ticks = town.sunshine.corerpg.p1.EmberSkillKit.slashLandSlowTicks(sync, posture);
+                int ticks = town.sunshine.corerpg.p1.EmberSkillKit.slashLandSlowTicks(sync, posture, roomShape);
                 int lim = Math.min(hit.size(), sync ? 4 : 3);
                 for (int i = 0; i < lim; i++) {
                     hit.get(i).addPotionEffect(new org.bukkit.potion.PotionEffect(

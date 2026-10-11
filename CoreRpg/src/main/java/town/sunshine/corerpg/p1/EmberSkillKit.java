@@ -696,12 +696,17 @@ public final class EmberSkillKit {
 
     /** D2266: burst land slow ticks (base or +4 when set-shape synced). */
     public static int slashLandSlowTicks(boolean setShapeSync) {
-        return slashLandSlowTicks(setShapeSync, false);
+        return slashLandSlowTicks(setShapeSync, false, false);
     }
 
-    /** D2447: +2 ticks when posture aligned (stacks with sync · zero skill_mult). */
     public static int slashLandSlowTicks(boolean setShapeSync, boolean postureAligned) {
-        return SLASH_BURST_SLOW_TICKS + (setShapeSync ? 4 : 0) + (postureAligned ? 2 : 0);
+        return slashLandSlowTicks(setShapeSync, postureAligned, false);
+    }
+
+    /** D2643: +2t when preferred-room × set×shape (stacks; not posture twin). */
+    public static int slashLandSlowTicks(boolean setShapeSync, boolean postureAligned, boolean roomShape) {
+        return SLASH_BURST_SLOW_TICKS + (setShapeSync ? 4 : 0) + (postureAligned ? 2 : 0)
+                + (setShapeSync && roomShape ? 2 : 0);
     }
 
     /** D2266: sustain land heal pct (×1.25 when synced). */

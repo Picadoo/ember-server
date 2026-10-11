@@ -1,13 +1,13 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.545-d2640.local**
-- D2609–D2640 Gate + Shape×Room
+- jar **1.65.546-d2656.local**
+- D2609–D2656 Gate + Shape×Room
 
 ## Shipped
-- Gate: Q01 enter unlock · open land Speed 2s + Resist 1s · ASK CD 5s
-- Shape×Room: preferred variety room + set×shape → geometry thin + dash radius +0.15
+- Gate enter unlock · open Speed/Resist · AUTO Resist 2s · ASK CD 5s
+- Shape×Room: geometry + dash +0.15 · burst slash land +2t in preferred room
 
-Pressure/HeldNext/ConfirmTokens/remain/sig ICD/posture twins STOPPED. Talent HOLD.
+Talent HOLD. Twin axes STOPPED.
 
-Updated 2026-10-11 08:24 CST
+Updated 2026-10-11 08:25 CST

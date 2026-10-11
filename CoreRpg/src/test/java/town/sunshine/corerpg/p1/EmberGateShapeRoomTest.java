@@ -44,4 +44,13 @@ public class EmberGateShapeRoomTest {
         assertEquals(sync + 0.15, room, 1e-9);
         assertEquals(EmberSkillKit.DASH_HIT_RADIUS, EmberSkillKit.dashHitRadius(false, true), 1e-9);
     }
+
+    @Test
+    public void slashRoomBonusAndGateAutoResist() {
+        assertEquals(20, EmberSkillKit.slashLandSlowTicks(false, false, false));
+        assertEquals(24, EmberSkillKit.slashLandSlowTicks(true, false, false));
+        assertEquals(26, EmberSkillKit.slashLandSlowTicks(true, false, true));
+        assertEquals(40, EmberGatePath.gateResistTicks(EmberGatePath.AUTO));
+        assertEquals(20, EmberGatePath.gateResistTicks(EmberGatePath.ASK));
+    }
 }

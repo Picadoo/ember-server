@@ -96,15 +96,22 @@ public final class EmberGatePath {
         return path == ASK ? ASK_PATH_COOLDOWN_MS : ASK_COOLDOWN_MS;
     }
 
-    /** D2612: after force-open — Speed I 2s + Resist I 1s. */
+    /** D2642: AUTO Resist 2s; ASK/manual 1s. Speed always 2s. */
+    public static int gateResistTicks(int path) {
+        return path == AUTO ? 40 : 20;
+    }
+
     public static void applyGateLand(Player p) {
         if (p == null || !p.isOnline()) return;
+        PlayerData d = dataOf(p);
+        int path = d == null ? NONE : get(d);
+        int resist = gateResistTicks(path);
         try {
             p.addPotionEffect(new org.bukkit.potion.PotionEffect(
                     org.bukkit.potion.PotionEffectType.SPEED, 40, 0, false, true), true);
             p.addPotionEffect(new org.bukkit.potion.PotionEffect(
-                    org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE, 20, 0, false, true), true);
-            try { p.sendActionBar("§a开门推进 · §fSpeed 2s · Resist 1s"); } catch (Throwable ignored) { }
+                    org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE, resist, 0, false, true), true);
+            try { p.sendActionBar("§a开门推进 · §fSpeed 2s · Resist " + (resist / 20) + "s"); } catch (Throwable ignored) { }
         } catch (Throwable ignored) { }
     }
 
