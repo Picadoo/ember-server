@@ -244,9 +244,14 @@ public final class FlexSkillService implements Listener {
         String name = (PILOT_ID.equals(def.id) || "step".equals(def.type))
                 ? town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(stepVar, back) : def.display;
         player.sendMessage(PREFIX + name + ChatColor.GRAY + " · " + cdRemain);
+        String mapKey = null;
+        try {
+            town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+            mapKey = runs == null ? null : runs.activeMapKey(player);
+        } catch (Throwable ignored) { }
         double dist = town.sunshine.corerpg.p1.EmberSkillKit.stepTravelDistance(
                 def.distance, back, stepPostureAligned(player),
-                town.sunshine.corerpg.p1.EmberPosturePath.get(data));
+                town.sunshine.corerpg.p1.EmberPosturePath.get(data), mapKey);
         String igniteNote = stepEffectNote(stepVar, back);
         player.sendMessage(ChatColor.GRAY + "  冷却 " + def.cooldownSeconds + "s · 位移约 "
                 + (int) Math.round(dist) + " 格 · 零体力" + igniteNote
@@ -321,7 +326,12 @@ public final class FlexSkillService implements Listener {
         boolean back = town.sunshine.corerpg.p1.EmberSkillKit.stepBackward(data);
         boolean posture = stepPostureAligned(player);
         int pid = town.sunshine.corerpg.p1.EmberPosturePath.get(data);
-        double dist = town.sunshine.corerpg.p1.EmberSkillKit.stepTravelDistance(def.distance, back, posture, pid);
+        String mapKey2 = null;
+        try {
+            town.sunshine.corerpg.p1.EmberRunService runs2 = plugin.getEmberRuns();
+            mapKey2 = runs2 == null ? null : runs2.activeMapKey(player);
+        } catch (Throwable ignored) { }
+        double dist = town.sunshine.corerpg.p1.EmberSkillKit.stepTravelDistance(def.distance, back, posture, pid, mapKey2);
         Location best = town.sunshine.corerpg.p1.EmberDash.tryDash(player, dist, back, back);
         if (best == null) {
             String fail = from.getWorld() == null ? "无法踏步"

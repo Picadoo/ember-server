@@ -60,6 +60,7 @@ public final class EmberParry implements Listener {
         if (!EmberSkillKit.parryUnlocked(d, plugin.getEmberRuns())) return;
         boolean syncWin = false;
         boolean guardPosture = false;
+        String mapKeyWin = null;
         try {
             EmberLoadoutService ls = plugin.getEmberLoadouts();
             EmberLoadout lo = ls == null ? null : ls.get(player);
@@ -69,8 +70,9 @@ public final class EmberParry implements Listener {
             syncWin = EmberSkillKit.setShapeSynced(fam, sid);
             guardPosture = EmberPosturePath.aligned(d, runs)
                     && EmberPosturePath.get(d) == EmberPosturePath.GUARD;
+            mapKeyWin = runs == null ? null : runs.activeMapKey(player);
         } catch (Throwable ignored) { }
-        long until = System.currentTimeMillis() + EmberSkillKit.parryWindowMs(syncWin, guardPosture);
+        long until = System.currentTimeMillis() + EmberSkillKit.parryWindowMs(syncWin, guardPosture, mapKeyWin);
         windowUntil.put(player.getUniqueId(), until);
         windowBoss.put(player.getUniqueId(), boss.getUniqueId());
     }

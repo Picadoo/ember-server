@@ -504,12 +504,18 @@ public final class EmberSkillKit {
 
     /** D2475: step travel distance; posture-aligned footwork stretch. */
     public static double stepTravelDistance(double forwardDist, boolean back, boolean postureAligned, int postureId) {
+        return stepTravelDistance(forwardDist, back, postureAligned, postureId, null);
+    }
+
+    /** D3100: Q05 kit identity — step +0.35 in Q05 (zero skill_mult). */
+    public static double stepTravelDistance(double forwardDist, boolean back, boolean postureAligned, int postureId, String mapKey) {
         double base = back ? BACKSTEP_DISTANCE : forwardDist;
-        if (!postureAligned || postureId <= 0) return base;
-        // GUARD=2 prefers back stretch; STRIKE/SWEEP prefer forward stretch
-        if (back && postureId == EmberPosturePath.GUARD) return base + 0.5;
-        if (!back && (postureId == EmberPosturePath.STRIKE || postureId == EmberPosturePath.SWEEP))
-            return base + 0.5;
+        if (postureAligned && postureId > 0) {
+            if (back && postureId == EmberPosturePath.GUARD) base += 0.5;
+            else if (!back && (postureId == EmberPosturePath.STRIKE || postureId == EmberPosturePath.SWEEP))
+                base += 0.5;
+        }
+        if (mapKey != null && "q05".equalsIgnoreCase(mapKey)) base += 0.35;
         return base;
     }
 
@@ -552,9 +558,15 @@ public final class EmberSkillKit {
 
     /** D3009: RING surround dash +0.10 (shape-native; not Shape×Room twin). */
     public static double dashHitRadius(boolean setShapeSync, boolean roomShape, int shapeId) {
+        return dashHitRadius(setShapeSync, roomShape, shapeId, null);
+    }
+
+    /** D3097: Q02 kit identity — dash radius +0.08 in Q02 (not Shape-native twin). */
+    public static double dashHitRadius(boolean setShapeSync, boolean roomShape, int shapeId, String mapKey) {
         double r = setShapeSync ? DASH_HIT_RADIUS + 0.20 : DASH_HIT_RADIUS;
         if (setShapeSync && roomShape) r += 0.15;
         if (shapeId == SHAPE_RING) r += 0.10;
+        if (mapKey != null && "q02".equalsIgnoreCase(mapKey)) r += 0.08;
         return r;
     }
 
@@ -565,8 +577,15 @@ public final class EmberSkillKit {
 
     /** D2490: GUARD posture aligned adds +50ms (stacks sync · zero flat). */
     public static long parryWindowMs(boolean setShapeSync, boolean guardPosture) {
+        return parryWindowMs(setShapeSync, guardPosture, null);
+    }
+
+    /** D3098: Q03 kit identity — parry window +30ms in Q03 (zero skill_mult). */
+    public static long parryWindowMs(boolean setShapeSync, boolean guardPosture, String mapKey) {
         long ms = setShapeSync ? PARRY_WINDOW_MS + 50L : PARRY_WINDOW_MS;
-        return guardPosture ? ms + 50L : ms;
+        if (guardPosture) ms += 50L;
+        if (mapKey != null && "q03".equalsIgnoreCase(mapKey)) ms += 30L;
+        return ms;
     }
 
     /** D2366: signature skill_charge wind-up secs (synced · faster cast · zero skill_mult). */
@@ -838,6 +857,7 @@ public final class EmberSkillKit {
         int baseMax = Math.max(1, mode == null ? 5 : mode.i("skill.max_targets", 5));
         EmberGrowth.Mods m = gmods == null ? EmberGrowth.Mods.NONE : gmods;
         boolean roomShape = player != null && runs != null && runs.inPreferredVarietyRoom(player);
+        String mapKey = player != null && runs != null ? runs.activeMapKey(player) : null;
         boolean variant = m.get("skill_var") > 0;
         double sigLine = variant ? m.get("skill_line") : 0;
         double sigRing = variant ? m.get("skill_ring") : 0;
@@ -869,7 +889,7 @@ public final class EmberSkillKit {
             return new Shape(shapeId(d, runs), range, arc, line, lineW, max, true, label);
         }
         int id = shapeId(d, runs);
-        return geometryFor(id, baseRange, baseArc, baseMax, setShapeSynced(activeSetFamily, id), roomShape);
+        return geometryFor(id, baseRange, baseArc, baseMax, setShapeSynced(activeSetFamily, id), roomShape, mapKey);
     }
 
     /** Pure: 2pc family prefers this rune shape. */
@@ -934,21 +954,28 @@ public final class EmberSkillKit {
 
     /** D2619: room×shape thin geometry (zero skill_mult / no ICD). */
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync, boolean roomShape) {
+        return geometryFor(id, baseRange, baseArc, baseMax, setSync, roomShape, null);
+    }
+
+    /** D3122: Q04 kit identity — thin geometry in Q04 (not Shape-native land / Shape×Room). */
+    public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync, boolean roomShape, String mapKey) {
         boolean bonus = setSync && roomShape;
+        boolean q04 = mapKey != null && "q04".equalsIgnoreCase(mapKey);
         if (id == SHAPE_LINE) {
             double lw = setSync ? 0.95 : 0.7;
             int max = setSync ? 4 : 3;
-            double range = Math.max(baseRange, 6.0) + (bonus ? 0.35 : 0);
+            double range = Math.max(baseRange, 6.0) + (bonus ? 0.35 : 0) + (q04 ? 0.2 : 0);
             return new Shape(id, range, baseArc, 6.0, lw, max, false, shapeName(id));
         }
         if (id == SHAPE_RING) {
-            double range = (setSync ? 3.9 : 3.5) + (bonus ? 0.25 : 0);
+            double range = (setSync ? 3.9 : 3.5) + (bonus ? 0.25 : 0) + (q04 ? 0.15 : 0);
             int max = setSync ? 5 : 4;
             return new Shape(id, range, 360.0, 0, 0.0, max, false, shapeName(id));
         }
         double arc = Math.max(baseArc, 110.0);
         if (setSync) arc += 12.0;
         if (bonus) arc += 8.0;
+        if (q04) arc += 4.0;
         return new Shape(SHAPE_FAN, baseRange, arc, 0, 0.0, baseMax, false, shapeName(SHAPE_FAN));
     }
 

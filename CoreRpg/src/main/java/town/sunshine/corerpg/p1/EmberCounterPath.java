@@ -60,6 +60,25 @@ public final class EmberCounterPath {
         }
     }
 
+
+    /** D3074: personal cast-start tip when preferred counter window is relevant. */
+    public static void maybeCastStartCue(EmberRunSession s, EmberRunService runs,
+            boolean wall, boolean whiffArmed, boolean breakArmed) {
+        if (s == null || runs == null) return;
+        for (java.util.UUID u : s.committed) {
+            int path = get(runs.dataOf(u));
+            if (!valid(path)) continue;
+            String tip = null;
+            if (path == WALL && wall) tip = "§e破绽 · 贴墙打断";
+            else if (path == WHIFF && whiffArmed) tip = "§e破绽 · 站开让重招落空";
+            else if (path == BREAK && breakArmed) tip = "§e破绽 · 圈内猛打破招";
+            if (tip == null) continue;
+            org.bukkit.entity.Player p = org.bukkit.Bukkit.getPlayer(u);
+            if (p == null || !p.isOnline()) continue;
+            try { p.sendActionBar(tip); } catch (Throwable ignored) { }
+        }
+    }
+
     public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ02(p); }
 
 
@@ -101,9 +120,9 @@ public final class EmberCounterPath {
     }
 
     public static String tip(int id) {
-        if (id == WALL) return "撞墙破绽略久 · 练 Q02/Q07";
-        if (id == WHIFF) return "落空破绽略久 · 练 Q01–Q05";
-        if (id == BREAK) return "破招对齐提示 · 练 Q06/Q07";
+        if (id == WALL) return "撞墙破绽略久 · 开招提示 · 练 Q02/Q07";
+        if (id == WHIFF) return "落空破绽略久 · 开招提示 · 练 Q01–Q05";
+        if (id == BREAK) return "破招踉跄略久 · 开招提示 · 练 Q06/Q07";
         return "点选本周破绽练法";
     }
 

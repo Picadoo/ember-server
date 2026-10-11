@@ -1491,6 +1491,14 @@ public boolean pathCutRegen(Player p) {
         return d != null && d.inPreferredVarietyRoom();
     }
 
+    /** D3097: current P1 map key for kit identity sidegrades, or null. */
+    public String activeMapKey(Player p) {
+        if (p == null) return null;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null) return null;
+        return d.s.mapKey;
+    }
+
 public boolean pathForceOpenDoor(Player p) {
         if (p == null) return false;
         EmberRunDirector d = byWorld.get(p.getWorld().getName());

@@ -3510,6 +3510,7 @@ final class EmberRunDirector {
         svc.tellRun(s, "§c" + bossDef().name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
         // D304 W1a: cast-start ActionBar each cast (chat kept); charge 0-cell already returned above
         flashActionBar(EmberCounterplay.castStartBar(sk.name, sk.type, sk.warn, sk.wallStun, sk.whiffStun, breakNeed, sk.share));
+        EmberCounterPath.maybeCastStartCue(s, svc, sk.wallStun > 0, pendingArmed, breakNeed > 0); // D3074
         if (sk.share) EmberSoakPath.maybeAfterSoak(s); // D584
         if (breakNeed > 0) EmberPressPath.maybeAfterPress(s); // D581
         if (pendingCrash) EmberCrashPath.maybeAfterCrash(s); // D590
@@ -3576,19 +3577,21 @@ final class EmberRunDirector {
         pendingCrash = false;
         pendingArmed = false;
         recoverUntil = now + (long) ((Double.isNaN(sk.recover) ? b.recover : sk.recover) * 1000);
-        long ms = EmberCounterplay.stunMs(sk.breakStun);
+        double breakSec = sk.breakStun + EmberCounterPath.preferredStunBonusSec(s, svc, EmberCounterPath.KIND_BREAK);
+        if (breakSec > 2.5) breakSec = 2.5; // D3073 soft cap
+        long ms = EmberCounterplay.stunMs(breakSec);
         le.removePotionEffect(PotionEffectType.SLOW); // the wind-up root ends with the cast
         if (ms > 0) {
             long[] bb = EmberCounterplay.applyStunBounds(now, ms, recoverUntil, followStart);
             stunUntil = bb[0]; recoverUntil = bb[1]; if (follow != null) followStart = bb[2];
-            le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, EmberCounterplay.stunPotionTicks(sk.breakStun), 10, false, false), true);
+            le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, EmberCounterplay.stunPotionTicks(breakSec), 10, false, false), true);
         }
         Location at = le.getLocation();
         w.spawnParticle(Particle.CRIT_MAGIC, at.clone().add(0, 2.2, 0), 16, 0.5, 0.3, 0.5, 0.1);
         w.playSound(at, Sound.BLOCK_GLASS_BREAK, 1.0f, 0.8f);
         svc.tellRun(s, "§a破招！§c" + bossDef().name + " §7的「" + sk.name + "」被打断"
-                + (ms > 0 ? " §e踉跄 " + fmt(sk.breakStun) + " 秒 §7· 趁现在输出" : ""));
-        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s break %s %.0f/%.0f stun %.1fs", s.runId, sk.name, done, need, sk.breakStun));
+                + (ms > 0 ? " §e踉跄 " + fmt(breakSec) + " 秒 §7· 趁现在输出" : ""));
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s break %s %.0f/%.0f stun %.1fs", s.runId, sk.name, done, need, breakSec));
         EmberCounterPath.maybeAlignCue(s, svc, EmberCounterPath.KIND_BREAK);
         EmberBurstPath.maybeAfterStagger(s); // D563
         flashCounterplaySuccess(CounterplayKind.BREAK);

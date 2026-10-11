@@ -750,6 +750,7 @@ public final class SkillService implements Listener {
         boolean dashSyncR = false;
         boolean dashRoomR = false;
         int dashShapeId = town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_FAN;
+        String dashMap = null;
         try {
             town.sunshine.corerpg.p1.EmberLoadoutService lsR = plugin.getEmberLoadouts();
             String famR = lsR == null ? "none" : lsR.get(player).activeSet;
@@ -758,8 +759,9 @@ public final class SkillService implements Listener {
             dashRoomR = runsR != null && runsR.inPreferredVarietyRoom(player);
             town.sunshine.corerpg.PlayerData pdR = dataStore.get(player.getUniqueId());
             dashShapeId = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(pdR, runsR);
+            dashMap = runsR == null ? null : runsR.activeMapKey(player);
         } catch (Throwable ignored) { }
-        double dashR = town.sunshine.corerpg.p1.EmberSkillKit.dashHitRadius(dashSyncR, dashRoomR, dashShapeId);
+        double dashR = town.sunshine.corerpg.p1.EmberSkillKit.dashHitRadius(dashSyncR, dashRoomR, dashShapeId, dashMap);
         for (Location sample : town.sunshine.corerpg.p1.EmberDash.pathSamples(from, dest)) {
             if (sample.getWorld() == null) continue;
             double r = dashR;
