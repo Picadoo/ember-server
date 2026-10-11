@@ -474,6 +474,9 @@ public final class EmberForgeService implements Listener {
             } else if ("refine".equals(kind)) {
                 soft = EmberRefineCostSoft.apply(pdS, plan.cost, go); // D9617
                 cue = "精工减负";
+            } else if ("quality".equals(kind)) {
+                soft = EmberQualityCostSoft.apply(pdS, plan.cost, go); // D9921
+                cue = "成色减负";
             }
             if (soft != null && soft != plan.cost) {
                 payCost = soft;

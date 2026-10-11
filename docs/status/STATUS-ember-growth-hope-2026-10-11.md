@@ -1,3 +1,6 @@
+Live jar: **1.65.686-d9952.local** · D9889–D9952 ForgeRollCostSoft + QualityCostSoft + RerollLockShardSoft
+Prior: Attune/Exchange/EnhanceUndo
+
 Live jar: **1.65.685-d9888.local** · D9825–D9888 AttuneUnlockSoft + ExchangeMarkSoft + EnhanceUndoSoft
 Prior: Convert/Imprint/Supply
 

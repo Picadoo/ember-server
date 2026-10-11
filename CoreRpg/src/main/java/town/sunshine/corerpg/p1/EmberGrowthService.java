@@ -2071,6 +2071,18 @@ public final class EmberGrowthService implements Listener {
         // D148 lock: keep the current affix, roll only the tier, for lock_shard extra shards
         EmberAffix.Def cur = EmberAffix.decodeDef(reroll, affixOf(d, t));
         int lockShard = reroll.lockShardFor(t.tier);
+        if (lock && lockShard > 0) {
+            try {
+                int softL = EmberRerollLockShardSoft.apply(d, lockShard, confirm); // D9937
+                if (softL < lockShard) {
+                    lockShard = softL;
+                    if (confirm) {
+                        p.sendMessage(P + "§a锁定洗练减负 · 锁碎 ×0.5（今日一次）");
+                        try { p.sendActionBar("§a锁定洗练减负"); } catch (Throwable ignored) { }
+                    }
+                }
+            } catch (Throwable ignored) { }
+        }
         if (lock) {
             if (lockShard <= 0) { p.sendMessage(P + "§c锁定词条没有开放"); return true; }
             if (cur == null) { p.sendMessage(P + "§c词条槽还是空的，没有可锁定的词条（先普通洗一次）"); return true; }

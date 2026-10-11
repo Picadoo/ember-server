@@ -3610,7 +3610,17 @@ public boolean pathForceOpenDoor(Player p) {
             else if ("floor".equals(a) || "下限".equals(a) || "精良保".equals(a)) floor = true;
         }
         boolean gate = tier <= 1 || EmberSkillKit.directedForgeOpen(d, this, tier);
-        String refuse = EmberForgeRollRules.refusal(marks(d, tier), tier, fam, slot, gate);
+        int needPeek = EmberForgeRollRules.marks();
+        try {
+            if (EmberForgeRollCostSoft.ready(d))
+                needPeek = EmberForgeRollCostSoft.softMarks(d, needPeek, false); // D9889 peek
+        } catch (Throwable ignored) { }
+        String refuse = EmberRunRules.exchangeCheck(marks(d, tier), tier, tier, fam, slot, gate, needPeek);
+        if (refuse == null) {
+            // quality table sanity (from ForgeRollRules.refusal)
+            if (EmberForgeRollRules.QUALITY_W.length != 4 || EmberForgeRollRules.QUALITY_W[3] != 0)
+                refuse = "成色表损坏：极品权重必须为 0";
+        }
         if (refuse != null) {
             p.sendMessage(P + ChatColor.RED + refuse);
             try { // D1844
@@ -3626,6 +3636,13 @@ public boolean pathForceOpenDoor(Player p) {
         String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
         if (!confirm) {
             EmberUpgradeRules.Cost cost = floor ? EmberForgeRollRules.matCostFloor() : EmberForgeRollRules.matCost();
+            int needMarks = EmberForgeRollRules.marks();
+            try {
+                if (EmberForgeRollCostSoft.ready(d)) {
+                    needMarks = EmberForgeRollCostSoft.softMarks(d, needMarks, false);
+                    cost = EmberForgeRollCostSoft.softCost(cost);
+                }
+            } catch (Throwable ignored) { }
             int haveM = marks(d, tier);
             int haveBlank = 0, haveBone = 0;
             try {
@@ -3637,8 +3654,9 @@ public boolean pathForceOpenDoor(Player p) {
             int haveCoin = d.getCoin();
             String rem = EmberForgeRollRules.remainLine(haveM, haveBlank, haveBone, haveCoin, floor);
             p.sendMessage(P + (floor ? "§6随机锻造·成色下限" : "§6随机锻造") + " · T" + tier + " " + label);
-            p.sendMessage(P + "花费：§f" + EmberForgeRollRules.marks() + " 枚 T" + tier + " 印记 + " + cost.blanks + " 胚料"
-                    + (cost.bone > 0 ? " + " + cost.bone + " 骨尘" : "") + " + " + cost.coins + " 币");
+            p.sendMessage(P + "花费：§f" + needMarks + " 枚 T" + tier + " 印记 + " + cost.blanks + " 胚料"
+                    + (cost.bone > 0 ? " + " + cost.bone + " 骨尘" : "") + " + " + cost.coins + " 币"
+                    + (needMarks < EmberForgeRollRules.marks() ? " §a· 减负" : ""));
             p.sendMessage(P + "§7库存：§f" + rem);
             p.sendMessage(P + (floor ? EmberForgeRollRules.oddsLineFloor() : EmberForgeRollRules.oddsLine()));
             p.sendMessage(P + "§7产物：指定族部位 · " + (floor ? "成色≥精良" : "成色随机") + " · 精工随机 · +0 · 词条空 · 出不了极品");
@@ -3687,8 +3705,20 @@ public boolean pathForceOpenDoor(Player p) {
         final String uid = EmberRunRules.rewardUid(rnd.nextLong(), id.toString(), rid, "forge_roll");
         final EmberItemData item = new EmberItemData(uid, EmberItemData.templateId(fam, slot, tier), fam, slot, tier, q, craft, 0, 0, true, "drop",
                 EmberItemData.DATA_VERSION, 0, 0, 0, 0, 0, EmberProvenance.forForgeRoll(rid, System.currentTimeMillis()));
-        final EmberPay.Price price = EmberPay.Price.of(floor ? EmberForgeRollRules.matCostFloor() : EmberForgeRollRules.matCost())
-                .plus(EmberPay.Price.marks(tier, EmberForgeRollRules.marks())).at("C22");
+        EmberUpgradeRules.Cost mat = floor ? EmberForgeRollRules.matCostFloor() : EmberForgeRollRules.matCost();
+        int markNeed = EmberForgeRollRules.marks();
+        try {
+            PlayerData pdCost = data(id);
+            if (EmberForgeRollCostSoft.ready(pdCost)) {
+                markNeed = EmberForgeRollCostSoft.softMarks(pdCost, markNeed, true); // D9889
+                mat = EmberForgeRollCostSoft.softCost(mat);
+                if (p.isOnline()) {
+                    p.sendMessage(P + "§a随机锻减负 · 花费 ×0.5（今日一次）");
+                    try { p.sendActionBar("§a随机锻减负"); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
+        final EmberPay.Price price = EmberPay.Price.of(mat).plus(EmberPay.Price.marks(tier, markNeed)).at("C22");
         final String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
         pay.pay(p, rid, price, "随机锻造没完成，退回", null, () ->
                 loadouts.store().commitCreate(rid, "forge_roll", id, item, price.json(),
