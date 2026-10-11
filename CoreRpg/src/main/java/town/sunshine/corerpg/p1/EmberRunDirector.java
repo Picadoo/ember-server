@@ -453,7 +453,15 @@ final class EmberRunDirector {
             EmberRunMaps.Variety v = svc.maps().variety;
             lastEventTickMs = eventStart;
             if ("crystal".equals(kind)) {
-                placeCrystals(r, v.crystalCount);
+                int cx = v.crystalCount;
+                try {
+                    int ex = EmberCrystalExtra.consumeExtra(s.runId); // D7809
+                    if (ex > 0) {
+                        cx += ex;
+                        svc.tellRun(s, "§a砸晶加赠 · 本房多 §f" + ex + "§a 块晶（本局一次 · 目标仍 " + v.crystalCount + "）");
+                    }
+                } catch (Throwable ignored) { }
+                placeCrystals(r, cx);
                 svc.tellRun(s, "§b砸余烬晶 §7· 砸掉本房 " + v.crystalCount + " 块发光晶再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
                 EmberSmashPath.maybeAfterPlace(s); // D564
             } else if ("escort".equals(kind)) {
@@ -3085,6 +3093,13 @@ final class EmberRunDirector {
     private void unscathedReset(int party, EmberRunMaps.Variety v) {
         unscathedTaken = 0;
         unscathedBudgetNow = unscathedBudget(v.unscathedHits, v.unscathedPerMember, Math.max(1, party));
+        try {
+            int ex = EmberUnscathedBudgetBoost.consumeExtra(s == null ? null : s.runId); // D7777
+            if (ex > 0) {
+                unscathedBudgetNow += ex;
+                svc.tellRun(s, "§a无伤加容 · 可挨打 +" + ex + " 次（本局一次 · 现 " + unscathedBudgetNow + "）");
+            }
+        } catch (Throwable ignored) { }
     }
 
     /** D191: a tracked room mob of the live event room died (escort / boss / extra never get here). */

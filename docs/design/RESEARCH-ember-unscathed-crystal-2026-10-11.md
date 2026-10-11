@@ -1,0 +1,3 @@
+# RESEARCH · UnscathedBudgetBoost + CrystalExtra · 2026-10-11
+Outside EventBrace/BeaconHp…
+Less despair: 无伤可挨打+1（本局一次）；砸晶多放1块（目标数不变，本局一次）。
