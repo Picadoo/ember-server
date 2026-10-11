@@ -2286,6 +2286,7 @@ public boolean pathForceOpenDoor(Player p) {
             if (stack == null) return null;
             loadouts.remember(d, p.getUniqueId());
             p.getInventory().addItem(stack);
+            EmberLootMapFeel.pulse(p, d); // D3753 map identity feel · zero drop
             return d.shortLabel() + "（护甲已放进背包，装备页「护甲」里可对比换上）";
         }
         EmberGearLib lib = EmberGearLib.get(); // 1.62 装备库: new drops go to the library while the backpack is nearly full
@@ -2293,13 +2294,17 @@ public boolean pathForceOpenDoor(Player p) {
             EmberItemData act = activePiece(p, d.slot);
             boolean up = act != null && d.tier >= 1 && EmberRunRules.upgradeVerdict(EmberMode.tables(), d, act,
                     loadouts.get(p) == null ? "none" : loadouts.get(p).activeSet, loadouts.get(p) == null ? 10 : loadouts.get(p).level) != EmberRunRules.UP_NONE;
-            if (lib.autoStash(p, d, freeSlots(p), up, act != null)) return d.shortLabel() + "（已存入装备库）";
+            if (lib.autoStash(p, d, freeSlots(p), up, act != null)) {
+                EmberLootMapFeel.pulse(p, d); // D3753 even when library stash
+                return d.shortLabel() + "（已存入装备库）";
+            }
         }
         if (freeSlots(p) <= 0) return null;
         ItemStack stack = loadouts.items().create(d);
         if (stack == null) return null;
         loadouts.remember(d, p.getUniqueId());
         p.getInventory().addItem(stack);
+        EmberLootMapFeel.pulse(p, d); // D3753
         if (d.isCharm() && loadouts.autoSelectCharm(p, d.uid, d.tier)) // D85 onboarding: no more half-life new players
             return d.shortLabel() + "（已自动选定为生效护符）";
         String placed = null;
