@@ -23,7 +23,7 @@ Icons:
     display:
       material: iron sword
       name: '§eT1 → T2'
-      lore: ['', '§7手持 T1 刃 / 护符', '§7核心碎片×10 + 碎片×40 + 1500 币', '', '§e➥ §f查看配方与持有数量']
+      lore: ['§7手持 T1 刃/护符', '§7核碎×10 + 碎×40 + 1500币', '§e➥ §f查看配方']
     actions:
       all:
         - 'close'
@@ -32,7 +32,7 @@ Icons:
     display:
       material: diamond sword
       name: '§6T2 → T3'
-      lore: ['', '§7手持 T2 刃 / 护符', '§7凝核×3 + 核心碎片×25 + 灾厄余烬×6 + 5000 币', '§8凝核：团本通关每人 1 · 灾厄每周首个日箱 1', '', '§e➥ §f查看配方与持有数量']
+      lore: ['§7手持 T2 · 凝核×3 + 核碎×25 + 灾厄×6 + 5000币', '§8凝核：团本通关1 · 灾厄周首日箱1', '§e➥ §f查看配方']
     actions:
       all:
         - 'close'
@@ -41,7 +41,7 @@ Icons:
     display:
       material: anvil
       name: '§a确认锻造（手持装备）'
-      lore: ['', '§7保留 50% 强化等级（向下取整）', '§7保留附魔、次要词条；宝石仍可用的孔位保留', '§7新等级下未解锁的孔位 → 宝石退回背包', '', '§c➥ §f立即锻造手持装备']
+      lore: ['§7保留50%强化（下取整）· 附魔/次要词条', '§7未解锁孔的宝石退回背包', '§c➥ §f立即锻造手持']
     actions:
       all:
         - 'close'
@@ -50,7 +50,7 @@ Icons:
     display:
       material: anvil
       name: '§c去强化'
-      lore: ['', '§7强化刃 / 护符 +0～+10', '', '§e➥ §f打开强化']
+      lore: ['§7强化刃/护符 +0～+10', '§e➥ §f打开强化']
     actions:
       all:
         - 'menu: ember_enhance'
@@ -58,7 +58,7 @@ Icons:
     display:
       material: emerald
       name: '§e去镶嵌'
-      lore: ['', '§7P1 孔石（刃/符）', '§e希望保底：§f%corerpg_p1_gem_pity_hope%', '§7合成：碎8+骨4+币40', '§8不走旧镶嵌页', '', '§e➥ §f/corerpg p1 gem']
+      lore: ['§7P1 孔石 · 希望保底 §f%corerpg_p1_gem_pity_hope%', '§7合成：碎8+骨4+币40 · 不走旧镶嵌', '§e➥ §f打开镶嵌']
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -68,12 +68,8 @@ Icons:
       material: flint
       name: '§a炼部件'
       lore:
-        - ''
-        - '§7材料炼成可装备部件'
-        - '§7有铁锭时：碎片优先沉铁锭炼灰箍'
-        - '§7灰箍：碎片×12 + 余烬铁锭×2'
-        - '§8放副手槽生效 · 微量物防 · 不计入主线刃/护符战力'
-        - ''
+        - '§7材料炼部件 · 灰箍：碎×12+铁锭×2'
+        - '§8副手微量物防 · 不计主线战力'
         - '§e➥ §f打开炼部件'
     actions:
       all:
@@ -82,7 +78,7 @@ Icons:
     display:
       material: book
       name: '§f说明'
-      lore: ['', '§7手持装备后点左侧预览配方与材料', '§7确认：点「确认锻造」按钮（勿手打命令）']
+      lore: ['§7手持装备后点左侧预览配方', '§7确认：点「确认锻造」（勿手打命令）']
   Z:
     display:
       material: arrow

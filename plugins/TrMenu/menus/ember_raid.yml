@@ -46,8 +46,7 @@ Icons:
           material: gray stained glass pane
           name: '§8开始协作 · 体力不足'
           lore:
-            - ''
-            - '§7需要 §e%corerpg_stamina_cost_raid% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§7需要 §e%corerpg_stamina_cost_raid% §7体力 · 现 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c本周免费已用完 · 体力不足 · 每日 0:00 回满'
         actions:
           all:
@@ -60,15 +59,8 @@ Icons:
       material: beacon
       name: '§a开始协作'
       lore:
-        - ''
-        - '§7消耗 §e%corerpg_stamina_cost_raid% §7体力（本周首次免费）'
-        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - '§7失败不返还 · 请确认全队就绪'
-        - ''
-        - '§8大厅集结 → 左道卫兵 → 右道射手 → 汇合 → 终厅'
-        - '§8周首通保底团戒 · 戒+刃=同袍套装'
-        - '§8人数 §f3～5 §8· 时限约 30～40 分'
-        - ''
+        - '§7%corerpg_stamina_cost_raid% 体力（周首免费）· 现 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - '§83～5人 · 约30～40分 · 周首保底团戒 · 失败不退'
         - '§e➥ §f点击进本'
     actions:
       all:
@@ -84,16 +76,8 @@ Icons:
       material: ender chest
       name: '§6奖励预览'
       lore:
-        - ''
-        - '§7通关箱（全队每人）：'
-        - '  §e核心 ×4 · 附魔晶 ×2'
-        - '  §e碎片 ×10 · 骨尘 ×6'
-        - '  §e锋利石约 50%（非必给）'
-        - ''
-        - '§7周首通保底 §6余烬团本之戒'
-        - '§7戒+刃=§6余烬同袍'
-        - '§7T2/T3 终厅低概率 · 不保底'
-        - ''
+        - '§7通关箱：核×4 晶×2 碎×10 骨×6 · 锋利石约50%'
+        - '§7周首保底团戒 · 戒+刃=同袍 · T2/T3低概率'
         - '§e➥ §f点击查看'
     actions:
       all:
@@ -105,14 +89,9 @@ Icons:
       material: watch
       name: '§e次数说明'
       lore:
-        - ''
-        - '§7本周首次免费 · 其后 %corerpg_stamina_cost_raid% 体力'
-        - '§7重置：§f周一 00:00 Asia/Shanghai'
-        - '§7只扣发起者 · 没进成本自动退还'
-        - '§7进本后失败 / 超时不返还（含首免）'
-        - '§7人数硬限 §f3～5'
-        - ''
-        - '§7体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - '§7周首免费 · 其后 %corerpg_stamina_cost_raid% · 3～5人'
+        - '§7只扣发起者 · 未进本自动退 · 进本后不退'
+        - '§8体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% · 周一0:00重置'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

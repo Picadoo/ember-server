@@ -78,7 +78,6 @@ Icons:
       material: nether star
       name: '§6此刻状态'
       lore:
-        - ''
         - '§7充能 §f%corerpg_kit_charge% §7· 形状 §f%corerpg_kit_shape% §7· 身法 §b%corerpg_kit_step_dir%'
         - '§7守招 §f%corerpg_kit_parry_name% §8· %corerpg_kit_parry_cd% §8（%corerpg_kit_parry_unlock%）'
         - '§e希望：§f%corerpg_kit_next_hope% §7· §f%corerpg_kit_set_hope%'
@@ -94,7 +93,6 @@ Icons:
       material: blaze powder
       name: '§6① 烬斩 · F'
       lore:
-        - ''
         - '§a主招 · F · 1.5B · 形状 §e%corerpg_kit_shape%'
         - '§7充能：§f%corerpg_kit_charge% §8· 与烬突二选一'
         - '§8不暴击 · 不吸血 · 不触发套装计数'
@@ -109,7 +107,6 @@ Icons:
       material: diamond sword
       name: '§c② 烬突 · 潜行+F'
       lore:
-        - ''
         - '§c副招 · 冲4格 · 最多3目标 · 各1.5B（首领×0.5）'
         - '§7充能：§f%corerpg_kit_charge% §8· 解锁 %corerpg_kit_dash_unlock%（Q02）'
         - '§8挂机不自动烬突 · 未解锁仍放烬斩'
@@ -125,7 +122,6 @@ Icons:
       material: feather
       name: '§b身法 · §f%corerpg_kit_step_dir% §8· %corerpg_kit_step%'
       lore:
-        - ''
         - '§7潜行+Q · 前冲5/后撤4 · CD14 · 零伤害'
         - '§7当前 §b%corerpg_kit_step_dir% §8· 火痕解锁 %corerpg_kit_step_unlock%'
         - '§e➥ §f出本切方向 · 或开轻技页'
@@ -141,7 +137,6 @@ Icons:
       material: gold sword
       name: '§e符文 · 扇形'
       lore:
-        - ''
         - '§f扇≥110° · 半径3.5 · 最多5 §8（Stage2）'
         - '§7当前 §f%corerpg_kit_shape% §8· 解锁 %corerpg_kit_shape_unlock%（Q04）'
         - '§e➥ §f出本切扇形 · 换后充能转满'
@@ -157,7 +152,6 @@ Icons:
       material: iron sword
       name: '§b符文 · 直线穿刺'
       lore:
-        - ''
         - '§f正前6格 · 半宽0.7 · 最多3 §8（Stage2 · 同L07）'
         - '§7当前 §f%corerpg_kit_shape% §8· 解锁 %corerpg_kit_shape_unlock%'
         - '§e➥ §f出本切直线 · 换后充能转满'
@@ -173,7 +167,6 @@ Icons:
       material: stone sword
       name: '§d符文 · 原地环斩'
       lore:
-        - ''
         - '§f身边半径3.5 · 最多4 §8（Stage2 · 同L09；L13见签名）'
         - '§7当前 §f%corerpg_kit_shape% §8· 解锁 %corerpg_kit_shape_unlock%'
         - '§e➥ §f出本切环斩 · 换后充能转满'
@@ -190,7 +183,6 @@ Icons:
       material: sugar
       name: '§a身法 · 前冲'
       lore:
-        - ''
         - '§7向前最多5格 · 无伤害 · 当前 §b%corerpg_kit_step_dir%'
         - '§8出本免费换 · 换后身法 CD 转满'
         - '§e➥ §f切换为前冲'
@@ -206,7 +198,6 @@ Icons:
       material: rabbit foot
       name: '§b身法 · 后撤'
       lore:
-        - ''
         - '§7向后最多4格 · 无伤害 · 当前 §b%corerpg_kit_step_dir%'
         - '§8出本免费换 · 换后身法 CD 转满'
         - '§e➥ §f切换为后撤'
@@ -238,7 +229,6 @@ Icons:
       material: iron chestplate
       name: '§b守招 · §f%corerpg_kit_parry_name%'
       lore:
-        - ''
         - '§7单按Q · 解锁 §f%corerpg_kit_parry_unlock%（Q03）· CD §f%corerpg_kit_parry_cd%§8（28s）'
         - '§7预警砸中你后约半秒内再按 · 反打0.45B'
         - '§8窗外乱按白丢CD · 不挡预警伤'

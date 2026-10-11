@@ -45,8 +45,7 @@ Icons:
           material: gray stained glass pane
           name: '§8开始下潜 · 体力不足'
           lore:
-            - ''
-            - '§7需要 §e%corerpg_stamina_cost_abyss% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§7需要 §e%corerpg_stamina_cost_abyss% §7体力 · 现 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
         actions:
           all:
@@ -59,17 +58,8 @@ Icons:
       material: obsidian
       name: '§a开始下潜'
       lore:
-        - ''
-        - '§7消耗 §e%corerpg_stamina_cost_abyss% §7体力'
-        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - '§7冲层 · 撤离按最高层结算'
-        - '§7撤离不退体力'
-        - ''
-        - '§7本期可下潜至第 §f12 §7层 · 第12层周首通稳定符'
-        - '§7共 12 层：潮尸→混潮→骨潮→蛮层→看守→…→最终看守'
-        - '§8清层后续潜；随时可打开本菜单撤离'
-        - '§8时限约 25 分 · 人数 1～2 · 需余烬 Lv.25'
-        - ''
+        - '§7%corerpg_stamina_cost_abyss% 体力 · 现 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% · 撤离不退'
+        - '§8冲至12层 · 时限约25分 · 1～2人 · Lv.25'
         - '§e➥ §f点击开始下潜'
     actions:
       all:
@@ -84,13 +74,8 @@ Icons:
       material: ender pearl
       name: '§d上浮撤离'
       lore:
-        - ''
-        - '§7冲层中可随时撤离'
-        - '§7按本局最高层发结算箱'
-        - '§c撤离不退体力'
-        - ''
+        - '§7按本局最高层结算 · 撤离不退体力'
         - '§8需在深渊本内使用'
-        - '§8打开深渊菜单点击撤离即可'
         - '§e➥ §f点击撤离'
     actions:
       all:
@@ -104,17 +89,8 @@ Icons:
       material: emerald
       name: '§6奖励预览'
       lore:
-        - ''
-        - '§7战斗中（MM）：碎片 / 骨尘 / 孔石 / 核心'
-        - ''
-        - '§7撤离/超时结算箱（按最高层）：'
-        - '  §e1～4 §7碎片8 骨尘2'
-        - '  §e5～9 §7碎片12 骨尘4 核心1 · 孔石约 10%（非必给）'
-        - '  §e10+ §7碎片16 骨尘6 核心2 · 孔石约 10%（本期顶12）'
-        - ''
-        - '§7通关 COMPLETE：本周首通 T2 刃+护符 · 之后 4% / 3%'
-        - '§7第 §f12 §7层周首通：§a稳定符 ×1'
-        - ''
+        - '§7结算按最高层：1～4碎8骨2 · 5～9核1 · 10+核2'
+        - '§7通关周首 T2刃+符 · 第12层周首稳定符'
         - '§e➥ §f点击查看'
     actions:
       all:
@@ -126,13 +102,9 @@ Icons:
       material: watch
       name: '§e次数说明'
       lore:
-        - ''
-        - '§7消耗 §e%corerpg_stamina_cost_abyss% §7体力（与日常同池）'
-        - '§7重置：§f00:00 Asia/Shanghai'
-        - '§7每日不限次数 · 体力够就能进'
-        - ''
-        - '§7撤离 / 超时 / 团灭均不退体力'
-        - '§8体力不足：明日 0 点恢复或商城体力药'
+        - '§7%corerpg_stamina_cost_abyss% 体力 · 每日不限 · 0:00回满'
+        - '§7撤离/超时/团灭均不退'
+        - '§8不足：明日恢复或商城体力药'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

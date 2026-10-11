@@ -45,8 +45,7 @@ Icons:
           material: gray stained glass pane
           name: '§8开始挑战 · 体力不足'
           lore:
-            - ''
-            - '§7需要 §e%corerpg_stamina_cost_weekly% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§7需要 §e%corerpg_stamina_cost_weekly% §7体力 · 现 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c本周免费已用完 · 体力不足 · 每日 0:00 回满'
         actions:
           all:
@@ -59,15 +58,8 @@ Icons:
       material: diamond sword
       name: '§a开始挑战'
       lore:
-        - ''
-        - '§7消耗 §e%corerpg_stamina_cost_weekly% §7体力（本周首次免费抵扣）'
-        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - '§7失败不返还 · 请确认后再进'
-        - ''
-        - '§8高难多波 + 终局蛮兵'
-        - '§8一局约 2～3 分钟 · 建议 1～3 人'
-        - ''
-        - '§c'
+        - '§7%corerpg_stamina_cost_weekly% 体力（周首免费）· 现 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - '§8高难多波 · 约2～3分 · 1～3人 · 失败不退'
         - '§e➥ §f点击进本'
     actions:
       all:
@@ -82,19 +74,8 @@ Icons:
       material: ender chest
       name: '§6奖励预览'
       lore:
-        - ''
-        - '§7终厅战斗：'
-        - '  §f核心 ×1（必掉）'
-        - '  §f余烬之刃 §e约 20% · §f精炼护符 §e约 12%'
-        - '  §f稳定符 §e约 4%'
-        - '  §8中核另有较低 T1/T2 刃机会'
-        - ''
-        - '§7通关箱：'
-        - '  §e核心 ×3 · 附魔晶 ×2'
-        - '  §e碎片 ×8 · 骨尘 ×4 · 原版经验 +6 级'
-        - '  §e每周首通保底 精炼护符'
-        - '  §8其后：精炼刃 10% · 护符 8%'
-        - ''
+        - '§7终厅：核心×1 · 刃约20% · 护符约12% · 稳定符约4%'
+        - '§7通关箱：核×3 晶×2 碎×8 骨×4 · 周首保底护符'
         - '§e➥ §f点击查看'
     actions:
       all:
@@ -106,13 +87,8 @@ Icons:
       material: watch
       name: '§e次数说明'
       lore:
-        - ''
-        - '§7本周首次免费（账户抵扣）· 其后扣 %corerpg_stamina_cost_weekly% 体力'
-        - '§7本周免费剩余 §f%ember_weekly_left% §7次'
-        - '§7体力不够可买商城「周体力包」· 主线送体力药'
-        - '§7重置：§f周一 00:00 Asia/Shanghai'
-        - '§7进本即扣 · 失败不返还'
-        - ''
+        - '§7周首免费 · 其后 %corerpg_stamina_cost_weekly% 体力 · 剩 §f%ember_weekly_left%'
+        - '§7重置周一 0:00 · 进本即扣 · 失败不退'
         - '§8体力 §f%corerpg_stamina%§8/§f%corerpg_stamina_max%'
     actions:
       all:

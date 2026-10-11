@@ -2090,3 +2090,12 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | ops | 根 `server.pid`→symlink runtime；waiter 端口空闲≥10s 强制清陈旧 pid |
 | jar | 未改（live 仍 1.65.723-d12194.local） |
 | STATUS | `docs/status/STATUS-ember-trmenu-lore-skill-help-short-d12197-2026-10-11.md` |
+
+
+### 13.106 TrMenu lore 压缩 weekly/set/abyss/raid/afk/forge/enhance + skill_kit 收尾（D12198，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 菜单 | `ember_weekly.yml` · `ember_set.yml` · `ember_abyss.yml` · `ember_raid.yml` · `ember_afk.yml` · `ember_forge.yml` · `ember_enhance.yml` · `ember_skill_kit.yml` lore ≤3（砍空白与说明墙；PAPI/体力/动作保留） |
+| jar | 未改（live 仍 1.65.723-d12194.local） |
+| STATUS | `docs/status/STATUS-ember-trmenu-lore-weekly-set-abyss-raid-afk-d12198-2026-10-11.md` |
