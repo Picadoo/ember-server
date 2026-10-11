@@ -431,9 +431,19 @@ public final class LifeService implements Listener {
             return false;
         }
         if (o.daily > 0 && d.periodCount("life_" + o.id, td) >= o.daily) {
-            p.sendMessage(ChatColor.RED + "[生活] 今日次数已用完（" + o.daily + "）。");
-            try { p.sendActionBar("§e生活 · 今日帽满 · " + o.id); } catch (Throwable ignored) { }
-            return false;
+            try {
+                if (town.sunshine.corerpg.p1.EmberLifeDailyCapSoft.consume(d)) { // D9057
+                    p.sendMessage(ChatColor.GREEN + "[生活] 日次容错 · 额外 1 次（今日一次 · " + o.id + "）");
+                    try { p.sendActionBar("§a生活 · 日次容错"); } catch (Throwable ignored) { }
+                } else {
+                    p.sendMessage(ChatColor.RED + "[生活] 今日次数已用完（" + o.daily + "）。");
+                    try { p.sendActionBar("§e生活 · 今日帽满 · " + o.id); } catch (Throwable ignored) { }
+                    return false;
+                }
+            } catch (Throwable ignored) {
+                p.sendMessage(ChatColor.RED + "[生活] 今日次数已用完（" + o.daily + "）。");
+                return false;
+            }
         }
         for (Map.Entry<String, Integer> e : o.inputs.entrySet()) {
             int have = ni.countInInventory(p, e.getKey());
@@ -469,6 +479,14 @@ public final class LifeService implements Listener {
                 int soft = town.sunshine.corerpg.p1.EmberBreadBuySoft.consumeCoin(d, payCoin); // D8977
                 if (soft < payCoin) {
                     p.sendMessage(ChatColor.GREEN + "[生活] 面包减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
+                    payCoin = soft;
+                }
+            } catch (Throwable ignored) { }
+        } else if (town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.isSoulDustOffer(o.id) && payCoin > 0) {
+            try {
+                int soft = town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.consumeCoin(d, payCoin); // D9089
+                if (soft < payCoin) {
+                    p.sendMessage(ChatColor.GREEN + "[生活] 魂尘减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
                     payCoin = soft;
                 }
             } catch (Throwable ignored) { }

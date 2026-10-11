@@ -1,3 +1,6 @@
+Live jar: **1.65.673-d9120.local** · D9057–D9120 LifeDailyCapSoft + SoulDustCoinSoft + FlyIntoWallSoft
+Prior: Anvil/Lightning/HotFloor
+
 Live jar: **1.65.672-d9056.local** · D8993–D9056 AnvilRepairSoft + LightningSoft + HotFloorSoft
 Prior: Starve/CookXp/Bread
 
