@@ -137,13 +137,20 @@ public final class EmberPackPath {
         return EmberStashPath.hasStashableMats(p);
     }
 
-    /** D2687: after successful deposit — Speed I 1s keep farming. */
+    /** D2707: AUTO Speed 1.5s; ASK/manual 1s. */
+    public static int packSpeedTicks(int path) {
+        return path == AUTO ? 30 : 20;
+    }
+
     public static void applyPackLand(Player p) {
         if (p == null || !p.isOnline()) return;
+        PlayerData d = dataOf(p);
+        int path = d == null ? NONE : get(d);
+        int ticks = packSpeedTicks(path);
         try {
             p.addPotionEffect(new org.bukkit.potion.PotionEffect(
-                    org.bukkit.potion.PotionEffectType.SPEED, 20, 0, false, true), true);
-            try { p.sendActionBar("§a腾包 · §fSpeed I 1s"); } catch (Throwable ignored) { }
+                    org.bukkit.potion.PotionEffectType.SPEED, ticks, 0, false, true), true);
+            try { p.sendActionBar("§a腾包 · §fSpeed I " + (ticks / 20) + "s"); } catch (Throwable ignored) { }
         } catch (Throwable ignored) { }
     }
 

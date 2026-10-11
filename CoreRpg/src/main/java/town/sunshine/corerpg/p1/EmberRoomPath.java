@@ -158,9 +158,14 @@ public final class EmberRoomPath {
                 org.bukkit.entity.Player p = org.bukkit.Bukkit.getPlayer(u);
                 if (p == null || !p.isOnline() || p.isDead()) continue;
                 int ticks = clearSpeedTicks(path);
+                if (s.challenge) ticks = Math.max(ticks, 60); // D2708 challenge preferred clear 3s
                 p.addPotionEffect(new org.bukkit.potion.PotionEffect(
                         org.bukkit.potion.PotionEffectType.SPEED, ticks, 0, false, true), true);
-                try { p.sendActionBar("§a优房清 · §fSpeed I " + (ticks / 20) + "s"); } catch (Throwable ignored) { }
+                try {
+                    String ab = s.challenge ? ("§c硬本优房清 · §fSpeed I " + (ticks / 20) + "s")
+                            : ("§a优房清 · §fSpeed I " + (ticks / 20) + "s");
+                    p.sendActionBar(ab);
+                } catch (Throwable ignored) { }
             }
         } catch (Throwable ignored) { }
     }

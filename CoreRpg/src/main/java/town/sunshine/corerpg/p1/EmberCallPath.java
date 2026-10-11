@@ -96,13 +96,20 @@ public final class EmberCallPath {
         return path == ASK ? ASK_PATH_COOLDOWN_MS : ASK_COOLDOWN_MS;
     }
 
-    /** D2675: after call — Speed I 2s (boss open footwork). */
+    /** D2706: AUTO Speed 3s; ASK/manual 2s. */
+    public static int callSpeedTicks(int path) {
+        return path == AUTO ? 60 : 40;
+    }
+
     public static void applyCallLand(Player p) {
         if (p == null || !p.isOnline()) return;
+        PlayerData d = dataOf(p);
+        int path = d == null ? NONE : get(d);
+        int ticks = callSpeedTicks(path);
         try {
             p.addPotionEffect(new org.bukkit.potion.PotionEffect(
-                    org.bukkit.potion.PotionEffectType.SPEED, 40, 0, false, true), true);
-            try { p.sendActionBar("§a召战开战 · §fSpeed I 2s"); } catch (Throwable ignored) { }
+                    org.bukkit.potion.PotionEffectType.SPEED, ticks, 0, false, true), true);
+            try { p.sendActionBar("§a召战开战 · §fSpeed I " + (ticks / 20) + "s"); } catch (Throwable ignored) { }
         } catch (Throwable ignored) { }
     }
 

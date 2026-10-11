@@ -38,4 +38,12 @@ public class EmberCallPackChallengeRoomTest {
         assertEquals(12_000L, EmberPackPath.askCooldownMs(EmberPackPath.ASK));
         assertEquals(20_000L, EmberPackPath.askCooldownMs(EmberPackPath.NONE));
     }
+
+    @Test
+    public void callPackAutoSpeedLonger() {
+        assertEquals(60, EmberCallPath.callSpeedTicks(EmberCallPath.AUTO));
+        assertEquals(40, EmberCallPath.callSpeedTicks(EmberCallPath.ASK));
+        assertEquals(30, EmberPackPath.packSpeedTicks(EmberPackPath.AUTO));
+        assertEquals(20, EmberPackPath.packSpeedTicks(EmberPackPath.ASK));
+    }
 }
