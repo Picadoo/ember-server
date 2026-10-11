@@ -668,6 +668,21 @@ public final class SkillService implements Listener {
                         player.getWorld().spawnParticle(org.bukkit.Particle.SMOKE_NORMAL, player.getLocation().add(0, 0.8, 0), 12, 0.3, 0.2, 0.3, 0.01);
                         player.sendActionBar("§8蓄力落空");
                     } catch (Throwable ignored) { }
+                    try { // D6881 charge-miss CD soft rest
+                        town.sunshine.corerpg.PlayerData pdM = dataStore.get(id);
+                        int cdSec = Math.max(0, mode.i("skill.cooldown_seconds", 8));
+                        long refund = town.sunshine.corerpg.p1.EmberChargeMissRest.consumeRefundMs(pdM, cdSec);
+                        if (refund > 0) {
+                            town.sunshine.corerpg.p1.EmberPlayerState stM = ls.state(id);
+                            if (stM != null) {
+                                stM.skillCdUntil = Math.max(System.currentTimeMillis(), stM.skillCdUntil - refund);
+                                ls.saveState(player);
+                                town.sunshine.corerpg.p1.EmberSlashReady.arm(player, stM.skillCdUntil);
+                                player.sendMessage(PREFIX + "§a蓄力落空回充 · 共享CD −§f" + (refund / 1000) + "§as（本日一次）");
+                                try { player.sendActionBar("§a蓄力落空回充 · −" + (refund / 1000) + "s"); } catch (Throwable ignored2) { }
+                            }
+                        }
+                    } catch (Throwable ignored) { }
                     return;
                 }
                 landEmberSlash(player, ls, t2, fMax, fMods, true, gsv, sh.id, true);

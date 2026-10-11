@@ -1,3 +1,6 @@
+Live jar: **1.65.639-d6944.local** · D6881–D6944 ChargeMissRest
+Prior: DropCraftPity · DashStep · LockNear+ParryMiss
+
 Live jar: **1.65.638-d6880.local** · D6817–D6880 DropCraftPity
 Prior: 1.65.637 DashStepLink · 1.65.636 LockNear+ParryMiss
 
