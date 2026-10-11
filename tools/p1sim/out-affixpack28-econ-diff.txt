@@ -1,0 +1,1 @@
+MAX_ABS_DPP (p2econ % columns, new 58 vs old 56 pool) = 0.0 at None (cap 3.0) → WITHIN RANGE

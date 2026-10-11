@@ -2477,3 +2477,16 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack27-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack27.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack27-d12231-2026-10-12.md` |
+
+
+### 13.140 Affix Pack 28 切斩/谷原（CoreRpg 1.65.750，D12232，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12232 |
+| jar | CoreRpg **1.65.750-d12232.local** |
+| balance_version | 114 → **115** |
+| 行为 | 词缀池 56→58：+`nick` 切斩 / `dale` 谷原；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack28-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack28.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack28-d12232-2026-10-12.md` |
