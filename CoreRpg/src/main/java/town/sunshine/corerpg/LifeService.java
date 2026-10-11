@@ -456,6 +456,14 @@ public final class LifeService implements Listener {
                     payCoin = soft;
                 }
             } catch (Throwable ignored) { }
+        } else if (BREAD_OFFER_ID.equals(o.id) && payCoin > 0) {
+            try {
+                int soft = town.sunshine.corerpg.p1.EmberBreadBuySoft.consumeCoin(d, payCoin); // D8977
+                if (soft < payCoin) {
+                    p.sendMessage(ChatColor.GREEN + "[生活] 面包减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
+                    payCoin = soft;
+                }
+            } catch (Throwable ignored) { }
         }
         if (d.getCoin() < payCoin) {
             int gapC = payCoin - d.getCoin();
@@ -516,7 +524,11 @@ public final class LifeService implements Listener {
         Offer o = offers.get(BREAD_OFFER_ID);
         if (o == null) return false;
         PlayerData d = dataStore.get(p.getUniqueId());
-        if (d == null || d.getCoin() < o.coin) return false;
+        if (d == null) return false;
+        int needC = o.coin;
+        if (needC > 0 && town.sunshine.corerpg.p1.EmberBreadBuySoft.ready(d))
+            needC = Math.max(1, (int) Math.floor(needC * town.sunshine.corerpg.p1.EmberBreadBuySoft.MULT));
+        if (d.getCoin() < needC) return false;
         if (countPathFood(p) > 0) return false;
         if (ni.countInInventoryOnly(p, BREAD_NI_ID) > 0) return false;
         return true;
@@ -713,7 +725,15 @@ public final class LifeService implements Listener {
         dataStore.flushMutation(p.getUniqueId());
         p.sendMessage(ChatColor.GREEN + "[生活] 烤好了 " + ni.displayName(cookOutput) + "×" + cooked + ChatColor.GRAY + "（-" + cooked * cookCoinEach + " 币）");
         try { p.sendActionBar("§a烹饪 · §f烤好×" + cooked); } catch (Throwable ignored) { }
-        addXp(p, cooked * cookXp);
+        int cXp = cooked * cookXp;
+        try {
+            int boosted = town.sunshine.corerpg.p1.EmberCookXpBoost.consumeXp(d, cXp); // D8961
+            if (boosted > cXp) {
+                cXp = boosted;
+                p.sendMessage(ChatColor.GREEN + "[生活] 烹饪加验 · 经验 ×2（今日一次）");
+            }
+        } catch (Throwable ignored) { }
+        addXp(p, cXp);
         town.sunshine.corerpg.p1.EmberCookPath.afterCook(p, cooked); // D843
     }
 

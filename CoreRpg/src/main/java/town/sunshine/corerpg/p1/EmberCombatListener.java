@@ -363,6 +363,20 @@ public final class EmberCombatListener implements Listener {
                 } catch (Throwable ignored) { }
             }
         }
+        if (e.getCause() == DamageCause.STARVATION) {
+            try {
+                PlayerData pdSt = plugin.getDataStore().get(p.getUniqueId());
+                if (EmberStarvationSoft.consumeCancel(pdSt)) { // D8929
+                    e.setCancelled(true);
+                    EmberDamageTrace.note(e, before, "首饿免除");
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a饥饿免除（今日一次）");
+                        p.sendActionBar("§a饥饿免除");
+                    } catch (Throwable ignored) { }
+                    return;
+                }
+            } catch (Throwable ignored) { }
+        }
         if (e.getCause() == DamageCause.SUFFOCATION) {
             try {
                 PlayerData pdS = plugin.getDataStore().get(p.getUniqueId());
