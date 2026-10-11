@@ -24,6 +24,8 @@ import town.sunshine.corerpg.p1.encounter.AffixFrost;
 import town.sunshine.corerpg.p1.encounter.AffixHail;
 import town.sunshine.corerpg.p1.encounter.AffixJailer;
 import town.sunshine.corerpg.p1.encounter.AffixTether;
+import town.sunshine.corerpg.p1.encounter.AffixPulse;
+import town.sunshine.corerpg.p1.encounter.AffixMines;
 import town.sunshine.corerpg.p1.encounter.AffixMolten;
 import town.sunshine.corerpg.p1.encounter.AffixMortar;
 import town.sunshine.corerpg.p1.encounter.AffixRegen;
@@ -72,7 +74,7 @@ final class EmberRunDirector {
         long castAt;
         Vector castDir;
         Location castOrigin;
-        String affix;               // D138..D196/D12207: blazing..firechain/hail/tether (null = plain)
+        String affix;               // D138..D196/D12207/D12211: blazing..firechain/hail/tether/pulse/mines (null = plain)
         boolean splitAdd;           // D141: spawned by a split elite (counts as the affixed elite for 破缀 / 守缀 / 破甲)
         boolean varietyEscort;      // D171: escort rabbit — must not pay treasure coin; excluded from room-clear count
         long affixNext, affixAt;
@@ -94,6 +96,10 @@ final class EmberRunDirector {
         // D12207 雹霰: multi-circle origins + once-per-cast hit set
         Location[] hailOrigins;
         java.util.Set<UUID> hailHit = new java.util.HashSet<UUID>();
+        // D12211 脉爆 / 埋雷
+        java.util.Set<UUID> pulseHit = new java.util.HashSet<UUID>();
+        Location[] minesOrigins;
+        java.util.Set<UUID> minesHit = new java.util.HashSet<UUID>();
         EmberRunMaps.Skill twist;   // D182 Extra.ELITE light move (null = plain stump)
         EmberRunMaps.Skill twistAlt; // D185 Pack 2 second light move (null = Pack 1 only)
         boolean twistUseAlt;         // D185: true → fire twistAlt next
@@ -2662,6 +2668,96 @@ final class EmberRunDirector {
             t.affixAt = AffixCycle.after(now, v.tetherWarn);
             return;
         }
+        if ("pulse".equals(t.affix)) {
+            // D12211 脉爆: expanding ring at elite feet; each player hit at most once per cast
+            if (AffixCycle.armed(t.affixAt)) {
+                Particle pulseFx = EmberAffixTelegraph.warnParticle(t.affix);
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.pulseRadius, pulseFx);
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.pulseRadius * 0.55, Particle.EXPLOSION_LARGE);
+                if (AffixCycle.lands(now, t.affixAt)) {
+                    EmberRunMaps.Skill sk = pulseSkill(t, v);
+                    int hit = 0;
+                    w.spawnParticle(Particle.EXPLOSION_LARGE, t.affixOrigin.clone().add(0, 0.4, 0), 3, v.pulseRadius * 0.3, 0.2, v.pulseRadius * 0.3, 0.0);
+                    w.spawnParticle(Particle.CRIT, t.affixOrigin.clone().add(0, 0.3, 0), 12, v.pulseRadius * 0.35, 0.15, v.pulseRadius * 0.35, 0.02);
+                    for (Player p : participantsHere()) {
+                        if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                        if (t.pulseHit.contains(p.getUniqueId())) continue;
+                        if (!inShape(sk, t.affixOrigin, new Vector(1, 0, 0), p.getLocation())) continue;
+                        t.pulseHit.add(p.getUniqueId());
+                        if (sk.dmg > 0) svc.skillHit(s, p, t.le, sk.dmg, "mob");
+                        hit++;
+                    }
+                    w.playSound(t.affixOrigin, Sound.ENTITY_GENERIC_EXPLODE, 0.45f, 1.25f);
+                    svc.log().info(String.format(Locale.ROOT, "[P1 run] %s pulse hit=%d", s.runId, hit));
+                    t.pulseHit.clear();
+                    t.affixAt = 0;
+                    t.affixNext = AffixCycle.after(now, v.pulseEvery);
+                }
+                return;
+            }
+            if (!AffixCycle.ready(now, t.affixNext)) return;
+            Player tgt = nearest(t.le.getLocation(), AffixPulse.ENGAGE);
+            if (tgt == null) return;
+            Location el = t.le.getLocation().clone();
+            el.setY(Math.floor(el.getY()));
+            t.affixOrigin = el;
+            t.pulseHit.clear();
+            t.affixAt = AffixCycle.after(now, v.pulseWarn);
+            w.playSound(el, Sound.BLOCK_NOTE_PLING, 0.45f, 1.35f);
+            return;
+        }
+        if ("mines".equals(t.affix)) {
+            // D12211 埋雷: delayed circles behind the elite; each player hit at most once per cast across all mines
+            if (AffixCycle.armed(t.affixAt)) {
+                Location[] origins = t.minesOrigins;
+                if (origins != null) {
+                    Particle minesFx = EmberAffixTelegraph.warnParticle(t.affix);
+                    for (Location o : origins) {
+                        if (o == null) continue;
+                        warnCircle(o.clone().add(0, 0.15, 0), v.minesRadius, minesFx);
+                        warnCircle(o.clone().add(0, 0.15, 0), v.minesRadius * 0.55, Particle.FLAME);
+                    }
+                }
+                if (AffixCycle.lands(now, t.affixAt)) {
+                    EmberRunMaps.Skill sk = minesSkill(t, v);
+                    int hit = 0;
+                    if (origins != null) {
+                        for (Location o : origins) {
+                            if (o == null) continue;
+                            w.spawnParticle(Particle.LAVA, o.clone().add(0, 0.4, 0), 8, v.minesRadius * 0.35, 0.2, v.minesRadius * 0.35, 0.0);
+                            w.spawnParticle(Particle.FLAME, o.clone().add(0, 0.3, 0), 6, 0.15, 0.1, 0.15, 0.01);
+                            for (Player p : participantsHere()) {
+                                if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                                if (t.minesHit.contains(p.getUniqueId())) continue;
+                                if (!inShape(sk, o, new Vector(1, 0, 0), p.getLocation())) continue;
+                                t.minesHit.add(p.getUniqueId());
+                                if (sk.dmg > 0) svc.skillHit(s, p, t.le, sk.dmg, "mob");
+                                hit++;
+                            }
+                        }
+                    }
+                    w.playSound(t.le.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.55f, 0.8f);
+                    svc.log().info(String.format(Locale.ROOT, "[P1 run] %s mines pops=%d hit=%d",
+                            s.runId, origins == null ? 0 : origins.length, hit));
+                    t.minesOrigins = null;
+                    t.minesHit.clear();
+                    t.affixAt = 0;
+                    t.affixNext = AffixCycle.after(now, v.minesEvery);
+                }
+                return;
+            }
+            if (!AffixCycle.ready(now, t.affixNext)) return;
+            Player tgt = nearest(t.le.getLocation(), AffixMines.ENGAGE);
+            if (tgt == null) return;
+            Location el = t.le.getLocation().clone();
+            el.setY(Math.floor(el.getY()));
+            t.minesOrigins = AffixMines.origins(el, tgt.getLocation(), v);
+            t.minesHit.clear();
+            t.affixOrigin = t.minesOrigins.length > 0 ? t.minesOrigins[0] : el;
+            t.affixAt = AffixCycle.after(now, v.minesWarn);
+            w.playSound(el, Sound.BLOCK_NOTE_PLING, 0.45f, 0.9f);
+            return;
+        }
     }
 
     /** D196 旋光: beam angle (rad) {@code elapsed} s into the spin; stops at the end of the sweep. */
@@ -2758,6 +2854,12 @@ final class EmberRunDirector {
 
     /** D12207 牵丝 root ticks. */
     static int tetherRootTicks(EmberRunMaps.Variety v) { return AffixTether.rootTicks(v); }
+
+    /** D12211 脉爆 circle skill. */
+    static EmberRunMaps.Skill pulseSkill(Tracked t, EmberRunMaps.Variety v) { return AffixPulse.skill(t.atk, v); }
+
+    /** D12211 埋雷 circle skill. */
+    static EmberRunMaps.Skill minesSkill(Tracked t, EmberRunMaps.Variety v) { return AffixMines.skill(t.atk, v); }
 
     /** D138 炽热 circle. D241: {@link AffixBlazing#skill}. */
     static EmberRunMaps.Skill blazeSkill(Tracked t, EmberRunMaps.Variety v) { return AffixBlazing.skill(t.atk, v); }

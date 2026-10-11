@@ -2,6 +2,8 @@ package town.sunshine.corerpg.p1;
 
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
+import town.sunshine.corerpg.p1.encounter.AffixPulse;
+import town.sunshine.corerpg.p1.encounter.AffixMines;
 import town.sunshine.corerpg.p1.encounter.*;
 
 import java.io.Reader;
@@ -172,6 +174,18 @@ public final class EmberAffixExportTest {
                 periodic(o, b, v, k.warn, v.tetherEvery);
                 o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1);
                 o.put("root_s", AffixTether.rootTicks(v) / 20.0); o.put("pull", v.tetherPull); o.put("shape", shape(k));
+            } else if ("pulse".equals(id)) {
+                EmberRunMaps.Skill k = AffixPulse.skill(1.0, v);
+                o.put("engage", AffixPulse.ENGAGE); o.put("reach", AffixPulse.REACH);
+                periodic(o, b, v, k.warn, v.pulseEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1);
+                o.put("shape", shape(k));
+            } else if ("mines".equals(id)) {
+                EmberRunMaps.Skill k = AffixMines.skill(1.0, v);
+                o.put("engage", AffixMines.ENGAGE); o.put("reach", AffixMines.REACH);
+                periodic(o, b, v, k.warn, v.minesEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1); o.put("pops", v.minesCount);
+                o.put("shape", shape(k));
             }
             Object raw = yml.get(id);
             Map<String, Object> in = new TreeMap<String, Object>();
@@ -240,7 +254,7 @@ public final class EmberAffixExportTest {
         Map<?, ?> yml = liveVariety();
         EmberRunMaps.Variety v = new EmberRunMaps.Variety(yml);
         Map<?, ?> aff = (Map<?, ?>) table(yml, balanceVersion()).get("affixes");
-        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain", "hail", "tether"}) {
+        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines"}) {
             List<String> log = AffixReplay.run(new PrimitiveAffixPath(), id, AffixReplay.Script.of(1L), v);
             String promote = null;
             for (String l : log) if (l.contains("PROMOTE")) { promote = l; break; }

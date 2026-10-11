@@ -626,9 +626,9 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
+        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
-                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether"));
+                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
                 "timed", "crystal", "escort", "hold", "beacon", "relay", "breach", "chain", "unscathed"));
         public final double affixRate, eventRate;
@@ -657,6 +657,10 @@ public final class EmberRunMaps {
         public final double hailEvery, hailWarn, hailRadius, hailAhead, hailSpread, hailDmg;
         public final int hailCount;
         public final double tetherEvery, tetherWarn, tetherRadius, tetherRoot, tetherDmg, tetherPull;
+        // D12211 pulse (脉爆: expanding ring at elite) / mines (埋雷: delayed circles behind elite)
+        public final double pulseEvery, pulseWarn, pulseRadius, pulseDmg;
+        public final double minesEvery, minesWarn, minesRadius, minesBehind, minesSpread, minesDmg;
+        public final int minesCount;
         // D171 crystal / escort / timed
         public final int crystalCount, crystalSecs, timedSecs;
         public final double escortHp;
@@ -788,6 +792,19 @@ public final class EmberRunMaps {
             tetherRoot = Math.max(0.0, Math.min(0.8, num(th.get("root"), 0.8)));     // ≤ 0.8 s
             tetherDmg = Math.max(0.0, Math.min(0.4, num(th.get("dmg"), 0.4)));       // ≤ 0.4 atk
             tetherPull = Math.max(0.0, Math.min(1.5, num(th.get("pull"), 0.8)));
+            Map<?, ?> pu = m.get("pulse") instanceof Map ? (Map<?, ?>) m.get("pulse") : Collections.emptyMap();
+            pulseEvery = Math.max(6.0, num(pu.get("every"), 6.0));         // D12211: every ≥ 6
+            pulseWarn = Math.max(1.2, num(pu.get("warn"), 1.2));
+            pulseRadius = Math.max(0.5, Math.min(3.5, num(pu.get("radius"), 3.5))); // ≤ 3.5
+            pulseDmg = Math.max(0.0, Math.min(0.55, num(pu.get("dmg"), 0.55)));     // ≤ 0.55 atk
+            Map<?, ?> mi = m.get("mines") instanceof Map ? (Map<?, ?>) m.get("mines") : Collections.emptyMap();
+            minesEvery = Math.max(7.0, num(mi.get("every"), 7.0));         // D12211: every ≥ 7
+            minesWarn = Math.max(1.4, num(mi.get("warn"), 1.4));
+            minesRadius = Math.max(0.5, Math.min(1.4, num(mi.get("radius"), 1.4))); // ≤ 1.4
+            minesBehind = Math.max(0.5, Math.min(4.0, num(mi.get("behind"), 2.5)));
+            minesSpread = Math.max(0.5, Math.min(3.0, num(mi.get("spread"), 1.8)));
+            minesCount = Math.max(2, Math.min(2, (int) num(mi.get("count"), 2))); // fixed 2
+            minesDmg = Math.max(0.0, Math.min(0.6, num(mi.get("dmg"), 0.6)));     // ≤ 0.6 atk
             Map<?, ?> tm = m.get("timed") instanceof Map ? (Map<?, ?>) m.get("timed") : Collections.emptyMap();
             timedSecs = Math.max(5, (int) num(tm.get("secs"), eventSecs));
             Map<?, ?> cr = m.get("crystal") instanceof Map ? (Map<?, ?>) m.get("crystal") : Collections.emptyMap();
@@ -840,6 +857,8 @@ public final class EmberRunMaps {
             if ("firechain".equals(id)) return "火链";
             if ("hail".equals(id)) return "雹霰";
             if ("tether".equals(id)) return "牵丝";
+            if ("pulse".equals(id)) return "脉爆";
+            if ("mines".equals(id)) return "埋雷";
             return id;
         }
 
