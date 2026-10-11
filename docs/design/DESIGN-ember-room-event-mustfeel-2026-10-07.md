@@ -68,7 +68,7 @@
 
 ### 3.2.1 D623 SHIP（2026-10-11）
 
-**W2a 软保底已上线**（CoreRpg **1.65.312-d623**）：`EmberEventSoftPity` · `p1_ev_dry@all` · NEED=1 · Session `ensureEvent`（`subSeed(…,"evpity")`）· Settle `onSettle`。**W2b 已上线**（CoreRpg **1.65.724-d12206**）：`Variety.pickEventRoom` 袋装 2:1:1（r2>r1≈r3）；软保底同权重；词缀房仍均匀；不抬 `event_rate` / `event_core` / bv。禁 Pack6 / 叠第二事件。详见 `STATUS-ember-event-room-mid-weight-d12206-2026-10-11.md`。
+**W2a 软保底已上线**（CoreRpg **1.65.312-d623**）：`EmberEventSoftPity` · `p1_ev_dry@all` · NEED=1 · Session `ensureEvent`（`subSeed(…,"evpity")`）· Settle `onSettle`。**W2b 已上线**（CoreRpg **1.65.724-d12206**）：`Variety.pickEventRoom` 袋装 2:1:1（r2>r1≈r3）；软保底同权重；词缀房仍均匀；不抬 `event_rate` / `event_core` / bv。**W3 已上线**（CoreRpg **1.65.726-d12208** / bv91）：`variety.weights` timed **0.65**×（其它缺省 1.0）；池仍 9。禁 Pack6 / 叠第二事件。详见 `STATUS-ember-event-kind-weights-w3-d12208-2026-10-11.md`。
 
 ### 3.3 可选轻量 · 方案 W（权重，仍 9 kind）
 
@@ -150,7 +150,7 @@
 
 - [x] **批 A · 方案 M**（W1a 0.85 + W1b 种首次 + W1c 开房 HUD）→ 派施工  
 - [ ] **批 A · 方案 M + 预批 R**（软保底 / 中段房偏好作续窗，仍禁 Pack6）· **续窗后开（未预批）**  
-- [ ] **批 A · 方案 M + W3 权重意向**（须同时批 timed 相对权重数字）· **续窗后开**  
+- [x] **批 A · 方案 M + W3 权重意向**（timed=0.65 已批并施工 D12208）  
 - [ ] **驳回**（理由：________）· 改派候选 2/3/4  
 
 **已批：** 方案 M；R/W 续窗后开。
@@ -177,4 +177,4 @@
 
 ---
 
-*已批施工 D296；续窗 R/W3 仍须另批。*
+*已批施工 D296；W2a/W2b/W3 已上线（D623/D12206/D12208）。*

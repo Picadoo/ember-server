@@ -273,7 +273,7 @@ public final class EmberSessionService {
                     if (EmberEventSoftPity.get(pityLd) >= EmberEventSoftPity.NEED) {
                         String beforeEr = v[2] == null ? "" : v[2];
                         String beforeEk = v.length > 3 && v[3] != null ? v[3] : "";
-                        if (EmberEventSoftPity.ensureEvent(v, maps.variety.events,
+                        if (EmberEventSoftPity.ensureEvent(v, maps.variety,
                                 EmberRunRules.subSeed(s.seed, "evpity"))) {
                             runs.log().info("[P1 run] " + s.runId + " evpity soft-force "
                                     + beforeEr + "/" + beforeEk + " → " + v[2] + "/" + v[3]

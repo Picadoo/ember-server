@@ -633,6 +633,8 @@ public final class EmberRunMaps {
                 "timed", "crystal", "escort", "hold", "beacon", "relay", "breach", "chain", "unscathed"));
         public final double affixRate, eventRate;
         public final List<String> affixes, events;
+        /** D12208 W3: optional kind → relative weight; missing key = 1.0 */
+        public final Map<String, Double> eventWeights;
         public final int affixShard, eventCore, eventSecs;
         public final double blazeEvery, blazeRadius, blazeWarn, blazeDmg;
         public final int splitCount;
@@ -686,6 +688,19 @@ public final class EmberRunMaps {
             }
             if (ev.isEmpty() && eventRate > 0) ev.add("timed"); // D138 compat: no events list → timed only
             events = Collections.unmodifiableList(ev);
+            // D12208 W3: optional variety.weights (kind → relative); unknown keys ignored; ≤0 skipped; clamp (0,100]
+            Map<String, Double> ew = new LinkedHashMap<String, Double>();
+            if (m.get("weights") instanceof Map) {
+                for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("weights")).entrySet()) {
+                    String id = String.valueOf(e.getKey()).trim();
+                    if (!events.contains(id)) continue; // unknown / not in pool
+                    double w = num(e.getValue(), 1.0);
+                    if (w <= 0) continue;
+                    if (w > 100.0) w = 100.0;
+                    ew.put(id, Double.valueOf(w));
+                }
+            }
+            eventWeights = Collections.unmodifiableMap(ew);
             int as = Math.max(0, (int) num(m.get("affix_shard"), 0));
             int ec = Math.max(0, (int) num(m.get("event_core"), 0));
             // D1084 Stage2-F: pin to economy SoT (identical to runs.yml; dual-assert via amount)
@@ -867,6 +882,41 @@ public final class EmberRunMaps {
             return "r2";
         }
 
+        /**
+         * D12208 W3 · mustfeel：事件 kind 相对权重（缺省 1.0）。袋装加权；全无效则均匀 floorMod。
+         * 纯 Random，无 Bukkit。与 SoftPity 共用。
+         */
+        public static String pickEventKind(List<String> events, Map<String, Double> weights, java.util.Random r) {
+            if (events == null || events.isEmpty() || r == null) return "";
+            double total = 0.0;
+            double[] ws = new double[events.size()];
+            for (int i = 0; i < events.size(); i++) {
+                double w = 1.0;
+                if (weights != null) {
+                    Double got = weights.get(events.get(i));
+                    if (got != null) w = got.doubleValue();
+                }
+                if (w <= 0.0) w = 0.0;
+                ws[i] = w;
+                total += w;
+            }
+            if (total <= 0.0) {
+                return events.get(Math.floorMod(r.nextInt(), events.size()));
+            }
+            double x = r.nextDouble() * total;
+            double acc = 0.0;
+            for (int i = 0; i < events.size(); i++) {
+                acc += ws[i];
+                if (x < acc) return events.get(i);
+            }
+            return events.get(events.size() - 1);
+        }
+
+        /** Instance: weighted pick over this.events / this.eventWeights. */
+        public String pickEventKind(java.util.Random r) {
+            return pickEventKind(events, eventWeights, r);
+        }
+
         public String[] roll(long seed) {
             java.util.Random r = new java.util.Random(seed);
             String[] rooms = {"r1", "r2", "r3"};
@@ -877,7 +927,7 @@ public final class EmberRunMaps {
             }
             if (r.nextDouble() < eventRate && !events.isEmpty()) {
                 er = pickEventRoom(r);
-                ek = events.get(r.nextInt(events.size()));
+                ek = pickEventKind(r);
             }
             return new String[]{ar, at, er, ek};
         }

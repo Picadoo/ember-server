@@ -8,8 +8,8 @@ import town.sunshine.corerpg.PlayerData;
 
 /**
  * D623 · mustfeel R · W2a soft pity：账户连续 {@link #NEED} 次合格花样局 {@code eventRoom} 空
- * → 下一合格局强制抽事件（房走 D12206 W2b 中段权重，kind 仍由 seed 定）。禁止叠第二事件；禁挑战/首通/团本/连战/深渊保底。
- * 纯逻辑，无 Bukkit。不改 {@code event_rate} / balance_version。
+ * → 下一合格局强制抽事件（房走 D12206 W2b 中段权重；kind 走 D12208 W3 相对权重，与 {@code Variety.roll} 同）。
+ * 禁止叠第二事件；禁挑战/首通/团本/连战/深渊保底。纯逻辑，无 Bukkit。
  */
 public final class EmberEventSoftPity {
 
@@ -38,6 +38,7 @@ public final class EmberEventSoftPity {
      *
      * @return true when this call forced an event into an empty slot
      */
+    /** Prefer {@link #ensureEvent(String[], EmberRunMaps.Variety, long)} so kind uses W3 weights. */
     public static boolean ensureEvent(String[] v, List<String> events, long seed) {
         if (v == null || v.length < 4) return false;
         if (v[2] != null && !v[2].isEmpty()) return false; // already has event — no stack
@@ -45,8 +46,26 @@ public final class EmberEventSoftPity {
         Random r = new Random(seed);
         // D12206 W2b: same mid-room weight as Variety.roll
         String room = EmberRunMaps.Variety.pickEventRoom(r);
-        String kind = pick(events, r);
-        if (kind == null) return false;
+        // no Variety → uniform (null weights)
+        String kind = EmberRunMaps.Variety.pickEventKind(events, null, r);
+        if (kind == null || kind.isEmpty()) return false;
+        v[2] = room;
+        v[3] = kind;
+        return true;
+    }
+
+    /**
+     * D12208: same as list overload, but kind uses {@link EmberRunMaps.Variety#pickEventKind(java.util.Random)}.
+     */
+    public static boolean ensureEvent(String[] v, EmberRunMaps.Variety variety, long seed) {
+        if (variety == null) return false;
+        if (v == null || v.length < 4) return false;
+        if (v[2] != null && !v[2].isEmpty()) return false;
+        if (variety.events == null || variety.events.isEmpty()) return false;
+        Random r = new Random(seed);
+        String room = EmberRunMaps.Variety.pickEventRoom(r);
+        String kind = variety.pickEventKind(r);
+        if (kind == null || kind.isEmpty()) return false;
         v[2] = room;
         v[3] = kind;
         return true;
