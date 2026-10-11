@@ -335,7 +335,7 @@ final class EmberRunDirector {
         }
         if (eventStart > 0 && !eventWarned && activeRoom != null && activeRoom.equals(s.eventRoom)) {
             String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
-            int lim = svc.maps().variety.eventLimit(kind);
+            int lim = svc.maps().variety.eventLimit(kind) + (("timed".equals(kind) || kind.isEmpty()) ? timedLimitBonus : 0);
             if (lim > 10 && now >= eventStart + (lim - 10) * 1000L) {
                 eventWarned = true;
                 svc.tellRun(s, "§b" + EmberRunMaps.Variety.eventLabel(kind) + " §7还剩 §e10 秒");
@@ -450,6 +450,7 @@ final class EmberRunDirector {
             String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
             EmberSpicePath.maybeAlignCue(s, svc, "event", kind); // D2926
             try { EmberEventStartBrace.maybeBrace(s, participantsHere()); } catch (Throwable ignored) { } // D7713
+            timedLimitBonus = 0; // reset; timed branch may set
             EmberRunMaps.Variety v = svc.maps().variety;
             lastEventTickMs = eventStart;
             if ("crystal".equals(kind)) {
@@ -494,7 +495,14 @@ final class EmberRunDirector {
                 svc.tellRun(s, "§b无伤 §7· 清完这个房间时全队被怪打中不超过 " + unscathedBudgetNow + " 次 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
                 EmberCleanPath.maybeAfterClean(s); // D578
             } else {
-                svc.tellRun(s, "§b限时清房 §7· " + v.eventLimit(kind) + " 秒内清完这个房间 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                timedLimitBonus = 0;
+                try {
+                    timedLimitBonus = EmberTimedExtraSecs.consumeExtra(s.runId); // D7937
+                    if (timedLimitBonus > 0)
+                        svc.tellRun(s, "§a限时加秒 · +" + timedLimitBonus + "s（本局一次）");
+                } catch (Throwable ignored) { }
+                int tLim = v.eventLimit(kind) + timedLimitBonus;
+                svc.tellRun(s, "§b限时清房 §7· " + tLim + " 秒内清完这个房间 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
                 EmberRushPath.maybeAfterRush(s); // D579
             }
             // D296 W1c: per-run first event-room ActionBar short name (chat still fires every time)
@@ -614,6 +622,7 @@ final class EmberRunDirector {
         if (activeRoom == null || !activeRoom.equals(s.eventRoom)) return false;
         String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
         int lim = svc.maps() == null ? 0 : svc.maps().variety.eventLimit(kind);
+        if ("timed".equals(kind) || kind.isEmpty()) lim += timedLimitBonus;
         return lim > 10;
     }
 
@@ -2103,7 +2112,7 @@ final class EmberRunDirector {
             } else if ("unscathed".equals(kind)) {
                 ok = !eventFailed && unscathedOk(unscathedTaken, unscathedBudgetNow);
             } else {
-                ok = secs <= v.eventLimit(kind);
+                ok = secs <= v.eventLimit(kind) + timedLimitBonus;
             }
             clearCrystals();
             removeEscort();
@@ -2188,6 +2197,7 @@ final class EmberRunDirector {
     // D179 hold / beacon / relay (markers are ArmorStands + optional SEA_LANTERN; never in mobs / Extra.TREASURE)
     private Location holdCenter;
     private double holdRadiusBonus; // D7873
+    private int timedLimitBonus; // D7937
     private double holdAccum;
     private int holdToldPct; // last progress chat milestone (0/25/50/75)
     private org.bukkit.entity.ArmorStand holdMarker;
@@ -2783,8 +2793,12 @@ final class EmberRunDirector {
         t.varietyEscort = true;
         AttributeInstance a = t.le.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (a != null) {
-            a.setBaseValue(Math.max(1.0, a.getBaseValue() * v.escortHp));
+            double eMult = 1.0;
+            try { eMult = EmberEscortHpBoost.consumeMult(s == null ? null : s.runId); } catch (Throwable ignored) { } // D7953
+            a.setBaseValue(Math.max(1.0, a.getBaseValue() * v.escortHp * eMult));
             t.le.setHealth(t.le.getMaxHealth());
+            if (eMult > 1.01)
+                svc.tellRun(s, "§a护宝加固 · 小兔生命 ×" + String.format(Locale.ROOT, "%.1f", eMult) + "（本局一次）");
         }
         // low threat: zero atk so it never hits (atk is final — zero interval via huge lastHit already set; rely on atk from role)
         String old = t.le.getCustomName();
@@ -3076,6 +3090,13 @@ final class EmberRunDirector {
         Location loc = new Location(w, pt.x + 0.5, (breachLantern != null ? breachLantern.getY() + 1.0 : pt.y + 1.0), pt.z + 0.5);
         breachCenter = loc.clone();
         breachR = v.breachRadius;
+        try {
+            double bx = EmberBreachStartBoost.consumeExtra(s == null ? null : s.runId); // D7905
+            if (bx > 0) {
+                breachR += bx;
+                svc.tellRun(s, "§a裂隙开扩 · 半径 +" + String.format(Locale.ROOT, "%.1f", bx) + "（本局一次）");
+            }
+        } catch (Throwable ignored) { }
         breachMarker = spawnEventMarker(loc, breachName(breachR), true);
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s breach placed r=%.1f min=%.1f shrink=%.2f grow=%.1f",
                 s.runId, r.id, breachR, v.breachMin, v.breachShrink, v.breachGrow));

@@ -1,0 +1,3 @@
+# RESEARCH · BreachStartBoost + TimedExtraSecs + EscortHpBoost · 2026-10-11
+Outside Chain/Hold/Unscathed/Crystal/EventBrace/Beacon…
+Less despair: 裂隙开局半径+1；限时花样+5s；护宝兔生命×1.2（均本局一次）。

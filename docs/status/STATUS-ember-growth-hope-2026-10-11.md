@@ -1,3 +1,6 @@
+Live jar: **1.65.655-d7968.local** · D7905–D7968 BreachStartBoost + TimedExtraSecs + EscortHpBoost
+Prior: Chain/Hold/Unscathed/Crystal/EventBrace/Beacon
+
 Live jar: **1.65.654-d7904.local** · D7841–D7904 ChainNeedSoft + HoldRadiusBoost
 Prior: Unscathed+Crystal · EventBrace+Beacon
 
