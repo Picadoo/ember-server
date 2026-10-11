@@ -6,7 +6,7 @@
 ## 交付
 1. **TrMenu lore ≤3**（Karen）：`ember_talent` · `ember_shop` · `ember_storage` · `ember_settings` · `ember_character` · `ember_mail` · `ember_friends` · `ember_flex_skill` · `ember_socket` · `ember_part` · `ember_arena` · `ember_auction` · `ember_bestiary` · `ember_vip` · `ember_weekly_rewards` · `ember_raid_rewards` · `ember_enchant_guide` · `ember_pass` · `ember_covenant` · `ember_guild` · `ember_calamity` · `ember_calamity_rewards`；砍空行与说明墙，保留 PAPI / 费用 / ➥。
 2. 校验：目标文件 long-lore(>3)=0 · 无重复 `lore:` · YAML OK。
-3. `trmenu reload` 见本 STATUS 现场行 / COORD。live jar 未动（1.65.723-d12194.local）。
+3. `trmenu reload` → **77** 菜单 · 123 ms · 无解析错误（15:46:02 CST）。live CoreRpg 1.65.723-d12194.local · SEVERE 0。
 
 ## 禁
 tip-twin densify · Six-slot / stage1-wt HOLD · p1sim · cosmetics pet/gacha · 改 jar · hub_legacy
