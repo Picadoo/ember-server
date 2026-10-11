@@ -568,12 +568,23 @@ public final class EmberSkillKit {
 
     /** D2266: burst land slow ticks (base or +4 when set-shape synced). */
     public static int slashLandSlowTicks(boolean setShapeSync) {
-        return SLASH_BURST_SLOW_TICKS + (setShapeSync ? 4 : 0);
+        return slashLandSlowTicks(setShapeSync, false);
+    }
+
+    /** D2447: +2 ticks when posture aligned (stacks with sync · zero skill_mult). */
+    public static int slashLandSlowTicks(boolean setShapeSync, boolean postureAligned) {
+        return SLASH_BURST_SLOW_TICKS + (setShapeSync ? 4 : 0) + (postureAligned ? 2 : 0);
     }
 
     /** D2266: sustain land heal pct (×1.25 when synced). */
     public static double slashLandHealPct(boolean setShapeSync) {
-        return setShapeSync ? SLASH_HEAL_PCT * 1.25 : SLASH_HEAL_PCT;
+        return slashLandHealPct(setShapeSync, false);
+    }
+
+    /** D2447: ×1.1 when posture aligned (on top of sync). */
+    public static double slashLandHealPct(boolean setShapeSync, boolean postureAligned) {
+        double v = setShapeSync ? SLASH_HEAL_PCT * 1.25 : SLASH_HEAL_PCT;
+        return postureAligned ? v * 1.1 : v;
     }
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync) {
         if (id == SHAPE_LINE) {

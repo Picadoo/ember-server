@@ -1,14 +1,13 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.533-d2444.local**
-- D2417–D2444
+- jar **1.65.534-d2460.local**
+- D2445–D2460 HeldNext GEM/LOCK/ROLL/QUALITY + posture land
 
-## Arc
-1. Sig sync **NEAR-SAT** — leftover: sig override now eats set×shape geometry
-2. Mainline unlock variety — challenge on Q07 enter; Mode/Posture/Challenge enter offers
-3. Forge determinism — HeldNext surfaces CONVERT/BRAND when goal set (not K3)
+## This window
+- HeldNext goal sinks: GEM (C24) · LOCK (C11 shard+lock) · ROLL · QUALITY · + ENHANCE/REFINE/UPGRADE prefer
+- Posture aligned: slash land Slow+2t / heal×1.1 (stacks with set×shape · zero skill_mult)
 
-Talent HOLD · ConfirmTokens/remain STOP · zero skill_mult
+Talent HOLD · ConfirmTokens/remain/sig ICD STOP · no K3
 
-Updated 2026-10-11 08:07 CST
+Updated 2026-10-11 08:09 CST

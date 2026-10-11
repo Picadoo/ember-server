@@ -36,6 +36,18 @@ public final class EmberForgeHeldNext {
         return s;
     }
 
+    /** D2446: C11 lock-reroll mat (shard+lock_shard + coin) from economy SoT. */
+    public static Cost lockRerollCost(int tier) {
+        int t = Math.max(1, Math.min(3, tier <= 0 ? 1 : tier));
+        int shard = EmberEconomy.amount("C11", "t" + t + ".shard");
+        int lock = EmberEconomy.amount("C11", "t" + t + ".lock_shard");
+        int coin = EmberEconomy.amount("C11", "t" + t + ".coin");
+        if (shard < 0) shard = 40 * t;
+        if (lock < 0) lock = 40 * t;
+        if (coin < 0) coin = 300 * t;
+        return new Cost(shard + lock, 0, 0, 0, coin);
+    }
+
     /** Convenience: assume upgrade gate open for glance. */
     public static String line(EmberItemData d, Mats m) {
         return line(d, m, true, EmberForgeGoal.NONE);
@@ -48,7 +60,7 @@ public final class EmberForgeHeldNext {
     /**
      * One-glance next step for held blade/charm.
      * Affordable order: quality → refine → enhance → upgrade;
-     * D2434: when forgeGoal is CONVERT/BRAND, those deterministic sinks surface first if payable.
+     * D2434/D2446: when forgeGoal is CONVERT/BRAND/GEM/LOCK/ROLL/QUALITY, those sinks surface first if payable.
      * {@code gateOk} = first-clear for upgradeFlag(tier).
      */
     public static String line(EmberItemData d, Mats m, boolean gateOk, int forgeGoal) {
@@ -62,12 +74,29 @@ public final class EmberForgeHeldNext {
         Cost u = EmberUpgradeRules.upgradeCost(d.tier);
         Cost conv = EmberConvertRules.cost(d.tier);
         Cost brand = new Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0);
+        Cost gem = EmberGemAcquire.craftCost();
+        Cost lock = lockRerollCost(d.tier);
+        Cost roll = EmberForgeRollRules.matCost();
 
-        // D2434 forge determinism: goal-locked sinks first when payable (not K3 / not pity)
+        // D2434/D2446 forge determinism: goal-locked sinks first when payable (not K3 / not pity)
         if (forgeGoal == EmberForgeGoal.CONVERT && conv != null && canPay(conv, m))
             return "下一确定 · 跨族转化 · 料够 · /corerpg p1 convert";
         if (forgeGoal == EmberForgeGoal.BRAND && canPay(brand, m))
             return "下一确定 · 合成烙纹 · 料够 · /corerpg p1 brand craft";
+        if (forgeGoal == EmberForgeGoal.GEM && gem != null && canPay(gem, m))
+            return "下一确定 · 合成宝石 · 料够 · /corerpg p1 gem craft sharp";
+        if (forgeGoal == EmberForgeGoal.LOCK && lock != null && canPay(lock, m))
+            return "下一确定 · 锁定洗练 · 料够 · /corerpg p1 reroll from forge";
+        if (forgeGoal == EmberForgeGoal.ROLL && roll != null && canPay(roll, m))
+            return "下一确定 · 随机锻 · 料够 · /corerpg p1 forgeroll";
+        if (forgeGoal == EmberForgeGoal.QUALITY && q != null && canPay(q, m))
+            return "下一确定 · " + EmberQualityCraftDial.qualityDial(d) + " · 料够 · /corerpg p1 quality";
+        if (forgeGoal == EmberForgeGoal.REFINE && r != null && canPay(r, m))
+            return "下一确定 · " + EmberQualityCraftDial.craftDial(d) + " · 料够 · /corerpg p1 refine";
+        if (forgeGoal == EmberForgeGoal.ENHANCE && e != null && canPay(e, m))
+            return "下一确定 · " + EmberGearNextHint.enhanceLine(d) + " · 料够 · /corerpg p1 enhance";
+        if (forgeGoal == EmberForgeGoal.UPGRADE && u != null && gateOk && canPay(u, m))
+            return "下一确定 · " + EmberGearNextHint.upgradeLine(d, true) + " · 料够 · /corerpg p1 upgrade";
 
         if (q != null && canPay(q, m))
             return "下一确定 · " + EmberQualityCraftDial.qualityDial(d) + " · 料够 · /corerpg p1 quality";
@@ -114,6 +143,34 @@ public final class EmberForgeHeldNext {
             if (g < best || pick == null) {
                 best = g;
                 pick = "合成烙纹 · 还差碎 · /corerpg p1 brand craft";
+            }
+        }
+        if (forgeGoal == EmberForgeGoal.GEM && gem != null) {
+            long g = shortfall(gem, m);
+            if (g < best || pick == null) {
+                best = g;
+                pick = "合成宝石 · 还差料 · /corerpg p1 gem craft sharp";
+            }
+        }
+        if (forgeGoal == EmberForgeGoal.LOCK && lock != null) {
+            long g = shortfall(lock, m);
+            if (g < best || pick == null) {
+                best = g;
+                pick = "锁定洗练 · 还差碎/币 · /corerpg p1 reroll from forge";
+            }
+        }
+        if (forgeGoal == EmberForgeGoal.ROLL && roll != null) {
+            long g = shortfall(roll, m);
+            if (g < best || pick == null) {
+                best = g;
+                pick = "随机锻 · 还差料 · /corerpg p1 forgeroll";
+            }
+        }
+        if (forgeGoal == EmberForgeGoal.QUALITY && q != null) {
+            long g = shortfall(q, m);
+            if (g < best || pick == null) {
+                best = g;
+                pick = "成色 · " + EmberQualityCraftDial.qualityDial(d) + " · 还差料 · /corerpg p1 quality";
             }
         }
         if (pick != null) return "下一确定 · " + pick;

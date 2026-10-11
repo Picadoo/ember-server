@@ -463,3 +463,7 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - Sig sync NEAR-SAT; sig override gains set×shape geometry
 - Challenge / ModePath / Posture unlock variety on Q enter (OR clear)
 - Talent HOLD · no K3/ConfirmTokens twin
+
+## HeldNext GEM/LOCK + posture · D2445–D2460
+- ForgeGoal GEM/LOCK/ROLL/QUALITY(/ENHANCE/REFINE/UPGRADE) HeldNext prefer when payable
+- Posture aligned slash land Slow+2 / heal×1.1 · zero skill_mult

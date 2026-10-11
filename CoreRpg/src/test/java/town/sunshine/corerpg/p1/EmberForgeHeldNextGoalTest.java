@@ -27,4 +27,27 @@ public class EmberForgeHeldNextGoalTest {
         String line = EmberForgeHeldNext.line(blade(), m, true, EmberForgeGoal.BRAND);
         assertTrue(line, line.contains("合成烙纹"));
     }
+
+    @Test
+    public void gemGoalWhenPayable() {
+        EmberForgeHeldNext.Mats m = new EmberForgeHeldNext.Mats(99, 0, 99, 9999);
+        String line = EmberForgeHeldNext.line(blade(), m, true, EmberForgeGoal.GEM);
+        assertTrue(line, line.contains("合成宝石"));
+    }
+
+    @Test
+    public void lockGoalWhenPayable() {
+        EmberUpgradeRules.Cost lock = EmberForgeHeldNext.lockRerollCost(1);
+        EmberForgeHeldNext.Mats m = new EmberForgeHeldNext.Mats(lock.shards, 0, 0, lock.coins);
+        String line = EmberForgeHeldNext.line(blade(), m, true, EmberForgeGoal.LOCK);
+        assertTrue(line, line.contains("锁定洗练"));
+    }
+
+    @Test
+    public void postureLandHelpers() {
+        assertEquals(20, EmberSkillKit.slashLandSlowTicks(false, false));
+        assertEquals(26, EmberSkillKit.slashLandSlowTicks(true, true)); // +4 sync +2 posture
+        assertEquals(EmberSkillKit.SLASH_HEAL_PCT * 1.25 * 1.1,
+                EmberSkillKit.slashLandHealPct(true, true), 1e-9);
+    }
 }

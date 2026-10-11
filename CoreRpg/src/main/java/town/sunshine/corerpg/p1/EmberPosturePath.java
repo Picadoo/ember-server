@@ -85,6 +85,17 @@ public final class EmberPosturePath {
         return EmberSkillKit.DIR_FORWARD; // STRIKE / SWEEP
     }
 
+    /**
+     * D2447: posture commitment matches live shape + step dir (zero skill_mult gate).
+     */
+    public static boolean aligned(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        int id = get(d);
+        if (!valid(id)) return false;
+        return EmberSkillKit.shapeId(d, runs) == shapeId(id)
+                && EmberSkillKit.stepDirId(d) == dirId(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8姿态路径：首进/首通 Q05 后可选（需符文+身法）";
         if (!valid(id)) return "§8姿态路径：未选 · /corerpg p1 posturepath";
