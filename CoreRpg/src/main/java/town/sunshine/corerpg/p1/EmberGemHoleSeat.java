@@ -77,6 +77,7 @@ public final class EmberGemHoleSeat {
             try {
                 p.sendActionBar("§a开孔入座 · §f" + EmberItemData.gemName(path) + " → 孔" + hole);
             } catch (Throwable ignored) { }
+            EmberGemSeatLive.maybeAfterSeat(p, d, path, lo); // D4289
             return true;
         }
         return false;
@@ -115,6 +116,7 @@ public final class EmberGemHoleSeat {
         try {
             p.sendActionBar("§a入座 · §f" + EmberItemData.gemName(gemCode) + " → 孔" + hole);
         } catch (Throwable ignored) { }
+        EmberGemSeatLive.maybeAfterSeat(p, d, gemCode, loadouts); // D4289
         return true;
     }
 

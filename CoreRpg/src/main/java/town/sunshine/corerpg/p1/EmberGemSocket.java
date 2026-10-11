@@ -113,6 +113,10 @@ public final class EmberGemSocket {
         }
         p.sendMessage(P + "已镶入 " + EmberItemData.gemName(code) + " → 孔" + hole);
         try { p.sendActionBar("§a镶嵌 · §f" + EmberItemData.gemName(code) + " → 孔" + hole); } catch (Throwable ignored) { }
+        try {
+            PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
+            EmberGemSeatLive.maybeAfterSeat(p, pd, code, loadouts); // D4289
+        } catch (Throwable ignored) { }
         // D2090 piece-aware commit next (empty hole / enhance / craft)
         EmberItems.Read afterR = loadouts.items().read(p.getInventory().getItemInMainHand());
         EmberItemData after = afterR != null && afterR.ok() ? afterR.data : null;

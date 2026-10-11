@@ -178,7 +178,11 @@ public final class EmberGemPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a宝石 → §f" + label(id) + " §7· " + tip(id));
-        maybeAfterProgress(p);
+        EmberLoadoutService loSeat = pl.getEmberLoadouts();
+        if (loSeat == null && pl.getEmberRuns() != null) loSeat = pl.getEmberRuns().loadouts();
+        boolean seated = EmberGemHoleSeat.maybeAutoSeatOnAcquire(p, id, loSeat, pl); // D4353
+        if (seated) EmberGemSeatLive.maybeAfterSeat(p, d, id, loSeat);
+        else maybeAfterProgress(p);
         ConfirmTokens.sendButtons(p, P + "§7下一步：", // D895
                 new String[]{"[宝石页]", "/ember_p1_gem", "合成/镶嵌 · 不走旧 socket", "GOLD"},
                 new String[]{"[图装追]", "/corerpg p1 mapfarm", "刷保底通关", "GREEN"},

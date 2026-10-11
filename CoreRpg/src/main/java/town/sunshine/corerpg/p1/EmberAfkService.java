@@ -567,6 +567,11 @@ public final class EmberAfkService implements Listener {
                 EmberLoadout lo = ls2 == null ? null : ls2.get(p);
                 if (lo != null) {
                     boolean fired = EmberAfkGearFeel.maybeStableCue(p, d, t.n, lo.b, lo.h);
+                    if (fired && !f.deaths.isEmpty()) { // D4321 gear-driven: 够稳清连死
+                        f.deaths.clear();
+                        p.sendMessage(P + "§a挂机装效 · §f连死窗口已清 §7· 够稳后重新计阵亡（不改日表）");
+                        try { p.sendActionBar("§a挂机 · §f连死已清"); } catch (Throwable ignored) { }
+                    }
                     fired |= EmberAfkGearFeel.maybeWeakCue(p, d, t.n, lo.b, lo.h, f.deaths.size());
                     if (fired) plugin.getDataStore().flushMutation(p.getUniqueId());
                 }

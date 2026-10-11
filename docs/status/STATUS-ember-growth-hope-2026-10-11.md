@@ -1,5 +1,4 @@
 # STATUS · growth · 2026-10-11
-- Live: `1.65.599-d4288.local`
-- D4097–D4240 Gem hole auto-seat + sharp T2 live
-- D4241–D4288 AFK gear-stable first-death forgive (zero table)
-- Quiet densify STOP · Talent HOLD · zero gem flat / skill_mult
+- Live: `1.65.601-d4384.local`
+- D4289–D4384 GemSeatLive + AFK death-clear + gempath auto-seat
+- Quiet densify STOP · Talent HOLD · zero gem flat
