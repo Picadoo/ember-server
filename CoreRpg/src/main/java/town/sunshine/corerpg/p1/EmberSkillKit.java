@@ -665,11 +665,18 @@ public final class EmberSkillKit {
     /** D5153: posture aligned → dash hit +0.12 (zero skill_mult). */
     public static double dashHitRadius(boolean setShapeSync, boolean roomShape, int shapeId, String mapKey,
                                        boolean postureAligned) {
+        return dashHitRadius(setShapeSync, roomShape, shapeId, mapKey, postureAligned, false);
+    }
+
+    /** D6369: map resonance → dash hit +0.10 (zero skill_mult). */
+    public static double dashHitRadius(boolean setShapeSync, boolean roomShape, int shapeId, String mapKey,
+                                       boolean postureAligned, boolean mapResonance) {
         double r = setShapeSync ? DASH_HIT_RADIUS + 0.20 : DASH_HIT_RADIUS;
         if (setShapeSync && roomShape) r += 0.15;
         if (shapeId == SHAPE_RING) r += 0.10;
         if (mapKey != null && "q02".equalsIgnoreCase(mapKey)) r += 0.08;
         if (postureAligned) r += 0.12;
+        if (mapResonance) r += 0.10;
         return r;
     }
 
@@ -1021,19 +1028,26 @@ public final class EmberSkillKit {
                 else { range = Math.min(range + 0.25, 4.7); }
             }
             boolean posture = EmberPosturePath.aligned(d, runs); // D5089
+            boolean reso = EmberMapResonance.active(player, runs, mapKey); // D6305
             if (posture) {
                 if (sigLine > 0) { line = line + 0.2; lineW = Math.min(lineW + 0.08, 1.35); }
                 else { range = Math.min(range + 0.15, 4.85); }
+            }
+            if (reso) {
+                if (sigLine > 0) { line = line + 0.15; lineW = Math.min(lineW + 0.05, 1.4); }
+                else { range = Math.min(range + 0.12, 4.95); }
             }
             String label = sigLine > 0 ? "签名·直线" : (sigRing > 0 || sigPlus || sigCharge ? "签名·环斩" : "签名");
             if (sync) label = label + "·形同";
             if (sync && roomShape) label = label + "·优房";
             if (posture) label = label + "·姿齐";
+            if (reso) label = label + "·图源";
             return new Shape(shapeId(d, runs), range, arc, line, lineW, max, true, label);
         }
         int id = shapeId(d, runs);
         boolean posture = EmberPosturePath.aligned(d, runs); // D5089
-        return geometryFor(id, baseRange, baseArc, baseMax, setShapeSynced(activeSetFamily, id), roomShape, mapKey, posture);
+        boolean reso = EmberMapResonance.active(player, runs, mapKey); // D6305
+        return geometryFor(id, baseRange, baseArc, baseMax, setShapeSynced(activeSetFamily, id), roomShape, mapKey, posture, reso);
     }
 
     /** Pure: 2pc family prefers this rune shape. */
@@ -1103,15 +1117,19 @@ public final class EmberSkillKit {
 
     /** D3122: Q04 kit identity — thin geometry in Q04 (not Shape-native land / Shape×Room). */
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync, boolean roomShape, String mapKey) {
-        return geometryFor(id, baseRange, baseArc, baseMax, setSync, roomShape, mapKey, false);
+        return geometryFor(id, baseRange, baseArc, baseMax, setSync, roomShape, mapKey, false, false);
+    }
+
+    public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync,
+                                    boolean roomShape, String mapKey, boolean postureAligned) {
+        return geometryFor(id, baseRange, baseArc, baseMax, setSync, roomShape, mapKey, postureAligned, false);
     }
 
     /**
-     * D5089: postureAligned → shape-native widen (zero skill_mult / CD / dmg mult).
-     * LINE +距/宽 · RING +径 · FAN +弧.
+     * D5089 posture · D6305 mapResonance — shape widen (zero skill_mult / CD / dmg mult).
      */
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync,
-                                    boolean roomShape, String mapKey, boolean postureAligned) {
+                                    boolean roomShape, String mapKey, boolean postureAligned, boolean mapResonance) {
         boolean bonus = setSync && roomShape;
         boolean q04 = mapKey != null && "q04".equalsIgnoreCase(mapKey);
         boolean q01 = mapKey != null && "q01".equalsIgnoreCase(mapKey);
@@ -1120,12 +1138,14 @@ public final class EmberSkillKit {
             int max = setSync ? 4 : 3;
             double range = Math.max(baseRange, 6.0) + (bonus ? 0.35 : 0) + (q04 ? 0.2 : 0) + (q01 ? 0.15 : 0);
             if (postureAligned) { range += 0.25; lw = Math.min(lw + 0.08, 1.15); }
+            if (mapResonance) { range += 0.2; lw = Math.min(lw + 0.05, 1.2); }
             return new Shape(id, range, baseArc, 6.0, lw, max, false, shapeName(id));
         }
         if (id == SHAPE_RING) {
             double range = (setSync ? 3.9 : 3.5) + (bonus ? 0.25 : 0) + (q04 ? 0.15 : 0);
             int max = setSync ? 5 : 4;
             if (postureAligned) range = Math.min(range + 0.2, 4.4);
+            if (mapResonance) range = Math.min(range + 0.15, 4.5);
             return new Shape(id, range, 360.0, 0, 0.0, max, false, shapeName(id));
         }
         double arc = Math.max(baseArc, 110.0);
@@ -1133,6 +1153,7 @@ public final class EmberSkillKit {
         if (bonus) arc += 8.0;
         if (q04) arc += 4.0;
         if (postureAligned) arc += 8.0;
+        if (mapResonance) arc += 6.0;
         int fanMax = baseMax + (q01 ? 1 : 0); // D3153 Q01 clear trash
         return new Shape(SHAPE_FAN, baseRange, arc, 0, 0.0, fanMax, false, shapeName(SHAPE_FAN));
     }

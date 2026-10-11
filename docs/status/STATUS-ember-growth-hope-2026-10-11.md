@@ -1,4 +1,4 @@
 # STATUS · growth · 2026-10-11
-- Live: `1.65.630-d6304.local`
-- D6177–D6304 BagBetter (UP_AUTO) + DropQ challenge NEAR-SAT
-- STOP sure-do / TalentPlaystyle / BagSeat densify / access / Path
+- Live: `1.65.632-d6432.local`
+- D6305–D6432 MapResonance NEAR-SAT (slash+dash · origin.map)
+- STOP BagBetter/sure-do/TalentPlaystyle/access/Path densify · Talent HOLD
