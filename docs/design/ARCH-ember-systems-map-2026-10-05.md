@@ -564,3 +564,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D7649–D7712: DoorOpenSpeed (Speed I first door/run) + ShortBlankBoost (+1 blank short settle/day). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D7713–D7776: EventStartBrace (Resist I first event/run) + BeaconHpBoost (×1.2/run). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D7777–D7840: UnscathedBudgetBoost (+1 hit/run) + CrystalExtra (+1 crystal placed/run). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D7841–D7904: ChainNeedSoft (need−1/run) + HoldRadiusBoost (+0.5R/run). STOP densify those + priors. Talent HOLD. Six-slot HOLD.

@@ -1,3 +1,6 @@
+Live jar: **1.65.654-d7904.local** · D7841–D7904 ChainNeedSoft + HoldRadiusBoost
+Prior: Unscathed+Crystal · EventBrace+Beacon
+
 Live jar: **1.65.653-d7840.local** · D7777–D7840 UnscathedBudgetBoost + CrystalExtra
 Prior: EventStartBrace+BeaconHp
 

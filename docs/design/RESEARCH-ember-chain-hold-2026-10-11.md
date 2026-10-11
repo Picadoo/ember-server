@@ -1,0 +1,3 @@
+# RESEARCH · ChainNeedSoft + HoldRadiusBoost · 2026-10-11
+Outside Unscathed/Crystal/EventBrace/Beacon…
+Less despair: 连斩目标−1（本局一次）；占点半径+0.5（本局一次）。

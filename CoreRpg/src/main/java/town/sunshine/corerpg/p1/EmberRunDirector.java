@@ -2187,6 +2187,7 @@ final class EmberRunDirector {
     private UUID escortId;
     // D179 hold / beacon / relay (markers are ArmorStands + optional SEA_LANTERN; never in mobs / Extra.TREASURE)
     private Location holdCenter;
+    private double holdRadiusBonus; // D7873
     private double holdAccum;
     private int holdToldPct; // last progress chat milestone (0/25/50/75)
     private org.bukkit.entity.ArmorStand holdMarker;
@@ -2865,12 +2866,19 @@ final class EmberRunDirector {
         clearHold();
         holdAccum = 0;
         holdToldPct = 0;
+        holdRadiusBonus = 0;
+        try {
+            holdRadiusBonus = EmberHoldRadiusBoost.consumeExtra(s == null ? null : s.runId); // D7873
+            if (holdRadiusBonus > 0)
+                svc.tellRun(s, "§a占点扩圈 · 半径 +" + String.format(Locale.ROOT, "%.1f", holdRadiusBonus) + "（本局一次）");
+        } catch (Throwable ignored) { }
         EmberRunMaps.Pt pt = eventAnchorPt(r);
         holdLantern = placeLanternAt(pt);
         Location loc = new Location(w, pt.x + 0.5, (holdLantern != null ? holdLantern.getY() + 1.0 : pt.y + 1.0), pt.z + 0.5);
         holdCenter = loc.clone();
         holdMarker = spawnEventMarker(loc, "§b[占点] §f站进圈内", true);
-        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s hold placed r=%.1f need=%.1f", s.runId, r.id, v.holdRadius, v.holdNeed));
+        double hr = v.holdRadius + holdRadiusBonus;
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s hold placed r=%.1f need=%.1f", s.runId, r.id, hr, v.holdNeed));
     }
 
     private void clearHold() {
@@ -2878,6 +2886,7 @@ final class EmberRunDirector {
         clearLantern(holdLantern);
         holdLantern = null;
         holdCenter = null;
+        holdRadiusBonus = 0;
         holdAccum = 0;
         holdToldPct = 0;
     }
@@ -2953,7 +2962,8 @@ final class EmberRunDirector {
             for (Player p : participantsHere()) {
                 Location l = p.getLocation();
                 double dx = l.getX() - holdCenter.getX(), dz = l.getZ() - holdCenter.getZ();
-                boolean in = dx * dx + dz * dz <= v.holdRadius * v.holdRadius;
+                double hR = v.holdRadius + holdRadiusBonus;
+                boolean in = dx * dx + dz * dz <= hR * hR;
                 if (holdCounts(in, p.isOnGround())) { present = true; break; }
             }
             if (present) {
@@ -2967,7 +2977,7 @@ final class EmberRunDirector {
                             + "/" + String.format(Locale.ROOT, "%.0f", v.holdNeed) + " 秒）");
                 }
             }
-            if (holdCenter != null) warnCircle(holdCenter.clone().add(0, 0.1, 0), v.holdRadius, Particle.VILLAGER_HAPPY);
+            if (holdCenter != null) warnCircle(holdCenter.clone().add(0, 0.1, 0), v.holdRadius + holdRadiusBonus, Particle.VILLAGER_HAPPY);
         } else if ("beacon".equals(kind) && beaconLoc != null && beaconHp > 0) {
             boolean guarded = false;
             for (Player p : participantsHere()) {
@@ -3085,6 +3095,13 @@ final class EmberRunDirector {
 
     private void chainReset(int spawned, EmberRunMaps.Variety v) {
         chainNeedNow = chainNeedFor(v.chainNeed, spawned);
+        try {
+            int less = EmberChainNeedSoft.consumeLess(s == null ? null : s.runId); // D7841
+            if (less > 0) {
+                chainNeedNow = Math.max(1, chainNeedNow - less);
+                svc.tellRun(s, "§a连斩减负 · 目标 −" + less + "（本局一次 · 现 " + chainNeedNow + "）");
+            }
+        } catch (Throwable ignored) { }
         chainStreak = 0;
         chainBest = 0;
         chainLastMs = 0;
