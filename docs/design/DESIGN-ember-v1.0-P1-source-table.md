@@ -2129,3 +2129,13 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | jar | 未改（live 仍 1.65.723-d12194.local） |
 | STATUS | `docs/status/STATUS-ember-watchdog-spark-sign-lore-d12201-2026-10-11.md` |
 
+
+### 13.110 Watchdog 世界 tick 减压 keepSpawn/autoLoad（D12203，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 现场 | 16:48 Watchdog `WorldServer.doTick`；spark 背景采样已关仍复现 |
+| live | 全图 `doFireTick false`；unload nether/end/event/daily_*；timings off |
+| MV | `worlds.yml`：仅 hub/afk keepSpawn+autoLoad；其余 keepSpawn/autoLoad false |
+| jar | 未改（live 仍 1.65.723-d12194.local） |
+| STATUS | `docs/status/STATUS-ember-watchdog-world-spawn-d12203-2026-10-11.md` |
