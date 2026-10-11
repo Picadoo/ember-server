@@ -508,3 +508,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - STOP further feel densify twin · Talent HOLD · next: growth/acquisition RESEARCH
 - Loot map feel D3753–D3784: origin.map particle on giveItem (G1 light)
 - Map stash pin D3801–D3880: origin.map GearLib filter + enter auto-pin (non-Path)
+- Sig chase enter pin D3881–D3912: auto-chase under-mark sig on map enter (non-Path)

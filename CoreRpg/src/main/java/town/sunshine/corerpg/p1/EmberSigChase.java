@@ -113,6 +113,43 @@ public final class EmberSigChase {
         return mapKey.equalsIgnoreCase(def.map);
     }
 
+    /**
+     * D3881: enter map with no chase → auto-pin first under-mark sig of this map (non-Path).
+     * Requires map first-clear; zero STAMP_RATE / imprint price / ConfirmTokens.
+     * @return true when chase was newly set
+     */
+
+    /** Bukkit-free: first signature on map with marks &lt; imprint need. */
+    public static EmberSignature.Def pickUnderMarkForMap(PlayerData d, String pin) {
+        if (d == null || pin == null) return null;
+        int need = EmberSignature.imprintMarks();
+        for (EmberSignature.Def def : EmberSignature.DEFS) {
+            if (def == null || !pin.equalsIgnoreCase(def.map)) continue;
+            int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
+            if (marks >= need) continue;
+            return def;
+        }
+        return null;
+    }
+
+    public static boolean maybeAutoChaseOnEnter(Player p, PlayerData d, EmberRunService runs, String mapKey) {
+        if (p == null || d == null || mapKey == null) return false;
+        if (get(d) != null) return false;
+        String pin = EmberMapStashPin.pinKey(mapKey);
+        if (pin == null) return false;
+        if (runs == null || !runs.progressFlag(d, pin)) return false;
+        // imprint spend still gated elsewhere; chase pin only needs map first-clear
+        EmberSignature.Def pick = pickUnderMarkForMap(d, pin);
+        if (pick == null) return false;
+        if (!set(d, pick)) return false;
+        flush(p);
+        String rem = remainLine(pick, d.periodCount(EmberSignature.C_MARK + pick.map, "all"));
+        p.sendMessage(EmberRunService.P + "§e追烙已按本图钉选 · §f" + label(pick)
+                + " §7· " + rem + " §8· /corerpg p1 sig chase");
+        try { p.sendActionBar("§e追烙 · §f" + pick.id + " §7" + rem); } catch (Throwable ignored) { }
+        return true;
+    }
+
     public static String glance(PlayerData d) {
         EmberSignature.Def def = get(d);
         if (def == null) return EmberHopeMeter.sigChase(null, 0);

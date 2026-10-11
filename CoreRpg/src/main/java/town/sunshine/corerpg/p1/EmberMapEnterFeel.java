@@ -206,6 +206,7 @@ public final class EmberMapEnterFeel {
                             + " §7· /corerpg p1 stash filter map");
                 } catch (Throwable ignored) { }
             }
+            EmberSigChase.maybeAutoChaseOnEnter(p, pd, runsPin, m.key); // D3881
         }
         boolean ch = s != null && s.challenge;
         int ab = s == null ? 0 : s.abyss;
