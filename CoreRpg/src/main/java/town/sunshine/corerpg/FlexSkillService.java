@@ -489,8 +489,18 @@ public final class FlexSkillService implements Listener {
                 town.sunshine.corerpg.p1.EmberSkillKit.stepIgniteRadius(posture));
         if (target == null) return true;
         boolean sync = stepShapeSynced(player);
+        int slowTicks = town.sunshine.corerpg.p1.EmberSkillKit.stepLandSlowTicks(sync, posture);
+        try {
+            if (town.sunshine.corerpg.p1.EmberStepSetLandBoost.consume(dataStore.get(player.getUniqueId()))) {
+                slowTicks += town.sunshine.corerpg.p1.EmberStepSetLandBoost.SLOW_EXTRA;
+                try {
+                    player.sendMessage(PREFIX + "§b爆闪首击 · 缓速加长（本日一次）");
+                    player.sendActionBar("§b爆闪首击 · 缓速+" + town.sunshine.corerpg.p1.EmberStepSetLandBoost.SLOW_EXTRA);
+                } catch (Throwable ignored) { }
+            }
+        } catch (Throwable ignored) { }
         target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
-                town.sunshine.corerpg.p1.EmberSkillKit.stepLandSlowTicks(sync, posture), 0, false, true), true);
+                slowTicks, 0, false, true), true);
         at.getWorld().spawnParticle(Particle.CRIT_MAGIC, at.clone().add(0, 0.3, 0), 16, 0.35, 0.2, 0.35, 0.02);
         return true;
     }
@@ -512,6 +522,15 @@ public final class FlexSkillService implements Listener {
             } catch (Throwable ignored) { }
             double heal = Math.max(0.5, player.getMaxHealth()
                     * town.sunshine.corerpg.p1.EmberSkillKit.stepLandHealPct(sync, posture, mapKey));
+            try {
+                if (town.sunshine.corerpg.p1.EmberStepSetLandBoost.consume(dataStore.get(player.getUniqueId()))) {
+                    heal *= town.sunshine.corerpg.p1.EmberStepSetLandBoost.HEAL_MULT;
+                    try {
+                        player.sendMessage(PREFIX + "§a承护首击 · 微疗加强（本日一次）");
+                        player.sendActionBar("§a承护首击 · 微疗×" + town.sunshine.corerpg.p1.EmberStepSetLandBoost.HEAL_MULT);
+                    } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
             player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
         }
         at.getWorld().spawnParticle(Particle.HEART, at.clone().add(0, 0.5, 0), 4, 0.2, 0.15, 0.2, 0.0);

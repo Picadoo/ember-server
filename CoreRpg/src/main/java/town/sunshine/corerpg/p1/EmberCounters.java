@@ -554,6 +554,7 @@ public final class EmberCounters {
         px("p1_shield_first_secs", "EmberShieldFirstSecs", A, PR, NV, "D7265 shield first secs day");
         px("p1_burn_spread_boost", "EmberBurnSpreadBoost", A, PR, NV, "D7361 burn spread boost day");
         px("p1_boss_pot_gift", "EmberBossPotGift", A, PR, NV, "D7425 boss pot gift day");
+        px("p1_step_set_land_boost", "EmberStepSetLandBoost", A, PR, NV, "D7457 step set land boost day");
         px("p1_brand_auto_pin_", "EmberBrandSure", A, PR, NV, "D5025 craft→path auto-pin latch");
         px("p1_marks_awk_auto_t", "EmberMarksBreak", D, HI, OW, "D4513 marks awaken auto-redeem per tier@day");
         px("p1_awk_break_", "EmberAwakenBreak", A, PR, NV, "D4385 awakening breakthrough latch I..III");

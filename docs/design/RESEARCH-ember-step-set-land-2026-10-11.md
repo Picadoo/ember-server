@@ -1,0 +1,3 @@
+# RESEARCH · StepSetLandBoost · 2026-10-11
+Outside BossBrace/PotGift/RoomClear/HuohenRadius…
+Continuous: 本日首次承护微疗×1.5 或 爆闪缓速+4tick（共享日闩）。

@@ -1,3 +1,6 @@
+Live jar: **1.65.648-d7520.local** · D7457–D7520 StepSetLandBoost
+Prior: BossBrace+PotGift · RoomClear+BurnSpread
+
 Live jar: **1.65.647-d7456.local** · D7393–D7456 BossSpawnBrace + BossPotGift
 Prior: RoomClearHeal+BurnSpread
 
