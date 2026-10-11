@@ -838,6 +838,12 @@ public final class SkillService implements Listener {
         String fam = ls.get(player).activeSet;
         if (fam == null || "none".equals(fam)) return null;
         boolean sync = dashShapeSynced(player, fam);
+        boolean posture = false;
+        try {
+            posture = town.sunshine.corerpg.p1.EmberPosturePath.aligned(
+                    dataStore.get(player.getUniqueId()), plugin.getEmberRuns());
+        } catch (Throwable ignored) { }
+        String tag = (sync ? "·形同" : "") + (posture ? "·姿态" : "");
         if ("scorch".equals(fam)) {
             town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
             if (sets != null && hitCount > 0 && town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
@@ -847,11 +853,11 @@ public final class SkillService implements Listener {
                             town.sunshine.corerpg.p1.EmberSkillKit.DASH_IGNITE_SCALE);
                 }
             }
-            return sync ? " · 烬途点燃·形同" : " · 烬途点燃";
+            return " · 烬途点燃" + tag;
         }
         if ("burst".equals(fam)) {
             if (hitCount > 0 && town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
-                int ticks = town.sunshine.corerpg.p1.EmberSkillKit.dashLandSlowTicks(sync);
+                int ticks = town.sunshine.corerpg.p1.EmberSkillKit.dashLandSlowTicks(sync, posture);
                 int lim = Math.min(hitCount, town.sunshine.corerpg.p1.EmberSkillKit.DASH_MAX_TARGETS);
                 for (int i = 0; i < lim; i++) {
                     ordered.get(i).addPotionEffect(new org.bukkit.potion.PotionEffect(
@@ -859,16 +865,16 @@ public final class SkillService implements Listener {
                 }
                 spawnParticles(player.getLocation().clone().add(0, 0.3, 0), "CRIT", 10);
             }
-            return sync ? " · 烬途缓速·形同" : " · 烬途缓速";
+            return " · 烬途缓速" + tag;
         }
         if ("sustain".equals(fam)) {
             if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
                 double heal = Math.max(0.5, player.getMaxHealth()
-                        * town.sunshine.corerpg.p1.EmberSkillKit.dashLandHealPct(sync));
+                        * town.sunshine.corerpg.p1.EmberSkillKit.dashLandHealPct(sync, posture));
                 player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
                 spawnParticles(player.getLocation().clone().add(0, 0.5, 0), "HEART", 3);
             }
-            return sync ? " · 烬途微疗·形同" : " · 烬途微疗";
+            return " · 烬途微疗" + tag;
         }
         return null;
     }

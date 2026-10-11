@@ -233,12 +233,23 @@ public final class EmberSkillKit {
 
     /** D2305: dash land slow (synced). */
     public static int dashLandSlowTicks(boolean setShapeSync) {
-        return DASH_BURST_SLOW_TICKS + (setShapeSync ? 4 : 0);
+        return dashLandSlowTicks(setShapeSync, false);
+    }
+
+    /** D2461: +2 ticks when posture aligned. */
+    public static int dashLandSlowTicks(boolean setShapeSync, boolean postureAligned) {
+        return DASH_BURST_SLOW_TICKS + (setShapeSync ? 4 : 0) + (postureAligned ? 2 : 0);
     }
 
     /** D2305: dash land heal fraction. */
     public static double dashLandHealPct(boolean setShapeSync) {
-        return setShapeSync ? DASH_HEAL_PCT * 1.25 : DASH_HEAL_PCT;
+        return dashLandHealPct(setShapeSync, false);
+    }
+
+    /** D2461: ×1.1 when posture aligned. */
+    public static double dashLandHealPct(boolean setShapeSync, boolean postureAligned) {
+        double v = setShapeSync ? DASH_HEAL_PCT * 1.25 : DASH_HEAL_PCT;
+        return postureAligned ? v * 1.1 : v;
     }
 
     /** D2306: signature skill_shield duration secs (synced · zero skill_mult). */
