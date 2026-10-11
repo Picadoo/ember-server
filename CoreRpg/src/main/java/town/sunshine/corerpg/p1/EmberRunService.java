@@ -3421,7 +3421,7 @@ public boolean pathForceOpenDoor(Player p) {
             p.sendMessage(P + "T2 定向锻造：" + (EmberSkillKit.directedForgeOpen(d, this, 2) ? "§a已开放" : "§7需本人首进或首通 Q04")
                     + " §7· T3：" + (EmberSkillKit.directedForgeOpen(d, this, 3) ? "§a已开放" : "§7需本人首进或首通 Q07"));
             boolean any = false;
-            int need = EmberRunRules.marksPerExchange();
+            int need = EmberExchangeMarkSoft.need(d, false); // D9857 peek
             int bestGap = Integer.MAX_VALUE; int bestT = 1; int bestHave = 0;
             for (int t = 3; t >= 1; t--) { // D88: clickable exchange rows instead of a typed command
                 int have = marks(d, t);
@@ -3452,12 +3452,16 @@ public boolean pathForceOpenDoor(Player p) {
         String fam = args[3].toLowerCase(Locale.ROOT), slot = args[4].toLowerCase(Locale.ROOT);
         int tier = 1;
         if (args.length >= 6) try { tier = Integer.parseInt(args[5].replace("t", "").replace("T", "")); } catch (NumberFormatException ignored) { }
+        boolean doConfirm = args.length >= 7 && "confirm".equalsIgnoreCase(args[6]);
+        int needM = EmberExchangeMarkSoft.need(d, false); // D9857 peek
         String err = EmberRunRules.exchangeCheck(marks(d, tier), tier, tier, fam, slot,
-                EmberSkillKit.directedForgeOpen(d, this, tier));
+                EmberSkillKit.directedForgeOpen(d, this, tier), needM);
         if (err != null) { p.sendMessage(P + ChatColor.RED + err); return true; }
-        if (args.length < 7 || !"confirm".equalsIgnoreCase(args[6])) { // D88: preview + confirm button (8 marks are not refunded)
+        if (!doConfirm) { // D88: preview + confirm button
             // D1354: have/need honesty
-            int needM = EmberRunRules.marksPerExchange();
+            if (needM < EmberRunRules.marksPerExchange()) {
+                p.sendMessage(P + "§a印记兑换减负 · 需枚 ×0.5（今日一次 · 预览）");
+            }
             int haveM = marks(d, tier);
             int gapM = Math.max(0, needM - haveM);
             p.sendMessage(P + "§6印记兑换 · T" + tier + " " + EmberItemData.familyName(fam) + EmberItemData.slotName(slot)
@@ -3484,12 +3488,17 @@ public boolean pathForceOpenDoor(Player p) {
         EmberPay pay = EmberPay.get();
         if (pay != null && pay.durable()) return redeemDurable(p, pay, fam, slot, tier);
         // YAML storage (no MySQL): the old in-memory path
-        if (!EmberEconomy.spendMark(d, "C07", tier, EmberEconomy.amount("C07", "marks"))) { p.sendMessage(P + ChatColor.RED + "扣除印记失败"); return true; } // D218
+        needM = EmberExchangeMarkSoft.need(d, true); // D9857 consume at pay
+        if (needM < EmberRunRules.marksPerExchange()) {
+            p.sendMessage(P + "§a印记兑换减负 · 需枚 ×0.5（今日一次）");
+            try { p.sendActionBar("§a印记兑换减负"); } catch (Throwable ignored) { }
+        }
+        if (!EmberEconomy.spendMark(d, "C07", tier, needM)) { p.sendMessage(P + ChatColor.RED + "扣除印记失败"); return true; } // D218
         String run = "mark-" + Long.toString(System.currentTimeMillis(), 36) + "-" + Integer.toString(rnd.nextInt(1296), 36);
         String uid = EmberRunRules.rewardUid(rnd.nextLong(), p.getUniqueId().toString(), run, "mark_item");
         ledgerRow(p.getUniqueId(), run, "mark_item", "item:" + uid + ":" + fam + ":" + slot + ":" + tier + ":0:0", EmberRunRules.ST_PENDING);
         plugin.getDataStore().flushMutation(p.getUniqueId());
-        p.sendMessage(P + "§a已用 " + EmberRunRules.marksPerExchange() + " 枚 T" + tier + " 印记兑换 " + EmberItemData.familyName(fam)
+        p.sendMessage(P + "§a已用 " + needM + " 枚 T" + tier + " 印记兑换 " + EmberItemData.familyName(fam)
                 + EmberItemData.slotName(slot) + "（剩余 " + marks(d, tier) + "）");
         deliver(p);
         return true;
@@ -3505,7 +3514,8 @@ public boolean pathForceOpenDoor(Player p) {
         PlayerData d = data(p.getUniqueId());
         if (d == null) return null;
         boolean gate = EmberSkillKit.directedForgeOpen(d, this, tier);
-        String err = EmberRunRules.exchangeCheck(marks(d, tier), tier, tier, fam, slot, gate);
+        int needAuto = EmberExchangeMarkSoft.need(d, false); // D9857 peek
+        String err = EmberRunRules.exchangeCheck(marks(d, tier), tier, tier, fam, slot, gate, needAuto);
         if (err != null) return null;
         if (freeSlots(p) <= 0) return null;
         EmberPay pay = EmberPay.get();
@@ -3513,7 +3523,8 @@ public boolean pathForceOpenDoor(Player p) {
             redeemDurable(p, pay, fam, slot, tier);
             return ""; // async — caller matches fam/slot/tier in bag
         }
-        if (!EmberEconomy.spendMark(d, "C07", tier, EmberEconomy.amount("C07", "marks"))) return null;
+        int needSpend = EmberExchangeMarkSoft.need(d, true); // D9857
+        if (!EmberEconomy.spendMark(d, "C07", tier, needSpend)) return null;
         String run = "mark-auto-" + Long.toString(System.currentTimeMillis(), 36) + "-" + Integer.toString(rnd.nextInt(1296), 36);
         String uid = EmberRunRules.rewardUid(rnd.nextLong(), p.getUniqueId().toString(), run, "mark_item");
         ledgerRow(p.getUniqueId(), run, "mark_item", "item:" + uid + ":" + fam + ":" + slot + ":" + tier + ":0:0", EmberRunRules.ST_PENDING);
@@ -3537,11 +3548,17 @@ public boolean pathForceOpenDoor(Player p) {
         final String uid = EmberRunRules.rewardUid(rnd.nextLong(), id.toString(), rid, "mark_item");
         final EmberItemData item = new EmberItemData(uid, EmberItemData.templateId(fam, slot, tier), fam, slot, tier, 0, 0, 0, 0, true, "drop",
                 EmberItemData.DATA_VERSION, 0, 0, 0, 0, 0, EmberProvenance.forRedeem(rid, System.currentTimeMillis())); // D245: forge / S28
-        final EmberPay.Price price = EmberPay.Price.marks(tier, EmberEconomy.amount("C07", "marks")).at("C07"); // D218: REG C07 (golden = MARKS_PER_EXCHANGE)
+        PlayerData pdR = data(id);
+        final int needPay = EmberExchangeMarkSoft.need(pdR, true); // D9857
+        if (needPay < EmberRunRules.marksPerExchange() && p.isOnline()) {
+            p.sendMessage(P + "§a印记兑换减负 · 需枚 ×0.5（今日一次）");
+            try { p.sendActionBar("§a印记兑换减负"); } catch (Throwable ignored) { }
+        }
+        final EmberPay.Price price = EmberPay.Price.marks(tier, needPay).at("C07"); // D218: REG C07
         final String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
         pay.pay(p, rid, price, "兑换没完成，退回印记", null, () ->
                 loadouts.store().commitCreate(rid, "mark_redeem", id, item, price.json(),
-                        "印记兑换 T" + tier + " " + label + "（" + EmberRunRules.marksPerExchange() + " 枚 T" + tier + " 印记）",
+                        "印记兑换 T" + tier + " " + label + "（" + needPay + " 枚 T" + tier + " 印记）",
                         java.util.Arrays.asList(EmberItemStore.Owed.gear(uid, "印记兑换 T" + tier + " " + label)), res -> {
                             redeemBusy.remove(id);
                             Player q = Bukkit.getPlayer(id);
@@ -3550,7 +3567,7 @@ public boolean pathForceOpenDoor(Player p) {
                                 log().info("[P1 run] " + id + " mark redeem " + rid + " T" + tier + " " + fam + " " + slot + " → " + uid);
                                 if (q != null) {
                                     PlayerData qd = data(id);
-                                    q.sendMessage(P + "§a已用 " + EmberRunRules.marksPerExchange() + " 枚 T" + tier + " 印记兑换 " + label
+                                    q.sendMessage(P + "§a已用 " + needPay + " 枚 T" + tier + " 印记兑换 " + label
                                             + "（剩余 " + (qd == null ? "?" : String.valueOf(marks(qd, tier))) + "）");
                                     EmberGearLib gl = EmberGearLib.get();
                                     if (gl != null) gl.delivery().kick(q);
@@ -3558,7 +3575,7 @@ public boolean pathForceOpenDoor(Player p) {
                             } else {
                                 pay.release(id, rid); // not committed → the 8 marks come back once
                                 log().warning("[P1 run] " + id + " mark redeem " + rid + " not committed: " + res.status + " " + res.detail);
-                                if (q != null) q.sendMessage(P + ChatColor.RED + "兑换没完成（" + res.status + "），" + EmberRunRules.marksPerExchange() + " 枚 T" + tier + " 印记会退回");
+                                if (q != null) q.sendMessage(P + ChatColor.RED + "兑换没完成（" + res.status + "），" + needPay + " 枚 T" + tier + " 印记会退回");
                             }
                         }),
                 err -> { redeemBusy.remove(id); if (p.isOnline()) p.sendMessage(P + ChatColor.RED + "没有兑换：" + err); });

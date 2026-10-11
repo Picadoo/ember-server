@@ -595,3 +595,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D9633–D9696: DismantleYieldBoost + UndoWindowSoft + DeathRefundBoost. STOP densify those + forge-cost/enter-brace/life-coin/env-soft + priors. Talent HOLD. Six-slot HOLD.
 - D9697–D9760: BrandCraftSoft + BrandPinCostSoft + RerollCoinSoft. STOP densify those + forge-cost/dismantle-undo-death/enter-brace/life-coin/env-soft + priors. Talent HOLD. Six-slot HOLD.
 - D9761–D9824: ConvertCostSoft + ImprintCoinSoft + SupplyShopSoft. STOP densify those + brand/reroll/forge-cost/dismantle/enter-brace/life-coin/env-soft + priors. Talent HOLD. Six-slot HOLD.
+- D9825–D9888: AttuneUnlockSoft + ExchangeMarkSoft + EnhanceUndoSoft. STOP densify those + convert-imprint-supply/brand-reroll/forge-cost/dismantle/enter-brace/life-coin/env-soft + priors. Talent HOLD. Six-slot HOLD.

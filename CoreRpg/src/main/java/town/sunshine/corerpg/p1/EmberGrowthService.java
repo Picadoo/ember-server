@@ -1596,12 +1596,13 @@ public final class EmberGrowthService implements Listener {
         if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后再调律（副本里不能改）"); return true; }
         boolean un = altUnlocked(d, sd);
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
-        String why = EmberSignature.attuneCheck(sd, EmberSkillKit.attuneUnlocked(d, runs), runs.progressFlag(d, sd.map), un, marks);
+        int needAttune = EmberAttuneUnlockSoft.need(d, false); // D9825 peek
+        String why = EmberSignature.attuneCheck(sd, EmberSkillKit.attuneUnlocked(d, runs), runs.progressFlag(d, sd.map), un, marks, needAttune);
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); return true; }
         if (!un) {
             if (!unlock) {
                 // D1297: marks gap honesty（非 hope PAPI）
-                int needA = EmberSignature.altMarks();
+                int needA = needAttune;
                 int gapA = Math.max(0, needA - marks);
                 p.sendMessage(P + "§d签名调律 §7· " + sd.name + "：调律版代价「" + EmberSignature.alt(sd).bad + "」（原版「" + sd.bad + "」，好处不变）");
                 p.sendMessage(P + "§e解锁要 " + needA + " 枚 " + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + marks + "）"
@@ -1615,7 +1616,12 @@ public final class EmberGrowthService implements Listener {
             }
             String hold = EmberAssetGuard.hold(p);
             if (hold != null) { p.sendMessage(P + ChatColor.RED + hold); return true; }
-            if (!EmberEconomy.spendInsignia(d, "C13", sd.map, EmberSignature.altMarks())) { p.sendMessage(P + ChatColor.RED + "扣除首领徽记失败"); return true; } // D218 REG C13
+            int needPay = EmberAttuneUnlockSoft.need(d, true); // D9825
+            if (needPay < EmberSignature.altMarks()) {
+                p.sendMessage(P + "§a调律解锁减负 · 徽记 ×0.5（今日一次）");
+                try { p.sendActionBar("§a调律解锁减负"); } catch (Throwable ignored) { }
+            }
+            if (!EmberEconomy.spendInsignia(d, "C13", sd.map, needPay)) { p.sendMessage(P + ChatColor.RED + "扣除首领徽记失败"); return true; } // D218 REG C13
             d.addPeriodCount(EmberSignature.C_ALTU + sd.id, "all", 1);
             d.addPeriodCount(EmberSignature.C_ALT + sd.id, "all", 1 - d.periodCount(EmberSignature.C_ALT + sd.id, "all"));
             boolean saved = plugin.getDataStore().flushMutationChecked(p.getUniqueId());

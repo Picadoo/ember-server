@@ -31,13 +31,19 @@ public final class EmberEnhanceUndo {
         final Cost cost;
         final long at;
 
+        final long windowMs;
+
         Snap(UUID player, String uid, int enhance, int pityBefore, int pityAfter, int revAfter, Cost cost, long at) {
-            this.player = player; this.uid = uid; this.enhance = enhance;
-            this.pityBefore = pityBefore; this.pityAfter = pityAfter; this.revAfter = revAfter;
-            this.cost = cost; this.at = at;
+            this(player, uid, enhance, pityBefore, pityAfter, revAfter, cost, at, WINDOW_MS);
         }
 
-        boolean open(long now) { return now - at <= WINDOW_MS; }
+        Snap(UUID player, String uid, int enhance, int pityBefore, int pityAfter, int revAfter, Cost cost, long at, long windowMs) {
+            this.player = player; this.uid = uid; this.enhance = enhance;
+            this.pityBefore = pityBefore; this.pityAfter = pityAfter; this.revAfter = revAfter;
+            this.cost = cost; this.at = at; this.windowMs = windowMs > 0 ? windowMs : WINDOW_MS;
+        }
+
+        boolean open(long now) { return now - at <= windowMs; }
     }
 
     static final ConcurrentHashMap<UUID, Snap> LAST = new ConcurrentHashMap<UUID, Snap>();
@@ -54,8 +60,20 @@ public final class EmberEnhanceUndo {
         TxnItem t = list.get(0);
         if (t == null || t.before == null || t.after == null) return;
         if (t.after.enhance != t.before.enhance) return; // not a pure fail
+        long win = WINDOW_MS;
+        try {
+            org.bukkit.plugin.Plugin pl = org.bukkit.Bukkit.getPluginManager().getPlugin("CoreRpg");
+            if (pl instanceof town.sunshine.corerpg.CoreRpgPlugin) {
+                town.sunshine.corerpg.PlayerData pd = ((town.sunshine.corerpg.CoreRpgPlugin) pl).getDataStore().get(p.getUniqueId());
+                long soft = EmberEnhanceUndoSoft.windowMs(pd); // D9873
+                if (soft > win) {
+                    win = soft;
+                    p.sendMessage(EmberRunService.P + "§a失败撤销加长 · +" + (EmberEnhanceUndoSoft.EXTRA_MS / 1000) + "s（今日）");
+                }
+            }
+        } catch (Throwable ignored) { }
         Snap s = new Snap(p.getUniqueId(), t.after.uid, t.after.enhance, t.before.pity, t.after.pity,
-                t.after.rev, cost, System.currentTimeMillis());
+                t.after.rev, cost, System.currentTimeMillis(), win);
         LAST.put(p.getUniqueId(), s);
         String P = EmberRunService.P;
         int sec = remainSec(s, System.currentTimeMillis());
@@ -105,7 +123,7 @@ public final class EmberEnhanceUndo {
         Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
         if (pl == null) return;
         final UUID id = p.getUniqueId();
-        long delayTicks = Math.max(1L, (WINDOW_MS - 10_000L) / 50L);
+        long delayTicks = Math.max(1L, ((s.windowMs > 0 ? s.windowMs : WINDOW_MS) - 10_000L) / 50L);
         Bukkit.getScheduler().runTaskLater(pl, () -> {
             Player q = Bukkit.getPlayer(id);
             if (q == null || !q.isOnline()) return;
@@ -126,7 +144,7 @@ public final class EmberEnhanceUndo {
         Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
         if (pl == null) return;
         final UUID id = p.getUniqueId();
-        long delayTicks = Math.max(1L, WINDOW_MS / 50L + 5L);
+        long delayTicks = Math.max(1L, (s.windowMs > 0 ? s.windowMs : WINDOW_MS) / 50L + 5L);
         Bukkit.getScheduler().runTaskLater(pl, () -> {
             Player q = Bukkit.getPlayer(id);
             if (q == null || !q.isOnline()) return;
@@ -186,7 +204,8 @@ public final class EmberEnhanceUndo {
     /** Remaining seconds for UI/tests. */
     public static int remainSec(Snap s, long now) {
         if (s == null) return 0;
-        long left = WINDOW_MS - (now - s.at);
+        long win = s.windowMs > 0 ? s.windowMs : WINDOW_MS;
+        long left = win - (now - s.at);
         return left <= 0 ? 0 : (int) ((left + 999) / 1000);
     }
 }

@@ -164,11 +164,17 @@ public final class EmberSignature {
 
     /** 调律 precheck (unlock or switch); null = ok. Switching only in town is the caller's gate (same as 烙印). */
     public static String attuneCheck(Def d, boolean q07, boolean mapCleared, boolean unlocked, int marks) {
+        return attuneCheck(d, q07, mapCleared, unlocked, marks, altMarks());
+    }
+
+    /** D9825: needMarks override (soft unlock). */
+    public static String attuneCheck(Def d, boolean q07, boolean mapCleared, boolean unlocked, int marks, int needMarks) {
         if (d == null) return "没有这条签名";
         if (alt(d) == null) return d.name + " 没有调律版";
         if (!q07) return "首进或首通 " + ALT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放签名调律";
         if (!mapCleared) return "先首通 " + d.map.toUpperCase(Locale.ROOT) + " 才能调律它的签名";
-        if (!unlocked && marks < altMarks()) return d.map.toUpperCase(Locale.ROOT) + " 首领徽记不够（" + marks + "/" + altMarks() + "）";
+        int need = needMarks > 0 ? needMarks : altMarks();
+        if (!unlocked && marks < need) return d.map.toUpperCase(Locale.ROOT) + " 首领徽记不够（" + marks + "/" + need + "）";
         return null;
     }
 
