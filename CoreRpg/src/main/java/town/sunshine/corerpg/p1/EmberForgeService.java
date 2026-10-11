@@ -556,7 +556,15 @@ public final class EmberForgeService implements Listener {
         String r = rid != null ? rid : kind + ":" + it.data.uid + ":" + it.data.rev;
         if (replayed(p, r)) return true;
         final String rr = r;
-        payDurable(p, rr, kind, pay, () -> commit(p, kind, rr, pay, Arrays.asList(new TxnItem(it.data, plan.after, null)), plan.note));
+        payDurable(p, rr, kind, pay, () -> {
+            commit(p, kind, rr, pay, Arrays.asList(new TxnItem(it.data, plan.after, null)), plan.note);
+            try {
+                PlayerData pdW = plugin.getDataStore().get(p.getUniqueId());
+                if ("quality".equals(kind)) EmberQualityWinShard.maybeGift(p, pdW); // D10913
+                else if ("refine".equals(kind)) EmberRefineWinBone.maybeGift(p, pdW); // D10929
+                else if ("upgrade".equals(kind)) EmberUpgradeWinCore.maybeGift(p, pdW); // D10945
+            } catch (Throwable ignored) { }
+        });
         return true;
     }
 
