@@ -2314,6 +2314,13 @@ final class EmberRunDirector {
             }
             if (!AffixCycle.ready(now, t.affixNext) || nearest(t.le.getLocation(), AffixRegen.ENGAGE) == null) return;
             t.regenWindowEnd = AffixRegen.windowEnd(now, v);
+            try {
+                long rx = EmberRegenWindowBoost.consumeExtraMs(s == null ? null : s.runId); // D8033
+                if (rx > 0) {
+                    t.regenWindowEnd += rx;
+                    svc.tellRun(s, "§a再生加窗 · +" + (rx / 100) / 10.0 + "s（本局一次）");
+                }
+            } catch (Throwable ignored) { }
             t.regenHurt = 0;
             svc.tellRun(s, "§6「再生」§7读条中 · 猛打可打断");
             EmberCutPath.maybeAfterCut(s); // D580
@@ -2351,7 +2358,15 @@ final class EmberRunDirector {
             for (Player p : participantsHere()) {
                 if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
                 if (AffixFrost.inAura(p.getLocation().distanceSquared(c), v)) {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, AffixFrost.slowTicks(v), v.frostAmplifier, false, true), true);
+                    int frostT = AffixFrost.slowTicks(v);
+                    try {
+                        int soft = EmberFrostSlowSoft.consumeTicks(s == null ? null : s.runId, frostT); // D8065
+                        if (soft < frostT) {
+                            frostT = soft;
+                            svc.tellRun(s, "§a凝霜软化 · 减速时长 ×0.6（本局一次）");
+                        }
+                    } catch (Throwable ignored) { }
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, frostT, v.frostAmplifier, false, true), true);
                     EmberThawPath.maybeAfterFrost(p); // D561
                 } else {
                     for (PotionEffect cur : p.getActivePotionEffects()) {
@@ -2423,6 +2438,13 @@ final class EmberRunDirector {
                 if (AffixCycle.lands(now, t.affixAt)) {
                     EmberRunMaps.Skill sk = jailerSkill(t, v);
                     int ticks = jailerRootTicks(v);
+                    try {
+                        int soft = EmberJailerRootSoft.consumeTicks(s == null ? null : s.runId, ticks); // D8081
+                        if (soft < ticks) {
+                            ticks = soft;
+                            svc.tellRun(s, "§a禁锢软化 · 定身 ×0.7（本局一次）");
+                        }
+                    } catch (Throwable ignored) { }
                     int rooted = 0;
                     for (Player p : participantsHere()) {
                         if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
