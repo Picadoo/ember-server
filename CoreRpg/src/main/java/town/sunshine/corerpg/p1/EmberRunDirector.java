@@ -246,10 +246,13 @@ final class EmberRunDirector {
             }
         }
         // D300: deferred door open (door_delay breath between clear and passage)
-        if (doorOpenAt > 0 && doorPending != null && now >= doorOpenAt) {
-            openDoorNow(doorPending);
-            doorPending = null;
-            doorOpenAt = 0;
+        if (doorOpenAt > 0 && doorPending != null) {
+            pulseDoorTempo(now); // D3369
+            if (now >= doorOpenAt) {
+                openDoorNow(doorPending);
+                doorPending = null;
+                doorOpenAt = 0;
+            }
         }
         // passages (spire): once the room is cleared, stepping into the passage box moves the player up
         for (EmberRunMaps.Link k : def.links) {
@@ -510,7 +513,33 @@ final class EmberRunDirector {
     private void openDoorNow(EmberRunMaps.Room r) {
         if (r == null || r.door == null) return;
         setBox(r.door, Material.AIR, Material.IRON_FENCE);
-        w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+        Location c = center(r.door);
+        w.playSound(c, Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+        try {
+            w.spawnParticle(Particle.VILLAGER_HAPPY, c.clone().add(0, 1.0, 0), 16, 0.4, 0.5, 0.4, 0.02);
+        } catch (Throwable ignored) { }
+        for (Player p : participantsHere()) {
+            PlayerData pd = svc.dataOf(p.getUniqueId());
+            if (!EmberDoorTempo.showCountdown(EmberGatePath.get(pd))) continue;
+            try { p.sendActionBar(EmberDoorTempo.actionBar(0)); } catch (Throwable ignored) { }
+        }
+    }
+
+    /** D3369: door pending tempo feel — PORTAL column + countdown (not Boss telegraph LAVA). */
+    private void pulseDoorTempo(long now) {
+        if (doorPending == null || doorPending.door == null || doorOpenAt <= 0) return;
+        Location c = center(doorPending.door);
+        try {
+            w.spawnParticle(Particle.PORTAL, c.clone().add(0, 1.2, 0), 10, 0.35, 0.9, 0.35, 0.4);
+            w.spawnParticle(Particle.END_ROD, c.clone().add(0, 0.3, 0), 2, 0.25, 0.1, 0.25, 0.01);
+        } catch (Throwable ignored) { }
+        int sec = EmberDoorTempo.secondsLeft(now, doorOpenAt);
+        for (Player p : participantsHere()) {
+            if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+            PlayerData pd = svc.dataOf(p.getUniqueId());
+            if (!EmberDoorTempo.showCountdown(EmberGatePath.get(pd))) continue;
+            try { p.sendActionBar(EmberDoorTempo.actionBar(sec)); } catch (Throwable ignored) { }
+        }
     }
 
     /** D599: boss arm timer running (pre-boss stock check window). */
@@ -2037,8 +2066,11 @@ final class EmberRunDirector {
         if (r.door != null) {
             if (r.doorDelay > 0) {
                 doorPending = r;
-                doorOpenAt = System.currentTimeMillis() + (long) (r.doorDelay * 1000.0);
-                svc.tellRun(s, "§7门扇缓缓开启…");
+                double scale = EmberDoorTempo.delayScale(s, svc); // D3345 ASK tempo
+                doorOpenAt = System.currentTimeMillis() + (long) (r.doorDelay * scale * 1000.0);
+                svc.tellRun(s, scale < 1.0 - 1e-9
+                        ? "§7门扇较快开启…（急推进节奏）"
+                        : "§7门扇缓缓开启…");
                 EmberGatePath.maybeAfterPending(s); // D556
             } else {
                 openDoorNow(r);

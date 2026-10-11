@@ -1,5 +1,5 @@
 # STATUS · growth · 2026-10-11
-- Live: `1.65.572-d3344.local`
-- D3281–D3344 Boss telegraph geometry **NEAR-SAT**
-- Talent HOLD · sig land/Q0x/Counter stun/Prep twins STOP
-- Next: 房门/节奏 tempo 或 affix telegraph
+- Live: `1.65.574-d3408.local`
+- D3345–D3408 Door tempo **NEAR-SAT** (PORTAL column · countdown · ASK ×0.85)
+- Talent HOLD · Boss telegraph/Counter/Gate land twins STOP
+- Next: Affix telegraph light OR Link tempo

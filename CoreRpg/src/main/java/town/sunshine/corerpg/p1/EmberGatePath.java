@@ -74,8 +74,8 @@ public final class EmberGatePath {
 
     public static String tip(int id) {
         if (id == AUTO) return "房间清完门扇缓开时立即开门推进";
-        if (id == ASK) return "门扇缓开时聊天提醒，点按钮开门（默认）";
-        if (id == MUTE) return "不刷提醒；等门扇自然开启";
+        if (id == ASK) return "门扇略加快缓开 · 聊天可点提前开（默认）";
+        if (id == MUTE) return "不刷倒计时；等门扇自然开启";
         return "点选门扇缓开节奏（改副本循环 · 不改掉落表）";
     }
 
