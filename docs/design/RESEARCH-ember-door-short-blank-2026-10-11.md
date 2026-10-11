@@ -1,0 +1,3 @@
+# RESEARCH · DoorOpenSpeed + ShortBlankBoost · 2026-10-11
+Outside AffixShard/SigCharge/DupRefund…
+Continuous: 本局首次开门 → 速度I 2s。Acquisition: 短征领奖结算 → +1胚（本日一次）。

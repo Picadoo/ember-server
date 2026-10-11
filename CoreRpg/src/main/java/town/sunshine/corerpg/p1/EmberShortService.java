@@ -120,6 +120,7 @@ public final class EmberShortService {
                         + (r.firstClearPaidNow ? " §a（含生涯首通包）" : "")
                         + " §7· " + EmberShortRules.dayLine(r.rewardedAfter, dailyCap(m)));
                 try { p.sendActionBar("§e短征 · 日奖 " + r.rewardedAfter + "/" + dailyCap(m)); } catch (Throwable ignored) { }
+                try { EmberShortBlankBoost.maybeGrant(p, pd); } catch (Throwable ignored) { } // D7681
                 // D878 day-reward next (FC branch may add more)
                 int left = dailyCap(m) - r.rewardedAfter;
                 if (left > 0) {

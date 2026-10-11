@@ -521,6 +521,7 @@ final class EmberRunDirector {
         try {
             w.spawnParticle(Particle.VILLAGER_HAPPY, c.clone().add(0, 1.0, 0), 16, 0.4, 0.5, 0.4, 0.02);
         } catch (Throwable ignored) { }
+        try { EmberDoorOpenSpeed.maybeSpeed(s, participantsHere()); } catch (Throwable ignored) { } // D7649
         for (Player p : participantsHere()) {
             PlayerData pd = svc.dataOf(p.getUniqueId());
             if (!EmberDoorTempo.showCountdown(EmberGatePath.get(pd))) continue;

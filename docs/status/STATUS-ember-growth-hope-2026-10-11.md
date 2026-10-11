@@ -1,3 +1,6 @@
+Live jar: **1.65.651-d7712.local** · D7649–D7712 DoorOpenSpeed + ShortBlankBoost
+Prior: AffixShard+SigCharge · DupRefund+RaidRevive
+
 Live jar: **1.65.650-d7648.local** · D7585–D7648 AffixShardBoost + SigChargeFirst
 Prior: DupRefund+RaidRevive
 
