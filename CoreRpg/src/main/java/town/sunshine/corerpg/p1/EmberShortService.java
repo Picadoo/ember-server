@@ -57,8 +57,15 @@ public final class EmberShortService {
         String claim = m != null && m.shortClaim != null && !m.shortClaim.isEmpty() ? m.shortClaim : EmberShortRules.CLAIM;
         String ver = m != null && m.contentVersion != null ? m.contentVersion : "v1";
         List<EmberRunRules.Grant> grants = fresh
-                ? EmberShortRules.settleGrants(mapKey, rewardedBefore, cap, firstClearPaid)
+                ? new java.util.ArrayList<EmberRunRules.Grant>(EmberShortRules.settleGrants(mapKey, rewardedBefore, cap, firstClearPaid))
                 : CollectionsEmpty();
+        if (fresh && pd != null && !grants.isEmpty()) {
+            try {
+                EmberShortClearCoinBoost.apply(pd, grants); // D10529
+                EmberShortClearShardBoost.apply(pd, grants); // D10545
+                EmberShortClearBoneBoost.apply(pd, grants); // D10561
+            } catch (Throwable ignored) { }
+        }
         boolean pays = fresh && EmberShortRules.paysReward(rewardedBefore, cap);
         List<EmberRunRules.Row> changed = new ArrayList<EmberRunRules.Row>();
         boolean[] created = new boolean[1];

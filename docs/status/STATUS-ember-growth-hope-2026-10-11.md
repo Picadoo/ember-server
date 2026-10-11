@@ -1,3 +1,4 @@
+Live jar: **1.65.696-d10592.local** · D10529–D10592 ShortClearCoinBoost + ShortClearShardBoost + ShortClearBoneBoost
 Live jar: **1.65.695-d10528.local** · D10465–D10528 FcShardBoost + FcCoreBoost + FcCoinBoost
 Live jar: **1.65.694-d10464.local** · D10401–D10464 ExtraTreasureBoost + ExtraChestFloorSoft + FcBlankBoost
 Live jar: **1.65.693-d10400.local** · D10337–D10400 BaseXpBoost + BaseMarkBoost + ExtraEliteBoost

@@ -1,0 +1,37 @@
+package town.sunshine.corerpg.p1;
+
+import java.util.List;
+
+import town.sunshine.corerpg.PlayerData;
+
+/**
+ * D10529: first short-expedition {@code *_clear_coin} settle of the day → amount +{@link #BONUS}.
+ * Zero short clear table. Not FcCoin/ExtraTreasure densify (short clear coin).
+ */
+public final class EmberShortClearCoinBoost {
+
+    public static final String C_USED = "p1_short_clear_coin_boost";
+    public static final int BONUS = 30;
+
+    private EmberShortClearCoinBoost() {}
+
+    public static boolean usedToday(PlayerData d) {
+        return d != null && d.periodCount(C_USED, "day") > 0;
+    }
+
+    public static boolean ready(PlayerData d) {
+        return d != null && !usedToday(d);
+    }
+
+    public static boolean apply(PlayerData pd, List<EmberRunRules.Grant> grants) {
+        if (pd == null || grants == null || !ready(pd)) return false;
+        for (int i = 0; i < grants.size(); i++) {
+            EmberRunRules.Grant g = grants.get(i);
+            if (g == null || g.key == null || !g.key.endsWith("clear_coin") || g.amount <= 0) continue;
+            pd.addPeriodCount(C_USED, "day", 1);
+            grants.set(i, new EmberRunRules.Grant(g.key, g.kind, g.id, g.amount + BONUS, g.item));
+            return true;
+        }
+        return false;
+    }
+}
