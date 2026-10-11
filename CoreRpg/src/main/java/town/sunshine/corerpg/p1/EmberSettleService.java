@@ -561,6 +561,7 @@ public final class EmberSettleService {
                 EmberLoadout lo2 = runs.loadouts() == null ? null : runs.loadouts().refresh(p);
                 EmberMapFarmCue.afterSettle(p, farmMap, lo2);
                 EmberBagSeat.scheduleScan(p); // D5665
+                EmberBagBetter.scheduleScan(p); // D6177
                 if (runs.loadouts() != null) // D747 setchase equip after deliver
                     EmberSetChase.afterEquip(p, pd, runs.loadouts());
             }, 5L);

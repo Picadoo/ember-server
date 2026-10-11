@@ -6,7 +6,7 @@ import java.util.Locale;
 import town.sunshine.corerpg.PlayerData;
 
 /**
- * D611: account-level drop-quality pity for mainline normal {@code base_item}.
+ * D611: account-level drop-quality pity for mainline normal/challenge {@code base_item}.
  * Soft floor at 精良 after {@link #NEED} consecutive 标准 drops. Never forces 极品.
  * Does not change {@link EmberRunRules#QUALITY_WEIGHTS} tables.
  */
@@ -78,7 +78,8 @@ public final class EmberDropQualityPity {
     /** True when settleFor should run this pity (mainline ordinary clear). */
     public static boolean applicable(EmberRunSession s, EmberRunMaps.MapDef m) {
         if (s == null || m == null) return false;
-        if (s.challenge || s.abyss > 0) return false;
+        if (s.abyss > 0) return false;
+        // D6209: challenge shares soft floor (weights unchanged; NEED unchanged)
         if (m.raid || m.event || m.rush) return false;
         // D6049: short expedition shares soft floor (zero NEED change)
         if (m.shortExpedition) return true;

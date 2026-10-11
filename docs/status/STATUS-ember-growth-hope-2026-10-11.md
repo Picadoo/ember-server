@@ -1,5 +1,4 @@
 # STATUS · growth · 2026-10-11
-- Live: `1.65.628-d6176.local`
-- D5985–D6048 RerollKeepSure
-- D6049–D6112 DropQPity short
-- D6113–D6176 UpgradeSure (forgegoal only)
+- Live: `1.65.630-d6304.local`
+- D6177–D6304 BagBetter (UP_AUTO) + DropQ challenge NEAR-SAT
+- STOP sure-do / TalentPlaystyle / BagSeat densify / access / Path

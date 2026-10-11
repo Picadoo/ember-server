@@ -540,3 +540,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - RerollKeepSure D5985–D6048: 更优档自动保留新
 - DropQPity short D6049–D6112: 短征共用成色软保底
 - UpgradeSure D6113–D6176: 工坊目标=升阶且料齐直办
+- BagBetter D6177–D6240: 背包 UP_AUTO 更优自动换上；挑战成色软保底

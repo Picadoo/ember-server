@@ -2717,6 +2717,7 @@ public boolean pathForceOpenDoor(Player p) {
             EmberMapFarmCue.maybeResumeAfterJoin(p, jd, jlo, maps);
             EmberTalentPlaystyle.schedulePending(p); // D5601
             EmberBagSeat.scheduleScan(p); // D5665
+            EmberBagBetter.scheduleScan(p); // D6177
         }, 60L);
     }
 
