@@ -2394,3 +2394,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack20-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack20.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack20-d12224-2026-10-12.md` |
+### 13.133 Affix Pack 21 刺斩/沼洼（CoreRpg 1.65.743，D12225，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12225 |
+| jar | CoreRpg **1.65.743-d12225.local** |
+| balance_version | 107 → **108** |
+| 行为 | 词缀池 42→44：+`spur` 刺斩 / `fen` 沼洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack21-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack21.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack21-d12225-2026-10-12.md` |
+
