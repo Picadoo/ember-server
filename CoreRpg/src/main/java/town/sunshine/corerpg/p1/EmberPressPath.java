@@ -178,13 +178,20 @@ public final class EmberPressPath {
         return true;
     }
 
-    /** D2517: after press warp — boss Slow I 1s + self Speed I 1.5s (zero skill_mult). */
+    /** D2547: AUTO gets longer boss Slow than ASK/manual. */
+    public static int pressBossSlowTicks(int path) {
+        return path == AUTO ? 30 : 20;
+    }
+
+    /** D2517: after press warp — boss Slow + self Speed I 1.5s (zero skill_mult). */
     public static void applyPressLand(Player p, EmberRunService runs) {
         if (p == null || runs == null) return;
         try {
+            PlayerData d = dataOf(p);
+            int path = d == null ? NONE : get(d);
             p.addPotionEffect(new org.bukkit.potion.PotionEffect(
                     org.bukkit.potion.PotionEffectType.SPEED, 30, 0, false, true), true);
-            runs.applyPressBossSlow(p, 20);
+            runs.applyPressBossSlow(p, pressBossSlowTicks(path));
             try { p.sendActionBar("§a压伤贴脸 · §fSlow首领 · Speed自己"); } catch (Throwable ignored) { }
         } catch (Throwable ignored) { }
     }

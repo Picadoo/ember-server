@@ -49,4 +49,18 @@ public class EmberRoomPressBehaviorTest {
         assertEquals(8000L, EmberPressPath.askCooldownMs(EmberPressPath.NONE));
         assertEquals(8000L, EmberPressPath.askCooldownMs(EmberPressPath.AUTO));
     }
+
+    @Test
+    public void frontOpenLongerBackClearLonger() {
+        assertEquals(80, EmberRoomPath.openSpeedTicks(EmberRoomPath.FRONT));
+        assertEquals(40, EmberRoomPath.openSpeedTicks(EmberRoomPath.BACK));
+        assertEquals(30, EmberRoomPath.clearSpeedTicks(EmberRoomPath.FRONT));
+        assertEquals(60, EmberRoomPath.clearSpeedTicks(EmberRoomPath.BACK));
+    }
+
+    @Test
+    public void autoPressSlowLonger() {
+        assertEquals(30, EmberPressPath.pressBossSlowTicks(EmberPressPath.AUTO));
+        assertEquals(20, EmberPressPath.pressBossSlowTicks(EmberPressPath.ASK));
+    }
 }

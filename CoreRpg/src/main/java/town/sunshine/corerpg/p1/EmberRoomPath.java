@@ -118,6 +118,22 @@ public final class EmberRoomPath {
         return want != null && roomKey != null && want.equalsIgnoreCase(roomKey);
     }
 
+    /** D2546: FRONT early burst / BACK late push. */
+    public static int openSpeedTicks(int path) {
+        if (path == FRONT) return 80;
+        if (path == MID) return 60;
+        if (path == BACK) return 40;
+        return 60;
+    }
+
+    public static int clearSpeedTicks(int path) {
+        if (path == FRONT) return 30;
+        if (path == MID) return 40;
+        if (path == BACK) return 60;
+        return 40;
+    }
+
+
     /**
      * D2515: preferred-room open → party Speed I 3s (footwork, zero skill_mult).
      * Call from run room-start when variety pinned this room.
@@ -141,9 +157,10 @@ public final class EmberRoomPath {
             for (java.util.UUID u : s.committed) {
                 org.bukkit.entity.Player p = org.bukkit.Bukkit.getPlayer(u);
                 if (p == null || !p.isOnline() || p.isDead()) continue;
+                int ticks = clearSpeedTicks(path);
                 p.addPotionEffect(new org.bukkit.potion.PotionEffect(
-                        org.bukkit.potion.PotionEffectType.SPEED, 40, 0, false, true), true);
-                try { p.sendActionBar("§a优房清 · §fSpeed I 2s"); } catch (Throwable ignored) { }
+                        org.bukkit.potion.PotionEffectType.SPEED, ticks, 0, false, true), true);
+                try { p.sendActionBar("§a优房清 · §fSpeed I " + (ticks / 20) + "s"); } catch (Throwable ignored) { }
             }
         } catch (Throwable ignored) { }
     }
@@ -166,10 +183,11 @@ public final class EmberRoomPath {
             for (java.util.UUID u : s.committed) {
                 org.bukkit.entity.Player p = org.bukkit.Bukkit.getPlayer(u);
                 if (p == null || !p.isOnline() || p.isDead()) continue;
+                int ticks = openSpeedTicks(path);
                 p.addPotionEffect(new org.bukkit.potion.PotionEffect(
-                        org.bukkit.potion.PotionEffectType.SPEED, 60, 0, false, true), true);
+                        org.bukkit.potion.PotionEffectType.SPEED, ticks, 0, false, true), true);
                 try {
-                    p.sendMessage(EmberRunService.P + "§a房序优房 · §f" + r.label + " §7Speed I 3s");
+                    p.sendMessage(EmberRunService.P + "§a房序优房 · §f" + r.label + " §7Speed I " + (ticks / 20) + "s");
                     p.sendActionBar("§a优房 · §f" + label(path));
                 } catch (Throwable ignored) { }
             }
