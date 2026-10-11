@@ -626,9 +626,9 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
+        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
-                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines"));
+                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
                 "timed", "crystal", "escort", "hold", "beacon", "relay", "breach", "chain", "unscathed"));
         public final double affixRate, eventRate;
@@ -661,6 +661,9 @@ public final class EmberRunMaps {
         public final double pulseEvery, pulseWarn, pulseRadius, pulseDmg;
         public final double minesEvery, minesWarn, minesRadius, minesBehind, minesSpread, minesDmg;
         public final int minesCount;
+        // D12212 spore (孢雾: circle at random player feet, no root) / flank (侧袭: 2 circles left/right of elite)
+        public final double sporeEvery, sporeWarn, sporeRadius, sporeDmg;
+        public final double flankEvery, flankWarn, flankRadius, flankSide, flankDmg;
         // D171 crystal / escort / timed
         public final int crystalCount, crystalSecs, timedSecs;
         public final double escortHp;
@@ -805,6 +808,17 @@ public final class EmberRunMaps {
             minesSpread = Math.max(0.5, Math.min(3.0, num(mi.get("spread"), 1.8)));
             minesCount = Math.max(2, Math.min(2, (int) num(mi.get("count"), 2))); // fixed 2
             minesDmg = Math.max(0.0, Math.min(0.6, num(mi.get("dmg"), 0.6)));     // ≤ 0.6 atk
+            Map<?, ?> sp8 = m.get("spore") instanceof Map ? (Map<?, ?>) m.get("spore") : Collections.emptyMap();
+            sporeEvery = Math.max(7.0, num(sp8.get("every"), 7.0));         // D12212: every ≥ 7
+            sporeWarn = Math.max(1.5, num(sp8.get("warn"), 1.5));
+            sporeRadius = Math.max(0.5, Math.min(2.2, num(sp8.get("radius"), 2.2))); // ≤ 2.2
+            sporeDmg = Math.max(0.0, Math.min(0.5, num(sp8.get("dmg"), 0.5)));       // ≤ 0.5 atk
+            Map<?, ?> fl = m.get("flank") instanceof Map ? (Map<?, ?>) m.get("flank") : Collections.emptyMap();
+            flankEvery = Math.max(6.5, num(fl.get("every"), 6.5));         // D12212: every ≥ 6.5
+            flankWarn = Math.max(1.3, num(fl.get("warn"), 1.3));
+            flankRadius = Math.max(0.5, Math.min(1.4, num(fl.get("radius"), 1.4))); // ≤ 1.4
+            flankSide = Math.max(0.5, Math.min(3.5, num(fl.get("side"), 2.8)));     // ≤ 3.5
+            flankDmg = Math.max(0.0, Math.min(0.55, num(fl.get("dmg"), 0.55)));     // ≤ 0.55 atk
             Map<?, ?> tm = m.get("timed") instanceof Map ? (Map<?, ?>) m.get("timed") : Collections.emptyMap();
             timedSecs = Math.max(5, (int) num(tm.get("secs"), eventSecs));
             Map<?, ?> cr = m.get("crystal") instanceof Map ? (Map<?, ?>) m.get("crystal") : Collections.emptyMap();
@@ -859,6 +873,8 @@ public final class EmberRunMaps {
             if ("tether".equals(id)) return "牵丝";
             if ("pulse".equals(id)) return "脉爆";
             if ("mines".equals(id)) return "埋雷";
+            if ("spore".equals(id)) return "孢雾";
+            if ("flank".equals(id)) return "侧袭";
             return id;
         }
 

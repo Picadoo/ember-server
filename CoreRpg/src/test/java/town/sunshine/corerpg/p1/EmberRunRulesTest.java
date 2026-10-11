@@ -1346,7 +1346,7 @@ public class EmberRunRulesTest {
 
     @Test public void varietyPack2RollsNewAffixesAndEventsOffFirstClears_D171() {
         EmberRunMaps.Variety v = bundled().variety;
-        assertEquals(16, EmberRunMaps.Variety.KNOWN.size()); // D181..D12211 Pack7 14→16
+        assertEquals(18, EmberRunMaps.Variety.KNOWN.size()); // D181..D12212 Pack8 16→18
         assertTrue(EmberRunMaps.Variety.KNOWN.containsAll(java.util.Arrays.asList("regen", "charge", "frost", "mortar", "molten")));
         assertEquals(EmberRunMaps.Variety.KNOWN, v.affixes);
         assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
@@ -1420,7 +1420,7 @@ public class EmberRunRulesTest {
 
     @Test public void varietyPack3MortarMolten_D181() {
         EmberRunMaps.Variety v = bundled().variety;
-        assertEquals(16, EmberRunMaps.Variety.KNOWN.size()); // D189..D12211 Pack7 +pulse/mines
+        assertEquals(18, EmberRunMaps.Variety.KNOWN.size()); // D189..D12212 Pack8 +spore/flank
         assertTrue(EmberRunMaps.Variety.KNOWN.containsAll(java.util.Arrays.asList("mortar", "molten")));
         assertEquals(EmberRunMaps.Variety.KNOWN, v.affixes);
         assertEquals(5.0, v.mortarEvery, 1e-9);
@@ -1471,7 +1471,7 @@ public class EmberRunRulesTest {
     @Test public void varietyPack4VenomJailer_D189() {
         EmberRunMaps.Variety v = bundled().variety;
         assertTrue(v.affixes.containsAll(java.util.Arrays.asList("venom", "jailer")));
-        assertEquals(16, v.affixes.size()); // D196 + D12207 + D12211 Pack7
+        assertEquals(18, v.affixes.size()); // D196 + D12207 + D12211 + D12212 Pack8
         assertEquals("毒十字", EmberRunMaps.Variety.label("venom"));
         assertEquals("禁锢", EmberRunMaps.Variety.label("jailer"));
         assertEquals(6.0, v.venomEvery, 1e-9);
@@ -1614,14 +1614,14 @@ public class EmberRunRulesTest {
             if (!a[1].isEmpty()) aff.add(a[1]);
         }
         assertTrue(aff.containsAll(java.util.Arrays.asList("arcane", "firechain")));
-        assertEquals(16, aff.size());
+        assertEquals(18, aff.size());
     }
 
 
     @Test public void varietyPack6HailTether_D12207() {
         EmberRunMaps.Variety v = bundled().variety;
         assertTrue(v.affixes.containsAll(java.util.Arrays.asList("hail", "tether")));
-        assertEquals(16, EmberRunMaps.Variety.KNOWN.size());
+        assertEquals(18, EmberRunMaps.Variety.KNOWN.size());
         assertEquals("雹霰", EmberRunMaps.Variety.label("hail"));
         assertEquals("牵丝", EmberRunMaps.Variety.label("tether"));
         assertEquals(5.0, v.hailEvery, 1e-9);
@@ -1690,14 +1690,14 @@ public class EmberRunRulesTest {
             if (!a[1].isEmpty()) aff.add(a[1]);
         }
         assertTrue(aff.containsAll(java.util.Arrays.asList("hail", "tether")));
-        assertEquals(16, aff.size());
+        assertEquals(18, aff.size());
     }
 
 
     @Test public void varietyPack7PulseMines_D12211() {
         EmberRunMaps.Variety v = bundled().variety;
         assertTrue(v.affixes.containsAll(java.util.Arrays.asList("pulse", "mines")));
-        assertEquals(16, EmberRunMaps.Variety.KNOWN.size());
+        assertEquals(18, EmberRunMaps.Variety.KNOWN.size());
         assertEquals(EmberRunMaps.Variety.KNOWN, v.affixes);
         assertEquals("脉爆", EmberRunMaps.Variety.label("pulse"));
         assertEquals("埋雷", EmberRunMaps.Variety.label("mines"));
@@ -1762,7 +1762,80 @@ public class EmberRunRulesTest {
             if (!a[1].isEmpty()) aff.add(a[1]);
         }
         assertTrue(aff.containsAll(java.util.Arrays.asList("pulse", "mines")));
-        assertEquals(16, aff.size());
+        assertEquals(18, aff.size());
+    }
+
+
+
+    @Test public void varietyPack8SporeFlank_D12212() {
+        EmberRunMaps.Variety v = bundled().variety;
+        assertTrue(v.affixes.containsAll(java.util.Arrays.asList("spore", "flank")));
+        assertEquals(18, EmberRunMaps.Variety.KNOWN.size());
+        assertEquals(EmberRunMaps.Variety.KNOWN, v.affixes);
+        assertEquals("孢雾", EmberRunMaps.Variety.label("spore"));
+        assertEquals("侧袭", EmberRunMaps.Variety.label("flank"));
+        assertEquals(7.0, v.sporeEvery, 1e-9);
+        assertTrue(v.sporeWarn >= 1.5);
+        assertEquals(2.2, v.sporeRadius, 1e-9);
+        assertEquals(0.5, v.sporeDmg, 1e-9);
+        assertEquals(6.5, v.flankEvery, 1e-9);
+        assertTrue(v.flankWarn >= 1.3);
+        assertEquals(1.4, v.flankRadius, 1e-9);
+        assertEquals(2.8, v.flankSide, 1e-9);
+        assertEquals(0.55, v.flankDmg, 1e-9);
+        assertEquals(2, v.affixShard); // reward unchanged
+        // clamps + unknown ids discarded
+        java.util.Map<String, Object> raw = new java.util.LinkedHashMap<String, Object>();
+        raw.put("affix_rate", 1.0);
+        raw.put("affixes", java.util.Arrays.asList("spore", "flank", "orbiter", "waller", "reflect"));
+        java.util.Map<String, Object> sp = new java.util.LinkedHashMap<String, Object>();
+        sp.put("every", 1); sp.put("warn", 0.1); sp.put("radius", 99); sp.put("dmg", 9);
+        raw.put("spore", sp);
+        java.util.Map<String, Object> fl = new java.util.LinkedHashMap<String, Object>();
+        fl.put("every", 1); fl.put("warn", 0.1); fl.put("radius", 9); fl.put("dmg", 9); fl.put("side", 99);
+        raw.put("flank", fl);
+        EmberRunMaps.Variety cl = new EmberRunMaps.Variety(raw);
+        assertEquals(java.util.Arrays.asList("spore", "flank"), cl.affixes);
+        assertEquals(7.0, cl.sporeEvery, 1e-9);
+        assertEquals(1.5, cl.sporeWarn, 1e-9);
+        assertEquals(2.2, cl.sporeRadius, 1e-9);
+        assertEquals(0.5, cl.sporeDmg, 1e-9);
+        assertEquals(6.5, cl.flankEvery, 1e-9);
+        assertEquals(1.3, cl.flankWarn, 1e-9);
+        assertEquals(1.4, cl.flankRadius, 1e-9);
+        assertEquals(3.5, cl.flankSide, 1e-9); // clamp ≤3.5
+        assertEquals(0.55, cl.flankDmg, 1e-9);
+        // flank origins: 2 pops left/right of elite (target at +x → side is ±z)
+        org.bukkit.Location el = new org.bukkit.Location(null, 0, 64, 0);
+        org.bukkit.Location tgt = new org.bukkit.Location(null, 10, 64, 0);
+        org.bukkit.Location[] pops = town.sunshine.corerpg.p1.encounter.AffixFlank.origins(el, tgt, v);
+        assertEquals(2, pops.length);
+        assertEquals(0.0, pops[0].getX(), 1e-6);
+        assertEquals(2.8, Math.abs(pops[0].getZ()), 1e-6);
+        assertEquals(-pops[0].getZ(), pops[1].getZ(), 1e-6);
+        // skills kb 0; spore has no root field
+        EmberRunDirector.Tracked h = new EmberRunDirector.Tracked(null, "heavy", "r1", null, null, 20, 3, 2, null);
+        EmberRunMaps.Skill ss = EmberRunDirector.sporeSkill(h, v);
+        assertEquals("circle", ss.type);
+        assertEquals(0.0, ss.kb, 1e-9);
+        assertEquals(20 * v.sporeDmg, ss.dmg, 1e-9);
+        EmberRunMaps.Skill fs = EmberRunDirector.flankSkill(h, v);
+        assertEquals("circle", fs.type);
+        assertEquals(0.0, fs.kb, 1e-9);
+        assertEquals(20 * v.flankDmg, fs.dmg, 1e-9);
+        // varietyGrants affixShard still 2
+        java.util.List<EmberRunRules.Grant> g = EmberRunRules.varietyGrants(false, true, 2, false, 0, null);
+        assertEquals(1, g.size());
+        assertEquals("var_affix_shard", g.get(0).key);
+        assertEquals(2, g.get(0).amount);
+        // roll reaches both
+        java.util.Set<String> aff = new java.util.HashSet<String>();
+        for (long seed = 0; seed < 14000; seed++) {
+            String[] a = v.roll(EmberRunRules.subSeed(seed, "variety"));
+            if (!a[1].isEmpty()) aff.add(a[1]);
+        }
+        assertTrue(aff.containsAll(java.util.Arrays.asList("spore", "flank")));
+        assertEquals(18, aff.size());
     }
 
 
@@ -1799,7 +1872,7 @@ public class EmberRunRulesTest {
         EmberRunMaps.Variety v = bundled().variety;
         assertEquals(9, EmberRunMaps.Variety.EVENTS.size()); // D191 Pack 4: 6 → 9
         assertTrue(EmberRunMaps.Variety.EVENTS.containsAll(java.util.Arrays.asList("hold", "beacon", "relay")));
-        assertEquals(16, EmberRunMaps.Variety.KNOWN.size()); // affix pool unchanged by D179 (later →16 Pack7)
+        assertEquals(18, EmberRunMaps.Variety.KNOWN.size()); // affix pool unchanged by D179 (later →18 Pack8)
         assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
         assertEquals(2.5, v.holdRadius, 1e-9);
         assertEquals(12.0, v.holdNeed, 1e-9);
@@ -1879,7 +1952,7 @@ public class EmberRunRulesTest {
     @Test public void varietyPack4RollsBreachChainUnscathed_D191() {
         EmberRunMaps.Variety v = bundled().variety;
         assertTrue(EmberRunMaps.Variety.EVENTS.containsAll(java.util.Arrays.asList("breach", "chain", "unscathed")));
-        assertEquals(16, EmberRunMaps.Variety.KNOWN.size()); // affix pool untouched by D191 (later →16 Pack7)
+        assertEquals(18, EmberRunMaps.Variety.KNOWN.size()); // affix pool untouched by D191 (later →18 Pack8)
         assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
         assertEquals(0.85, v.eventRate, 1e-9);              // D296 W1a 房间事件必感
         assertEquals(1, v.eventCore);                       // reward amount unchanged
