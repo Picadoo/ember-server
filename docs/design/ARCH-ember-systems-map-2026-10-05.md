@@ -585,3 +585,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D8993–D9056: AnvilRepairSoft + LightningSoft + HotFloorSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D9057–D9120: LifeDailyCapSoft + SoulDustCoinSoft + FlyIntoWallSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D9121–D9184: LifeWeeklyCapSoft + DragonBreathSoft + MeltingSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D9185–D9248: VoidSoft + CrammingSoft + FallingBlockSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.

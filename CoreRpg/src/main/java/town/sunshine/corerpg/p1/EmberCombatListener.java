@@ -405,6 +405,48 @@ public final class EmberCombatListener implements Listener {
                 }
             } catch (Throwable ignored) { }
         }
+        if (e.getCause() == DamageCause.VOID) {
+            try {
+                PlayerData pdV = plugin.getDataStore().get(p.getUniqueId());
+                double soft = EmberVoidSoft.consume(pdV, base); // D9185
+                if (soft < base) {
+                    base = soft;
+                    pipe += " · 虚空软化 ×0.5";
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a虚空软化 · ×0.5（今日一次）");
+                        p.sendActionBar("§a虚空软化");
+                    } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
+        if (e.getCause() == DamageCause.CRAMMING) {
+            try {
+                PlayerData pdC = plugin.getDataStore().get(p.getUniqueId());
+                double soft = EmberCrammingSoft.consume(pdC, base); // D9217
+                if (soft < base) {
+                    base = soft;
+                    pipe += " · 挤压软化 ×0.5";
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a挤压软化 · ×0.5（今日一次）");
+                        p.sendActionBar("§a挤压软化");
+                    } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
+        if (e.getCause() == DamageCause.FALLING_BLOCK) {
+            try {
+                PlayerData pdF = plugin.getDataStore().get(p.getUniqueId());
+                double soft = EmberFallingBlockSoft.consume(pdF, base); // D9233
+                if (soft < base) {
+                    base = soft;
+                    pipe += " · 落块软化 ×0.5";
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a落块软化 · ×0.5（今日一次）");
+                        p.sendActionBar("§a落块软化");
+                    } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
         if (e.getCause() == DamageCause.STARVATION) {
             try {
                 PlayerData pdSt = plugin.getDataStore().get(p.getUniqueId());
