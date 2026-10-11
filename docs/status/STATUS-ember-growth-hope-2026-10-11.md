@@ -1,14 +1,12 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.542-d2576.local**
-- D2513–D2576 room/press/cut pressure-path behavior
+- jar **1.65.543-d2592.local**
+- D2513–D2592 room/press/cut pressure-path **NEAR-SAT**
 
-## Shipped summary
-- Room: bias harden · preferred open/clear Speed by FRONT/MID/BACK · event open Resist I 1s
-- Press: Q01 enter unlock · land Slow/Speed · AUTO Slow longer · ASK CD 5s
-- Cut: Q01 enter unlock · land Slow regen + Speed
+## Next
+RESEARCH post-pressure → RallyPath enter+land (同族收口)
 
-Talent HOLD. Twin axes STOPPED.
+Talent HOLD.
 
-Updated 2026-10-11 08:20 CST
+Updated 2026-10-11 08:21 CST

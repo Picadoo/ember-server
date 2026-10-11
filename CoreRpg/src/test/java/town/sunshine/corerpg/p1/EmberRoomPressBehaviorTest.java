@@ -71,4 +71,12 @@ public class EmberRoomPressBehaviorTest {
         assertFalse(EmberSkillKit.markCutEnter(d));
         assertTrue(EmberSkillKit.cutPathUnlocked(d, null));
     }
+
+    @Test
+    public void cutAskCooldownAndAutoSlow() {
+        assertEquals(5000L, EmberCutPath.askCooldownMs(EmberCutPath.ASK));
+        assertEquals(8000L, EmberCutPath.askCooldownMs(EmberCutPath.NONE));
+        assertEquals(30, EmberCutPath.cutRegenSlowTicks(EmberCutPath.AUTO));
+        assertEquals(20, EmberCutPath.cutRegenSlowTicks(EmberCutPath.ASK));
+    }
 }

@@ -31,6 +31,16 @@ public final class EmberCutPath {
     public static final int MUTE = 3;
 
     private static final long ASK_COOLDOWN_MS = 8000L;
+    private static final long ASK_PATH_COOLDOWN_MS = 5000L;
+
+    static long askCooldownMs(int path) {
+        return path == ASK ? ASK_PATH_COOLDOWN_MS : ASK_COOLDOWN_MS;
+    }
+
+    public static int cutRegenSlowTicks(int path) {
+        return path == AUTO ? 30 : 20;
+    }
+
     private static final Map<UUID, Long> lastAsk = new ConcurrentHashMap<UUID, Long>();
 
     private EmberCutPath() {}
@@ -119,7 +129,7 @@ public final class EmberCutPath {
             if (shouldMute(path)) continue;
             long now = System.currentTimeMillis();
             Long last = lastAsk.get(p.getUniqueId());
-            if (last != null && now - last < ASK_COOLDOWN_MS) continue;
+            if (last != null && now - last < askCooldownMs(path)) continue;
             lastAsk.put(p.getUniqueId(), now);
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§6再生 ",
                     new String[]{"[打断]", "/corerpg p1 cut", "传至再生精英猛打", "GREEN"},
@@ -173,9 +183,11 @@ public final class EmberCutPath {
     public static void applyCutLand(Player p, EmberRunService runs) {
         if (p == null || runs == null) return;
         try {
+            PlayerData d = dataOf(p);
+            int path = d == null ? NONE : get(d);
             p.addPotionEffect(new org.bukkit.potion.PotionEffect(
                     org.bukkit.potion.PotionEffectType.SPEED, 30, 0, false, true), true);
-            runs.applyCutRegenSlow(p, 20);
+            runs.applyCutRegenSlow(p, cutRegenSlowTicks(path));
             try { p.sendActionBar("§a打断贴脸 · §fSlow再生 · Speed自己"); } catch (Throwable ignored) { }
         } catch (Throwable ignored) { }
     }
