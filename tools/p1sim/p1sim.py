@@ -1303,7 +1303,7 @@ def affix_mob(cfg, m, mobs, kind, t0):
     elif kind == 'molten':
         # D247 亡爆: on death schedule one telegraphed blast at hit_after_death_s (atk snapped at promote time).
         pick_['molten'] = (float(A['hit_after_death_s']), pick_['atk'] * float(A['dmg_atk']))
-    if AFFIX_STRESS and 'blaze' in pick_ and kind in ('venom', 'jailer', 'arcane', 'firechain', 'charge', 'mortar', 'hail', 'tether', 'pulse', 'mines', 'spore', 'flank', 'pierce', 'scatter', 'rift', 'cascade', 'cleave', 'ripple', 'mirror', 'bloom', 'lance', 'nova', 'shear', 'brace', 'hook', 'skew', 'fan', 'sink', 'crest', 'pond', 'edge', 'well', 'seam', 'mire', 'ridge', 'marsh', 'spur', 'fen', 'gleam', 'bog'):
+    if AFFIX_STRESS and 'blaze' in pick_ and kind in ('venom', 'jailer', 'arcane', 'firechain', 'charge', 'mortar', 'hail', 'tether', 'pulse', 'mines', 'spore', 'flank', 'pierce', 'scatter', 'rift', 'cascade', 'cleave', 'ripple', 'mirror', 'bloom', 'lance', 'nova', 'shear', 'brace', 'hook', 'skew', 'fan', 'sink', 'crest', 'pond', 'edge', 'well', 'seam', 'mire', 'ridge', 'marsh', 'spur', 'fen', 'gleam', 'bog', 'slash', 'basin'):
         _, ev, dmg = pick_['blaze']
         pick_['blaze'] = (t0 + affixtable.grace(), ev, dmg)  # worst case: the first cast lands as soon as the room opens
     pick_['affix'] = True

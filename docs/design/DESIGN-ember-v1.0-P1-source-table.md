@@ -2417,3 +2417,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack22-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack22.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack22-d12226-2026-10-12.md` |
+
+### 13.135 Affix Pack 23 扫斩/洼池（CoreRpg 1.65.745，D12227，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12227 |
+| jar | CoreRpg **1.65.745-d12227.local** |
+| balance_version | 109 → **110** |
+| 行为 | 词缀池 46→48：+`slash` 扫斩 / `basin` 洼池；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack23-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack23.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack23-d12227-2026-10-12.md` |
