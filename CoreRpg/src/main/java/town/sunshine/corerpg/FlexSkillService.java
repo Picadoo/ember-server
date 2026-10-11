@@ -1,5 +1,7 @@
 package town.sunshine.corerpg;
 
+import town.sunshine.corerpg.p1.EmberFlexFirstCd;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -290,7 +292,15 @@ public final class FlexSkillService implements Listener {
             return;
         }
         if (!ok) return;
-        startCooldown(player.getUniqueId(), def.id, def.cooldownSeconds);
+        int cdSecs = def.cooldownSeconds;
+        try {
+            int soft = EmberFlexFirstCd.consumeSecs(data, def.cooldownSeconds); // D8017
+            if (soft < def.cooldownSeconds) {
+                cdSecs = soft;
+                player.sendMessage(PREFIX + ChatColor.GREEN + "轻技首发 · CD ×0.85（今日一次 · " + cdSecs + "s）");
+            }
+        } catch (Throwable ignored) { }
+        startCooldown(player.getUniqueId(), def.id, cdSecs);
         int stepVar = lastCastWasStepVariant(player);
         boolean back = lastCastWasBack(player);
         String shown = (PILOT_ID.equals(def.id) || "step".equals(def.type) || "dash".equals(def.type))

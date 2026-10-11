@@ -566,3 +566,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D7777–D7840: UnscathedBudgetBoost (+1 hit/run) + CrystalExtra (+1 crystal placed/run). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D7841–D7904: ChainNeedSoft (need−1/run) + HoldRadiusBoost (+0.5R/run). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D7905–D7968: BreachStartBoost (+1R) + TimedExtraSecs (+5s) + EscortHpBoost (×1.2). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D7969–D8032: MoltenWarnExtra (+0.4s) + RelayForgive (skip once) + FlexFirstCd (×0.85). STOP densify those + priors. Talent HOLD. Six-slot HOLD.

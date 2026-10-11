@@ -1,3 +1,6 @@
+Live jar: **1.65.656-d8032.local** · D7969–D8032 MoltenWarnExtra + RelayForgive + FlexFirstCd
+Prior: Breach/Timed/Escort
+
 Live jar: **1.65.655-d7968.local** · D7905–D7968 BreachStartBoost + TimedExtraSecs + EscortHpBoost
 Prior: Chain/Hold/Unscathed/Crystal/EventBrace/Beacon
 

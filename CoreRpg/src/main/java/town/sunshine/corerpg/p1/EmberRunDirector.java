@@ -2666,6 +2666,14 @@ final class EmberRunDirector {
         long now = System.currentTimeMillis();
         moltenWarnAt = AffixMolten.warnAt(now, v);
         moltenBoomAt = AffixMolten.boomAt(moltenWarnAt, v);
+        try {
+            long mx = EmberMoltenWarnExtra.consumeExtraMs(s == null ? null : s.runId); // D7969
+            if (mx > 0) {
+                moltenWarnAt += mx;
+                moltenBoomAt += mx;
+                svc.tellRun(s, "§a亡爆加时 · 预警 +" + (mx / 100) / 10.0 + "s（本局一次）");
+            }
+        } catch (Throwable ignored) { }
         svc.tellRun(s, "§c亡爆 §7· 尸体要炸，退后！");
         EmberDuckPath.maybeAfterMolten(s); // D560
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s molten scheduled at %.1f %.1f %.1f",
@@ -3026,8 +3034,27 @@ final class EmberRunDirector {
                     double dx = l.getX() - mloc.getX(), dz = l.getZ() - mloc.getZ();
                     if (dx * dx + dz * dz > v.relayRadius * v.relayRadius) continue;
                     if (i != relayNext) {
-                        if (i > relayNext) svc.tellRun(s, "§7先点亮上一处传火标记（现在是 §e" + (relayNext + 1) + "§7）");
-                        break;
+                        if (i > relayNext) {
+                            boolean forgave = false;
+                            try { forgave = EmberRelayForgive.consume(s == null ? null : s.runId); } catch (Throwable ignored) { } // D8001
+                            if (forgave) {
+                                for (int j = relayNext; j < i && j < relayMarkers.size(); j++) {
+                                    org.bukkit.entity.ArmorStand sj = relayMarkers.get(j);
+                                    if (sj != null) {
+                                        sj.setCustomName("§a[传火 " + (j + 1) + "/" + relayLocs.size() + "] §f已点亮");
+                                        sj.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 600, 0, false, false), true);
+                                    }
+                                }
+                                relayNext = i;
+                                svc.tellRun(s, "§a传火容错 · 跳点至 §e" + (i + 1) + "§a（本局一次）");
+                                // fall through as if this is the next mark
+                            } else {
+                                svc.tellRun(s, "§7先点亮上一处传火标记（现在是 §e" + (relayNext + 1) + "§7）");
+                                break;
+                            }
+                        } else {
+                            break;
+                        }
                     }
                     int was = relayNext;
                     relayNext = relayAdvance(relayNext, i, relayLocs.size());
