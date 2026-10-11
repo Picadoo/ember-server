@@ -31,6 +31,14 @@ public final class EmberEnhanceLoop {
         if (won) {
             boolean seated = EmberGemHoleSeat.maybeAutoSeat(p, d, list); // D4097 real seat
             if (!seated) maybeGemHoleChase(p, d, list); // D731 chase only if no auto-seat
+            try { // D4449 awaken step after enhance
+                CoreRpgPlugin pl = plugin();
+                if (pl != null) {
+                    EmberLoadoutService lo = pl.getEmberLoadouts();
+                    EmberRunService runs = pl.getEmberRuns();
+                    EmberAwakenBreak.maybeAfterEnhance(p, d, lo, runs);
+                }
+            } catch (Throwable ignored) { }
         }
         boolean goalHit = won && d != null && EmberForgeGoal.get(d) == EmberForgeGoal.ENHANCE;
         if (goalHit) { // D660

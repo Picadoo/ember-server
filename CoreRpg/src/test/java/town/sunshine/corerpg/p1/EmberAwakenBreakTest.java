@@ -28,4 +28,13 @@ public class EmberAwakenBreakTest {
     public void breakKeyPrefix() {
         assertEquals("p1_awk_break_", EmberAwakenBreak.C_BREAK);
     }
+
+    @Test
+    public void shouldSwapWhenDonorHigher() {
+        EmberItemData old = EmberItemData.create("scorch", "charm", 1, 1, 0, 8, true, "drop");
+        EmberItemData neu = EmberItemData.create("scorch", "charm", 2, 1, 0, 3, true, "drop");
+        assertTrue(EmberAwakenBreak.shouldSwapEnhance(old, neu));
+        assertFalse(EmberAwakenBreak.shouldSwapEnhance(neu, old));
+        assertFalse(EmberAwakenBreak.shouldSwapEnhance(old, old));
+    }
 }
