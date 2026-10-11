@@ -529,6 +529,7 @@ public final class EmberCounters {
         x("p1_abyss_layer_target", "EmberAbyssTarget", A, SE, OW, "D694 abyss next-layer target");
         x("p1_afk_forge_path_told", "EmberAfkForgePath", A, HI, OW, "AFK forge path tip latch");
         px("p1_afk_gear_stable_t", "EmberAfkGearFeel", D, HI, OW, "D2230 AFK gear-stable rising-edge latch per tier@day");
+        px("p1_imprint_auto_", "EmberImprintBreak", A, PR, NV, "D4641 chase imprint auto empty-sig latch");
         px("p1_marks_awk_auto_t", "EmberMarksBreak", D, HI, OW, "D4513 marks awaken auto-redeem per tier@day");
         px("p1_awk_break_", "EmberAwakenBreak", A, PR, NV, "D4385 awakening breakthrough latch I..III");
         px("p1_gem_seat_live_", "EmberGemSeatLive", A, PR, NV, "D4289 first gem-code combat-live latch");

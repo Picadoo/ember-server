@@ -367,6 +367,11 @@ public final class EmberSigChase {
         String rem = remainLine(def, marks);
         p.sendMessage(P + "§7" + rem);
         try { p.sendActionBar("§e" + rem); } catch (Throwable ignored) { }
+        // D4641: empty-sig auto imprint (no ConfirmTokens); overwrite keeps button
+        CoreRpgPlugin pl = plugin();
+        EmberRunService runs = pl == null ? null : pl.getEmberRuns();
+        EmberLoadout lo = runs == null || runs.loadouts() == null ? null : runs.loadouts().refresh(p);
+        if (EmberImprintBreak.maybeAuto(p, d, lo, runs)) return true;
         ConfirmTokens.sendButton(p, P + "§7下一步：", // D753 one-click when no overwrite needed
                 "[一键烙印·" + def.id + "]", "/corerpg p1 sig imprint " + def.id + " go",
                 EmberSignature.imprintMarks() + " 枚徽记 · 烙到穿着" + EmberItemData.slotName(def.slot) + "（无覆盖则直接花）");
@@ -481,7 +486,7 @@ public final class EmberSigChase {
         return ((town.sunshine.corerpg.CoreRpgPlugin) pl).getDataStore().get(p.getUniqueId());
     }
 
-    private static void flush(Player p) {
+    static void flush(Player p) {
         Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
         if (pl instanceof town.sunshine.corerpg.CoreRpgPlugin)
             ((town.sunshine.corerpg.CoreRpgPlugin) pl).getDataStore().flushMutation(p.getUniqueId());

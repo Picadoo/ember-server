@@ -1,4 +1,4 @@
 # STATUS · growth · 2026-10-11
-- Live: `1.65.605-d4640.local`
-- D4577–D4640 MarksBreak edges (missing slot, tier-only, scan, retry, bag-skip)
-- Talent HOLD · no forge sure twin / K3
+- Live: `1.65.606-d4704.local`
+- D4641–D4704 ImprintBreak empty-sig auto (new axis)
+- MarksBreak NEAR-SAT STOP · Talent HOLD

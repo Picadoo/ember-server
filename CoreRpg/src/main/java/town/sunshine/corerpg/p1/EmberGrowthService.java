@@ -759,6 +759,10 @@ public final class EmberGrowthService implements Listener {
             if (d == null || runs == null) return;
             EmberLoadoutService lo = runs.loadouts();
             try { EmberMarksBreak.maybeScan(p, d, lo, runs); } catch (Throwable ignored) { }
+            try {
+                EmberLoadout load = lo == null ? null : lo.refresh(p);
+                EmberImprintBreak.maybeAuto(p, d, load, runs);
+            } catch (Throwable ignored) { }
         }, 160L);
     }
 
@@ -1344,6 +1348,31 @@ public final class EmberGrowthService implements Listener {
      * insignia / coins come back exactly once when it does not commit (EmberDelivery kinds sigmark / coin).
      * Returns true when the payment started.
      */
+    /**
+     * D4641: auto-imprint chase onto empty-sig worn piece (no overwrite / ConfirmTokens).
+     * @return true when payment started
+     */
+    boolean autoImprintEmpty(Player p, EmberSignature.Def sd) {
+        if (p == null || sd == null) return false;
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) return false;
+        EmberLoadout lo = runs == null || runs.loadouts() == null ? null : runs.loadouts().refresh(p);
+        if (lo == null) return false;
+        EmberItemData t = "blade".equals(sd.slot) ? lo.blade : lo.charm;
+        int cur = t == null ? 0 : sigOf(d, t);
+        if (cur != 0) return false; // overwrite stays manual
+        int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
+        String why = EmberSignature.imprintCheck(sd, t,
+                runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK),
+                runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
+        if (why != null) return false;
+        int coin = EmberSignature.imprintCoin(t.tier);
+        p.sendMessage(P + "§a追烙自动 · §f" + sd.name + " §7→ " + t.shortLabel()
+                + " §8（空签名直办 · 不改徽记产量）");
+        try { p.sendActionBar("§a追烙自动 · §f" + sd.id); } catch (Throwable ignored) { }
+        return doImprint(p, d, lo, sd, t, cur, coin, "auto");
+    }
+
     private boolean doImprint(Player p, PlayerData d, EmberLoadout lo, EmberSignature.Def sd, EmberItemData t, int cur, int coin, String via) {
         final EmberPay pay = EmberPay.get();
         if (pay == null) { p.sendMessage(P + ChatColor.RED + "烙印暂不可用（服务未就绪）"); return false; }

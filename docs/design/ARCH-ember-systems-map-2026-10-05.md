@@ -520,3 +520,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - Awaken swap-track D4449–D4512 + forge swap 预览直办（非 K3）
 - MarksBreak D4513–D4576: 印记够数→觉醒缺口自动兑换换上（零产量抬）
 - MarksBreak edges D4577–D4640: 缺件/仅阶缺口/全阶扫/交付重试/袋内已有跳过
+- ImprintBreak D4641–D4704: 追烙空签名自动烙（覆盖仍确认 · 零产量抬）
