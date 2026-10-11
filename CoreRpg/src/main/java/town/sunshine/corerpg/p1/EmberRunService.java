@@ -3507,6 +3507,7 @@ public boolean pathForceOpenDoor(Player p) {
         plugin.getDataStore().flushMutation(p.getUniqueId());
         p.sendMessage(P + "§a已用 " + needM + " 枚 T" + tier + " 印记兑换 " + EmberItemData.familyName(fam)
                 + EmberItemData.slotName(slot) + "（剩余 " + marks(d, tier) + "）");
+        try { EmberMarkExchangeWinBlank.maybeGift(p, d); } catch (Throwable ignored) { } // D11329
         deliver(p);
         return true;
     }
@@ -3576,6 +3577,7 @@ public boolean pathForceOpenDoor(Player p) {
                                     PlayerData qd = data(id);
                                     q.sendMessage(P + "§a已用 " + needPay + " 枚 T" + tier + " 印记兑换 " + label
                                             + "（剩余 " + (qd == null ? "?" : String.valueOf(marks(qd, tier))) + "）");
+                                    try { EmberMarkExchangeWinBlank.maybeGift(q, qd); } catch (Throwable ignored) { } // D11329
                                     EmberGearLib gl = EmberGearLib.get();
                                     if (gl != null) gl.delivery().kick(q);
                                 }

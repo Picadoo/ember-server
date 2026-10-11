@@ -137,6 +137,10 @@ public final class PartService {
         p.updateInventory();
         p.sendMessage(ChatColor.GREEN + "[部件] 炼成 " + ChatColor.WHITE + ni.displayName(r.output)
                 + ChatColor.GRAY + " ×" + r.amount + ChatColor.DARK_GRAY + "（放副手槽生效）");
+        try {
+            PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
+            town.sunshine.corerpg.p1.EmberPartCraftWinShard.maybeGift(p, pd); // D11297
+        } catch (Throwable ignored) { }
         plugin.getLogger().info("part craft " + p.getName() + " " + r.key + " -> " + r.output + "x" + r.amount);
         return true;
     }
