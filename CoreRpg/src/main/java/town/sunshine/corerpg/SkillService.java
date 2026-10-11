@@ -695,7 +695,7 @@ public final class SkillService implements Listener {
         spawnShapeLandBurst(player, sh); // D659 Stage2 land feel · zero skill_mult
     }
 
-    /** D659: brief land burst matching slash shape geometry. */
+    /** D659/D3721: land burst denser + shape land sfx (not cast-telegraph / Shape-native twin). */
     private void spawnShapeLandBurst(Player player, town.sunshine.corerpg.p1.EmberSkillKit.Shape sh) {
         if (player == null || sh == null || player.getWorld() == null) return;
         org.bukkit.Location base = player.getLocation().clone().add(0, 0.3, 0);
@@ -704,29 +704,39 @@ public final class SkillService implements Listener {
         look.normalize();
         try {
             if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_LINE) {
-                for (int i = 1; i <= 6; i++) {
-                    org.bukkit.Location at = base.clone().add(look.clone().multiply(i * (sh.range / 6.0)));
-                    player.getWorld().spawnParticle(org.bukkit.Particle.CRIT, at, 4, 0.05, 0.05, 0.05, 0.01);
+                int n = town.sunshine.corerpg.p1.EmberSlashLandFeel.lineSamples();
+                int ppt = town.sunshine.corerpg.p1.EmberSlashLandFeel.linePpt();
+                for (int i = 1; i <= n; i++) {
+                    org.bukkit.Location at = base.clone().add(look.clone().multiply(i * (sh.range / (double) n)));
+                    player.getWorld().spawnParticle(org.bukkit.Particle.CRIT, at, ppt, 0.05, 0.05, 0.05, 0.01);
                 }
             } else if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_RING) {
+                int pts = town.sunshine.corerpg.p1.EmberSlashLandFeel.ringPoints();
+                int ppt = town.sunshine.corerpg.p1.EmberSlashLandFeel.ringPpt();
                 double r = Math.max(1.5, Math.min(sh.range, 3.5));
-                for (int i = 0; i < 12; i++) {
-                    double a = Math.PI * 2 * i / 12.0;
+                for (int i = 0; i < pts; i++) {
+                    double a = Math.PI * 2 * i / (double) pts;
                     org.bukkit.Location at = base.clone().add(Math.cos(a) * r, 0.1, Math.sin(a) * r);
-                    player.getWorld().spawnParticle(org.bukkit.Particle.SPELL_WITCH, at, 2, 0.02, 0.02, 0.02, 0);
+                    player.getWorld().spawnParticle(org.bukkit.Particle.SPELL_WITCH, at, ppt, 0.02, 0.02, 0.02, 0);
                 }
             } else {
+                int arms = town.sunshine.corerpg.p1.EmberSlashLandFeel.fanArms();
+                int ppt = town.sunshine.corerpg.p1.EmberSlashLandFeel.fanPpt();
+                int halfN = arms / 2;
                 double half = Math.toRadians(Math.max(sh.arc, 110.0) / 2.0);
-                for (int i = -4; i <= 4; i++) {
-                    double a = half * i / 4.0;
+                for (int i = -halfN; i <= halfN; i++) {
+                    double a = halfN == 0 ? 0 : half * i / (double) halfN;
                     double cos = Math.cos(a), sin = Math.sin(a);
                     double lx = look.getX(), lz = look.getZ();
                     org.bukkit.util.Vector v = new org.bukkit.util.Vector(lx * cos - lz * sin, 0, lx * sin + lz * cos)
                             .multiply(Math.min(sh.range, 3.5));
                     org.bukkit.Location at = base.clone().add(v);
-                    player.getWorld().spawnParticle(org.bukkit.Particle.CRIT_MAGIC, at, 3, 0.05, 0.05, 0.05, 0.01);
+                    player.getWorld().spawnParticle(org.bukkit.Particle.CRIT_MAGIC, at, ppt, 0.05, 0.05, 0.05, 0.01);
                 }
             }
+            player.getWorld().playSound(player.getLocation(),
+                    town.sunshine.corerpg.p1.EmberSlashLandFeel.landSound(sh.id),
+                    0.5f, town.sunshine.corerpg.p1.EmberSlashLandFeel.landPitch(sh.id));
         } catch (Throwable ignored) { }
     }
 
