@@ -301,6 +301,13 @@ public final class EmberSettleService {
             for (EmberRunRules.Grant g : grants) if ("base_item".equals(g.key)) base = g;
             boolean forceSig = EmberSigStampPity.ready(pd); // D6433
             grants.addAll(EmberRunRules.signatureGrants(m.key, in, base, forceSig));
+            if (EmberMarkNearBreak.maybeBoost(pd, m.key, grants)) { // D6625
+                Player cue2 = Bukkit.getPlayer(u);
+                if (cue2 != null && cue2.isOnline()) {
+                    cue2.sendMessage(EmberRunService.P + "§a徽记临门 · 本局徽记加倍（距烙印差1 · 每图一次）");
+                    try { cue2.sendActionBar("§a徽记临门 · 加倍"); } catch (Throwable ignored) { }
+                }
+            }
             if (forceSig) {
                 Player cue = Bukkit.getPlayer(u);
                 if (cue != null && cue.isOnline()) {
@@ -581,6 +588,10 @@ public final class EmberSettleService {
                 EmberBagSeat.scheduleScan(p); // D5665
                 EmberBagBetter.scheduleScan(p); // D6177
                 EmberCodexBreak.schedule(p); // D6465
+                EmberGrowthService eg = EmberGrowthService.get();
+                EmberLoadout loRest = runs.loadouts() == null ? null : runs.loadouts().refresh(p);
+                EmberForgeChargeRest.maybeAfterSettle(p, pd, loRest, eg); // D6561
+
                 if (runs.loadouts() != null) // D747 setchase equip after deliver
                     EmberSetChase.afterEquip(p, pd, runs.loadouts());
             }, 5L);

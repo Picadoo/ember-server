@@ -2460,6 +2460,16 @@ public final class EmberGrowthService implements Listener {
         runs.flushData(id);
     }
 
+    /** D6561: restore one forge charge (used−1) when used &gt; 0. */
+    boolean afcRest(UUID id, PlayerData d, EmberItemData it) {
+        if (d == null || it == null) return false;
+        int used = afcUsed(d, it);
+        if (used <= 0) return false;
+        d.addPeriodCount(C_AFC + it.uid, "all", -1);
+        runs.flushData(id);
+        return true;
+    }
+
     /**
      * D5025: auto pin along brandpath after craft (mats/charges gated inside brandPin).
      * @return true when pin payment started or completed path entered

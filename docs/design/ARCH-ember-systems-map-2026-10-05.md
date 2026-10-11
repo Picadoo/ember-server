@@ -544,3 +544,5 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - MapResonance D6305–D6368: 图源件对齐当前图→烬斩几何加宽（G1）
 - SigStampPity D6433–D6464: 签名连空软保底（零抬 STAMP_RATE）
 - CodexBreak D6465–D6496: 图录阶段自动领币
+- ForgeChargeRest D6561–D6624: 锻造次数耗尽通关回1
+- MarkNearBreak D6625–D6688: 徽记差1烙印时本局加倍一次

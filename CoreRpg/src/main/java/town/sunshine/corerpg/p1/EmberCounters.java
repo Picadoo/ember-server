@@ -539,6 +539,8 @@ public final class EmberCounters {
         px("p1_enh_pity_chase", "EmberEnhancePityChase", A, PR, NV, "D5793 enhance pity chase day");
         px("p1_bag_better", "EmberBagBetter", A, PR, NV, "D6177 bag better UP_AUTO day");
         px("p1_map_res_enter_", "EmberMapResonance", A, PR, NV, "D6305 map resonance enter latch");
+        px("p1_afc_rest_", "EmberForgeChargeRest", A, PR, NV, "D6561 forge charge rest day");
+        px("p1_mark_near_", "EmberMarkNearBreak", A, PR, NV, "D6625 mark near imprint boost");
         px("p1_brand_auto_pin_", "EmberBrandSure", A, PR, NV, "D5025 craft→path auto-pin latch");
         px("p1_marks_awk_auto_t", "EmberMarksBreak", D, HI, OW, "D4513 marks awaken auto-redeem per tier@day");
         px("p1_awk_break_", "EmberAwakenBreak", A, PR, NV, "D4385 awakening breakthrough latch I..III");
