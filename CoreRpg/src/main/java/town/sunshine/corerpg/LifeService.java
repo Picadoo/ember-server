@@ -177,7 +177,16 @@ public final class LifeService implements Listener {
                 + " caught=" + (e.getCaught() == null ? "-" : e.getCaught().getType().name())
                 + (e.getHook() == null ? "" : " " + hookInfo(e.getHook())));
         if (!enabled || e.isCancelled() || e.getState() != PlayerFishEvent.State.CAUGHT_FISH) return;
-        addXp(e.getPlayer(), fishXp);
+        int xp = fishXp;
+        try {
+            PlayerData pdF = dataStore.get(e.getPlayer().getUniqueId());
+            int boosted = town.sunshine.corerpg.p1.EmberFishXpBoost.consumeXp(pdF, fishXp); // D8865
+            if (boosted > fishXp) {
+                xp = boosted;
+                e.getPlayer().sendMessage(ChatColor.GREEN + "[生活] 首钓加验 · 经验 ×2（今日一次）");
+            }
+        } catch (Throwable ignored) { }
+        addXp(e.getPlayer(), xp);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -436,6 +445,14 @@ public final class LifeService implements Listener {
                 int soft = town.sunshine.corerpg.p1.EmberBrewCoinSoft.consumeCoin(d, payCoin); // D8769
                 if (soft < payCoin) {
                     p.sendMessage(ChatColor.GREEN + "[生活] 熬药减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
+                    payCoin = soft;
+                }
+            } catch (Throwable ignored) { }
+        } else if (ROD_OFFER_ID.equals(o.id) && payCoin > 0) {
+            try {
+                int soft = town.sunshine.corerpg.p1.EmberRodBuySoft.consumeCoin(d, payCoin); // D8897
+                if (soft < payCoin) {
+                    p.sendMessage(ChatColor.GREEN + "[生活] 钓竿减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
                     payCoin = soft;
                 }
             } catch (Throwable ignored) { }

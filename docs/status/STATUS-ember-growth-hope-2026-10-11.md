@@ -1,3 +1,6 @@
+Live jar: **1.65.670-d8928.local** · D8865–D8928 FishXpBoost + RodBuySoft + SuffocationSoft
+Prior: Bite/Contact/Cook
+
 Live jar: **1.65.669-d8864.local** · D8801–D8864 BiteRestoreBoost + ContactSoft + CookCoinSoft
 Prior: Fest/Brew/Lava
 
