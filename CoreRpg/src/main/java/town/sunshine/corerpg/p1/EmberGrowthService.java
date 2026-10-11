@@ -1434,6 +1434,10 @@ public final class EmberGrowthService implements Listener {
                     }
                     pay.settled(id, rid);
                     PlayerData x = data(id);
+                    try {
+                        Player tip = Bukkit.getPlayer(id);
+                        if (tip != null) EmberImprintWinShard.maybeGift(tip, x); // D11057
+                    } catch (Throwable ignored) { }
                     markSeen(x, sd);
                     boolean saved = plugin.getDataStore().flushMutationChecked(id);
                     plugin.getLogger().info("[P1 sig] " + (q == null ? id.toString() : q.getName()) + " imprint " + t.uid + " " + (old == null ? "-" : old.id) + " → " + sd.id
@@ -2669,6 +2673,7 @@ public final class EmberGrowthService implements Listener {
             if (p.isOnline()) {
                 p.sendMessage(P + "§a已合成 §f余烬烙纹 ×1 §7（花费 " + needPay + " 碎片）");
                 PlayerData nd = data(id);
+                try { EmberBrandCraftWinBlank.maybeGift(p, nd); } catch (Throwable ignored) { } // D11041
                 if (!EmberBrandSure.maybeAutoPinAfterCraft(p, nd, EmberGrowthService.this)) // D5025
                     EmberBrandLoop.afterCraft(p, nd); // D471 craft→pin loop when no auto
             }
@@ -2955,6 +2960,7 @@ public final class EmberGrowthService implements Listener {
                         }
                         Player q = Bukkit.getPlayer(id);
                         if (q != null) {
+                            try { EmberConvertWinBone.maybeGift(q, nd); } catch (Throwable ignored) { } // D11073
                             q.sendMessage(P + "§a转化完成：§f" + planned.shortLabel()
                                     + " §7· 强化+0 · 本周已用 §f" + (usedNow + 1) + "/" + EmberConvertRules.WEEKLY_CAP);
                             EmberConvertLoop.afterConvert(q, nd, toFam, before.enhance > 0, planned); // D2089
