@@ -254,6 +254,7 @@ final class EmberRunDirector {
                 doorOpenAt = 0;
             }
         }
+        pulseOpenLinks(); // D3409 channel tempo
         // passages (spire): once the room is cleared, stepping into the passage box moves the player up
         for (EmberRunMaps.Link k : def.links) {
             if (!s.cleared.contains(k.after)) continue;
@@ -263,6 +264,7 @@ final class EmberRunDirector {
                 p.teleport(new Location(w, k.to.x + 0.5, k.to.y, k.to.z + 0.5, k.yaw, 0f));
                 w.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.8f, 1.2f);
                 if (!k.label.isEmpty()) p.sendMessage("§7" + k.label);
+                linkLandFeel(p, k.label); // D3433
             }
         }
         // F-review Q04 (D122): a player who drops below the map's floors (pool, ground outside) goes back to the room
@@ -540,6 +542,46 @@ final class EmberRunDirector {
             if (!EmberDoorTempo.showCountdown(EmberGatePath.get(pd))) continue;
             try { p.sendActionBar(EmberDoorTempo.actionBar(sec)); } catch (Throwable ignored) { }
         }
+    }
+
+    /** D3409: open link entry pulse — SPELL_WITCH column (not Door PORTAL / Boss LAVA). */
+    private void pulseOpenLinks() {
+        if (def == null || def.links == null || s == null || !s.open()) return;
+        String cueLabel = null;
+        boolean any = false;
+        for (EmberRunMaps.Link k : def.links) {
+            if (k.after == null || k.from == null || !s.cleared.contains(k.after)) continue;
+            any = true;
+            Location c = center(k.from);
+            if (cueLabel == null || cueLabel.isEmpty()) cueLabel = k.label;
+            int n = 8;
+            for (Player p : participantsHere()) {
+                if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                PlayerData pd = svc.dataOf(p.getUniqueId());
+                int path = EmberLinkPath.get(pd);
+                double dsq = p.getLocation().distanceSquared(c);
+                n = Math.max(n, EmberLinkTempo.pulseCountNear(path, EmberLinkTempo.nearEntry(dsq)));
+            }
+            try {
+                w.spawnParticle(Particle.SPELL_WITCH, c.clone().add(0, 1.0, 0), n, 0.3, 0.8, 0.3, 0.02);
+            } catch (Throwable ignored) { }
+        }
+        if (!any) return;
+        for (Player p : participantsHere()) {
+            if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+            PlayerData pd = svc.dataOf(p.getUniqueId());
+            if (!EmberLinkTempo.showCue(EmberLinkPath.get(pd))) continue;
+            try { p.sendActionBar(EmberLinkTempo.actionBar(cueLabel == null ? "" : cueLabel)); } catch (Throwable ignored) { }
+        }
+    }
+
+    /** D3433: link land feel — END_ROD only (no Speed/Resist). */
+    private void linkLandFeel(Player p, String label) {
+        if (p == null || !p.isOnline()) return;
+        try {
+            w.spawnParticle(Particle.END_ROD, p.getLocation().add(0, 1.0, 0), 14, 0.35, 0.5, 0.35, 0.04);
+            p.sendActionBar(EmberLinkTempo.landActionBar(label));
+        } catch (Throwable ignored) { }
     }
 
     /** D599: boss arm timer running (pre-boss stock check window). */
@@ -1972,12 +2014,14 @@ final class EmberRunDirector {
             p.teleport(new Location(w, k.to.x + 0.5, k.to.y, k.to.z + 0.5, k.yaw, 0f));
             w.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.8f, 1.2f);
             if (!k.label.isEmpty()) p.sendMessage("§7" + k.label);
+            linkLandFeel(p, k.label); // D3433
             any = true;
         }
         if (deepestOnly && last != null) {
             p.teleport(new Location(w, last.to.x + 0.5, last.to.y, last.to.z + 0.5, last.yaw, 0f));
             w.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.8f, 1.2f);
             if (!last.label.isEmpty()) p.sendMessage("§7" + last.label);
+            linkLandFeel(p, last.label); // D3433
             return true;
         }
         return any;

@@ -73,9 +73,9 @@ public final class EmberLinkPath {
     }
 
     public static String tip(int id) {
-        if (id == AUTO) return "通道开启时自动传送到下一层";
-        if (id == ASK) return "通道开启时聊天提醒，点按钮跃迁（默认）";
-        if (id == MUTE) return "不刷提醒；自己走进通道方块";
+        if (id == AUTO) return "通道开启自动跃迁 · 落地光柱";
+        if (id == ASK) return "通道入口高亮 · 近距更密 · 可点跃迁（默认）";
+        if (id == MUTE) return "不刷 ActionBar；入口仍有淡柱 · 自己走进";
         return "点选尖塔通道跃迁节奏（改副本循环 · 不改掉落表）";
     }
 
