@@ -626,9 +626,9 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
+        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9 + D12214 Pack 10. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
-                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter"));
+                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
                 "timed", "crystal", "escort", "hold", "beacon", "relay", "breach", "chain", "unscathed"));
         public final double affixRate, eventRate;
@@ -668,6 +668,10 @@ public final class EmberRunMaps {
         public final double pierceEvery, pierceWarn, pierceHalfLen, pierceHalfW, pierceDmg;
         public final double scatterEvery, scatterWarn, scatterRadius, scatterRing, scatterDmg;
         public final int scatterCount;
+        // D12214 rift (裂隙: line perpendicular to player vector) / cascade (连落: 3 circles stepping toward player)
+        public final double riftEvery, riftWarn, riftHalfLen, riftHalfW, riftDmg;
+        public final double cascadeEvery, cascadeWarn, cascadeRadius, cascadeStep, cascadeDmg;
+        public final int cascadeCount;
         // D171 crystal / escort / timed
         public final int crystalCount, crystalSecs, timedSecs;
         public final double escortHp;
@@ -836,6 +840,19 @@ public final class EmberRunMaps {
             scatterRing = Math.max(0.5, Math.min(3.5, num(sc.get("ring"), 2.6)));     // ≤ 3.5
             scatterCount = Math.max(3, Math.min(3, (int) num(sc.get("count"), 3))); // fixed 3
             scatterDmg = Math.max(0.0, Math.min(0.5, num(sc.get("dmg"), 0.5)));      // ≤ 0.5 atk
+            Map<?, ?> rf = m.get("rift") instanceof Map ? (Map<?, ?>) m.get("rift") : Collections.emptyMap();
+            riftEvery = Math.max(6.5, num(rf.get("every"), 6.5));         // D12214: every ≥ 6.5
+            riftWarn = Math.max(1.4, num(rf.get("warn"), 1.4));
+            riftHalfLen = Math.max(1.0, Math.min(6.0, num(rf.get("half_len"), 4.0))); // ≤ 6
+            riftHalfW = Math.max(0.5, Math.min(1.5, num(rf.get("half_w"), 1.0)));   // thin ≤ 1.5
+            riftDmg = Math.max(0.0, Math.min(0.55, num(rf.get("dmg"), 0.55)));      // ≤ 0.55 atk
+            Map<?, ?> ca = m.get("cascade") instanceof Map ? (Map<?, ?>) m.get("cascade") : Collections.emptyMap();
+            cascadeEvery = Math.max(7.0, num(ca.get("every"), 7.0));         // D12214: every ≥ 7
+            cascadeWarn = Math.max(1.3, num(ca.get("warn"), 1.3));
+            cascadeRadius = Math.max(0.5, Math.min(1.3, num(ca.get("radius"), 1.2))); // ≤ 1.3
+            cascadeStep = Math.max(1.5, Math.min(3.0, num(ca.get("step"), 2.0)));     // 1.5–3.0
+            cascadeCount = Math.max(3, Math.min(3, (int) num(ca.get("count"), 3))); // fixed 3
+            cascadeDmg = Math.max(0.0, Math.min(0.5, num(ca.get("dmg"), 0.5)));      // ≤ 0.5 atk
             Map<?, ?> tm = m.get("timed") instanceof Map ? (Map<?, ?>) m.get("timed") : Collections.emptyMap();
             timedSecs = Math.max(5, (int) num(tm.get("secs"), eventSecs));
             Map<?, ?> cr = m.get("crystal") instanceof Map ? (Map<?, ?>) m.get("crystal") : Collections.emptyMap();
@@ -894,6 +911,8 @@ public final class EmberRunMaps {
             if ("flank".equals(id)) return "侧袭";
             if ("pierce".equals(id)) return "贯穿";
             if ("scatter".equals(id)) return "散射";
+            if ("rift".equals(id)) return "裂隙";
+            if ("cascade".equals(id)) return "连落";
             return id;
         }
 
