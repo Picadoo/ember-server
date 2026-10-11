@@ -116,6 +116,7 @@ public final class EmberGemSocket {
         try {
             PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
             EmberGemSeatLive.maybeAfterSeat(p, pd, code, loadouts); // D4289
+            EmberGemInsertShard.maybeGift(p, pd, ni); // D8705
         } catch (Throwable ignored) { }
         // D2090 piece-aware commit next (empty hole / enhance / craft)
         EmberItems.Read afterR = loadouts.items().read(p.getInventory().getItemInMainHand());

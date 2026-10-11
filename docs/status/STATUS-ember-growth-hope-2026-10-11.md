@@ -1,3 +1,6 @@
+Live jar: **1.65.667-d8736.local** · D8673–D8736 StaminaPotBoost + GemInsertShard + ChallengeEnterBrace
+Prior: Ticket/Bank/Short/Pledge/Drown/Thorns
+
 Live jar: **1.65.666-d8672.local** · D8609–D8672 PledgePotSoft + DrownSoft + ThornsSoft
 Prior: Ticket/Bank/ShortSpeed
 

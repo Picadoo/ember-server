@@ -259,7 +259,15 @@ public final class StaminaService implements Listener {
             } catch (Throwable ignored) { }
             return false;
         }
-        int applied = addStamina(data, amount, true);
+        int give = amount;
+        try {
+            int bonus = town.sunshine.corerpg.p1.EmberStaminaPotBoost.consumeBonus(data); // D8673
+            if (bonus > 0) {
+                give += bonus;
+                player.sendMessage(ChatColor.GREEN + "[体力] 药剂加赠 +" + bonus + "（今日一次）");
+            }
+        } catch (Throwable ignored) { }
+        int applied = addStamina(data, give, true);
         data.setPotionStaminaToday(data.getPotionStaminaToday() + amount);
         dataStore.flushMutation(player.getUniqueId());
         int potLeft = Math.max(0, potionDailyCap - data.getPotionStaminaToday());
