@@ -41,7 +41,6 @@ Icons:
           material: compass
           name: '§e今天该打哪'
           lore:
-            - ''
             - '§e%corerpg_p1_route_pri%'
             - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8不足'
             - '§e➥ §f左：挂机 · 右：补给'
@@ -59,7 +58,6 @@ Icons:
           shiny: true
           name: '§e今天该打哪 §6（挂机已满）'
           lore:
-            - ''
             - '§e%corerpg_p1_route_pri%'
             - '§a挂机已满 · §e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§e➥ §f左：冒险 · 右：工坊 · Shift左：短征'
@@ -77,7 +75,6 @@ Icons:
       material: compass
       name: '§e今天该打哪'
       lore:
-        - ''
         - '§e%corerpg_p1_route_pri%'
         - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
         - '§e➥ §f左：冒险 · 右：短征'
@@ -96,7 +93,6 @@ Icons:
       material: clock
       name: '§a挂机庭'
       lore:
-        - ''
         - '§7%corerpg_p1_afk_state% §7· 今日 %corerpg_p1_afk_today%'
         - '§7每小时：%corerpg_p1_afk_loot%'
         - '§e➥ §f打开挂机庭'
@@ -136,7 +132,6 @@ Icons:
       material: map
       name: '§e推荐打法'
       lore:
-        - ''
         - '§7机动 / 站桩 / 压上'
         - '§e➥ §f打开'
     actions:
@@ -154,7 +149,6 @@ Icons:
           material: firework charge
           name: '§6国庆纪念'
           lore:
-            - ''
             - '§7%corerpg_p1_fest_state% · 币 §f%corerpg_p1_fest_coins%'
             - '§e➥ §f打开活动页'
         actions:
@@ -166,7 +160,6 @@ Icons:
       material: firework
       name: '§c国庆庙会'
       lore:
-        - ''
         - '§7%corerpg_p1_fest_window% · 今日 %corerpg_p1_fest_entries%'
         - '§e➥ §f打开活动页'
     actions:
@@ -179,7 +172,6 @@ Icons:
       material: blaze rod
       name: '§6冒险'
       lore:
-        - ''
         - '§a下一步：§f%corerpg_p1_next%'
         - '§8主线 / 短征 · 每次 30 体力'
         - '§e➥ §f打开冒险页'
@@ -194,7 +186,6 @@ Icons:
       material: iron chestplate
       name: '§6装备'
       lore:
-        - ''
         - '§7套装：§f%corerpg_p1_awaken% §7· 护甲：§f%corerpg_p1_armor_set%'
         - '§e➥ §f打开装备页'
     actions:
@@ -206,7 +197,6 @@ Icons:
       material: anvil
       name: '§6工坊'
       lore:
-        - ''
         - '§7强化 / 升阶 / 精工 / 成色'
         - '§e➥ §f打开工坊'
     actions:
@@ -223,7 +213,6 @@ Icons:
           material: gray dye
           name: '§7Q07 后解锁'
           lore:
-            - ''
             - '§7挑战 / 深渊 / 团本'
             - '§a现在：§f%corerpg_p1_next%'
         actions:
@@ -234,7 +223,6 @@ Icons:
       material: ender eye
       name: '§5深渊'
       lore:
-        - ''
         - '§7%corerpg_p1_abyss_state%'
         - '§e➥ §f打开深渊选层'
     actions:
@@ -254,7 +242,6 @@ Icons:
       material: iron chestplate
       name: '§6团本'
       lore:
-        - ''
         - '§7R01–R03 · 3～5 人 · 每周 3 次'
         - '§7招募：§f%corerpg_p1_recruits%'
         - '§e➥ §f打开冒险页选团本'
@@ -267,7 +254,6 @@ Icons:
       material: book and quill
       name: '§3图录'
       lore:
-        - ''
         - '§7首领招式 · 装备图鉴 · 荣誉'
         - '§e➥ §f打开图录'
     actions:
@@ -283,7 +269,6 @@ Icons:
       material: blaze powder
       name: '§6技能组'
       lore:
-        - ''
         - '§7形状 §f%corerpg_kit_shape% §7· 身法 §b%corerpg_kit_step_dir%'
         - '§e➥ §f打开技能组'
     actions:
@@ -296,7 +281,6 @@ Icons:
       material: feather
       name: '§a轻技'
       lore:
-        - ''
         - '§7当前 §f%corerpg_flex_skill_name% §8· 潜行+Q'
         - '§e➥ §f左：轻技 · 右：帮助 · Shift：踏步'
     actions:
@@ -319,7 +303,6 @@ Icons:
       material: ender chest
       name: '§3仓库'
       lore:
-        - ''
         - '§7材料 / 装备自动入库'
         - '§e➥ §f打开仓库'
     actions:
@@ -333,7 +316,6 @@ Icons:
       material: bread
       name: '§a补给 · 生活'
       lore:
-        - ''
         - '§7钓鱼 · 烹饪 · 回复药 · 使魔'
         - '§e➥ §f打开补给'
     actions:
@@ -345,7 +327,6 @@ Icons:
       material: book
       name: '§b帮助'
       lore:
-        - ''
         - '§7怎么玩 · 操作 · 变强'
         - '§e➥ §f打开帮助'
     actions:
@@ -357,7 +338,6 @@ Icons:
       material: book and quill
       name: '§f邮寄'
       lore:
-        - ''
         - '§7系统邮件与补偿'
         - '§e➥ §f打开邮寄'
     actions:
@@ -370,7 +350,6 @@ Icons:
       material: cake
       name: '§a好友'
       lore:
-        - ''
         - '§7好友与组队'
         - '§e➥ §f打开好友'
     actions:
@@ -385,7 +364,6 @@ Icons:
       material: nether star
       name: '§d赛季'
       lore:
-        - ''
         - '§7%corerpg_p1_season% §7· 徽 §f%corerpg_p1_badges%'
         - '§e➥ §f左：赛季排行 · 右：称号足迹'
     actions:
@@ -401,7 +379,6 @@ Icons:
       material: comparator
       name: '§7设置'
       lore:
-        - ''
         - '§7音效 · 提示 · 隐私'
         - '§e➥ §f打开设置'
     actions:
@@ -416,7 +393,6 @@ Icons:
       material: ender pearl
       name: '§d外观扭蛋'
       lore:
-        - ''
         - '§7券 §f%coregacha_tickets% §7· 光屑 §b%coregacha_shards%'
         - '§e➥ §f打开扭蛋'
     actions:
@@ -429,7 +405,6 @@ Icons:
       material: barrier
       name: '§c关闭'
       lore:
-        - ''
         - '§7关闭菜单'
     actions:
       all:
@@ -446,7 +421,6 @@ Icons:
           shiny: true
           name: '§e签到 · 未签'
           lore:
-            - ''
             - '%corerpg_p1_sign_head%'
             - '§7在线 §f%corerpg_p1_online_min%§7分 · 可领 §f%corerpg_p1_online_can%§7档'
             - '§e➥ §f打开签到'
@@ -458,7 +432,6 @@ Icons:
       material: emerald
       name: '§a签到 · 在线'
       lore:
-        - ''
         - '%corerpg_p1_sign_head%'
         - '§7在线 §f%corerpg_p1_online_min%§7分 · 可领 §f%corerpg_p1_online_can%§7档'
         - '§e➥ §f打开签到'

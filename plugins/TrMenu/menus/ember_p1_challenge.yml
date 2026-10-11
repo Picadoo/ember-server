@@ -37,7 +37,6 @@ Icons:
       material: blaze rod
       name: '§c挑战版：§f%corerpg_p1_challenge%'
       lore:
-        - ''
         - '§7体力：§f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8（每局 30）'
         - '%corerpg_p1_failrefund%'
   '1':
@@ -46,7 +45,6 @@ Icons:
       material: iron sword
       name: '§cQ01 挑战 §f%corerpg_p1_q01_name%'
       lore:
-        - ''
         - '§7偏向：§f%corerpg_p1_loot_q01%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
@@ -61,7 +59,6 @@ Icons:
       material: iron sword
       name: '§cQ02 挑战 §f%corerpg_p1_q02_name%'
       lore:
-        - ''
         - '§7偏向：§f%corerpg_p1_loot_q02%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
@@ -76,7 +73,6 @@ Icons:
       material: diamond sword
       name: '§cQ03 挑战 §f%corerpg_p1_q03_name%'
       lore:
-        - ''
         - '§7偏向：§f%corerpg_p1_loot_q03%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
@@ -91,7 +87,6 @@ Icons:
       material: prismarine shard
       name: '§cQ04 挑战 §f%corerpg_p1_q04_name%'
       lore:
-        - ''
         - '§7偏向：§f%corerpg_p1_loot_q04%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
@@ -106,7 +101,6 @@ Icons:
       material: iron axe
       name: '§cQ05 挑战 §f%corerpg_p1_q05_name%'
       lore:
-        - ''
         - '§7偏向：§f%corerpg_p1_loot_q05%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
@@ -121,7 +115,6 @@ Icons:
       material: packed ice
       name: '§cQ06 挑战 §f%corerpg_p1_q06_name%'
       lore:
-        - ''
         - '§7偏向：§f%corerpg_p1_loot_q06%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
@@ -136,7 +129,6 @@ Icons:
       material: rail
       name: '§cQ07 挑战 §f%corerpg_p1_q07_name%'
       lore:
-        - ''
         - '§7偏向：§f%corerpg_p1_loot_q07%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'

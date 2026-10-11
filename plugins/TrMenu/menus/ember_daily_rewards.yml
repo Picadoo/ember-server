@@ -32,7 +32,6 @@ Icons:
       material: chest
       name: '§6日常奖励预览'
       lore:
-        - ''
         - '§7通关箱各线相同 · Boss 装掉各线同概率 · 风味小料分线'
         - '§8纯展示 · 不进本'
 
@@ -41,7 +40,6 @@ Icons:
       material: nether star
       name: '§e余烬核心碎片 §f×1'
       lore:
-        - ''
         - '§8通关箱 · 各线相同'
 
   C:
@@ -49,7 +47,6 @@ Icons:
       material: glowstone dust
       name: '§d余烬附魔晶 §f×1'
       lore:
-        - ''
         - '§8通关箱 · 各线相同'
 
   I:
@@ -57,7 +54,6 @@ Icons:
       material: redstone
       name: '§c余烬碎片 §f×5'
       lore:
-        - ''
         - '§8通关箱 · 各线相同'
         - '§7另附原版经验 §a+3 级'
 
@@ -66,7 +62,6 @@ Icons:
       material: nether star
       name: '§eBoss 核心碎片 §f×1（必掉）'
       lore:
-        - ''
         - '§8七线 Boss 相同'
 
   E:
@@ -74,7 +69,6 @@ Icons:
       material: bone
       name: '§7风味小料 §f50%'
       lore:
-        - ''
         - '§7焦骨 / 潮蚀 / 霜晶 → §c余烬碎片'
         - '§7地窖 / 断塔 / 锈轨 → §f余烬骨尘'
         - '§8庭院无此行'
@@ -84,7 +78,6 @@ Icons:
       material: experience bottle
       name: '§b精英击杀经验'
       lore:
-        - ''
         - '§7Boss 击杀触发精英经验'
         - '§8通关进度另计 daily_clear'
         - '§8（非背包物品 · 仅说明）'
@@ -94,7 +87,6 @@ Icons:
       material: iron sword
       name: '§c余烬之刃'
       lore:
-        - ''
         - '§e约 12%'
         - '§8各线 Boss 相同'
 
@@ -103,7 +95,6 @@ Icons:
       material: gold nugget
       name: '§e余烬护符'
       lore:
-        - ''
         - '§e约 8%'
         - '§8各线 Boss 相同'
 
@@ -112,7 +103,6 @@ Icons:
       material: diamond sword
       name: '§b余烬精炼之刃'
       lore:
-        - ''
         - '§e约 3%'
         - '§8各线 Boss 相同'
 

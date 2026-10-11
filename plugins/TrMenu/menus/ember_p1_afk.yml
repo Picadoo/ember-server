@@ -53,7 +53,6 @@ Icons:
       material: clock
       name: '§f挂机战况（实时）'
       lore:
-        - ''
         - '§7状态：%corerpg_p1_afk_state%'
         - '§7当前层：%corerpg_p1_afk_here%'
         - '§e今日软目标：%corerpg_p1_afk_today%'
@@ -108,7 +107,6 @@ Icons:
           material: diamond sword
           name: '§e体力还在 · 去冒险/短征'
           lore:
-            - ''
             - '§a今日挂机击杀已满（%corerpg_p1_afk_today%）'
             - '§d短征还可追 · 今日剩余有奖 §f%corerpg_p1_sx_day_left_sum%'
             - '§e➥ §f左键 ➥ 冒险页 · 右键 ➥ 短征选本（体力够才开）'
@@ -129,7 +127,6 @@ Icons:
       material: iron sword
       name: '§e自动战斗 开 / 关'
       lore:
-        - ''
         - '§7现在：%corerpg_p1_afk_state%'
         - '§7进入挂机庭会自动开打；想站着聊天就先暂停'
         - '§e➥ §f点击切换'
@@ -142,9 +139,7 @@ Icons:
       material: ender pearl
       name: '§e回枢纽'
       lore:
-        - ''
         - '§7离开挂机庭回到枢纽（今天的击杀和进度都保留）'
-        - ''
         - '§e➥ §f点击返回枢纽'
     actions:
       all:
@@ -161,7 +156,6 @@ Icons:
       material: anvil
       name: '§6战利品去哪花'
       lore:
-        - ''
         - '§7挂机材料去工坊花'
         - '§7旁格可查仓库'
         - '§e➥ §f打开工坊'
@@ -174,7 +168,6 @@ Icons:
       material: ender chest
       name: '§3材料仓库'
       lore:
-        - ''
         - '§7查仓里有多少碎片/骨尘/核心/胚料'
         - '§7强化升阶直接扣仓库材料'
         - '§e➥ §f材料仓库'
@@ -190,7 +183,6 @@ Icons:
           material: barrier
           name: '§8① 灰坡 §7· 首通 Q01 后开放'
           lore:
-            - ''
             - '§d名片：入门稳挂'
             - '§b养：币·碎片·骨尘（无核心/胚料）'
         actions:
@@ -202,7 +194,6 @@ Icons:
       material: grass
       name: '§a① 灰坡 §7· 已开放'
       lore:
-        - ''
         - '%corerpg_p1_afk_gear_eff_t1%'
         - '§d名片：入门稳挂'
         - '§e➥ §f点击传送，到了就自动开打'
@@ -219,7 +210,6 @@ Icons:
           material: barrier
           name: '§8② 荒原 §7· 首通 Q03 后开放'
           lore:
-            - ''
             - '§d名片：核心入门'
             - '§b养：+核心碎片'
         actions:
@@ -231,7 +221,6 @@ Icons:
       material: smooth brick
       name: '§e② 荒原 §7· 已开放'
       lore:
-        - ''
         - '%corerpg_p1_afk_gear_eff_t2%'
         - '§d名片：核心入门'
         - '§e➥ §f点击传送，到了就自动开打'
@@ -248,7 +237,6 @@ Icons:
           material: barrier
           name: '§8③ 焦土 §7· 首通 Q05 后开放'
           lore:
-            - ''
             - '§d名片：胚料起步'
             - '§b养：+胚料 · 核心续'
         actions:
@@ -260,7 +248,6 @@ Icons:
       material: nether brick
       name: '§6③ 焦土 §7· 已开放'
       lore:
-        - ''
         - '%corerpg_p1_afk_gear_eff_t3%'
         - '§d名片：胚料起步'
         - '§e➥ §f点击传送，到了就自动开打'
@@ -277,7 +264,6 @@ Icons:
           material: barrier
           name: '§8④ 烬原深处 §7· 首通 Q07 后开放'
           lore:
-            - ''
             - '§d名片：满表材料'
             - '§b养：币/碎片/核心最高档 · 刚通 Q07 多半扛不住'
         actions:
@@ -289,7 +275,6 @@ Icons:
       material: red nether brick
       name: '§c④ 烬原深处 §7· 已开放'
       lore:
-        - ''
         - '%corerpg_p1_afk_gear_eff_t4%'
         - '§d名片：满表材料'
         - '§e➥ §f点击传送，到了就自动开打'

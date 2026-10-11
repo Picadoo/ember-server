@@ -37,7 +37,6 @@ Icons:
       material: firework
       name: '§c%corerpg_p1_fest_name%'
       lore:
-        - ''
         - '§7时间：§f%corerpg_p1_fest_window%'
         - '§7状态：%corerpg_p1_fest_state%'
 
@@ -49,7 +48,6 @@ Icons:
           material: gray dye
           name: '§7活动本「烟火庙会」§8（未开放）'
           lore:
-            - ''
             - '§7状态：%corerpg_p1_fest_state%'
             - '§7时间：§f%corerpg_p1_fest_window%'
     update: 20
@@ -57,7 +55,6 @@ Icons:
       material: blaze powder
       name: '§6活动本「烟火庙会」§7（1～3 人）'
       lore:
-        - ''
         - '§7今日：§f%corerpg_p1_fest_entries% §7· 不耗体力 · 掉%corerpg_p1_fest_coinname%'
         - '§e➥ §f开本（需 Q04）'
     actions:
@@ -74,10 +71,8 @@ Icons:
           material: nether star
           name: '§c%corerpg_p1_fest_charm_name% §7（%corerpg_p1_fest_charm%§7）'
           lore:
-            - ''
             - '§7独立的活动护符位：不占主手和已选护符，不算套装'
             - '§f%corerpg_p1_fest_charm_effect%'
-            - ''
             - '§e➥ §f左键：佩戴 · 右键：取下'
         actions:
           left:
@@ -93,7 +88,6 @@ Icons:
       material: nether star
       name: '§c%corerpg_p1_fest_charm_name% §8（%corerpg_p1_fest_charm%§8）'
       lore:
-        - ''
         - '§f%corerpg_p1_fest_charm_effect%'
         - '§6价格：%corerpg_p1_fest_charm_price%'
         - '§e➥ §f左：币购 · 右：徽购'
@@ -113,7 +107,6 @@ Icons:
       material: blaze powder
       name: '§6足迹 %corerpg_p1_fest_trail_name% §8（限时）'
       lore:
-        - ''
         - '§7状态 / 价格：%corerpg_p1_fest_trail%'
         - '§8活动结束后也能用剩下的%corerpg_p1_fest_coinname%买（不再掉落）'
         - '§e➥ §f左：购买 · 右：装上'
@@ -133,10 +126,8 @@ Icons:
       material: name tag
       name: '§6称号 §c盛世§6烟火 §8（限时）'
       lore:
-        - ''
         - '§7%corerpg_p1_fest_title%'
         - '§8只做展示，不加属性；活动结束后不再发放（已有的一直保留）'
-        - ''
         - '§e➥ §f左键：装上称号'
     actions:
       all:
@@ -150,7 +141,6 @@ Icons:
       material: name tag
       name: '§6纪念称号 %corerpg_p1_fest_memo_name%'
       lore:
-        - ''
         - '§7用剩下的%corerpg_p1_fest_coinname%换：§f%corerpg_p1_fest_memo%'
         - '§7国庆币（含仓库）：§f%corerpg_p1_fest_coins%'
         - '§e➥ §f左：兑换 · 右：装上'
@@ -170,7 +160,6 @@ Icons:
       material: gold nugget
       name: '§6%corerpg_p1_fest_coinname% → 余烬徽'
       lore:
-        - ''
         - '§7%corerpg_p1_fest_xbadge%'
         - '§7%corerpg_p1_fest_xrate%枚换1徽 · 上限%corerpg_p1_fest_xcap%'
         - '§e➥ §f左：全换 · 右：换5徽'

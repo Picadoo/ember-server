@@ -42,7 +42,6 @@ Icons:
       material: nether star
       name: '§6天赋专精'
       lore:
-        - ''
         - '%corerpg_p1_spec_pts%'
         - '§e希望：§f%corerpg_p1_spec_next_hope%'
 
@@ -70,7 +69,6 @@ Icons:
       material: iron sword
       name: '%corerpg_p1_spec_name_t1a%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t1a%'
         - '%corerpg_p1_spec_bad_t1a%'
     actions:
@@ -85,7 +83,6 @@ Icons:
       material: shield
       name: '%corerpg_p1_spec_name_t1b%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t1b%'
         - '%corerpg_p1_spec_bad_t1b%'
     actions:
@@ -100,7 +97,6 @@ Icons:
       material: feather
       name: '%corerpg_p1_spec_name_t1c%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t1c%'
         - '%corerpg_p1_spec_bad_t1c%'
     actions:
@@ -115,7 +111,6 @@ Icons:
       material: golden sword
       name: '%corerpg_p1_spec_name_t2a%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t2a%'
         - '%corerpg_p1_spec_bad_t2a%'
     actions:
@@ -130,7 +125,6 @@ Icons:
       material: iron chestplate
       name: '%corerpg_p1_spec_name_t2b%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t2b%'
         - '%corerpg_p1_spec_bad_t2b%'
     actions:
@@ -145,7 +139,6 @@ Icons:
       material: prismarine shard
       name: '%corerpg_p1_spec_name_t2c%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t2c%'
         - '%corerpg_p1_spec_bad_t2c%'
     actions:
@@ -160,7 +153,6 @@ Icons:
       material: blaze powder
       name: '%corerpg_p1_spec_name_t3a%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t3a%'
         - '%corerpg_p1_spec_bad_t3a%'
     actions:
@@ -175,7 +167,6 @@ Icons:
       material: magma cream
       name: '%corerpg_p1_spec_name_t3b%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t3b%'
         - '%corerpg_p1_spec_bad_t3b%'
     actions:
@@ -190,7 +181,6 @@ Icons:
       material: golden apple
       name: '%corerpg_p1_spec_name_t3c%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t3c%'
         - '%corerpg_p1_spec_bad_t3c%'
     actions:
@@ -205,10 +195,8 @@ Icons:
       material: map
       name: '§e推荐打法'
       lore:
-        - ''
         - '§7第 1 排三选一的认知标签页'
         - '§e机动§7=回身斩 · §a站桩§7=稳桩 · §6压上§7=踏步回气'
-        - ''
         - '§e➥ §f打开（本页仍负责点选）'
     actions:
       all:
@@ -221,7 +209,6 @@ Icons:
       material: water bucket
       name: '§c重置天赋'
       lore:
-        - ''
         - '%corerpg_p1_spec_reset%'
         - '§7三排全部清空，专精点全部退回'
         - '§e➥ §f点击：聊天栏确认后重置'
@@ -250,7 +237,6 @@ Icons:
       name: '§6余烬勋记'
       lore:
         - '%corerpg_p1_honor_n%'
-        - ''
         - '§e➥ §f打开勋记页'
     actions:
       all:

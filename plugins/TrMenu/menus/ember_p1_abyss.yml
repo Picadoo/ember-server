@@ -42,7 +42,6 @@ Icons:
       material: ender eye
       name: '§5深渊：§f%corerpg_p1_abyss_state%'
       lore:
-        - ''
         - '%corerpg_p1_abyss_hope%'
         - '§7体力：§f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8（每层 30）'
 
@@ -52,7 +51,6 @@ Icons:
       material: stone sword
       name: '§a浅渊 · 第 1 层'
       lore:
-        - ''
         - '%corerpg_p1_abyss_t1%'
         - '§a段：浅渊 §7· 近挑战强度 · 层费低/免'
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
@@ -69,7 +67,6 @@ Icons:
       material: stone sword
       name: '§a浅渊 · 第 2 层'
       lore:
-        - ''
         - '%corerpg_p1_abyss_t2%'
         - '§a段：浅渊 §7· 近挑战强度 · 层费低/免'
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
@@ -86,7 +83,6 @@ Icons:
       material: stone sword
       name: '§a浅渊 · 第 3 层'
       lore:
-        - ''
         - '%corerpg_p1_abyss_t3%'
         - '§a段：浅渊 §7· 近挑战强度 · 层费低/免'
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
@@ -103,7 +99,6 @@ Icons:
       material: gold sword
       name: '§e中渊 · 第 4 层'
       lore:
-        - ''
         - '%corerpg_p1_abyss_t4%'
         - '§e段：中渊 §7· 成色右移 · 层费抬升'
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
@@ -120,7 +115,6 @@ Icons:
       material: gold sword
       name: '§e中渊 · 第 5 层'
       lore:
-        - ''
         - '%corerpg_p1_abyss_t5%'
         - '§e段：中渊 §7· 成色右移 · 层费抬升'
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
@@ -137,7 +131,6 @@ Icons:
       material: gold sword
       name: '§e中渊 · 第 6 层'
       lore:
-        - ''
         - '%corerpg_p1_abyss_t6%'
         - '§e段：中渊 §7· 成色右移 · 层费抬升'
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
@@ -154,7 +147,6 @@ Icons:
       material: gold sword
       name: '§e中渊 · 第 7 层'
       lore:
-        - ''
         - '%corerpg_p1_abyss_t7%'
         - '§e段：中渊 §7· 成色右移 · 层费抬升'
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
@@ -172,7 +164,6 @@ Icons:
       shiny: true
       name: '§c深渊 · 第 8 层'
       lore:
-        - ''
         - '%corerpg_p1_abyss_t8%'
         - '§c段：深渊 §7· 顶压 · 高费换更高成色'
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
@@ -190,7 +181,6 @@ Icons:
       shiny: true
       name: '§c深渊 · 第 9 层'
       lore:
-        - ''
         - '%corerpg_p1_abyss_t9%'
         - '§c段：深渊 §7· 顶压 · 高费换更高成色'
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
@@ -208,7 +198,6 @@ Icons:
       shiny: true
       name: '§c深渊 · 第 10 层'
       lore:
-        - ''
         - '%corerpg_p1_abyss_t10%'
         - '§c段：深渊 §7· 顶压 · 高费换更高成色'
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'

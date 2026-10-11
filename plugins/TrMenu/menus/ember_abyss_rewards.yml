@@ -33,7 +33,6 @@ Icons:
       material: chest
       name: '§5深渊奖励预览'
       lore:
-        - ''
         - '§7结算按本局最高层落档'
         - '§8纯展示 · 不进本 · 不撤离 · 不发物'
 
@@ -42,7 +41,6 @@ Icons:
       material: redstone
       name: '§e档 1～4 · 基础结算'
       lore:
-        - ''
         - '§7余烬碎片 §f×8'
         - '§7余烬骨尘 §f×2'
         - '§8核心 ×0 · 锋利石 ×0'
@@ -52,7 +50,6 @@ Icons:
       material: glowstone dust
       name: '§e档 5～9 · 进阶结算'
       lore:
-        - ''
         - '§7余烬碎片 §f×12'
         - '§7余烬骨尘 §f×4 · 余烬核心 §f×1'
         - '§7锋利石 §e约 10% §8（非必给）'
@@ -62,7 +59,6 @@ Icons:
       material: nether star
       name: '§e档 10+ · 本期顶 12'
       lore:
-        - ''
         - '§7余烬碎片 §f×16'
         - '§7余烬骨尘 §f×6 · 余烬核心 §f×2'
         - '§7锋利石 §e约 10% §8（非必给）'
@@ -72,7 +68,6 @@ Icons:
       material: iron sword
       name: '§6COMPLETE · T2 周首通'
       lore:
-        - ''
         - '§e本周首次 COMPLETE：T2 刃 + 护符 ×1'
         - '§7同周再通：刃约 4% · 符约 3%'
         - '§8来自 loot abyss_t2 · 仅展示概率'
@@ -82,7 +77,6 @@ Icons:
       material: amethyst shard
       name: '§dL12 · 稳定符周首通'
       lore:
-        - ''
         - '§7本周首次达到第 12 层：稳定符 §f×1'
         - '§8同周再达静默，不重复发放'
 
@@ -91,7 +85,6 @@ Icons:
       material: skeleton skull
       name: '§8战斗摘要'
       lore:
-        - ''
         - '§7清怪另有碎片 / 骨尘 / 孔石 / 核心与低概率装'
         - '§8仅作一行摘要，不展开 12 层怪物表'
 

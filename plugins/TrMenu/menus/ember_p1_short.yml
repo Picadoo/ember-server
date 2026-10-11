@@ -71,7 +71,6 @@ Icons:
           material: paper
           name: '§e今日有奖已满 · 去工坊花'
           lore:
-            - ''
             - '§a今日短征有奖已满 §7· 剩余 §f%corerpg_p1_sx_day_left_sum%'
             - '§7材料在仓 · 点「去哪花」开工坊 · 练习仍可进'
             - '§8日线/首通看各图按钮 · 仓差碎%corerpg_p1_vault_shard%·骨%corerpg_p1_vault_bone%'
@@ -82,7 +81,6 @@ Icons:
           material: paper
           name: '§e今日有奖已满 · 去工坊花'
           lore:
-            - ''
             - '§a今日短征有奖已满 §7· 剩余 §f%corerpg_p1_sx_day_left_sum%'
             - '§7材料在仓 · 点「去哪花」开工坊 · 体力已尽先回满'
             - '§8日线/首通看各图按钮 · 仓差碎%corerpg_p1_vault_shard%·骨%corerpg_p1_vault_bone%'
@@ -90,7 +88,6 @@ Icons:
       material: paper
       name: '§e短征说明'
       lore:
-        - ''
         - '§7短征十九本 · 各30体力 · 日帽分开 · 不是旧日常窟'
         - '§7今日剩余有奖 §f%corerpg_p1_sx_day_left_sum% §8· 首通未领 %corerpg_p1_sx_fc_left%'
         - '§8日线看各图按钮 · 材料进仓去工坊'
@@ -101,7 +98,6 @@ Icons:
       material: glowstone dust
       name: '§e余烬体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
       lore:
-        - ''
         - '§7短征每次 §e30 §7体力（与主线同池）'
         - '§7不足时灰显 · 开本失败退还'
         - '§7每天 0 点回满（Asia/Shanghai）'
@@ -114,17 +110,14 @@ Icons:
           material: gray dye
           name: '§7烬门哨岗 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx01_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7烬门哨岗 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx01_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -133,7 +126,6 @@ Icons:
       material: shield
       name: '§6烬门哨岗 §7· 短征 sx01'
       lore:
-        - ''
         - '§e%corerpg_p1_sx01_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx01_fc% §8· 币80+碎4+骨3 · 哨长读条'
         - '§e➥ §f左键：进本'
@@ -151,17 +143,14 @@ Icons:
           material: gray dye
           name: '§7锈灯栈道 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx02_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7锈灯栈道 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx02_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -170,7 +159,6 @@ Icons:
       material: lantern
       name: '§6锈灯栈道 §7· 短征 sx02'
       lore:
-        - ''
         - '§e%corerpg_p1_sx02_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx02_fc% §8· 币80+碎4+骨3 · 灯塔扫线'
         - '§e➥ §f左键：进本'
@@ -188,17 +176,14 @@ Icons:
           material: gray dye
           name: '§7霜雾闸廊 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx03_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7霜雾闸廊 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx03_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -207,7 +192,6 @@ Icons:
       material: packed ice
       name: '§6霜雾闸廊 §7· 短征 sx03'
       lore:
-        - ''
         - '§e%corerpg_p1_sx03_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx03_fc% §8· 币80+碎4+骨3 · 霜雾楔'
         - '§e➥ §f左键：进本'
@@ -225,17 +209,14 @@ Icons:
           material: gray dye
           name: '§7烬井螺旋 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx04_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7烬井螺旋 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx04_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -244,7 +225,6 @@ Icons:
       material: magma cream
       name: '§6烬井螺旋 §7· 短征 sx04'
       lore:
-        - ''
         - '§e%corerpg_p1_sx04_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx04_fc% §8· 币80+碎4+骨3 · 井心喷焰'
         - '§e➥ §f左键：进本'
@@ -262,17 +242,14 @@ Icons:
           material: gray dye
           name: '§7裂谷风廊 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx05_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7裂谷风廊 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx05_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -281,7 +258,6 @@ Icons:
       material: feather
       name: '§6裂谷风廊 §7· 短征 sx05'
       lore:
-        - ''
         - '§e%corerpg_p1_sx05_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx05_fc% §8· 币80+碎4+骨3 · 风剪条'
         - '§e➥ §f左键：进本'
@@ -300,17 +276,14 @@ Icons:
           material: gray dye
           name: '§7烬环廊 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx06_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7烬环廊 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx06_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -319,7 +292,6 @@ Icons:
       material: stone brick
       name: '§6烬环廊 §7· 短征 sx06'
       lore:
-        - ''
         - '§e%corerpg_p1_sx06_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx06_fc% §8· 币80+碎4+骨3 · 环扫斩'
         - '§e➥ §f左键：进本'
@@ -337,17 +309,14 @@ Icons:
           material: gray dye
           name: '§7烬塔回升 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx07_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7烬塔回升 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx07_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -356,7 +325,6 @@ Icons:
       material: ladder
       name: '§6烬塔回升 §7· 短征 sx07'
       lore:
-        - ''
         - '§e%corerpg_p1_sx07_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx07_fc% §8· 币80+碎4+骨3 · 塔冠坠焰'
         - '§e➥ §f左键：进本'
@@ -376,17 +344,14 @@ Icons:
           material: gray dye
           name: '§7错层烬庭 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx08_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7错层烬庭 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx08_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -395,7 +360,6 @@ Icons:
       material: mossy stone brick
       name: '§6错层烬庭 §7· 短征 sx08'
       lore:
-        - ''
         - '§e%corerpg_p1_sx08_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx08_fc% §8· 币80+碎4+骨3 · 层间砸落'
         - '§e➥ §f左键：进本'
@@ -415,17 +379,14 @@ Icons:
           material: gray dye
           name: '§7烬渠跳石 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx09_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7烬渠跳石 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx09_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -434,7 +395,6 @@ Icons:
       material: prismarine
       name: '§6烬渠跳石 §7· 短征 sx09'
       lore:
-        - ''
         - '§e%corerpg_p1_sx09_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx09_fc% §8· 币80+碎4+骨3 · 渠心溅浪'
         - '§e➥ §f左键：进本'
@@ -454,17 +414,14 @@ Icons:
           material: gray dye
           name: '§7烬闸递室 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx10_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7烬闸递室 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx10_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -473,7 +430,6 @@ Icons:
       material: iron door
       name: '§6烬闸递室 §7· 短征 sx10'
       lore:
-        - ''
         - '§e%corerpg_p1_sx10_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx10_fc% §8· 币80+碎4+骨3 · 闸心压浪'
         - '§e➥ §f左键：进本'
@@ -493,17 +449,14 @@ Icons:
           material: gray dye
           name: '§7烬镜对廊 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx11_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7烬镜对廊 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx11_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -512,7 +465,6 @@ Icons:
       material: glass
       name: '§6烬镜对廊 §7· 短征 sx11'
       lore:
-        - ''
         - '§e%corerpg_p1_sx11_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx11_fc% §8· 币80+碎4+骨3 · 镜面扫线'
         - '§e➥ §f左键：进本'
@@ -532,17 +484,14 @@ Icons:
           material: gray dye
           name: '§7烬枢转厅 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx12_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7烬枢转厅 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx12_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -551,7 +500,6 @@ Icons:
       material: andesite
       name: '§6烬枢转厅 §7· 短征 sx12'
       lore:
-        - ''
         - '§e%corerpg_p1_sx12_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx12_fc% §8· 币80+碎4+骨3 · 枢扫斩'
         - '§e➥ §f左键：进本'
@@ -571,17 +519,14 @@ Icons:
           material: gray dye
           name: '§7烬衡悬梁 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx13_day_line%'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7烬衡悬梁 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx13_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -590,7 +535,6 @@ Icons:
       material: anvil
       name: '§6烬衡悬梁 §7· 短征 sx13'
       lore:
-        - ''
         - '§e%corerpg_p1_sx13_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx13_fc% §8· 币80+碎4+骨3 · 衡扫斩'
         - '§e➥ §f左键：进本'
@@ -610,17 +554,14 @@ Icons:
           material: iron bars
           name: '§7烬裂折廊 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c需本人先通主线 Q01'
             - '§e%corerpg_p1_sx14_day_line%'
             - '§7通关后本格解锁 · 勿假开'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7烬裂折廊 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx14_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -629,7 +570,6 @@ Icons:
       material: cobble wall
       name: '§6烬裂折廊 §7· 短征 sx14'
       lore:
-        - ''
         - '§e%corerpg_p1_sx14_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx14_fc% §8· 币80+碎4+骨3 · 裂扫斩'
         - '§e➥ §f左键：进本'
@@ -649,17 +589,14 @@ Icons:
           material: iron bars
           name: '§7烬旋坡廊 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c需本人先通主线 Q01'
             - '§e%corerpg_p1_sx15_day_line%'
             - '§7通关后本格解锁 · 勿假开'
-      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
           name: '§7烬旋坡廊 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx15_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
@@ -668,7 +605,6 @@ Icons:
       material: quartz stairs
       name: '§6烬旋坡廊 §7· 短征 sx15'
       lore:
-        - ''
         - '§e%corerpg_p1_sx15_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx15_fc% §8· 币80+碎4+骨3 · 旋扫斩'
         - '§e➥ §f左键：进本'
@@ -688,7 +624,6 @@ Icons:
           material: iron bars
           name: '§7烬影叠廊 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c需本人先通主线 Q01'
             - '§e%corerpg_p1_sx16_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
@@ -697,7 +632,6 @@ Icons:
           material: iron bars
           name: '§7烬影叠廊 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx16_day_line%'
     update: 20
@@ -705,7 +639,6 @@ Icons:
       material: stained glass
       name: '§6烬影叠廊 §7· 短征 sx16'
       lore:
-        - ''
         - '§e%corerpg_p1_sx16_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx16_fc% §8· 币80+碎4+骨3 · 影扫斩'
         - '§e➥ §f左键：进本'
@@ -725,7 +658,6 @@ Icons:
           material: iron bars
           name: '§7烬潮回廊 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c需本人先通主线 Q01'
             - '§e%corerpg_p1_sx17_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
@@ -734,7 +666,6 @@ Icons:
           material: iron bars
           name: '§7烬潮回廊 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx17_day_line%'
     update: 20
@@ -742,7 +673,6 @@ Icons:
       material: stained glass
       name: '§6烬潮回廊 §7· 短征 sx17'
       lore:
-        - ''
         - '§e%corerpg_p1_sx17_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx17_fc% §8· 币80+碎4+骨3 · 潮扫斩'
         - '§e➥ §f左键：进本'
@@ -762,7 +692,6 @@ Icons:
           material: iron bars
           name: '§7烬晶折棱 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c需本人先通主线 Q01'
             - '§e%corerpg_p1_sx18_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
@@ -771,7 +700,6 @@ Icons:
           material: iron bars
           name: '§7烬晶折棱 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx18_day_line%'
     update: 20
@@ -779,7 +707,6 @@ Icons:
       material: stained glass
       name: '§6烬晶折棱 §7· 短征 sx18'
       lore:
-        - ''
         - '§e%corerpg_p1_sx18_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx18_fc% §8· 币80+碎4+骨3 · 晶扫斩'
         - '§e➥ §f左键：进本'
@@ -799,7 +726,6 @@ Icons:
           material: iron bars
           name: '§7烬弦共鸣 §8（需本人 Q01 首通）'
           lore:
-            - ''
             - '§c需本人先通主线 Q01'
             - '§e%corerpg_p1_sx19_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
@@ -808,7 +734,6 @@ Icons:
           material: iron bars
           name: '§7烬弦共鸣 §8（体力不足）'
           lore:
-            - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
             - '§e%corerpg_p1_sx19_day_line%'
     update: 20
@@ -816,7 +741,6 @@ Icons:
       material: stained glass
       name: '§6烬弦共鸣 §7· 短征 sx19'
       lore:
-        - ''
         - '§e%corerpg_p1_sx19_day_line% §7· 30体力'
         - '§7首通 §f%corerpg_p1_sx19_fc% §8· 币80+碎4+骨3 · 弦扫斩'
         - '§e➥ §f左键：进本'
@@ -837,7 +761,6 @@ Icons:
           material: book
           name: '§a今日有奖已满 · 去工坊花材料'
           lore:
-            - ''
             - '§7碎片/骨尘/胚料在账号仓 · 工坊花材料'
             - '§8体力还在可挂机'
             - '§e左键 ➥ §f工坊 · §e右键 ➥ §f挂机庭'
@@ -855,7 +778,6 @@ Icons:
           material: book
           name: '§a今日有奖已满 · 去工坊花材料'
           lore:
-            - ''
             - '§7碎片/骨尘/胚料在账号仓 · 工坊花材料'
             - '§8体力已尽 · 先回满再挂机'
             - '§e➥ §f打开工坊'
@@ -867,7 +789,6 @@ Icons:
       material: book
       name: '§b去哪花'
       lore:
-        - ''
         - '§7通关材料进账号仓 · 工坊花材料'
         - '§e➥ §f打开工坊'
     actions:

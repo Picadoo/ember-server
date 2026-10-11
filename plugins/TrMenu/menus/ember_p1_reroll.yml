@@ -40,7 +40,6 @@ Icons:
       material: book
       name: '§6说明'
       lore:
-        - ''
         - '§7用重复件或碎片洗词条'
         - '§7Shift 锁定词条'
         - '§e➥ §f点下方按钮开始'
@@ -51,7 +50,6 @@ Icons:
       material: blaze rod
       name: '§6刃 · 用重复件洗练'
       lore:
-        - ''
         - '%corerpg_p1_reroll_blade_item%'
         - '%corerpg_p1_reroll_blade_cur%'
         - '§e➥ §f点击：聊天栏预览，再确认 · Shift：锁定词条再洗'
@@ -71,7 +69,6 @@ Icons:
       material: prismarine shard
       name: '§6刃 · 用碎片洗练'
       lore:
-        - ''
         - '%corerpg_p1_reroll_blade_item%'
         - '%corerpg_p1_reroll_blade_cur%'
         - '§e➥ §f点击：聊天栏预览，再确认 · Shift：锁定词条再洗'
@@ -91,7 +88,6 @@ Icons:
       material: ender eye
       name: '§6护符 · 用重复件洗练'
       lore:
-        - ''
         - '%corerpg_p1_reroll_charm_item%'
         - '%corerpg_p1_reroll_charm_cur%'
         - '§e➥ §f点击：聊天栏预览，再确认 · Shift：锁定词条再洗'
@@ -111,7 +107,6 @@ Icons:
       material: prismarine crystals
       name: '§6护符 · 用碎片洗练'
       lore:
-        - ''
         - '%corerpg_p1_reroll_charm_item%'
         - '%corerpg_p1_reroll_charm_cur%'
         - '§e➥ §f点击：聊天栏预览，再确认 · Shift：锁定词条再洗'

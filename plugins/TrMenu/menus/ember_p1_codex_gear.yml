@@ -40,7 +40,6 @@ Icons:
       material: book and quill
       name: '§6图录'
       lore:
-        - ''
         - '%corerpg_p1_codex_hope%'
         - '§7第一次拿到某种刃或护符就登记（放进背包即可）'
 
@@ -267,7 +266,6 @@ Icons:
       material: compass
       name: '§6哪里刷什么 · 掉落偏向'
       lore:
-        - ''
         - '§7选了目标族：它约 60%（偏向它的图约 63%）'
         - '§7没选：本图偏向族 50%，另两族各 25%'
 
@@ -277,7 +275,6 @@ Icons:
       material: nether star
       name: '§d荣誉 · 称号与足迹'
       lore:
-        - ''
         - '§7已获得：§f%corerpg_p1_honors%'
         - '§7当前称号：§f%corerpg_p1_title%'
         - '§e➥ §f左：称号与足迹（查看与装上） · 右：赛季 · 排行 · 周目标页'
@@ -298,7 +295,6 @@ Icons:
       lore:
         - '§7奖励：§f余烬币 200 §8（一次性）'
         - '§7状态：%corerpg_p1_codex_stage_0%'
-        - ''
         - '§e➥ §f点击领取所有已达成的阶段'
     actions:
       all:
@@ -313,7 +309,6 @@ Icons:
       lore:
         - '§7奖励：§f余烬币 400 §8（一次性）'
         - '§7状态：%corerpg_p1_codex_stage_1%'
-        - ''
         - '§e➥ §f点击领取所有已达成的阶段'
     actions:
       all:
@@ -328,7 +323,6 @@ Icons:
       lore:
         - '§7奖励：§f余烬币 600 §8（一次性）'
         - '§7状态：%corerpg_p1_codex_stage_2%'
-        - ''
         - '§e➥ §f点击领取所有已达成的阶段'
     actions:
       all:
@@ -343,7 +337,6 @@ Icons:
       lore:
         - '§7奖励：§f余烬币 1000 §8（一次性）'
         - '§7状态：%corerpg_p1_codex_stage_3%'
-        - ''
         - '§e➥ §f点击领取所有已达成的阶段'
     actions:
       all:

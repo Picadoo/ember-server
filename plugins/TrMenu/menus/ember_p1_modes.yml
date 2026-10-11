@@ -44,7 +44,6 @@ Icons:
           material: gray dye
           name: '§7首领残响 §8（首通 Q04 潮蚀水道后开放）'
           lore:
-            - ''
             - '§7每周 3 次：单独再打一个 Q01–Q07 首领（按 T2 加强）'
             - '§7每次必得这张图 2 枚首领徽记 · 不耗体力 · 不掉装备'
     update: 20
@@ -52,7 +51,6 @@ Icons:
       material: amethyst shard
       name: '§b首领残响 §7（下面一排选首领）'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q01%'
         - '§7选一个已首通的 Q01–Q07 首领'
 
@@ -65,7 +63,6 @@ Icons:
           material: gray dye
           name: '§7连战·前哨 §8（首通 Q05 断塔回廊后开放）'
           lore:
-            - ''
             - '§7Q01 → Q02 → Q03 三个首领同一个大厅连打（按 T2 加强）'
             - '§7每周首通领奖：三张图各 2 枚首领徽记 + 1 枚 T2 印记'
     update: 20
@@ -73,7 +70,6 @@ Icons:
       material: blaze powder
       name: '§c连战·前哨（1～3 人）'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_rush_outpost%'
         - '§7每打倒一个休息 10 秒、站着的人回复 30% 生命 · 倒下观战，没有复活'
         - '§e➥ §f左：开始（组队时队长点） · 右：规则（聊天栏）'
@@ -95,7 +91,6 @@ Icons:
           material: gray dye
           name: '§7自选誓约 §8（首通 Q06 霜封哨所后开放）'
           lore:
-            - ''
             - '§7重打已首通的 Q01–Q07 普通版时自己挂规则（限药 / 逆行）'
             - '§7每挂一条，通关结算每人 +1 枚本图首领徽记 · 掉落不变'
     update: 20
@@ -103,7 +98,6 @@ Icons:
       material: writable book
       name: '§d自选誓约'
       lore:
-        - ''
         - '%corerpg_p1_pledge_head%'
         - '§7你当队长重打已首通的 Q01–Q07 普通版时生效（全队都首通过这张图）'
         - '§e➥ §f点击：选择要挂的规则'
@@ -124,7 +118,6 @@ Icons:
       material: iron axe
       name: '§b残响 · Q01 残门蛮兵'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q01%'
         - '§7生命 ×12、伤害 ×3（组队另按人数加生命）· 1～3 人'
         - '§e➥ §f左：开始（组队时队长点） · 右：规则（聊天栏）'
@@ -149,7 +142,6 @@ Icons:
       material: anvil
       name: '§b残响 · Q02 守炉蛮兵'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q02%'
         - '§7生命 ×3.5、伤害 ×2.2（组队另按人数加生命）· 1～3 人'
         - '§e➥ §f左：开始（组队时队长点） · 右：规则（聊天栏）'
@@ -174,7 +166,6 @@ Icons:
       material: iron sword
       name: '§b残响 · Q03 残誓守卫'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q03%'
         - '§7生命 ×3.2、伤害 ×2.0（组队另按人数加生命）· 1～3 人'
         - '§e➥ §f左：开始（组队时队长点） · 右：规则（聊天栏）'
@@ -199,7 +190,6 @@ Icons:
       material: prismarine shard
       name: '§b残响 · Q04 潮闸重卫'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q04%'
         - '§7生命 ×2.0、伤害 ×1.8（组队另按人数加生命）· 1～3 人'
         - '§e➥ §f左：开始（组队时队长点） · 右：规则（聊天栏）'
@@ -226,7 +216,6 @@ Icons:
       material: golden axe
       name: '§b残响 · Q05 断塔斧卫'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q05%'
         - '§7生命 ×1.3、伤害 ×1.4（组队另按人数加生命）· 1～3 人'
         - '§e➥ §f左：开始（组队时队长点） · 右：规则（聊天栏）'
@@ -251,7 +240,6 @@ Icons:
       material: packed ice
       name: '§b残响 · Q06 霜封统领'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q06%'
         - '§7生命 ×1.15、伤害 ×1.2（组队另按人数加生命）· 1～3 人'
         - '§e➥ §f左：开始（组队时队长点） · 右：规则（聊天栏）'
@@ -276,7 +264,6 @@ Icons:
       material: iron block
       name: '§b残响 · Q07 炉锁巨卫'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q07%'
         - '§7生命 ×1.0、伤害 ×1.1（组队另按人数加生命）· 1～3 人'
         - '§e➥ §f左：开始（组队时队长点） · 右：规则（聊天栏）'

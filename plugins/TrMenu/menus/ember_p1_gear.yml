@@ -42,7 +42,6 @@ Icons:
       material: iron sword
       name: '§6主手 · 刃'
       lore:
-        - ''
         - '§f%corerpg_p1_blade%'
         - '%corerpg_p1_gearlib_hope%'
         - '§e➥ §f点击：看手持物品的属性，以及换上后整套怎么变'
@@ -57,7 +56,6 @@ Icons:
       material: totem
       name: '§6已选护符'
       lore:
-        - ''
         - '§f%corerpg_p1_charm%'
         - '§7%corerpg_p1_charm_next_q%'
         - '§e➥ §f手持要用的护符，点击选定'
@@ -72,7 +70,6 @@ Icons:
       material: paper
       name: '§e实际属性'
       lore:
-        - ''
         - '§f%corerpg_p1_stats%'
         - '§7有效生命 §f%corerpg_p1_ehp% §8（生命 ÷ 承伤倍率）'
         - '§e➥ §f点击：聊天栏完整明细与计算公式'
@@ -87,7 +84,6 @@ Icons:
       material: nether star
       name: '§d套装：§f%corerpg_p1_awaken%'
       lore:
-        - ''
         - '§a炽愈：生命 ×1.00，每 5 次普攻回最大生命 2.5%（觉醒后最多 4%，6 秒一次），最稳'
         - '§8护甲四件套：§f%corerpg_p1_armor_set%'
 
@@ -97,7 +93,6 @@ Icons:
       material: exp bottle
       name: '§b下一次突破'
       lore:
-        - ''
         - '§f%corerpg_p1_awaken_next%'
         - '%corerpg_p1_awaken_route%'
         - '§e➥ §f点击：在聊天栏列出每件的路线（带 [换上] / [兑换] 按钮）'
@@ -113,7 +108,6 @@ Icons:
       material: book
       name: '§6成套进度'
       lore:
-        - ''
         - '§f%corerpg_p1_set_progress%'
         - '%corerpg_p1_set_run%'
 
@@ -122,7 +116,6 @@ Icons:
       material: potion
       name: '§a回复药 · 买 1 瓶'
       lore:
-        - ''
         - '§7余烬回复药：回复最大生命 20%'
         - '§7所有回复药共用 15 秒冷却 · 绑定、不回售'
         - '§e➥ §f点击购买 1 瓶（10 余烬币）'
@@ -136,7 +129,6 @@ Icons:
       amount: 5
       name: '§a回复药 · 买5瓶'
       lore:
-        - ''
         - '§7普通本约喝 4–8 瓶 · 限药精选最多 3'
         - '§e➥ §f买 5 瓶（50 币）'
     actions:
@@ -150,7 +142,6 @@ Icons:
       name: '§b补领暂存奖励'
       lore:
         - '§7背包满时结算会先暂存：§f%corerpg_p1_pending% §7项'
-        - ''
         - '§e➥ §f点击补领'
     actions:
       all:
@@ -163,7 +154,6 @@ Icons:
       lore:
         - '§7手持要处理的刃或护符再打开'
         - '§8手持护甲：仅可分解（白板零头）；养成随护符'
-        - ''
         - '§e➥ §f打开工坊'
     actions:
       all:
@@ -175,7 +165,6 @@ Icons:
       material: banner
       name: '§6外观商店'
       lore:
-        - ''
         - '§7余烬币 §f%corerpg_coin% §7· 余烬徽 §f%corerpg_p1_badges%'
         - '§7可用印记 §f%corerpg_p1_shopmarks% §8（每阶留 8 枚备用兑换）'
         - '§e➥ §f外观商店页（点商品在页内付款，右键试穿）'
@@ -192,7 +181,6 @@ Icons:
       material: nether star
       name: '§6签名传奇'
       lore:
-        - ''
         - '%corerpg_p1_sig_head%'
         - '%corerpg_p1_sig_blade%'
         - '§e➥ §f签名页'
@@ -211,7 +199,6 @@ Icons:
       lore:
         - '%corerpg_p1_honor_n%'
         - '§7一次性成就换来的账号永久小加成（有总上限）'
-        - ''
         - '§e➥ §f打开勋记页'
     actions:
       all:
@@ -226,7 +213,6 @@ Icons:
       material: prismarine crystals
       name: '§6词条洗练'
       lore:
-        - ''
         - '§7主手刃：%corerpg_p1_reroll_blade_cur%'
         - '§7护符：%corerpg_p1_reroll_charm_cur%'
         - '§e➥ §f洗练页'
@@ -243,7 +229,6 @@ Icons:
       material: firework charge
       name: '§c%corerpg_p1_fest_charm_name% §8（活动护符位）'
       lore:
-        - ''
         - '§7%corerpg_p1_fest_charm%'
         - '§f%corerpg_p1_fest_charm_effect%'
         - '§e➥ §f活动页（购买 / 佩戴 / 剩余国庆币兑换）'
@@ -258,7 +243,6 @@ Icons:
       material: enchanted book
       name: '§6天赋专精'
       lore:
-        - ''
         - '%corerpg_p1_spec_pts%'
         - '§7三排小天赋树：首领预警 · 词缀精英 · 套装专精'
         - '§e➥ §f天赋页'
@@ -308,7 +292,6 @@ Icons:
           material: iron chestplate
           name: '§6护甲'
           lore:
-            - ''
             - '%corerpg_p1_armor_head%'
             - '%corerpg_p1_armor_chest%'
             - '§e➥ §f护甲页（对比后换上）'
@@ -322,7 +305,6 @@ Icons:
           material: iron chestplate
           name: '§6护甲'
           lore:
-            - ''
             - '%corerpg_p1_armor_head%'
             - '%corerpg_p1_armor_chest%'
             - '§e➥ §f护甲页（对比后换上）'
@@ -337,7 +319,6 @@ Icons:
           name: '§6待领物品'
           lore:
             - '%corerpg_p1_armor_stash_line%'
-            - ''
             - '§7原来穿着的东西收在这里，一件不少'
             - '§e➥ §f点击领取到背包（背包满时留在这里，腾出空位再来）'
         actions:
@@ -350,7 +331,6 @@ Icons:
           material: iron chestplate
           name: '§6护甲'
           lore:
-            - ''
             - '%corerpg_p1_armor_head%'
             - '%corerpg_p1_armor_chest%'
             - '§e➥ §f护甲页（对比后换上）'

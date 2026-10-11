@@ -44,7 +44,6 @@ Icons:
       material: nether star
       name: '§e希望 · 通关保底'
       lore:
-        - ''
         - '§f%corerpg_p1_gem_pity_hope%'
         - '§7Q01–Q07 通关累计 · 满 5 发 1 石'
         - '§e➥ §f刷新保底提示'
@@ -59,7 +58,6 @@ Icons:
       material: book
       name: '§6说明 · 孔与战斗'
       lore:
-        - ''
         - '§7仓内：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%'
         - '§e通关保底：§f%corerpg_p1_gem_pity_hope%'
         - '§e➥ §f手持件 list'
@@ -110,7 +108,6 @@ Icons:
       material: paper
       name: '§7合成说明'
       lore:
-        - ''
         - '§7上面四格：确定合成指定石'
         - '§7材料：碎片×8 + 骨尘×4 + 币 40'
         - '§8挂机庭产碎/骨 · 不抬 AFK 表'
@@ -257,7 +254,6 @@ Icons:
       material: emerald
       name: '§a刷新 list'
       lore:
-        - ''
         - '§7聊天打印手持孔位 + 保底'
         - '§f%corerpg_p1_gem_pity_hope%'
     actions:

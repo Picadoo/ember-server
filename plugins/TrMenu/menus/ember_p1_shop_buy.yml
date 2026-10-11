@@ -34,7 +34,6 @@ Icons:
       lore:
         - '§7%corerpg_p1_shopsel_how%'
         - '§6%corerpg_p1_shopsel_price%'
-        - ''
         - '%corerpg_p1_shopsel_note%'
 
   C:
@@ -44,7 +43,6 @@ Icons:
       name: '§e用余烬币付'
       lore:
         - '%corerpg_p1_shopsel_coin%'
-        - ''
         - '§e➥ §f点击付款（付不起不会扣）'
     actions:
       all:
@@ -59,7 +57,6 @@ Icons:
       name: '§e用余烬徽付'
       lore:
         - '%corerpg_p1_shopsel_badge%'
-        - ''
         - '§e➥ §f点击付款（付不起不会扣）'
     actions:
       all:
@@ -74,7 +71,6 @@ Icons:
       name: '§e用 T3 印记付'
       lore:
         - '%corerpg_p1_shopsel_t3%'
-        - ''
         - '§e➥ §f点击付款（付不起不会扣）'
     actions:
       all:
@@ -89,7 +85,6 @@ Icons:
       name: '§e用 T2 印记付'
       lore:
         - '%corerpg_p1_shopsel_t2%'
-        - ''
         - '§e➥ §f点击付款（付不起不会扣）'
     actions:
       all:
@@ -104,7 +99,6 @@ Icons:
       name: '§e用 T1 印记付'
       lore:
         - '%corerpg_p1_shopsel_t1%'
-        - ''
         - '§e➥ §f点击付款（付不起不会扣）'
     actions:
       all:

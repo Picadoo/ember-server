@@ -48,10 +48,8 @@ Icons:
       material: map
       name: '§e推荐打法'
       lore:
-        - ''
         - '§7机动 / 站桩 / 压上 ↔ 天赋一排'
         - '§8签名覆盖形状时仍先认打法标签'
-        - ''
         - '§e➥ §f打开'
     actions:
       all:
@@ -64,7 +62,6 @@ Icons:
       material: nether star
       name: '§6签名传奇 · 说明'
       lore:
-        - ''
         - '%corerpg_p1_sig_head%'
         - '§7来源：首通后普通重打这张图 → 每局 1 枚首领徽记，基础掉落 12% 是签名件'
 
@@ -76,7 +73,6 @@ Icons:
       lore:
         - '%corerpg_p1_sig_marks%'
         - '§e希望 · 追烙：§f%corerpg_p1_sig_chase_hope%'
-        - ''
         - '§8只用来烙印这张图的签名 · 满 5 可烙 · 不锁通关'
 
   R:
@@ -86,7 +82,6 @@ Icons:
       name: '§6烬炉烙印'
       lore:
         - '%corerpg_p1_sig_rules%'
-        - ''
         - '§7选签名 → 选件（正在用的 / 手里拿着的）→ 看花费 → 确认'
         - '§7覆盖已有签名时要 Shift+点击确认，不能取回'
 
@@ -96,7 +91,6 @@ Icons:
       material: iron sword
       name: '§6正在用的刃'
       lore:
-        - ''
         - '%corerpg_p1_sig_blade%'
         - '%corerpg_p1_sig_blade_o%'
     actions:
@@ -110,7 +104,6 @@ Icons:
       material: totem
       name: '§6已选护符'
       lore:
-        - ''
         - '%corerpg_p1_sig_charm%'
         - '%corerpg_p1_sig_charm_o%'
     actions:
@@ -266,7 +259,6 @@ Icons:
       material: enchanted book
       name: '§d签名调律'
       lore:
-        - ''
         - '%corerpg_p1_sig_alt_head%'
         - '§7每件用那张图的 10 枚徽记解锁一次（永久），之后在城里随时切换'
         - '§e➥ §f➥ 点击打开调律页'
@@ -313,10 +305,8 @@ Icons:
       material: diamond sword
       name: '§6技能组'
       lore:
-        - ''
         - '§7烬斩 / 烬突二选一 · 形状预览 · 身法方向'
         - '§8L07/L09/L13 覆盖符文时，以本页签名为准'
-        - ''
         - '§e➥ §f打开技能组'
     actions:
       all:

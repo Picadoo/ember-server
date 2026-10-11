@@ -2139,3 +2139,13 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | MV | `worlds.yml`：仅 hub/afk keepSpawn+autoLoad；其余 keepSpawn/autoLoad false |
 | jar | 未改（live 仍 1.65.723-d12194.local） |
 | STATUS | `docs/status/STATUS-ember-watchdog-world-spawn-d12203-2026-10-11.md` |
+
+
+### 13.111 TrMenu lore 压缩 p1/hub/rewards（D12202，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 菜单 | hub · daily_rewards · abyss_rewards · p1_abyss/afk/armor/brand/challenge/codex_gear/fest/forge/forge_recipes/gear/gem/modes/playstyle/pledge/reroll/season/shop/shop_buy/short/sig/sig_runconfirm/spec lore ≤3（跳过 pet/gacha/hub_legacy） |
+| jar | 未改（live 仍 1.65.723-d12194.local） |
+| STATUS | `docs/status/STATUS-ember-trmenu-lore-p1-hub-rewards-d12202-2026-10-11.md` |
+

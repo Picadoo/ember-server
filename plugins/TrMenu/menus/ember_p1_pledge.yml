@@ -36,7 +36,6 @@ Icons:
       material: writable book
       name: '§d自选誓约'
       lore:
-        - ''
         - '%corerpg_p1_pledge_head%'
         - '§b本周精选：§f%corerpg_p1_featured%'
 
@@ -46,9 +45,7 @@ Icons:
       material: potion
       name: '§f%corerpg_p1_pledge_n_lean%'
       lore:
-        - ''
         - '§7%corerpg_p1_pledge_t_lean%'
-        - ''
         - '%corerpg_p1_pledge_s_lean%'
     actions:
       all:
@@ -61,9 +58,7 @@ Icons:
       material: compass
       name: '§f%corerpg_p1_pledge_n_reverse%'
       lore:
-        - ''
         - '§7%corerpg_p1_pledge_t_reverse%'
-        - ''
         - '%corerpg_p1_pledge_s_reverse%'
     actions:
       all:

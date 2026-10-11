@@ -38,7 +38,6 @@ Icons:
       material: map
       name: '§e推荐打法 · 认知标签'
       lore:
-        - ''
         - '§7专精：%corerpg_p1_spec_pts%'
         - '§8%corerpg_p1_spec_row_1%'
 
@@ -48,7 +47,6 @@ Icons:
       material: feather
       name: '§b机动 §8· §f%corerpg_p1_spec_name_t1a%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t1a%'
         - '%corerpg_p1_spec_bad_t1a%'
         - '§e➥ §f天赋页点选 / 确认'
@@ -64,7 +62,6 @@ Icons:
       material: shield
       name: '§a站桩 §8· §f%corerpg_p1_spec_name_t1b%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t1b%'
         - '%corerpg_p1_spec_bad_t1b%'
         - '§e➥ §f天赋页点选 / 确认'
@@ -80,7 +77,6 @@ Icons:
       material: sugar
       name: '§6压上 §8· §f%corerpg_p1_spec_name_t1c%'
       lore:
-        - ''
         - '%corerpg_p1_spec_good_t1c%'
         - '%corerpg_p1_spec_bad_t1c%'
         - '§e➥ §f天赋页点选 / 确认'
@@ -95,10 +91,8 @@ Icons:
       material: blaze powder
       name: '§6技能组'
       lore:
-        - ''
         - '§7烬斩/烬突二选一 · 形状预览 · 身法方向'
         - '§7当前 §f%corerpg_kit_shape% §7· 身法 §b%corerpg_kit_step_dir%'
-        - ''
         - '§e➥ §f打开'
     actions:
       all:
@@ -110,10 +104,8 @@ Icons:
       material: enchanted book
       name: '§6天赋专精'
       lore:
-        - ''
         - '§7第 1 排三选一就在这里点'
         - '§7%corerpg_p1_spec_pts%'
-        - ''
         - '§e➥ §f打开天赋页'
     actions:
       all:
@@ -126,10 +118,8 @@ Icons:
       material: nether star
       name: '§6签名传奇'
       lore:
-        - ''
         - '§7刃/护符签名可覆盖烬斩符文'
         - '§8L07 直线 · L09 环 · L13 蓄力环'
-        - ''
         - '§e➥ §f打开签名页'
     actions:
       all:

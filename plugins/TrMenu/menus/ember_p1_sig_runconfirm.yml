@@ -49,7 +49,6 @@ Icons:
       lore:
         - '§7打开签名调律页'
         - '§7换完后再从冒险/挑战进本'
-        - ''
         - '§e➥ §f点击'
     actions:
       all:
@@ -78,7 +77,6 @@ Icons:
       name: '§c取消'
       lore:
         - '§7不进本 · 关闭面板'
-        - ''
         - '§e➥ §f点击'
     actions:
       all:

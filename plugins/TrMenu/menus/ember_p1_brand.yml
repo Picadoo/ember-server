@@ -38,7 +38,6 @@ Icons:
       material: book
       name: '§6烙纹定向 · 说明'
       lore:
-        - ''
         - '§c仓差：§f碎差 %corerpg_p1_forge_gap_brand% §8（合成需×40）'
         - '§c定向还差：§f%corerpg_p1_forge_gap_pin% §8（手持阶；空手T1）'
 
@@ -48,7 +47,6 @@ Icons:
       name: '§e合成烙纹'
       lore:
         - '§740 余烬碎片 → 1 余烬烙纹'
-        - ''
         - '§e➥ §f点击：聊天栏确认合成'
         - '§c还差：§f碎差 %corerpg_p1_forge_gap_brand%（需×40）'
     actions:

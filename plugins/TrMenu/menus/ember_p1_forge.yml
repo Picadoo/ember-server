@@ -62,7 +62,6 @@ Icons:
       material: anvil
       name: '§c强化 · 预览'
       lore:
-        - ''
         - '§e保底进度：§f%corerpg_p1_held_enhance_pity%'
         - '§e本次：§f%corerpg_p1_held_enhance_cost%'
     actions:
@@ -76,7 +75,6 @@ Icons:
           material: gray stained glass pane
           name: '§8强化 · 不可用'
           lore:
-            - ''
             - '§e本次：§f%corerpg_p1_held_enhance_cost%'
             - '§c%corerpg_p1_held_enhance_lack%'
         actions:
@@ -88,7 +86,6 @@ Icons:
       material: redstone
       name: '§c强化 · 确认一次'
       lore:
-        - ''
         - '§e保底进度：§f%corerpg_p1_held_enhance_pity%'
         - '§e本次：§f%corerpg_p1_held_enhance_cost%'
     actions:
@@ -101,7 +98,6 @@ Icons:
           material: gray stained glass pane
           name: '§8强化 · 不可用'
           lore:
-            - ''
             - '§e本次：§f%corerpg_p1_held_enhance_cost%'
             - '§c%corerpg_p1_held_enhance_lack%'
         actions:
@@ -113,7 +109,6 @@ Icons:
       material: nether star
       name: '§d升阶 · 预览'
       lore:
-        - ''
         - '§e本次：§f%corerpg_p1_held_upgrade_cost%'
         - '§c%corerpg_p1_held_upgrade_lack%'
     actions:
@@ -126,7 +121,6 @@ Icons:
           material: gray stained glass pane
           name: '§8升阶 · 不可用'
           lore:
-            - ''
             - '§e本次：§f%corerpg_p1_held_upgrade_cost%'
             - '§c%corerpg_p1_held_upgrade_lack%'
         actions:
@@ -152,7 +146,6 @@ Icons:
           material: gray stained glass pane
           name: '§8升阶 · 不可用'
           lore:
-            - ''
             - '§e本次：§f%corerpg_p1_held_upgrade_cost%'
             - '§c%corerpg_p1_held_upgrade_lack%'
         actions:
@@ -164,7 +157,6 @@ Icons:
       material: blaze powder
       name: '§6精工 · 预览'
       lore:
-        - ''
         - '§7让这件的成长 +2%/档（0→2%→4%→6%）：材料确定升'
         - '§e精工进度：§f%corerpg_p1_held_refine_hope%'
     actions:
@@ -177,7 +169,6 @@ Icons:
           material: gray stained glass pane
           name: '§8精工 · 不可用'
           lore:
-            - ''
             - '§e手持件：§f%corerpg_p1_held_next_c%'
             - '§c%corerpg_p1_held_refine_lack%'
         actions:
@@ -189,7 +180,6 @@ Icons:
       material: blaze powder
       name: '§6精工 · 确认'
       lore:
-        - ''
         - '§e精工进度：§f%corerpg_p1_held_refine_hope%'
         - '§e手持件：§f%corerpg_p1_held_next_c%'
     actions:
@@ -202,7 +192,6 @@ Icons:
           material: gray stained glass pane
           name: '§8精工 · 不可用'
           lore:
-            - ''
             - '§e手持件：§f%corerpg_p1_held_next_c%'
             - '§c%corerpg_p1_held_refine_lack%'
         actions:
@@ -214,7 +203,6 @@ Icons:
       material: gold nugget
       name: '§e成色 · 预览'
       lore:
-        - ''
         - '§8强化一档 +4%～8%，通常先强化更划算'
         - '§e成色进度：§f%corerpg_p1_held_quality_hope%'
     actions:
@@ -227,7 +215,6 @@ Icons:
           material: gray stained glass pane
           name: '§8成色 · 不可用'
           lore:
-            - ''
             - '§e手持件：§f%corerpg_p1_held_next_q%'
             - '§c%corerpg_p1_held_quality_lack%'
         actions:
@@ -239,7 +226,6 @@ Icons:
       material: gold nugget
       name: '§e成色 · 确认'
       lore:
-        - ''
         - '§e成色进度：§f%corerpg_p1_held_quality_hope%'
         - '§e手持件：§f%corerpg_p1_held_next_q%'
     actions:
@@ -252,7 +238,6 @@ Icons:
           material: gray stained glass pane
           name: '§8成色 · 不可用'
           lore:
-            - ''
             - '§e手持件：§f%corerpg_p1_held_next_q%'
             - '§c%corerpg_p1_held_quality_lack%'
         actions:
@@ -264,7 +249,6 @@ Icons:
       material: hopper
       name: '§b强化轨道互换 · 预览'
       lore:
-        - ''
         - '§e%corerpg_p1_held_swap_cost%'
         - '§7主手与副手同部位装备互换 强化等级+失败计数'
     actions:
@@ -289,7 +273,6 @@ Icons:
       material: flint
       name: '§7分解 · 预览'
       lore:
-        - ''
         - '§e预览：§f%corerpg_p1_held_dismantle_yield%'
         - '§7只限普通掉落件；甲→白板胚零头（0.1×阶），攒满 1 到账'
     actions:
@@ -302,7 +285,6 @@ Icons:
       material: ender pearl
       name: '§b强化轨道互换 · 确认'
       lore:
-        - ''
         - '§e%corerpg_p1_held_swap_cost%'
         - '§7主手与副手的同部位装备交换「强化等级 + 失败计数」'
     actions:
@@ -326,7 +308,6 @@ Icons:
       material: gray dye
       name: '§7分解 · 确认在聊天栏'
       lore:
-        - ''
         - '§7点上面的预览后，聊天栏出现 §c[确认分解]'
         - '§7只限普通掉落件；首通和起步件拆不了'
   # D381: 产花反向 · 工坊→挂机庭
@@ -335,7 +316,6 @@ Icons:
       material: grass
       name: '§a材料哪来 · 挂机庭'
       lore:
-        - ''
         - '§7挂机六键产 → 仓 → 本页花'
         - '§7日顶仍 2400 · 魂尘≠挂机'
         - '§e➥ §f挂机庭'
@@ -349,7 +329,6 @@ Icons:
       material: anvil
       name: '§6旁路 · 随机锻造'
       lore:
-        - ''
         - '§8旁路赌线 · 主养仍用上方强化/成色/精工'
         - '§78 印记 + 4 胚料 + 500 币'
         - '§e➥ §f随机锻造页'
@@ -363,10 +342,8 @@ Icons:
       material: ender pearl
       name: '§6每周转化'
       lore:
-        - ''
         - '§7跨族改底 · 每周 1 次'
         - '§7成色截卓越 · 强化归零'
-        - ''
         - '§e➥ §f打开转化页'
     actions:
       all:
@@ -378,7 +355,6 @@ Icons:
       material: blaze powder
       name: '§6烙纹定向'
       lore:
-        - ''
         - '§7用余烬烙纹写入§f指定词条类型'
         - '§7档位仍随机 · 每件锻造次数 13'
         - '§e➥ §f烙纹工坊'
@@ -392,7 +368,6 @@ Icons:
       material: book
       name: '§e配方速览'
       lore:
-        - ''
         - '§7未持装备也能看强化/升阶/精工大概要多少'
         - '§7代表档 +1/+4/+7/+10 · 升阶/精工/成色表'
         - '§e➥ §f查看阶梯'
@@ -407,7 +382,6 @@ Icons:
       material: emerald
       name: '§5P1 宝石'
       lore:
-        - ''
         - '§e希望保底：§f%corerpg_p1_gem_pity_hope%'
         - '§7孔位镶拆 · 合成四石 · 通关保底'
         - '§e➥ §f宝石页'
@@ -422,7 +396,6 @@ Icons:
       material: enchanting table
       name: '§6词条洗练'
       lore:
-        - ''
         - '§7刃：%corerpg_p1_reroll_blade_cur%'
         - '§7护符：%corerpg_p1_reroll_charm_cur%'
         - '§e➥ §f洗练页'

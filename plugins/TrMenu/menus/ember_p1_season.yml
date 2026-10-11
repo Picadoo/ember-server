@@ -41,7 +41,6 @@ Icons:
       material: nether star
       name: '§d%corerpg_p1_season%'
       lore:
-        - ''
         - '§74 周一个赛季 · 每周一 0 点（北京时间）换周'
         - '§7季末：每榜前 3 名得赛季称号，各榜第 1 名再得 §d❖ §7名牌框'
         - '§e➥ §f左：本周榜（聊天栏，含你的名次） · 右：赛季榜'
@@ -61,7 +60,6 @@ Icons:
       material: book and quill
       name: '§6本周目标：§f%corerpg_p1_goals%'
       lore:
-        - ''
         - '§7余烬徽：§f%corerpg_p1_badges% §8（外观商店用，1 徽 = 1 点）'
         - '§7每完成一个 +15，全部完成再 +20'
         - '§e➥ §f点击：在聊天栏列出（带 [打开] 按钮）'
@@ -77,9 +75,7 @@ Icons:
       material: banner
       name: '§d上赛季结果'
       lore:
-        - ''
         - '§7%corerpg_p1_season_last%'
-        - ''
         - '§e➥ §f点击：完整结果'
     actions:
       all:
@@ -93,9 +89,7 @@ Icons:
       material: compass
       name: '§6周目标 · 精选挑战'
       lore:
-        - ''
         - '%corerpg_p1_goal_featured%'
-        - ''
         - '§e➥ §f点击：打开对应页面'
     actions:
       all:
@@ -108,9 +102,7 @@ Icons:
       material: ender eye
       name: '§6周目标 · 深渊'
       lore:
-        - ''
         - '%corerpg_p1_goal_abyss%'
-        - ''
         - '§e➥ §f点击：打开对应页面'
     actions:
       all:
@@ -123,9 +115,7 @@ Icons:
       material: iron axe
       name: '§6周目标 · 团本'
       lore:
-        - ''
         - '%corerpg_p1_goal_raid%'
-        - ''
         - '§e➥ §f点击：打开对应页面'
     actions:
       all:
@@ -138,7 +128,6 @@ Icons:
       material: paper
       name: '§6周目标 · 每日委托'
       lore:
-        - ''
         - '%corerpg_p1_goal_bounty%'
         - '§8首通 Q07 后才计数；当天做满委托（第 3 局档）算 1 天'
         - '§e➥ §f点击：打开对应页面'
@@ -153,7 +142,6 @@ Icons:
       material: slime ball
       name: '§6周目标'
       lore:
-        - ''
         - '%corerpg_p1_goal_core%'
         - '§7团本断塔回廊·团（R03）里'
         - '§e➥ §f点击：打开冒险页'
@@ -168,7 +156,6 @@ Icons:
       material: feather
       name: '§6周目标 · 短征 §8（可选）'
       lore:
-        - ''
         - '%corerpg_p1_goal_short%'
         - '§7五本（sx01–sx05）共用一个周进度 · 第 4+ 次无结算不计'
         - '§e➥ §f点击：打开短征选本'
@@ -183,7 +170,6 @@ Icons:
       material: blaze powder
       name: '§c余烬连战最快'
       lore:
-        - ''
         - '§f 1. %corerpg_p1_sboard_w_time_rush_1%'
         - '§f 2. %corerpg_p1_sboard_w_time_rush_2%'
         - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
@@ -203,7 +189,6 @@ Icons:
       material: ender eye
       name: '§e深渊最高层'
       lore:
-        - ''
         - '§f 1. %corerpg_p1_sboard_w_abyss_1%'
         - '§f 2. %corerpg_p1_sboard_w_abyss_2%'
         - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
@@ -223,7 +208,6 @@ Icons:
       material: compass
       name: '§e精选挑战通关'
       lore:
-        - ''
         - '§f 1. %corerpg_p1_sboard_w_featured_1%'
         - '§f 2. %corerpg_p1_sboard_w_featured_2%'
         - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
@@ -243,7 +227,6 @@ Icons:
       material: iron axe
       name: '§e团本通关'
       lore:
-        - ''
         - '§f 1. %corerpg_p1_sboard_w_raids_1%'
         - '§f 2. %corerpg_p1_sboard_w_raids_2%'
         - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
@@ -263,7 +246,6 @@ Icons:
       material: rail
       name: '§eR01 最快通关'
       lore:
-        - ''
         - '§f 1. %corerpg_p1_sboard_w_time_r01_1%'
         - '§f 2. %corerpg_p1_sboard_w_time_r01_2%'
         - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
@@ -283,7 +265,6 @@ Icons:
       material: packed ice
       name: '§eR02 最快通关'
       lore:
-        - ''
         - '§f 1. %corerpg_p1_sboard_w_time_r02_1%'
         - '§f 2. %corerpg_p1_sboard_w_time_r02_2%'
         - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
@@ -303,7 +284,6 @@ Icons:
       material: blaze powder
       name: '§eR03 最快通关'
       lore:
-        - ''
         - '§f 1. %corerpg_p1_sboard_w_time_r03_1%'
         - '§f 2. %corerpg_p1_sboard_w_time_r03_2%'
         - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
@@ -322,10 +302,8 @@ Icons:
       material: name tag
       name: '§d称号与足迹'
       lore:
-        - ''
         - '§7当前称号：§f%corerpg_p1_title%'
         - '§7赛季称号、❖ 名牌框也在这里装上'
-        - ''
         - '§e➥ §f点击：查看与装上'
     actions:
       all:
@@ -347,10 +325,8 @@ Icons:
       material: emerald
       name: '§b外观商店'
       lore:
-        - ''
         - '§7用余烬币、余烬徽或多出来的印记换外观'
         - '§8只做展示，不加属性'
-        - ''
         - '§e➥ §f点击：打开商店页'
     actions:
       all:
