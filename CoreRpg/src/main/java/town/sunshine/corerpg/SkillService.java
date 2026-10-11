@@ -1089,6 +1089,10 @@ public final class SkillService implements Listener {
                 player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_GENERIC_EXPLODE, 0.35f, 1.4f);
             } catch (Throwable ignored) { }
             try { player.sendActionBar("§6蓄力落地 · §f缓速"); } catch (Throwable ignored) { }
+            try {
+                town.sunshine.corerpg.PlayerData pdH = plugin.getDataStore().get(player.getUniqueId());
+                town.sunshine.corerpg.p1.EmberChargeLandHeal.maybeHeal(player, pdH); // D8145
+            } catch (Throwable ignored) { }
         }
         applySlashSetIdentity(player, hit);
         maybeFlashSlashHit(player, hit.size(), shapeId); // D445 / D1155 SF1–SF3

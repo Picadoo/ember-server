@@ -3643,10 +3643,23 @@ public boolean pathForceOpenDoor(Player p) {
         final UUID id = p.getUniqueId();
         if (!forgeRollBusy.add(id)) { p.sendMessage(P + "§c上一次随机锻造还在处理"); return true; }
         final String rid = EmberPayRules.forgeRollRid(id, System.currentTimeMillis(), rnd.nextInt(46656));
-        final int q = floor
+        int qRoll = floor
                 ? EmberForgeRollRules.rollQualityFloor(new java.util.Random(EmberPayRules.seed(rid.hashCode(), id.toString(), rid)))
                 : EmberForgeRollRules.rollQuality(new java.util.Random(EmberPayRules.seed(rid.hashCode(), id.toString(), rid)));
-        final int craft = EmberForgeRollRules.rollCraft(new java.util.Random(EmberPayRules.seed(rid.hashCode() ^ 0x9e3779b9L, id.toString(), rid + ":c")));
+        int craftRoll = EmberForgeRollRules.rollCraft(new java.util.Random(EmberPayRules.seed(rid.hashCode() ^ 0x9e3779b9L, id.toString(), rid + ":c")));
+        try {
+            PlayerData pdF = data(id);
+            int qSoft = EmberForgeQualityFloor.consumeFloor(pdF, qRoll); // D8097
+            if (qSoft > qRoll && p != null)
+                p.sendMessage(P + "§a锻造成色保底 · ≥精良（今日一次）");
+            qRoll = qSoft;
+            int cSoft = EmberForgeCraftFloor.consumeFloor(pdF, craftRoll); // D8129
+            if (cSoft > craftRoll && p != null)
+                p.sendMessage(P + "§a锻造精工保底 · ≥1（今日一次）");
+            craftRoll = cSoft;
+        } catch (Throwable ignored) { }
+        final int q = qRoll;
+        final int craft = craftRoll;
         final String uid = EmberRunRules.rewardUid(rnd.nextLong(), id.toString(), rid, "forge_roll");
         final EmberItemData item = new EmberItemData(uid, EmberItemData.templateId(fam, slot, tier), fam, slot, tier, q, craft, 0, 0, true, "drop",
                 EmberItemData.DATA_VERSION, 0, 0, 0, 0, 0, EmberProvenance.forForgeRoll(rid, System.currentTimeMillis()));
