@@ -183,9 +183,9 @@ public final class EmberRaidServiceTest {
 
     @Test public void storyHalfHpCue_qMapsMatchHooks() {
         assertEquals("§e半血 · 招式变强", EmberRunDirector.storyHalfHpCue("q01"));
-        assertEquals("§e半血 · 招式变强", EmberRunDirector.storyHalfHpCue("q02"));
+        assertEquals("§e半血破招 §7· 焦核汲取可打断", EmberRunDirector.storyHalfHpCue("q02"));
         assertEquals("§e半血增援+破招 §7· 誓魂汲取可打断", EmberRunDirector.storyHalfHpCue("q03"));
-        assertEquals("§e半血 · 招式变强", EmberRunDirector.storyHalfHpCue("q04"));
+        assertEquals("§e半血破招 §7· 潮心聚裂可打断", EmberRunDirector.storyHalfHpCue("q04"));
         assertEquals("§e半血破招 §7· 塔心聚裂可打断", EmberRunDirector.storyHalfHpCue("q05"));
         assertEquals("§e半血破招 §7· 霜潮汲取可打断", EmberRunDirector.storyHalfHpCue("q06"));
         assertEquals("§e半血破招 §7· 炉心聚爆可打断", EmberRunDirector.storyHalfHpCue("q07"));

@@ -117,4 +117,20 @@ public class EmberBossMoveTest {
         assertEquals(0.3, q05.breakStun, 1e-9);
     }
 
+
+    @Test public void pack7EarlyGameBreakChannels_D12210() {
+        EmberRunMaps.Skill q02 = skill("type", "circle", "name", "焦核汲取", "every", 25, "below", 0.5,
+            "warn", 3.0, "radius", 5, "ahead", 0, "dmg", 18, "break_hp", 0.065, "break_stun", 0.3);
+        EmberRunMaps.Skill q04 = skill("type", "circle", "name", "潮心聚裂", "every", 25, "below", 0.5,
+            "warn", 3.0, "radius", 5.5, "ahead", 0, "dmg", 25, "break_hp", 0.065, "break_stun", 0.3);
+        assertTrue(q02.breakHp > 0);
+        assertTrue(q04.breakHp > 0);
+        assertEquals("焦核汲取", q02.name);
+        assertEquals("潮心聚裂", q04.name);
+        assertTrue(EmberBossMove.of(q02).has(CounterplayKind.BREAK));
+        assertTrue(EmberBossMove.of(q04).has(CounterplayKind.BREAK));
+        assertEquals(0.065, q02.breakHp, 1e-9);
+        assertEquals(0.3, q04.breakStun, 1e-9);
+    }
+
 }

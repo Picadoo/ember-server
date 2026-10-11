@@ -23,7 +23,7 @@
 # Behaviour-neutral: nothing in CoreRpg reads this file. Update it in the same commit as any new source / key / map.
 
 version: 1
-balance_version: 92
+balance_version: 93
 built_against: "1.65.417-d1030.local (D1030–D1038 source-map/ledger health: economy bv89 + claimable)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
