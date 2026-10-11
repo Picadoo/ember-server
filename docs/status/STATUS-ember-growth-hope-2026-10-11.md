@@ -1,3 +1,6 @@
+Live jar: **1.65.645-d7328.local** · D7265–D7328 ShieldFirstSecs
+Prior: ParrySlash+Huohen · StepBlock+ArmorTenths
+
 Live jar: **1.65.644-d7264.local** · D7201–D7264 ParrySlashArm + HuohenRadiusBoost
 Prior: StepBlock+ArmorTenths
 

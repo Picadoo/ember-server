@@ -1,0 +1,3 @@
+# RESEARCH · ShieldFirstSecs · 2026-10-11
+Outside ParrySlash/Huohen/StepBlock…
+Continuous: 本日首次签名护盾 +1s 持续。

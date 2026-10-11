@@ -353,6 +353,14 @@ public final class EmberGrowthService implements Listener {
                 * EmberSkillKit.sigShieldMaxMult(syncSh);
         double secs = m.get("skill_shield_secs") > 0 ? m.get("skill_shield_secs") : 5.0;
         secs = EmberSkillKit.sigShieldSecs(secs, syncSh);
+        try {
+            PlayerData pdSh = plugin.getDataStore().get(p.getUniqueId());
+            double extra = EmberShieldFirstSecs.consume(pdSh); // D7265
+            if (extra > 0) {
+                secs += extra;
+                try { p.sendActionBar("§b护盾首启 · +" + String.format(Locale.ROOT, "%.0f", extra) + "s"); } catch (Throwable ignored) { }
+            }
+        } catch (Throwable ignored) { }
         long now = System.currentTimeMillis();
         double[] cur = shield.get(p.getUniqueId());
         double keep = cur != null && now < cur[1] ? cur[0] : 0;

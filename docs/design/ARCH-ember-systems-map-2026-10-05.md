@@ -555,3 +555,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D7073–D7136: SetLandFirstBoost (first set slash land/day heal×1.5 or slow+4). STOP densify + priors. Talent HOLD. Six-slot HOLD.
 - D7137–D7200: StepBlockRetry (block→next +0.5) + ArmorTenthsBoost (+1 tenth/day). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D7201–D7264: ParrySlashArm (架→斩 +0.30) + HuohenRadiusBoost (+0.35R/day). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D7265–D7328: ShieldFirstSecs (first shield +1s/day). STOP densify those + priors. Talent HOLD. Six-slot HOLD.

@@ -551,6 +551,7 @@ public final class EmberCounters {
         px("p1_step_block_retry", "EmberStepBlockRetry", A, PR, NV, "D7137 step block retry day");
         px("p1_armor_tenths_boost", "EmberArmorTenthsBoost", A, PR, NV, "D7169 armor tenths boost day");
         px("p1_huohen_radius_boost", "EmberHuohenRadiusBoost", A, PR, NV, "D7233 huohen radius boost day");
+        px("p1_shield_first_secs", "EmberShieldFirstSecs", A, PR, NV, "D7265 shield first secs day");
         px("p1_brand_auto_pin_", "EmberBrandSure", A, PR, NV, "D5025 craft→path auto-pin latch");
         px("p1_marks_awk_auto_t", "EmberMarksBreak", D, HI, OW, "D4513 marks awaken auto-redeem per tier@day");
         px("p1_awk_break_", "EmberAwakenBreak", A, PR, NV, "D4385 awakening breakthrough latch I..III");
