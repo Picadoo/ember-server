@@ -317,6 +317,24 @@ public final class EmberSettleService {
                     try { tip.sendActionBar("§a额外精英加码"); } catch (Throwable ignored) { }
                 }
             }
+            if (EmberExtraTreasureBoost.apply(pd, grants)) { // D10401
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a宝藏加码 · 余烬币 ×2（今日一次）");
+                    try { tip.sendActionBar("§a宝藏加码"); } catch (Throwable ignored) { }
+                }
+            }
+            if (EmberExtraChestFloorSoft.apply(pd, grants)) { // D10417
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a额外宝箱 · 成色≥精良（今日一次）");
+                    try { tip.sendActionBar("§a额外宝箱成色底"); } catch (Throwable ignored) { }
+                }
+            }
+            if (EmberFcBlankBoost.apply(pd, grants)) { // D10433
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a首通加码 · 空白纸 +" + EmberFcBlankBoost.BONUS + "（今日一次）");
+                    try { tip.sendActionBar("§a首通空白纸加码"); } catch (Throwable ignored) { }
+                }
+            }
         } catch (Throwable ignored) { }
         boolean dropQForced = false;
         boolean dropCForced = false;
