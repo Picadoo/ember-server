@@ -224,7 +224,8 @@ public final class EmberCommand {
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
             if (args.length < 3) {
-                p.sendMessage(P + EmberCounterPath.glance(EmberCounterPath.get(d)));
+                boolean unlocked = EmberSkillKit.counterPathUnlocked(d, runs);
+                p.sendMessage(P + EmberCounterPath.glance(EmberCounterPath.get(d), unlocked));
                 EmberCounterPath.offerPick(p);
                 return true;
             }

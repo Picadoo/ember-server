@@ -127,6 +127,8 @@ public final class EmberSkillKit {
     public static final String C_BAR_ENTER = "p1_bar_enter";
     /** D2925: entered Q02 → spice path without clear-gate. */
     public static final String C_SPICE_ENTER = "p1_spice_enter";
+    /** D3041: entered Q02 → counter path without clear-gate. */
+    public static final String C_COUNTER_ENTER = "p1_counter_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -440,6 +442,20 @@ public final class EmberSkillKit {
     public static boolean spicePathUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
         if (d.periodCount(C_SPICE_ENTER, "all") > 0) return true;
+        if (runs != null && runs.firstClearedKey(d, "q02")) return true;
+        return runs != null && runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
+    }
+
+    public static boolean markCounterEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_COUNTER_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_COUNTER_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean counterPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_COUNTER_ENTER, "all") > 0) return true;
         if (runs != null && runs.firstClearedKey(d, "q02")) return true;
         return runs != null && runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
     }

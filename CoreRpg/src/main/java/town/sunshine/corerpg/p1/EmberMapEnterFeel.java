@@ -184,6 +184,12 @@ public final class EmberMapEnterFeel {
                 } catch (Throwable ignored) { }
                 EmberSpicePath.scheduleOfferAfterEnter(p);
             }
+            if ("q02".equalsIgnoreCase(m.key) && EmberSkillKit.markCounterEnter(pd)) {
+                try {
+                    p.sendMessage(EmberRunService.P + "§a破绽路径已开放 · §f/corerpg p1 counterpath §7（首进 Q02）");
+                } catch (Throwable ignored) { }
+                EmberCounterPath.scheduleOfferAfterEnter(p);
+            }
             EmberRoomPath.enterCue(p, pd);
         }
         boolean ch = s != null && s.challenge;

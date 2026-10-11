@@ -3589,6 +3589,7 @@ final class EmberRunDirector {
         svc.tellRun(s, "§a破招！§c" + bossDef().name + " §7的「" + sk.name + "」被打断"
                 + (ms > 0 ? " §e踉跄 " + fmt(sk.breakStun) + " 秒 §7· 趁现在输出" : ""));
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s break %s %.0f/%.0f stun %.1fs", s.runId, sk.name, done, need, sk.breakStun));
+        EmberCounterPath.maybeAlignCue(s, svc, EmberCounterPath.KIND_BREAK);
         EmberBurstPath.maybeAfterStagger(s); // D563
         flashCounterplaySuccess(CounterplayKind.BREAK);
     }
@@ -3610,30 +3611,36 @@ final class EmberRunDirector {
 
     /** D192 落空破绽: same stagger as the wall stun (rooted, no skill, no melee; a queued follow-up waits), shorter. */
     private void whiffStun(EmberRunMaps.Skill done, long now, LivingEntity le) {
-        long ms = EmberCounterplay.stunMs(done.whiffStun);
+        double sec = done.whiffStun + EmberCounterPath.preferredStunBonusSec(s, svc, EmberCounterPath.KIND_WHIFF);
+        if (sec > 2.0) sec = 2.0; // D192 cap
+        long ms = EmberCounterplay.stunMs(sec);
+        EmberCounterPath.maybeAlignCue(s, svc, EmberCounterPath.KIND_WHIFF);
         long[] b = EmberCounterplay.applyStunBounds(now, ms, recoverUntil, followStart);
         stunUntil = b[0]; recoverUntil = b[1]; if (follow != null) followStart = b[2];
-        le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, EmberCounterplay.stunPotionTicks(done.whiffStun), 10, false, false), true);
+        le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, EmberCounterplay.stunPotionTicks(sec), 10, false, false), true);
         Location at = le.getLocation();
         w.spawnParticle(Particle.CRIT, at.clone().add(0, 2.2, 0), 10, 0.4, 0.2, 0.4, 0.05);
         w.playSound(at, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.8f, 0.6f);
-        svc.tellRun(s, "§a落空！§c" + bossDef().name + " §e踉跄 " + fmt(done.whiffStun) + " 秒 §7· 破绽，趁现在输出");
-        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s whiff stun %s %.1fs", s.runId, done.name, done.whiffStun));
+        svc.tellRun(s, "§a落空！§c" + bossDef().name + " §e踉跄 " + fmt(sec) + " 秒 §7· 破绽，趁现在输出");
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s whiff stun %s %.1fs", s.runId, done.name, sec));
         EmberBurstPath.maybeAfterStagger(s); // D563
         flashCounterplaySuccess(CounterplayKind.WHIFF);
     }
 
     /** D188 撞墙破绽: rooted, no skill and no melee for {@code done.wallStun} s; a queued follow-up waits until it ends. */
     private void wallStun(EmberRunMaps.Skill done, long now, LivingEntity le) {
-        long ms = EmberCounterplay.stunMs(done.wallStun);
+        double sec = done.wallStun + EmberCounterPath.preferredStunBonusSec(s, svc, EmberCounterPath.KIND_WALL);
+        if (sec > 3.0) sec = 3.0; // D188 cap
+        long ms = EmberCounterplay.stunMs(sec);
+        EmberCounterPath.maybeAlignCue(s, svc, EmberCounterPath.KIND_WALL);
         long[] b = EmberCounterplay.applyStunBounds(now, ms, recoverUntil, followStart);
         stunUntil = b[0]; recoverUntil = b[1]; if (follow != null) followStart = b[2];
-        le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, EmberCounterplay.stunPotionTicks(done.wallStun), 10, false, false), true);
+        le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, EmberCounterplay.stunPotionTicks(sec), 10, false, false), true);
         Location at = le.getLocation();
         w.spawnParticle(Particle.CRIT, at.clone().add(0, 2.2, 0), 16, 0.4, 0.2, 0.4, 0.05);
         w.playSound(at, Sound.BLOCK_ANVIL_LAND, 0.8f, 0.7f);
-        svc.tellRun(s, "§a撞墙！§c" + bossDef().name + " §e眩晕 " + fmt(done.wallStun) + " 秒 §7· 破绽，趁现在输出");
-        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s wall stun %s %.1fs", s.runId, done.name, done.wallStun));
+        svc.tellRun(s, "§a撞墙！§c" + bossDef().name + " §e眩晕 " + fmt(sec) + " 秒 §7· 破绽，趁现在输出");
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s wall stun %s %.1fs", s.runId, done.name, sec));
         EmberBurstPath.maybeAfterStagger(s); // D563
         flashCounterplaySuccess(CounterplayKind.WALL);
     }

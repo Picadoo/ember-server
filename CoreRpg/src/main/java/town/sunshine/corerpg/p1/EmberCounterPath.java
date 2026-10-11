@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import town.sunshine.corerpg.ConfirmTokens;
+import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.PlayerData;
 
 /**
@@ -28,6 +29,40 @@ public final class EmberCounterPath {
     public static final int BREAK = 3;
 
     private EmberCounterPath() {}
+
+    public static final int KIND_WALL = 1;
+    public static final int KIND_WHIFF = 2;
+    public static final int KIND_BREAK = 3;
+
+    /** D3057: +0.12s when any committed player prefers this kind (capped later). */
+    public static double preferredStunBonusSec(EmberRunSession s, EmberRunService runs, int kind) {
+        if (s == null || runs == null) return 0;
+        int want = kind == KIND_WALL ? WALL : kind == KIND_WHIFF ? WHIFF : kind == KIND_BREAK ? BREAK : NONE;
+        if (!valid(want)) return 0;
+        for (java.util.UUID u : s.committed) {
+            if (get(runs.dataOf(u)) == want) return 0.12;
+        }
+        return 0;
+    }
+
+    public static void maybeAlignCue(EmberRunSession s, EmberRunService runs, int kind) {
+        if (s == null || runs == null) return;
+        int want = kind == KIND_WALL ? WALL : kind == KIND_WHIFF ? WHIFF : kind == KIND_BREAK ? BREAK : NONE;
+        if (!valid(want)) return;
+        for (java.util.UUID u : s.committed) {
+            if (get(runs.dataOf(u)) != want) continue;
+            org.bukkit.entity.Player p = org.bukkit.Bukkit.getPlayer(u);
+            if (p == null || !p.isOnline()) continue;
+            try {
+                p.sendActionBar("§a破绽对齐 · §f" + label(want));
+                p.playSound(p.getLocation(), org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.45f, 1.2f);
+            } catch (Throwable ignored) { }
+        }
+    }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ02(p); }
+
+
 
     public static int get(PlayerData d) {
         if (d == null) return NONE;
@@ -66,13 +101,18 @@ public final class EmberCounterPath {
     }
 
     public static String tip(int id) {
-        if (id == WALL) return "冲撞贴墙打断 · 练 Q02/Q07";
-        if (id == WHIFF) return "预警内站开让重招落空 · 练 Q01–Q05";
-        if (id == BREAK) return "半血读条圈内猛打破招 · 练 Q06/Q07";
+        if (id == WALL) return "撞墙破绽略久 · 练 Q02/Q07";
+        if (id == WHIFF) return "落空破绽略久 · 练 Q01–Q05";
+        if (id == BREAK) return "破招对齐提示 · 练 Q06/Q07";
         return "点选本周破绽练法";
     }
 
     public static String glance(int id) {
+        return glance(id, true);
+    }
+
+    public static String glance(int id, boolean unlocked) {
+        if (!unlocked) return "§8破绽路径：首进/首通 Q02 后可选";
         if (!valid(id)) return "§8破绽路径：未选 · /corerpg p1 counterpath";
         return "§e破绽路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -133,6 +173,12 @@ public final class EmberCounterPath {
         if (p == null) return;
         PlayerData d = dataOf(p);
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
+        CoreRpgPlugin pl = plugin();
+        EmberRunService runs = pl == null ? null : pl.getEmberRuns();
+        if (!EmberSkillKit.counterPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c破绽路径需本人首进或首通 Q02。");
+            return;
+        }
         String P = EmberRunService.P;
         if (id == NONE) {
             set(d, NONE);
@@ -156,6 +202,11 @@ public final class EmberCounterPath {
         Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
         if (!(pl instanceof town.sunshine.corerpg.CoreRpgPlugin)) return null;
         return ((town.sunshine.corerpg.CoreRpgPlugin) pl).getDataStore().get(p.getUniqueId());
+    }
+
+    private static CoreRpgPlugin plugin() {
+        Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
+        return pl instanceof CoreRpgPlugin ? (CoreRpgPlugin) pl : null;
     }
 
     private static void flush(Player p) {
