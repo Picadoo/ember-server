@@ -2381,3 +2381,16 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack19-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack19.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack19-d12223-2026-10-12.md` |
+
+
+### 13.132 Affix Pack 20 脊斩/泽地（CoreRpg 1.65.742，D12224，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12224 |
+| jar | CoreRpg **1.65.742-d12224.local** |
+| balance_version | 106 → **107** |
+| 行为 | 词缀池 40→42：+`ridge` 脊斩 / `marsh` 泽地；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack20-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack20.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack20-d12224-2026-10-12.md` |
