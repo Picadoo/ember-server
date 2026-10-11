@@ -352,7 +352,18 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
             moved.merge(id, put, Long::sum);
             audit(p, id, put, EmberVaultLog.STASH);
         }
-        if (!moved.isEmpty()) p.updateInventory();
+        if (!moved.isEmpty()) {
+            p.updateInventory();
+            try {
+                PlayerData pd = null;
+                org.bukkit.plugin.Plugin pl = org.bukkit.Bukkit.getPluginManager().getPlugin("CoreRpg");
+                if (pl instanceof town.sunshine.corerpg.CoreRpgPlugin) {
+                    town.sunshine.corerpg.CoreRpgPlugin cp = (town.sunshine.corerpg.CoreRpgPlugin) pl;
+                    if (cp.getDataStore() != null) pd = cp.getDataStore().get(p.getUniqueId());
+                }
+                EmberVaultDepositBonus.maybeGrant(p, pd, this, moved); // D10689
+            } catch (Throwable ignored) { }
+        }
         if (blocked > 0 && p != null) {
             try { p.sendActionBar("§e材料仓 · §f" + blocked + " 格装不下（达种上限）"); } catch (Throwable ignored) { }
         }

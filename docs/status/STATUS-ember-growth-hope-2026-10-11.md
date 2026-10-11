@@ -1,3 +1,4 @@
+Live jar: **1.65.698-d10720.local** · D10657–D10720 GemCraftCostSoft + GemPityNudge + VaultDepositBonus
 Live jar: **1.65.697-d10656.local** · D10593–D10656 RushMarkBoost + RushSigBoost + RushBadgeBoost
 Live jar: **1.65.696-d10592.local** · D10529–D10592 ShortClearCoinBoost + ShortClearShardBoost + ShortClearBoneBoost
 Live jar: **1.65.695-d10528.local** · D10465–D10528 FcShardBoost + FcCoreBoost + FcCoinBoost

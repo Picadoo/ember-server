@@ -78,6 +78,16 @@ public final class EmberGemAcquire {
         if (p == null || d == null || plugin == null) return false;
         if (!countsForPity(m, s)) return false;
         d.addPeriodCount(C_PITY, "all", 1);
+        try {
+            int extra = EmberGemPityNudge.consumeExtra(d); // D10673
+            if (extra > 0) {
+                d.addPeriodCount(C_PITY, "all", extra);
+                if (p.isOnline()) {
+                    p.sendMessage(P + "§a宝石保底加码 · +" + extra + "（今日一次）");
+                    try { p.sendActionBar("§a宝石保底加码"); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
         int cur = pity(d);
         if (cur < PITY_NEED) {
             // D1259: remain honesty（非 hope celebration）
@@ -116,6 +126,12 @@ public final class EmberGemAcquire {
             return true;
         }
         Cost cost = craftCost();
+        PlayerData softPd = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
+        boolean craftSoft = false;
+        try {
+            Cost soft = EmberGemCraftCostSoft.peek(softPd, cost); // D10657
+            if (soft != cost) { cost = soft; craftSoft = true; }
+        } catch (Throwable ignored) { }
         NiBridge ni = plugin.getNiBridge();
         if (ni == null) { p.sendMessage(P + "§cNI 未就绪"); return true; }
         // check mats
@@ -169,6 +185,14 @@ public final class EmberGemAcquire {
             plugin.getDataStore().flushMutation(p.getUniqueId());
             p.sendMessage(P + "§c发放宝石失败，已退回");
             return true;
+        }
+        if (craftSoft) {
+            try {
+                if (EmberGemCraftCostSoft.consume(softPd)) {
+                    p.sendMessage(P + "§a合成减负 · 消耗减半（今日一次）");
+                    try { p.sendActionBar("§a宝石合成减负"); } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
         }
         p.sendMessage(P + "§a合成成功：§f" + EmberItemData.gemName(code) + " §7（碎" + cost.shards + "+骨" + cost.bone + "+币" + cost.coins + "）");
         try { p.sendActionBar("§a宝石合成 · §f" + EmberItemData.gemName(code)); } catch (Throwable ignored) { }
