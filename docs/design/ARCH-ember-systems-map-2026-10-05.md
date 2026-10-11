@@ -560,3 +560,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D7393–D7456: BossSpawnBrace (Resist I 2s/run) + BossPotGift (empty→1 pot/day). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D7457–D7520: StepSetLandBoost (承护/爆闪首击/day). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D7521–D7584: RerollDupRefund (dup reroll +1 blank/day) + RaidReviveBoost (65% first revive/run). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D7585–D7648: AffixShardBoost (+1 shard/day on affixDone) + SigChargeFirst (charge ×0.85 first/day). STOP densify those + priors. Talent HOLD. Six-slot HOLD.

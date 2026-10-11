@@ -1,3 +1,6 @@
+Live jar: **1.65.650-d7648.local** · D7585–D7648 AffixShardBoost + SigChargeFirst
+Prior: DupRefund+RaidRevive
+
 Live jar: **1.65.649-d7584.local** · D7521–D7584 RerollDupRefund + RaidReviveBoost
 Prior: StepSetLand/BossBrace/PotGift/RoomClear/BurnSpread
 

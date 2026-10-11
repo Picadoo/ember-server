@@ -1,0 +1,3 @@
+# RESEARCH · AffixShardBoost + SigChargeFirst · 2026-10-11
+Outside DupRefund/RaidRevive/StepSetLand…
+Less RNG: 花样词缀成功结算 → +1碎片（本日一次）。Continuous: 本日首次签名蓄力前摇×0.85。

@@ -639,6 +639,15 @@ public final class SkillService implements Listener {
                 town.sunshine.corerpg.p1.EmberRunService runsC = plugin.getEmberRuns();
                 mapC = runsC == null ? null : runsC.activeMapKey(player);
                 charge = town.sunshine.corerpg.p1.EmberSkillKit.sigChargeSecs(charge, syncC, mapC);
+                try {
+                    town.sunshine.corerpg.PlayerData pdC = dataStore.get(player.getUniqueId());
+                    double cm = town.sunshine.corerpg.p1.EmberSigChargeFirst.consumeMult(pdC); // D7617
+                    if (cm < 1.0) {
+                        charge *= cm;
+                        player.sendMessage(PREFIX + "§6蓄力首启 · 前摇 ×" + String.format(java.util.Locale.ROOT, "%.2f", cm) + "（本日一次）");
+                        try { player.sendActionBar("§6蓄力首启 · ×" + String.format(java.util.Locale.ROOT, "%.2f", cm)); } catch (Throwable ignored2) { }
+                    }
+                } catch (Throwable ignored) { }
             } catch (Throwable ignored) { }
         }
         st.skillCdUntil = now + cd * 1000L;

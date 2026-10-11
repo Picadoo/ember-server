@@ -327,8 +327,11 @@ public final class EmberSettleService {
         }
         final boolean sigFc = sigRun && in.firstClear != null && pd.periodCount(EmberSignature.C_FC + m.key, "all") <= 0;
         if (sigFc) grants.add(new EmberRunRules.Grant("fc_sigmark", EmberRunRules.Kind.SIGMARK, m.key, EmberSignature.fcMarks(), null));
-        if (!s.challenge && s.abyss == 0 && !m.raid) // D138 repeat-run variety (rolled only when every member had the first clear)
+        boolean affixBoost = false;
+        if (!s.challenge && s.abyss == 0 && !m.raid) { // D138 repeat-run variety (rolled only when every member had the first clear)
             grants.addAll(EmberRunRules.varietyGrants(in.firstClear != null, s.affixDone, runs.maps().variety.affixShard, s.eventDone, runs.maps().variety.eventCore, s.eventKind));
+            affixBoost = EmberAffixShardBoost.apply(pd, s.affixDone, grants); // D7585
+        }
         EmberRunRules.Ledger l = runs.store().ledger(u);
         // P2-7 daily bounty (D79): the n-th settled clear of the stamina day; counted once per run (fresh = no base row yet)
         final boolean fresh = l.get(s.runId, "base_coin") == null;
@@ -479,6 +482,10 @@ public final class EmberSettleService {
                 gp.sendMessage(EmberRunService.P + "§a精工软保底触发 · §f本次主线装≥精工1");
                 try { gp.sendActionBar("§a精工软保底 · §f精工1底"); } catch (Throwable ignored) { }
             }
+        }
+        if (gp != null && gp.isOnline() && affixBoost) {
+            gp.sendMessage(EmberRunService.P + "§a词缀碎片加赠 · §f+" + EmberAffixShardBoost.BONUS + "（花样词缀 · 本日一次）");
+            try { gp.sendActionBar("§a词缀碎片 · +" + EmberAffixShardBoost.BONUS); } catch (Throwable ignored) { }
         }
         if (runs.leaderboard() != null && (s.abyss > 0 || fresh)) { // P2-10 (D84); abyss: idempotent, also lists older records
             String nm = Bukkit.getOfflinePlayer(u).getName();
