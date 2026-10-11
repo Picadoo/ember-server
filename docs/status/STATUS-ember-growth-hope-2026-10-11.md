@@ -1,3 +1,6 @@
+Live jar: **1.65.684-d9824.local** · D9761–D9824 ConvertCostSoft + ImprintCoinSoft + SupplyShopSoft
+Prior: Brand/Reroll cost
+
 Live jar: **1.65.683-d9760.local** · D9697–D9760 BrandCraftSoft + BrandPinCostSoft + RerollCoinSoft
 Prior: Dismantle/Undo/Death
 

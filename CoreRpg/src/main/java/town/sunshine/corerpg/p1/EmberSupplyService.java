@@ -291,6 +291,16 @@ public final class EmberSupplyService implements Listener {
         PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
         int coins = pd == null ? 0 : pd.getCoin();
         boolean buy = args.length >= 3 && ("buy".equalsIgnoreCase(args[2]) || "买".equals(args[2]));
+        try {
+            int soft = EmberSupplyShopSoft.apply(pd, price, buy); // D9809
+            if (soft < price) {
+                price = soft;
+                if (buy) {
+                    p.sendMessage(P + "§a补给减负 · 单价 ×0.5（今日一次）");
+                    try { p.sendActionBar("§a补给减负"); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
         if (!buy) {
             p.sendMessage(P + "余烬回复药：" + price + " 余烬币 / 瓶 · 回复最大生命 20% · 所有回复药共用 15 秒冷却 · 绑定、不回售");
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "余烬币 " + coins + " · ",

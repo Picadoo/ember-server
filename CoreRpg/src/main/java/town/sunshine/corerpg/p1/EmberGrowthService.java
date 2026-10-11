@@ -1404,7 +1404,16 @@ public final class EmberGrowthService implements Listener {
         final EmberSignature.Def old = EmberSignature.byCode(cur);
         final EmberItemData after = next(d, t, affixOf(d, t), afPityOf(d, t), sd.code, EmberItemKeys.rerollN(d, t));
         final String rid = EmberPayRules.imprintRid(t.uid, t.rev, System.currentTimeMillis());
-        final EmberPay.Price price = EmberPay.Price.insignia(coin, sd.map, EmberSignature.imprintMarks()).at(EmberEconomy.sinkForForge("imprint")); // D218 C12
+        int coinPay = coin;
+        try {
+            int soft = EmberImprintCoinSoft.apply(d, coin, true); // D9793
+            if (soft < coin) {
+                coinPay = soft;
+                p.sendMessage(P + "§a烙印减负 · 币 ×0.5（今日一次）");
+                try { p.sendActionBar("§a烙印减负"); } catch (Throwable ignored) { }
+            }
+        } catch (Throwable ignored) { }
+        final EmberPay.Price price = EmberPay.Price.insignia(coinPay, sd.map, EmberSignature.imprintMarks()).at(EmberEconomy.sinkForForge("imprint")); // D218 C12
         final String note = "烙印 " + t.shortLabel() + " " + (old == null ? "-" : old.id) + " → " + sd.id;
         pay.pay(p, rid, price, "烙印没完成，退回", null, () -> commitOnItem(id, "imprint", rid,
                 java.util.Collections.singletonList(new EmberItemStore.TxnItem(t, after, null)), price.json(), note, ok -> {
@@ -2817,6 +2826,19 @@ public final class EmberGrowthService implements Listener {
         }
         int blanks = EmberConvertRules.blanks(t.tier);
         int coins = EmberConvertRules.coins(t.tier);
+        try {
+            int[] soft = EmberConvertCostSoft.apply(d, blanks, coins, confirm); // D9761
+            if (soft[0] < blanks || soft[1] < coins) {
+                blanks = soft[0];
+                coins = soft[1];
+                if (confirm) {
+                    p.sendMessage(P + "§a转化减负 · 花费 ×0.5（今日一次）");
+                    try { p.sendActionBar("§a转化减负"); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
+        final int blanksPay = blanks;
+        final int coinsPay = coins;
         int qAfter = EmberConvertRules.qualityAfter(t.quality);
         if (!confirm) {
             // D1296: weekly remain + mat gap honesty（非 K3）
@@ -2827,8 +2849,8 @@ public final class EmberGrowthService implements Listener {
                     haveBlank = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BLANK);
             } catch (Throwable ignored) { }
             int haveCoin = d.getCoin();
-            int gapB = Math.max(0, blanks - haveBlank);
-            int gapC = Math.max(0, coins - haveCoin);
+            int gapB = Math.max(0, blanksPay - haveBlank);
+            int gapC = Math.max(0, coinsPay - haveCoin);
             p.sendMessage(P + "§6每周转化 · " + t.shortLabel());
             int path = EmberConvertPath.get(d); // D728
             String pathFam = EmberConvertPath.familyKey(path);
@@ -2842,7 +2864,7 @@ public final class EmberGrowthService implements Listener {
                     + (t.quality > EmberConvertRules.QUALITY_CAP ? " §c（极品截到卓越）" : "")
                     + " §7· 强化 §f+" + t.enhance + " §7→ §f+0");
             p.sendMessage(P + "保留：精工/词条/保底/锻造次数 · uid 不变");
-            p.sendMessage(P + "花费：§f胚 " + haveBlank + "/" + blanks + " §7+ §f币 " + haveCoin + "/" + coins
+            p.sendMessage(P + "花费：§f胚 " + haveBlank + "/" + blanksPay + " §7+ §f币 " + haveCoin + "/" + coinsPay
                     + (gapB + gapC > 0 ? (" §c· 还差"
                         + (gapB > 0 ? " 胚" + gapB : "")
                         + (gapC > 0 ? " 币" + gapC : "")) : " §a· 料够"));
@@ -2873,7 +2895,7 @@ public final class EmberGrowthService implements Listener {
         final String rid = "fconv:" + t.uid.substring(0, Math.min(8, t.uid.length())) + ":"
                 + Long.toString(System.currentTimeMillis(), 36);
         final EmberItemData planned = EmberConvertRules.plan(t, toFam).withRev(t.rev + 1);
-        final EmberPay.Price price = EmberPay.Price.of(EmberConvertRules.cost(t.tier)).at("C23");
+        final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(0, 0, blanksPay, 0, coinsPay)).at("C23"); // D9761 soft
         final EmberItemData before = t;
         final int usedNow = used;
         pay.pay(p, rid, price, "转化没完成，退回", null, () -> {
