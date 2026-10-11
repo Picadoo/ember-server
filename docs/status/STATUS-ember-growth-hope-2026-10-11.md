@@ -1,3 +1,6 @@
+Live jar: **1.65.646-d7392.local** · D7329–D7392 RoomClearHeal + BurnSpreadBoost
+Prior: ShieldFirst/ParrySlash/Huohen/StepBlock/ArmorTenths
+
 Live jar: **1.65.645-d7328.local** · D7265–D7328 ShieldFirstSecs
 Prior: ParrySlash+Huohen · StepBlock+ArmorTenths
 

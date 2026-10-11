@@ -525,14 +525,33 @@ public final class EmberSetService implements Listener {
                 double d = x.getLocation().distanceSquared(e.getEntity().getLocation());
                 if (d < bd) { bd = d; best = (LivingEntity) x; }
             }
-            if (best != null && s.engine.burns().transfer(id, best.getUniqueId().toString(), now(), (long) (s.engine.tune().burnSpread * 1000))) {
-                s.burnTargets.remove(id);
-                s.burnTargets.put(best.getUniqueId().toString(), best);
-                s.spreadCdUntil = now() + (long) (s.engine.tune().spreadIcd * 1000);
-                EmberDamageTrace.set(p, "燎原：燃烧转移到 " + best.getName());
-                best.getWorld().spawnParticle(Particle.FLAME, best.getLocation().add(0, 1, 0), 10, 0.3, 0.5, 0.3, 0.01);
-                EmberGrowthService g = EmberGrowthService.get(); // D455 sig feel if L01 owns burn_spread
-                if (g != null) g.flashSigOwned(p, "burn_spread", "燃烧传火");
+            if (best != null) {
+                long carry = (long) (s.engine.tune().burnSpread * 1000);
+                boolean boostReady = false;
+                try {
+                    PlayerData pdSp = plugin.getDataStore().get(p.getUniqueId());
+                    boostReady = EmberBurnSpreadBoost.ready(pdSp);
+                    if (boostReady) carry += EmberBurnSpreadBoost.EXTRA_MS;
+                } catch (Throwable ignored) { }
+                if (s.engine.burns().transfer(id, best.getUniqueId().toString(), now(), carry)) {
+                    s.burnTargets.remove(id);
+                    s.burnTargets.put(best.getUniqueId().toString(), best);
+                    s.spreadCdUntil = now() + (long) (s.engine.tune().spreadIcd * 1000);
+                    EmberDamageTrace.set(p, "燎原：燃烧转移到 " + best.getName());
+                    best.getWorld().spawnParticle(Particle.FLAME, best.getLocation().add(0, 1, 0), 10, 0.3, 0.5, 0.3, 0.01);
+                    EmberGrowthService g = EmberGrowthService.get(); // D455 sig feel if L01 owns burn_spread
+                    if (g != null) g.flashSigOwned(p, "burn_spread", "燃烧传火");
+                    if (boostReady) {
+                        try {
+                            PlayerData pdSp2 = plugin.getDataStore().get(p.getUniqueId());
+                            long extra = EmberBurnSpreadBoost.consume(pdSp2); // D7361 on success
+                            if (extra > 0) {
+                                p.sendMessage(EmberRunService.P + "§6燎原加时 · 传火 +" + (extra / 1000) + "s（本日一次）");
+                                try { p.sendActionBar("§6燎原加时 · +" + (extra / 1000) + "s"); } catch (Throwable ignored) { }
+                            }
+                        } catch (Throwable ignored) { }
+                    }
+                }
             }
         }
     }
