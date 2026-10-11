@@ -1,3 +1,6 @@
+Live jar: **1.65.649-d7584.local** · D7521–D7584 RerollDupRefund + RaidReviveBoost
+Prior: StepSetLand/BossBrace/PotGift/RoomClear/BurnSpread
+
 Live jar: **1.65.648-d7520.local** · D7457–D7520 StepSetLandBoost
 Prior: BossBrace+PotGift · RoomClear+BurnSpread
 

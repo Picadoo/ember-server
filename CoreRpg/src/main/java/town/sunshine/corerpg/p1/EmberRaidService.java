@@ -307,11 +307,13 @@ public final class EmberRaidService {
                 p.teleport(to);
                 p.setGameMode(GameMode.ADVENTURE);
                 double max = EmberHeal.maxHp(p);
-                p.setHealth(Math.max(1.0, Math.min(max, max * 0.5)));
+                double pct = EmberRaidReviveBoost.healPct(s.runId, p.getUniqueId()); // D7553
+                p.setHealth(Math.max(1.0, Math.min(max, max * pct)));
                 EmberHeal.rebase(p); // sanctioned HP change: the B2.144 guard must not revert it
                 p.setFireTicks(0);
                 p.setFallDistance(0f);
-                p.sendMessage(P() + "§a" + why + "：你已复活（50% 生命），回到 §f" + a.getName() + " §a身边");
+                String pctLabel = pct > EmberRaidReviveBoost.BASE_PCT + 0.01 ? ("§f" + (int) Math.round(pct * 100) + "%§a（本局加血）") : "50%";
+                p.sendMessage(P() + "§a" + why + "：你已复活（" + pctLabel + " 生命），回到 §f" + a.getName() + " §a身边");
             }, 3L);
             Bukkit.getScheduler().runTaskLater(runs.plugin(), () -> { // DP may put the player back on the death point a bit later
                 if (!p.isOnline() || !a.isOnline() || a.getWorld() != p.getWorld() || !world.equals(p.getWorld().getName())) return;

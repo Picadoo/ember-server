@@ -2158,7 +2158,7 @@ public final class EmberGrowthService implements Listener {
     }
 
     /** D172 → D208: the item transaction that makes the payment final AND carries the roll (or the refund, if it did not commit) */
-    private void settleReroll(final UUID id, final EmberItemData t, final String rid, boolean dup, int dupIndex, EmberItemData dupData,
+    private void settleReroll(final UUID id, final EmberItemData t, final String rid, final boolean dup, int dupIndex, EmberItemData dupData,
                               final EmberPay.Price price, final String paid, final RollPlan plan) {
         final EmberPay pay = EmberPay.get();
         final EmberItemStore.TxnItem target = new EmberItemStore.TxnItem(t, plan.after, null);
@@ -2168,6 +2168,23 @@ public final class EmberGrowthService implements Listener {
             if (committed) {
                 pay.settled(id, rid);
                 rolled(id, t, rid, plan, paid, false);
+                if (dup) {
+                    try { // D7521 dup blank refund
+                        Player q = Bukkit.getPlayer(id);
+                        PlayerData pd = plugin.getDataStore().get(id);
+                        if (q != null && q.isOnline() && EmberRerollDupRefund.consume(pd)) {
+                            EmberVault v = EmberVault.get();
+                            boolean ok = false;
+                            if (v != null) ok = v.credit(q, EmberUpgradeRules.MAT_BLANK, EmberRerollDupRefund.BONUS);
+                            if (!ok && plugin.getNiBridge() != null)
+                                ok = plugin.getNiBridge().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, EmberRerollDupRefund.BONUS);
+                            if (ok) {
+                                q.sendMessage(P + "§a洗练退胚 · 胚料 +§f" + EmberRerollDupRefund.BONUS + "§a（吃重复件 · 本日一次）");
+                                try { q.sendActionBar("§a洗练退胚 · +" + EmberRerollDupRefund.BONUS); } catch (Throwable ignored) { }
+                            }
+                        }
+                    } catch (Throwable ignored) { }
+                }
                 return;
             }
             if (pay.durable()) pay.release(id, rid); // not committed → the coins / shards come back once
