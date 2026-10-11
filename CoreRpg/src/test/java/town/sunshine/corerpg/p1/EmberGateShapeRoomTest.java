@@ -53,4 +53,11 @@ public class EmberGateShapeRoomTest {
         assertEquals(40, EmberGatePath.gateResistTicks(EmberGatePath.AUTO));
         assertEquals(20, EmberGatePath.gateResistTicks(EmberGatePath.ASK));
     }
+
+    @Test
+    public void healRoomBonus() {
+        double sync = EmberSkillKit.slashLandHealPct(true, false, false);
+        double room = EmberSkillKit.slashLandHealPct(true, false, true);
+        assertEquals(sync * 1.05, room, 1e-9);
+    }
 }

@@ -711,13 +711,19 @@ public final class EmberSkillKit {
 
     /** D2266: sustain land heal pct (×1.25 when synced). */
     public static double slashLandHealPct(boolean setShapeSync) {
-        return slashLandHealPct(setShapeSync, false);
+        return slashLandHealPct(setShapeSync, false, false);
     }
 
-    /** D2447: ×1.1 when posture aligned (on top of sync). */
     public static double slashLandHealPct(boolean setShapeSync, boolean postureAligned) {
+        return slashLandHealPct(setShapeSync, postureAligned, false);
+    }
+
+    /** D2658: ×1.05 when preferred-room × set×shape (on top of sync/posture). */
+    public static double slashLandHealPct(boolean setShapeSync, boolean postureAligned, boolean roomShape) {
         double v = setShapeSync ? SLASH_HEAL_PCT * 1.25 : SLASH_HEAL_PCT;
-        return postureAligned ? v * 1.1 : v;
+        if (postureAligned) v *= 1.1;
+        if (setShapeSync && roomShape) v *= 1.05;
+        return v;
     }
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync) {
         return geometryFor(id, baseRange, baseArc, baseMax, setSync, false);

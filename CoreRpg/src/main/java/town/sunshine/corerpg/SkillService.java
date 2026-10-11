@@ -1116,7 +1116,7 @@ public final class SkillService implements Listener {
         if ("sustain".equals(fam)) {
             if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
                 double heal = Math.max(0.25, player.getMaxHealth()
-                        * town.sunshine.corerpg.p1.EmberSkillKit.slashLandHealPct(sync, posture));
+                        * town.sunshine.corerpg.p1.EmberSkillKit.slashLandHealPct(sync, posture, roomShape));
                 player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
                 spawnParticles(player.getLocation().clone().add(0, 0.5, 0), "HEART", sync || posture ? 3 : 2);
             }

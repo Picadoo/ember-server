@@ -483,3 +483,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 ## Gate + Shape×Room · D2609–D2640
 - Gate enter unlock + open land Speed/Resist + ASK CD
 - Preferred variety room × set×shape geometry/dash radius
+- D2657–D2672: Shape×Room sustain heal ×1.05; Gate/Shape×Room NEAR-SAT
