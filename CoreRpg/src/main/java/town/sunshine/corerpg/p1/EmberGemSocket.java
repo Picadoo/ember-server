@@ -23,6 +23,7 @@ public final class EmberGemSocket {
         if ("list".equals(sub) || "ls".equals(sub) || "info".equals(sub)) return list(p, loadouts, plugin);
         if ("insert".equals(sub) || "in".equals(sub) || "镶".equals(sub)) return insert(p, args, loadouts, plugin);
         if ("remove".equals(sub) || "rm".equals(sub) || "拆".equals(sub)) return remove(p, args, loadouts, plugin);
+        if ("swap".equals(sub) || "对调".equals(sub) || "换孔".equals(sub)) return holeSwap(p, loadouts, plugin);
         if ("craft".equals(sub) || "合成".equals(sub)) {
             String g = args.length >= 4 ? args[3] : "";
             return EmberGemAcquire.craft(p, g, loadouts, plugin);
@@ -34,7 +35,7 @@ public final class EmberGemSocket {
                     + "+币" + EmberGemAcquire.CRAFT_COIN);
             return true;
         }
-        p.sendMessage(P + "用法：/corerpg p1 gem list|craft <石>|pity|insert|remove");
+        p.sendMessage(P + "用法：/corerpg p1 gem list|craft <石>|pity|insert|remove|swap");
         return true;
     }
 
@@ -146,6 +147,41 @@ public final class EmberGemSocket {
         EmberItems.Read afterR = loadouts.items().read(p.getInventory().getItemInMainHand());
         EmberItemData after = afterR != null && afterR.ok() ? afterR.data : null;
         EmberForgeCommitNext.afterGemInsert(p, after, code);
+        return true;
+    }
+
+    /** D11969: sock0↔sock1 once/day. */
+    static boolean holeSwap(Player p, EmberLoadoutService loadouts, CoreRpgPlugin plugin) {
+        ItemStack hand = p.getInventory().getItemInMainHand();
+        EmberItems.Read r = loadouts.items().read(hand);
+        if (r == null || !r.ok()) { p.sendMessage(P + "请手持已签名的余烬刃/护符"); return true; }
+        EmberItemData d = r.data;
+        PlayerData pd = plugin != null && plugin.getDataStore() != null ? plugin.getDataStore().get(p.getUniqueId()) : null;
+        if (!EmberGemHoleSwap.canSwap(d)) {
+            p.sendMessage(P + "§c双孔未齐或皆空，无法对调");
+            return true;
+        }
+        if (!EmberGemHoleSwap.ready(pd)) {
+            p.sendMessage(P + "§c今日双孔对调已用");
+            return true;
+        }
+        int a = d.sockAt(0), b = d.sockAt(1);
+        if (a == b) {
+            p.sendMessage(P + "§7两孔相同，无需对调");
+            return true;
+        }
+        if (!write(p, loadouts, d, b, a)) {
+            p.sendMessage(P + "§c对调写入失败");
+            return true;
+        }
+        EmberGemHoleSwap.consume(pd);
+        p.sendMessage(P + "§a双孔对调 · §f孔0←" + EmberItemData.gemName(b)
+                + " §7· §f孔1←" + EmberItemData.gemName(a) + " §a（今日一次）");
+        try { p.sendActionBar("§a双孔对调"); } catch (Throwable ignored) { }
+        try {
+            if (b > 0) EmberGemSeatLive.maybeAfterSeat(p, pd, b, loadouts);
+            if (a > 0) EmberGemSeatLive.maybeAfterSeat(p, pd, a, loadouts);
+        } catch (Throwable ignored) { }
         return true;
     }
 

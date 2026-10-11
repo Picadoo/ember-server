@@ -1,3 +1,4 @@
+Live jar: **1.65.718-d12000.local** · D11937–D12000 LockFlatRefund + GemHoleSwap + MapIdentityBone
 Live jar: **1.65.717-d11936.local** · D11873–D11936 GemSwapSoft + GemCraftPathSync + MapOriginWearBone
 Live jar: **1.65.716-d11872.local** · D11809–D11872 LockTierFloor + MapFarmHitBone + MapResonanceDayBoost
 Live jar: **1.65.715-d11808.local** · D11745–D11808 PassFreeWinBone + MonthlyBuyWinShard + CrystalPotWinBlank

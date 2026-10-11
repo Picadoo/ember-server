@@ -2335,6 +2335,10 @@ public final class EmberGrowthService implements Listener {
         String afterRem = EmberRerollPity.afterRemainLine(r.pityAfter, reroll.pity);
         p.sendMessage(P + "§6洗练结果：" + affixText(pl.enc, quality) + (r.forced ? " §a（保底）" : "")
                 + " §7· " + (afterRem.isEmpty() ? ("保底 " + r.pityAfter + "/" + reroll.pity) : afterRem));
+        try {
+            PlayerData pdFlat = data(id);
+            EmberLockFlatRefund.maybeRefund(p, pdFlat, pl.lock, pl.old, pl.enc, quality, reroll); // D11937
+        } catch (Throwable ignored) { }
         if (r.forced) {
             try { p.sendActionBar("§a保底出档 · §f" + affixText(pl.enc, quality)); } catch (Throwable ignored) { }
             p.sendMessage(P + "§a保底出档（只保档位 · 不改 pity 数学）");

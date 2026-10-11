@@ -628,3 +628,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D11745–D11808: PassFreeWinBone + MonthlyBuyWinShard + CrystalPotWinBlank. STOP densify those + covenant-monthly-vip-win + priors. Talent HOLD. Six-slot HOLD.
 - D11809–D11872: LockTierFloor + MapFarmHitBone + MapResonanceDayBoost. STOP densify those + pass-monthlybuy-crystalpot-win + tip-twin wins + priors. Talent HOLD. Six-slot HOLD.
 - D11873–D11936: GemSwapSoft + GemCraftPathSync + MapOriginWearBone. STOP densify those + lock-farm-reso + tip-twin wins + priors. Talent HOLD. Six-slot HOLD.
+- D11937–D12000: LockFlatRefund + GemHoleSwap + MapIdentityBone. STOP densify those + lock-farm-reso / gemswap-craftpath-mapwear + priors. Talent HOLD. Six-slot HOLD.

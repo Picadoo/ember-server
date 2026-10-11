@@ -152,6 +152,7 @@ public final class EmberMapIdentity {
                 + " §8（可随时 /corerpg p1 setfocus 改 · 不锁通关）";
         p.sendMessage(EmberRunService.P + line);
         try { p.sendActionBar("§a图鉴齐 · 焦点 §f" + famName); } catch (Throwable ignored) { }
+        try { EmberMapIdentityBone.maybeGift(p, d); } catch (Throwable ignored) { } // D11985
         return true;
     }
 
