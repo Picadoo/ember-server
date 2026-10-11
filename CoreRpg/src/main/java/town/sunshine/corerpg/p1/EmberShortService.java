@@ -172,6 +172,7 @@ public final class EmberShortService {
 
     String enteringLine(Player p, EmberRunMaps.MapDef m, int cost) {
         PlayerData d = runs.dataOf(p.getUniqueId());
+        try { EmberShortEnterSpeed.maybeSpeed(p, d); } catch (Throwable ignored) { } // D8593
         int n = rewardedToday(d, m);
         int cap = dailyCap(m);
         boolean pays = EmberShortRules.paysReward(n, cap);

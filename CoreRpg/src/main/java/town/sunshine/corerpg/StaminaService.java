@@ -421,6 +421,14 @@ public final class StaminaService implements Listener {
             tickets += have;
         }
         if (total > 0) {
+            try {
+                int bonus = town.sunshine.corerpg.p1.EmberTicketConvertBoost.consumeBonus(data); // D8545
+                if (bonus > 0) {
+                    total += bonus;
+                    if (announce)
+                        player.sendMessage(ChatColor.GREEN + "[体力] 折算加赠 +" + bonus + "（今日一次）");
+                }
+            } catch (Throwable ignored) { }
             addStamina(data, total, true);
             dataStore.flushMutation(player.getUniqueId());
             if (announce) {
@@ -523,6 +531,13 @@ public final class StaminaService implements Listener {
         if (take <= 0) return 0;
         data.setStamina(cur + take);
         data.setStaminaBank(bank - take);
+        try {
+            int bonus = town.sunshine.corerpg.p1.EmberBankDrawBoost.consumeBonus(data); // D8577
+            if (bonus > 0) {
+                data.setStamina(data.getStamina() + bonus);
+                try { p.sendMessage(ChatColor.GREEN + "[体力] 提取加赠 +" + bonus + "（今日一次）"); } catch (Throwable ignored) { }
+            }
+        } catch (Throwable ignored) { }
         dataStore.flushMutation(p.getUniqueId());
         return take;
     }

@@ -1,3 +1,6 @@
+Live jar: **1.65.665-d8608.local** · D8545–D8608 TicketConvertBoost + BankDrawBoost + ShortEnterSpeed
+Prior: Stamina/Poison/Fee
+
 Live jar: **1.65.664-d8544.local** · D8481–D8544 StaminaFirstSoft + PoisonDotSoft + AbyssFeeSoft
 Prior: MainCoin/Explosion/RaidCoin
 
