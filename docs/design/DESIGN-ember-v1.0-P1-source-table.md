@@ -2052,3 +2052,13 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 版本 | CoreRpg **1.65.26**；`balance_version` **49** |
 | 测试 | 单测池 14 / 98 对 + 斜移窗口 / 相邻不重复 / remap 方向唯一 + Pack 4 remap/converted/`normal==false`；Stage C p2econ `--mods --weeks 24` within range；冒烟 deferred batch（POLICY 01:53）|
 | 文档 | 设计 `docs/design/DESIGN-ember-weekly-mod-pack4-2026-10-05.md`；状态 `docs/status/STATUS-ember-weekly-mod-pack4-1.65.26.md`；发布 `docs/status/RELEASE-ember-1.65.26.md` |
+
+### 13.102 HungerLock 注册入库（CoreRpg 1.65.723，D12194，2026-10-11）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | D550 设计；类在 jar 内但未 `registerEvents`；源码未进 git HEAD |
+| 裁决 | 注册 `EmberHungerLock`；提交 java+test；`hunger_lock` 默认 true（代码）；`ops.json` → `[]` |
+| 版本 | CoreRpg **1.65.723-d12194.local** |
+| 文档 | `docs/status/STATUS-ember-hunger-lock-register-d12194-2026-10-11.md` |
+

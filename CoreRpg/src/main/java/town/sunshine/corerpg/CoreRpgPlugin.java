@@ -196,6 +196,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         emberAfk = new town.sunshine.corerpg.p1.EmberAfkService(this); // D177 (config: ember-v1.yml afk, read in reloadLocal)
         new town.sunshine.corerpg.p1.EmberBindGuard(this); // D276 O9: bind guards outside AFK class
         new town.sunshine.corerpg.p1.EmberMenuStar(this); // D12129 sticky 余烬星 + vanilla→hub
+        Bukkit.getPluginManager().registerEvents(new town.sunshine.corerpg.p1.EmberHungerLock(), this); // D550/D12194 hunger lock
         new town.sunshine.corerpg.p1.EmberParry(this); // D301 守招·余烬招架 (bare Q)
         hubPlazaService = new HubPlazaService(this);
         hubNpcService = new HubNpcService(this);
