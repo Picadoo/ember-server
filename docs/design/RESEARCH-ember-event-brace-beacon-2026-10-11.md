@@ -1,0 +1,3 @@
+# RESEARCH · EventStartBrace + BeaconHpBoost · 2026-10-11
+Outside DoorOpen/ShortBlank/AffixShard/SigCharge/DupRefund/RaidRevive/BossBrace…
+Continuous: 本局首次花样事件开局 → 抗性I 2s；护灯事件灯柱生命 ×1.2（本局一次）。

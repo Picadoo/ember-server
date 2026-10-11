@@ -1,3 +1,6 @@
+Live jar: **1.65.652-d7776.local** · D7713–D7776 EventStartBrace + BeaconHpBoost
+Prior: DoorOpen/ShortBlank/AffixShard…
+
 Live jar: **1.65.651-d7712.local** · D7649–D7712 DoorOpenSpeed + ShortBlankBoost
 Prior: AffixShard+SigCharge · DupRefund+RaidRevive
 

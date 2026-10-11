@@ -449,6 +449,7 @@ final class EmberRunDirector {
             eventFailed = false;
             String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
             EmberSpicePath.maybeAlignCue(s, svc, "event", kind); // D2926
+            try { EmberEventStartBrace.maybeBrace(s, participantsHere()); } catch (Throwable ignored) { } // D7713
             EmberRunMaps.Variety v = svc.maps().variety;
             lastEventTickMs = eventStart;
             if ("crystal".equals(kind)) {
@@ -2878,8 +2879,18 @@ final class EmberRunDirector {
         EmberRunMaps.Pt pt = eventAnchorPt(r);
         EmberRunMaps.Role melee = def.role("melee", ch);
         double base = melee == null ? 40.0 : melee.hp;
-        beaconMaxHp = Math.max(1.0, base * v.beaconHp);
+        double bMult = 1.0;
+        try { bMult = EmberBeaconHpBoost.consumeMult(s == null ? null : s.runId); } catch (Throwable ignored) { } // D7745
+        beaconMaxHp = Math.max(1.0, base * v.beaconHp * bMult);
         beaconHp = beaconMaxHp;
+        if (bMult > 1.01) {
+            try {
+                for (Player p : participantsHere()) {
+                    p.sendMessage(EmberRunService.P + "§a护灯加固 · 灯柱生命 ×§f" + String.format(java.util.Locale.ROOT, "%.1f", bMult) + "§a（本局一次）");
+                    try { p.sendActionBar("§a护灯加固 · ×" + String.format(java.util.Locale.ROOT, "%.1f", bMult)); } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
         beaconNextBite = System.currentTimeMillis() + (long) (v.beaconTick * 1000);
         beaconLantern = placeLanternAt(pt);
         Location loc = new Location(w, pt.x + 0.5, (beaconLantern != null ? beaconLantern.getY() + 1.0 : pt.y + 1.0), pt.z + 0.5);

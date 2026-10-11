@@ -562,3 +562,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D7521–D7584: RerollDupRefund (dup reroll +1 blank/day) + RaidReviveBoost (65% first revive/run). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D7585–D7648: AffixShardBoost (+1 shard/day on affixDone) + SigChargeFirst (charge ×0.85 first/day). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D7649–D7712: DoorOpenSpeed (Speed I first door/run) + ShortBlankBoost (+1 blank short settle/day). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D7713–D7776: EventStartBrace (Resist I first event/run) + BeaconHpBoost (×1.2/run). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
