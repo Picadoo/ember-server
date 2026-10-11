@@ -72,6 +72,7 @@ public final class EmberAffixExportTest {
         Map<String, Object> m = new LinkedHashMap<String, Object>();
         m.put("type", k.type);
         if ("circle".equals(k.type)) { m.put("radius", k.radius); m.put("ahead", k.ahead); }
+        else if ("cone".equals(k.type)) { m.put("angle", k.angle); m.put("range", k.range); }
         else { m.put("length", k.length); m.put("width", k.width); }
         return m;
     }
@@ -222,6 +223,18 @@ public final class EmberAffixExportTest {
                 periodic(o, b, v, k.warn, v.cascadeEvery);
                 o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1); o.put("pops", v.cascadeCount);
                 o.put("shape", shape(k));
+            } else if ("cleave".equals(id)) {
+                EmberRunMaps.Skill k = AffixCleave.skill(1.0, v);
+                o.put("engage", AffixCleave.ENGAGE); o.put("reach", AffixCleave.REACH);
+                periodic(o, b, v, k.warn, v.cleaveEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1);
+                o.put("shape", shape(k));
+            } else if ("ripple".equals(id)) {
+                EmberRunMaps.Skill k = AffixRipple.skill(1.0, v);
+                o.put("engage", AffixRipple.ENGAGE); o.put("reach", AffixRipple.REACH);
+                periodic(o, b, v, k.warn, v.rippleEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1);
+                o.put("shape", shape(k));
             }
             Object raw = yml.get(id);
             Map<String, Object> in = new TreeMap<String, Object>();
@@ -290,7 +303,7 @@ public final class EmberAffixExportTest {
         Map<?, ?> yml = liveVariety();
         EmberRunMaps.Variety v = new EmberRunMaps.Variety(yml);
         Map<?, ?> aff = (Map<?, ?>) table(yml, balanceVersion()).get("affixes");
-        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade"}) {
+        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple"}) {
             List<String> log = AffixReplay.run(new PrimitiveAffixPath(), id, AffixReplay.Script.of(1L), v);
             String promote = null;
             for (String l : log) if (l.contains("PROMOTE")) { promote = l; break; }

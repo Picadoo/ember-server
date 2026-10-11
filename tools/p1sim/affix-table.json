@@ -1,7 +1,7 @@
 {
   "generated_by": "CoreRpg/src/test/java/town/sunshine/corerpg/p1/EmberAffixExportTest.java",
   "note": "GENERATED — do not edit. Re-export: cd CoreRpg && mvn -o test -Dtest=EmberAffixExportTest -Daffix.export=write",
-  "balance_version": 97,
+  "balance_version": 98,
   "grace_s": 1.5,
   "affixes": {
     "blazing": {
@@ -283,6 +283,34 @@
       "pops": 3,
       "shape": { "type": "circle", "radius": 1.2, "ahead": 0.0 },
       "yml": { "count": 3, "dmg": 0.5, "every": 7.0, "radius": 1.2, "step": 2.0, "warn": 1.3 }
+    },
+    "cleave": {
+      "family": "STRIP",
+      "label": "劈斩",
+      "engage": 8.0,
+      "reach": 16.0,
+      "first_arm_s": 8.0,
+      "first_hit_s": 9.4,
+      "period_s": 7.9,
+      "warn_s": 1.4,
+      "dmg_atk": 0.55,
+      "hits_per_cast": 1,
+      "shape": { "type": "cone", "angle": 90.0, "range": 5.0 },
+      "yml": { "angle": 90, "dmg": 0.55, "every": 6.5, "range": 5.0, "warn": 1.4 }
+    },
+    "ripple": {
+      "family": "CIRCLE",
+      "label": "涟漪",
+      "engage": 10.0,
+      "reach": 16.0,
+      "first_arm_s": 8.5,
+      "first_hit_s": 9.8,
+      "period_s": 8.3,
+      "warn_s": 1.3,
+      "dmg_atk": 0.5,
+      "hits_per_cast": 1,
+      "shape": { "type": "circle", "radius": 4.0, "ahead": 0.0 },
+      "yml": { "dmg": 0.5, "every": 7.0, "half_w": 1.0, "radius": 4.0, "warn": 1.3 }
     }
   }
 }

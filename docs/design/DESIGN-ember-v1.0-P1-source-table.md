@@ -2270,3 +2270,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | jar | 1.65.732-d12214.local |
 | 门禁 | affixpack10 within range（stress vs venom；p2econ CRN 22vs20） |
 | STATUS | `docs/status/STATUS-ember-affix-pack10-d12214-2026-10-11.md` |
+
+
+### 13.123 Affix Pack 11 劈斩/涟漪（CoreRpg 1.65.733，D12215，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 行为 | 词缀池 22→24：+`cleave` 劈斩 / `ripple` 涟漪；affix_shard 仍 2 |
+| bv | 97→98 |
+| jar | 1.65.733-d12215.local |
+| 门禁 | affixpack11 within range（stress vs venom；p2econ CRN 24vs22） |
+| STATUS | `docs/status/STATUS-ember-affix-pack11-d12215-2026-10-11.md` |

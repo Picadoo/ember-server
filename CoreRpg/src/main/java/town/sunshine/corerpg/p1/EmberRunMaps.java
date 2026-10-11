@@ -626,9 +626,9 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9 + D12214 Pack 10. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
+        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9 + D12214 Pack 10 + D12215 Pack 11. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
-                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade"));
+                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
                 "timed", "crystal", "escort", "hold", "beacon", "relay", "breach", "chain", "unscathed"));
         public final double affixRate, eventRate;
@@ -672,6 +672,9 @@ public final class EmberRunMaps {
         public final double riftEvery, riftWarn, riftHalfLen, riftHalfW, riftDmg;
         public final double cascadeEvery, cascadeWarn, cascadeRadius, cascadeStep, cascadeDmg;
         public final int cascadeCount;
+        // D12215 cleave (劈斩: frontal cone toward player) / ripple (涟漪: expanding ring annulus)
+        public final double cleaveEvery, cleaveWarn, cleaveAngle, cleaveRange, cleaveDmg;
+        public final double rippleEvery, rippleWarn, rippleRadius, rippleHalfW, rippleDmg;
         // D171 crystal / escort / timed
         public final int crystalCount, crystalSecs, timedSecs;
         public final double escortHp;
@@ -853,6 +856,18 @@ public final class EmberRunMaps {
             cascadeStep = Math.max(1.5, Math.min(3.0, num(ca.get("step"), 2.0)));     // 1.5–3.0
             cascadeCount = Math.max(3, Math.min(3, (int) num(ca.get("count"), 3))); // fixed 3
             cascadeDmg = Math.max(0.0, Math.min(0.5, num(ca.get("dmg"), 0.5)));      // ≤ 0.5 atk
+            Map<?, ?> clv = m.get("cleave") instanceof Map ? (Map<?, ?>) m.get("cleave") : Collections.emptyMap();
+            cleaveEvery = Math.max(6.5, num(clv.get("every"), 6.5));         // D12215: every ≥ 6.5
+            cleaveWarn = Math.max(1.4, num(clv.get("warn"), 1.4));
+            cleaveAngle = Math.max(30.0, Math.min(90.0, num(clv.get("angle"), 90.0))); // full ≤ 90 (half ≤ 45)
+            cleaveRange = Math.max(1.0, Math.min(5.0, num(clv.get("range"), 5.0)));   // ≤ 5
+            cleaveDmg = Math.max(0.0, Math.min(0.55, num(clv.get("dmg"), 0.55)));     // ≤ 0.55 atk
+            Map<?, ?> rp = m.get("ripple") instanceof Map ? (Map<?, ?>) m.get("ripple") : Collections.emptyMap();
+            rippleEvery = Math.max(7.0, num(rp.get("every"), 7.0));         // D12215: every ≥ 7
+            rippleWarn = Math.max(1.3, num(rp.get("warn"), 1.3));
+            rippleRadius = Math.max(1.0, Math.min(4.0, num(rp.get("radius"), 4.0))); // ≤ 4
+            rippleHalfW = Math.max(0.3, Math.min(1.0, num(rp.get("half_w"), 1.0)));  // band ≤ 1.0
+            rippleDmg = Math.max(0.0, Math.min(0.5, num(rp.get("dmg"), 0.5)));       // ≤ 0.5 atk
             Map<?, ?> tm = m.get("timed") instanceof Map ? (Map<?, ?>) m.get("timed") : Collections.emptyMap();
             timedSecs = Math.max(5, (int) num(tm.get("secs"), eventSecs));
             Map<?, ?> cr = m.get("crystal") instanceof Map ? (Map<?, ?>) m.get("crystal") : Collections.emptyMap();
@@ -913,6 +928,8 @@ public final class EmberRunMaps {
             if ("scatter".equals(id)) return "散射";
             if ("rift".equals(id)) return "裂隙";
             if ("cascade".equals(id)) return "连落";
+            if ("cleave".equals(id)) return "劈斩";
+            if ("ripple".equals(id)) return "涟漪";
             return id;
         }
 
