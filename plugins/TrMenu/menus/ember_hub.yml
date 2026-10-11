@@ -7,6 +7,8 @@ Bindings:
   Commands:
     - '(?i)ember'
     - '(?i)menu'
+  Items:
+    - 'nether star'
 Options:
   Arguments: false
   Default-Layout: 0
@@ -22,18 +24,7 @@ Events:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'tell: §e今天：§f%corerpg_p1_route_pri%'
     - 'tell: §8%corerpg_p1_route_sec%'
-    - 'tell: §8旁轨：生活·使魔 / 工坊见「今天该打哪」'
-    - 'tell: §8成长：天赋/勋记/洗练 · 工坊四选择（烙纹/随机锻/转化/洗练）见成长格 Shift+右键'
-    - 'tell: §8短征：冒险页「烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石 / 递闸 / 镜廊 / 枢厅 / 衡梁 / 裂廊 / 旋坡 / 影廊 / 潮廊 / 晶棱 / 弦共鸣」（Q01后）'
-    - 'command: corerpg p1 mapfarm resume'
-    - 'command: corerpg p1 onlinepath'
-    - 'command: corerpg p1 mailpath'
-    - 'command: corerpg p1 stashpath'
-    - 'command: corerpg p1 brewpath'
-    - 'command: corerpg p1 cookpath'
-    - 'command: corerpg p1 petpath'
-    - 'command: corerpg p1 feedpath'
-    - 'command: corerpg p1 guildpath'
+    - 'tell: §7右键手中「余烬星」随时打开本页 · 勿敲指令'
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:

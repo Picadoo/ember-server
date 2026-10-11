@@ -195,6 +195,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         afkTierService = new AfkTierService(this, dataStore);
         emberAfk = new town.sunshine.corerpg.p1.EmberAfkService(this); // D177 (config: ember-v1.yml afk, read in reloadLocal)
         new town.sunshine.corerpg.p1.EmberBindGuard(this); // D276 O9: bind guards outside AFK class
+        new town.sunshine.corerpg.p1.EmberMenuStar(this); // D12129 sticky 余烬星 + vanilla→hub
         new town.sunshine.corerpg.p1.EmberParry(this); // D301 守招·余烬招架 (bare Q)
         hubPlazaService = new HubPlazaService(this);
         hubNpcService = new HubNpcService(this);
@@ -805,13 +806,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (lines != null) {
             for (Object o : lines) if (o != null) player.sendMessage(color(String.valueOf(o)));
         }
-        String[][] own = town.sunshine.corerpg.p1.EmberMode.active() && emberRuns != null ? emberRuns.joinButtons(joinData) : null;
-        if (own != null) ConfirmTokens.sendButtons(player, "§7", own); // F-review #3: graduates get the season / goals page
-        else if (town.sunshine.corerpg.p1.EmberMode.active()) // D99: open the menus by clicking, never by typing /ember
-            ConfirmTokens.sendButtons(player, "§7",
-                    new String[]{"[主菜单]", "/ember", "冒险 · 装备 · 工坊 · 帮助都在这里", "GOLD"},
-                    new String[]{"[冒险页]", "/ember_p1_adventure", "选图进副本（和右键门吏 · 灰钥一样）", "GREEN"},
-                    new String[]{"[帮助]", "/ember_help", "怎么玩 · 操作 · 三套装 · 变强", "AQUA"});
+        // D12129: never teach typing /ember — physical 余烬星 (TrMenu Items) opens hub; EmberMenuStar tells on join
+        if (town.sunshine.corerpg.p1.EmberMode.active()) {
+            player.sendMessage(color("§6[余烬] §f右键热键栏「余烬星」打开枢纽 · 勿敲指令"));
+        }
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
             @Override public void run() {
                 if (player.isOnline()) refreshBoard(player);

@@ -1,14 +1,17 @@
+# D12129: new players → ember_hub plaza near 灰烛 (not vanilla world).
+# Login itself has no ember_hub world; ForceSpawnLocOnJoin is off and sendPlayerTo=play.
+# Play-side CoreRpg EmberMenuStar also redirects vanilla world → hub on join.
 spawn:
-  world: world
-  x: 8.5
-  y: 64.0
-  z: 8.5
-  yaw: 0.0
+  world: ember_hub
+  x: -16.5
+  y: 58.0
+  z: 110.0
+  yaw: 180.0
   pitch: 0.0
 firstspawn:
-  world: world
-  x: 8.5
-  y: 64.0
-  z: 8.5
-  yaw: 0.0
+  world: ember_hub
+  x: -16.5
+  y: 58.0
+  z: 110.0
+  yaw: 180.0
   pitch: 0.0

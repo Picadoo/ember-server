@@ -4125,13 +4125,9 @@ public boolean pathForceOpenDoor(Player p) {
         return season == null ? "" : "本周目标 §f" + season.goalsDone(d) + "/" + season.goalCount() + "§7 · 余烬徽 §f" + EmberSeason.badges(d) + "§7";
     }
 
-    /** F-review #3: extra join buttons after graduation (null = the default three) */
+    /** F-review #3 / D12129: no join command buttons — hub opens via sticky 余烬星 only. */
     public String[][] joinButtons(PlayerData d) {
-        if (d == null || !EmberSkillKit.endgameUnlocked(d, this)) return null; // D5345
-        return new String[][]{{"[主菜单]", "/ember", "冒险 · 装备 · 工坊 · 帮助都在这里", "GOLD"},
-                {"[冒险页]", "/ember_p1_adventure", "挑战版 / 深渊 / 团本", "GREEN"},
-                {"[赛季 · 周目标]", "/ember_p1_season", "本周目标、排行榜、赛季奖励", "LIGHT_PURPLE"},
-                {"[外观商店]", "/corerpg p1 cosmetic", "打开外观商店页（余烬徽 / 币 / 印记都能付，只做展示）", "AQUA"}}; // recheck #5: D121 says the join message opens the shop page
+        return null; // D12129: never teach /ember · physical nether star
     }
 
     public List<String> joinLines(PlayerData d) {
@@ -4147,11 +4143,11 @@ public boolean pathForceOpenDoor(Player p) {
             boolean shapeOn = EmberSkillKit.shapeUnlocked(d, this);
             if (shapeOn)
                 out.add("§7烬斩符文 · §f" + EmberSkillKit.shapeName(EmberSkillKit.shapeId(d, this))
-                        + " §8· /corerpg skill kit");
-            out.add("§7外观商店：点下面的 [外观商店]（或主菜单「赛季 · 排行 · 周目标」→ 外观商店）；余烬徽、余烬币或多出来的印记都能付，只做展示");
+                        + " §8· 余烬星 → 技能");
+            out.add("§7外观商店：右键「余烬星」→ 赛季 · 排行 · 周目标 → 外观商店；余烬徽、余烬币或多出来的印记都能付，只做展示");
         } else {
             out.add("§6§l[余烬服] §e欢迎回来 · 下一步：§f" + ChatColor.stripColor(nextStep(d)));
-            out.add("§7本周精选 §f" + featuredShort() + "§7 · 右键门吏 · 灰钥或点下面的 [冒险页] 进本");
+            out.add("§7本周精选 §f" + featuredShort() + "§7 · 右键「余烬星」→ 冒险，或右键门吏 · 灰钥进本");
             String sk2 = EmberSkillUnlock.nextHope(d, this); // D1517
             if (sk2 != null && !sk2.isEmpty() && !sk2.contains("已齐"))
                 out.add("§7" + sk2);
