@@ -279,6 +279,27 @@ public final class EmberSettleService {
             in.sixStarter = modelled && in.firstClear != null && "q01".equals(m.key);
         }
         List<EmberRunRules.Grant> grants = new ArrayList<EmberRunRules.Grant>(EmberRunRules.settle(in));
+        try {
+            Player tip = Bukkit.getPlayer(u);
+            if (EmberBaseShardBoost.apply(pd, grants)) { // D10273
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a结算加码 · 碎片 +" + EmberBaseShardBoost.BONUS + "（今日一次）");
+                    try { tip.sendActionBar("§a结算加码 · 碎片"); } catch (Throwable ignored) { }
+                }
+            }
+            if (EmberBaseBoneBoost.apply(pd, grants)) { // D10289
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a结算加码 · 骨头 +" + EmberBaseBoneBoost.BONUS + "（今日一次）");
+                    try { tip.sendActionBar("§a结算加码 · 骨头"); } catch (Throwable ignored) { }
+                }
+            }
+            if (EmberBaseCoreBoost.apply(pd, grants)) { // D10305
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a结算加码 · 核心 +" + EmberBaseCoreBoost.BONUS + "（今日一次）");
+                    try { tip.sendActionBar("§a结算加码 · 核心"); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
         boolean dropQForced = false;
         boolean dropCForced = false;
         if (EmberDropQualityPity.applicable(s, m)) { // D611 drop quality pity · mainline base_item only

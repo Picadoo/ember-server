@@ -1,3 +1,4 @@
+Live jar: **1.65.692-d10336.local** · D10273–D10336 BaseShardBoost + BaseBoneBoost + BaseCoreBoost
 Live jar: **1.65.691-d10272.local** · D10209–D10272 SigMarkBoost + FcSigMarkBoost + RaidMarkBoost
 Live jar: **1.65.690-d10208.local** · D10145–D10208 EventCoreBoost + RotMarkBoost + PledgeSettleBoost
 Live jar: **1.65.689-d10144.local** · D10081–D10144 VarietyBountyCountSoft + VarietyBountyRewardBoost + HonorCoinBoost

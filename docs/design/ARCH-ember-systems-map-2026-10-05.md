@@ -602,3 +602,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D10081–D10144: VarietyBountyCountSoft + VarietyBountyRewardBoost + HonorCoinBoost. STOP densify those + goal-bounty + priors. Talent HOLD. Six-slot HOLD.
 - D10145–D10208: EventCoreBoost + RotMarkBoost + PledgeSettleBoost. STOP densify those + variety-honor + goal-bounty + priors. Talent HOLD. Six-slot HOLD.
 - D10209–D10272: SigMarkBoost + FcSigMarkBoost + RaidMarkBoost. STOP densify those + event-rot-pledge + priors. Talent HOLD. Six-slot HOLD.
+- D10273–D10336: BaseShardBoost + BaseBoneBoost + BaseCoreBoost. STOP densify those + sigmark + priors. Talent HOLD. Six-slot HOLD.
