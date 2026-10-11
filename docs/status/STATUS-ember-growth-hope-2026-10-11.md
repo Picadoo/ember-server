@@ -1,3 +1,6 @@
+Live jar: **1.65.681-d9632.local** · D9569–D9632 EnhanceCostSoft + UpgradeCostSoft + RefineCostSoft
+Prior: LifeLevel/ShortEnter/CustomDot
+
 Live jar: **1.65.680-d9568.local** · D9505–D9568 LifeLevelGateSoft + ShortEnterBrace + CustomDotSoft
 Prior: Pet/Fire/Proj
 

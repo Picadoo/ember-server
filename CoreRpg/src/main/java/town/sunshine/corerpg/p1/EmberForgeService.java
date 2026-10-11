@@ -386,6 +386,19 @@ public final class EmberForgeService implements Listener {
         EmberItemData d = it.data;
         Plan c = EmberUpgradeRules.enhanceCheck(d);
         if (!c.ok()) { p.sendMessage(P + ChatColor.RED + c.error); return true; }
+        Cost payCost = c.cost;
+        try {
+            PlayerData pdE = plugin.getDataStore().get(p.getUniqueId());
+            Cost soft = EmberEnhanceCostSoft.apply(pdE, c.cost, go); // D9569
+            if (soft != null && soft != c.cost) {
+                payCost = soft;
+                if (go) {
+                    p.sendMessage(P + "§a强化减负 · 花费 ×0.5（今日一次）");
+                    try { p.sendActionBar("§a强化减负"); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
+        final Cost pay = payCost;
         int target = d.enhance + 1;
         int max = EmberUpgradeRules.maxTries(target);
         if (!go) {
@@ -403,9 +416,9 @@ public final class EmberForgeService implements Listener {
                 try { p.sendActionBar("§e强化 · §f+" + d.enhance + "→+" + target
                         + " §7· " + ratePct + "% · ≤" + EmberGearNextHint.enhanceAttemptsUntilSure(d) + "次必成"); } catch (Throwable ignored) { }
             }
-            p.sendMessage(P + "每次消耗: " + c.cost.label() + "  · 失败不降级、不爆装，失败计数保存在本物品");
+            p.sendMessage(P + "每次消耗: " + pay.label() + "  · 失败不降级、不爆装，失败计数保存在本物品");
             warnT0(p, d);
-            List<String> lack = lacking(p, c.cost);
+            List<String> lack = lacking(p, pay);
             if (!lack.isEmpty()) {
                 p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack));
                 String src = sources(lack);
@@ -430,9 +443,9 @@ public final class EmberForgeService implements Listener {
         String r = rid != null ? rid : "enh:" + d.uid + ":" + d.rev;
         if (replayed(p, r)) return true;
         final String rr = r;
-        payDurable(p, rr, "enhance", c.cost, () -> {
+        payDurable(p, rr, "enhance", pay, () -> {
             Plan plan = EmberUpgradeRules.enhance(d, ThreadLocalRandom.current().nextDouble());
-            commit(p, "enhance", rr, c.cost, Arrays.asList(new TxnItem(d, plan.after, null)), plan.note);
+            commit(p, "enhance", rr, pay, Arrays.asList(new TxnItem(d, plan.after, null)), plan.note);
             try {
                 if (plan.after != null && plan.after.enhance == d.enhance) {
                     PlayerData pdB = plugin.getDataStore().get(p.getUniqueId());
@@ -450,11 +463,32 @@ public final class EmberForgeService implements Listener {
 
     private boolean simple(Player p, Slot it, String kind, Plan plan, boolean go, String rid) {
         if (!plan.ok()) { p.sendMessage(P + ChatColor.RED + plan.error); return true; }
+        Cost payCost = plan.cost;
+        try {
+            PlayerData pdS = plugin.getDataStore().get(p.getUniqueId());
+            Cost soft = null;
+            String cue = null;
+            if ("upgrade".equals(kind)) {
+                soft = EmberUpgradeCostSoft.apply(pdS, plan.cost, go); // D9601
+                cue = "升阶减负";
+            } else if ("refine".equals(kind)) {
+                soft = EmberRefineCostSoft.apply(pdS, plan.cost, go); // D9617
+                cue = "精工减负";
+            }
+            if (soft != null && soft != plan.cost) {
+                payCost = soft;
+                if (go && cue != null) {
+                    p.sendMessage(P + "§a" + cue + " · 花费 ×0.5（今日一次）");
+                    try { p.sendActionBar("§a" + cue); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
+        final Cost pay = payCost;
         if (!go) {
             p.sendMessage(P + plan.note);
             p.sendMessage(P + "当前: " + preview(it.data));
             p.sendMessage(P + "之后: " + preview(plan.after) + "（确定成功，预览即结果）");
-            p.sendMessage(P + "消耗: " + plan.cost.label());
+            p.sendMessage(P + "消耗: " + pay.label());
             warnT0(p, it.data);
             if ("upgrade".equals(kind) && it.data.tier >= 1) { // D104 (midgame #3): show the other route next to the price
                 int nt = it.data.tier + 1;
@@ -465,7 +499,7 @@ public final class EmberForgeService implements Listener {
             }
             if (it.data.tier == 1 && !"upgrade".equals(kind)) // D101 (midgame #4)
                 p.sendMessage(P + ChatColor.YELLOW + "T1 到 Q04 之后多半会被 T2 替换；想留着就用升阶（升阶会保留成色和精工）。");
-            List<String> lack = lacking(p, plan.cost);
+            List<String> lack = lacking(p, pay);
             String label = "upgrade".equals(kind) ? "[确认升阶]" : "quality".equals(kind) ? "[确认成色]" : "[确认精工]";
             String cmd = "/corerpg p1 " + ("quality".equals(kind) ? "refine quality" : kind) + " confirm";
             // D1298 / D1916 GS3 dial on quality/refine
@@ -477,12 +511,12 @@ public final class EmberForgeService implements Listener {
                     if (!lack.isEmpty())
                         p.sendActionBar("§c" + kn + " · §f" + dial + " §c· 缺料");
                     else
-                        p.sendActionBar("§a" + dial + " §7· " + plan.cost.label());
+                        p.sendActionBar("§a" + dial + " §7· " + pay.label());
                 } else if (!lack.isEmpty()) {
                     p.sendActionBar("§c" + kn + "缺料 · §f" + lack.get(0)
                             + (lack.size() > 1 ? "…" : ""));
                 } else {
-                    p.sendActionBar("§a确定成功 · §f" + kn + " §7· " + plan.cost.label());
+                    p.sendActionBar("§a确定成功 · §f" + kn + " §7· " + pay.label());
                 }
             } catch (Throwable ignored) { }
             if (!lack.isEmpty()) {
@@ -517,7 +551,7 @@ public final class EmberForgeService implements Listener {
         String r = rid != null ? rid : kind + ":" + it.data.uid + ":" + it.data.rev;
         if (replayed(p, r)) return true;
         final String rr = r;
-        payDurable(p, rr, kind, plan.cost, () -> commit(p, kind, rr, plan.cost, Arrays.asList(new TxnItem(it.data, plan.after, null)), plan.note));
+        payDurable(p, rr, kind, pay, () -> commit(p, kind, rr, pay, Arrays.asList(new TxnItem(it.data, plan.after, null)), plan.note));
         return true;
     }
 
