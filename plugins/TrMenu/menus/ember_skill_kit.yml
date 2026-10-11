@@ -10,6 +10,7 @@
 # D290 · 与签名页互相深链；L07/L09/L13 覆盖符文写清
 # D291 · P「推荐打法」深链
 # D301 · 守招·余烬招架（Q03 · 单按 Q · G2_parry_B2）
+# D12197 · lore ≤3 行（Karen）
 
 Title: '§6技能 · §e%corerpg_kit_shape% §8· §b%corerpg_kit_step_dir% §8· %corerpg_kit_charge%'
 
@@ -55,8 +56,6 @@ Icons:
       lore:
         - ''
         - '§7机动 / 站桩 / 压上 ↔ 天赋一排'
-        - '§8与本页身法/形状一起认标签'
-        - ''
         - '§e➥ §f打开'
     actions:
       all:
@@ -80,21 +79,9 @@ Icons:
       name: '§6此刻状态'
       lore:
         - ''
-        - '§7余烬充能：§f%corerpg_kit_charge%'
-        - '§7烬斩形状：§f%corerpg_kit_shape%'
-        - '§7身法方向：§b%corerpg_kit_step_dir%'
-        - '§7身法名：§f%corerpg_kit_step%'
-        - ''
-        - '§e每 8 秒一份充能 · 二选一（不能两招各放一次）'
-        - '§f  F §7→ 烬斩（当前形状）'
-        - '§f  潜行+F §7→ 烬突（花掉本次充能）'
-        - '§8烬突解锁：§f%corerpg_kit_dash_unlock% §8（首通 Q02）'
-        - ''
-        - '§7符文 / 身法方向：§e出本才可换 §7· 换后对应 CD 转满'
-        - '§b守招：§f%corerpg_kit_parry_name% §7· §f%corerpg_kit_parry_cd% §8（解锁 %corerpg_kit_parry_unlock% · Q03）'
-        - ''
-        - '§e希望 · 下一技能：§f%corerpg_kit_next_hope%'
-        - '§e希望 · 套装手感：§f%corerpg_kit_set_hope%'
+        - '§7充能 §f%corerpg_kit_charge% §7· 形状 §f%corerpg_kit_shape% §7· 身法 §b%corerpg_kit_step_dir%'
+        - '§7守招 §f%corerpg_kit_parry_name% §8· %corerpg_kit_parry_cd% §8（%corerpg_kit_parry_unlock%）'
+        - '§e希望：§f%corerpg_kit_next_hope% §7· §f%corerpg_kit_set_hope%'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -108,14 +95,9 @@ Icons:
       name: '§6① 烬斩 · F'
       lore:
         - ''
-        - '§a主招 · 共享充能的一半'
-        - '§7按 F：按当前形状挥砍 · 1.5B'
-        - '§7当前形状：§e%corerpg_kit_shape%'
-        - '§7充能：§f%corerpg_kit_charge%'
-        - ''
-        - '§e套装差：§7爆缓速 / 承微疗 / 焚余烬展示（D438）'
+        - '§a主招 · F · 1.5B · 形状 §e%corerpg_kit_shape%'
+        - '§7充能：§f%corerpg_kit_charge% §8· 与烬突二选一'
         - '§8不暴击 · 不吸血 · 不触发套装计数'
-        - '§e与烬突二选一 · 同一次充能只能花一次'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -128,17 +110,9 @@ Icons:
       name: '§c② 烬突 · 潜行+F'
       lore:
         - ''
-        - '§c副招 · 花掉本次余烬充能'
-        - '§7潜行+F：向前冲 §f4 §7格 · 穿过最多 §f3 §7个'
-        - '§7各 1.5B · 首领 §f×0.5'
-        - '§7充能：§f%corerpg_kit_charge%'
-        - ''
-        - '§8解锁：§f%corerpg_kit_dash_unlock% §8（首通 Q02）'
-        - '§e套装差：§7焚点燃 / 爆缓速 / 承微疗（D436 · 不改 1.5B）'
-        - '§8未解锁时潜行+F 仍放烬斩'
-        - '§8挂机庭不会自动烬突'
-        - '§b手感：§7施放前地面冲刺走廊预示（与 F 形状预示同哲学）'
-        - '§e与烬斩二选一 · 同一次充能只能花一次'
+        - '§c副招 · 冲4格 · 最多3目标 · 各1.5B（首领×0.5）'
+        - '§7充能：§f%corerpg_kit_charge% §8· 解锁 %corerpg_kit_dash_unlock%（Q02）'
+        - '§8挂机不自动烬突 · 未解锁仍放烬斩'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -152,17 +126,9 @@ Icons:
       name: '§b身法 · §f%corerpg_kit_step_dir% §8· %corerpg_kit_step%'
       lore:
         - ''
-        - '§7键位：§f潜行+Q'
-        - '§7当前方向：§b%corerpg_kit_step_dir%'
-        - '§7显示名：§f%corerpg_kit_step%'
-        - '§7前冲 §f5 §7格 / 后撤 §f4 §7格 · CD 14 秒 · 零伤害'
-        - ''
-        - '§e套装差：§7焚火痕点燃 / 爆闪缓速 / 承护微疗（两件套自动）'
-        - '§7火痕步（焚烬两件套 + Q05）：前冲落点 / 后撤起跳点燃'
-        - '§8火痕解锁：§f%corerpg_kit_step_unlock%'
-        - ''
-        - '§e➥ §f点右侧「前冲 / 后撤」切换（须出本）'
-        - '§8也可打开轻技页查看装配'
+        - '§7潜行+Q · 前冲5/后撤4 · CD14 · 零伤害'
+        - '§7当前 §b%corerpg_kit_step_dir% §8· 火痕解锁 %corerpg_kit_step_unlock%'
+        - '§e➥ §f出本切方向 · 或开轻技页'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -176,17 +142,9 @@ Icons:
       name: '§e符文 · 扇形'
       lore:
         - ''
-        - '§6预览（出本切换）'
-        - '§f  正前扇面 §e≥110° §f· 半径 §e3.5 §f格 · 最多 §e5 §8（Stage2）'
-        - '§7适合：贴脸清小群'
-        - ''
-        - '§e套装推荐：§7焚扇 / 爆直 / 承环（成套软设 · 可换）'
-        - '§7你当前：§f%corerpg_kit_shape%'
-        - '§8解锁：§f%corerpg_kit_shape_unlock% §8（首通 Q04）'
-        - '§8签名覆盖时本格仅预览 · 左下「签名传奇」看生效'
-        - '§8换后烬斩充能转满'
-        - ''
-        - '§e➥ §f点击切为扇形'
+        - '§f扇≥110° · 半径3.5 · 最多5 §8（Stage2）'
+        - '§7当前 §f%corerpg_kit_shape% §8· 解锁 %corerpg_kit_shape_unlock%（Q04）'
+        - '§e➥ §f出本切扇形 · 换后充能转满'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -200,16 +158,9 @@ Icons:
       name: '§b符文 · 直线穿刺'
       lore:
         - ''
-        - '§6预览（出本切换）'
-        - '§f  正前穿刺 §e6 §f格 · 半宽 §e0.7 §f· 最多 §e3 §8（Stage2）'
-        - '§7适合：走廊点名 / 窄道'
-        - '§8（几何同签名 L07 · 烙上则覆盖符文）'
-        - ''
-        - '§7你当前：§f%corerpg_kit_shape%'
-        - '§8解锁：§f%corerpg_kit_shape_unlock%'
-        - '§8换后烬斩充能转满'
-        - ''
-        - '§e➥ §f点击切为直线'
+        - '§f正前6格 · 半宽0.7 · 最多3 §8（Stage2 · 同L07）'
+        - '§7当前 §f%corerpg_kit_shape% §8· 解锁 %corerpg_kit_shape_unlock%'
+        - '§e➥ §f出本切直线 · 换后充能转满'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -223,17 +174,9 @@ Icons:
       name: '§d符文 · 原地环斩'
       lore:
         - ''
-        - '§6预览（出本切换）'
-        - '§f  身边一圈半径 §e3.5 §f格 · 最多 §e4 §8（Stage2）'
-        - '§7适合：被围时清身'
-        - '§8（几何同签名 L09 · 烙上则覆盖符文）'
-        - '§8L13 蓄力环斩另见签名页（Q07 · 覆盖本符文）'
-        - ''
-        - '§7你当前：§f%corerpg_kit_shape%'
-        - '§8解锁：§f%corerpg_kit_shape_unlock%'
-        - '§8换后烬斩充能转满'
-        - ''
-        - '§e➥ §f点击切为环斩'
+        - '§f身边半径3.5 · 最多4 §8（Stage2 · 同L09；L13见签名）'
+        - '§7当前 §f%corerpg_kit_shape% §8· 解锁 %corerpg_kit_shape_unlock%'
+        - '§e➥ §f出本切环斩 · 换后充能转满'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -248,10 +191,7 @@ Icons:
       name: '§a身法 · 前冲'
       lore:
         - ''
-        - '§7向前最多 §f5 §7格 · 无伤害'
-        - '§7你当前方向：§b%corerpg_kit_step_dir%'
-        - '§7火痕·前冲：落点点燃'
-        - ''
+        - '§7向前最多5格 · 无伤害 · 当前 §b%corerpg_kit_step_dir%'
         - '§8出本免费换 · 换后身法 CD 转满'
         - '§e➥ §f切换为前冲'
     actions:
@@ -267,10 +207,7 @@ Icons:
       name: '§b身法 · 后撤'
       lore:
         - ''
-        - '§7向后最多 §f4 §7格 · 无伤害 · 保持朝向'
-        - '§7你当前方向：§b%corerpg_kit_step_dir%'
-        - '§7火痕·后撤：起跳点点燃'
-        - ''
+        - '§7向后最多4格 · 无伤害 · 当前 §b%corerpg_kit_step_dir%'
         - '§8出本免费换 · 换后身法 CD 转满'
         - '§e➥ §f切换为后撤'
     actions:
@@ -287,11 +224,8 @@ Icons:
       name: '§6签名传奇'
       lore:
         - ''
-        - '§7刃/护符上的签名会§e覆盖§7烬斩符文形状'
-        - '§8L07 直线 · L09 环斩 · L13 蓄力环斩（Q07）'
-        - '§7本页符文预览仍可看；生效以签名为准'
-        - ''
-        - '§e➥ §f打开签名页（返回键回技能组）'
+        - '§7刃/护符签名可§e覆盖§7烬斩符文（L07/L09/L13）'
+        - '§e➥ §f打开签名页'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -305,17 +239,6 @@ Icons:
       name: '§b守招 · §f%corerpg_kit_parry_name%'
       lore:
         - ''
-        - '§7键位：§f单按 Q §8（解锁后替换扔刃）'
-        - '§7解锁：§f%corerpg_kit_parry_unlock% §8（首通 Q03）'
-        - '§7冷却：§f%corerpg_kit_parry_cd% §8（独立 28s · 不花烬斩/身法）'
-        - ''
-        - '§e怎么用'
-        - '§7  首领预警§f砸中你§7后约半秒内再按 Q'
-        - '§7  成功：对首领反打 §f0.45B §7（预警伤仍生效）'
-        - '§a成功瞬间 ActionBar 一闪「招架成功 · 反打」§8（D666 手感 · 零改数值）'
-        - ''
-        - '§a好：对齐落地窗口赚反打'
-        - '§c坏：窗外乱按白丢独立 CD'
-        - ''
-        - '§8与身法（潜行+Q）/ 烬斩·烬突（F）分工：守招=防御时机键'
-        - '§8不挡预警伤 · 无位移 · 无均匀减伤窗'
+        - '§7单按Q · 解锁 §f%corerpg_kit_parry_unlock%（Q03）· CD §f%corerpg_kit_parry_cd%§8（28s）'
+        - '§7预警砸中你后约半秒内再按 · 反打0.45B'
+        - '§8窗外乱按白丢CD · 不挡预警伤'

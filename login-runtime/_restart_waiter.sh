@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# D12196 login inner waiter
+# D12197 login inner waiter
+# Port free ≥10s → force clear pid even if kill -0 still true (PID reuse / dying JVM).
 set -euo pipefail
 cd "$(dirname "$0")"
 LOG=/tmp/ember-login-restart.log
@@ -8,6 +9,7 @@ PIDFILE=server.pid
 ts() { date '+%Y-%m-%d %H:%M:%S %z'; }
 echo "$(ts) restart-on-crash: invoked (login port ${PORT})" >>"$LOG"
 deadline=$((SECONDS + 120))
+port_free_since=-1
 while (( SECONDS < deadline )); do
   alive=0
   if [[ -f $PIDFILE ]]; then
@@ -22,7 +24,18 @@ while (( SECONDS < deadline )); do
   elif (echo >/dev/tcp/127.0.0.1/"${PORT}") >/dev/null 2>&1; then
     port_busy=1
   fi
+  if (( port_busy == 0 )); then
+    if (( port_free_since < 0 )); then
+      port_free_since=$SECONDS
+    fi
+  else
+    port_free_since=-1
+  fi
   if (( alive == 0 && port_busy == 0 )); then
+    break
+  fi
+  if (( port_busy == 0 && port_free_since >= 0 && SECONDS - port_free_since >= 10 )); then
+    echo "$(ts) force clear: port free ≥10s (pid_alive=$alive) — stale/dying JVM" >>"$LOG"
     break
   fi
   echo "$(ts) waiting: pid_alive=$alive port_busy=$port_busy" >>"$LOG"

@@ -1,3 +1,4 @@
+# D12197 · lore ≤3 行（Karen）· 砍十九本墙改看各图按钮
 # D463 · YAML 缩进+六行布局+体力 H 避 S 撞键（sx18 仍 S）
 # D421 · 短征十九本选页（sx01 烬门哨岗 · sx02 锈灯栈道 · sx03 霜雾闸廊 · sx04 烬井螺旋 · sx05 裂谷风廊 · sx06 烬环廊 · sx07 烬塔回升 · sx08 错层烬庭 · sx09 烬渠跳石 · sx10 烬闸递室 · sx11 烬镜对廊 · sx12 烬枢转厅 · sx13 烬衡悬梁 · sx14 烬裂折廊 · sx15 烬旋坡廊 · sx16 烬影叠廊 · sx17 烬潮回廊 · sx18 烬晶折棱 · sx19 烬弦共鸣）
 # D416 · 选页 I 挂 D404 vault/recipe_gap 仓差行 + Open 半行 · 零 jar · 满态不盖 D409 去工坊花
@@ -47,7 +48,7 @@ Events:
         - 'tell: §e今日短征有奖已满 §7· 材料在仓 · 去工坊花'
         - 'tell: §8练习仍可进 · 0 点重置有奖次数 · 不是旧日常窟'
       deny-actions:
-        - 'tell: §e短征选本：§f烬门哨岗 / 锈灯栈道 / 霜雾闸廊 / 烬井螺旋 / 裂谷风廊 / 烬环廊 / 烬塔回升 / 错层烬庭 / 烬渠跳石 / 烬闸递室 / 烬镜对廊 / 烬枢转厅 / 烬衡悬梁 / 烬裂折廊 / 烬旋坡廊 / 烬影叠廊 / 烬潮回廊 / 烬晶折棱 / 烬弦共鸣 · Q01 后 · 各体力30 · 日有奖帽分开计'
+        - 'tell: §e短征选本：§f点下方各图 · Q01后 · 各30体力 · 日帽分开'
         - 'tell: §8独立短本 · 不是旧日常窟 · 奖励以结算为准 · 材料进仓去工坊 · 今日有奖见各本悬停'
     - 'tell: §8生涯首通：各本悬停可见未领/已领取 · %corerpg_p1_sx_fc_pending_line%'
     - 'tell: §8本周可选周目标·短征：赛季页可看 · 有奖通关计入 · 只发外观徽 · 不算全部完成'
@@ -71,64 +72,9 @@ Icons:
           name: '§e今日有奖已满 · 去工坊花'
           lore:
             - ''
-            - '§a今日短征有奖已满 §7· 材料在仓 · 去工坊花'
-            - '§8练习仍可进 · 0 点重置有奖次数 · 不是旧日常窟'
-            - '§7今日剩余有奖合计（十九本）：§f%corerpg_p1_sx_day_left_sum%'
-            - '§e碎片/骨尘/胚料在账号仓 · 点「去哪花」开工坊'
-            - '§8体力还在可挂机 · 「去哪花」右键进挂机庭'
-            - ''
-            - '§7独立短本（§f不是§7旧日常窟）'
-            - '§7十九本并列：§f烬门哨岗 §7/ §f锈灯栈道 §7/ §f霜雾闸廊 §7/ §f烬井螺旋 §7/ §f裂谷风廊 §7/ §f烬环廊 §7/ §f烬塔回升 §7/ §f错层烬庭 §7/ §f烬渠跳石 §7/ §f烬闸递室 §7/ §f烬镜对廊 §7/ §f烬枢转厅 §7/ §f烬衡悬梁 §7/ §f烬裂折廊 §7/ §f烬旋坡廊 §7/ §f烬影叠廊 §7/ §f烬潮回廊 §7/ §f烬晶折棱 §7/ §f烬弦共鸣'
-            - '§7通关有奖：§f币80 + 碎片4 + 骨尘3 §7→ 仓库 → 工坊花'
-            - '§7烬门首通：§f%corerpg_p1_sx01_fc%'
-            - '§7锈灯首通：§f%corerpg_p1_sx02_fc%'
-            - '§7霜雾首通：§f%corerpg_p1_sx03_fc%'
-            - '§7烬井首通：§f%corerpg_p1_sx04_fc%'
-            - '§7裂谷首通：§f%corerpg_p1_sx05_fc%'
-            - '§7烬环首通：§f%corerpg_p1_sx06_fc%'
-            - '§7烬塔首通：§f%corerpg_p1_sx07_fc%'
-            - '§7错层首通：§f%corerpg_p1_sx08_fc%'
-            - '§7烬渠首通：§f%corerpg_p1_sx09_fc%'
-            - '§7烬闸首通：§f%corerpg_p1_sx10_fc%'
-            - '§7烬镜首通：§f%corerpg_p1_sx11_fc%'
-            - '§7烬枢首通：§f%corerpg_p1_sx12_fc%'
-            - '§7烬衡首通：§f%corerpg_p1_sx13_fc%'
-            - '§7烬裂首通：§f%corerpg_p1_sx14_fc%'
-            - '§7烬旋首通：§f%corerpg_p1_sx15_fc%'
-            - '§7烬影首通：§f%corerpg_p1_sx16_fc%'
-            - '§7烬潮首通：§f%corerpg_p1_sx17_fc%'
-            - '§7烬晶首通：§f%corerpg_p1_sx18_fc%'
-            - '§7烬弦首通：§f%corerpg_p1_sx19_fc%'
-            - '§7生涯首通未领：§f%corerpg_p1_sx_fc_left% §7本'
-            - '§8%corerpg_p1_sx_fc_pending_line%'
-            - '§e烬门 · %corerpg_p1_sx01_day_line%'
-            - '§e锈灯 · %corerpg_p1_sx02_day_line%'
-            - '§e霜雾 · %corerpg_p1_sx03_day_line%'
-            - '§e烬井 · %corerpg_p1_sx04_day_line%'
-            - '§e裂谷 · %corerpg_p1_sx05_day_line%'
-            - '§e烬环 · %corerpg_p1_sx06_day_line%'
-            - '§e烬塔 · %corerpg_p1_sx07_day_line%'
-            - '§e错层 · %corerpg_p1_sx08_day_line%'
-            - '§e烬渠 · %corerpg_p1_sx09_day_line%'
-            - '§e烬闸 · %corerpg_p1_sx10_day_line%'
-            - '§e烬镜 · %corerpg_p1_sx11_day_line%'
-            - '§e烬枢 · %corerpg_p1_sx12_day_line%'
-            - '§e烬衡 · %corerpg_p1_sx13_day_line%'
-            - '§e烬裂 · %corerpg_p1_sx14_day_line%'
-            - '§e烬旋 · %corerpg_p1_sx15_day_line%'
-            - '§e烬影 · %corerpg_p1_sx16_day_line%'
-            - '§e烬潮 · %corerpg_p1_sx17_day_line%'
-            - '§e烬晶 · %corerpg_p1_sx18_day_line%'
-            - '§e烬弦 · %corerpg_p1_sx19_day_line%'
-            # D416 W1a：D404 live 仓差（满态不盖上方去工坊花主 CTA）
-            - '§e仓内：§f碎%corerpg_p1_vault_shard% §7· §f骨%corerpg_p1_vault_bone% §7· §f核%corerpg_p1_vault_core% §7· §f胚%corerpg_p1_vault_blank%'
-            - '§c还差：§e强化+1 §7碎差 §f%corerpg_p1_recipe_gap_enhance1% §7· §e升阶T2 §7%corerpg_p1_recipe_gap_upgrade_t2%'
-            - '§6精工0→1 §7%corerpg_p1_recipe_gap_refine1%'
-            - '§8材料进仓 · 点「去哪花」开工坊 · 不加快产量'
-            - '§8不发主线装备/徽记/签名（首航）'
-            - ''
-            - '§8本周可选周目标·短征：有奖通关计入（赛季页）· 不算「全部完成」· 只发外观徽'
-            - '§8旧日常窟仍收起 · 勿找 ember_daily'
+            - '§a今日短征有奖已满 §7· 剩余 §f%corerpg_p1_sx_day_left_sum%'
+            - '§7材料在仓 · 点「去哪花」开工坊 · 练习仍可进'
+            - '§8日线/首通看各图按钮 · 仓差碎%corerpg_p1_vault_shard%·骨%corerpg_p1_vault_bone%'
       # D409 W1b：日帽合计满（体力已尽）→ 满态说明 · 仍追工坊
       - condition: 'check papi %corerpg_p1_sx_day_left_sum% <= 0'
         priority: 2
@@ -137,124 +83,17 @@ Icons:
           name: '§e今日有奖已满 · 去工坊花'
           lore:
             - ''
-            - '§a今日短征有奖已满 §7· 材料在仓 · 去工坊花'
-            - '§8练习仍可进 · 0 点重置有奖次数 · 不是旧日常窟'
-            - '§7今日剩余有奖合计（十九本）：§f%corerpg_p1_sx_day_left_sum%'
-            - '§e碎片/骨尘/胚料在账号仓 · 点「去哪花」开工坊'
-            - '§8体力已尽 · 先回满再挂机或练习进本'
-            - ''
-            - '§7独立短本（§f不是§7旧日常窟）'
-            - '§7十九本并列：§f烬门哨岗 §7/ §f锈灯栈道 §7/ §f霜雾闸廊 §7/ §f烬井螺旋 §7/ §f裂谷风廊 §7/ §f烬环廊 §7/ §f烬塔回升 §7/ §f错层烬庭 §7/ §f烬渠跳石 §7/ §f烬闸递室 §7/ §f烬镜对廊 §7/ §f烬枢转厅 §7/ §f烬衡悬梁 §7/ §f烬裂折廊 §7/ §f烬旋坡廊 §7/ §f烬影叠廊 §7/ §f烬潮回廊 §7/ §f烬晶折棱 §7/ §f烬弦共鸣'
-            - '§7通关有奖：§f币80 + 碎片4 + 骨尘3 §7→ 仓库 → 工坊花'
-            - '§7烬门首通：§f%corerpg_p1_sx01_fc%'
-            - '§7锈灯首通：§f%corerpg_p1_sx02_fc%'
-            - '§7霜雾首通：§f%corerpg_p1_sx03_fc%'
-            - '§7烬井首通：§f%corerpg_p1_sx04_fc%'
-            - '§7裂谷首通：§f%corerpg_p1_sx05_fc%'
-            - '§7烬环首通：§f%corerpg_p1_sx06_fc%'
-            - '§7烬塔首通：§f%corerpg_p1_sx07_fc%'
-            - '§7错层首通：§f%corerpg_p1_sx08_fc%'
-            - '§7烬渠首通：§f%corerpg_p1_sx09_fc%'
-            - '§7烬闸首通：§f%corerpg_p1_sx10_fc%'
-            - '§7烬镜首通：§f%corerpg_p1_sx11_fc%'
-            - '§7烬枢首通：§f%corerpg_p1_sx12_fc%'
-            - '§7烬衡首通：§f%corerpg_p1_sx13_fc%'
-            - '§7烬裂首通：§f%corerpg_p1_sx14_fc%'
-            - '§7烬旋首通：§f%corerpg_p1_sx15_fc%'
-            - '§7烬影首通：§f%corerpg_p1_sx16_fc%'
-            - '§7烬潮首通：§f%corerpg_p1_sx17_fc%'
-            - '§7烬晶首通：§f%corerpg_p1_sx18_fc%'
-            - '§7烬弦首通：§f%corerpg_p1_sx19_fc%'
-            - '§7生涯首通未领：§f%corerpg_p1_sx_fc_left% §7本'
-            - '§8%corerpg_p1_sx_fc_pending_line%'
-            - '§e烬门 · %corerpg_p1_sx01_day_line%'
-            - '§e锈灯 · %corerpg_p1_sx02_day_line%'
-            - '§e霜雾 · %corerpg_p1_sx03_day_line%'
-            - '§e烬井 · %corerpg_p1_sx04_day_line%'
-            - '§e裂谷 · %corerpg_p1_sx05_day_line%'
-            - '§e烬环 · %corerpg_p1_sx06_day_line%'
-            - '§e烬塔 · %corerpg_p1_sx07_day_line%'
-            - '§e错层 · %corerpg_p1_sx08_day_line%'
-            - '§e烬渠 · %corerpg_p1_sx09_day_line%'
-            - '§e烬闸 · %corerpg_p1_sx10_day_line%'
-            - '§e烬镜 · %corerpg_p1_sx11_day_line%'
-            - '§e烬枢 · %corerpg_p1_sx12_day_line%'
-            - '§e烬衡 · %corerpg_p1_sx13_day_line%'
-            - '§e烬裂 · %corerpg_p1_sx14_day_line%'
-            - '§e烬旋 · %corerpg_p1_sx15_day_line%'
-            - '§e烬影 · %corerpg_p1_sx16_day_line%'
-            - '§e烬潮 · %corerpg_p1_sx17_day_line%'
-            - '§e烬晶 · %corerpg_p1_sx18_day_line%'
-            - '§e烬弦 · %corerpg_p1_sx19_day_line%'
-            # D416 W1a：D404 live 仓差（满态不盖上方去工坊花主 CTA）
-            - '§e仓内：§f碎%corerpg_p1_vault_shard% §7· §f骨%corerpg_p1_vault_bone% §7· §f核%corerpg_p1_vault_core% §7· §f胚%corerpg_p1_vault_blank%'
-            - '§c还差：§e强化+1 §7碎差 §f%corerpg_p1_recipe_gap_enhance1% §7· §e升阶T2 §7%corerpg_p1_recipe_gap_upgrade_t2%'
-            - '§6精工0→1 §7%corerpg_p1_recipe_gap_refine1%'
-            - '§8材料进仓 · 点「去哪花」开工坊 · 不加快产量'
-            - '§8不发主线装备/徽记/签名（首航）'
-            - ''
-            - '§8本周可选周目标·短征：有奖通关计入（赛季页）· 不算「全部完成」· 只发外观徽'
-            - '§8旧日常窟仍收起 · 勿找 ember_daily'
+            - '§a今日短征有奖已满 §7· 剩余 §f%corerpg_p1_sx_day_left_sum%'
+            - '§7材料在仓 · 点「去哪花」开工坊 · 体力已尽先回满'
+            - '§8日线/首通看各图按钮 · 仓差碎%corerpg_p1_vault_shard%·骨%corerpg_p1_vault_bone%'
     display:
       material: paper
       name: '§e短征说明'
       lore:
         - ''
-        - '§7独立短本（§f不是§7旧日常窟）'
-        - '§7十九本并列：§f烬门哨岗 §7/ §f锈灯栈道 §7/ §f霜雾闸廊 §7/ §f烬井螺旋 §7/ §f裂谷风廊 §7/ §f烬环廊 §7/ §f烬塔回升 §7/ §f错层烬庭 §7/ §f烬渠跳石 §7/ §f烬闸递室 §7/ §f烬镜对廊 §7/ §f烬枢转厅 §7/ §f烬衡悬梁 §7/ §f烬裂折廊 §7/ §f烬旋坡廊 §7/ §f烬影叠廊 §7/ §f烬潮回廊 §7/ §f烬晶折棱 §7/ §f烬弦共鸣'
-        - '§7各三房 · 约 5～8 分钟手感 · 终厅可读可躲'
-        - '§7通关有奖：§f币80 + 碎片4 + 骨尘3 §7→ 仓库 → 工坊花'
-        - '§7奖励以结算为准 · 日有奖各本分开计'
-        - '§7烬门首通：§f%corerpg_p1_sx01_fc%'
-        - '§7锈灯首通：§f%corerpg_p1_sx02_fc%'
-        - '§7霜雾首通：§f%corerpg_p1_sx03_fc%'
-        - '§7烬井首通：§f%corerpg_p1_sx04_fc%'
-        - '§7裂谷首通：§f%corerpg_p1_sx05_fc%'
-        - '§7烬环首通：§f%corerpg_p1_sx06_fc%'
-        - '§7烬塔首通：§f%corerpg_p1_sx07_fc%'
-        - '§7错层首通：§f%corerpg_p1_sx08_fc%'
-        - '§7烬渠首通：§f%corerpg_p1_sx09_fc%'
-        - '§7烬闸首通：§f%corerpg_p1_sx10_fc%'
-        - '§7烬镜首通：§f%corerpg_p1_sx11_fc%'
-        - '§7烬枢首通：§f%corerpg_p1_sx12_fc%'
-        - '§7烬衡首通：§f%corerpg_p1_sx13_fc%'
-        - '§7烬裂首通：§f%corerpg_p1_sx14_fc%'
-        - '§7烬旋首通：§f%corerpg_p1_sx15_fc%'
-        - '§7烬影首通：§f%corerpg_p1_sx16_fc%'
-        - '§7烬潮首通：§f%corerpg_p1_sx17_fc%'
-        - '§7烬晶首通：§f%corerpg_p1_sx18_fc%'
-        - '§7烬弦首通：§f%corerpg_p1_sx19_fc%'
-        - '§7生涯首通未领：§f%corerpg_p1_sx_fc_left% §7本'
-        - '§8%corerpg_p1_sx_fc_pending_line%'
-        - '§e烬门 · %corerpg_p1_sx01_day_line%'
-        - '§e锈灯 · %corerpg_p1_sx02_day_line%'
-        - '§e霜雾 · %corerpg_p1_sx03_day_line%'
-        - '§e烬井 · %corerpg_p1_sx04_day_line%'
-        - '§e裂谷 · %corerpg_p1_sx05_day_line%'
-        - '§e烬环 · %corerpg_p1_sx06_day_line%'
-        - '§e烬塔 · %corerpg_p1_sx07_day_line%'
-        - '§e错层 · %corerpg_p1_sx08_day_line%'
-        - '§e烬渠 · %corerpg_p1_sx09_day_line%'
-        - '§e烬闸 · %corerpg_p1_sx10_day_line%'
-        - '§e烬镜 · %corerpg_p1_sx11_day_line%'
-        - '§e烬枢 · %corerpg_p1_sx12_day_line%'
-        - '§e烬衡 · %corerpg_p1_sx13_day_line%'
-        - '§e烬裂 · %corerpg_p1_sx14_day_line%'
-        - '§e烬旋 · %corerpg_p1_sx15_day_line%'
-        - '§e烬影 · %corerpg_p1_sx16_day_line%'
-        - '§e烬潮 · %corerpg_p1_sx17_day_line%'
-        - '§e烬晶 · %corerpg_p1_sx18_day_line%'
-        - '§e烬弦 · %corerpg_p1_sx19_day_line%'
-        # D416 W1a：D404 live 仓差（未满有奖分支）
-        - '§e仓内：§f碎%corerpg_p1_vault_shard% §7· §f骨%corerpg_p1_vault_bone% §7· §f核%corerpg_p1_vault_core% §7· §f胚%corerpg_p1_vault_blank%'
-        - '§c还差：§e强化+1 §7碎差 §f%corerpg_p1_recipe_gap_enhance1% §7· §e升阶T2 §7%corerpg_p1_recipe_gap_upgrade_t2%'
-        - '§6精工0→1 §7%corerpg_p1_recipe_gap_refine1%'
-        - '§8材料进仓 · 点「去哪花」开工坊 · 不加快产量'
-        - '§7今日剩余有奖合计（十九本）：§f%corerpg_p1_sx_day_left_sum%'
-        - '§8不发主线装备/徽记/签名（首航）'
-        - ''
-        - '§8本周可选周目标·短征：有奖通关计入（赛季页）· 不算「全部完成」· 只发外观徽'
-        - '§8旧日常窟仍收起 · 勿找 ember_daily'
+        - '§7短征十九本 · 各30体力 · 日帽分开 · 不是旧日常窟'
+        - '§7今日剩余有奖 §f%corerpg_p1_sx_day_left_sum% §8· 首通未领 %corerpg_p1_sx_fc_left%'
+        - '§8日线看各图按钮 · 材料进仓去工坊'
 
   H:
     update: 20
@@ -277,7 +116,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：短征三房 · 体力 30'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx01_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -295,15 +134,9 @@ Icons:
       name: '§6烬门哨岗 §7· 短征 sx01'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx01_day_line% §8（第 4+ 次无结算）'
-        - '§d名片：§f哨长读条 · 拉开'
-        - '§b本间：§f院角 → 甬道 → Boss 垫'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S40）'
-        - '§7生涯首通：§f%corerpg_p1_sx01_fc%'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx01_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx01_fc% §8· 币80+碎4+骨3 · 哨长读条'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -320,7 +153,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：抬升栈台+分叉灯桥 · 体力 30（与烬门分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx02_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -338,15 +171,9 @@ Icons:
       name: '§6锈灯栈道 §7· 短征 sx02'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx02_day_line% §8（与烬门分开计）'
-        - '§d名片：§f灯塔扫线/落点 · 拉开或侧移'
-        - '§b本间：§f抬升栈台 → 分叉灯桥 → 灯塔垫'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S41）'
-        - '§7生涯首通：§f%corerpg_p1_sx02_fc%'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx02_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx02_fc% §8· 币80+碎4+骨3 · 灯塔扫线'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -363,7 +190,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：雾廊+双闸室+霜窖 · 体力 30（与前两本分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx03_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -381,15 +208,9 @@ Icons:
       name: '§6霜雾闸廊 §7· 短征 sx03'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx03_day_line% §8（与烬门/锈灯分开计）'
-        - '§d名片：§f霜雾楔/冻圈 · 侧移或拉开'
-        - '§b本间：§f雾廊 → 双闸室（顺序开闸） → 霜窖终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S42）'
-        - '§7生涯首通：§f%corerpg_p1_sx03_fc%'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx03_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx03_fc% §8· 币80+碎4+骨3 · 霜雾楔'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -406,7 +227,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：井口台→螺旋下井→炉心 · 体力 30（与前三本分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx04_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -424,15 +245,9 @@ Icons:
       name: '§6烬井螺旋 §7· 短征 sx04'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx04_day_line% §8（与前三本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f井心喷焰/灰柱 · 踏上井沿或拉开'
-        - '§b本间：§f井口台 → 螺旋下井 → 井底炉心'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S43）'
-        - '§7生涯首通：§f%corerpg_p1_sx04_fc%'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx04_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx04_fc% §8· 币80+碎4+骨3 · 井心喷焰'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -449,7 +264,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：崖口→窄桥过隙→风心 · 体力 30（与前四本分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx05_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -467,15 +282,9 @@ Icons:
       name: '§6裂谷风廊 §7· 短征 sx05'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx05_day_line% §8（与前四本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f风剪条/侧风斩 · 退进侧龛或离开条带'
-        - '§b本间：§f崖口台 → 风廊窄桥过隙 → 对岸风心'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S44）'
-        - '§7生涯首通：§f%corerpg_p1_sx05_fc%'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx05_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx05_fc% §8· 币80+碎4+骨3 · 风剪条'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -493,7 +302,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：外环庭→双环廊→环心 · 体力 30（与前五本分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx06_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -511,15 +320,9 @@ Icons:
       name: '§6烬环廊 §7· 短征 sx06'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx06_day_line% §8（与前五本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f环扫斩/向心拉扯 · 退进外环龛或离开弧带'
-        - '§b本间：§f外环庭 → 双环廊绕行 → 环心终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S45）'
-        - '§7生涯首通：§f%corerpg_p1_sx06_fc%'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx06_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx06_fc% §8· 币80+碎4+骨3 · 环扫斩'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -536,7 +339,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：塔基庭→折返上行→塔冠 · 体力 30（与前六本分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx07_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -554,15 +357,9 @@ Icons:
       name: '§6烬塔回升 §7· 短征 sx07'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx07_day_line% §8（与前六本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f塔冠坠焰/扫顶柱 · 退进侧窗廊龛或下撤半层'
-        - '§b本间：§f塔基庭 → 折返/螺旋上行 → 塔冠终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S46）'
-        - '§7生涯首通：§f%corerpg_p1_sx07_fc%'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx07_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx07_fc% §8· 币80+碎4+骨3 · 塔冠坠焰'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -581,7 +378,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：下层庭→错层换层→上层终厅 · 体力 30（与前七本分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx08_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -599,15 +396,9 @@ Icons:
       name: '§6错层烬庭 §7· 短征 sx08'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx08_day_line% §8（与前七本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f层间砸落/扫层斩 · 退进下层栏或侧龛/下撤半层'
-        - '§b本间：§f下层庭 → 错层换层（台阶/短桥） → 上层终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S47）'
-        - '§7生涯首通：§f%corerpg_p1_sx08_fc%'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx08_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx08_fc% §8· 币80+碎4+骨3 · 层间砸落'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -626,7 +417,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：渠岸庭→离散跳石渡渠→对岸终厅 · 体力 30（与前八本分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx09_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -644,15 +435,9 @@ Icons:
       name: '§6烬渠跳石 §7· 短征 sx09'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx09_day_line% §8（与前八本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f渠心溅浪/扫岸斩 · 退进岸侧龛或回撤最后一枚跳石'
-        - '§b本间：§f渠岸庭 → 离散跳石渡渠（≥3 石墩） → 对岸终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S48）'
-        - '§7生涯首通：§f%corerpg_p1_sx09_fc%'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx09_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx09_fc% §8· 币80+碎4+骨3 · 渠心溅浪'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -671,7 +456,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：外闸庭→递闸密封室→末室终厅 · 体力 30（与前九本分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx10_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -689,16 +474,9 @@ Icons:
       name: '§6烬闸递室 §7· 短征 sx10'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx10_day_line% §8（与前九本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f闸心压浪/扫室斩 · 退进室侧龛或回撤上一道闸后平台'
-        - '§b本间：§f外闸庭 → 递闸密封室（≥3 重闸） → 末室终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S49）'
-        - '§7生涯首通：§f%corerpg_p1_sx10_fc%'
-        - '§8禁连续霜雾廊复读 sx03'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx10_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx10_fc% §8· 币80+碎4+骨3 · 闸心压浪'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -717,7 +495,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：对廊前厅→左右对称双廊→合镜终厅 · 体力 30（与前十本分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx11_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -735,16 +513,9 @@ Icons:
       name: '§6烬镜对廊 §7· 短征 sx11'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx11_day_line% §8（与前十本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f镜面扫线/对折斩 · 退进合镜侧龛或回撤侧廊末端平台'
-        - '§b本间：§f对廊前厅 → 左右对称双廊（两侧各通后中门开） → 合镜终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S50）'
-        - '§7生涯首通：§f%corerpg_p1_sx11_fc%'
-        - '§8禁环廊/递闸/霜雾廊/跳石/错层/塔升/风廊复读'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx11_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx11_fc% §8· 币80+碎4+骨3 · 镜面扫线'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -763,7 +534,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：入枢庭→环枢侧厢（清≥2侧厢后转枢对齐）→枢冠终厅 · 体力 30（与前十一本分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx12_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -781,16 +552,9 @@ Icons:
       name: '§6烬枢转厅 §7· 短征 sx12'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx12_day_line% §8（与前十一本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f枢扫斩/转面压浪 · 退进已对齐侧厢龛或枢冠侧台'
-        - '§b本间：§f入枢庭 → 环枢侧厢（清≥2侧厢后转枢对齐） → 枢冠终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S51）'
-        - '§7生涯首通：§f%corerpg_p1_sx12_fc%'
-        - '§8禁环廊/对廊/递闸/霜雾廊/跳石/错层/塔升/风廊复读'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx12_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx12_fc% §8· 币80+碎4+骨3 · 枢扫斩'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -809,7 +573,7 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：衡门庭→悬梁衡廊（≥3配重衡梁）→衡冠终厅 · 体力 30（与前十二本分开）'
+            - '§7解锁后：短征三房 · 体力30'
             - '§e%corerpg_p1_sx13_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
@@ -827,16 +591,9 @@ Icons:
       name: '§6烬衡悬梁 §7· 短征 sx13'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx13_day_line% §8（与前十二本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f衡扫斩/倾梁压浪 · 退进衡冠侧龛或已过衡梁侧台'
-        - '§b本间：§f衡门庭 → 悬梁衡廊（须过≥3道配重衡梁） → 衡冠终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S52）'
-        - '§7生涯首通：§f%corerpg_p1_sx13_fc%'
-        - '§8禁窄桥/跳石/转枢/递闸/对廊/环廊/塔升/错层/风廊/霜雾廊复读'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx13_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx13_fc% §8· 币80+碎4+骨3 · 衡扫斩'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -873,16 +630,9 @@ Icons:
       name: '§6烬裂折廊 §7· 短征 sx14'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx14_day_line% §8（与前十三本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f裂扫斩/折角压浪 · 退进裂冠侧龛或已过折角侧台'
-        - '§b本间：§f裂门庭 → 折裂廊（须经≥3道强制折角裂隙廊段） → 裂冠终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S53）'
-        - '§7生涯首通：§f%corerpg_p1_sx14_fc%'
-        - '§8禁线性/环廊/对廊/转枢/衡梁/递闸/跳石/错层/塔升/风廊/霜雾廊复读'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx14_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx14_fc% §8· 币80+碎4+骨3 · 裂扫斩'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -919,16 +669,9 @@ Icons:
       name: '§6烬旋坡廊 §7· 短征 sx15'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx15_day_line% §8（与前十四本分开计 · 第 4+ 次无结算）'
-        - '§d名片：§f旋扫斩/坡心压浪 · 退进旋冠侧龛或已过坡段内侧台'
-        - '§b本间：§f坡门庭 → 绕心螺旋坡（须≥2整圈上升） → 旋冠终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S54）'
-        - '§7生涯首通：§f%corerpg_p1_sx15_fc%'
-        - '§8禁竖井/塔升/平环/折角裂隙/衡梁/转枢/对廊/递闸/跳石复读'
-        - ''
-        - '§e➥ §f左键：进本（队长点）'
+        - '§e%corerpg_p1_sx15_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx15_fc% §8· 币80+碎4+骨3 · 旋扫斩'
+        - '§e➥ §f左键：进本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -963,14 +706,8 @@ Icons:
       name: '§6烬影叠廊 §7· 短征 sx16'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx16_day_line% §8（与前十五本分开计）'
-        - '§d名片：§f影扫斩/叠影压浪 · 退进影冠侧龛或已过影墙侧台'
-        - '§b本间：§f影门庭 → 叠影廊（≥3段影墙侧穿） → 影冠终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S55）'
-        - '§7生涯首通：§f%corerpg_p1_sx16_fc%'
-        - ''
+        - '§e%corerpg_p1_sx16_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx16_fc% §8· 币80+碎4+骨3 · 影扫斩'
         - '§e➥ §f左键：进本'
     actions:
       left:
@@ -1006,14 +743,8 @@ Icons:
       name: '§6烬潮回廊 §7· 短征 sx17'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx17_day_line% §8（与前十六本分开计）'
-        - '§d名片：§f潮扫斩/回潮压浪 · 退进潮冠侧龛或落潮侧台'
-        - '§b本间：§f潮门庭 → 回廊潮道（≥2段潮汐时窗） → 潮冠终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S56）'
-        - '§7生涯首通：§f%corerpg_p1_sx17_fc%'
-        - ''
+        - '§e%corerpg_p1_sx17_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx17_fc% §8· 币80+碎4+骨3 · 潮扫斩'
         - '§e➥ §f左键：进本'
     actions:
       left:
@@ -1049,14 +780,8 @@ Icons:
       name: '§6烬晶折棱 §7· 短征 sx18'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx18_day_line% §8（与前十七本分开计）'
-        - '§d名片：§f晶扫斩/折棱压浪 · 退进晶冠侧龛或已过折棱侧台'
-        - '§b本间：§f晶门庭 → 折棱廊（≥3段晶棱折角） → 晶冠终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S57）'
-        - '§7生涯首通：§f%corerpg_p1_sx18_fc%'
-        - ''
+        - '§e%corerpg_p1_sx18_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx18_fc% §8· 币80+碎4+骨3 · 晶扫斩'
         - '§e➥ §f左键：进本'
     actions:
       left:
@@ -1092,14 +817,8 @@ Icons:
       name: '§6烬弦共鸣 §7· 短征 sx19'
       lore:
         - ''
-        - '§7解锁：§a已通 Q01'
-        - '§7消耗：§e30 体力'
-        - '§e%corerpg_p1_sx19_day_line% §8（与前十八本分开计）'
-        - '§d名片：§f弦扫斩/共鸣压浪 · 退进弦冠侧龛或已共鸣节点侧台'
-        - '§b本间：§f弦门庭 → 共鸣廊（≥2段弦振节点） → 弦冠终厅'
-        - '§7通关：币80 + 碎片4 + 骨尘3（S58）'
-        - '§7生涯首通：§f%corerpg_p1_sx19_fc%'
-        - ''
+        - '§e%corerpg_p1_sx19_day_line% §7· 30体力'
+        - '§7首通 §f%corerpg_p1_sx19_fc% §8· 币80+碎4+骨3 · 弦扫斩'
         - '§e➥ §f左键：进本'
     actions:
       left:
@@ -1119,11 +838,9 @@ Icons:
           name: '§a今日有奖已满 · 去工坊花材料'
           lore:
             - ''
-            - '§7碎片/骨尘/胚料在账号仓'
-            - '§7工坊：强化 / 精工 / 成色吃碎片·骨尘'
-            - '§8体力还在可挂机 · 右键进挂机庭（不盖工坊主路）'
-            - ''
-            - '§e左键 ➥ §f打开工坊 · §e右键 ➥ §f挂机庭'
+            - '§7碎片/骨尘/胚料在账号仓 · 工坊花材料'
+            - '§8体力还在可挂机'
+            - '§e左键 ➥ §f工坊 · §e右键 ➥ §f挂机庭'
         actions:
           left:
             - 'sound: BLOCK_ANVIL_USE-1-1'
@@ -1139,10 +856,8 @@ Icons:
           name: '§a今日有奖已满 · 去工坊花材料'
           lore:
             - ''
-            - '§7碎片/骨尘/胚料在账号仓'
-            - '§7工坊：强化 / 精工 / 成色吃碎片·骨尘'
+            - '§7碎片/骨尘/胚料在账号仓 · 工坊花材料'
             - '§8体力已尽 · 先回满再挂机'
-            - ''
             - '§e➥ §f打开工坊'
         actions:
           all:
@@ -1153,9 +868,7 @@ Icons:
       name: '§b去哪花'
       lore:
         - ''
-        - '§7通关材料进账号仓'
-        - '§7工坊：强化 / 精工 / 成色吃碎片·骨尘'
-        - ''
+        - '§7通关材料进账号仓 · 工坊花材料'
         - '§e➥ §f打开工坊'
     actions:
       all:

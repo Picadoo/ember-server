@@ -2081,3 +2081,12 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | jar | 未改 |
 | STATUS | `docs/status/STATUS-ember-play-crash-restart-d12196-2026-10-11.md` |
 
+
+### 13.105 TrMenu lore 压缩 skill/help/short + pid/waiter（D12197，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 菜单 | `ember_skill_kit.yml` · `ember_help.yml` · `ember_p1_short.yml` lore ≤3；砍短征十九本墙 |
+| ops | 根 `server.pid`→symlink runtime；waiter 端口空闲≥10s 强制清陈旧 pid |
+| jar | 未改（live 仍 1.65.723-d12194.local） |
+| STATUS | `docs/status/STATUS-ember-trmenu-lore-skill-help-short-d12197-2026-10-11.md` |
