@@ -1195,12 +1195,21 @@ public final class SkillService implements Listener {
         if ("burst".equals(fam)) {
             if (town.sunshine.corerpg.p1.EmberMode.isP1(player) && !hit.isEmpty()) {
                 int ticks = town.sunshine.corerpg.p1.EmberSkillKit.slashLandSlowTicks(sync, posture, roomShape, shapeId);
+                boolean firstBoost = false;
+                try {
+                    town.sunshine.corerpg.PlayerData pdB = dataStore.get(player.getUniqueId());
+                    firstBoost = town.sunshine.corerpg.p1.EmberSetLandFirstBoost.consume(pdB); // D7073
+                    if (firstBoost) ticks += town.sunshine.corerpg.p1.EmberSetLandFirstBoost.SLOW_EXTRA;
+                } catch (Throwable ignored) { }
                 int lim = Math.min(hit.size(), sync ? 4 : 3);
                 for (int i = 0; i < lim; i++) {
                     hit.get(i).addPotionEffect(new org.bukkit.potion.PotionEffect(
                             org.bukkit.potion.PotionEffectType.SLOW, ticks, 0, false, true), true);
                 }
                 spawnParticles(player.getLocation().clone().add(0, 0.3, 0), "CRIT", sync || posture ? 12 : 8);
+                if (firstBoost) {
+                    try { player.sendActionBar("§b套装首击 · 缓速加长"); } catch (Throwable ignored) { }
+                }
             }
             return " · 烬刃缓速" + tag;
         }
@@ -1208,8 +1217,17 @@ public final class SkillService implements Listener {
             if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
                 double heal = Math.max(0.25, player.getMaxHealth()
                         * town.sunshine.corerpg.p1.EmberSkillKit.slashLandHealPct(sync, posture, roomShape, shapeId));
+                boolean firstBoost = false;
+                try {
+                    town.sunshine.corerpg.PlayerData pdS = dataStore.get(player.getUniqueId());
+                    firstBoost = town.sunshine.corerpg.p1.EmberSetLandFirstBoost.consume(pdS); // D7073
+                    if (firstBoost) heal *= town.sunshine.corerpg.p1.EmberSetLandFirstBoost.HEAL_MULT;
+                } catch (Throwable ignored) { }
                 player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
                 spawnParticles(player.getLocation().clone().add(0, 0.5, 0), "HEART", sync || posture ? 3 : 2);
+                if (firstBoost) {
+                    try { player.sendActionBar("§a套装首击 · 微疗加强"); } catch (Throwable ignored) { }
+                }
             }
             return " · 烬刃微疗" + tag;
         }

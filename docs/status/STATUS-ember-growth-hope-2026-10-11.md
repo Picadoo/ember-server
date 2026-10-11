@@ -1,3 +1,6 @@
+Live jar: **1.65.642-d7136.local** · D7073–D7136 SetLandFirstBoost
+Prior: BulkBlank+IgniteRefresh · FirstAffix+StepSlash
+
 Live jar: **1.65.641-d7072.local** · D7009–D7072 BulkBlankBoost + IgniteRefreshBonus
 Prior: FirstAffix+StepSlash · ChargeMiss…
 

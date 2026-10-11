@@ -1,0 +1,3 @@
+# RESEARCH · SetLandFirstBoost · 2026-10-11
+Outside Bulk/Ignite/FirstAffix/StepSlash…
+Continuous: 本日首次套装烬斩落点 — 承伤微疗×1.5 或 爆发缓速+4tick。
