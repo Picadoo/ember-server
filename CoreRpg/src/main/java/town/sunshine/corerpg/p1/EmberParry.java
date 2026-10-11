@@ -2,7 +2,6 @@ package town.sunshine.corerpg.p1;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -75,6 +74,7 @@ public final class EmberParry implements Listener {
         long until = System.currentTimeMillis() + EmberSkillKit.parryWindowMs(syncWin, guardPosture, mapKeyWin);
         windowUntil.put(player.getUniqueId(), until);
         windowBoss.put(player.getUniqueId(), boss.getUniqueId());
+        EmberParryFeel.pulseOpen(player); // D3681 open feel · zero windowMs
     }
 
     /** Remaining CD seconds (0 = ready). For PAPI / kit info. */
@@ -137,6 +137,7 @@ public final class EmberParry implements Listener {
             if (inRun) {
                 // Match T0b: outside-window press burns independent CD, no utility
                 armCd(player, now + EmberSkillKit.PARRY_CD_MS); // D476 ready cue
+                EmberParryFeel.pulseMiss(player); // D3701
                 player.sendMessage(P + ChatColor.YELLOW + EmberSkillKit.DISPLAY_PARRY
                         + "空按 · 窗外无效（独立冷却 " + EmberSkillKit.PARRY_CD_SECONDS + "s）");
             } else {
@@ -161,8 +162,7 @@ public final class EmberParry implements Listener {
                 EmberSkillKit.PARRY_FLAT_MULT, lo == null ? 0.0 : lo.b, flat);
         EmberCombatListener.dealP1(player, boss, flat, EmberSetEngine.Kind.SKILL, tag);
         String syncTip = applyParrySetSync(player, boss, lo == null ? "none" : lo.activeSet);
-        player.getWorld().spawnParticle(Particle.CRIT_MAGIC, boss.getLocation().add(0, 1.2, 0), 18, 0.4, 0.5, 0.4, 0.02);
-        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.55f, 1.6f);
+        EmberParryFeel.pulseSuccess(player, boss); // D3681 densify · zero flat
         player.sendMessage(P + ChatColor.GREEN + EmberSkillKit.DISPLAY_PARRY + "成功 · 反打 "
                 + ChatColor.WHITE + String.format(java.util.Locale.ROOT, "%.0f", flat)
                 + ChatColor.GRAY + "（预警伤仍生效 · CD " + EmberSkillKit.PARRY_CD_SECONDS + "s）"
