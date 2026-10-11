@@ -265,6 +265,11 @@ public final class EmberSignature {
 
     /** 烬炉烙印 precheck; null = ok */
     public static String imprintCheck(Def d, EmberItemData target, boolean imprintUnlocked, boolean mapCleared, int marks, int coin, int current) {
+        return imprintCheck(d, target, imprintUnlocked, mapCleared, marks, coin, current, imprintMarks(), target == null ? 0 : imprintCoin(target.tier));
+    }
+
+    /** D9985/D9793: needMarks / needCoin overrides (soft imprint). */
+    public static String imprintCheck(Def d, EmberItemData target, boolean imprintUnlocked, boolean mapCleared, int marks, int coin, int current, int needMarks, int needCoin) {
         if (d == null) return "没有这条签名";
         if (!imprintUnlocked) return "首进或首通 " + IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放烬炉烙印";
         if (!mapCleared) return "先首通 " + d.map.toUpperCase(Locale.ROOT) + " 才能烙印它的签名";
@@ -272,8 +277,10 @@ public final class EmberSignature {
         if (target.tier < 1) return "T0 起步件不能烙印";
         if (!fits(d, target.slot, target.family)) return d.name + " 只能烙在" + d.kindText() + "上";
         if (current == d.code) return "这件已经是 " + d.name;
-        if (marks < imprintMarks()) return d.map.toUpperCase(Locale.ROOT) + " 首领徽记不够（" + marks + "/" + imprintMarks() + "）";
-        if (coin < imprintCoin(target.tier)) return "余烬币不够（需 " + imprintCoin(target.tier) + "）";
+        int nm = needMarks > 0 ? needMarks : imprintMarks();
+        int nc = needCoin > 0 ? needCoin : imprintCoin(target.tier);
+        if (marks < nm) return d.map.toUpperCase(Locale.ROOT) + " 首领徽记不够（" + marks + "/" + nm + "）";
+        if (coin < nc) return "余烬币不够（需 " + nc + "）";
         return null;
     }
 

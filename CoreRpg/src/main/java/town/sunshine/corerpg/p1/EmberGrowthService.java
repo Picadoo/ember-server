@@ -1311,7 +1311,9 @@ public final class EmberGrowthService implements Listener {
         EmberItemData t = "blade".equals(sd.slot) ? lo.blade : lo.charm;
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
         int cur = t == null ? 0 : sigOf(d, t);
-        String why = EmberSignature.imprintCheck(sd, t, EmberSkillKit.imprintFeatureUnlocked(d, runs), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
+        int needM = EmberImprintMarkSoft.need(d, false); // D9985 peek
+        int needC = EmberImprintCoinSoft.apply(d, EmberSignature.imprintCoin(t == null ? 1 : t.tier), false); // D9793 peek
+        String why = EmberSignature.imprintCheck(sd, t, EmberSkillKit.imprintFeatureUnlocked(d, runs), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur, needM, needC);
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); return true; }
         int coin = EmberSignature.imprintCoin(t.tier);
         String fp = t.uid + "|" + sd.id + "|" + cur;
@@ -1329,12 +1331,11 @@ public final class EmberGrowthService implements Listener {
         }
         EmberSignature.Def old = EmberSignature.byCode(cur);
         if (!go) {
-            int needM = EmberSignature.imprintMarks();
             int gapM = Math.max(0, needM - marks);
             int haveCoin = d.getCoin();
-            int gapCoin = Math.max(0, coin - haveCoin);
+            int gapCoin = Math.max(0, needC - haveCoin);
             p.sendMessage(P + "烬炉烙印：把 §6" + sd.name + " §7烙到 §f" + t.shortLabel() + " §7· 花 " + needM + " 枚 "
-                    + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + marks + "）+ 币 §f" + haveCoin + "/" + coin
+                    + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + marks + "）+ 币 §f" + haveCoin + "/" + needC
                     + (gapM > 0 ? " §c· 还差徽记 " + gapM : " §a· 徽记够")
                     + (gapCoin > 0 ? " §c· 还差币 " + gapCoin : ""));
             if (old != null) p.sendMessage(P + ChatColor.RED + "⚠ 这件现在的签名「" + old.name + "」会被覆盖，不能取回");
@@ -1384,9 +1385,11 @@ public final class EmberGrowthService implements Listener {
         int cur = t == null ? 0 : sigOf(d, t);
         if (cur != 0) return false; // overwrite stays manual
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
+        int needM = EmberImprintMarkSoft.need(d, false);
+        int needC = EmberImprintCoinSoft.apply(d, EmberSignature.imprintCoin(t.tier), false);
         String why = EmberSignature.imprintCheck(sd, t,
                 EmberSkillKit.imprintFeatureUnlocked(d, runs),
-                runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
+                runs.progressFlag(d, sd.map), marks, d.getCoin(), cur, needM, needC);
         if (why != null) return false;
         int coin = EmberSignature.imprintCoin(t.tier);
         p.sendMessage(P + "§a追烙自动 · §f" + sd.name + " §7→ " + t.shortLabel()
@@ -1413,7 +1416,12 @@ public final class EmberGrowthService implements Listener {
                 try { p.sendActionBar("§a烙印减负"); } catch (Throwable ignored) { }
             }
         } catch (Throwable ignored) { }
-        final EmberPay.Price price = EmberPay.Price.insignia(coinPay, sd.map, EmberSignature.imprintMarks()).at(EmberEconomy.sinkForForge("imprint")); // D218 C12
+        int markNeed = EmberImprintMarkSoft.need(d, true); // D9985
+        if (markNeed < EmberSignature.imprintMarks()) {
+            p.sendMessage(P + "§a烙印徽记减负 · 徽记 ×0.5（今日一次）");
+            try { p.sendActionBar("§a烙印徽记减负"); } catch (Throwable ignored) { }
+        }
+        final EmberPay.Price price = EmberPay.Price.insignia(coinPay, sd.map, markNeed).at(EmberEconomy.sinkForForge("imprint")); // D218 C12
         final String note = "烙印 " + t.shortLabel() + " " + (old == null ? "-" : old.id) + " → " + sd.id;
         pay.pay(p, rid, price, "烙印没完成，退回", null, () -> commitOnItem(id, "imprint", rid,
                 java.util.Collections.singletonList(new EmberItemStore.TxnItem(t, after, null)), price.json(), note, ok -> {
@@ -1698,8 +1706,10 @@ public final class EmberGrowthService implements Listener {
         if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后烙印"); return true; }
         EmberItemData t = pickTarget(p, lo, sd, pk[1]);
         int cur = t == null ? 0 : sigOf(d, t);
+        int needM = EmberImprintMarkSoft.need(d, false);
+        int needC = EmberImprintCoinSoft.apply(d, EmberSignature.imprintCoin(t == null ? 1 : t.tier), false);
         String why = EmberSignature.imprintCheck(sd, t, EmberSkillKit.imprintFeatureUnlocked(d, runs), runs.progressFlag(d, sd.map),
-                d.periodCount(EmberSignature.C_MARK + sd.map, "all"), d.getCoin(), cur);
+                d.periodCount(EmberSignature.C_MARK + sd.map, "all"), d.getCoin(), cur, needM, needC);
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); openMenu(p, SIG_IMP_MENU); return true; }
         if (cur > 0 && !overwrite) { // the page says Shift+点击 for an overwrite; a plain click never destroys a signature
             p.sendMessage(P + ChatColor.RED + "这件已有签名「" + EmberSignature.byCode(cur).name + "」，覆盖请 Shift+点击确认");
@@ -1859,7 +1869,9 @@ public final class EmberGrowthService implements Listener {
         String which = pk[1];
         EmberItemData t = pickTarget(p, lo, sd, which);
         int cur = t == null ? 0 : sigOf(d, t), marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
-        String why = EmberSignature.imprintCheck(sd, t, EmberSkillKit.imprintFeatureUnlocked(d, runs), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
+        int needM = EmberImprintMarkSoft.need(d, false); // D9985 peek
+        int needC = EmberImprintCoinSoft.apply(d, EmberSignature.imprintCoin(t == null ? 1 : t.tier), false); // D9793 peek
+        String why = EmberSignature.imprintCheck(sd, t, EmberSkillKit.imprintFeatureUnlocked(d, runs), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur, needM, needC);
         switch (k) {
             case "name": return "§6" + sd.name + " §7（" + sd.kindText() + " · " + mapLabel(sd.map) + "）";
             case "good": return "§a得：§f" + sd.good;

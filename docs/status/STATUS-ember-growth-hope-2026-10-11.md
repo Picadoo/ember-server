@@ -1,3 +1,6 @@
+Live jar: **1.65.687-d10016.local** · D9953–D10016 ForgeRollFloorSoft + ImprintMarkSoft + FestBadgeSoft
+Prior: ForgeRollCost/Quality/LockShard
+
 Live jar: **1.65.686-d9952.local** · D9889–D9952 ForgeRollCostSoft + QualityCostSoft + RerollLockShardSoft
 Prior: Attune/Exchange/EnhanceUndo
 

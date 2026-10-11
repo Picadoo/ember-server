@@ -3685,7 +3685,19 @@ public boolean pathForceOpenDoor(Player p) {
         final UUID id = p.getUniqueId();
         if (!forgeRollBusy.add(id)) { p.sendMessage(P + "§c上一次随机锻造还在处理"); return true; }
         final String rid = EmberPayRules.forgeRollRid(id, System.currentTimeMillis(), rnd.nextInt(46656));
-        int qRoll = floor
+        boolean freeFloor = false;
+        try {
+            PlayerData pdFl = data(id);
+            if (!floor && EmberForgeRollFloorSoft.consume(pdFl)) { // D9953
+                freeFloor = true;
+                if (p.isOnline()) {
+                    p.sendMessage(P + "§a随机锻成色下限 · 免费精良保（今日一次）");
+                    try { p.sendActionBar("§a随机锻 · 免费下限"); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
+        final boolean useFloor = floor || freeFloor;
+        int qRoll = useFloor
                 ? EmberForgeRollRules.rollQualityFloor(new java.util.Random(EmberPayRules.seed(rid.hashCode(), id.toString(), rid)))
                 : EmberForgeRollRules.rollQuality(new java.util.Random(EmberPayRules.seed(rid.hashCode(), id.toString(), rid)));
         int craftRoll = EmberForgeRollRules.rollCraft(new java.util.Random(EmberPayRules.seed(rid.hashCode() ^ 0x9e3779b9L, id.toString(), rid + ":c")));
@@ -3730,7 +3742,7 @@ public boolean pathForceOpenDoor(Player p) {
                                 pay.settled(id, rid);
                                 log().info("[P1 run] " + id + " forge_roll " + rid + " T" + tier + " " + fam + " " + slot + " q=" + q + " c=" + craft + " → " + uid);
                                 if (qq != null) {
-                                    qq.sendMessage(P + "§a随机锻造完成" + (floor ? "§6·下限" : "") + "：§fT" + tier + " " + label
+                                    qq.sendMessage(P + "§a随机锻造完成" + (useFloor ? "§6·下限" : "") + "：§fT" + tier + " " + label
                                             + " §7· 成色§f" + EmberItemData.qualityName(q)
                                             + " §7· 精工§f" + (craft * 2) + "%§7 · +0 · 词条空");
                                     try {
@@ -3744,7 +3756,7 @@ public boolean pathForceOpenDoor(Player p) {
                                     } catch (Throwable ignored) { }
                                     EmberGearLib gl = EmberGearLib.get();
                                     if (gl != null) gl.delivery().kick(qq);
-                                    EmberForgeRollLoop.afterRoll(qq, dataOf(id), fam, slot, tier, floor); // D661/D1166
+                                    EmberForgeRollLoop.afterRoll(qq, dataOf(id), fam, slot, tier, useFloor); // D661/D1166
                                 }
                             } else {
                                 pay.release(id, rid);

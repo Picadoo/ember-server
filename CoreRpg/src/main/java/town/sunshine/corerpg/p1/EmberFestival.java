@@ -467,9 +467,18 @@ public final class EmberFestival implements Listener {
         int left = badgeCap - badgeConverted(d);
         if (left <= 0) { p.sendMessage(P + "余烬徽兑换已到上限（每人 " + badgeCap + " 徽）。剩下的" + coinName + "可以换纪念称号或留作纪念。"); return true; }
         int want = "all".equals(amount) || amount.isEmpty() ? left : (int) Math.max(0, num(amount, 0));
-        int n = Math.min(Math.min(want, left), have / badgeRate);
-        if (n <= 0) { p.sendMessage(P + ChatColor.RED + coinName + "不够（" + badgeRate + " 枚换 1 徽，背包里 " + have + "）"); return true; }
-        if (!EmberEconomy.spendFestCoin("C18", n * badgeRate) || ni == null || !ni.consumeExact(p, coinNi, n * badgeRate)) {
+        int rate = badgeRate;
+        try {
+            int soft = EmberFestBadgeSoft.rate(d, badgeRate, true); // D10001
+            if (soft < badgeRate) {
+                rate = soft;
+                p.sendMessage(P + "§a活动徽减负 · 兑换率 ×0.5（今日一次）");
+                try { p.sendActionBar("§a活动徽减负"); } catch (Throwable ignored) { }
+            }
+        } catch (Throwable ignored) { }
+        int n = Math.min(Math.min(want, left), have / rate);
+        if (n <= 0) { p.sendMessage(P + ChatColor.RED + coinName + "不够（" + rate + " 枚换 1 徽，背包里 " + have + "）"); return true; }
+        if (!EmberEconomy.spendFestCoin("C18", n * rate) || ni == null || !ni.consumeExact(p, coinNi, n * rate)) {
             p.sendMessage(P + ChatColor.RED + "扣除" + coinName + "失败，什么都没换");
             return true;
         }
@@ -477,8 +486,8 @@ public final class EmberFestival implements Listener {
         if (!EmberEconomy.grantBadge(d, "S27", n)) // D228 / ARCH S2-8 (S27 always pays BADGE; n > 0 checked above)
             runs.log().warning("[P1 fest] economy grantBadge refused S27 " + n + " for " + p.getName());
         runs.flushData(p.getUniqueId());
-        runs.log().info("[P1 fest] exchange " + p.getName() + " " + (n * badgeRate) + " " + coinName + " → " + n + " badges (" + badgeConverted(d) + "/" + badgeCap + ")");
-        p.sendMessage(P + "§a" + coinName + " " + (n * badgeRate) + " → 余烬徽 +" + n + " §7（共 " + EmberSeason.badges(d) + "；兑换额度 " + badgeConverted(d) + "/" + badgeCap + "）· 余烬徽只买外观");
+        runs.log().info("[P1 fest] exchange " + p.getName() + " " + (n * rate) + " " + coinName + " → " + n + " badges (" + badgeConverted(d) + "/" + badgeCap + ")");
+        p.sendMessage(P + "§a" + coinName + " " + (n * rate) + " → 余烬徽 +" + n + " §7（共 " + EmberSeason.badges(d) + "；兑换额度 " + badgeConverted(d) + "/" + badgeCap + "）· 余烬徽只买外观");
         return true;
     }
 
