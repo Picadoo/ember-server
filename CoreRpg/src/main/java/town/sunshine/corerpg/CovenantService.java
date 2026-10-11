@@ -287,5 +287,6 @@ public final class CovenantService {
                     + (resetClearsTalent ? " · 天赋已清空" : "") + "）");
         }
         player.sendMessage(ChatColor.GRAY + "  伪属性：" + formatStats(def));
+        try { town.sunshine.corerpg.p1.EmberCovenantSetWinBone.maybeGift(player, data); } catch (Throwable ignored) { } // D11681
     }
 }

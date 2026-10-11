@@ -303,6 +303,7 @@ public final class CashService {
         } else {
             player.sendMessage(ChatColor.GREEN + "[月卡] 登录礼：余烬币 +" + monthlyLoginCoin);
         }
+        try { town.sunshine.corerpg.p1.EmberMonthlyLoginWinShard.maybeGift(player, data); } catch (Throwable ignored) { } // D11713
     }
 
     public boolean isMonthlyActive(PlayerData data) {
@@ -530,6 +531,7 @@ public final class CashService {
         dataStore.flushMutation(player.getUniqueId());
         player.sendMessage(ChatColor.GREEN + "[勋阶] 日礼已领取：余烬币 +" + coin
                 + ChatColor.GRAY + "（勋阶 " + data.getVipTier() + "）");
+        try { town.sunshine.corerpg.p1.EmberVipDailyWinBlank.maybeGift(player, data); } catch (Throwable ignored) { } // D11729
     }
 
     /** 1.4.10: free pass-track supply (mail template pass_track_free), once per day. */

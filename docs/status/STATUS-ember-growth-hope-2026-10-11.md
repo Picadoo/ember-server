@@ -1,3 +1,4 @@
+Live jar: **1.65.714-d11744.local** · D11681–D11744 CovenantSetWinBone + MonthlyLoginWinShard + VipDailyWinBlank
 Live jar: **1.65.713-d11680.local** · D11617–D11680 MentorAcceptWinBone + AuctionDealWinShard + GearUnstashWinBlank
 Live jar: **1.65.712-d11616.local** · D11553–D11616 FriendAcceptWinBone + AuctionSellWinShard + AuctionBuyWinBlank
 Live jar: **1.65.711-d11552.local** · D11489–D11552 OnlineClaimWinBone + GuildDonateWinShard + ArenaWinBlank
