@@ -335,11 +335,21 @@ public final class FlexSkillService implements Listener {
         double dist = town.sunshine.corerpg.p1.EmberSkillKit.stepTravelDistance(def.distance, back, posture, pid, mapKey2, syncStep);
         double link = town.sunshine.corerpg.p1.EmberDashStepLink.consume(player.getUniqueId()); // D6753
         dist += link;
+        double blockRetryPeek = town.sunshine.corerpg.p1.EmberStepBlockRetry.isArmed(player.getUniqueId())
+                ? town.sunshine.corerpg.p1.EmberStepBlockRetry.BONUS : 0.0; // D7137
+        dist += blockRetryPeek;
         Location best = town.sunshine.corerpg.p1.EmberDash.tryDash(player, dist, back, back);
         if (best == null) {
             String fail = from.getWorld() == null ? "无法踏步"
                     : (back ? "后方受阻，无法后撤" : "前方受阻，无法踏步");
             player.sendMessage(PREFIX + ChatColor.YELLOW + fail);
+            try {
+                town.sunshine.corerpg.p1.EmberStepBlockRetry.onBlock(data, player.getUniqueId());
+                if (town.sunshine.corerpg.p1.EmberStepBlockRetry.isArmed(player.getUniqueId())) {
+                    player.sendMessage(PREFIX + "§a踏步受阻补距 · 下次 +" + town.sunshine.corerpg.p1.EmberStepBlockRetry.BONUS + " 格（本日一次）");
+                    try { player.sendActionBar("§a受阻补距 · 已预备"); } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
             lastStepVariant.put(player.getUniqueId(), Integer.valueOf(
                     town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_PLAIN));
             lastBack.put(player.getUniqueId(), Boolean.valueOf(back));
@@ -349,11 +359,18 @@ public final class FlexSkillService implements Listener {
         int variant = stepVariantOf(player);
         spawnStepVariantTrail(from, best, variant, def.particles);
         player.teleport(best);
+        double blockRetry = town.sunshine.corerpg.p1.EmberStepBlockRetry.consume(player.getUniqueId()); // D7137 success only
         try { town.sunshine.corerpg.p1.EmberStepSlashArm.arm(player.getUniqueId()); } catch (Throwable ignored) { } // D6977
         if (link > 0) {
             try {
                 player.sendMessage(PREFIX + "§a突→步连携 · 踏步 +" + String.format(java.util.Locale.ROOT, "%.2f", link) + " 格");
                 player.sendActionBar("§a突→步连携 · +" + String.format(java.util.Locale.ROOT, "%.2f", link));
+            } catch (Throwable ignored) { }
+        }
+        if (blockRetry > 0) {
+            try {
+                player.sendMessage(PREFIX + "§a受阻补距生效 · 踏步 +" + String.format(java.util.Locale.ROOT, "%.2f", blockRetry) + " 格");
+                player.sendActionBar("§a受阻补距 · +" + String.format(java.util.Locale.ROOT, "%.2f", blockRetry));
             } catch (Throwable ignored) { }
         }
         spawnStepVariantLand(best, variant, def.particles);

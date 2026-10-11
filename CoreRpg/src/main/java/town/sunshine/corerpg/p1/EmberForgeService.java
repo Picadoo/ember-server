@@ -793,10 +793,18 @@ public final class EmberForgeService implements Listener {
                         PlayerData tpd = plugin.getDataStore().get(id);
                         if (tpd != null) {
                             int before = tpd.periodCount(C_BLANK_TENTHS, "all");
-                            tpd.addPeriodCount(C_BLANK_TENTHS, "all", (Integer) pd[2]);
+                            int delta = (Integer) pd[2];
+                            int boost = EmberArmorTenthsBoost.consume(tpd); // D7169
+                            if (boost > 0) delta += boost;
+                            tpd.addPeriodCount(C_BLANK_TENTHS, "all", delta);
                             plugin.getDataStore().flushMutation(id);
                             plugin.getLogger().info("[" + EmberMode.MODE_ID + "] six-slot armor dismantle " + rid + " " + id + " tenths " + before + " → "
-                                    + tpd.periodCount(C_BLANK_TENTHS, "all") + " blanks " + blanks);
+                                    + tpd.periodCount(C_BLANK_TENTHS, "all") + " blanks " + blanks
+                                    + (boost > 0 ? (" +" + boost + " boost") : ""));
+                            if (boost > 0 && q != null) {
+                                q.sendMessage(P + "§a护甲零头加赠 · +§f" + boost + "§a（本日一次）");
+                                try { q.sendActionBar("§a护甲零头 · +" + boost); } catch (Throwable ignored) { }
+                            }
                         }
                     }
                     if (!store().usable()) { if (q != null) { if (EmberVault.get() != null) EmberVault.get().give(q, EmberUpgradeRules.MAT_BLANK, blanks); else ni().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, blanks); } } // econ-ok: S29 dismantle blanks (legacy YAML path; MySQL uses delivery)
