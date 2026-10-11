@@ -268,6 +268,7 @@ public final class EmberGearLib implements Listener {
         if (pd != null && EmberCodex.register(pd, d) && d.tier > 0) {
             p.sendMessage("§6[图录] §f登记 T" + d.tier + " " + EmberItemData.familyName(d.family) + EmberItemData.slotName(d.slot)
                     + " §7（" + EmberCodex.count(pd) + "/" + EmberCodex.ENTRIES.size() + "）");
+            try { EmberMapCodexShard.maybeGift(p, pd); } catch (Throwable ignored) { } // D12049
             try { // D2207 map-identity soft focus
                 EmberRunService runs = plugin.getEmberRuns();
                 EmberMapIdentity.maybeSoftFocusAfterCodex(p, pd, d.family, runs == null ? null : runs.maps());

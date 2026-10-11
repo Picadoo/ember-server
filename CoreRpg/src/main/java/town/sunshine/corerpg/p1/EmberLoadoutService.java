@@ -519,6 +519,7 @@ public final class EmberLoadoutService implements Listener {
         if (pd != null && EmberCodex.register(pd, d) && d.tier > 0) { // D99: the two starter pieces register silently
             p.sendMessage("§6[图录] §f登记 T" + d.tier + " " + EmberItemData.familyName(d.tier == 0 ? "none" : d.family)
                     + EmberItemData.slotName(d.slot) + " §7（" + EmberCodex.count(pd) + "/" + EmberCodex.ENTRIES.size() + "，主菜单 图录 → 装备图鉴）");
+            try { EmberMapCodexShard.maybeGift(p, pd); } catch (Throwable ignored) { } // D12049
             // D1376: stage remain honesty（非 celebration twin）
             String rem = EmberCodex.progressRemain(pd);
             p.sendMessage(EmberRunService.P + "§7" + rem);

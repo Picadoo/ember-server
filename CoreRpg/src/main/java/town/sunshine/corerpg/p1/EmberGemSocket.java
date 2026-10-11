@@ -212,6 +212,10 @@ public final class EmberGemSocket {
         if (ni != null) ni.giveNiItem(p, gemId, 1);
         p.sendMessage(P + "已拆下 " + EmberItemData.gemName(code) + "（已返还）");
         try { p.sendActionBar("§e拆石 · §f孔" + hole + " 空"); } catch (Throwable ignored) { }
+        try {
+            PlayerData pdRm = plugin.getDataStore().get(p.getUniqueId());
+            EmberGemRemovePathSync.maybeSync(p, pdRm, code); // D12033
+        } catch (Throwable ignored) { }
         // D862 re-insert chase
         ConfirmTokens.sendButtons(p, P + "§7可再嵌：",
                 new String[]{"[嵌回孔" + hole + "]", "/corerpg p1 gem insert " + hole + " " + EmberGemPath.key(code),

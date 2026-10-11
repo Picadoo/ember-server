@@ -2130,6 +2130,10 @@ public final class EmberGrowthService implements Listener {
                 p.sendMessage(P + "§a临上限锁洗 · 本次必出上限档（零改 pity 表）");
                 try { p.sendActionBar("§a锁洗 · 临上限必出"); } catch (Throwable ignored) { }
             }
+            if (lock && EmberLockMidFloor.wouldFloor(affixOf(d, t), t.quality, reroll, true, d)) {
+                p.sendMessage(P + "§a锁洗中档保 · 今日首锁≥上限−1（零改 pity 表）");
+                try { p.sendActionBar("§a锁洗 · 中档保"); } catch (Throwable ignored) { }
+            }
             if (lock && EmberLockTierFloor.ready(d)) {
                 p.sendMessage(P + "§a锁洗保档 · 今日首锁不降档（零改 lock_shard 表）");
                 try { p.sendActionBar("§a锁洗 · 首锁不降档"); } catch (Throwable ignored) { }
@@ -2211,6 +2215,7 @@ public final class EmberGrowthService implements Listener {
         EmberAffix.Roll r = EmberAffix.roll(reroll, t.slot, t.quality, pity, new java.util.Random(EmberPayRules.seed(salt(), id.toString(), rid)), lockId);
         if (r == null) return null;
         r = EmberLockNearCap.apply(r, old, t.quality, reroll, lock); // D6689
+        r = EmberLockMidFloor.apply(r, old, t.quality, reroll, lock, d); // D12001
         r = EmberLockTierFloor.apply(r, old, t.quality, reroll, lock, d); // D11809
         r = EmberFirstAffixFloor.apply(r, old, t.quality, reroll); // D6945
         int pityUse = r.pityAfter;
