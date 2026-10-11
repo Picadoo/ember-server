@@ -2718,6 +2718,7 @@ public boolean pathForceOpenDoor(Player p) {
             EmberTalentPlaystyle.schedulePending(p); // D5601
             EmberBagSeat.scheduleScan(p); // D5665
             EmberBagBetter.scheduleScan(p); // D6177
+            EmberCodexBreak.schedule(p); // D6465
         }, 60L);
     }
 

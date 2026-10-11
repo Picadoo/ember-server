@@ -128,10 +128,20 @@ public final class EmberSettleService {
                               boolean sigFc, boolean varietyEligible, boolean affixDone, int affixShard,
                               boolean eventDone, int eventCore, String eventKind,
                               List<EmberRunRules.Grant> bountyPaid) {
+        appendBonuses(grants, in, m, raidItemQualityFloor, tier, rotation, rotMarks, sigRepeat, baseItem, pledged,
+                sigFc, varietyEligible, affixDone, affixShard, eventDone, eventCore, eventKind, bountyPaid, false);
+    }
+
+    static void appendBonuses(List<EmberRunRules.Grant> grants, EmberRunRules.SettleInput in, EmberRunMaps.MapDef m,
+                              int raidItemQualityFloor, int tier, boolean rotation, int rotMarks,
+                              boolean sigRepeat, EmberRunRules.Grant baseItem, int pledged,
+                              boolean sigFc, boolean varietyEligible, boolean affixDone, int affixShard,
+                              boolean eventDone, int eventCore, String eventKind,
+                              List<EmberRunRules.Grant> bountyPaid, boolean forceStamp) {
         if (m != null && m.raid)
             grants.addAll(EmberRaidService.settleGrants(in, m, raidItemQualityFloor, tier));
         if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(tier), rotMarks, null));
-        if (sigRepeat && m != null) grants.addAll(EmberRunRules.signatureGrants(m.key, in, baseItem));
+        if (sigRepeat && m != null) grants.addAll(EmberRunRules.signatureGrants(m.key, in, baseItem, forceStamp)); // D6433
         if (sigRepeat && m != null && pledged > 0) {
             EmberRunRules.Grant pg = EmberPledgeService.settleGrant(m.key, pledged);
             if (pg != null) grants.add(pg);
@@ -289,7 +299,15 @@ public final class EmberSettleService {
         if (sigRun && in.firstClear == null && runs.progressFlag(pd, m.key)) {
             EmberRunRules.Grant base = null;
             for (EmberRunRules.Grant g : grants) if ("base_item".equals(g.key)) base = g;
-            grants.addAll(EmberRunRules.signatureGrants(m.key, in, base));
+            boolean forceSig = EmberSigStampPity.ready(pd); // D6433
+            grants.addAll(EmberRunRules.signatureGrants(m.key, in, base, forceSig));
+            if (forceSig) {
+                Player cue = Bukkit.getPlayer(u);
+                if (cue != null && cue.isOnline()) {
+                    try { cue.sendActionBar("§a签名软保底 · 本局必出盖章候选"); } catch (Throwable ignored) { }
+                    cue.sendMessage(EmberRunService.P + "§a签名软保底触发 · 连空达期望局（零抬 STAMP_RATE）");
+                }
+            }
         }
         final int pledged = runs.pledge().count(s.modifier);
         if (sigRun && in.firstClear == null && runs.progressFlag(pd, m.key) && pledged > 0) { // D174 stage 2b 自选誓约: +1 insignia per pledged rule (D232 → EmberPledgeService)
@@ -562,6 +580,7 @@ public final class EmberSettleService {
                 EmberMapFarmCue.afterSettle(p, farmMap, lo2);
                 EmberBagSeat.scheduleScan(p); // D5665
                 EmberBagBetter.scheduleScan(p); // D6177
+                EmberCodexBreak.schedule(p); // D6465
                 if (runs.loadouts() != null) // D747 setchase equip after deliver
                     EmberSetChase.afterEquip(p, pd, runs.loadouts());
             }, 5L);

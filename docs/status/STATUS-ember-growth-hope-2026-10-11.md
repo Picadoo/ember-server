@@ -1,4 +1,4 @@
 # STATUS · growth · 2026-10-11
-- Live: `1.65.632-d6432.local`
-- D6305–D6432 MapResonance NEAR-SAT (slash+dash · origin.map)
-- STOP BagBetter/sure-do/TalentPlaystyle/access/Path densify · Talent HOLD
+- Live: `1.65.634-d6560.local`
+- D6433–D6560 SigStampPity + CodexBreak NEAR-SAT
+- STOP MapResonance/Bag/sure-do/TalentPlaystyle/access/Path · Talent HOLD

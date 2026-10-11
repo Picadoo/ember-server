@@ -374,12 +374,19 @@ public final class EmberRunRules {
      * "base_item" grant (null = none). Caller decides the run is a repeat normal main-story clear.
      */
     public static List<Grant> signatureGrants(String map, SettleInput in, Grant base) {
+        return signatureGrants(map, in, base, false);
+    }
+
+    /** D6433: {@code forceStamp} ignores rate (soft pity); still picks among stampable. */
+    public static List<Grant> signatureGrants(String map, SettleInput in, Grant base, boolean forceStamp) {
         List<Grant> out = new ArrayList<Grant>(2);
         if (!EmberSignature.hasMap(map)) return out;
         out.add(new Grant("sig_mark", Kind.SIGMARK, map, EmberSignature.clearMarks(), null)); // D1054
         if (base != null && base.kind == Kind.ITEM && base.item != null && base.item.tier >= 1) {
             double u = new Random(subSeed(in.seed, in.player, in.runId, "sig_stamp")).nextDouble();
-            EmberSignature.Def d = EmberSignature.rollStamp(map, base.item.slot, base.item.family, u);
+            EmberSignature.Def d = forceStamp
+                    ? EmberSignature.pickStamp(map, base.item.slot, base.item.family, u)
+                    : EmberSignature.rollStamp(map, base.item.slot, base.item.family, u);
             if (d != null) out.add(new Grant("sig_stamp", Kind.SIG, base.id + "/" + d.id, 0, null));
         }
         return out;

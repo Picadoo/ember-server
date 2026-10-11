@@ -215,6 +215,17 @@ public final class EmberSignature {
         return l.get(Math.max(0, Math.min(l.size() - 1, i)));
     }
 
+    /** D6433 soft pity: always pick among stampable (uniform on u); rate ignored. */
+    public static Def pickStamp(String map, String slot, String family, double u) {
+        List<Def> l = stampable(map, slot, family);
+        if (l.isEmpty() || !(u >= 0.0) || u >= 1.0) {
+            if (l.isEmpty()) return null;
+            u = 0.0;
+        }
+        int i = (int) Math.floor(Math.min(0.999999999, Math.max(0.0, u)) * l.size());
+        return l.get(Math.max(0, Math.min(l.size() - 1, i)));
+    }
+
     /** one worn piece: its signature (or null) + the piece's slot / family */
     public static final class Worn {
         public final Def def;
