@@ -172,6 +172,11 @@ public final class EmberMapEnterFeel {
                 } catch (Throwable ignored) { }
                 EmberBarPath.scheduleOfferAfterEnter(p);
             }
+            if ("q01".equalsIgnoreCase(m.key) && EmberMapStashPin.markEnter(pd)) {
+                try {
+                    p.sendMessage(EmberRunService.P + "§a装备库出处筛选已开放 · §7进主线图自动按本图钉选（非路径）");
+                } catch (Throwable ignored) { }
+            }
             // D2502: Q02 enter can unlock room even if dash latch already set
             if ("q02".equalsIgnoreCase(m.key) && EmberSkillKit.markRoomEnter(pd)) {
                 try {
@@ -191,6 +196,16 @@ public final class EmberMapEnterFeel {
                 EmberCounterPath.scheduleOfferAfterEnter(p);
             }
             EmberRoomPath.enterCue(p, pd);
+            // D3801: pin stash origin filter to this map (non-Path real behavior)
+            EmberRunService runsPin = EmberRunService.get();
+            if (EmberMapStashPin.pinOnEnter(p, pd, runsPin, m.key)) {
+                try {
+                    String pin = EmberMapStashPin.pinKey(m.key);
+                    p.sendMessage(EmberRunService.P + "§e装备库已按出处钉选 · §f"
+                            + (pin == null ? m.key : pin.toUpperCase(java.util.Locale.ROOT))
+                            + " §7· /corerpg p1 stash filter map");
+                } catch (Throwable ignored) { }
+            }
         }
         boolean ch = s != null && s.challenge;
         int ab = s == null ? 0 : s.abyss;

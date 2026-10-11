@@ -140,6 +140,7 @@ public final class EmberCounters {
         x("p1_extra_enter", "EmberSkillKit", A, SE, OW, "D2866 entered Q01 → extra path unlock without clear");
         x("p1_prep_enter", "EmberSkillKit", A, SE, OW, "D2914 entered Q01 → prep path unlock without clear");
         x("p1_bar_enter", "EmberSkillKit", A, SE, OW, "D2915 entered Q01 → bar path unlock without clear");
+        x("p1_map_stash_pin_enter", "EmberMapStashPin", A, SE, OW, "D3801 entered Q01 → stash origin pin unlock");
         x("p1_spice_enter", "EmberSkillKit", A, SE, OW, "D2925 entered Q02 → spice path unlock without clear");
         x("p1_counter_enter", "EmberSkillKit", A, SE, OW, "D3041 entered Q02 → counter path unlock without clear");
         x("p1_convert_path", "EmberConvertPath", A, SE, OW, "D469 convert path 0=none 1=scorch 2=burst 3=sustain");

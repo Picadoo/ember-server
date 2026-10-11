@@ -83,9 +83,12 @@ public final class EmberStorageRules {
     public static final class Filter {
         public int quality = -1, tier = -1, sort = 0;
         public String family = null, slot = null;
+        /** D3801: origin.map pin (q01..q07); null = any */
+        public String map = null;
 
         public static final String[] FAMILIES = {null, "scorch", "burst", "sustain", "none"};
         public static final String[] SLOTS = {null, "blade", "charm"};
+        public static final String[] MAPS = {null, "q01", "q02", "q03", "q04", "q05", "q06", "q07"};
         public static final String[] SORTS = {"最新存入", "阶 高→低", "成色 高→低", "强化 高→低"};
 
         public void cycleQuality() { quality = quality >= EmberTables.MAX_QUALITY ? -1 : quality + 1; }
@@ -93,6 +96,7 @@ public final class EmberStorageRules {
         public void cycleSort() { sort = (sort + 1) % SORTS.length; }
         public void cycleFamily() { family = next(FAMILIES, family); }
         public void cycleSlot() { slot = next(SLOTS, slot); }
+        public void cycleMap() { map = next(MAPS, map); }
 
         private static String next(String[] all, String cur) {
             for (int i = 0; i < all.length; i++) if (eq(all[i], cur)) return all[(i + 1) % all.length];
@@ -103,10 +107,15 @@ public final class EmberStorageRules {
             if (quality >= 0 && d.quality != quality) return false;
             if (tier >= 0 && d.tier != tier) return false;
             if (family != null && !family.equals(d.family)) return false;
-            return slot == null || slot.equals(d.slot);
+            if (slot != null && !slot.equals(d.slot)) return false;
+            if (map != null) {
+                String om = d.origin == null ? "" : d.origin.map;
+                if (om == null || !om.toLowerCase(java.util.Locale.ROOT).startsWith(map)) return false;
+            }
+            return true;
         }
 
-        public boolean any() { return quality < 0 && tier < 0 && family == null && slot == null; }
+        public boolean any() { return quality < 0 && tier < 0 && family == null && slot == null && map == null; }
 
         public String label() {
             List<String> p = new ArrayList<String>();
@@ -114,6 +123,7 @@ public final class EmberStorageRules {
             if (family != null) p.add(EmberItemData.familyName(family));
             if (slot != null) p.add(EmberItemData.slotName(slot));
             if (tier >= 0) p.add("T" + tier);
+            if (map != null) p.add("出处" + map.toUpperCase(java.util.Locale.ROOT));
             return p.isEmpty() ? "全部" : String.join(" · ", p);
         }
     }

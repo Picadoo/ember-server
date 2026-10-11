@@ -424,6 +424,7 @@ public final class EmberGearLib implements Listener {
                 new String[]{"[成色]", "/corerpg p1 stash filter quality", "循环成色", "YELLOW"},
                 new String[]{"[套装族]", "/corerpg p1 stash filter family", "循环族", "AQUA"},
                 new String[]{"[部位]", "/corerpg p1 stash filter slot", "刃/护符", "GREEN"},
+                new String[]{"[出处]", "/corerpg p1 stash filter map", "按图出处", "LIGHT_PURPLE"},
                 new String[]{"[开装备库]", "/corerpg p1 gearlib", "页内改", "GRAY"});
     }
 
@@ -484,6 +485,22 @@ public final class EmberGearLib implements Listener {
     }
 
     private Filter filter(UUID id) { Filter f = filters.get(id); if (f == null) { f = new Filter(); filters.put(id, f); } return f; }
+
+    /** D3801: pin origin.map filter (q01..q07). Returns true when value changed. */
+    public boolean pinMapFilter(Player p, String mapKey) {
+        if (p == null || mapKey == null) return false;
+        Filter f = filter(p.getUniqueId());
+        String pin = EmberMapStashPin.pinKey(mapKey);
+        if (pin == null) return false;
+        if (pin.equals(f.map)) return false;
+        f.map = pin;
+        return true;
+    }
+
+    public String currentMapFilter(Player p) {
+        if (p == null) return null;
+        return filter(p.getUniqueId()).map;
+    }
 
     /** D531: count safe gearlib junk under current filter (hub-gated). */
     public int countPathJunk(Player p) {
@@ -557,6 +574,10 @@ public final class EmberGearLib implements Listener {
             int enh = EmberStorageRules.enhancedCount(take);
             p.sendMessage(P + "批量分解（筛选：" + f.label() + "）：" + ChatColor.WHITE + take.size() + ChatColor.GRAY + " 件 → 胚料 ×"
                     + EmberStorageRules.blanksOf(take) + " · 按成色：" + ChatColor.WHITE + byQ + ChatColor.GRAY + " · 其中强化过 " + (enh > 0 ? ChatColor.RED : ChatColor.WHITE) + enh + ChatColor.GRAY + " 件");
+            if (f.map != null) { // D3849 map-origin recycle cue · zero yield change
+                p.sendMessage(P + "§7出处 §f" + f.map.toUpperCase(Locale.ROOT)
+                        + " §7差装清库 · 腾位继续刷同图徽记/成套（不改胚料表）");
+            }
             try { // D1726 FC2
                 int blanks = EmberStorageRules.blanksOf(take);
                 p.sendActionBar("§e批量分解 · §f" + take.size() + "件 → 胚×" + blanks
@@ -848,6 +869,7 @@ public final class EmberGearLib implements Listener {
                 else if ("slot".equals(what) || "部位".equals(what)) f.cycleSlot();
                 else if ("tier".equals(what) || "阶".equals(what)) f.cycleTier();
                 else if ("sort".equals(what) || "排序".equals(what)) f.cycleSort();
+                else if ("map".equals(what) || "出处".equals(what) || "图".equals(what)) f.cycleMap(); // D3801
                 tellFilter(p);
                 return true;
             }
@@ -1039,8 +1061,11 @@ public final class EmberGearLib implements Listener {
         inv.setItem(47, icon(Material.DIAMOND, 0, "§f成色：§e" + (f.quality < 0 ? "全部" : EmberItemData.qualityName(f.quality)), "§e点击切换"));
         inv.setItem(48, icon(Material.BLAZE_POWDER, 0, "§f套装族：§e" + (f.family == null ? "全部" : EmberItemData.familyName(f.family)), "§e点击切换"));
         inv.setItem(49, icon(Material.IRON_SWORD, 0, "§f部位：§e" + (f.slot == null ? "全部" : EmberItemData.slotName(f.slot)), "§e点击切换"));
-        inv.setItem(50, icon(Material.EXP_BOTTLE, 0, "§f阶：§e" + (f.tier < 0 ? "全部" : "T" + f.tier), "§e点击切换"));
-        inv.setItem(51, icon(Material.HOPPER, 0, "§f排序：§e" + Filter.SORTS[f.sort], "§e点击切换", "§8" + view.size() + " 件符合筛选，共 " + entries(id).size() + " 件"));
+        String mapLab = f.map == null ? "全部" : f.map.toUpperCase(Locale.ROOT);
+        inv.setItem(50, icon(Material.EXP_BOTTLE, 0, "§f阶：§e" + (f.tier < 0 ? "全部" : "T" + f.tier),
+                "§e左键切换阶", "§e右键切换出处：§f" + mapLab, "§8进本后可自动钉本图出处"));
+        inv.setItem(51, icon(Material.HOPPER, 0, "§f排序：§e" + Filter.SORTS[f.sort], "§e点击切换",
+                "§8出处：" + mapLab + " · " + view.size() + " 件符合筛选，共 " + entries(id).size() + " 件"));
         inv.setItem(52, icon(Material.ANVIL, 0, "§c批量分解（当前筛选）", "§7可分解 §f" + bulk.size() + " §7件 → 胚料 ×" + EmberStorageRules.blanksOf(bulk),
                 "§7锁定 / 收藏 / 装备中 / 有投入(强化·精工·成色卓越+/词条) / 非掉落 / T0 跳过", "§7点了先在聊天里列出清单，再点确认", "§e右键：撤销最近的分解（" + undoMinutes() + " 分钟内）"));
         inv.setItem(53, icon(Material.PAPER, 0, "§f下一页", "§7第 " + (pg + 1) + " / " + pages + " 页"));
@@ -1118,7 +1143,10 @@ public final class EmberGearLib implements Listener {
             case 47: f.cycleQuality(); break;
             case 48: f.cycleFamily(); break;
             case 49: f.cycleSlot(); break;
-            case 50: f.cycleTier(); break;
+            case 50:
+                if (ct.isRightClick()) f.cycleMap(); // D3801 origin.map
+                else f.cycleTier();
+                break;
             case 51: f.cycleSort(); break;
             case 52:
                 p.closeInventory();
