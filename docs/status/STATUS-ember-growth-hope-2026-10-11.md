@@ -1,3 +1,6 @@
+Live jar: **1.65.678-d9440.local** · D9377–D9440 AbyssEnterBrace + MainlineEnterBrace + StableCharmSoft
+Prior: Raid/Rush/Offhand
+
 Live jar: **1.65.677-d9376.local** · D9313–D9376 RaidEnterBrace + RushEnterBrace + OffhandBuySoft
 Prior: ConvertCap/Reforge/Magic
 

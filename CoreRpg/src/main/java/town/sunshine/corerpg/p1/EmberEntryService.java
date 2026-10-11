@@ -328,8 +328,13 @@ public final class EmberEntryService {
 
     /** the per-member「正在创建实例……」line (abyss / rush / festival / raid·main) */
     String enteringLine(Player p, EmberRunMaps.MapDef m, EmberRunMaps.AbyssTier at, int abyss, boolean challenge, int cost) {
-        if (at != null) return "§5深渊 · 余烬层 第 " + abyss + " 层 §7→ §e" + m.key.toUpperCase(Locale.ROOT) + " " + m.name
+        if (at != null) {
+            try {
+                EmberAbyssEnterBrace.maybeBrace(p, runs.dataOf(p.getUniqueId())); // D9377
+            } catch (Throwable ignored) { }
+            return "§5深渊 · 余烬层 第 " + abyss + " 层 §7→ §e" + m.key.toUpperCase(Locale.ROOT) + " " + m.name
                 + " §7正在创建实例……（已预留体力 " + cost + (at.fee > 0 ? " · 余烬币 " + at.fee : "") + "）";
+        }
         if (m.rush) {
             try {
                 EmberRushEnterBrace.maybeBrace(p, runs.dataOf(p.getUniqueId())); // D9345
@@ -347,6 +352,10 @@ public final class EmberEntryService {
             try {
                 PlayerData pdB = runs.dataOf(p.getUniqueId());
                 EmberChallengeEnterBrace.maybeBrace(p, pdB); // D8721
+            } catch (Throwable ignored) { }
+        } else if (!m.raid && !m.event && !m.rush && !m.shortExpedition && abyss <= 0 && !challenge) {
+            try {
+                EmberMainlineEnterBrace.maybeBrace(p, runs.dataOf(p.getUniqueId())); // D9409
             } catch (Throwable ignored) { }
         }
         if (m.raid) { // D755
