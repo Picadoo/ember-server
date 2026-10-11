@@ -1859,13 +1859,15 @@ final class EmberRunDirector {
         if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
         EmberRunMaps.Pt a = def.eventAnchor;
         Location to = new Location(w, a.x + 0.5, a.y, a.z + 0.5, p.getLocation().getYaw(), 0f);
-        // D2786: face living elite after warp (zero skill_mult / no Speed-Resist land)
+        // D2786/D2802: face + step 1.2 toward living elite (engage distance, no land buff)
         if (extraMob != null) {
             Tracked tr = mobs.get(extraMob);
             if (tr != null && tr.le != null && !tr.le.isDead()) {
                 Location eye = tr.le.getLocation().add(0, tr.le.getEyeHeight() * 0.6, 0);
                 org.bukkit.util.Vector dir = eye.toVector().subtract(to.toVector());
                 if (dir.lengthSquared() > 1.0e-6) {
+                    org.bukkit.util.Vector n = dir.clone().normalize();
+                    to.add(n.multiply(1.2));
                     to.setDirection(dir);
                 }
             }

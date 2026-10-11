@@ -109,6 +109,7 @@ public final class EmberChestPath {
         CoreRpgPlugin pl = plugin();
         if (pl == null || pl.getEmberRuns() == null) return;
         EmberRunService runs = pl.getEmberRuns();
+        boolean autoOpened = false; // D2803: only one AUTO open per spawn
         for (UUID u : s.committed) {
             Player p = Bukkit.getPlayer(u);
             if (p == null || !p.isOnline()) continue;
@@ -116,7 +117,12 @@ public final class EmberChestPath {
             if (d == null) continue;
             int path = get(d);
             if (shouldAuto(path)) {
+                if (autoOpened) {
+                    p.sendMessage(EmberRunService.P + "§a开箱·自动 §7队友已开箱");
+                    continue;
+                }
                 final int delay = autoDelayTicks(path);
+                autoOpened = true;
                 Bukkit.getScheduler().runTaskLater(pl, () -> {
                     if (!p.isOnline()) return;
                     if (runs.pathOpenExtraChest(p)) {

@@ -1,14 +1,15 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.552-d2800.local**
-- D2769–D2800 Chest/Hunt
+- jar **1.65.553-d2816.local**
+- D2769–D2816 Chest/Hunt **NEAR-SAT**
 
-## Shipped
-- Chest: Q01 enter · AUTO open 4t · ASK CD 5s
-- Hunt: Q01 enter · AUTO warp 3t · face elite · ASK CD 5s
-- No Speed/Resist land twin
+## Summary
+| 轴 | 行为 |
+|----|------|
+| Chest | Q01 首进 · AUTO 4t 开箱 · 仅一人 AUTO · ASK CD 5s |
+| Hunt | Q01 首进 · AUTO 3t · 朝向精英 + 贴脸 1.2 · ASK CD 5s |
 
-Talent HOLD.
+无 Speed/Resist land twin. Talent HOLD. Next: Stash / Mode×Room.
 
-Updated 2026-10-11 08:34 CST
+Updated 2026-10-11 08:35 CST
