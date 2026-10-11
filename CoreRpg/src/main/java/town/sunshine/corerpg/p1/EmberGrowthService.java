@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import town.sunshine.corerpg.ConfirmTokens;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.yaml.snakeyaml.Yaml;
 import town.sunshine.corerpg.CoreRpgPlugin;
@@ -744,7 +745,23 @@ public final class EmberGrowthService implements Listener {
             if (d == null) return;
             EmberSigChase.maybeReadyCue(p, d);
             maybeAttuneReadyCue(p, d);
+            EmberLoadout lo = runs == null || runs.loadouts() == null ? null : runs.loadouts().get(p);
+            EmberSigChase.maybeHeldReadyTip(p, d, lo); // D3937
         }, 140L);
+    }
+
+    /** D3957: switch hotbar onto same-slot chase piece → one-shot tip (no ConfirmTokens). */
+    @EventHandler(ignoreCancelled = true)
+    public void onItemHeld(PlayerItemHeldEvent e) {
+        Player p = e.getPlayer();
+        if (p == null || !EmberMode.active()) return;
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            if (!p.isOnline()) return;
+            PlayerData d = data(p.getUniqueId());
+            if (d == null || EmberSigChase.get(d) == null) return;
+            EmberLoadout lo = runs == null || runs.loadouts() == null ? null : runs.loadouts().refresh(p);
+            EmberSigChase.maybeHeldReadyTip(p, d, lo);
+        });
     }
 
     // ------------------------------------------------------------------ placeholders (%corerpg_p1_spec_*%)

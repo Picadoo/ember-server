@@ -213,6 +213,11 @@ public final class EmberMapEnterFeel {
                 if (gl != null && !gl.isEmpty()) {
                     try { p.sendMessage(EmberRunService.P + "§7" + gl); } catch (Throwable ignored) { }
                 }
+                EmberLoadout loPin = null;
+                try {
+                    if (runsPin != null && runsPin.loadouts() != null) loPin = runsPin.loadouts().get(p);
+                } catch (Throwable ignored) { }
+                EmberSigChase.maybeHeldReadyTip(p, pd, loPin); // D3937 no ConfirmTokens
             }
         }
         boolean ch = s != null && s.challenge;

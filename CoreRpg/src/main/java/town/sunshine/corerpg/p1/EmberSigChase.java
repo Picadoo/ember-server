@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import town.sunshine.corerpg.ConfirmTokens;
+import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.PlayerData;
 
 /**
@@ -24,6 +25,8 @@ public final class EmberSigChase {
     public static final String C_OFFERED = "p1_sig_chase_offered";
     /** Def.code latched after ready cue; cleared when marks drop below need or chase clears. */
     public static final String C_READY = "p1_sig_chase_ready";
+    /** D3937: Def.code latched after held-same-slot one-shot tip (no ConfirmTokens). */
+    public static final String C_HELD_TIP = "p1_sig_chase_held_tip";
 
     private EmberSigChase() {}
 
@@ -54,6 +57,13 @@ public final class EmberSigChase {
         if (d == null) return;
         int r = d.periodCount(C_READY, "all");
         if (r > 0) d.addPeriodCount(C_READY, "all", -r);
+        clearHeldTipLatch(d);
+    }
+
+    static void clearHeldTipLatch(PlayerData d) {
+        if (d == null) return;
+        int r = d.periodCount(C_HELD_TIP, "all");
+        if (r > 0) d.addPeriodCount(C_HELD_TIP, "all", -r);
     }
 
     public static EmberSignature.Def parse(String raw) {
@@ -326,6 +336,97 @@ public final class EmberSigChase {
                 "[一键烙印·" + def.id + "]", "/corerpg p1 sig imprint " + def.id + " go",
                 EmberSignature.imprintMarks() + " 枚徽记 · 烙到穿着" + EmberItemData.slotName(def.slot) + "（无覆盖则直接花）");
         return true;
+    }
+
+
+    /**
+     * D3937: imprint-ready + held/worn same-slot → one-shot tip, no ConfirmTokens.
+     * @return true when tip fired
+     */
+    public static boolean maybeHeldReadyTip(Player p, PlayerData d, EmberLoadout lo) {
+        if (p == null || d == null) return false;
+        EmberSignature.Def def = get(d);
+        if (def == null) {
+            clearHeldTipLatch(d);
+            return false;
+        }
+        int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
+        int need = EmberSignature.imprintMarks();
+        if (marks < need) {
+            clearHeldTipLatch(d);
+            return false;
+        }
+        int latched = d.periodCount(C_HELD_TIP, "all");
+        if (latched == def.code) return false;
+        EmberItemData target = sameSlotPiece(p, d, lo, def);
+        if (target == null) return false;
+        int delta = def.code - latched;
+        d.addPeriodCount(C_HELD_TIP, "all", delta);
+        flush(p);
+        String P = EmberRunService.P;
+        boolean held = isHeldUid(p, target.uid);
+        boolean worn = lo != null && (("charm".equals(def.slot) ? lo.charm : lo.blade) != null)
+                && target.uid.equals(("charm".equals(def.slot) ? lo.charm : lo.blade).uid);
+        String where = worn ? "穿着" : (held ? "主手" : "同部位");
+        String how = worn
+                ? ("/corerpg p1 sig imprint " + def.id)
+                : ("先穿上/选定同部位 · /corerpg p1 sig imprint " + def.id);
+        String line = "§a烙印可做 · §f" + def.id + " " + def.name
+                + " §7→ " + where + " §f" + target.shortLabel()
+                + " §8· " + how;
+        p.sendMessage(P + line);
+        try {
+            p.sendActionBar("§a烙印就绪 · §f" + def.id + " §7" + where
+                    + (worn ? "" : " · 先装备"));
+        } catch (Throwable ignored) { }
+        return true;
+    }
+
+    /** Bukkit-free slot match: worn loadout piece or main-hand P1 piece of chase slot. */
+    public static EmberItemData sameSlotPiece(Player p, PlayerData d, EmberLoadout lo, EmberSignature.Def def) {
+        if (def == null) return null;
+        // prefer main-hand same-slot (手持) then worn
+        if (p != null) {
+            try {
+                CoreRpgPlugin pl = plugin();
+                if (pl != null && pl.getEmberRuns() != null && pl.getEmberRuns().loadouts() != null) {
+                    org.bukkit.inventory.ItemStack st = p.getInventory().getItemInMainHand();
+                    if (st != null) {
+                        EmberItems items = pl.getEmberRuns().loadouts().items();
+                        if (items != null && items.hasData(st)) {
+                            EmberItems.Read r = items.read(st);
+                            if (r != null && r.ok() && r.data != null && def.slot.equals(r.data.slot))
+                                return r.data;
+                        }
+                    }
+                }
+            } catch (Throwable ignored) { }
+        }
+        if (lo != null) {
+            EmberItemData worn = "charm".equals(def.slot) ? lo.charm : lo.blade;
+            if (worn != null && def.slot.equals(worn.slot)) return worn;
+        }
+        return null;
+    }
+
+    static boolean isHeldUid(Player p, String uid) {
+        if (p == null || uid == null) return false;
+        try {
+            CoreRpgPlugin pl = plugin();
+            if (pl == null || pl.getEmberRuns() == null || pl.getEmberRuns().loadouts() == null) return false;
+            org.bukkit.inventory.ItemStack st = p.getInventory().getItemInMainHand();
+            EmberItems items = pl.getEmberRuns().loadouts().items();
+            if (items == null || !items.hasData(st)) return false;
+            EmberItems.Read r = items.read(st);
+            return r != null && r.ok() && r.data != null && uid.equals(r.data.uid);
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
+    private static CoreRpgPlugin plugin() {
+        Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
+        return pl instanceof CoreRpgPlugin ? (CoreRpgPlugin) pl : null;
     }
 
     public static void forceOffer(Player p) {
