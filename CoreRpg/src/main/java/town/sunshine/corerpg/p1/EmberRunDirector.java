@@ -1852,6 +1852,30 @@ final class EmberRunDirector {
         return true;
     }
 
+    /** D2867: path-align highlight — Glow mob 5s or chest particle ping. */
+    void highlightExtra(Player p, EmberRunRules.Extra ex) {
+        if (p == null || ex == null) return;
+        try {
+            if (ex == EmberRunRules.Extra.TREASURE || ex == EmberRunRules.Extra.ELITE) {
+                if (extraMob == null) return;
+                Tracked tr = mobs.get(extraMob);
+                if (tr == null || tr.le == null || tr.le.isDead()) return;
+                tr.le.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                        org.bukkit.potion.PotionEffectType.GLOWING, 100, 0, false, true), true);
+                return;
+            }
+            if (ex == EmberRunRules.Extra.CHEST && chest != null) {
+                Location c = chest.clone().add(0.5, 1.0, 0.5);
+                try {
+                    p.spawnParticle(org.bukkit.Particle.END_ROD, c, 18, 0.35, 0.5, 0.35, 0.01);
+                } catch (Throwable ignored) {
+                    try { p.spawnParticle(org.bukkit.Particle.CRIT_MAGIC, c, 16, 0.3, 0.4, 0.3, 0.02); } catch (Throwable ignored2) { }
+                }
+                w.playSound(c, Sound.BLOCK_ENDERCHEST_OPEN, 0.45f, 1.35f);
+            }
+        } catch (Throwable ignored) { }
+    }
+
     /** D559: warp a committed player to the side-extra anchor. */
     boolean pathHuntExtra(Player p) {
         if (p == null || !p.isOnline() || !hasHuntExtra()) return false;

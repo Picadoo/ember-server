@@ -1545,6 +1545,13 @@ public boolean pathForceOpenDoor(Player p) {
         return d.s.committed.contains(p.getUniqueId());
     }
 
+    /** D2867: Glow treasure/elite or ping chest for path-aligned player. */
+    public void highlightExtraFor(Player p, EmberRunRules.Extra ex) {
+        if (p == null || ex == null) return;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d != null) d.highlightExtra(p, ex);
+    }
+
     void onExtraSpawned(EmberRunSession s) {
         // D182: reward elite announces its fixed light move (dodge hint + same 10+1 rewards)
         if (s.extra == EmberRunRules.Extra.ELITE && maps != null) {
@@ -1557,6 +1564,7 @@ public boolean pathForceOpenDoor(Player p) {
                 tellRun(s, "§e额外事件：奖励精英" + title + "§7· " + hint
                         + " · 击败 → §f碎片 +" + EmberRunRules.eliteShard() + " §7+ §f核心 +" + EmberRunRules.eliteCore());
                 EmberHuntPath.maybeAfterSpawn(s); // D559 elite
+                EmberExtraPath.afterSpawn(s, this); // D2867
                 return;
             }
         }
@@ -1564,6 +1572,7 @@ public boolean pathForceOpenDoor(Player p) {
         if (s.extra == EmberRunRules.Extra.CHEST) EmberChestPath.maybeAfterSpawn(s); // D553
         if (s.extra == EmberRunRules.Extra.TREASURE || s.extra == EmberRunRules.Extra.ELITE)
             EmberHuntPath.maybeAfterSpawn(s); // D559
+        EmberExtraPath.afterSpawn(s, this); // D2867 path-align highlight
     }
 
     void onExtraDone(EmberRunSession s) {

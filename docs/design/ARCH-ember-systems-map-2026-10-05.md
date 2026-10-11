@@ -500,3 +500,6 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 ## Stash / Mode×Room · D2817–D2848
 - Stash enter + instance mats-only AUTO
 - Mode-hard preferred room Night Vision 3s
+
+## ExtraPath · D2865–D2896
+- Enter unlock; path-align Glow / chest ping (not Hunt/Chest twin)

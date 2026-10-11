@@ -1,6 +1,7 @@
 package town.sunshine.corerpg.p1;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -82,7 +83,7 @@ public final class EmberExtraPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8加料路径：首通 Q01 后可选";
+        if (!unlocked) return "§8加料路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8加料路径：未选 · /corerpg p1 extrapath";
         return "§e加料路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -125,6 +126,29 @@ public final class EmberExtraPath {
         return true;
     }
 
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
+
+    /**
+     * D2867: when spawned extra matches path preference — highlight target (Glow / chest ping).
+     * Not Hunt warp / Chest auto-open / Speed-Resist land.
+     */
+    public static void afterSpawn(EmberRunSession s, EmberRunService runs) {
+        if (s == null || runs == null || s.extra == null || s.extra == EmberRunRules.Extra.NONE) return;
+        for (UUID u : s.committed) {
+            PlayerData d = runs.dataOf(u);
+            int path = get(d);
+            if (!valid(path) || toExtra(path) != s.extra) continue;
+            Player p = Bukkit.getPlayer(u);
+            if (p == null || !p.isOnline()) continue;
+            runs.highlightExtraFor(p, s.extra);
+            try {
+                p.sendMessage(EmberRunService.P + "§a加料对齐 · §f" + label(path) + " §7目标已标亮");
+                p.sendActionBar("§a加料对齐 · §f" + label(path));
+            } catch (Throwable ignored) { }
+        }
+    }
+
     /** After Q01 — extras appear on all main maps. Delay past family/flex. */
     public static void scheduleOfferAfterQ01(Player p) {
         if (p == null) return;
@@ -149,8 +173,8 @@ public final class EmberExtraPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c加料路径需本人首通 Q01。");
+        if (!EmberSkillKit.extraPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c加料路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;
