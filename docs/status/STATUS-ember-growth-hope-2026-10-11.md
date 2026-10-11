@@ -1,15 +1,14 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.547-d2672.local**
-- D2609–D2672 Gate + Shape×Room **NEAR-SAT**
+- jar **1.65.548-d2704.local**
+- D2673–D2704 Call/Pack + Challenge×Room
 
-## Summary
-| 轴 | 行为 |
-|----|------|
-| Gate | Q01 首进解锁 · 开门 Speed 2s + Resist · AUTO Resist 2s · ASK CD 5s |
-| Shape×Room | 优房+形同：几何薄加 · dash +0.15 · burst Slow +2t · sustain heal ×1.05 |
+## Shipped
+- Call: Q01 enter · call land Speed 2s · ASK CD 5s
+- Pack: Q01 enter · AUTO tight≤3 · pack land Speed 1s · ASK CD 12s
+- Challenge×Room: challenge preferred open → Resist I 1.5s
 
-Next RESEARCH: Call/Pack or Challenge×Room. Talent HOLD.
+Talent HOLD. Gate/Shape×Room/pressure twin STOPPED.
 
-Updated 2026-10-11 08:26 CST
+Updated 2026-10-11 08:28 CST

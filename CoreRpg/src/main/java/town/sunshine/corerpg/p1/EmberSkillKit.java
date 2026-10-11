@@ -105,6 +105,10 @@ public final class EmberSkillKit {
     public static final String C_RALLY_ENTER = "p1_rally_enter";
     /** D2610: entered Q01 → gate path without clear-gate. */
     public static final String C_GATE_ENTER = "p1_gate_enter";
+    /** D2674: entered Q01 → call path without clear-gate. */
+    public static final String C_CALL_ENTER = "p1_call_enter";
+    /** D2685: entered Q01 → pack path without clear-gate. */
+    public static final String C_PACK_ENTER = "p1_pack_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -274,6 +278,32 @@ public final class EmberSkillKit {
     public static boolean gatePathUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
         if (d.periodCount(C_GATE_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
+    public static boolean markCallEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_CALL_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_CALL_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean callPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_CALL_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
+    public static boolean markPackEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_PACK_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_PACK_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean packPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_PACK_ENTER, "all") > 0) return true;
         return runs != null && runs.firstClearedKey(d, "q01");
     }
 

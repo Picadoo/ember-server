@@ -80,13 +80,34 @@ public final class EmberCallPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8召战路径：首通 Q01 后可选";
+        if (!unlocked) return "§8召战路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8召战路径：未选 · /corerpg p1 callpath";
         return "§e召战路径：§f" + label(id) + " §8· " + tip(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
     public static boolean shouldMute(int path) { return path == MUTE; }
+
+    private static final long ASK_COOLDOWN_MS = 8000L;
+    private static final long ASK_PATH_COOLDOWN_MS = 5000L;
+    private static final java.util.Map<UUID, Long> lastAsk = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
+
+    static long askCooldownMs(int path) {
+        return path == ASK ? ASK_PATH_COOLDOWN_MS : ASK_COOLDOWN_MS;
+    }
+
+    /** D2675: after call — Speed I 2s (boss open footwork). */
+    public static void applyCallLand(Player p) {
+        if (p == null || !p.isOnline()) return;
+        try {
+            p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.SPEED, 40, 0, false, true), true);
+            try { p.sendActionBar("§a召战开战 · §fSpeed I 2s"); } catch (Throwable ignored) { }
+        } catch (Throwable ignored) { }
+    }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
+
 
     /** After bossAt is armed and the wait/hint lines are told. */
     public static void maybeAfterArmed(EmberRunSession s) {
@@ -104,13 +125,19 @@ public final class EmberCallPath {
             if (shouldAuto(path)) {
                 if (!called && runs.pathCallBoss(p)) {
                     called = true;
+                    applyCallLand(p);
                     p.sendMessage(EmberRunService.P + "§a召战·自动 §7首领已现身");
                 } else if (called) {
+                    applyCallLand(p);
                     p.sendMessage(EmberRunService.P + "§a召战·自动 §7首领已现身");
                 }
                 continue;
             }
             if (shouldMute(path)) continue;
+            long now = System.currentTimeMillis();
+            Long last = lastAsk.get(p.getUniqueId());
+            if (last != null && now - last < askCooldownMs(path)) continue;
+            lastAsk.put(p.getUniqueId(), now);
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§e首领已预备 ",
                     new String[]{"[召战]", "/corerpg p1 call", "立即现身开战", "GREEN"},
                     new String[]{"[改路径]", "/corerpg p1 callpath", "自动/提醒/静默", "GRAY"});
@@ -126,6 +153,7 @@ public final class EmberCallPath {
         int path = get(d);
         if (shouldAuto(path)) {
             if (runs != null && runs.pathCallBoss(p)) {
+                applyCallLand(p);
                 p.sendMessage(EmberRunService.P + "§a召战·自动 §7首领已现身");
             } else {
                 p.sendMessage(EmberRunService.P + "§a召战·自动 §7待命（首领预备时立即现身）");
@@ -182,8 +210,8 @@ public final class EmberCallPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c召战路径需本人首通 Q01。");
+        if (!EmberSkillKit.callPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c召战路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;

@@ -192,6 +192,12 @@ public final class EmberRoomPath {
                         p.addPotionEffect(new org.bukkit.potion.PotionEffect(
                                 org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE, 20, 0, false, true), true);
                     }
+                    // D2695: challenge × preferred room — Resist I 1.5s (not Shape×Room geometry)
+                    if (s.challenge) {
+                        p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                                org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE, 30, 0, false, true), true);
+                        try { p.sendActionBar("§c硬本优房 · §fResist I 1.5s"); } catch (Throwable ignored) { }
+                    }
                     p.sendActionBar("§a优房 · §f" + label(path));
                 } catch (Throwable ignored) { }
             }

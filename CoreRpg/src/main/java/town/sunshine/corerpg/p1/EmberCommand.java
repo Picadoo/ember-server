@@ -517,18 +517,18 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            boolean unlocked = runs.progressFlag(d, "q01");
+            boolean unlocked = EmberSkillKit.callPathUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberCallPath.glance(EmberCallPath.get(d), unlocked));
                 if (!unlocked) {
-                    p.sendMessage(P + "§c召战路径需本人首通 Q01。");
+                    p.sendMessage(P + "§c召战路径需本人首进或首通 Q01。");
                     return true;
                 }
                 EmberCallPath.offerPick(p);
                 return true;
             }
             if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
-                if (!unlocked) { p.sendMessage(P + "§c召战路径需本人首通 Q01。"); return true; }
+                if (!unlocked) { p.sendMessage(P + "§c召战路径需本人首进或首通 Q01。"); return true; }
                 String week = EmberPlayfeelTelemetry.weekKey();
                 boolean offered = EmberCallPath.maybeOfferWeekly(p, d, week);
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
@@ -552,7 +552,10 @@ public final class EmberCommand {
             Player p = (Player) s;
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             if (!runs.pathCallBoss(p)) p.sendMessage(P + "无法召战（首领未预备/已现身/未进本）");
-            else p.sendMessage(P + "§a召战·手点 §7首领已现身");
+            else {
+                EmberCallPath.applyCallLand(p);
+                p.sendMessage(P + "§a召战·手点 §7首领已现身");
+            }
             return true;
         }
         if ("gatepath".equals(sub) || "开门路径".equals(sub)) { // D556 door-breath gate path
@@ -608,18 +611,18 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            boolean unlocked = runs.progressFlag(d, "q01");
+            boolean unlocked = EmberSkillKit.packPathUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberPackPath.glance(EmberPackPath.get(d), unlocked));
                 if (!unlocked) {
-                    p.sendMessage(P + "§c腾包路径需本人首通 Q01。");
+                    p.sendMessage(P + "§c腾包路径需本人首进或首通 Q01。");
                     return true;
                 }
                 EmberPackPath.offerPick(p);
                 return true;
             }
             if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
-                if (!unlocked) { p.sendMessage(P + "§c腾包路径需本人首通 Q01。"); return true; }
+                if (!unlocked) { p.sendMessage(P + "§c腾包路径需本人首进或首通 Q01。"); return true; }
                 String week = EmberPlayfeelTelemetry.weekKey();
                 boolean offered = EmberPackPath.maybeOfferWeekly(p, d, week);
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
@@ -642,7 +645,10 @@ public final class EmberCommand {
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
             if (!EmberPackPath.pathPackClick(p)) p.sendMessage(P + "无法腾包（需在本内且背包有可存材料）");
-            else p.sendMessage(P + "§a腾包·手点 §7已入库腾格");
+            else {
+                EmberPackPath.applyPackLand(p);
+                p.sendMessage(P + "§a腾包·手点 §7已入库腾格");
+            }
             return true;
         }
         if ("flepath".equals(sub) || "fleepath".equals(sub) || "撤离路径".equals(sub)) { // D554 post-fall flee path

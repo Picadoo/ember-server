@@ -34,8 +34,21 @@ public final class EmberPackPath {
 
     /** Fire when this many storage slots (or fewer) are empty. */
     public static final int TIGHT_SLOTS = 1;
+    /** D2686: AUTO packs earlier (≤3 empty). */
+    public static final int AUTO_TIGHT_SLOTS = 3;
+
+    public static int tightSlotsFor(int path) {
+        return path == AUTO ? AUTO_TIGHT_SLOTS : TIGHT_SLOTS;
+    }
+
 
     private static final long ASK_COOLDOWN_MS = 20_000L;
+    private static final long ASK_PATH_COOLDOWN_MS = 12_000L;
+
+    static long askCooldownMs(int path) {
+        return path == ASK ? ASK_PATH_COOLDOWN_MS : ASK_COOLDOWN_MS;
+    }
+
     private static final Map<UUID, Long> lastAsk = new ConcurrentHashMap<UUID, Long>();
 
     private EmberPackPath() {}
@@ -91,7 +104,7 @@ public final class EmberPackPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8腾包路径：首通 Q01 后可选";
+        if (!unlocked) return "§8腾包路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8腾包路径：未选 · /corerpg p1 packpath";
         return "§e腾包路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -118,9 +131,23 @@ public final class EmberPackPath {
     public static boolean needsPack(Player p) {
         if (p == null || !p.isOnline()) return false;
         if (!inPackWorld(p)) return false;
-        if (emptyStorage(p) > TIGHT_SLOTS) return false;
+        PlayerData d = dataOf(p);
+        int path = d == null ? NONE : get(d);
+        if (emptyStorage(p) > tightSlotsFor(path)) return false;
         return EmberStashPath.hasStashableMats(p);
     }
+
+    /** D2687: after successful deposit — Speed I 1s keep farming. */
+    public static void applyPackLand(Player p) {
+        if (p == null || !p.isOnline()) return;
+        try {
+            p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.SPEED, 20, 0, false, true), true);
+            try { p.sendActionBar("§a腾包 · §fSpeed I 1s"); } catch (Throwable ignored) { }
+        } catch (Throwable ignored) { }
+    }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
 
     public static boolean pathPack(Player p) {
         if (p == null || !needsPack(p)) return false;
@@ -150,6 +177,7 @@ public final class EmberPackPath {
         int path = get(d);
         if (shouldAuto(path)) {
             if (pathPack(p)) {
+                applyPackLand(p);
                 p.sendMessage(EmberRunService.P + "§a腾包·自动 §7已入库腾格");
             }
             return;
@@ -157,7 +185,7 @@ public final class EmberPackPath {
         if (shouldMute(path)) return;
         long now = System.currentTimeMillis();
         Long last = lastAsk.get(p.getUniqueId());
-        if (last != null && now - last < ASK_COOLDOWN_MS) return;
+        if (last != null && now - last < askCooldownMs(path)) return;
         lastAsk.put(p.getUniqueId(), now);
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e背包将满 ",
                 new String[]{"[腾包]", "/corerpg p1 pack", "材料入库腾格", "GREEN"},
@@ -172,6 +200,7 @@ public final class EmberPackPath {
         int path = get(d);
         if (shouldAuto(path)) {
             if (needsPack(p) && pathPack(p)) {
+                applyPackLand(p);
                 p.sendMessage(EmberRunService.P + "§a腾包·自动 §7已入库腾格");
             } else {
                 p.sendMessage(EmberRunService.P + "§a腾包·自动 §7待命（局内背包将满且有可存材料时入库）");
@@ -228,8 +257,8 @@ public final class EmberPackPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c腾包路径需本人首通 Q01。");
+        if (!EmberSkillKit.packPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c腾包路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;
