@@ -297,6 +297,16 @@ public final class EmberSetService implements Listener {
         String id = le.getUniqueId().toString();
         boolean refresh = s.engine.burns().get(id) != null;
         String evicted = s.engine.burns().ignite(id, perTick, now());
+        if (refresh) {
+            try {
+                PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
+                int extra = EmberIgniteRefreshBonus.consumeExtraTicks(pd); // D7041
+                if (extra > 0 && s.engine.burns().extendEnd(id, extra)) {
+                    flashProc(p, s, ChatColor.GOLD + "焚烬续燃加时" + ChatColor.GRAY + " · +" + extra + " 跳（本日一次）");
+                    try { p.sendActionBar("§6续燃加时 · +" + extra + "跳"); } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
         s.burnTargets.put(id, le);
         if (evicted != null) {
             s.burnTargets.remove(evicted);

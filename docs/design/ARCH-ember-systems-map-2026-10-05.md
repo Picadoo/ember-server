@@ -551,3 +551,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D6817–D6880: DropCraftPity (craft0×5 → floor craft1). STOP densify DropCraft + DashStep/LockNear/ParryMiss. Talent HOLD.
 - D6881–D6944: ChargeMissRest (蓄力落空 −50% CD once/day). STOP densify ChargeMiss + DropCraft/DashStep/LockNear/ParryMiss. Talent HOLD.
 - D6945–D7008: FirstAffixFloor (empty slot tier≥2) + StepSlashArm (踏步→烬斩 +0.25). STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D7009–D7072: BulkBlankBoost (≥3 dismantle +1 blank/day) + IgniteRefreshBonus (+1 tick first refresh/day). STOP densify those + priors. Talent HOLD. Six-slot HOLD.

@@ -1,3 +1,6 @@
+Live jar: **1.65.641-d7072.local** · D7009–D7072 BulkBlankBoost + IgniteRefreshBonus
+Prior: FirstAffix+StepSlash · ChargeMiss…
+
 Live jar: **1.65.640-d7008.local** · D6945–D7008 FirstAffixFloor + StepSlashArm
 Prior: ChargeMiss/DropCraft/DashStep/LockNear/ParryMiss
 

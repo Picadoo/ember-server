@@ -101,6 +101,15 @@ public final class EmberBurnBook {
         return out;
     }
 
+    /** D7041: push endAt by extra tick intervals (refresh bonus). */
+    public boolean extendEnd(String target, int extraTicks) {
+        if (target == null || extraTicks <= 0) return false;
+        Burn b = burns.get(target);
+        if (b == null) return false;
+        b.endAt += (long) extraTicks * EmberSetRules.BURN_INTERVAL_MS;
+        return true;
+    }
+
     public void remove(String target) { burns.remove(target); }
     public void clear() { burns.clear(); }
     public int size() { return burns.size(); }

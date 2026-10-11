@@ -634,10 +634,28 @@ public final class EmberGearLib implements Listener {
         Player q = Bukkit.getPlayer(id);
         // D162 (A01): the blanks are delivery rows written with each dismantle — delivered now, or at the next join
         if (q == null) { plugin.getLogger().info("[P1 gearlib] bulk dismantle " + id + " left: " + n + " pieces, blanks " + blanks + " owed (delivered at next join)"); return; }
+        int bonusBlank = 0;
+        try { // D7009 bulk blank boost
+            PlayerData pd = plugin.getDataStore().get(id);
+            if (EmberBulkBlankBoost.consume(pd, n)) {
+                EmberVault v = vault();
+                if (v != null && v.credit(q, EmberUpgradeRules.MAT_BLANK, EmberBulkBlankBoost.BONUS)) {
+                    bonusBlank = EmberBulkBlankBoost.BONUS;
+                } else if (plugin.getNiBridge() != null
+                        && plugin.getNiBridge().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, EmberBulkBlankBoost.BONUS)) {
+                    bonusBlank = EmberBulkBlankBoost.BONUS;
+                }
+            }
+        } catch (Throwable ignored) { }
         if (n > 0) ConfirmTokens.sendButtons(q, P + "整批撤销：", new String[]{"[撤销这一批]", "/corerpg p1 undo batch", "一次撤销最近这批分解（" + undoMinutes() + " 分钟内，要退回胚料）", "GREEN"});
         if (blanks > 0) delivery.kick(q);
-        plugin.getLogger().info("[P1 gearlib] bulk dismantle " + q.getName() + " " + n + " pieces → blanks " + blanks);
+        plugin.getLogger().info("[P1 gearlib] bulk dismantle " + q.getName() + " " + n + " pieces → blanks " + blanks
+                + (bonusBlank > 0 ? (" +" + bonusBlank + " boost") : ""));
         q.sendMessage(P + ChatColor.GREEN + "已分解 " + n + " 件 → 胚料 ×" + blanks + ChatColor.GRAY + "（" + undoMinutes() + " 分钟内可撤销）");
+        if (bonusBlank > 0) {
+            q.sendMessage(P + "§a批量清库加赠 · 胚料 +§f" + bonusBlank + "§a（本日一次 · ≥" + EmberBulkBlankBoost.NEED + "件）");
+            try { q.sendActionBar("§a清库加赠 · 胚+" + bonusBlank); } catch (Throwable ignored) { }
+        }
         try { // D1786
             q.sendActionBar("§a批量分解 · §f" + n + "件 → 胚×" + blanks + " §8· " + undoMinutes() + "分钟可撤");
         } catch (Throwable ignored) { }

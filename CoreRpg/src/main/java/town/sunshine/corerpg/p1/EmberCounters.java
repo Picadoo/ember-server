@@ -545,6 +545,8 @@ public final class EmberCounters {
         x("p1_parry_miss_streak", "EmberParryMissBreak", A, PR, NV, "D6721 miss streak");
         px("p1_parry_miss_rest", "EmberParryMissBreak", A, PR, NV, "D6721 miss-rest day");
         px("p1_charge_miss_rest", "EmberChargeMissRest", A, PR, NV, "D6881 charge miss rest day");
+        px("p1_bulk_blank_boost", "EmberBulkBlankBoost", A, PR, NV, "D7009 bulk blank boost day");
+        px("p1_ignite_refresh_bonus", "EmberIgniteRefreshBonus", A, PR, NV, "D7041 ignite refresh bonus day");
         px("p1_brand_auto_pin_", "EmberBrandSure", A, PR, NV, "D5025 craft→path auto-pin latch");
         px("p1_marks_awk_auto_t", "EmberMarksBreak", D, HI, OW, "D4513 marks awaken auto-redeem per tier@day");
         px("p1_awk_break_", "EmberAwakenBreak", A, PR, NV, "D4385 awakening breakthrough latch I..III");
