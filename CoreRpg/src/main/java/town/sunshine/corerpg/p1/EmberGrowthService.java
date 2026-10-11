@@ -2487,6 +2487,13 @@ public final class EmberGrowthService implements Listener {
                 p.sendActionBar(gap == 0 ? "§a烙纹合成 · 碎片够"
                         : ("§e烙纹合成 · 还差碎 §f" + gap));
             } catch (Throwable ignored) { }
+            // D4961: craft sure-do when shards ready (zero craftShards change)
+            if (EmberBrandSure.craftReady(have, need)) {
+                if (gate(p)) return true;
+                p.sendMessage(P + "§a烙纹合成 · 碎片齐 · 预览直办（不改合成比）");
+                try { p.sendActionBar("§a烙纹合成 · 直办"); } catch (Throwable ignored) { }
+                return brandCraft(p, d, true);
+            }
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
                     new String[]{"[确认合成]", "/corerpg p1 brand craft confirm", "扣 " + need + " 碎片，得 1 烙纹", "GREEN"},
                     new String[]{"[打开烙纹页]", "/corerpg p1 brand menu", "回菜单", "GRAY"});
@@ -2555,6 +2562,13 @@ public final class EmberGrowthService implements Listener {
                 else if (gapCoin > 0) p.sendActionBar("§e定向 · 还差币 §f" + gapCoin);
                 else p.sendActionBar("§a定向 · 料够 · 次数余" + left);
             } catch (Throwable ignored) { }
+            // D4961: pin sure-do when mats ready (type chosen; tier still rolls). Zero pin price.
+            if (EmberBrandSure.pinReady(haveBrand, brands, haveCoin, coins)) {
+                if (gate(p)) return true;
+                p.sendMessage(P + "§a烙纹定向 · 料齐 · 预览直办（不改价/次数）");
+                try { p.sendActionBar("§a定向 · 直办 · §f" + want.name); } catch (Throwable ignored) { }
+                return brandPin(p, d, slot, affixId, true);
+            }
             java.util.List<String[]> btns = new java.util.ArrayList<String[]>();
             btns.add(new String[]{"[确认定向]", "/corerpg p1 brand pin " + slot + " " + affixId + " confirm", "扣烙纹与币，写入「" + want.name + "」", "GREEN"});
             if (gapBrand > 0)
