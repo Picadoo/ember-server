@@ -623,3 +623,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D11425–D11488: AttuneUnlockWinBone + SignWinShard + MailClaimWinBlank. STOP densify those + stable-bread-rod-win + priors. Talent HOLD. Six-slot HOLD.
 - D11489–D11552: OnlineClaimWinBone + GuildDonateWinShard + ArenaWinBlank. STOP densify those + attune-sign-mail-win + priors. Talent HOLD. Six-slot HOLD.
 - D11553–D11616: FriendAcceptWinBone + AuctionSellWinShard + AuctionBuyWinBlank. STOP densify those + online-guild-arena-win + priors. Talent HOLD. Six-slot HOLD.
+- D11617–D11680: MentorAcceptWinBone + AuctionDealWinShard + GearUnstashWinBlank. STOP densify those + friend-auction-win + priors. Talent HOLD. Six-slot HOLD.

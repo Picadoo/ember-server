@@ -107,6 +107,7 @@ public final class EmberDealPath {
                     + ChatColor.YELLOW + " · 实收 " + receive + " 币"
                     + ChatColor.DARK_GRAY + "（税 " + taxLabel + "，标价 " + listPrice + "）"
                     + ChatColor.GRAY + " · 买家 " + buyerName);
+            try { EmberAuctionDealWinShard.maybeGift(sellerOnline, sellerData); } catch (Throwable ignored) { } // D11649
             return;
         }
         // GATE, NONE, or OPEN-while-offline
@@ -129,6 +130,7 @@ public final class EmberDealPath {
         if (coin > 0) d.addPeriodCount(C_PEND_COIN, "all", -coin);
         pl.getDataStore().flushMutation(p.getUniqueId());
         p.sendMessage(EmberRunService.P + "§e成交·汇总 §7寄售成交 §f" + n + " §7笔 · 实收 §e" + coin + " §7币（离线/汇总）");
+        try { EmberAuctionDealWinShard.maybeGift(p, d); } catch (Throwable ignored) { } // D11649
     }
 
     public static void offerPick(Player p) {

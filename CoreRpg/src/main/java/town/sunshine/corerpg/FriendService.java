@@ -531,6 +531,7 @@ public final class FriendService {
             dataStore.flushMutation(off.getUniqueId());
             p.sendMessage(PREFIX + ChatColor.GOLD + "已与 §f" + otherName + ChatColor.GOLD + " 结成师徒。");
             EmberMentorPath.afterBound(p, otherName); // D806
+            try { town.sunshine.corerpg.p1.EmberMentorAcceptWinBone.maybeGift(p, self); } catch (Throwable ignored) { } // D11617
             Player online = Bukkit.getPlayer(off.getUniqueId());
             if (online != null && online.isOnline()) {
                 online.sendMessage(PREFIX + ChatColor.GOLD + p.getName() + " 已接受师徒绑定。");

@@ -359,6 +359,10 @@ public final class EmberGearLib implements Listener {
                             q.sendActionBar("§a取装 · §f" + after.shortLabel()
                                     + " §8· 库余" + count(id) + " · 空" + freeBackpackSlots(q) + "格");
                         } catch (Throwable ignored) { }
+                        try {
+                            PlayerData pdU = plugin.getDataStore().get(id);
+                            EmberGearUnstashWinBlank.maybeGift(q, pdU); // D11665
+                        } catch (Throwable ignored) { }
                         q.playSound(q.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.6f, 1.0f);
                         if (q.getOpenInventory().getTopInventory().getHolder() instanceof Holder) openLib(q, ((Holder) q.getOpenInventory().getTopInventory().getHolder()).opener, ((Holder) q.getOpenInventory().getTopInventory().getHolder()).page);
                     });
