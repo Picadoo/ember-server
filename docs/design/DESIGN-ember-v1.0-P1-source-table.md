@@ -2062,3 +2062,11 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 版本 | CoreRpg **1.65.723-d12194.local** |
 | 文档 | `docs/status/STATUS-ember-hunger-lock-register-d12194-2026-10-11.md` |
 
+### 13.103 Play crash-restart wrapper（D12195，2026-10-11）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | Paper Watchdog 两次崩溃（13:15 / 13:40 CST）；`restart-on-crash: true` 调 `./start.sh` 时 `server.pid` 仍指向濒死 JVM → start.sh exit 1 |
+| 裁决 | 新增 `server-runtime/restart-on-crash.sh`（login 镜像）：立刻 `exit 0`，后台等至多 120s 至旧 pid 消失且端口空闲 → `rm -f server.pid` → `./start.sh auto`；`spigot.yml` `restart-script: ./restart-on-crash.sh` |
+| 版本 | scripts/docs only（jar 不变；live 仍 1.65.723-d12194.local） |
+| 文档 | `docs/status/STATUS-ember-play-crash-restart-d12195-2026-10-11.md` |
