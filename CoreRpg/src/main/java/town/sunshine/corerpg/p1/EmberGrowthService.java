@@ -1353,12 +1353,20 @@ public final class EmberGrowthService implements Listener {
      * @return true when payment started
      */
     boolean autoImprintEmpty(Player p, EmberSignature.Def sd) {
+        return autoImprintEmpty(p, sd, null);
+    }
+
+    /** @param prefer pre-selected empty-sig piece (bag equip path); null = worn slot */
+    boolean autoImprintEmpty(Player p, EmberSignature.Def sd, EmberItemData prefer) {
         if (p == null || sd == null) return false;
+        if (inRun(p)) return false;
+        if (EmberAssetGuard.hold(p) != null) return false;
         PlayerData d = data(p.getUniqueId());
         if (d == null) return false;
         EmberLoadout lo = runs == null || runs.loadouts() == null ? null : runs.loadouts().refresh(p);
         if (lo == null) return false;
-        EmberItemData t = "blade".equals(sd.slot) ? lo.blade : lo.charm;
+        EmberItemData t = prefer;
+        if (t == null) t = "blade".equals(sd.slot) ? lo.blade : lo.charm;
         int cur = t == null ? 0 : sigOf(d, t);
         if (cur != 0) return false; // overwrite stays manual
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");

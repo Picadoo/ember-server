@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import town.sunshine.corerpg.ConfirmTokens;
+import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.PlayerData;
 
 /**
@@ -163,6 +164,11 @@ public final class EmberSetChase {
     public static void afterEquip(Player p, PlayerData d, EmberLoadoutService loadouts) {
         if (p == null || loadouts == null) return;
         EmberLoadout lo = loadouts.refresh(p);
+        try { // D4705 imprint auto after equip empty-sig
+            CoreRpgPlugin pl = (CoreRpgPlugin) org.bukkit.Bukkit.getPluginManager().getPlugin("CoreRpg");
+            EmberRunService runs = pl == null ? null : pl.getEmberRuns();
+            EmberImprintBreak.maybeAuto(p, d, lo, runs);
+        } catch (Throwable ignored) { }
         String fk = d == null ? null : EmberSetFocus.familyKey(EmberSetFocus.get(d));
         tell(p, d, lo, loadouts);
         if (fk != null && fk.equals(lo.activeSet)) { // D744

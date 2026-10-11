@@ -157,6 +157,7 @@ public final class EmberSigChase {
         p.sendMessage(EmberRunService.P + "§e追烙已按本图钉选 · §f" + label(pick)
                 + " §7· " + rem + " §8· /corerpg p1 sig chase");
         try { p.sendActionBar("§e追烙 · §f" + pick.id + " §7" + rem); } catch (Throwable ignored) { }
+        maybeReadyCue(p, d); // D4705 may auto-imprint if marks already full
         return true;
     }
 

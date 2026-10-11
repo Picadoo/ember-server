@@ -10,7 +10,15 @@ public class EmberImprintBreakTest {
     }
 
     @Test
-    public void canAutoFalseWithoutRuns() {
-        assertFalse(EmberImprintBreak.canAuto(null, null, EmberSignature.byId("L01"), null));
+    public void townOkFalseWithoutRuns() {
+        assertFalse(EmberImprintBreak.townOk(null, null));
+    }
+
+    @Test
+    public void fitsEmptyBladeForL01() {
+        EmberSignature.Def def = EmberSignature.byId("L01");
+        assertNotNull(def);
+        EmberItemData blade = EmberItemData.create(def.family, "blade", 1, 1, 0, 0, true, "drop");
+        assertTrue(EmberSignature.fits(def, blade.slot, blade.family));
     }
 }
