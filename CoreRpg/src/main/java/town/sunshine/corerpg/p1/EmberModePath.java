@@ -86,8 +86,8 @@ public final class EmberModePath {
         if (runs == null) return;
         PlayerData d = runs.dataOf(p.getUniqueId());
         if (d == null) return;
-        if (!runs.progressFlag(d, EmberPledgeService.UNLOCK)) {
-            p.sendMessage(EmberRunService.P + "§c自选誓约需本人首通 Q06");
+        if (!EmberSkillKit.pledgeUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c自选誓约需本人首进或首通 Q06");
             return;
         }
         for (String id : new String[]{"lean", "reverse"}) {

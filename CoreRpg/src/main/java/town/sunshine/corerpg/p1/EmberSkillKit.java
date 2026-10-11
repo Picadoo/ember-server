@@ -95,6 +95,8 @@ public final class EmberSkillKit {
     public static final String C_IMPRINT_ENTER = "p1_imprint_enter";
     /** D5217: entered Q03 → 双签名 without clear-gate. */
     public static final String C_DUAL_ENTER = "p1_dual_enter";
+    /** D5281: entered Q01 → 宝石路径 without clear-gate. */
+    public static final String C_GEM_ENTER = "p1_gem_enter";
     /** D2330: entered Q06 → pledge/trial without clear-gate. */
     public static final String C_PLEDGE_ENTER = "p1_pledge_enter";
     /** D2378: entered Q01 → stride path without clear-gate. */
@@ -239,6 +241,15 @@ public final class EmberSkillKit {
         d.addPeriodCount(C_DUAL_ENTER, "all", 1);
         return true;
     }
+
+    /** D5281: Q01 first-enter → gem path (no clear-gate). */
+    public static boolean markGemEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_GEM_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_GEM_ENTER, "all", 1);
+        return true;
+    }
+
 
 
     public static boolean markPledgeEnter(PlayerData d) {
@@ -514,6 +525,24 @@ public final class EmberSkillKit {
         if (d == null) return false;
         if (d.periodCount(C_DUAL_ENTER, "all") > 0) return true;
         return runs != null && runs.firstClearedKey(d, EmberSignature.DUAL_UNLOCK);
+    }
+
+    /** D5281: Q01 clear OR first-enter unlocks gem path. */
+    public static boolean gemPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_GEM_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
+    /**
+     * D5281: directed forge T2 ← shape (Q04 enter/clear); T3 ← attune (Q07 enter/clear).
+     * T1 always open. Zero mark prices.
+     */
+    public static boolean directedForgeOpen(PlayerData d, EmberRunService runs, int tier) {
+        if (tier <= 1) return true;
+        if (tier == 2) return shapeUnlocked(d, runs);
+        if (tier == 3) return attuneUnlocked(d, runs);
+        return false;
     }
 
     /** D2292: step land slow ticks (synced with set-shape). */

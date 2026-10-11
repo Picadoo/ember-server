@@ -68,7 +68,8 @@ public final class EmberMapEnterFeel {
                     p.sendActionBar("§a招架解锁 · §fQ");
                 } else if ("q04".equals(k) && EmberSkillKit.markShapeEnter(pd)) {
                     p.sendMessage(EmberRunService.P + "§a烬斩符文已解锁 · §f扇/直/环 §7（首进 Q04 · 不锁通关 · /corerpg skill shape）");
-                    p.sendActionBar("§a符文解锁 · §f/corerpg skill shape");
+                    p.sendMessage(EmberRunService.P + "§aT2 定向锻造已开放 · §f印记兑换 §7（首进 Q04 · 不锁通关）");
+                    p.sendActionBar("§a符文+T2定向 · §fshape");
                     EmberSkillUnlock.scheduleShapePick(p); // D2354 enter pick · no ConfirmTokens twin
                     EmberModePath.scheduleOffer(p, "q04"); // D2420 enter mode variety
                 } else if ("q05".equals(k) && EmberSkillKit.markStepEnter(pd)) {
@@ -83,10 +84,18 @@ public final class EmberMapEnterFeel {
                     EmberModePath.scheduleOffer(p, "q06"); // D2420
                 } else if ("q07".equals(k) && EmberSkillKit.markAttuneEnter(pd)) {
                     p.sendMessage(EmberRunService.P + "§a签名调律+挑战版已开放 · §f/corerpg p1 attunepath · challengepath §7（首进 Q07）");
-                    p.sendActionBar("§a调律/挑战 · §fattunepath");
+                    p.sendMessage(EmberRunService.P + "§aT3 定向锻造已开放 · §f印记兑换 §7（首进 Q07 · 不锁通关）");
+                    p.sendActionBar("§a调律+T3定向 · §fattunepath");
                     EmberChallengePath.scheduleOfferAfterEnter(p); // D2420
                 }
             } catch (Throwable ignored) { }
+            // D5281: Q01 enter unlocks gem path
+            if ("q01".equalsIgnoreCase(m.key) && EmberSkillKit.markGemEnter(pd)) {
+                try {
+                    p.sendMessage(EmberRunService.P + "§a宝石路径已开放 · §f/corerpg p1 gempath §7（首进 Q01 · 不锁通关）");
+                    p.sendActionBar("§a宝石路径 · §fgempath");
+                } catch (Throwable ignored) { }
+            }
             // D5217: Q02 enter unlocks imprint even if dash latch already set
             if ("q02".equalsIgnoreCase(m.key) && EmberSkillKit.markImprintEnter(pd)) {
                 try {

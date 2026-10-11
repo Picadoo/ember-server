@@ -571,8 +571,8 @@ public final class EmberRunPapi {
     }
 
     private String gate(PlayerData d, String key) {
-        if ("forge_t2".equals(key)) return runs.progressFlag(d, "q04") ? "已开放" : "需本人首通 Q04";
-        if ("forge_t3".equals(key)) return runs.progressFlag(d, "q07") ? "已开放" : "需本人首进/首通 Q07";
+        if ("forge_t2".equals(key)) return EmberSkillKit.directedForgeOpen(d, runs, 2) ? "已开放" : "需本人首进或首通 Q04";
+        if ("forge_t3".equals(key)) return EmberSkillKit.directedForgeOpen(d, runs, 3) ? "已开放" : "需本人首进或首通 Q07";
         if ("challenge".equals(key)) return runs.challengeOpen(d) ? "已开放" : "需本人首进/首通 Q07";
         if ("q07done".equals(key)) return runs.progressFlag(d, "q07") ? "1" : "0"; // D99 menu condition (post-Q07 icons)
         return runs.progressFlag(d, key.substring(0, 3)) ? "1" : "0"; // D174 stage 2b: q04done / q05done / q06done

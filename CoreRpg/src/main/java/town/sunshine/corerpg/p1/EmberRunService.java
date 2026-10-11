@@ -2448,7 +2448,7 @@ public boolean pathForceOpenDoor(Player p) {
                 continue;
             }
             int t = needT;
-            boolean open = t == 1 || progressFlag(d, EmberRunRules.directedForgeFlag(t));
+            boolean open = t == 1 || EmberSkillKit.directedForgeOpen(d, this, t);
             int have = marks(d, t);
             if (open && have >= EmberRunRules.marksPerExchange() && !"none".equals(fam)) {
                 out.add(want + "§a用 8 枚 T" + t + " 印记兑换§7（有 " + have + " 枚）" + (x != null && x.enhance > 0 ? "，再免费互换 +" + x.enhance : ""));
@@ -2466,7 +2466,7 @@ public boolean pathForceOpenDoor(Player p) {
                     continue;
                 } else up = "升阶 " + c.label() + "，还缺 " + String.join("、", lack).replaceAll("§.", "");
             }
-            out.add(want + (open ? "T" + t + " 印记 " + have + "/8" : "T" + t + " 兑换要先首通 " + EmberRunRules.directedForgeFlag(t).toUpperCase(Locale.ROOT))
+            out.add(want + (open ? "T" + t + " 印记 " + have + "/8" : "T" + t + " 兑换要先首进或首通 " + EmberRunRules.directedForgeFlag(t).toUpperCase(Locale.ROOT))
                     + (up == null ? "" : " · " + up) + "（每局首领结算给 1 枚同阶印记）");
         }
         if (out.isEmpty()) out.add("两件都够了：" + l.nextAwakeningHint());
@@ -3394,14 +3394,14 @@ public boolean pathForceOpenDoor(Player p) {
             } catch (Throwable ignored) { }
             p.sendMessage(P + "锻造印记（账户绑定）：T1 " + marks(d, 1) + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3));
             p.sendMessage(P + "8 枚同阶印记 → 指定族+部位的同阶标准件（成色标准、精工 0、+0）");
-            p.sendMessage(P + "T2 定向锻造：" + (progressFlag(d, "q04") ? "§a已开放" : "§7需本人首通 Q04")
-                    + " §7· T3：" + (progressFlag(d, "q07") ? "§a已开放" : "§7需本人首通 Q07"));
+            p.sendMessage(P + "T2 定向锻造：" + (EmberSkillKit.directedForgeOpen(d, this, 2) ? "§a已开放" : "§7需本人首进或首通 Q04")
+                    + " §7· T3：" + (EmberSkillKit.directedForgeOpen(d, this, 3) ? "§a已开放" : "§7需本人首进或首通 Q07"));
             boolean any = false;
             int need = EmberRunRules.marksPerExchange();
             int bestGap = Integer.MAX_VALUE; int bestT = 1; int bestHave = 0;
             for (int t = 3; t >= 1; t--) { // D88: clickable exchange rows instead of a typed command
                 int have = marks(d, t);
-                if (t > 1 && !progressFlag(d, EmberRunRules.directedForgeFlag(t))) continue;
+                if (t > 1 && !EmberSkillKit.directedForgeOpen(d, this, t)) continue;
                 int gap = Math.max(0, need - have);
                 if (gap < bestGap) { bestGap = gap; bestT = t; bestHave = have; }
                 if (have < need) {
@@ -3429,7 +3429,7 @@ public boolean pathForceOpenDoor(Player p) {
         int tier = 1;
         if (args.length >= 6) try { tier = Integer.parseInt(args[5].replace("t", "").replace("T", "")); } catch (NumberFormatException ignored) { }
         String err = EmberRunRules.exchangeCheck(marks(d, tier), tier, tier, fam, slot,
-                progressFlag(d, EmberRunRules.directedForgeFlag(tier)));
+                EmberSkillKit.directedForgeOpen(d, this, tier));
         if (err != null) { p.sendMessage(P + ChatColor.RED + err); return true; }
         if (args.length < 7 || !"confirm".equalsIgnoreCase(args[6])) { // D88: preview + confirm button (8 marks are not refunded)
             // D1354: have/need honesty
@@ -3480,7 +3480,7 @@ public boolean pathForceOpenDoor(Player p) {
         if (blocksLegacy(p.getWorld())) return null;
         PlayerData d = data(p.getUniqueId());
         if (d == null) return null;
-        boolean gate = progressFlag(d, EmberRunRules.directedForgeFlag(tier));
+        boolean gate = EmberSkillKit.directedForgeOpen(d, this, tier);
         String err = EmberRunRules.exchangeCheck(marks(d, tier), tier, tier, fam, slot, gate);
         if (err != null) return null;
         if (freeSlots(p) <= 0) return null;
@@ -3568,7 +3568,7 @@ public boolean pathForceOpenDoor(Player p) {
             if ("confirm".equals(a)) confirm = true;
             else if ("floor".equals(a) || "下限".equals(a) || "精良保".equals(a)) floor = true;
         }
-        boolean gate = tier <= 1 || progressFlag(d, EmberRunRules.directedForgeFlag(tier));
+        boolean gate = tier <= 1 || EmberSkillKit.directedForgeOpen(d, this, tier);
         String refuse = EmberForgeRollRules.refusal(marks(d, tier), tier, fam, slot, gate);
         if (refuse != null) {
             p.sendMessage(P + ChatColor.RED + refuse);

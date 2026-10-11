@@ -160,8 +160,8 @@ public final class EmberGemPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c宝石路径需本人首通 Q01。");
+        if (!EmberSkillKit.gemPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c宝石路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;

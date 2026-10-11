@@ -812,7 +812,7 @@ public final class EmberRunRules {
         String err = exchangeCheck(haveOfTier, markTier, wantTier, family, slot);
         if (err != null) return err;
         String flag = directedForgeFlag(markTier);
-        if (flag != null && !gateOpen) return "T" + markTier + " 定向锻造需本人首通 " + flag.toUpperCase(Locale.ROOT);
+        if (flag != null && !gateOpen) return "T" + markTier + " 定向锻造需本人首进或首通 " + flag.toUpperCase(Locale.ROOT);
         return null;
     }
 

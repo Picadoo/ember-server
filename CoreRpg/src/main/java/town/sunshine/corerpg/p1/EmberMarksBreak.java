@@ -138,7 +138,7 @@ public final class EmberMarksBreak {
 
         if (bagHasTierPiece(p, loadouts, lo, fam, slot, tier)) return false;
 
-        boolean gate = runs.progressFlag(d, EmberRunRules.directedForgeFlag(tier));
+        boolean gate = EmberSkillKit.directedForgeOpen(d, runs, tier);
         String err = EmberRunRules.exchangeCheck(runs.marks(d, tier), tier, tier, fam, slot, gate);
         if (err != null) return false;
         if (EmberRunService.freeSlots(p) <= 0) return false;
