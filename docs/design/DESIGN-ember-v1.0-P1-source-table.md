@@ -2429,3 +2429,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack23-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack23.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack23-d12227-2026-10-12.md` |
+
+### 13.136 Affix Pack 24 曳斩/山洼（CoreRpg 1.65.746，D12228，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12228 |
+| jar | CoreRpg **1.65.746-d12228.local** |
+| balance_version | 110 → **111** |
+| 行为 | 词缀池 48→50：+`draw` 曳斩 / `tarn` 山洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack24-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack24.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack24-d12228-2026-10-12.md` |
