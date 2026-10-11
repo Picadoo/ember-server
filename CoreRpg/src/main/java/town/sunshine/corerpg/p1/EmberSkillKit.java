@@ -101,6 +101,8 @@ public final class EmberSkillKit {
     public static final String C_PRESS_ENTER = "p1_press_enter";
     /** D2562: entered Q01 → cut path without clear-gate. */
     public static final String C_CUT_ENTER = "p1_cut_enter";
+    /** D2594: entered Q01 → rally path without clear-gate. */
+    public static final String C_RALLY_ENTER = "p1_rally_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -244,6 +246,19 @@ public final class EmberSkillKit {
     public static boolean cutPathUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
         if (d.periodCount(C_CUT_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
+    public static boolean markRallyEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_RALLY_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_RALLY_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean rallyPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_RALLY_ENTER, "all") > 0) return true;
         return runs != null && runs.firstClearedKey(d, "q01");
     }
 

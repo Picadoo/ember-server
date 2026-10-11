@@ -1384,8 +1384,11 @@ public boolean pathCutRegen(Player p) {
         if (d == null || d.s == null || !d.s.open()) return false;
         if (!d.s.committed.contains(p.getUniqueId())) return false;
         if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        PlayerData pd = dataOf(p.getUniqueId());
+        int path = pd == null ? EmberRallyPath.NONE : EmberRallyPath.get(pd);
+        int ticks = EmberRallyPath.rallySpeedTicks(path);
         p.addPotionEffect(new org.bukkit.potion.PotionEffect(
-                org.bukkit.potion.PotionEffectType.SPEED, RALLY_TICKS, 0, false, false), true);
+                org.bukkit.potion.PotionEffectType.SPEED, ticks, 0, false, false), true);
         return true;
     }
 

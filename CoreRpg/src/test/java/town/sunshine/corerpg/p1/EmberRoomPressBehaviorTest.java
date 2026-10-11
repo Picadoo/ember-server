@@ -79,4 +79,13 @@ public class EmberRoomPressBehaviorTest {
         assertEquals(30, EmberCutPath.cutRegenSlowTicks(EmberCutPath.AUTO));
         assertEquals(20, EmberCutPath.cutRegenSlowTicks(EmberCutPath.ASK));
     }
+
+    @Test
+    public void rallyEnterAndAutoLonger() {
+        PlayerData d = new PlayerData();
+        assertTrue(EmberSkillKit.markRallyEnter(d));
+        assertTrue(EmberSkillKit.rallyPathUnlocked(d, null));
+        assertEquals(EmberRunService.RALLY_TICKS + 20, EmberRallyPath.rallySpeedTicks(EmberRallyPath.AUTO));
+        assertEquals(EmberRunService.RALLY_TICKS, EmberRallyPath.rallySpeedTicks(EmberRallyPath.ASK));
+    }
 }

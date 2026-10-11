@@ -82,7 +82,7 @@ public final class EmberRallyPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8突进路径：首通 Q01 后可选";
+        if (!unlocked) return "§8突进路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8突进路径：未选 · /corerpg p1 rallypath";
         return "§e突进路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -90,10 +90,20 @@ public final class EmberRallyPath {
     public static boolean shouldAuto(int path) { return path == AUTO; }
     public static boolean shouldMute(int path) { return path == MUTE; }
 
+    /** D2595: AUTO gets 5s Speed; ASK/manual 4s. */
+    public static int rallySpeedTicks(int path) {
+        return path == AUTO ? EmberRunService.RALLY_TICKS + 20 : EmberRunService.RALLY_TICKS;
+    }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
+
+
     /** Hub/smoke Speed without a director. */
     public static boolean rallyLocal(Player p) {
         if (p == null || !p.isOnline()) return false;
-        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, EmberRunService.RALLY_TICKS, 0, false, false), true);
+        PlayerData d = dataOf(p);
+        int path = d == null ? NONE : get(d);
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, rallySpeedTicks(path), 0, false, false), true);
         return true;
     }
 
@@ -188,8 +198,8 @@ public final class EmberRallyPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c突进路径需本人首通 Q01。");
+        if (!EmberSkillKit.rallyPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c突进路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;
