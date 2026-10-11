@@ -5773,7 +5773,10 @@ public final class EmberCommand {
             Player p = (Player) s;
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             if (!runs.pathCutRegen(p)) p.sendMessage(P + "无法打断（无再生读条/未进本）");
-            else p.sendMessage(P + "§a打断·手点 §7已传至再生精英");
+            else {
+                EmberCutPath.applyCutLand(p, runs);
+                p.sendMessage(P + "§a打断·手点 §7已传至再生精英");
+            }
             return true;
     }
 

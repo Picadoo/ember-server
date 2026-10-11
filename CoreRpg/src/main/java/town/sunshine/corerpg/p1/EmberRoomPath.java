@@ -188,6 +188,10 @@ public final class EmberRoomPath {
                         org.bukkit.potion.PotionEffectType.SPEED, ticks, 0, false, true), true);
                 try {
                     p.sendMessage(EmberRunService.P + "§a房序优房 · §f" + r.label + " §7Speed I " + (ticks / 20) + "s");
+                    if (r.id.equals(s.eventRoom) && s.eventRoom != null && !s.eventRoom.isEmpty()) {
+                        p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                                org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE, 20, 0, false, true), true);
+                    }
                     p.sendActionBar("§a优房 · §f" + label(path));
                 } catch (Throwable ignored) { }
             }

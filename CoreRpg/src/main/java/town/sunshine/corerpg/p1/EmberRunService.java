@@ -1090,7 +1090,14 @@ public final class EmberRunService implements Listener {
                 && d.s.committed.contains(p.getUniqueId());
     }
 
-    public boolean pathCutRegen(Player p) {
+        /** D2563: Slow nearest regen-channel elite. */
+    public void applyCutRegenSlow(Player p, int ticks) {
+        if (p == null) return;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d != null) d.applyCutRegenSlow(p, ticks);
+    }
+
+public boolean pathCutRegen(Player p) {
         if (p == null) return false;
         EmberRunDirector d = byWorld.get(p.getWorld().getName());
         if (d == null || d.s == null || !d.s.open()) return false;

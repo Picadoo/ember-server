@@ -63,4 +63,12 @@ public class EmberRoomPressBehaviorTest {
         assertEquals(30, EmberPressPath.pressBossSlowTicks(EmberPressPath.AUTO));
         assertEquals(20, EmberPressPath.pressBossSlowTicks(EmberPressPath.ASK));
     }
+
+    @Test
+    public void cutEnterLatch() {
+        PlayerData d = new PlayerData();
+        assertTrue(EmberSkillKit.markCutEnter(d));
+        assertFalse(EmberSkillKit.markCutEnter(d));
+        assertTrue(EmberSkillKit.cutPathUnlocked(d, null));
+    }
 }

@@ -86,7 +86,7 @@ public final class EmberCutPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8打断路径：首通 Q01 后可选";
+        if (!unlocked) return "§8打断路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8打断路径：未选 · /corerpg p1 cutpath";
         return "§e打断路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -110,6 +110,7 @@ public final class EmberCutPath {
                 Bukkit.getScheduler().runTaskLater(pl, () -> {
                     if (!p.isOnline()) return;
                     if (runs.pathCutRegen(p)) {
+                        applyCutLand(p, runs);
                         p.sendMessage(EmberRunService.P + "§a打断·自动 §7已传至再生精英");
                     }
                 }, 3L);
@@ -135,6 +136,7 @@ public final class EmberCutPath {
         int path = get(d);
         if (shouldAuto(path)) {
             if (runs != null && runs.pathCutRegen(p)) {
+                applyCutLand(p, runs);
                 p.sendMessage(EmberRunService.P + "§a打断·自动 §7已传至再生精英");
             } else {
                 p.sendMessage(EmberRunService.P + "§a打断·自动 §7待命（再生读条时贴脸）");
@@ -168,6 +170,18 @@ public final class EmberCutPath {
         return true;
     }
 
+    public static void applyCutLand(Player p, EmberRunService runs) {
+        if (p == null || runs == null) return;
+        try {
+            p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.SPEED, 30, 0, false, true), true);
+            runs.applyCutRegenSlow(p, 20);
+            try { p.sendActionBar("§a打断贴脸 · §fSlow再生 · Speed自己"); } catch (Throwable ignored) { }
+        } catch (Throwable ignored) { }
+    }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
+
     public static void scheduleOfferAfterQ01(Player p) {
         if (p == null) return;
         Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
@@ -191,8 +205,8 @@ public final class EmberCutPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c打断路径需本人首通 Q01。");
+        if (!EmberSkillKit.cutPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c打断路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;

@@ -1144,6 +1144,24 @@ final class EmberRunDirector {
     }
 
     /** D580: warp a committed player next to the nearest regen-channeling elite. */
+    void applyCutRegenSlow(Player p, int ticks) {
+        if (p == null || ticks <= 0) return;
+        Location pl = p.getLocation();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        for (Tracked tr : mobs.values()) {
+            if (tr == null || tr.le == null || tr.le.isDead()) continue;
+            if (!"regen".equals(tr.affix) || tr.regenWindowEnd <= 0) continue;
+            double d = tr.le.getLocation().distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = tr; }
+        }
+        if (best == null) return;
+        try {
+            best.le.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.SLOW, ticks, 0, false, true), true);
+        } catch (Throwable ignored) { }
+    }
+
     boolean pathCutRegen(Player p) {
         if (p == null || !p.isOnline() || !hasPendingCut()) return false;
         if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;

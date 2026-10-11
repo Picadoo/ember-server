@@ -475,3 +475,7 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 ## Room/Press behavior · D2513–D2528
 - Room bias harden + preferred-room Speed pulse
 - Press enter unlock + press-land Slow/Speed
+
+## Cut enter + event resist · D2561–D2576
+- Cut Q01 enter unlock + cut-land Slow/Speed
+- Preferred event room open Resistance I 1s

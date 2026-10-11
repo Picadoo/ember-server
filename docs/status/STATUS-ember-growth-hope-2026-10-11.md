@@ -1,14 +1,14 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.541-d2560.local**
-- D2513–D2560 room/press real path differentiation
+- jar **1.65.542-d2576.local**
+- D2513–D2576 room/press/cut pressure-path behavior
 
-## Axis
-- Room FRONT/MID/BACK: open Speed 4s/3s/2s · clear 1.5s/2s/3s
-- Press AUTO Slow 1.5s vs ASK/manual 1s · ASK CD 5s vs default 8s
-- Press Q01 enter unlock · preferred bias harden
+## Shipped summary
+- Room: bias harden · preferred open/clear Speed by FRONT/MID/BACK · event open Resist I 1s
+- Press: Q01 enter unlock · land Slow/Speed · AUTO Slow longer · ASK CD 5s
+- Cut: Q01 enter unlock · land Slow regen + Speed
 
 Talent HOLD. Twin axes STOPPED.
 
-Updated 2026-10-11 08:18 CST
+Updated 2026-10-11 08:20 CST
