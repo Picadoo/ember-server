@@ -1369,15 +1369,17 @@ public final class SkillService implements Listener {
         } catch (Throwable ignored) { }
     }
 
-    /** D650: dash path particles by set family — zero skill_mult / CD / damage. */
+    /** D650/D3577: dash path particles by set — denser trail (zero skill_mult / no radius twin). */
     private void spawnDashSetTrail(Location from, Location dest, String fam) {
         if (from == null || dest == null) return;
         String a = "FLAME", b = "SMOKE_NORMAL";
-        int na = 4, nb = 2;
-        if ("burst".equals(fam)) { a = "CRIT_MAGIC"; b = "CRIT"; na = 5; nb = 3; }
-        else if ("sustain".equals(fam)) { a = "HEART"; b = "SPELL_WITCH"; na = 3; nb = 2; }
-        else if ("scorch".equals(fam)) { a = "FLAME"; b = "LAVA"; na = 5; nb = 2; }
-        spawnParticles(from.clone().add(0, 0.2, 0), a, 12);
+        if ("burst".equals(fam)) { a = "CRIT_MAGIC"; b = "CRIT"; }
+        else if ("sustain".equals(fam)) { a = "HEART"; b = "SPELL_WITCH"; }
+        else if ("scorch".equals(fam)) { a = "FLAME"; b = "LAVA"; }
+        int na = town.sunshine.corerpg.p1.EmberDashFeel.trailPrimary(fam);
+        int nb = town.sunshine.corerpg.p1.EmberDashFeel.trailSecondary(fam);
+        int head = town.sunshine.corerpg.p1.EmberDashFeel.trailHead(fam);
+        spawnParticles(from.clone().add(0, 0.2, 0), a, head);
         for (Location sample : town.sunshine.corerpg.p1.EmberDash.pathSamples(from, dest)) {
             spawnParticles(sample.clone().add(0, 0.25, 0), a, na);
             spawnParticles(sample.clone().add(0, 0.25, 0), b, nb);
@@ -1387,15 +1389,22 @@ public final class SkillService implements Listener {
     private void spawnDashSetLand(Location dest, String fam) {
         if (dest == null) return;
         if ("burst".equals(fam)) {
-            spawnParticles(dest.clone().add(0, 0.2, 0), "CRIT_MAGIC", 22);
-            spawnParticles(dest.clone().add(0, 0.3, 0), "CRIT", 10);
+            spawnParticles(dest.clone().add(0, 0.2, 0), "CRIT_MAGIC", 26);
+            spawnParticles(dest.clone().add(0, 0.3, 0), "CRIT", 14);
         } else if ("sustain".equals(fam)) {
-            spawnParticles(dest.clone().add(0, 0.2, 0), "HEART", 8);
-            spawnParticles(dest.clone().add(0, 0.4, 0), "VILLAGER_HAPPY", 10);
+            spawnParticles(dest.clone().add(0, 0.2, 0), "HEART", 10);
+            spawnParticles(dest.clone().add(0, 0.4, 0), "VILLAGER_HAPPY", 12);
         } else {
-            spawnParticles(dest.clone().add(0, 0.2, 0), "FLAME", 18);
-            if ("scorch".equals(fam)) spawnParticles(dest.clone().add(0, 0.3, 0), "LAVA", 6);
+            spawnParticles(dest.clone().add(0, 0.2, 0), "FLAME", 22);
+            if ("scorch".equals(fam)) spawnParticles(dest.clone().add(0, 0.3, 0), "LAVA", 8);
         }
+        try {
+            if (dest.getWorld() != null) {
+                dest.getWorld().playSound(dest,
+                        town.sunshine.corerpg.p1.EmberDashFeel.landSound(fam),
+                        0.55f, town.sunshine.corerpg.p1.EmberDashFeel.landPitch(fam));
+            }
+        } catch (Throwable ignored) { }
     }
 
     /** D632: cast-time ground telegraph by shape — fan cone sparks, line trail, ring circle. No damage change. */

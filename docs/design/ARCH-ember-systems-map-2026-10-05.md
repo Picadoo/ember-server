@@ -501,5 +501,5 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - Stash enter + instance mats-only AUTO
 - Mode-hard preferred room Night Vision 3s
 
-## ExtraPath; Prep/Bar/Spice D2913–D2976; Counter+Q0x kit D3073–D3152; Q01/Q06/Q07 kit D3153–D3216; Sig variant land D3217–D3280; Boss telegraph D3281–D3344; Door tempo D3345–D3408; Link tempo D3409–D3472; Affix telegraph color D3473–D3504; Melee set spark D3505–D3552 · D2865–D2896
+## ExtraPath; Prep/Bar/Spice D2913–D2976; Counter+Q0x kit D3073–D3152; Q01/Q06/Q07 kit D3153–D3216; Sig variant land D3217–D3280; Boss telegraph D3281–D3344; Door tempo D3345–D3408; Link tempo D3409–D3472; Affix telegraph color D3473–D3504; Melee set spark D3505–D3552; Spark+Dash feel D3553–D3616 · D2865–D2896
 - Enter unlock; path-align Glow / chest ping (not Hunt/Chest twin)
