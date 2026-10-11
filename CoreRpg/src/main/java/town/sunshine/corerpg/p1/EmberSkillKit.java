@@ -613,6 +613,18 @@ public final class EmberSkillKit {
         return setShapeSync ? 1.25 : 1.0;
     }
 
+    /** D3217: charge-land Slow ticks (synced longer · zero skill_mult). */
+    public static final int CHARGE_LAND_SLOW_TICKS = 16;
+    public static int chargeLandSlowTicks(boolean setShapeSync) {
+        return CHARGE_LAND_SLOW_TICKS + (setShapeSync ? 4 : 0);
+    }
+
+    /** D3241: shield-land Resist ticks (synced longer · not path assist Resist twin). */
+    public static final int SHIELD_LAND_RESIST_TICKS = 10;
+    public static int shieldLandResistTicks(boolean setShapeSync) {
+        return SHIELD_LAND_RESIST_TICKS + (setShapeSync ? 6 : 0);
+    }
+
     /** D2380: dodge_heal ICD secs when synced. */
     public static double sigDodgeIcdSecs(double baseSecs, boolean setShapeSync) {
         if (baseSecs <= 0) return baseSecs;

@@ -356,6 +356,15 @@ public final class EmberGrowthService implements Listener {
         String shVerb = "护盾 " + String.format(Locale.ROOT, "%.1f", got) + "（" + String.format(Locale.ROOT, "%.0f", secs) + " 秒）";
         if (!flashSigOwned(p, "skill_shield", shVerb))
             p.sendActionBar(ChatColor.AQUA + "霜封护盾 " + String.format(Locale.ROOT, "%.1f", got) + "（" + String.format(Locale.ROOT, "%.0f", secs) + " 秒）");
+        // D3241: shield land feel — particle shell + brief Resist (not path assist twin)
+        try {
+            int rt = EmberSkillKit.shieldLandResistTicks(syncSh);
+            p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE, rt, 0, false, true), true);
+            org.bukkit.Location at = p.getLocation().add(0, 1.0, 0);
+            p.getWorld().spawnParticle(org.bukkit.Particle.END_ROD, at, syncSh ? 18 : 10, 0.4, 0.5, 0.4, 0.02);
+            p.playSound(p.getLocation(), org.bukkit.Sound.BLOCK_ENCHANTMENT_TABLE_USE, 0.5f, 1.35f);
+        } catch (Throwable ignored) { }
         return got;
     }
 

@@ -646,19 +646,37 @@ public final class SkillService implements Listener {
             CHARGING.put(id, until);
             player.sendMessage(PREFIX + ChatColor.GOLD + String.format(java.util.Locale.ROOT, "烬斩蓄力 %.1fs（蓄力时普攻无效）", charge));
             playSound(player.getLocation(), "BLOCK_BEACON_POWER_SELECT");
+            // D3218: charge wind-up ground pulses (geometry feel · zero skill_mult)
+            long pulseTicks = Math.max(1L, Math.round(charge * 20.0));
+            for (long pt = 4L; pt < pulseTicks; pt += 4L) {
+                final long mark = until;
+                org.bukkit.Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    if (!player.isOnline()) return;
+                    Long u = CHARGING.get(id);
+                    if (u == null || u != mark) return;
+                    spawnShapeGroundTelegraph(player, sh);
+                }, pt);
+            }
             org.bukkit.Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 Long u = CHARGING.get(id);
                 if (u != null && u == until) CHARGING.remove(id);
                 if (!player.isOnline() || player.isDead() || !town.sunshine.corerpg.p1.EmberMode.isP1(player)) return;
                 List<LivingEntity> t2 = slashTargets(player, fRange, fArc, fLine, fLineW);
-                if (t2.isEmpty()) { player.sendMessage(PREFIX + ChatColor.YELLOW + "烬斩蓄力落空（范围里没有目标了）"); return; }
-                landEmberSlash(player, ls, t2, fMax, fMods, true, gsv, sh.id);
+                if (t2.isEmpty()) {
+                    player.sendMessage(PREFIX + ChatColor.YELLOW + "烬斩蓄力落空（范围里没有目标了）");
+                    try {
+                        player.getWorld().spawnParticle(org.bukkit.Particle.SMOKE_NORMAL, player.getLocation().add(0, 0.8, 0), 12, 0.3, 0.2, 0.3, 0.01);
+                        player.sendActionBar("§8蓄力落空");
+                    } catch (Throwable ignored) { }
+                    return;
+                }
+                landEmberSlash(player, ls, t2, fMax, fMods, true, gsv, sh.id, true);
                 player.sendMessage(PREFIX + ChatColor.GREEN + "释放 烬斩（蓄力）");
             }, Math.max(1L, Math.round(charge * 20.0)));
             return;
         }
         List<LivingEntity> landed = slashTargets(player, fRange, fArc, fLine, fLineW);
-        landEmberSlash(player, ls, landed, fMax, gmods, variant, gsv, sh.id);
+        landEmberSlash(player, ls, landed, fMax, gmods, variant, gsv, sh.id, false);
         String tip = sh.sigOverride || sh.id != town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_FAN
                 ? "释放 烬斩（" + sh.label + "）" : "释放 烬斩";
         String slashId = slashSetTip(player);
@@ -951,6 +969,11 @@ public final class SkillService implements Listener {
 
     private void landEmberSlash(Player player, town.sunshine.corerpg.p1.EmberLoadoutService ls, List<LivingEntity> targets, int maxTargets,
                                 town.sunshine.corerpg.p1.EmberGrowth.Mods gmods, boolean variant, town.sunshine.corerpg.p1.EmberGrowthService gsv, int shapeId) {
+        landEmberSlash(player, ls, targets, maxTargets, gmods, variant, gsv, shapeId, false);
+    }
+
+    private void landEmberSlash(Player player, town.sunshine.corerpg.p1.EmberLoadoutService ls, List<LivingEntity> targets, int maxTargets,
+                                town.sunshine.corerpg.p1.EmberGrowth.Mods gmods, boolean variant, town.sunshine.corerpg.p1.EmberGrowthService gsv, int shapeId, boolean charged) {
         Location eye = player.getEyeLocation();
         Vector look = eye.getDirection().normalize();
         double b = ls.get(player).b;
@@ -991,6 +1014,24 @@ public final class SkillService implements Listener {
             }
         } finally {
             town.sunshine.corerpg.p1.EmberCombatListener.internalTag = prevTag;
+        }
+        if (charged && !hit.isEmpty()) {
+            boolean syncCh = false;
+            try {
+                String famCh = ls.get(player).activeSet;
+                syncCh = dashShapeSynced(player, famCh);
+            } catch (Throwable ignored) { }
+            int slowT = town.sunshine.corerpg.p1.EmberSkillKit.chargeLandSlowTicks(syncCh);
+            int lim = Math.min(hit.size(), 4);
+            for (int i = 0; i < lim; i++) {
+                hit.get(i).addPotionEffect(new org.bukkit.potion.PotionEffect(
+                        org.bukkit.potion.PotionEffectType.SLOW, slowT, 0, false, true), true);
+            }
+            try {
+                player.getWorld().spawnParticle(org.bukkit.Particle.EXPLOSION_LARGE, player.getLocation().add(0, 0.5, 0), 1, 0, 0, 0, 0);
+                player.playSound(player.getLocation(), org.bukkit.Sound.ENTITY_GENERIC_EXPLODE, 0.35f, 1.4f);
+            } catch (Throwable ignored) { }
+            try { player.sendActionBar("§6蓄力落地 · §f缓速"); } catch (Throwable ignored) { }
         }
         applySlashSetIdentity(player, hit);
         maybeFlashSlashHit(player, hit.size(), shapeId); // D445 / D1155 SF1–SF3
