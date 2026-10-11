@@ -33,4 +33,12 @@ public class EmberLinkFleeBehaviorTest {
         assertEquals(8, EmberFleePath.autoDelayTicks(EmberFleePath.AUTO));
         assertEquals(15, EmberFleePath.autoDelayTicks(EmberFleePath.ASK));
     }
+
+    @Test
+    public void preferredClearFasterAndFleeAskCd() {
+        assertEquals(1, EmberLinkPath.autoDelayTicks(EmberLinkPath.AUTO, true));
+        assertEquals(2, EmberLinkPath.autoDelayTicks(EmberLinkPath.AUTO, false));
+        assertEquals(8000L, EmberFleePath.askCooldownMs(EmberFleePath.ASK));
+        assertEquals(12000L, EmberFleePath.askCooldownMs(EmberFleePath.NONE));
+    }
 }

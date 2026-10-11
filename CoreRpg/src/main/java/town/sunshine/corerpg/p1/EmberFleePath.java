@@ -1,5 +1,7 @@
 package town.sunshine.corerpg.p1;
 
+import java.util.UUID;
+
 import java.util.Locale;
 
 import org.bukkit.Bukkit;
@@ -92,6 +94,14 @@ public final class EmberFleePath {
         return path == AUTO ? 8 : 15;
     }
 
+    private static final long ASK_COOLDOWN_MS = 12000L;
+    private static final long ASK_PATH_COOLDOWN_MS = 8000L;
+    private static final java.util.Map<UUID, Long> lastAsk = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
+
+    static long askCooldownMs(int path) {
+        return path == ASK ? ASK_PATH_COOLDOWN_MS : ASK_COOLDOWN_MS;
+    }
+
     public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
 
 
@@ -116,6 +126,10 @@ public final class EmberFleePath {
             return;
         }
         if (shouldMute(path)) return;
+        long now = System.currentTimeMillis();
+        Long last = lastAsk.get(p.getUniqueId());
+        if (last != null && now - last < askCooldownMs(path)) return;
+        lastAsk.put(p.getUniqueId(), now);
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e你已倒下 ",
                 new String[]{"[离本]", "/corerpg p1 flee", "离开副本回城", "GREEN"},
                 new String[]{"[改路径]", "/corerpg p1 flepath", "自动/提醒/静默", "GRAY"});

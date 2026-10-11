@@ -92,9 +92,14 @@ public final class EmberLinkPath {
     private static final long ASK_PATH_COOLDOWN_MS = 5000L;
     private static final java.util.Map<UUID, Long> lastAsk = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
 
-    /** D2723: AUTO hops faster than legacy 5t. */
+    /** D2723/D2754: AUTO 2t; preferred-room just cleared → 1t. */
     public static int autoDelayTicks(int path) {
-        return path == AUTO ? 2 : 5;
+        return autoDelayTicks(path, false);
+    }
+
+    public static int autoDelayTicks(int path, boolean preferredJustCleared) {
+        if (path == AUTO) return preferredJustCleared ? 1 : 2;
+        return 5;
     }
 
     static long askCooldownMs(int path) {
@@ -117,7 +122,9 @@ public final class EmberLinkPath {
             if (d == null) continue;
             int path = get(d);
             if (shouldAuto(path)) {
-                final int delay = autoDelayTicks(path);
+                boolean prefClear = EmberRoomPath.valid(EmberRoomPath.get(d))
+                        && EmberRoomPath.isPreferredRoom(EmberRoomPath.get(d), afterRoom);
+                final int delay = autoDelayTicks(path, prefClear);
                 Bukkit.getScheduler().runTaskLater(pl, () -> {
                     if (!p.isOnline()) return;
                     if (runs.pathTakeLinks(p, afterRoom, true)) {
