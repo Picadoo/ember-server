@@ -414,15 +414,28 @@ public final class LifeService implements Listener {
 
     private boolean buy(Player p, PlayerData d, Offer o, boolean verbose) {
         if (o.lifeLevel > lifeLevel(d)) {
-            if (verbose) {
-                int haveLv = lifeLevel(d);
-                p.sendMessage(ChatColor.RED + "[生活] 需要生活 Lv." + o.lifeLevel + "（钓鱼/烹饪/熬药升级）· 现 Lv." + haveLv
-                        + " · 还差 " + (o.lifeLevel - haveLv) + " 级");
-                try { // D1572
-                    p.sendActionBar("§e生活 · 需 Lv." + o.lifeLevel + " §8· 现" + haveLv);
-                } catch (Throwable ignored) { }
+            try {
+                if (town.sunshine.corerpg.p1.EmberLifeLevelGateSoft.consume(d)) { // D9505
+                    p.sendMessage(ChatColor.GREEN + "[生活] 等级门容错 · 跳过 Lv." + o.lifeLevel + "（今日一次）");
+                    try { p.sendActionBar("§a生活 · 等级门容错"); } catch (Throwable ignored) { }
+                } else {
+                    if (verbose) {
+                        int haveLv = lifeLevel(d);
+                        p.sendMessage(ChatColor.RED + "[生活] 需要生活 Lv." + o.lifeLevel + "（钓鱼/烹饪/熬药升级）· 现 Lv." + haveLv
+                                + " · 还差 " + (o.lifeLevel - haveLv) + " 级");
+                        try { // D1572
+                            p.sendActionBar("§e生活 · 需 Lv." + o.lifeLevel + " §8· 现" + haveLv);
+                        } catch (Throwable ignored) { }
+                    }
+                    return false;
+                }
+            } catch (Throwable ignored) {
+                if (verbose) {
+                    int haveLv = lifeLevel(d);
+                    p.sendMessage(ChatColor.RED + "[生活] 需要生活 Lv." + o.lifeLevel + " · 现 Lv." + haveLv);
+                }
+                return false;
             }
-            return false;
         }
         String wk = DailyService.weekId(), td = DailyService.today();
         if (o.weekly > 0 && d.periodCount("life_" + o.id, wk) >= o.weekly) {

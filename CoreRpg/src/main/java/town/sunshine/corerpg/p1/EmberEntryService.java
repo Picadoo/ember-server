@@ -342,7 +342,12 @@ public final class EmberEntryService {
             return "§c" + m.rushLabel + " §7正在创建实例……（不耗体力 · " + EmberRushService.ruleText(m) + " · "
                 + (EmberRunRules.rushPaysReward(runs.rush().week(runs.dataOf(p.getUniqueId()), p.getUniqueId(), m), m.rushWeekly) ? "§a你本周奖励未领完§7" : "§e你本周已领完，这局是练习（无奖励）§7") + "）";
         }
-        if (m.shortExpedition) return runs.shortExpedition().enteringLine(p, m, cost);
+        if (m.shortExpedition) {
+            try {
+                EmberShortEnterBrace.maybeBrace(p, runs.dataOf(p.getUniqueId())); // D9537
+            } catch (Throwable ignored) { }
+            return runs.shortExpedition().enteringLine(p, m, cost);
+        }
         if (m.event) {
             EmberFestival festival = runs.festival();
             return "§c国庆活动本 §6" + m.name + " §7正在创建实例……（不耗体力 · 今日第 " + (festival.entriesToday(runs.dataOf(p.getUniqueId())) + 1) + "/" + festival.dailyEntries + " 次）";

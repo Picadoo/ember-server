@@ -1,3 +1,6 @@
+Live jar: **1.65.680-d9568.local** · D9505–D9568 LifeLevelGateSoft + ShortEnterBrace + CustomDotSoft
+Prior: Pet/Fire/Proj
+
 Live jar: **1.65.679-d9504.local** · D9441–D9504 PetHatchSoft + FireBlockSoft + ProjectileSoft
 Prior: Abyss/Main/Stable
 
