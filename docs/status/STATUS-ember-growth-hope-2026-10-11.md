@@ -1,3 +1,6 @@
+Live jar: **1.65.659-d8224.local** · D8161–D8224 SlashFirstHeal + KillStreakSpeed + EnhanceFailBone
+Prior: ForgeQ/Craft/ChargeHeal
+
 Live jar: **1.65.658-d8160.local** · D8097–D8160 ForgeQualityFloor + ForgeCraftFloor + ChargeLandHeal
 Prior: Regen/Frost/Jailer
 

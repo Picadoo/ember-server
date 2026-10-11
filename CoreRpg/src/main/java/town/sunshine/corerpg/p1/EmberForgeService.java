@@ -433,6 +433,12 @@ public final class EmberForgeService implements Listener {
         payDurable(p, rr, "enhance", c.cost, () -> {
             Plan plan = EmberUpgradeRules.enhance(d, ThreadLocalRandom.current().nextDouble());
             commit(p, "enhance", rr, c.cost, Arrays.asList(new TxnItem(d, plan.after, null)), plan.note);
+            try {
+                if (plan.after != null && plan.after.enhance == d.enhance) {
+                    PlayerData pdB = plugin.getDataStore().get(p.getUniqueId());
+                    EmberEnhanceFailBone.maybeGift(p, pdB); // D8209
+                }
+            } catch (Throwable ignored) { }
         });
         return true;
     }

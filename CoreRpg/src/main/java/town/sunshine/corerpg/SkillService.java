@@ -1095,6 +1095,12 @@ public final class SkillService implements Listener {
             } catch (Throwable ignored) { }
         }
         applySlashSetIdentity(player, hit);
+        if (!hit.isEmpty()) {
+            try {
+                town.sunshine.corerpg.PlayerData pdS = plugin.getDataStore().get(player.getUniqueId());
+                town.sunshine.corerpg.p1.EmberSlashFirstHeal.maybeHeal(player, pdS); // D8161
+            } catch (Throwable ignored) { }
+        }
         maybeFlashSlashHit(player, hit.size(), shapeId); // D445 / D1155 SF1–SF3
         if (hit.isEmpty()) maybeFlashSlashMiss(player, shapeId); // D1209
         if (look2 != null) {

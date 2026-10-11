@@ -3406,6 +3406,10 @@ final class EmberRunDirector {
             return false;
         }
         noteEventKill(t); // D191 裂隙 / 连斩
+        try {
+            if (!t.varietyEscort && !t.boss())
+                EmberKillStreakSpeed.noteKill(s == null ? null : s.runId, participantsHere()); // D8193
+        } catch (Throwable ignored) { }
         if (t.affix != null) { // D138/D171/D181
             if ("frost".equals(t.affix)) clearFrostSlow();
             if ("split".equals(t.affix)) splitAdds(t);
@@ -3425,6 +3429,7 @@ final class EmberRunDirector {
     }
 
     void finish() {
+        try { EmberKillStreakSpeed.clear(s == null ? null : s.runId); } catch (Throwable ignored) { }
         doorPending = null;
         doorOpenAt = 0;
         finished = true;
