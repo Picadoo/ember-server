@@ -3763,10 +3763,11 @@ final class EmberRunDirector {
      * Raids keep {@link EmberRaidService#halfHpCue}; R03 share stays on warn line.
      */
     static String storyHalfHpCue(String mapKey) {
-        if ("q03".equals(mapKey)) return "§e半血增援 §7· 两侧加怪";
+        if ("q03".equals(mapKey)) return "§e半血增援+破招 §7· 誓魂汲取可打断";
+        if ("q05".equals(mapKey)) return "§e半血破招 §7· 塔心聚裂可打断";
         if ("q06".equals(mapKey)) return "§e半血破招 §7· 霜潮汲取可打断";
         if ("q07".equals(mapKey)) return "§e半血破招 §7· 炉心聚爆可打断";
-        return "§e半血 · 招式变强"; // q01 / q02 / q04 / q05 + default
+        return "§e半血 · 招式变强"; // q01 / q02 / q04 + default
     }
 
     /** D304 / D303: resolve half-HP chat line for current run map. */

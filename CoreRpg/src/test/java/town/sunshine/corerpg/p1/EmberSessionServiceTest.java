@@ -134,7 +134,7 @@ public final class EmberSessionServiceTest {
         assertEquals(30, maps.cost);
         assertEquals(30, maps.cost(maps.byKey("q01")));
         assertTrue(maps.passSeconds > 0);
-        assertEquals(83, maps.balanceVersion); // bv83 pin — session extract must not bump numbers
+        assertEquals(92, maps.balanceVersion); // D12209 Pack6 bv pin
     }
 
     @Test public void abyssRhythmReveal_matchesD300Copy() {

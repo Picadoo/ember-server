@@ -361,8 +361,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(89, m.balanceVersion);                // D428 sx19 S58
-        assertEquals("g04-1/b89", m.ruleVersion);
+        assertEquals(92, m.balanceVersion);                // D12209 Pack6 mid-game break
+        assertEquals("g04-1/b92", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1988,7 +1988,8 @@ public class EmberRunRulesTest {
 
     @Test public void lateBossesHaveOneHalfHpBreakChannel_D193() {
         EmberRunMaps m = bundled();
-        String[][] want = {{"q06", "霜潮汲取", "0.3"}, {"q07", "炉心聚爆", "0.5"}};
+        // D193 Q06/Q07 + D12209 Pack6 mid-game Q03/Q05
+        String[][] want = {{"q03", "誓魂汲取", "0.3"}, {"q05", "塔心聚裂", "0.3"}, {"q06", "霜潮汲取", "0.3"}, {"q07", "炉心聚爆", "0.5"}};
         for (String[] w : want) {
             int n = 0;
             for (EmberRunMaps.Skill sk : m.byKey(w[0]).boss.skills) {
@@ -2006,7 +2007,7 @@ public class EmberRunRulesTest {
             }
             assertEquals(w[0] + " exactly one break channel", 1, n);
         }
-        for (String k : new String[]{"q01", "q02", "q03", "q04", "q05", "r01", "r02", "r03"})
+        for (String k : new String[]{"q01", "q02", "q04", "r01", "r02", "r03"})
             for (EmberRunMaps.Skill sk : m.byKey(k).boss.skills) assertEquals(k + " untouched", 0.0, sk.breakHp, 0);
     }
 
@@ -2033,13 +2034,13 @@ public class EmberRunRulesTest {
         assertEquals(40.0, m.byKey("q01").boss.skills.get(1).every, 0);
         assertEquals(3, m.byKey("q02").boss.skills.size());
         assertEquals(13.0, m.byKey("q02").boss.skills.get(0).every, 0);
-        assertEquals(2, m.byKey("q03").boss.skills.size());
+        assertEquals(3, m.byKey("q03").boss.skills.size()); // D12209 +誓魂汲取
         assertEquals(16.5, m.byKey("q03").boss.skills.get(0).every, 0);
         assertEquals(18.0, m.byKey("q03").boss.skills.get(1).every, 0);
         assertEquals("誓印扇", m.byKey("q03").boss.skills.get(1).follow.name);
         assertEquals(3, m.byKey("q04").boss.skills.size());
         assertEquals(18.0, m.byKey("q04").boss.skills.get(2).every, 0);
-        assertEquals(3, m.byKey("q05").boss.skills.size());
+        assertEquals(4, m.byKey("q05").boss.skills.size()); // D12209 +塔心聚裂
         assertEquals(19.0, m.byKey("q05").boss.skills.get(2).every, 0);
         assertEquals(3, m.byKey("q06").boss.skills.size()); // D193 +霜潮汲取 (break channel, last)
         assertEquals(13.0, m.byKey("q06").boss.skills.get(0).every, 0);
