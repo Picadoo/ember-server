@@ -599,3 +599,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D9889–D9952: ForgeRollCostSoft + QualityCostSoft + RerollLockShardSoft. STOP densify those + attune/exchange/enhanceundo + priors. Talent HOLD. Six-slot HOLD.
 - D9953–D10016: ForgeRollFloorSoft + ImprintMarkSoft + FestBadgeSoft. STOP densify those + forgeroll-cost/quality/lockshard/attune/exchange + priors. Talent HOLD. Six-slot HOLD.
 - D10017–D10080: WeeklyGoalRewardBoost + WeeklyGoalTargetSoft + BountyWeightBoost. STOP densify those + rollfloor/imprintmark/festbadge + priors. Talent HOLD. Six-slot HOLD.
+- D10081–D10144: VarietyBountyCountSoft + VarietyBountyRewardBoost + HonorCoinBoost. STOP densify those + goal-bounty + priors. Talent HOLD. Six-slot HOLD.

@@ -1,3 +1,4 @@
+Live jar: **1.65.689-d10144.local** · D10081–D10144 VarietyBountyCountSoft + VarietyBountyRewardBoost + HonorCoinBoost
 Live jar: **1.65.688-d10080.local** · D10017–D10080 WeeklyGoalRewardBoost + WeeklyGoalTargetSoft + BountyWeightBoost
 Prior: RollFloor/ImprintMark/FestBadge
 

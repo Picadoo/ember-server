@@ -244,6 +244,12 @@ public final class EmberSettleService {
         runs.endInstance(s, true);
     }
 
+    /** D10081: variety bounty with soft need count. */
+    static EmberRunRules.VarietyBounty softVb(EmberRunRules.VarietyBounty vb, int need) {
+        if (vb == null || need == vb.count) return vb;
+        return new EmberRunRules.VarietyBounty(vb.kind, need, vb.coin, vb.shard);
+    }
+
     void settleFor(EmberRunSession s, EmberRunMaps.MapDef m, UUID u) {
         PlayerData pd = runs.dataOf(u);
         EmberRunRules.SettleInput in = new EmberRunRules.SettleInput();
@@ -363,10 +369,49 @@ public final class EmberSettleService {
         for (EmberRunRules.VarietyBounty vb : vbs) {
             boolean hit = "affix".equals(vb.kind) ? s.affixDone : s.eventDone;
             if (!hit) continue;
+            int need = vb.count;
             int prev = pd.periodCount(EmberRunService.C_VBOUNTY + vb.kind, bDay);
-            List<EmberRunRules.Grant> g = EmberRunRules.varietyBountyGrants(vb, prev, true);
-            if (prev < vb.count) { pd.addPeriodCount(EmberRunService.C_VBOUNTY + vb.kind, bDay, 1); vbMoved = true; }
-            if (!g.isEmpty()) { grants.addAll(g); vbDone.add(vb.label() + "（" + vb.rewardText() + "）"); }
+            try {
+                int soft = EmberVarietyBountyCountSoft.softCount(pd, vb.count); // D10081
+                if (soft < vb.count && prev < vb.count) {
+                    need = soft;
+                    if (prev < soft && EmberVarietyBountyCountSoft.consume(pd)) {
+                        Player tip = Bukkit.getPlayer(u);
+                        if (tip != null && tip.isOnline()) {
+                            tip.sendMessage(EmberRunService.P + "§a花样减负 · 需求 −1（今日一次 · " + vb.label() + "）");
+                            try { tip.sendActionBar("§a花样减负"); } catch (Throwable ignored) { }
+                        }
+                    } else if (EmberVarietyBountyCountSoft.usedToday(pd)) {
+                        need = soft;
+                    }
+                }
+            } catch (Throwable ignored) { }
+            List<EmberRunRules.Grant> g = EmberRunRules.varietyBountyGrants(
+                    softVb(vb, need), prev, true);
+            if (prev < need) { pd.addPeriodCount(EmberRunService.C_VBOUNTY + vb.kind, bDay, 1); vbMoved = true; }
+            if (!g.isEmpty()) {
+                try {
+                    if (EmberVarietyBountyRewardBoost.ready(pd)) {
+                        List<EmberRunRules.Grant> boosted = new ArrayList<EmberRunRules.Grant>();
+                        boolean consumed = false;
+                        for (EmberRunRules.Grant gr : g) {
+                            int amt = EmberVarietyBountyRewardBoost.applyAmount(pd, gr.amount, !consumed); // D10097
+                            if (amt > gr.amount) consumed = true;
+                            boosted.add(new EmberRunRules.Grant(gr.key, gr.kind, gr.id, amt, gr.item));
+                        }
+                        if (consumed) {
+                            g = boosted;
+                            Player tip = Bukkit.getPlayer(u);
+                            if (tip != null && tip.isOnline()) {
+                                tip.sendMessage(EmberRunService.P + "§a花样加码 · 奖励 ×2（今日一次）");
+                                try { tip.sendActionBar("§a花样加码"); } catch (Throwable ignored) { }
+                            }
+                        }
+                    }
+                } catch (Throwable ignored) { }
+                grants.addAll(g);
+                vbDone.add(vb.label() + "（" + vb.rewardText() + "）");
+            }
         }
         try {
             if (fresh && !s.challenge && s.abyss == 0 && !m.raid && !m.event && !m.rush
@@ -393,6 +438,17 @@ public final class EmberSettleService {
             int coins = 0;
             for (EmberRunRules.Grant g : grants) if (g.kind == EmberRunRules.Kind.COIN) coins += g.amount;
             int hc = growth.honorCoin(gp, coins), hs = growth.honorShard(gp);
+            try {
+                int boosted = EmberHonorCoinBoost.apply(pd, hc); // D10113
+                if (boosted > hc) {
+                    hc = boosted;
+                    Player tip = Bukkit.getPlayer(u);
+                    if (tip != null && tip.isOnline()) {
+                        tip.sendMessage(EmberRunService.P + "§a勋记加码 · 余烬币 +" + EmberHonorCoinBoost.BONUS + "（今日一次）");
+                        try { tip.sendActionBar("§a勋记加码"); } catch (Throwable ignored) { }
+                    }
+                }
+            } catch (Throwable ignored) { }
             if (hc > 0) grants.add(new EmberRunRules.Grant("honor_coin", EmberRunRules.Kind.COIN, null, hc, null));
             if (hs > 0) grants.add(new EmberRunRules.Grant("honor_shard", EmberRunRules.Kind.MAT, EmberUpgradeRules.MAT_SHARD, hs, null));
         }
