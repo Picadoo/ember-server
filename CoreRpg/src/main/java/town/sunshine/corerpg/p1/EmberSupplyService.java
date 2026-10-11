@@ -172,7 +172,7 @@ public final class EmberSupplyService implements Listener {
         return EmberBarPath.emptyHotbar(p, EmberBarPath.get(d));
     }
 
-    boolean isHealPotion(ItemStack s) {
+    public boolean isHealPotion(ItemStack s) {
         if (s == null || s.getType() == org.bukkit.Material.AIR) return false;
         if (isBound(s)) return true;
         NiBridge ni = plugin.getNiBridge();

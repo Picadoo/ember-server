@@ -441,6 +441,7 @@ final class EmberRunDirector {
             eventWarned = false;
             eventFailed = false;
             String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
+            EmberSpicePath.maybeAlignCue(s, svc, "event", kind); // D2926
             EmberRunMaps.Variety v = svc.maps().variety;
             lastEventTickMs = eventStart;
             if ("crystal".equals(kind)) {
@@ -2157,6 +2158,7 @@ final class EmberRunDirector {
         t.le.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 600, 0, false, false), true);
         String how = EmberAffixes.how(t.affix, v);
         svc.tellRun(s, "§6词缀精英「" + tag + "」§7出现：" + how + " · 击败 → 结算时 §f余烬碎片 +" + v.affixShard);
+        EmberSpicePath.maybeAlignCue(s, svc, "affix", t.affix); // D2926
         EmberFocusPath.maybeAfterFocus(s); // D597
         if ("shield".equals(t.affix)) EmberShellPath.maybeAfterShell(s); // D583
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s affix %s on %s hp=%.0f", s.runId, t.roomId, t.affix, t.role, t.le.getMaxHealth()));

@@ -102,7 +102,7 @@ public final class EmberSpicePath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8花样路径：首通 Q02 后可选（重打本花样）";
+        if (!unlocked) return "§8花样路径：首进/首通 Q02 后可选（重打本花样）";
         if (!valid(id)) return "§8花样路径：未选 · /corerpg p1 spicepath";
         return "§e花样路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -125,12 +125,9 @@ public final class EmberSpicePath {
             List<String> cand = intersect(affixPool, want);
             if (cand.isEmpty()) return v;
             String pick = cand.get(Math.floorMod(r.nextInt(), cand.size()));
-            if (v[1].isEmpty()) {
-                v[0] = v[0].isEmpty() ? roomPick(r) : v[0];
-                v[1] = pick;
-            } else if (!want.contains(v[1])) {
-                v[1] = pick; // keep room
-            }
+            // D2945: always land preferred-family affix when pool intersects (real scroll bias)
+            v[0] = v[0].isEmpty() ? roomPick(r) : v[0];
+            v[1] = pick;
             return v;
         }
         // OBJECTIVE
@@ -138,14 +135,9 @@ public final class EmberSpicePath {
         if (cand.isEmpty()) cand = eventPool == null ? Collections.<String>emptyList() : eventPool;
         if (cand == null || cand.isEmpty()) return v;
         String pick = cand.get(Math.floorMod(r.nextInt(), cand.size()));
-        if (v[2].isEmpty()) {
-            v[2] = roomPick(r);
-            v[3] = pick;
-        } else if (!OBJECTIVE_EVENT.contains(v[3]) && OBJECTIVE_EVENT.contains(pick)) {
-            v[3] = pick; // remap timed → objective when possible
-        } else if (!cand.contains(v[3])) {
-            v[3] = pick;
-        }
+        // D2945: always land objective-family event when pool intersects
+        v[2] = v[2].isEmpty() ? roomPick(r) : v[2];
+        v[3] = pick;
         return v;
     }
 
@@ -159,6 +151,40 @@ public final class EmberSpicePath {
     static String roomPick(Random r) {
         String[] rooms = {"r1", "r2", "r3"};
         return rooms[Math.floorMod(r.nextInt(), 3)];
+    }
+
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ02(p); }
+
+    public static boolean matchesAffix(int spice, String affix) {
+        if (affix == null || affix.isEmpty()) return false;
+        if (spice == BLAZE) return BLAZE_AFFIX.contains(affix);
+        if (spice == CONTROL) return CONTROL_AFFIX.contains(affix);
+        return false;
+    }
+
+    public static boolean matchesEvent(int spice, String eventKind) {
+        if (spice != OBJECTIVE || eventKind == null || eventKind.isEmpty()) return false;
+        return OBJECTIVE_EVENT.contains(eventKind);
+    }
+
+    /** D2926: spice-align cue (no Glow twin — affix already glows). */
+    public static void maybeAlignCue(EmberRunSession s, EmberRunService runs, String kind, String id) {
+        if (s == null || runs == null || id == null || id.isEmpty()) return;
+        for (java.util.UUID u : s.committed) {
+            PlayerData d = runs.dataOf(u);
+            int spice = get(d);
+            if (!valid(spice)) continue;
+            boolean ok = "affix".equals(kind) ? matchesAffix(spice, id) : matchesEvent(spice, id);
+            if (!ok) continue;
+            org.bukkit.entity.Player p = org.bukkit.Bukkit.getPlayer(u);
+            if (p == null || !p.isOnline()) continue;
+            try {
+                p.sendMessage(EmberRunService.P + "§a花样对齐 · §f" + label(spice) + " §7· " + id);
+                p.sendActionBar("§a花样对齐 · §f" + label(spice));
+                p.playSound(p.getLocation(), org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 1.35f);
+            } catch (Throwable ignored) { }
+        }
     }
 
     public static void offerPick(Player p) {
@@ -206,8 +232,8 @@ public final class EmberSpicePath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK)) {
-            p.sendMessage(EmberRunService.P + "§c花样路径需本人首通 Q02（重打本花样解锁）。");
+        if (!EmberSkillKit.spicePathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c花样路径需本人首进或首通 Q02。");
             return;
         }
         String P = EmberRunService.P;

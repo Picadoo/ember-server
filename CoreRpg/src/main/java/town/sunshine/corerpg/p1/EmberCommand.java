@@ -2950,18 +2950,18 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            boolean unlocked = runs.progressFlag(d, "q01");
+            boolean unlocked = EmberSkillKit.barPathUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberBarPath.glance(EmberBarPath.get(d), unlocked));
                 if (!unlocked) {
-                    p.sendMessage(P + "§c药栏路径需本人首通 Q01。");
+                    p.sendMessage(P + "§c药栏路径需本人首进或首通 Q01。");
                     return true;
                 }
                 EmberBarPath.offerPick(p);
                 return true;
             }
             if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
-                if (!unlocked) { p.sendMessage(P + "§c药栏路径需本人首通 Q01。"); return true; }
+                if (!unlocked) { p.sendMessage(P + "§c药栏路径需本人首进或首通 Q01。"); return true; }
                 String week = EmberPlayfeelTelemetry.weekKey();
                 boolean offered = EmberBarPath.maybeOfferWeekly(p, d, week);
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
@@ -3319,18 +3319,18 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            boolean unlocked = runs.progressFlag(d, "q01");
+            boolean unlocked = EmberSkillKit.prepPathUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberPrepPath.glance(EmberPrepPath.get(d), unlocked));
                 if (!unlocked) {
-                    p.sendMessage(P + "§c备药路径需本人首通 Q01。");
+                    p.sendMessage(P + "§c备药路径需本人首进或首通 Q01。");
                     return true;
                 }
                 EmberPrepPath.offerPick(p);
                 return true;
             }
             if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
-                if (!unlocked) { p.sendMessage(P + "§c备药路径需本人首通 Q01。"); return true; }
+                if (!unlocked) { p.sendMessage(P + "§c备药路径需本人首进或首通 Q01。"); return true; }
                 String week = EmberPlayfeelTelemetry.weekKey();
                 boolean offered = EmberPrepPath.maybeOfferWeekly(p, d, week);
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
@@ -3391,18 +3391,18 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            boolean unlocked = runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
+            boolean unlocked = EmberSkillKit.spicePathUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberSpicePath.glance(EmberSpicePath.get(d), unlocked));
                 if (!unlocked) {
-                    p.sendMessage(P + "§c花样路径需本人首通 Q02。");
+                    p.sendMessage(P + "§c花样路径需本人首进或首通 Q02。");
                     return true;
                 }
                 EmberSpicePath.offerPick(p);
                 return true;
             }
             if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
-                if (!unlocked) { p.sendMessage(P + "§c花样路径需本人首通 Q02。"); return true; }
+                if (!unlocked) { p.sendMessage(P + "§c花样路径需本人首进或首通 Q02。"); return true; }
                 String week = EmberPlayfeelTelemetry.weekKey();
                 boolean offered = EmberSpicePath.maybeOfferWeekly(p, d, week);
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());

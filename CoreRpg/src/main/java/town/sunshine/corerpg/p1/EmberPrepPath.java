@@ -77,17 +77,19 @@ public final class EmberPrepPath {
     }
 
     public static String tip(int id) {
-        if (id == LIGHT) return "进本前自动补到 3 瓶回复药（花余烬币）";
-        if (id == FULL) return "进本前自动补到 5 瓶回复药（花余烬币）";
+        if (id == LIGHT) return "进本前自动补到 3 瓶并按药栏重排（花余烬币）";
+        if (id == FULL) return "进本前自动补到 5 瓶并按药栏重排（花余烬币）";
         if (id == BARE) return "进本前不自动买药 · 自己补";
         return "点选备药偏好（进本前城内自动补货）";
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8备药路径：首通 Q01 后可选";
+        if (!unlocked) return "§8备药路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8备药路径：未选 · /corerpg p1 preppath";
         return "§e备药路径：§f" + label(id) + " §8· " + tip(id);
     }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
 
     /** Called from SessionService before stamina reserve (still in town). */
     public static void maybeTopUpBeforeRun(Player p, EmberRunService runs) {
@@ -101,7 +103,13 @@ public final class EmberPrepPath {
         if (pl == null) return;
         EmberSupplyService supply = pl.getEmberSupplies();
         if (supply == null) return;
-        supply.topUpTo(p, want, "prep");
+        int given = supply.topUpTo(p, want, "prep");
+        int packed = EmberBarPath.repackHealPotions(p); // D2914 layout after top-up
+        if (given > 0 || packed > 0) {
+            try {
+                p.sendActionBar("§a备药 · §f+" + given + " · 栏位重排 " + packed);
+            } catch (Throwable ignored) { }
+        }
     }
 
     public static void offerPick(Player p) {
@@ -149,8 +157,8 @@ public final class EmberPrepPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c备药路径需本人首通 Q01。");
+        if (!EmberSkillKit.prepPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c备药路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;

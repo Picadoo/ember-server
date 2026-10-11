@@ -76,14 +76,14 @@ public final class EmberBarPath {
     }
 
     public static String tip(int id) {
-        if (id == RIGHT) return "回复药优先放快捷栏右侧（数字 9→2）";
-        if (id == LEFT) return "回复药优先放快捷栏左侧（数字 2→9）";
-        if (id == KEY5) return "回复药优先放第 5 格（数字 5），再向两侧铺";
+        if (id == RIGHT) return "选后立即重排 · 优先右侧（9→2）";
+        if (id == LEFT) return "选后立即重排 · 优先左侧（2→9）";
+        if (id == KEY5) return "选后立即重排 · 优先第 5 格再两侧";
         return "点选回复药快捷栏落点（改手感 · 不改药价）";
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8药栏路径：首通 Q01 后可选";
+        if (!unlocked) return "§8药栏路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8药栏路径：未选 · /corerpg p1 barpath";
         return "§e药栏路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -93,6 +93,48 @@ public final class EmberBarPath {
         if (path == LEFT) return new int[]{1, 2, 3, 4, 5, 6, 7, 8};
         if (path == KEY5) return new int[]{4, 5, 3, 6, 2, 7, 1, 8};
         return new int[]{8, 7, 6, 5, 4, 3, 2, 1}; // RIGHT / NONE
+    }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
+
+    /**
+     * D2915: move heal potions into preferred hotbar order (muscle-memory layout).
+     * Returns how many stacks placed on hotbar.
+     */
+    public static int repackHealPotions(Player p) {
+        if (p == null || !p.isOnline()) return 0;
+        CoreRpgPlugin pl = plugin();
+        EmberSupplyService supply = pl == null ? null : pl.getEmberSupplies();
+        if (supply == null) return 0;
+        PlayerData d = dataOf(p);
+        int path = d == null || !valid(get(d)) ? RIGHT : get(d);
+        java.util.List<ItemStack> pots = new java.util.ArrayList<ItemStack>();
+        ItemStack[] cont = p.getInventory().getStorageContents();
+        if (cont == null) return 0;
+        for (int i = 0; i < cont.length; i++) {
+            ItemStack s = cont[i];
+            if (s == null || !supply.isHealPotion(s)) continue;
+            pots.add(s.clone());
+            p.getInventory().setItem(i, null);
+        }
+        if (pots.isEmpty()) return 0;
+        int placed = 0;
+        int pi = 0;
+        for (int slot : slotOrder(path)) {
+            if (pi >= pots.size()) break;
+            p.getInventory().setItem(slot, pots.get(pi++));
+            placed++;
+        }
+        while (pi < pots.size()) {
+            java.util.HashMap<Integer, ItemStack> left = p.getInventory().addItem(pots.get(pi++));
+            if (!left.isEmpty()) {
+                for (ItemStack drop : left.values()) {
+                    try { p.getWorld().dropItemNaturally(p.getLocation(), drop); } catch (Throwable ignored) { }
+                }
+            }
+        }
+        try { p.updateInventory(); } catch (Throwable ignored) { }
+        return placed;
     }
 
     /** First empty hotbar index for path, or -1. */
@@ -149,8 +191,8 @@ public final class EmberBarPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c药栏路径需本人首通 Q01。");
+        if (!EmberSkillKit.barPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c药栏路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;
@@ -167,6 +209,8 @@ public final class EmberBarPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a药栏 → §f" + label(id) + " §7· " + tip(id));
+        int n = repackHealPotions(p);
+        if (n > 0) p.sendMessage(P + "§7已重排回复药 §f" + n + " §7组到偏好格");
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{"[补给店]", "/corerpg p1 shop", "新买的药用新落点", "AQUA"},
                 new String[]{"[换一条]", "/corerpg p1 barpath", "重选", "GRAY"});

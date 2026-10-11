@@ -121,6 +121,12 @@ public final class EmberSkillKit {
     public static final String C_STASH_ENTER = "p1_stash_enter";
     /** D2866: entered Q01 → extra path without clear-gate. */
     public static final String C_EXTRA_ENTER = "p1_extra_enter";
+    /** D2914: entered Q01 → prep path without clear-gate. */
+    public static final String C_PREP_ENTER = "p1_prep_enter";
+    /** D2915: entered Q01 → bar path without clear-gate. */
+    public static final String C_BAR_ENTER = "p1_bar_enter";
+    /** D2925: entered Q02 → spice path without clear-gate. */
+    public static final String C_SPICE_ENTER = "p1_spice_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -395,6 +401,47 @@ public final class EmberSkillKit {
         if (d == null) return false;
         if (d.periodCount(C_EXTRA_ENTER, "all") > 0) return true;
         return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
+    public static boolean markPrepEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_PREP_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_PREP_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean prepPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_PREP_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
+    public static boolean markBarEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_BAR_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_BAR_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean barPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_BAR_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
+    public static boolean markSpiceEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_SPICE_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_SPICE_ENTER, "all", 1);
+        return true;
+    }
+
+    /** D2925: Q02 clear OR first-enter unlocks spice (imprint OR enter). */
+    public static boolean spicePathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_SPICE_ENTER, "all") > 0) return true;
+        if (runs != null && runs.firstClearedKey(d, "q02")) return true;
+        return runs != null && runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
     }
 
     /** D2378: Q01 clear OR first-enter unlocks stride path (still needs Q05 step). */
