@@ -244,7 +244,9 @@ public final class FlexSkillService implements Listener {
         String name = (PILOT_ID.equals(def.id) || "step".equals(def.type))
                 ? town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(stepVar, back) : def.display;
         player.sendMessage(PREFIX + name + ChatColor.GRAY + " · " + cdRemain);
-        double dist = back ? town.sunshine.corerpg.p1.EmberSkillKit.BACKSTEP_DISTANCE : def.distance;
+        double dist = town.sunshine.corerpg.p1.EmberSkillKit.stepTravelDistance(
+                def.distance, back, stepPostureAligned(player),
+                town.sunshine.corerpg.p1.EmberPosturePath.get(data));
         String igniteNote = stepEffectNote(stepVar, back);
         player.sendMessage(ChatColor.GRAY + "  冷却 " + def.cooldownSeconds + "s · 位移约 "
                 + (int) Math.round(dist) + " 格 · 零体力" + igniteNote
@@ -317,7 +319,9 @@ public final class FlexSkillService implements Listener {
         Location from = player.getLocation();
         PlayerData data = dataStore.get(player.getUniqueId());
         boolean back = town.sunshine.corerpg.p1.EmberSkillKit.stepBackward(data);
-        double dist = back ? town.sunshine.corerpg.p1.EmberSkillKit.BACKSTEP_DISTANCE : def.distance;
+        boolean posture = stepPostureAligned(player);
+        int pid = town.sunshine.corerpg.p1.EmberPosturePath.get(data);
+        double dist = town.sunshine.corerpg.p1.EmberSkillKit.stepTravelDistance(def.distance, back, posture, pid);
         Location best = town.sunshine.corerpg.p1.EmberDash.tryDash(player, dist, back, back);
         if (best == null) {
             String fail = from.getWorld() == null ? "无法踏步"
@@ -424,8 +428,9 @@ public final class FlexSkillService implements Listener {
                 town.sunshine.corerpg.p1.EmberSkillKit.STEP_IGNITE_RADIUS);
         if (target == null) return true;
         boolean sync = stepShapeSynced(player);
+        boolean posture = stepPostureAligned(player);
         target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
-                town.sunshine.corerpg.p1.EmberSkillKit.stepLandSlowTicks(sync), 0, false, true), true);
+                town.sunshine.corerpg.p1.EmberSkillKit.stepLandSlowTicks(sync, posture), 0, false, true), true);
         at.getWorld().spawnParticle(Particle.CRIT_MAGIC, at.clone().add(0, 0.3, 0), 16, 0.35, 0.2, 0.35, 0.02);
         return true;
     }
@@ -439,8 +444,9 @@ public final class FlexSkillService implements Listener {
         if (stepVariantOf(player) != town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU) return false;
         if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
             boolean sync = stepShapeSynced(player);
+            boolean posture = stepPostureAligned(player);
             double heal = Math.max(0.5, player.getMaxHealth()
-                    * town.sunshine.corerpg.p1.EmberSkillKit.stepLandHealPct(sync));
+                    * town.sunshine.corerpg.p1.EmberSkillKit.stepLandHealPct(sync, posture));
             player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
         }
         at.getWorld().spawnParticle(Particle.HEART, at.clone().add(0, 0.5, 0), 4, 0.2, 0.15, 0.2, 0.0);
@@ -478,6 +484,18 @@ public final class FlexSkillService implements Listener {
 
 
     /** D2292: set-shape sync for step land (zero skill_mult). */
+
+    /** D2474: posture commitment matches live kit. */
+    private boolean stepPostureAligned(Player player) {
+        if (player == null) return false;
+        try {
+            PlayerData data = dataStore.get(player.getUniqueId());
+            return town.sunshine.corerpg.p1.EmberPosturePath.aligned(data, plugin.getEmberRuns());
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
     private boolean stepShapeSynced(Player player) {
         if (player == null) return false;
         try {

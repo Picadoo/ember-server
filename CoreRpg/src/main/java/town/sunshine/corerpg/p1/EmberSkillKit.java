@@ -95,6 +95,8 @@ public final class EmberSkillKit {
     public static final String C_PLEDGE_ENTER = "p1_pledge_enter";
     /** D2378: entered Q01 → stride path without clear-gate. */
     public static final String C_STRIDE_ENTER = "p1_stride_enter";
+    /** D2502: entered Q02 → room path without clear-gate. */
+    public static final String C_ROOM_ENTER = "p1_room_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -200,6 +202,20 @@ public final class EmberSkillKit {
         return true;
     }
 
+    public static boolean markRoomEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_ROOM_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_ROOM_ENTER, "all", 1);
+        return true;
+    }
+
+    /** D2502: Q02 clear OR first-enter unlocks room-order path. */
+    public static boolean roomPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_ROOM_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q02");
+    }
+
     /** D2378: Q01 clear OR first-enter unlocks stride path (still needs Q05 step). */
     public static boolean strideMapUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
@@ -223,12 +239,34 @@ public final class EmberSkillKit {
 
     /** D2292: step land slow ticks (synced with set-shape). */
     public static int stepLandSlowTicks(boolean setShapeSync) {
-        return STEP_SLOW_TICKS + (setShapeSync ? 4 : 0);
+        return stepLandSlowTicks(setShapeSync, false);
+    }
+
+    /** D2474: +2 ticks when posture aligned. */
+    public static int stepLandSlowTicks(boolean setShapeSync, boolean postureAligned) {
+        return STEP_SLOW_TICKS + (setShapeSync ? 4 : 0) + (postureAligned ? 2 : 0);
     }
 
     /** D2292: chenghu land heal fraction. */
     public static double stepLandHealPct(boolean setShapeSync) {
-        return setShapeSync ? 0.005 * 1.25 : 0.005;
+        return stepLandHealPct(setShapeSync, false);
+    }
+
+    /** D2474: ×1.1 when posture aligned. */
+    public static double stepLandHealPct(boolean setShapeSync, boolean postureAligned) {
+        double v = setShapeSync ? 0.005 * 1.25 : 0.005;
+        return postureAligned ? v * 1.1 : v;
+    }
+
+    /** D2475: step travel distance; posture-aligned footwork stretch. */
+    public static double stepTravelDistance(double forwardDist, boolean back, boolean postureAligned, int postureId) {
+        double base = back ? BACKSTEP_DISTANCE : forwardDist;
+        if (!postureAligned || postureId <= 0) return base;
+        // GUARD=2 prefers back stretch; STRIKE/SWEEP prefer forward stretch
+        if (back && postureId == EmberPosturePath.GUARD) return base + 0.5;
+        if (!back && (postureId == EmberPosturePath.STRIKE || postureId == EmberPosturePath.SWEEP))
+            return base + 0.5;
+        return base;
     }
 
     /** D2305: dash land slow (synced). */
@@ -265,7 +303,13 @@ public final class EmberSkillKit {
 
     /** D2343: parry window ms when set-shape synced. */
     public static long parryWindowMs(boolean setShapeSync) {
-        return setShapeSync ? PARRY_WINDOW_MS + 50L : PARRY_WINDOW_MS;
+        return parryWindowMs(setShapeSync, false);
+    }
+
+    /** D2490: GUARD posture aligned adds +50ms (stacks sync · zero flat). */
+    public static long parryWindowMs(boolean setShapeSync, boolean guardPosture) {
+        long ms = setShapeSync ? PARRY_WINDOW_MS + 50L : PARRY_WINDOW_MS;
+        return guardPosture ? ms + 50L : ms;
     }
 
     /** D2366: signature skill_charge wind-up secs (synced · faster cast · zero skill_mult). */

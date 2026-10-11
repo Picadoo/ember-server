@@ -87,7 +87,7 @@ public final class EmberRoomPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8房序路径：首通 Q02 后可选（重打本花样）";
+        if (!unlocked) return "§8房序路径：首进/首通 Q02 后可选（重打本花样）";
         if (!valid(id)) return "§8房序路径：未选 · /corerpg p1 roompath";
         return "§e房序路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -107,6 +107,16 @@ public final class EmberRoomPath {
         if (!v[1].isEmpty()) v[0] = room;
         if (!v[2].isEmpty()) v[2] = room;
         return v;
+    }
+
+    /** D2503: map-enter glance when path set (no ConfirmTokens). */
+    public static void enterCue(Player p, PlayerData d) {
+        if (p == null || d == null) return;
+        int id = get(d);
+        if (!valid(id)) return;
+        String line = "§e房序 · §f" + label(id) + " §8· " + tip(id);
+        try { p.sendMessage(EmberRunService.P + line); } catch (Throwable ignored) { }
+        try { p.sendActionBar(line); } catch (Throwable ignored) { }
     }
 
     public static void offerPick(Player p) {
@@ -153,8 +163,8 @@ public final class EmberRoomPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q02")) {
-            p.sendMessage(EmberRunService.P + "§c房序路径需本人首通 Q02（重打本才有花样）。");
+        if (!EmberSkillKit.roomPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c房序路径需本人首进或首通 Q02（重打本才有花样）。");
             return;
         }
         String P = EmberRunService.P;

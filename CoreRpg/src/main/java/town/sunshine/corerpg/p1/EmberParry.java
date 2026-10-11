@@ -59,14 +59,18 @@ public final class EmberParry implements Listener {
         PlayerData d = plugin.getDataStore().get(player.getUniqueId());
         if (!EmberSkillKit.parryUnlocked(d, plugin.getEmberRuns())) return;
         boolean syncWin = false;
+        boolean guardPosture = false;
         try {
             EmberLoadoutService ls = plugin.getEmberLoadouts();
             EmberLoadout lo = ls == null ? null : ls.get(player);
             String fam = lo == null ? "none" : lo.activeSet;
-            int sid = EmberSkillKit.shapeId(d, plugin.getEmberRuns());
+            EmberRunService runs = plugin.getEmberRuns();
+            int sid = EmberSkillKit.shapeId(d, runs);
             syncWin = EmberSkillKit.setShapeSynced(fam, sid);
+            guardPosture = EmberPosturePath.aligned(d, runs)
+                    && EmberPosturePath.get(d) == EmberPosturePath.GUARD;
         } catch (Throwable ignored) { }
-        long until = System.currentTimeMillis() + EmberSkillKit.parryWindowMs(syncWin);
+        long until = System.currentTimeMillis() + EmberSkillKit.parryWindowMs(syncWin, guardPosture);
         windowUntil.put(player.getUniqueId(), until);
         windowBoss.put(player.getUniqueId(), boss.getUniqueId());
     }

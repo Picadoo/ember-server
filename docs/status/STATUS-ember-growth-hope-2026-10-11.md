@@ -1,13 +1,13 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.535-d2472.local**
-- D2445–D2472
+- jar **1.65.538-d2512.local**
+- D2473–D2512
 
-## Shipped
-- HeldNext: GEM/LOCK/ROLL/QUALITY + ENHANCE/REFINE/UPGRADE goal prefer (not K3)
-- Posture aligned: slash + dash land Slow+2t / heal×1.1 (stacks sync)
+## This arc
+- Posture/footwork: step land + step distance by stance; GUARD parry window +50ms → **NEAR-SAT**
+- New axis start: Room path Q02 enter unlock + enter glance (no ConfirmTokens twin)
 
-Talent HOLD · ConfirmTokens/remain/sig ICD STOP
+Talent HOLD · HeldNext/ConfirmTokens/remain/sig ICD STOP
 
-Updated 2026-10-11 08:10 CST
+Updated 2026-10-11 08:14 CST
