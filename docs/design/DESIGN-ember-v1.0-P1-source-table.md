@@ -2099,3 +2099,22 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 菜单 | `ember_weekly.yml` · `ember_set.yml` · `ember_abyss.yml` · `ember_raid.yml` · `ember_afk.yml` · `ember_forge.yml` · `ember_enhance.yml` · `ember_skill_kit.yml` lore ≤3（砍空白与说明墙；PAPI/体力/动作保留） |
 | jar | 未改（live 仍 1.65.723-d12194.local） |
 | STATUS | `docs/status/STATUS-ember-trmenu-lore-weekly-set-abyss-raid-afk-d12198-2026-10-11.md` |
+
+
+### 13.107 TrMenu lore 压缩 adventure/daily/life/ladder/disassemble（D12199，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 菜单 | `ember_p1_adventure.yml` · `ember_daily.yml` · `ember_life.yml` · `ember_ladder.yml` · `ember_disassemble.yml` lore ≤3 |
+| jar | 未改（live 仍 1.65.723-d12194.local） |
+| STATUS | `docs/status/STATUS-ember-trmenu-lore-adventure-daily-life-d12199-2026-10-11.md` |
+| commit | `413a1bd7` |
+
+
+### 13.108 TrMenu lore 压缩 talent/shop/storage/settings/social 等（D12200，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 菜单 | `ember_talent` · `ember_shop` · `ember_storage` · `ember_settings` · `ember_character` · `ember_mail` · `ember_friends` · `ember_flex_skill` · `ember_socket` · `ember_part` · `ember_arena` · `ember_auction` · `ember_bestiary` · `ember_vip` · `ember_weekly_rewards` · `ember_raid_rewards` · `ember_enchant_guide` · `ember_pass` · `ember_covenant` · `ember_guild` · `ember_calamity` · `ember_calamity_rewards` lore ≤3（砍空白与说明墙；PAPI/费用/➥ 保留；不含 pet/gacha/hub_legacy） |
+| jar | 未改（live 仍 1.65.723-d12194.local） |
+| STATUS | `docs/status/STATUS-ember-trmenu-lore-talent-shop-storage-d12200-2026-10-11.md` |

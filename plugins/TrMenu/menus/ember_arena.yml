@@ -41,11 +41,8 @@ Icons:
       material: book
       name: '§e我的战绩'
       lore:
-        - ''
         - '§7查看积分、段位与赛季箱'
         - '§8赛季制 · 奖励绑外观与币'
-        - ''
-        - ''
         - '§e➥ §f点击查询'
     actions:
       all:
@@ -58,12 +55,8 @@ Icons:
       material: iron sword
       name: '§c排队 · 1v1'
       lore:
-        - ''
         - '§7单挑积分赛'
         - '§8独立竞技世界 · CoreCombat'
-        - '§8日奖励箱：币 / 外观币'
-        - ''
-        - ''
         - '§c➥ §f加入 1v1 队列'
     actions:
       all:
@@ -77,12 +70,8 @@ Icons:
       material: diamond sword
       name: '§6排队 · 2v2'
       lore:
-        - ''
         - '§7双人组队积分赛'
         - '§8可与好友组队后排队'
-        - '§8日奖励箱：币 / 外观币'
-        - ''
-        - ''
         - '§6➥ §f加入 2v2 队列'
     actions:
       all:
@@ -96,10 +85,7 @@ Icons:
       material: barrier
       name: '§7取消排队'
       lore:
-        - ''
         - '§7离开当前匹配队列'
-        - ''
-        - ''
         - '§7➥ §f取消'
     actions:
       all:

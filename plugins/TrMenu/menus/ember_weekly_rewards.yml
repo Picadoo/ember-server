@@ -33,7 +33,6 @@ Icons:
       material: chest
       name: '§6周本奖励预览'
       lore:
-        - ''
         - '§7通关箱、周首通与终厅掉落一览'
         - '§8纯展示 · 不进本 · 不发物'
 
@@ -42,7 +41,6 @@ Icons:
       material: nether star
       name: '§e余烬核心碎片 §f×3'
       lore:
-        - ''
         - '§8通关箱'
 
   C:
@@ -50,7 +48,6 @@ Icons:
       material: glowstone dust
       name: '§d余烬附魔晶 §f×2'
       lore:
-        - ''
         - '§8通关箱'
 
   I:
@@ -58,7 +55,6 @@ Icons:
       material: redstone
       name: '§c余烬碎片 §f×8'
       lore:
-        - ''
         - '§8通关箱'
 
   D:
@@ -66,7 +62,6 @@ Icons:
       material: bone
       name: '§7余烬骨尘 §f×4'
       lore:
-        - ''
         - '§8通关箱'
 
   E:
@@ -74,7 +69,6 @@ Icons:
       material: experience bottle
       name: '§b原版经验 §f+6 级'
       lore:
-        - ''
         - '§8通关结算经验'
         - '§8非背包物品 · 仅展示'
 
@@ -83,7 +77,6 @@ Icons:
       material: gold nugget
       name: '§6周首通 · 精炼护符 §f×1'
       lore:
-        - ''
         - '§e每周首次通关保底'
         - '§8同周再通不重复发放此项'
 
@@ -92,7 +85,6 @@ Icons:
       material: iron sword
       name: '§c同周再通 · 概率掉落'
       lore:
-        - ''
         - '§7精炼刃 §e约 10%'
         - '§7精炼护符 §e约 8%'
         - '§8来自 weekly_t1 · 仅展示概率'
@@ -102,11 +94,8 @@ Icons:
       material: enchanted book
       name: '§d终厅摘要'
       lore:
-        - ''
         - '§7核心 §a×1（必掉）'
         - '§7余烬之刃 §e约 20%'
-        - '§7精炼护符 §e约 12%'
-        - '§7稳定符 §e约 4%'
         - '§8终厅机会均非额外保底'
 
   T:
@@ -114,7 +103,6 @@ Icons:
       material: nether star
       name: '§6终厅核心'
       lore:
-        - ''
         - '§e核心 ×1 §7必掉'
         - '§8终厅 EmberWeeklyBruteB'
 
@@ -123,7 +111,6 @@ Icons:
       material: iron sword
       name: '§8中核一句'
       lore:
-        - ''
         - '§7中核另有较低 T1/T2 刃机会'
         - '§8仅作掉落摘要，不代表保底'
 

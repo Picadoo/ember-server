@@ -41,10 +41,7 @@ Icons:
       material: book
       name: '§e查看当前誓约'
       lore:
-        - ''
         - '§7查询已选定誓约与洗约费用'
-        - ''
-        - ''
         - '§e➥ §f点击查看'
     actions:
       all:
@@ -56,11 +53,9 @@ Icons:
       material: paper
       name: '§c洗约说明'
       lore:
-        - ''
         - '§7首次选定 §a免费'
         - '§7之后：§b晶钻 ×80 §7或 §e誓约重置券'
         - '§7洗约会 §c清空天赋分配'
-        - ''
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -71,12 +66,8 @@ Icons:
       material: diamond sword
       name: '§6烬刃'
       lore:
-        - ''
         - '§7近战爆发 · 暴击 / 吸血 / 斩击'
         - '§8推荐：余烬之刃'
-        - '§8ID: blaze'
-        - ''
-        - ''
         - '§6➥ §f点击选定'
     actions:
       all:
@@ -91,12 +82,8 @@ Icons:
       material: bow
       name: '§7灰行'
       lore:
-        - ''
         - '§7持续风筝 · 攻速 / 减速 / 微弱使魔'
         - '§8推荐：刃或远程倾向'
-        - '§8ID: ash'
-        - ''
-        - ''
         - '§7➥ §f点击选定'
     actions:
       all:
@@ -111,12 +98,8 @@ Icons:
       material: shield
       name: '§9守墓'
       lore:
-        - ''
         - '§7生存团队 · 减伤 / 嘲讽 / 护符加成'
         - '§8推荐：余烬护符权重高'
-        - '§8ID: warden'
-        - ''
-        - ''
         - '§9➥ §f点击选定'
     actions:
       all:

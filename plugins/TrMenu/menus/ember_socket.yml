@@ -41,13 +41,8 @@ Icons:
       material: book and quill
       name: '§e查看孔位'
       lore:
-        - ''
         - '§7列出已解锁 / 空 / 已镶宝石'
-        - ''
         - '§8刃：孔1@+0 · 孔2@+5'
-        - '§8护符：孔1@+3'
-        - ''
-        - ''
         - '§e➥ §f点击查看'
     actions:
       all:
@@ -60,10 +55,7 @@ Icons:
       material: emerald
       name: '§a卸下孔 1'
       lore:
-        - ''
         - '§7将孔 1 宝石退回背包'
-        - ''
-        - ''
         - '§a➥ §f点击卸下'
     actions:
       all:
@@ -76,10 +68,7 @@ Icons:
       material: diamond
       name: '§b卸下孔 2'
       lore:
-        - ''
         - '§7将孔 2 宝石退回背包（刃）'
-        - ''
-        - ''
         - '§b➥ §f点击卸下'
     actions:
       all:
@@ -92,10 +81,8 @@ Icons:
       material: quartz
       name: '§c镶入 · 锋利石'
       lore:
-        - ''
         - '§7微量攻击 · gem_ember_sharp'
         - '§8背包需有该石'
-        - ''
         - '§c➥ §f点击镶入'
     actions:
       all:
@@ -109,10 +96,8 @@ Icons:
       material: iron ingot
       name: '§9镶入 · 稳固石'
       lore:
-        - ''
         - '§7微量防御 · gem_ember_steady'
         - '§8背包需有该石'
-        - ''
         - '§9➥ §f点击镶入'
     actions:
       all:
@@ -126,10 +111,8 @@ Icons:
       material: ghast tear
       name: '§5镶入 · 汲取石'
       lore:
-        - ''
         - '§7微量吸血 · gem_ember_drain'
         - '§8背包需有该石'
-        - ''
         - '§5➥ §f点击镶入'
     actions:
       all:
@@ -143,10 +126,8 @@ Icons:
       material: feather
       name: '§a镶入 · 疾风石'
       lore:
-        - ''
         - '§7微量移速 · gem_ember_gale'
         - '§8背包需有该石'
-        - ''
         - '§a➥ §f点击镶入'
     actions:
       all:

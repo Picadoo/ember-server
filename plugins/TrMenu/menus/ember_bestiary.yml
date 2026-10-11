@@ -42,10 +42,8 @@ Icons:
       material: skull item
       name: '§c主线首领'
       lore:
-        - ''
         - '§7Q01–Q07 七个首领：生命、招式、预警、躲法'
         - '§7以及你自己的首通状态'
-        - ''
         - '§c➥ §f打开'
     actions:
       all:
@@ -58,10 +56,8 @@ Icons:
       material: diamond sword
       name: '§6装备图鉴 §f%corerpg_p1_codex_count%'
       lore:
-        - ''
         - '§7刃 / 护符：三族 × T0–T3，共 20 种'
         - '§7第一次拿到就登记；只做展示，不加属性'
-        - ''
         - '§6➥ §f打开'
     actions:
       all:
@@ -73,10 +69,8 @@ Icons:
       material: egg
       name: '§a使魔图鉴'
       lore:
-        - ''
         - '§7与使魔系统共享收集进度'
         - '§8可跳转使魔菜单'
-        - ''
         - '§e➥ §f打开使魔'
     actions:
       all:
@@ -88,11 +82,8 @@ Icons:
       material: gold ingot
       name: '§e阶段奖励'
       lore:
-        - ''
-        - '§7装备图鉴集齐 5 / 10 / 15 / 20 种'
         - '§7各领一次余烬币（200 / 400 / 600 / 1000）'
         - '§8一次性资源，不加战斗属性'
-        - ''
         - '§e➥ §f打开装备图鉴领取'
     actions:
       all:

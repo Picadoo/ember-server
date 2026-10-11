@@ -41,13 +41,8 @@ Icons:
       material: feather
       name: '§a装配 · 余烬踏步'
       lore:
-        - ''
-        - '§7朝看向方向短位移约 §f5 §7格'
         - '§7不穿墙 · 无伤害 · 零体力'
-        - '§8冷却 §f14§8 秒'
-        - ''
         - '§8当前装配：§f%corerpg_flex_skill_name%'
-        - ''
         - '§a➥ §f点击装配'
     actions:
       all:
@@ -60,12 +55,8 @@ Icons:
       material: barrier
       name: '§c卸下轻技'
       lore:
-        - ''
         - '§7清空轻技槽'
-        - '§8卸下后无法释放轻技'
-        - ''
         - '§8当前装配：§f%corerpg_flex_skill_name%'
-        - ''
         - '§c➥ §f点击卸下'
     actions:
       all:
@@ -78,13 +69,8 @@ Icons:
       material: blaze powder
       name: '§e释放轻技'
       lore:
-        - ''
         - '§7释放当前已装配的轻技'
-        - '§8需先装配 · CD 中会提示'
-        - '§7战斗中 §e潜行+Q §7可释放'
-        - ''
         - '§8当前装配：§f%corerpg_flex_skill_name%'
-        - ''
         - '§e➥ §f立即释放'
     actions:
       all:
@@ -97,12 +83,8 @@ Icons:
       material: book
       name: '§b轻技说明'
       lore:
-        - ''
         - '§a余烬踏步§7：潜行 + Q 向前短位移，躲首领的地面预警'
-        - '§7烬斩是刃自带的技能：副本里手持刃按 §eF'
-        - '§7两者互不占用，可以连着用'
         - '§8全员可装配 · 本窗仅 1 槽'
-        - ''
         - '§e➥ §f查看状态'
     actions:
       all:

@@ -39,12 +39,8 @@ Icons:
       material: magma cream
       name: '§a奔赴灾厄'
       lore:
-        - ''
         - '§7奔赴公共灾厄祭坛盆地'
         - '§c需要余烬等级 Lv.30'
-        - '§7仅在开放窗口内有 Boss 与领奖'
-        - '§8建议窗：12:00 / 20:00 / 22:00（上海）'
-        - ''
         - '§e➥ §f点击奔赴'
     actions:
       all:
@@ -58,11 +54,8 @@ Icons:
       material: chest
       name: '§6奖励预览'
       lore:
-        - ''
         - '§7尾刀结算：核心、灾厄余烬、外观碎片'
         - '§7日箱：核心×2 + 附魔晶×1 + 余烬×2'
-        - '§7尾刀低概率 §cT3 §7装备（刃 / 护符各 1%）'
-        - ''
         - '§e➥ §f点击查看'
     actions:
       all:
@@ -74,7 +67,6 @@ Icons:
       material: watch
       name: '§e窗口说明'
       lore:
-        - ''
         - '§7公共场：全服同图可见'
         - '§7可多窗参战，§f日箱只领 1 次'
     actions:
@@ -87,7 +79,6 @@ Icons:
       material: barrier
       name: '§8测试实例（OP）'
       lore:
-        - ''
         - '§8DungeonPlus 隔离本，用于调 Boss'
         - '§8正式游玩请用「奔赴灾厄」'
         - '§8非正式入口 · 仅管理/测试 · 正式请走奔赴'

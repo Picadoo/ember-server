@@ -41,12 +41,8 @@ Icons:
       material: note block
       name: '§e音效'
       lore:
-        - ''
         - '§7菜单点击与领取提示音'
-        - '§8默认开 · 仅影响本人'
-        - ''
         - '§8点击切换音效'
-        - ''
         - '§e➥ §f查看说明'
     actions:
       all:
@@ -59,12 +55,8 @@ Icons:
       material: paper
       name: '§b提示'
       lore:
-        - ''
         - '§7签到 / 邮件等系统聊天提示'
-        - '§8可关刷屏，不关奖励'
-        - ''
         - '§8点击切换提示'
-        - ''
         - '§b➥ §f查看说明'
     actions:
       all:
@@ -77,13 +69,8 @@ Icons:
       material: stained glass
       name: '§d隐私'
       lore:
-        - ''
         - '§7好友申请与在线可见'
-        - '§8可拒陌生人申请'
-        - '§8不影响盟约 / 天梯展示'
-        - ''
         - '§8点击切换隐私'
-        - ''
         - '§d➥ §f查看说明'
     actions:
       all:

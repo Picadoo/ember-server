@@ -41,10 +41,7 @@ Icons:
       material: book
       name: '§e我的盟约'
       lore:
-        - ''
         - '§7查看所属盟、贡献与职务'
-        - ''
-        - ''
         - '§e➥ §f点击查询'
     actions:
       all:
@@ -56,12 +53,8 @@ Icons:
       material: banner
       name: '§a创建盟约'
       lore:
-        - ''
         - '§7创建自己的公会'
         - '§8费用：余烬币 5000 或 晶钻 40'
-        - '§8人数起步 cap 20'
-        - ''
-        - ''
         - '§a➥ §f查看说明'
     actions:
       all:
@@ -74,13 +67,8 @@ Icons:
       material: chest
       name: '§6捐献 · 盟课'
       lore:
-        - ''
         - '§7捐碎片 / 骨尘换盟贡献'
         - '§8日个人贡献 cap 50'
-        - '§8可计活跃「盟课」+10'
-        - '§8不收核心 / 毕业刃'
-        - ''
-        - ''
         - '§6➥ §f查看说明'
     actions:
       all:
@@ -93,13 +81,8 @@ Icons:
       material: diamond sword
       name: '§c周盟 Boss'
       lore:
-        - ''
         - '§7每周一次协作 Boss'
         - '§8贡献排名奖：币 / 外观 / 材料'
-        - '§8不出毕业伤害'
-        - '§8日后开放周盟 Boss 入口'
-        - ''
-        - ''
         - '§c➥ §f查看说明'
     actions:
       all:

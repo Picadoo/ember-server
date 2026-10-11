@@ -35,13 +35,8 @@ Icons:
       material: chest
       name: '§6材料仓库'
       lore:
-        - ''
         - '§7白名单材料无格子上限'
         - '§7每种最多近二十亿 · 打副本自动入库'
-        - '§8强化 / 升阶直接扣仓库里的材料'
-        - '§a挂机战利品进本仓'
-        - '§7配方速览可看仓内还差'
-        - ''
         - '§e➥ §f打开材料仓库'
     actions:
       all:
@@ -54,11 +49,8 @@ Icons:
       material: diamond sword
       name: '§b装备库'
       lore:
-        - ''
         - '§7背包快满时新装备自动存入'
         - '§7筛选 · 收藏 · 批量分解（可撤销）'
-        - '§8免费无限 · 不占背包格'
-        - ''
         - '§e➥ §f打开装备库'
     actions:
       all:
@@ -71,10 +63,8 @@ Icons:
       material: hopper
       name: '§a一键存入'
       lore:
-        - ''
         - '§7背包里的白名单材料 → 材料仓'
         - '§7背包里的 P1 装备 → 装备库'
-        - ''
         - '§e➥ §f点击存入'
     actions:
       all:
@@ -88,9 +78,7 @@ Icons:
       material: ender chest
       name: '§5末影箱'
       lore:
-        - ''
         - '§7普通物品仍走末影箱'
-        - ''
         - '§e➥ §f打开'
     actions:
       all:
@@ -104,10 +92,8 @@ Icons:
       material: grass
       name: '§a材料哪来 · 挂机庭'
       lore:
-        - ''
         - '§7挂机战利品账号绑定进本仓'
         - '§7日顶仍 2400 · 魂尘≠挂机'
-        - ''
         - '§e➥ §f打开挂机庭'
     actions:
       all:

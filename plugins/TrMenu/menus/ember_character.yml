@@ -41,11 +41,8 @@ Icons:
       material: skull item
       name: '§b战力 / 状态'
       lore:
-        - ''
         - '§7查看等级、战力与今日摘要'
         - '§8挂机 / 体力 / 签到一览'
-        - ''
-        - ''
         - '§e➥ §f点击查询'
     actions:
       all:
@@ -58,11 +55,8 @@ Icons:
       material: diamond sword
       name: '§6当前誓约'
       lore:
-        - ''
         - '§7已选烬刃 / 灰行 / 守墓'
         - '§8未选则先去枢纽「誓约」'
-        - ''
-        - ''
         - '§e➥ §f点击查询'
     actions:
       all:
@@ -75,11 +69,8 @@ Icons:
       material: emerald
       name: '§a晶钻 / 钱包'
       lore:
-        - ''
         - '§7晶钻余额 · 体力药日限'
         - '§8余烬币见钱包行'
-        - ''
-        - ''
         - '§e➥ §f点击查晶钻'
     actions:
       all:
@@ -92,12 +83,8 @@ Icons:
       material: watch
       name: '§e月卡状态'
       lore:
-        - ''
         - '§a每日登录礼：币 + 体力相关（P1 照常）'
         - '§7是否有效、到期日、今日是否已发'
-        - '§8与勋阶日礼 / 战令补给无关'
-        - '§8开卡 / 续期见商城'
-        - ''
         - '§e➥ §f点击查询'
     actions:
       all:

@@ -32,13 +32,8 @@ Icons:
       material: gold helmet
       name: '§6勋阶状态'
       lore:
-        - ''
         - '§7层级 §f0～10§7（累计充值晶钻，不降级）'
-        - '§8I 68 · II 198 · III 488 · IV 988 · V 1988 …'
-        - ''
-        - '§cP1 现行：旧日礼币不发'
         - '§7可查层级 / 称号等展示位；币请走签到、周目标、挂机'
-        - ''
         - '§e➥ §f查看我的勋阶'
     actions:
       all:
@@ -50,12 +45,8 @@ Icons:
       material: emerald
       name: '§8领取日礼 · P1 暂停'
       lore:
-        - ''
         - '§cP1 下暂不发放旧勋阶日礼币'
-        - '§7请用：签到 / 周目标 / 挂机庭'
         - '§8点这里只会收到灰字说明，不会到账'
-        - '§c不含攻击加成'
-        - ''
         - '§e➥ §f查看说明（不会发币）'
     actions:
       all:
@@ -69,9 +60,7 @@ Icons:
       material: gold block
       name: '§e前往商城'
       lore:
-        - ''
         - '§7月卡登录礼照常 · 战令/勋阶币礼 P1 暂停'
-        - ''
         - '§e➥ §f打开商城'
     actions:
       all:
@@ -83,10 +72,8 @@ Icons:
       material: chest
       name: '§e打开邮寄'
       lore:
-        - ''
         - '§7系统邮件 / 维护补偿'
         - '§8旧勋阶附件在 P1 下也不会新发币礼'
-        - ''
         - '§e➥ §f邮寄'
     actions:
       all:
