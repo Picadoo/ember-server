@@ -2490,3 +2490,16 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack28-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack28.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack28-d12232-2026-10-12.md` |
+
+
+### 13.141 Affix Pack 29 锉斩/幽洼（CoreRpg 1.65.751，D12233，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12233 |
+| jar | CoreRpg **1.65.751-d12233.local** |
+| balance_version | 115 → **116** |
+| 行为 | 词缀池 58→60：+`rasp` 锉斩 / `combe` 幽洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack29-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack29.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack29-d12233-2026-10-12.md` |
