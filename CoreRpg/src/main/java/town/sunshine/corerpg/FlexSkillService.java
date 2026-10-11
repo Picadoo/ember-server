@@ -333,6 +333,8 @@ public final class FlexSkillService implements Listener {
             mapKey2 = runs2 == null ? null : runs2.activeMapKey(player);
         } catch (Throwable ignored) { }
         double dist = town.sunshine.corerpg.p1.EmberSkillKit.stepTravelDistance(def.distance, back, posture, pid, mapKey2, syncStep);
+        double link = town.sunshine.corerpg.p1.EmberDashStepLink.consume(player.getUniqueId()); // D6753
+        dist += link;
         Location best = town.sunshine.corerpg.p1.EmberDash.tryDash(player, dist, back, back);
         if (best == null) {
             String fail = from.getWorld() == null ? "无法踏步"
@@ -347,6 +349,12 @@ public final class FlexSkillService implements Listener {
         int variant = stepVariantOf(player);
         spawnStepVariantTrail(from, best, variant, def.particles);
         player.teleport(best);
+        if (link > 0) {
+            try {
+                player.sendMessage(PREFIX + "§a突→步连携 · 踏步 +" + String.format(java.util.Locale.ROOT, "%.2f", link) + " 格");
+                player.sendActionBar("§a突→步连携 · +" + String.format(java.util.Locale.ROOT, "%.2f", link));
+            } catch (Throwable ignored) { }
+        }
         spawnStepVariantLand(best, variant, def.particles);
         playSound(best, def.sound);
         try {

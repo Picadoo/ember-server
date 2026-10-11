@@ -1,3 +1,6 @@
+Live jar: **1.65.637-d6816.local** · D6753–D6816 DashStepLink
+Prior: 1.65.636-d6752 LockNearCap + ParryMissBreak
+
 # STATUS · growth hope · 2026-10-11
 Live jar: **1.65.636-d6752.local** · D6689–D6752 LockNearCap + ParryMissBreak
 Prior: 1.65.635-d6688 ForgeChargeRest + MarkNearBreak · STOP densify those + priors

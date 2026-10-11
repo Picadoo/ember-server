@@ -824,6 +824,7 @@ public final class SkillService implements Listener {
         spawnDashGroundTelegraph(from, dest, dashFam); // D677 副招施放前路径预示 · zero skill_mult
         spawnDashSetTrail(from, dest, dashFam);
         player.teleport(dest);
+        try { town.sunshine.corerpg.p1.EmberDashStepLink.arm(player.getUniqueId()); } catch (Throwable ignored) { } // D6753
         maybeFlashDashLand(player); // D445 烬突落地 (成功位移；前方受阻路径不进此分支)
         spawnDashSetLand(dest, dashFam);
         try {
