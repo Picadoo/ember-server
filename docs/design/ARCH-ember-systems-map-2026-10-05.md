@@ -607,3 +607,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D10401–D10464: ExtraTreasureBoost + ExtraChestFloorSoft + FcBlankBoost. STOP densify those + base-xp-mark-extra + priors. Talent HOLD. Six-slot HOLD.
 - D10465–D10528: FcShardBoost + FcCoreBoost + FcCoinBoost. STOP densify those + extra-treasure-chest-fcblank + priors. Talent HOLD. Six-slot HOLD.
 - D10529–D10592: ShortClearCoin/Shard/BoneBoost. STOP densify those + fc-mat-coin + priors. Talent HOLD. Six-slot HOLD.
+- D10593–D10656: RushMarkBoost + RushSigBoost + RushBadgeBoost. STOP densify those + short-clear + priors. Talent HOLD. Six-slot HOLD.

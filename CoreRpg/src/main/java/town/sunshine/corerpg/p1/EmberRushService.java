@@ -144,8 +144,18 @@ public final class EmberRushService {
                     EmberRunRules.ST_DELIVERED, now, created);
             if (created[0]) changed.add(r);
         }
-        if (pays && m.rushMarks > 0) {
-            EmberRunRules.Row r = l.record(runId, "rush_mark", new EmberRunRules.Grant("rush_mark", EmberRunRules.Kind.MARK, String.valueOf(m.rushMarkTier), m.rushMarks, null).encode(),
+        int rushMarksPay = m.rushMarks;
+        int rushSigPay = m.rushSig;
+        int rushBadgesPay = m.rushBadges;
+        try {
+            if (pays && pd != null) {
+                rushMarksPay = EmberRushMarkBoost.apply(pd, rushMarksPay); // D10593
+                rushSigPay = EmberRushSigBoost.apply(pd, rushSigPay); // D10609
+                rushBadgesPay = EmberRushBadgeBoost.apply(pd, rushBadgesPay); // D10625
+            }
+        } catch (Throwable ignored) { }
+        if (pays && rushMarksPay > 0) {
+            EmberRunRules.Row r = l.record(runId, "rush_mark", new EmberRunRules.Grant("rush_mark", EmberRunRules.Kind.MARK, String.valueOf(m.rushMarkTier), rushMarksPay, null).encode(),
                     EmberRunRules.ST_PENDING, now, created);
             if (created[0]) changed.add(r);
         }
@@ -153,9 +163,9 @@ public final class EmberRushService {
             EmberRunRules.Row r = l.record(runId, "rush_paid", new EmberRunRules.Grant("rush_paid", EmberRunRules.Kind.MARK, String.valueOf(m.rushMarkTier), 0, null).encode(),
                     EmberRunRules.ST_DELIVERED, now, created);
             if (created[0]) changed.add(r);
-            if (m.rushSig > 0) for (String ck : m.chainKeys) {
+            if (rushSigPay > 0) for (String ck : m.chainKeys) {
                 if (!EmberSignature.hasMap(ck)) continue;
-                EmberRunRules.Row g = l.record(runId, "rush_sig_" + ck, new EmberRunRules.Grant("rush_sig_" + ck, EmberRunRules.Kind.SIGMARK, ck, m.rushSig, null).encode(),
+                EmberRunRules.Row g = l.record(runId, "rush_sig_" + ck, new EmberRunRules.Grant("rush_sig_" + ck, EmberRunRules.Kind.SIGMARK, ck, rushSigPay, null).encode(),
                         EmberRunRules.ST_PENDING, now, created);
                 if (created[0]) changed.add(g);
             }
@@ -165,11 +175,11 @@ public final class EmberRushService {
         if (fresh && pays && pd != null) {
             pd.addPeriodCount(m.mainRush() ? C_RUSH_CLAIM : m.rushClaim, weekKey, 1);
             claimsAfter = claimsBefore + 1;
-            if (m.rushBadges > 0) {
-                badgeOk = EmberEconomy.grantBadge(pd, EmberEconomy.sourceForRushMode(m.rushMode), m.rushBadges);
+            if (rushBadgesPay > 0) {
+                badgeOk = EmberEconomy.grantBadge(pd, EmberEconomy.sourceForRushMode(m.rushMode), rushBadgesPay);
             }
         }
-        return new SettleResult(fresh, pays, changed, badgeOk, claimsAfter, m.rushBadges > 0 && fresh && pays);
+        return new SettleResult(fresh, pays, changed, badgeOk, claimsAfter, rushBadgesPay > 0 && fresh && pays);
     }
 
     /** Outcome of {@link #applyGrants} (Bukkit-free). */
