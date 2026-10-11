@@ -14,3 +14,6 @@
 | 资产 | 未改 → skip persist-roundtrip |
 | 挑刺 | stage1-6slot HOLD 未推 |
 | COORD | COORD-routine-1811 |
+| commit | `4ef13cc6` |
+| live | Enabling CoreRpg v1.65.725-d12207.local @18:28:37 CST · MySQL×2 · SEVERE 0 · smoke DEFER |
+| backup | `/workspace/backup/CoreRpg-1.65.724-pre-1.65.725-d12207.jar` |
