@@ -357,6 +357,12 @@ public final class EmberSettleService {
                     try { tip.sendActionBar("§a首通币加码"); } catch (Throwable ignored) { }
                 }
             }
+            if (EmberFcBoneBoost.apply(pd, grants)) { // D11009
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a首通加码 · 骨尘 +" + EmberFcBoneBoost.BONUS + "（今日一次）");
+                    try { tip.sendActionBar("§a首通骨尘加码"); } catch (Throwable ignored) { }
+                }
+            }
         } catch (Throwable ignored) { }
         boolean dropQForced = false;
         boolean dropCForced = false;

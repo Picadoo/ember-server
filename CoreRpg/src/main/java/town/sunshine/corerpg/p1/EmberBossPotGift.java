@@ -36,6 +36,7 @@ public final class EmberBossPotGift {
             d.addPeriodCount(C_USED, "day", 1);
             p.sendMessage(EmberRunService.P + "§a首领救急药 · 回复药 ×1（空瓶对峙 · 本日一次）");
             try { p.sendActionBar("§a救急药 · ×1"); } catch (Throwable ignored) { }
+            try { EmberBossPotExtra.maybeExtra(p, d, plugin); } catch (Throwable ignored) { } // D10993
             return true;
         } catch (Throwable ignored) {
             return false;

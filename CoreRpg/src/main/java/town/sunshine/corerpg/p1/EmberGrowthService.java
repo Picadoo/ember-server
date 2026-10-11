@@ -2203,8 +2203,18 @@ public final class EmberGrowthService implements Listener {
         if (r == null) return null;
         r = EmberLockNearCap.apply(r, old, t.quality, reroll, lock); // D6689
         r = EmberFirstAffixFloor.apply(r, old, t.quality, reroll); // D6945
+        int pityUse = r.pityAfter;
+        try {
+            if (!r.forced) {
+                int extra = EmberRerollPityNudge.consumeExtra(d); // D10977
+                if (extra > 0) {
+                    pityUse = r.pityAfter + extra;
+                    r = new EmberAffix.Roll(r.id, r.tier, pityUse, r.forced);
+                }
+            }
+        } catch (Throwable ignored) { }
         int enc = EmberAffix.encode(reroll.def(r.id), r.tier);
-        return new RollPlan(next(d, t, old == 0 ? enc : old, r.pityAfter, sigOf(d, t), n), r, enc, old, pity, lockId != null);
+        return new RollPlan(next(d, t, old == 0 ? enc : old, pityUse, sigOf(d, t), n), r, enc, old, pity, lockId != null);
     }
 
     /** D172 → D208: the item transaction that makes the payment final AND carries the roll (or the refund, if it did not commit) */

@@ -1,3 +1,4 @@
+Live jar: **1.65.703-d11040.local** · D10977–D11040 RerollPityNudge + BossPotExtra + FcBoneBoost
 Live jar: **1.65.702-d10976.local** · D10913–D10976 QualityWinShard + RefineWinBone + UpgradeWinCore
 Live jar: **1.65.701-d10912.local** · D10849–D10912 SigStampNudge + AwakenBlankGift + EnhanceWinBone
 Live jar: **1.65.700-d10848.local** · D10785–D10848 GemHoleUnlockSoft + AbyssNewBestShard + ChallengeShardBoost
