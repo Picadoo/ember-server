@@ -72,10 +72,17 @@ public final class EmberParry implements Listener {
             guardPosture = postureAligned && EmberPosturePath.get(d) == EmberPosturePath.GUARD;
             mapKeyWin = runs == null ? null : runs.activeMapKey(player);
         } catch (Throwable ignored) { }
-        long until = System.currentTimeMillis() + EmberSkillKit.parryWindowMs(syncWin, guardPosture, mapKeyWin, postureAligned);
+        long bonus = EmberParryMissBreak.consumeBonus(d); // D6721
+        long until = System.currentTimeMillis() + EmberSkillKit.parryWindowMs(syncWin, guardPosture, mapKeyWin, postureAligned) + bonus;
         windowUntil.put(player.getUniqueId(), until);
         windowBoss.put(player.getUniqueId(), boss.getUniqueId());
         EmberParryFeel.pulseOpen(player); // D3681 open feel · zero windowMs
+        if (bonus > 0) {
+            try {
+                player.sendMessage(P + "§a招架补窗 · 空按连失后 +§f" + bonus + "§ams（本日一次）");
+                player.sendActionBar("§a招架补窗 · +" + bonus + "ms");
+            } catch (Throwable ignored) { }
+        }
     }
 
     /** Remaining CD seconds (0 = ready). For PAPI / kit info. */
@@ -139,6 +146,10 @@ public final class EmberParry implements Listener {
                 // Match T0b: outside-window press burns independent CD, no utility
                 armCd(player, now + EmberSkillKit.PARRY_CD_MS); // D476 ready cue
                 EmberParryFeel.pulseMiss(player); // D3701
+                try {
+                    PlayerData pdMiss = plugin.getDataStore().get(id);
+                    EmberParryMissBreak.onMiss(pdMiss); // D6721
+                } catch (Throwable ignored) { }
                 player.sendMessage(P + ChatColor.YELLOW + EmberSkillKit.DISPLAY_PARRY
                         + "空按 · 窗外无效（独立冷却 " + EmberSkillKit.PARRY_CD_SECONDS + "s）");
             } else {
@@ -164,6 +175,10 @@ public final class EmberParry implements Listener {
         EmberCombatListener.dealP1(player, boss, flat, EmberSetEngine.Kind.SKILL, tag);
         String syncTip = applyParrySetSync(player, boss, lo == null ? "none" : lo.activeSet);
         EmberParryFeel.pulseSuccess(player, boss); // D3681 densify · zero flat
+        try {
+            PlayerData pdHit = plugin.getDataStore().get(id);
+            EmberParryMissBreak.onHit(pdHit); // D6721
+        } catch (Throwable ignored) { }
         player.sendMessage(P + ChatColor.GREEN + EmberSkillKit.DISPLAY_PARRY + "成功 · 反打 "
                 + ChatColor.WHITE + String.format(java.util.Locale.ROOT, "%.0f", flat)
                 + ChatColor.GRAY + "（预警伤仍生效 · CD " + EmberSkillKit.PARRY_CD_SECONDS + "s）"

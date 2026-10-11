@@ -546,3 +546,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - CodexBreak D6465–D6496: 图录阶段自动领币
 - ForgeChargeRest D6561–D6624: 锻造次数耗尽通关回1
 - MarkNearBreak D6625–D6688: 徽记差1烙印时本局加倍一次
+- D6689–D6752: LockNearCap (lock + old=cap−1 → force cap) + ParryMissBreak (3 miss → +80ms window once/day). STOP densify those. Talent HOLD.
