@@ -207,6 +207,13 @@ public final class EmberMapEnterFeel {
                 } catch (Throwable ignored) { }
             }
             EmberSigChase.maybeAutoChaseOnEnter(p, pd, runsPin, m.key); // D3881
+            if (EmberSigChase.chaseMap(pd, EmberMapStashPin.pinKey(m.key))) {
+                EmberSigChase.maybeReadyCue(p, pd); // D3913 rising-edge only
+                String gl = EmberSigChase.statusGlance(pd);
+                if (gl != null && !gl.isEmpty()) {
+                    try { p.sendMessage(EmberRunService.P + "§7" + gl); } catch (Throwable ignored) { }
+                }
+            }
         }
         boolean ch = s != null && s.challenge;
         int ab = s == null ? 0 : s.abyss;
