@@ -604,9 +604,18 @@ public final class LifeService implements Listener {
         if (p.getFoodLevel() >= 20) return 0;
         if (countPathFood(p) <= 0) return 0;
         if (!ni.consumeExact(p, cookOutput, 1)) return 0;
-        int fl = Math.min(20, p.getFoodLevel() + BITE_RESTORE);
+        int restore = BITE_RESTORE;
+        try {
+            PlayerData pdB = dataStore.get(p.getUniqueId());
+            int extra = town.sunshine.corerpg.p1.EmberBiteRestoreBoost.consumeExtra(pdB); // D8801
+            if (extra > 0) {
+                restore += extra;
+                p.sendMessage(ChatColor.GREEN + "[生活] 首口加餐 · 饱食 +" + extra + "（今日一次）");
+            }
+        } catch (Throwable ignored) { }
+        int fl = Math.min(20, p.getFoodLevel() + restore);
         p.setFoodLevel(fl);
-        float sat = Math.min(20f, p.getSaturation() + BITE_RESTORE);
+        float sat = Math.min(20f, p.getSaturation() + restore);
         p.setSaturation(sat);
         return 1;
     }
@@ -662,6 +671,13 @@ public final class LifeService implements Listener {
             for (Map.Entry<String, Integer> e : take.entrySet()) { int u = Math.min(left, e.getValue()); e.setValue(u); left -= u; }
         }
         int cookFee = fee; // matches adjusted total
+        try {
+            int soft = town.sunshine.corerpg.p1.EmberCookCoinSoft.consumeFee(d, cookFee); // D8849
+            if (soft < cookFee) {
+                p.sendMessage(ChatColor.GREEN + "[生活] 烹饪减负 · 币 ×0.5（今日一次 · " + cookFee + "→" + soft + "）");
+                cookFee = soft;
+            }
+        } catch (Throwable ignored) { }
         if (cookFee > 0 && !town.sunshine.corerpg.p1.EmberEconomy.spendCoin(d, "C17", cookFee)) {
             p.sendMessage(ChatColor.RED + "[生活] 扣币失败"); return;
         } // D1020: coin before mats

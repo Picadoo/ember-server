@@ -1,3 +1,6 @@
+Live jar: **1.65.669-d8864.local** · D8801–D8864 BiteRestoreBoost + ContactSoft + CookCoinSoft
+Prior: Fest/Brew/Lava
+
 Live jar: **1.65.668-d8800.local** · D8737–D8800 FestivalEntrySoft + BrewCoinSoft + LavaSoft
 Prior: StamPot/GemInsert/ChalBrace
 
