@@ -1111,6 +1111,14 @@ final class EmberRunDirector {
     }
 
     /** D581: warp a committed player next to the boss to pile break damage. */
+    void applyPressBossSlow(int ticks) {
+        if (boss == null || boss.le == null || boss.le.isDead() || ticks <= 0) return;
+        try {
+            boss.le.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.SLOW, ticks, 0, false, true), true);
+        } catch (Throwable ignored) { }
+    }
+
     boolean pathPressBoss(Player p) {
         if (p == null || !p.isOnline() || !hasPendingPress()) return false;
         if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;

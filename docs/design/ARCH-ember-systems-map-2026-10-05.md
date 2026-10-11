@@ -471,3 +471,7 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 ## Posture footwork NEAR-SAT · Room enter · D2473–D2512
 - Step land/distance by posture; GUARD parry window
 - Room path unlock on Q02 enter + enterCue
+
+## Room/Press behavior · D2513–D2528
+- Room bias harden + preferred-room Speed pulse
+- Press enter unlock + press-land Slow/Speed

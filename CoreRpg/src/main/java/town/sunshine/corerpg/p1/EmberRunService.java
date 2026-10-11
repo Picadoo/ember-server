@@ -671,6 +671,7 @@ public final class EmberRunService implements Listener {
         if (!r.hint.isEmpty()) tellRun(s, "§e提示：§f" + r.hint); // D166
         log().info("[P1 run] " + s.runId + " " + r.id + " variant " + (b ? "B" : "A") + " " + comp.replaceAll("§.", ""));
         reviveFallen(s, RevivePoint.ROOM_OPEN); // D106
+        EmberRoomPath.pulsePreferredRoom(s, r, this); // D2515
     }
 
     void onRoomCleared(EmberRunSession s, EmberRunMaps.Room r, boolean last) {
@@ -1063,6 +1064,13 @@ public final class EmberRunService implements Listener {
         EmberRunDirector d = byWorld.get(p.getWorld().getName());
         return d != null && d.hasPendingPress() && d.s != null && d.s.open()
                 && d.s.committed.contains(p.getUniqueId());
+    }
+
+    /** D2517: Slow I on current press boss for {@code ticks}. */
+    public void applyPressBossSlow(Player p, int ticks) {
+        if (p == null) return;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d != null) d.applyPressBossSlow(ticks);
     }
 
     public boolean pathPressBoss(Player p) {

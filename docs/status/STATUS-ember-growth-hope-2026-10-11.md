@@ -1,13 +1,13 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.538-d2512.local**
-- D2473–D2512
+- jar **1.65.539-d2528.local**
+- D2513–D2528 room/press real behavior
 
-## This arc
-- Posture/footwork: step land + step distance by stance; GUARD parry window +50ms → **NEAR-SAT**
-- New axis start: Room path Q02 enter unlock + enter glance (no ConfirmTokens twin)
+## Shipped
+- Room: applyBias harden (eventKind-only pin); preferred-room open → Speed I 3s
+- Press: Q01 enter unlock; press warp → boss Slow I 1s + self Speed I 1.5s
 
-Talent HOLD · HeldNext/ConfirmTokens/remain/sig ICD STOP
+No HeldNext/ConfirmTokens/remain/sig ICD/posture twin. Talent HOLD.
 
-Updated 2026-10-11 08:14 CST
+Updated 2026-10-11 08:17 CST

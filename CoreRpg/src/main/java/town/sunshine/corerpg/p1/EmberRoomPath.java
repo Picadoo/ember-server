@@ -94,7 +94,8 @@ public final class EmberRoomPath {
 
     /**
      * Remap affix/event rooms to preferred slot when that outcome exists.
-     * Does not invent affix/event ids. Bukkit-free.
+     * D2514: also pins event room when eventKind present without room; never invents kinds.
+     * Bukkit-free.
      */
     public static String[] applyBias(String[] rolled, int path) {
         String[] v = new String[4];
@@ -104,9 +105,49 @@ public final class EmberRoomPath {
         v[3] = rolled != null && rolled.length > 3 && rolled[3] != null ? rolled[3] : (!v[2].isEmpty() ? "timed" : "");
         String room = roomId(path);
         if (room == null) return v;
-        if (!v[1].isEmpty()) v[0] = room;
-        if (!v[2].isEmpty()) v[2] = room;
+        if (!v[1].isEmpty()) v[0] = room; // affix → preferred room
+        if (!v[3].isEmpty() || !v[2].isEmpty()) {
+            v[2] = room; // event → preferred room
+            if (v[3].isEmpty()) v[3] = "timed";
+        }
         return v;
+    }
+
+    public static boolean isPreferredRoom(int path, String roomKey) {
+        String want = roomId(path);
+        return want != null && roomKey != null && want.equalsIgnoreCase(roomKey);
+    }
+
+    /**
+     * D2515: preferred-room open → party Speed I 3s (footwork, zero skill_mult).
+     * Call from run room-start when variety pinned this room.
+     */
+    public static void pulsePreferredRoom(EmberRunSession s, EmberRunMaps.Room r, EmberRunService runs) {
+        if (s == null || r == null || runs == null || r.id == null) return;
+        try {
+            org.bukkit.entity.Player leader = null;
+            for (java.util.UUID u : s.committed) {
+                org.bukkit.entity.Player p = org.bukkit.Bukkit.getPlayer(u);
+                if (p != null && p.isOnline()) { leader = p; break; }
+            }
+            if (leader == null) return;
+            PlayerData ld = runs.dataOf(leader.getUniqueId());
+            int path = get(ld);
+            if (!valid(path) || !isPreferredRoom(path, r.id)) return;
+            boolean varietyHere = (r.id.equals(s.affixRoom) && s.affix != null && !s.affix.isEmpty())
+                    || (r.id.equals(s.eventRoom) && s.eventRoom != null && !s.eventRoom.isEmpty());
+            if (!varietyHere) return;
+            for (java.util.UUID u : s.committed) {
+                org.bukkit.entity.Player p = org.bukkit.Bukkit.getPlayer(u);
+                if (p == null || !p.isOnline() || p.isDead()) continue;
+                p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                        org.bukkit.potion.PotionEffectType.SPEED, 60, 0, false, true), true);
+                try {
+                    p.sendMessage(EmberRunService.P + "§a房序优房 · §f" + r.label + " §7Speed I 3s");
+                    p.sendActionBar("§a优房 · §f" + label(path));
+                } catch (Throwable ignored) { }
+            }
+        } catch (Throwable ignored) { }
     }
 
     /** D2503: map-enter glance when path set (no ConfirmTokens). */

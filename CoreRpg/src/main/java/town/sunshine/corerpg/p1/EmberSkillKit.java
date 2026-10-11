@@ -97,6 +97,8 @@ public final class EmberSkillKit {
     public static final String C_STRIDE_ENTER = "p1_stride_enter";
     /** D2502: entered Q02 → room path without clear-gate. */
     public static final String C_ROOM_ENTER = "p1_room_enter";
+    /** D2516: entered Q01 → press path without clear-gate. */
+    public static final String C_PRESS_ENTER = "p1_press_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -214,6 +216,20 @@ public final class EmberSkillKit {
         if (d == null) return false;
         if (d.periodCount(C_ROOM_ENTER, "all") > 0) return true;
         return runs != null && runs.firstClearedKey(d, "q02");
+    }
+
+    public static boolean markPressEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_PRESS_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_PRESS_ENTER, "all", 1);
+        return true;
+    }
+
+    /** D2516: Q01 clear OR first-enter unlocks press path. */
+    public static boolean pressPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_PRESS_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
     }
 
     /** D2378: Q01 clear OR first-enter unlocks stride path (still needs Q05 step). */

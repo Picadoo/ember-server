@@ -87,7 +87,7 @@ public final class EmberPressPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8压伤路径：首通 Q01 后可选";
+        if (!unlocked) return "§8压伤路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8压伤路径：未选 · /corerpg p1 presspath";
         return "§e压伤路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -111,6 +111,7 @@ public final class EmberPressPath {
                 Bukkit.getScheduler().runTaskLater(pl, () -> {
                     if (!p.isOnline()) return;
                     if (runs.pathPressBoss(p)) {
+                        applyPressLand(p, runs);
                         p.sendMessage(EmberRunService.P + "§a压伤·自动 §7已传至首领压破招");
                     }
                 }, 3L);
@@ -136,6 +137,7 @@ public final class EmberPressPath {
         int path = get(d);
         if (shouldAuto(path)) {
             if (runs != null && runs.pathPressBoss(p)) {
+                applyPressLand(p, runs);
                 p.sendMessage(EmberRunService.P + "§a压伤·自动 §7已传至首领压破招");
             } else {
                 p.sendMessage(EmberRunService.P + "§a压伤·自动 §7待命（破招蓄力时贴脸）");
@@ -169,6 +171,20 @@ public final class EmberPressPath {
         return true;
     }
 
+    /** D2517: after press warp — boss Slow I 1s + self Speed I 1.5s (zero skill_mult). */
+    public static void applyPressLand(Player p, EmberRunService runs) {
+        if (p == null || runs == null) return;
+        try {
+            p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.SPEED, 30, 0, false, true), true);
+            runs.applyPressBossSlow(p, 20);
+            try { p.sendActionBar("§a压伤贴脸 · §fSlow首领 · Speed自己"); } catch (Throwable ignored) { }
+        } catch (Throwable ignored) { }
+    }
+
+    /** D2516: first-enter Q01. */
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
+
     public static void scheduleOfferAfterQ01(Player p) {
         if (p == null) return;
         Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
@@ -192,8 +208,8 @@ public final class EmberPressPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c压伤路径需本人首通 Q01。");
+        if (!EmberSkillKit.pressPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c压伤路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;

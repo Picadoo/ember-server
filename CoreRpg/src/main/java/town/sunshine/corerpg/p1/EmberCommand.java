@@ -5829,7 +5829,10 @@ public final class EmberCommand {
             Player p = (Player) s;
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             if (!runs.pathPressBoss(p)) p.sendMessage(P + "无法压伤（无破招蓄力/未进本）");
-            else p.sendMessage(P + "§a压伤·手点 §7已传至首领");
+            else {
+                EmberPressPath.applyPressLand(p, runs);
+                p.sendMessage(P + "§a压伤·手点 §7已传至首领");
+            }
             return true;
     }
 

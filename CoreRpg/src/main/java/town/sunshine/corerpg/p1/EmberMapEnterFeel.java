@@ -87,6 +87,13 @@ public final class EmberMapEnterFeel {
                     EmberChallengePath.scheduleOfferAfterEnter(p); // D2420
                 }
             } catch (Throwable ignored) { }
+            // D2516: Q01 enter unlocks press even if stride latch already set
+            if ("q01".equalsIgnoreCase(m.key) && EmberSkillKit.markPressEnter(pd)) {
+                try {
+                    p.sendMessage(EmberRunService.P + "§a压伤路径已开放 · §f/corerpg p1 presspath §7（首进 Q01）");
+                } catch (Throwable ignored) { }
+                EmberPressPath.scheduleOfferAfterEnter(p);
+            }
             // D2502: Q02 enter can unlock room even if dash latch already set
             if ("q02".equalsIgnoreCase(m.key) && EmberSkillKit.markRoomEnter(pd)) {
                 try {
