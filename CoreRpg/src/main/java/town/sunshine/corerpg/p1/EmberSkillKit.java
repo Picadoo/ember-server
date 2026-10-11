@@ -531,8 +531,15 @@ public final class EmberSkillKit {
 
     /** D2618: preferred variety room + set×shape → +0.15 dash radius. */
     public static double dashHitRadius(boolean setShapeSync, boolean roomShape) {
+        return dashHitRadius(setShapeSync, roomShape, SHAPE_FAN);
+    }
+
+    /** D3009: RING surround dash +0.10 (shape-native; not Shape×Room twin). */
+    public static double dashHitRadius(boolean setShapeSync, boolean roomShape, int shapeId) {
         double r = setShapeSync ? DASH_HIT_RADIUS + 0.20 : DASH_HIT_RADIUS;
-        return (setShapeSync && roomShape) ? r + 0.15 : r;
+        if (setShapeSync && roomShape) r += 0.15;
+        if (shapeId == SHAPE_RING) r += 0.10;
+        return r;
     }
 
     /** D2343: parry window ms when set-shape synced. */
@@ -872,8 +879,15 @@ public final class EmberSkillKit {
 
     /** D2643: +2t when preferred-room × set×shape (stacks; not posture twin). */
     public static int slashLandSlowTicks(boolean setShapeSync, boolean postureAligned, boolean roomShape) {
-        return SLASH_BURST_SLOW_TICKS + (setShapeSync ? 4 : 0) + (postureAligned ? 2 : 0)
+        return slashLandSlowTicks(setShapeSync, postureAligned, roomShape, SHAPE_FAN);
+    }
+
+    /** D2977: LINE pierce linger +2t (shape-native; not Shape×Room twin). */
+    public static int slashLandSlowTicks(boolean setShapeSync, boolean postureAligned, boolean roomShape, int shapeId) {
+        int t = SLASH_BURST_SLOW_TICKS + (setShapeSync ? 4 : 0) + (postureAligned ? 2 : 0)
                 + (setShapeSync && roomShape ? 2 : 0);
+        if (shapeId == SHAPE_LINE) t += 2;
+        return t;
     }
 
     /** D2266: sustain land heal pct (×1.25 when synced). */
@@ -887,9 +901,15 @@ public final class EmberSkillKit {
 
     /** D2658: ×1.05 when preferred-room × set×shape (on top of sync/posture). */
     public static double slashLandHealPct(boolean setShapeSync, boolean postureAligned, boolean roomShape) {
+        return slashLandHealPct(setShapeSync, postureAligned, roomShape, SHAPE_FAN);
+    }
+
+    /** D2978: RING surround sustain ×1.04 (shape-native; not Shape×Room twin). */
+    public static double slashLandHealPct(boolean setShapeSync, boolean postureAligned, boolean roomShape, int shapeId) {
         double v = setShapeSync ? SLASH_HEAL_PCT * 1.25 : SLASH_HEAL_PCT;
         if (postureAligned) v *= 1.1;
         if (setShapeSync && roomShape) v *= 1.05;
+        if (shapeId == SHAPE_RING) v *= 1.04;
         return v;
     }
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync) {

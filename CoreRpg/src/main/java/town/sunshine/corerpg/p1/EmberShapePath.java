@@ -82,8 +82,8 @@ public final class EmberShapePath {
 
     public static String tip(int id) {
         if (id == FAN) return "扇面略宽 · 近距清杂";
-        if (id == LINE) return "更长更窄直线 · 走廊点杀";
-        if (id == RING) return "环身略大 · 被围可多命中";
+        if (id == LINE) return "更长更窄直线 · 走廊点杀 · 缓速略久";
+        if (id == RING) return "环身略大 · 被围可多命中 · 微疗略增";
         return "点选烬斩几何（真改出招）";
     }
 
