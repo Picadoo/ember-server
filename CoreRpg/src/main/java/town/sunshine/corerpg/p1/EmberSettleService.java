@@ -457,6 +457,13 @@ public final class EmberSettleService {
             oldBest = floor.oldBest;
         }
         if (newBest && runs.cosmetics() != null) runs.cosmetics().onAbyssBest(Bukkit.getPlayer(u), oldBest, s.abyss); // P2-9 (D83)
+        if (newBest) {
+            try {
+                Player bp = Bukkit.getPlayer(u);
+                if (bp != null && bp.isOnline())
+                    EmberAbyssNewBestBone.maybeGift(bp, pd); // D8257
+            } catch (Throwable ignored) { }
+        }
         if (growth != null && gp != null) growth.refreshHonors(gp); // D142: one-time unlock notice
         // D623 W2a soft pity: variety-eligible repeat settle updates dry streak
         boolean varietyEligibleSettle = s.varietyRolled && in.firstClear == null

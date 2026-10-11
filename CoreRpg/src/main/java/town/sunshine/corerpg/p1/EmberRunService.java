@@ -3679,6 +3679,9 @@ public boolean pathForceOpenDoor(Player p) {
                                     qq.sendMessage(P + "§a随机锻造完成" + (floor ? "§6·下限" : "") + "：§fT" + tier + " " + label
                                             + " §7· 成色§f" + EmberItemData.qualityName(q)
                                             + " §7· 精工§f" + (craft * 2) + "%§7 · +0 · 词条空");
+                                    try {
+                                        EmberForgeRollBone.maybeGift(qq, data(id)); // D8273
+                                    } catch (Throwable ignored) { }
                                     try { // D1844
                                         PlayerData qd = data(id);
                                         int leftM = qd == null ? 0 : marks(qd, tier);

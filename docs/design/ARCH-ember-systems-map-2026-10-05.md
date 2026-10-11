@@ -570,3 +570,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D8033–D8096: RegenWindowBoost + FrostSlowSoft + JailerRootSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D8097–D8160: ForgeQualityFloor + ForgeCraftFloor + ChargeLandHeal. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D8161–D8224: SlashFirstHeal + KillStreakSpeed + EnhanceFailBone. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D8225–D8288: MeleeFirstSlow + AbyssNewBestBone + ForgeRollBone. STOP densify those + priors. Talent HOLD. Six-slot HOLD.

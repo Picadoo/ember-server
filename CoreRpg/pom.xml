@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>town.sunshine</groupId>
   <artifactId>CoreRpg</artifactId>
-  <version>1.65.659-d8224.local</version>
+  <version>1.65.660-d8288.local</version>
   <packaging>jar</packaging>
   <name>CoreRpg</name>
   <properties>

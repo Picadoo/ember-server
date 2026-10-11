@@ -1,3 +1,6 @@
+Live jar: **1.65.660-d8288.local** · D8225–D8288 MeleeFirstSlow + AbyssNewBestBone + ForgeRollBone
+Prior: SlashHeal/KillStreak/EnhBone
+
 Live jar: **1.65.659-d8224.local** · D8161–D8224 SlashFirstHeal + KillStreakSpeed + EnhanceFailBone
 Prior: ForgeQ/Craft/ChargeHeal
 

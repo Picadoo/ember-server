@@ -1,5 +1,7 @@
 package town.sunshine.corerpg.p1;
 
+import town.sunshine.corerpg.PlayerData;
+
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -210,6 +212,10 @@ public final class EmberCombatListener implements Listener {
         e.setDamage(dmg);
         // D3505/D3553: set-family melee spark fan + sfx (feel only · zero skill_mult)
         EmberMeleeFeel.spawnHitSparks(p, le.getLocation(), l.activeSet, crit);
+        try {
+            PlayerData pdM = plugin.getDataStore().get(p.getUniqueId());
+            EmberMeleeFirstSlow.maybeSlow(p, pdM, le); // D8225
+        } catch (Throwable ignored) { }
         // Gem Stage2: basic-hit life steal only (skills never · D06)
         double ls = EmberGems.lifeStealPct(l.blade, l.charm);
         if (ls > 0 && dmg > 0 && !est.unreliable) {
