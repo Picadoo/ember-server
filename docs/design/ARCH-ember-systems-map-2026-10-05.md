@@ -510,3 +510,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - Map stash pin D3801–D3880: origin.map GearLib filter + enter auto-pin (non-Path)
 - Sig chase enter pin D3881–D3912: auto-chase under-mark sig on map enter (non-Path)
 - Held ready tip D3937–D3976: imprint-ready same-slot one-shot (no ConfirmTokens)
+- Forge mat quiet D3977–D4008: held enhance-ready chat+AB no ConfirmTokens

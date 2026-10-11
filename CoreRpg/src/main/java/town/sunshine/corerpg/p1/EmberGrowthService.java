@@ -761,6 +761,7 @@ public final class EmberGrowthService implements Listener {
             if (d == null || EmberSigChase.get(d) == null) return;
             EmberLoadout lo = runs == null || runs.loadouts() == null ? null : runs.loadouts().refresh(p);
             EmberSigChase.maybeHeldReadyTip(p, d, lo);
+            EmberForgeMatReady.maybeQuietReadyTip(p); // D3977 no ConfirmTokens
         });
     }
 

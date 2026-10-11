@@ -529,6 +529,7 @@ public final class EmberCounters {
         px("p1_afk_gear_stable_t", "EmberAfkGearFeel", D, HI, OW, "D2230 AFK gear-stable rising-edge latch per tier@day");
         px("p1_afk_gear_weak_t", "EmberAfkGearFeel", D, HI, OW, "D2242 AFK gear-weak+deaths latch per tier@day");
         x("p1_forge_mat_ready", "EmberForgeMatReady", A, HI, OW, "D478 enhance mat-ready latch = target enhance");
+        x("p1_forge_mat_quiet", "EmberForgeMatReady", A, HI, OW, "D3977 quiet held mat tip latch = target enhance");
         x("p1_shape_manual", "EmberSkillKit", A, SE, OW, "D793 player locked shape; soft prefer skips");
         x("p1_sig_stamp_dry", "EmberSigStampDry", A, HI, OW, "sig stamp dry tip latch");
         px("p4_afc_", "EmberGrowthService", A, IT, NV, "affix craft/commit latch by uid");

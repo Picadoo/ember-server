@@ -18,6 +18,8 @@ public final class EmberForgeMatReady {
 
     /** Latched next enhance target (1..MAX) that we already announced; 0 = clear. */
     public static final String C_READY = "p1_forge_mat_ready";
+    /** D3977: quiet held tip latch (no ConfirmTokens); same target semantics as C_READY. */
+    public static final String C_QUIET = "p1_forge_mat_quiet";
 
     private EmberForgeMatReady() {}
 
@@ -40,6 +42,19 @@ public final class EmberForgeMatReady {
         if (d == null) return;
         int cur = d.periodCount(C_READY, "all");
         if (cur != 0) d.addPeriodCount(C_READY, "all", -cur);
+        clearQuietLatch(d);
+    }
+
+    public static void clearQuietLatch(PlayerData d) {
+        if (d == null) return;
+        int cur = d.periodCount(C_QUIET, "all");
+        if (cur != 0) d.addPeriodCount(C_QUIET, "all", -cur);
+    }
+
+    public static void setQuietLatch(PlayerData d, int target) {
+        if (d == null) return;
+        int cur = d.periodCount(C_QUIET, "all");
+        d.addPeriodCount(C_QUIET, "all", target - cur);
     }
 
     public static void setLatch(PlayerData d, int target) {
@@ -109,6 +124,59 @@ public final class EmberForgeMatReady {
                 new String[]{"[强化预览]", "/corerpg p1 enhance", "看成功率/保底再确认", "GREEN"},
                 new String[]{"[成套追]", "/corerpg p1 setchase", "换装再强化", "AQUA"},
                 new String[]{"[去工坊]", "/corerpg p1 forge", "打开工坊页", "GOLD"});
+        return true;
+    }
+
+
+    /**
+     * D3977: same afford gate as {@link #maybeReadyCue} but chat+AB only (no ConfirmTokens).
+     * For ItemHeld / hub convenience.
+     */
+    public static boolean maybeQuietReadyTip(Player p) {
+        if (p == null || !p.isOnline()) return false;
+        if (EmberMode.isP1World(p.getWorld())) return false; // hub/town only
+        CoreRpgPlugin pl = plugin();
+        if (pl == null) return false;
+        PlayerData d = pl.getDataStore().get(p.getUniqueId());
+        if (d == null || d.isLoadFailed()) return false;
+        EmberForgeService forge = pl.getEmberForge();
+        EmberLoadoutService ls = pl.getEmberLoadouts();
+        if (forge == null || ls == null) return false;
+        ItemStack main = p.getInventory().getItemInMainHand();
+        if (main == null || !ls.items().hasData(main)) {
+            clearQuietLatch(d);
+            flush(p);
+            return false;
+        }
+        EmberItems.Read r = ls.items().read(main);
+        if (r == null || !r.ok() || r.data == null || r.data.tier < 1) {
+            clearQuietLatch(d);
+            flush(p);
+            return false;
+        }
+        EmberItemData data = r.data;
+        EmberUpgradeRules.Plan plan = EmberUpgradeRules.enhanceCheck(data);
+        if (!plan.ok() || plan.cost == null) {
+            clearQuietLatch(d);
+            flush(p);
+            return false;
+        }
+        List<String> lack = forge.lackingFor(p, plan.cost);
+        boolean can = lack == null || lack.isEmpty();
+        int target = data.enhance + 1;
+        int latched = d.periodCount(C_QUIET, "all");
+        if (!can) {
+            clearQuietLatch(d);
+            flush(p);
+            return false;
+        }
+        if (!risingEdge(latched, target, true)) return false;
+        setQuietLatch(d, target);
+        flush(p);
+        String P = EmberRunService.P;
+        p.sendMessage(P + chatLine(data.shortLabel(), data.enhance, target)
+                + " §8· /corerpg p1 enhance");
+        try { p.sendActionBar(actionBar(data.enhance, target)); } catch (Throwable ignored) { }
         return true;
     }
 
