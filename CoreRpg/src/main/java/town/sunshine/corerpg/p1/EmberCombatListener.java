@@ -208,6 +208,12 @@ public final class EmberCombatListener implements Listener {
             return;
         }
         e.setDamage(dmg);
+        // D3505: set-family melee spark (feel only · zero skill_mult)
+        try {
+            org.bukkit.Particle sp = EmberMeleeFeel.sparkParticle(l.activeSet);
+            int n = EmberMeleeFeel.sparkCount(crit);
+            le.getWorld().spawnParticle(sp, le.getLocation().add(0, 1.0, 0), n, 0.25, 0.35, 0.25, 0.02);
+        } catch (Throwable ignored) { }
         // Gem Stage2: basic-hit life steal only (skills never · D06)
         double ls = EmberGems.lifeStealPct(l.blade, l.charm);
         if (ls > 0 && dmg > 0 && !est.unreliable) {

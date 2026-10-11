@@ -34,6 +34,7 @@ import town.sunshine.corerpg.p1.encounter.EmberShape;
 import town.sunshine.corerpg.p1.encounter.CounterplayKind;
 import town.sunshine.corerpg.p1.encounter.EmberCounterplay;
 import town.sunshine.corerpg.p1.encounter.EmberTelegraph;
+import town.sunshine.corerpg.p1.encounter.EmberAffixTelegraph;
 import town.sunshine.corerpg.p1.encounter.EmberEventTeach;
 import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.p1.encounter.EmberRoomObjective;
@@ -2258,7 +2259,7 @@ final class EmberRunDirector {
         EmberRunMaps.Variety v = svc.maps().variety;
         if ("blazing".equals(t.affix)) {
             if (AffixCycle.armed(t.affixAt)) {
-                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.blazeRadius, Particle.FLAME);
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.blazeRadius, EmberAffixTelegraph.warnParticle(t.affix));
                 if (AffixCycle.lands(now, t.affixAt)) {
                     execute(blazeSkill(t, v), t.affixOrigin, new Vector(1, 0, 0), t.le);
                     t.affixAt = 0;
@@ -2301,7 +2302,7 @@ final class EmberRunDirector {
             // D171: telegraph strip only — no body dash out of leash (execute skips teleport when src != boss)
             if (AffixCycle.armed(t.affixAt)) {
                 EmberRunMaps.Skill sk = chargeSkill(t, v, t.affixDir == null ? new Vector(1, 0, 0) : t.affixDir);
-                drawShape(sk, t.affixOrigin, t.affixDir == null ? new Vector(1, 0, 0) : t.affixDir);
+                drawShape(sk, t.affixOrigin, t.affixDir == null ? new Vector(1, 0, 0) : t.affixDir, 0.0, EmberAffixTelegraph.warnParticle(t.affix));
                 if (AffixCycle.lands(now, t.affixAt)) {
                     execute(sk, t.affixOrigin, t.affixDir == null ? new Vector(1, 0, 0) : t.affixDir, t.le);
                     t.affixAt = 0;
@@ -2325,7 +2326,7 @@ final class EmberRunDirector {
             if (!AffixCycle.ready(now, t.frostNext)) return;
             t.frostNext = AffixFrost.nextTick(now, v);
             Location c = t.le.getLocation();
-            warnCircle(c.clone().add(0, 0.15, 0), v.frostRadius, Particle.SNOW_SHOVEL);
+            warnCircle(c.clone().add(0, 0.15, 0), v.frostRadius, EmberAffixTelegraph.warnParticle(t.affix));
             for (Player p : participantsHere()) {
                 if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
                 if (AffixFrost.inAura(p.getLocation().distanceSquared(c), v)) {
@@ -2345,7 +2346,7 @@ final class EmberRunDirector {
         if ("mortar".equals(t.affix)) {
             // D181: periodic circle near nearest in-run player feet (onGround Y); kb=0
             if (AffixCycle.armed(t.affixAt)) {
-                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.mortarRadius, Particle.FLAME);
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.mortarRadius, EmberAffixTelegraph.warnParticle(t.affix));
                 if (AffixCycle.lands(now, t.affixAt)) {
                     execute(mortarSkill(t, v), t.affixOrigin, new Vector(1, 0, 0), t.le);
                     t.affixAt = 0;
@@ -2365,7 +2366,7 @@ final class EmberRunDirector {
             // D189 毒十字: two lines crossing at the elite's feet ("+" then "x"); a player is hit at most once per cast
             EmberRunMaps.Skill arm = venomSkill(t, v);
             if (AffixCycle.armed(t.affixAt)) {
-                for (Vector d : venomDirs(t.venomDiag)) drawShape(arm, t.affixOrigin, d);
+                for (Vector d : venomDirs(t.venomDiag)) drawShape(arm, t.affixOrigin, d, 0.0, EmberAffixTelegraph.warnParticle(t.affix));
                 if (AffixCycle.lands(now, t.affixAt)) {
                     Vector[] dirs = venomDirs(t.venomDiag);
                     int hit = 0;
@@ -2395,8 +2396,9 @@ final class EmberRunDirector {
         if ("jailer".equals(t.affix)) {
             // D189 禁锢: small circle at the nearest player's feet; inside when it lands = light hit + rooted (≤1.5 s)
             if (AffixCycle.armed(t.affixAt)) {
-                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.jailerRadius, Particle.CRIT_MAGIC);
-                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.jailerRadius * 0.5, Particle.CRIT_MAGIC);
+                Particle jailFx = EmberAffixTelegraph.warnParticle(t.affix);
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.jailerRadius, jailFx);
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.jailerRadius * 0.5, jailFx);
                 if (AffixCycle.lands(now, t.affixAt)) {
                     EmberRunMaps.Skill sk = jailerSkill(t, v);
                     int ticks = jailerRootTicks(v);
@@ -2653,7 +2655,7 @@ final class EmberRunDirector {
         if (moltenWarnAt <= 0 || moltenOrigin == null) return;
         EmberRunMaps.Variety v = svc.maps().variety;
         if (now < moltenWarnAt) return;
-        warnCircle(moltenOrigin.clone().add(0, 0.15, 0), v.moltenRadius, Particle.LAVA);
+        warnCircle(moltenOrigin.clone().add(0, 0.15, 0), v.moltenRadius, EmberAffixTelegraph.warnParticle("molten"));
         if (AffixCycle.lands(now, moltenBoomAt)) {
             // rebuild skill with stored absolute dmg (atk already folded)
             execute(AffixMolten.blast(moltenDmg, v), moltenOrigin, new Vector(1, 0, 0), null);
@@ -3936,16 +3938,21 @@ final class EmberRunDirector {
     private static String fmt(double v) { return v == Math.rint(v) ? String.valueOf((int) v) : String.valueOf(v); }
 
     private void drawShape(EmberRunMaps.Skill sk, Location o, Vector dir) {
-        drawShape(sk, o, dir, 0.0);
+        drawShape(sk, o, dir, 0.0, null);
     }
 
     /** D3281: urgency-aware telegraph geometry (readability · zero skill_mult / no stun twin). */
     private void drawShape(EmberRunMaps.Skill sk, Location o, Vector dir, double urgency) {
+        drawShape(sk, o, dir, urgency, null);
+    }
+
+    /** D3473: optional outlineForce for affix color-diff (no Boss urgency when urgency=0). */
+    private void drawShape(EmberRunMaps.Skill sk, Location o, Vector dir, double urgency, Particle outlineForce) {
         if (sk == null || o == null || dir == null) return;
         double y = o.getY() + 0.15;
         boolean share = sk.share;
-        Particle outline = EmberTelegraph.outlineParticle(sk.type, share, urgency);
-        Particle fill = EmberTelegraph.fillParticle(sk.type, share, urgency);
+        Particle outline = outlineForce != null ? outlineForce : EmberTelegraph.outlineParticle(sk.type, share, urgency);
+        Particle fill = outlineForce != null ? outlineForce : EmberTelegraph.fillParticle(sk.type, share, urgency);
         int dens = EmberTelegraph.densityMult(urgency);
         switch (sk.type) {
             case "circle": {
