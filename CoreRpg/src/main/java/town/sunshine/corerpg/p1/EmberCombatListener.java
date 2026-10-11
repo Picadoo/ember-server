@@ -363,6 +363,20 @@ public final class EmberCombatListener implements Listener {
                 } catch (Throwable ignored) { }
             }
         }
+        if (e.getCause() == DamageCause.LAVA || e.getCause() == DamageCause.FIRE_TICK) {
+            try {
+                PlayerData pdL = plugin.getDataStore().get(p.getUniqueId());
+                double soft = EmberLavaSoft.consume(pdL, base); // D8785
+                if (soft < base) {
+                    base = soft;
+                    pipe += " · 熔岩软化 ×0.5";
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a熔岩软化 · ×0.5（今日一次）");
+                        p.sendActionBar("§a熔岩软化");
+                    } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
         if (e.getCause() == DamageCause.DROWNING) {
             try {
                 PlayerData pdW = plugin.getDataStore().get(p.getUniqueId());

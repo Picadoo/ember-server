@@ -430,21 +430,31 @@ public final class LifeService implements Listener {
                 return false;
             }
         }
-        if (d.getCoin() < o.coin) {
-            int gapC = o.coin - d.getCoin();
-            p.sendMessage(ChatColor.RED + "[生活] 余烬币不足：需要 " + o.coin + "，拥有 " + d.getCoin()
+        int payCoin = o.coin;
+        if (BREW_OFFER_ID.equals(o.id) && payCoin > 0) {
+            try {
+                int soft = town.sunshine.corerpg.p1.EmberBrewCoinSoft.consumeCoin(d, payCoin); // D8769
+                if (soft < payCoin) {
+                    p.sendMessage(ChatColor.GREEN + "[生活] 熬药减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
+                    payCoin = soft;
+                }
+            } catch (Throwable ignored) { }
+        }
+        if (d.getCoin() < payCoin) {
+            int gapC = payCoin - d.getCoin();
+            p.sendMessage(ChatColor.RED + "[生活] 余烬币不足：需要 " + payCoin + "，拥有 " + d.getCoin()
                     + " §8· 还差 " + gapC);
             try { // D1545
                 p.sendActionBar("§e生活 · 还差币 §f" + gapC);
             } catch (Throwable ignored) { }
             return false;
         }
-        if (o.coin > 0 && !town.sunshine.corerpg.p1.EmberEconomy.spendCoin(d, "C17", o.coin)) {
+        if (payCoin > 0 && !town.sunshine.corerpg.p1.EmberEconomy.spendCoin(d, "C17", payCoin)) {
             p.sendMessage(ChatColor.RED + "[生活] 扣币失败"); return false;
         } // D1020: coin before mats
         for (Map.Entry<String, Integer> e : o.inputs.entrySet()) {
             if (!ni.consumeExact(p, e.getKey(), e.getValue())) {
-                if (o.coin > 0) d.addCoin(o.coin); // econ-ok: mat fail refund
+                if (payCoin > 0) d.addCoin(payCoin); // econ-ok: mat fail refund
                 p.sendMessage(ChatColor.RED + "[生活] 扣除失败"); return false;
             }
         }
@@ -456,7 +466,7 @@ public final class LifeService implements Listener {
             got.add(ni.displayName(e.getKey()) + "×" + e.getValue());
         }
         p.sendMessage(ChatColor.GREEN + "[生活] " + ChatColor.stripColor(o.name) + " → " + ChatColor.WHITE + String.join("，", got)
-                + (o.coin > 0 ? ChatColor.GRAY + "（-" + o.coin + " 币）" : ""));
+                + (payCoin > 0 ? ChatColor.GRAY + "（-" + payCoin + " 币）" : ""));
         try {
             String bar = "§a生活 · §f" + ChatColor.stripColor(o.name);
             if (o.weekly > 0) {
@@ -518,7 +528,11 @@ public final class LifeService implements Listener {
         PlayerData d = dataStore.get(p.getUniqueId());
         if (d == null) return false;
         if (lifeLevel(d) < o.lifeLevel) return false;
-        if (d.getCoin() < o.coin) return false;
+        int needCoin = o.coin;
+        if (BREW_OFFER_ID.equals(o.id) && needCoin > 0
+                && town.sunshine.corerpg.p1.EmberBrewCoinSoft.ready(d))
+            needCoin = Math.max(1, (int) Math.floor(needCoin * town.sunshine.corerpg.p1.EmberBrewCoinSoft.MULT));
+        if (d.getCoin() < needCoin) return false;
         town.sunshine.corerpg.p1.EmberSupplyService supply = plugin.getEmberSupplies();
         int pots = supply == null ? 0 : supply.countHealPotions(p);
         if (pots >= BREW_POTION_NEED) return false;

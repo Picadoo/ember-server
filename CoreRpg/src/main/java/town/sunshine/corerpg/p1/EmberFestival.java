@@ -218,7 +218,18 @@ public final class EmberFestival implements Listener {
         if (now < startMs) return name + " 还没开始（" + windowText() + "）";
         if (now >= endMs) return name + " 已结束（" + windowText() + "）";
         if (runs != null && !runs.progressFlag(d, requires)) return p.getName() + " 未开放活动本（需本人首通 " + requires.toUpperCase(Locale.ROOT) + "）";
-        if (dailyEntries > 0 && entriesToday(d) >= dailyEntries) return p.getName() + " 今天的活动本次数已满（" + entriesToday(d) + "/" + dailyEntries + "，0 点重置）";
+        if (dailyEntries > 0 && entriesToday(d) >= dailyEntries) {
+            try {
+                if (EmberFestivalEntrySoft.consume(d)) { // D8737
+                    p.sendMessage(P + "§a活动容错 · 额外 1 次（今日一次）");
+                    try { p.sendActionBar("§a活动容错"); } catch (Throwable ignored) { }
+                } else {
+                    return p.getName() + " 今天的活动本次数已满（" + entriesToday(d) + "/" + dailyEntries + "，0 点重置）";
+                }
+            } catch (Throwable ignored) {
+                return p.getName() + " 今天的活动本次数已满（" + entriesToday(d) + "/" + dailyEntries + "，0 点重置）";
+            }
+        }
         return null;
     }
 

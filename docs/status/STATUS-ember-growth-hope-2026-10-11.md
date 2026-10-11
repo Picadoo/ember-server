@@ -1,3 +1,6 @@
+Live jar: **1.65.668-d8800.local** · D8737–D8800 FestivalEntrySoft + BrewCoinSoft + LavaSoft
+Prior: StamPot/GemInsert/ChalBrace
+
 Live jar: **1.65.667-d8736.local** · D8673–D8736 StaminaPotBoost + GemInsertShard + ChallengeEnterBrace
 Prior: Ticket/Bank/Short/Pledge/Drown/Thorns
 

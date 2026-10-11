@@ -578,3 +578,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D8545–D8608: TicketConvertBoost + BankDrawBoost + ShortEnterSpeed. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D8609–D8672: PledgePotSoft + DrownSoft + ThornsSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D8673–D8736: StaminaPotBoost + GemInsertShard + ChallengeEnterBrace. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D8737–D8800: FestivalEntrySoft + BrewCoinSoft + LavaSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
