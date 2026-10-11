@@ -485,6 +485,7 @@ public final class EmberGrowthService implements Listener {
         if (cost > 0 && d.getCoin() < cost) { p.sendMessage(P + "§c重置要 " + cost + " 余烬币，现有 " + d.getCoin()); return true; }
         if (cost > 0 && !EmberEconomy.spendCoin(d, "C10", cost)) { p.sendMessage(P + "§c扣币失败"); return true; } // D218 REG C10
         for (EmberGrowth.Row r : talents.rows) d.addPeriodCount(C_ROW + r.row, "all", -d.periodCount(C_ROW + r.row, "all"));
+        EmberTalentPlaystyle.clearLatches(d); // D5601 allow re-apply after respec
         d.addPeriodCount(C_RESETS, "all", 1);
         epoch++;
         runs.flushData(p.getUniqueId());

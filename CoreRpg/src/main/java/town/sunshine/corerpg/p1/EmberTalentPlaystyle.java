@@ -17,6 +17,15 @@ public final class EmberTalentPlaystyle {
     public static final String C_STYLE = "p1_talent_style_";
 
     private EmberTalentPlaystyle() {}
+    public static void clearLatches(PlayerData d) {
+        if (d == null) return;
+        for (String id : new String[]{"t1a", "t1b", "t1c"}) {
+            int v = d.periodCount(C_STYLE + id, "all");
+            if (v > 0) d.addPeriodCount(C_STYLE + id, "all", -v);
+        }
+    }
+
+
     public static void schedulePending(Player p) {
         if (p == null) return;
         CoreRpgPlugin pl = (CoreRpgPlugin) Bukkit.getPluginManager().getPlugin("CoreRpg");
