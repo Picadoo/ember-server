@@ -78,14 +78,14 @@ public final class EmberRushService {
      * D160: no weekly entry limit (the reward is claimed once a week).
      */
     static String entryProblemText(String name, EmberRunMaps.MapDef m, boolean open, String missingChain) {
-        if (!open) return name + " 未开放" + m.rushLabel + "（需本人首通 " + m.requires.toUpperCase(Locale.ROOT) + "）";
+        if (!open) return name + " 未开放" + m.rushLabel + "（需本人首进或首通 " + m.requires.toUpperCase(Locale.ROOT) + "）";
         if (missingChain != null) return name + " 还没首通 " + missingChain.toUpperCase(Locale.ROOT) + "（" + m.rushLabel + "只打已首通的图的首领）"; // D174 stage 2b
         return null;
     }
 
     /** D235: one member's rush gate for {@link EmberEntryService#admit} (D144 own Q07 first clear; D174 chain maps first-cleared). */
     String entryProblem(Player p, PlayerData d, EmberRunMaps.MapDef m) {
-        boolean open = runs.progressFlag(d, m.requires);
+        boolean open = EmberSkillKit.mapAccessUnlocked(d, runs, m.requires); // D5409 access only
         String missing = null;
         if (open) for (String ck : m.chainKeys) if (!runs.progressFlag(d, ck)) { missing = ck; break; }
         return entryProblemText(p.getName(), m, open, missing);
@@ -239,7 +239,7 @@ public final class EmberRushService {
             p.sendMessage(P() + "§c" + m.rushLabel + " §7— " + chainText(m) + (m.chain.size() > 1 ? "，同一个大厅连打" : "，单独在大厅里打") + "（招式和各自主线图一样）");
             p.sendMessage(P() + "§7首领生命 ×" + fmt2(m.rushHp) + "、伤害 ×" + fmt2(m.rushDmg) + "（组队另按人数加生命）· 1～" + maps.partyMax(m) + " 人 · 不耗体力 · 倒下观战，没有复活");
             p.sendMessage(P() + "§e" + ruleText(m) + " §7· 奖励：" + rewardText(m) + " · 不给余烬币、装备、碎片，也不算每日委托");
-            if (!runs.progressFlag(d, m.requires)) { p.sendMessage(P() + "§c需本人首通 " + m.requires.toUpperCase(Locale.ROOT)); return true; }
+            if (!EmberSkillKit.mapAccessUnlocked(d, runs, m.requires)) { p.sendMessage(P() + "§c需本人首进或首通 " + m.requires.toUpperCase(Locale.ROOT)); return true; }
             int used = week(d, p.getUniqueId(), m);
             p.sendMessage(P() + (EmberRunRules.rushPaysReward(used, m.rushWeekly) ? "§a本周已领 " : "§8本周已领 ") + used + "/" + m.rushWeekly);
             ConfirmTokens.sendButtons(p, P(), new String[]{EmberRunRules.rushPaysReward(used, m.rushWeekly) ? "[开始]" : "[练习一局]",
@@ -252,7 +252,7 @@ public final class EmberRushService {
         p.sendMessage(P() + "§e每周首通领奖，失败可无限重试；已领奖后可练习（无奖励）§7 · 失败不扣体力、不算次数");
         p.sendMessage(P() + "§7本周奖励：T3 印记 +" + m.rushMarks + " · 余烬徽 +" + m.rushBadges + " · 第一次通关得称号「" + (EmberCosmetics.byId(m.rushTitle) == null ? m.rushTitle : EmberCosmetics.byId(m.rushTitle).label)
                 + "§7」· 不给余烬币、装备、碎片，也不算每日委托 · 本周最快榜（练习局也算成绩；赛季末前 3 名得「赛季疾行者」）");
-        if (!runs.progressFlag(d, m.requires)) { p.sendMessage(P() + "§c需本人首通 " + m.requires.toUpperCase(Locale.ROOT)); return true; }
+        if (!EmberSkillKit.mapAccessUnlocked(d, runs, m.requires)) { p.sendMessage(P() + "§c需本人首进或首通 " + m.requires.toUpperCase(Locale.ROOT)); return true; }
         int used = week(d, p.getUniqueId());
         p.sendMessage(P() + (EmberRunRules.rushPaysReward(used, RUSH_WEEKLY) ? "§a" : "§8") + EmberRunRules.rushWeekText(used, RUSH_WEEKLY));
         EmberSeason season = runs.season();

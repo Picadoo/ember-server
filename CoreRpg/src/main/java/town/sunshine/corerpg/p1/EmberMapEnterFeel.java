@@ -86,7 +86,9 @@ public final class EmberMapEnterFeel {
                     p.sendMessage(EmberRunService.P + "§a签名调律+挑战版已开放 · §f/corerpg p1 attunepath · challengepath §7（首进 Q07）");
                     p.sendMessage(EmberRunService.P + "§aT3 定向锻造已开放 · §f印记兑换 §7（首进 Q07 · 不锁通关）");
                     p.sendMessage(EmberRunService.P + "§a深渊·周目标已开放 · §f/ember_p1_abyss · /ember_p1_season §7（首进 Q07 · 不锁通关 · 不改经济表）");
-                    p.sendActionBar("§a调律+深渊+周目标 · §fQ07");
+                    p.sendMessage(EmberRunService.P + "§a团本已开放 · §f/ember_p1_raid §7（首进 Q07 · 周帽不变）");
+                    p.sendMessage(EmberRunService.P + "§a连战已开放 · §f/ember_p1_rush §7（首进 Q07 · 链内首通仍要；周帽不变）");
+                    p.sendActionBar("§a团本+连战 · §fQ07");
                     EmberChallengePath.scheduleOfferAfterEnter(p); // D2420
                 }
             } catch (Throwable ignored) { }
@@ -94,7 +96,8 @@ public final class EmberMapEnterFeel {
             if ("q01".equalsIgnoreCase(m.key) && EmberSkillKit.markGemEnter(pd)) {
                 try {
                     p.sendMessage(EmberRunService.P + "§a宝石路径已开放 · §f/corerpg p1 gempath §7（首进 Q01 · 不锁通关）");
-                    p.sendActionBar("§a宝石路径 · §fgempath");
+                    p.sendMessage(EmberRunService.P + "§a短征已开放 · §f/ember_p1_short §7（首进 Q01 · 日帽/结算不变）");
+                    p.sendActionBar("§a宝石+短征 · §fQ01");
                 } catch (Throwable ignored) { }
             }
             // D5217: Q02 enter unlocks imprint even if dash latch already set

@@ -71,14 +71,14 @@ public final class EmberRaidService {
      * {@code used} is only read when {@code open}. Null = no problem.
      */
     public static String entryProblemText(String name, EmberRunMaps.MapDef m, boolean open, int used) {
-        if (!open) return name + " 未开放团本（需本人首通 " + m.requires.toUpperCase(Locale.ROOT) + "）";
+        if (!open) return name + " 未开放团本（需本人首进或首通 " + m.requires.toUpperCase(Locale.ROOT) + "）";
         if (capReached(m, used)) return name + " 本周团本次数已满（" + used + "/" + m.weeklyCap + "，周一 0 点重置）";
         return null;
     }
 
     /** menu / PAPI label (P2-5 %corerpg_p1_raid_r01%) */
     public static String labelText(EmberRunMaps.MapDef m, boolean open, int used, int partyMin, int partyMax, int cost) {
-        if (!open) return "需本人首通 " + m.requires.toUpperCase(Locale.ROOT);
+        if (!open) return "需本人首进或首通 " + m.requires.toUpperCase(Locale.ROOT);
         return "本周 " + used + "/" + m.weeklyCap + (capKey(m).equals(m.key) ? "" : "（团本合计）") + " · " + partyMin + "～" + partyMax + " 人 · " + cost + " 体力";
     }
 
@@ -163,13 +163,13 @@ public final class EmberRaidService {
 
     String label(PlayerData d, EmberRunMaps.MapDef m) {
         EmberRunMaps maps = runs.maps();
-        boolean open = runs.progressFlag(d, m.requires);
+        boolean open = EmberSkillKit.mapAccessUnlocked(d, runs, m.requires); // D5409
         return labelText(m, open, open ? week(d, m) : 0, maps.partyMin(m), maps.partyMax(m), maps.cost(m));
     }
 
-    /** P2-5: own Q07 first clear + weekly cap of settled clears (null = ok) */
+    /** P2-5: own Q07 enter/clear + weekly cap of settled clears (null = ok) · caps unchanged */
     String entryProblem(Player p, PlayerData d, EmberRunMaps.MapDef m) {
-        boolean open = runs.progressFlag(d, m.requires);
+        boolean open = EmberSkillKit.mapAccessUnlocked(d, runs, m.requires); // D5409
         return entryProblemText(p.getName(), m, open, open && m.weeklyCap > 0 ? week(d, m) : 0);
     }
 
@@ -195,7 +195,7 @@ public final class EmberRaidService {
     void menuButtons(Player p, PlayerData d) {
         for (EmberRunMaps.MapDef rm : runs.maps().raids.values())
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P() + "§6团本 " + rm.key.toUpperCase(Locale.ROOT) + " " + rm.name + " §7" + label(d, rm) + " ",
-                    new String[]{"[开本]", "/corerpg p1 enter " + rm.key, "队长点：全队需各自首通 Q07，3～5 人", "GOLD"});
+                    new String[]{"[开本]", "/corerpg p1 enter " + rm.key, "队长点：全队需各自首进或首通 Q07，3～5 人", "GOLD"});
     }
 
     /** P2-5 %corerpg_p1_raid_&lt;key&gt;% */

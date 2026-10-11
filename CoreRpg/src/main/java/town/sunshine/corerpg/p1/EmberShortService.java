@@ -38,10 +38,10 @@ public final class EmberShortService {
         return m != null && m.shortDailyCap > 0 ? m.shortDailyCap : EmberShortRules.dailyCap(m != null ? m.key : EmberShortRules.KEY); // D1057
     }
 
-    /** D391: Q01 首通门闩（日帽不挡进本）。 */
+    /** D391/D5409: Q01 首进或首通门闩（日帽不挡进本 · 不改日帽/结算）。 */
     String entryProblem(Player p, PlayerData d, EmberRunMaps.MapDef m) {
         String req = m == null || m.requires == null || m.requires.isEmpty() ? EmberShortRules.REQUIRES : m.requires;
-        return EmberShortRules.entryProblemText(p.getName(), runs.progressFlag(d, req));
+        return EmberShortRules.entryProblemText(p.getName(), EmberSkillKit.mapAccessUnlocked(d, runs, req));
     }
 
     /**

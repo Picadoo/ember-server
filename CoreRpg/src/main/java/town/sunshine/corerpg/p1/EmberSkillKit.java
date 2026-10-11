@@ -550,6 +550,19 @@ public final class EmberSkillKit {
         return attuneUnlocked(d, runs);
     }
 
+    /**
+     * D5409: soft access for raid/short (and similar) by requires key.
+     * q01 → gem enter/clear · q07 → endgame · else first-clear only.
+     * Does not change weekly/daily caps or settle tables.
+     */
+    public static boolean mapAccessUnlocked(PlayerData d, EmberRunService runs, String requires) {
+        if (d == null || requires == null || requires.isEmpty()) return false;
+        String r = requires.toLowerCase(java.util.Locale.ROOT);
+        if ("q01".equals(r)) return gemPathUnlocked(d, runs);
+        if ("q07".equals(r)) return endgameUnlocked(d, runs);
+        return runs != null && runs.firstClearedKey(d, r);
+    }
+
     /** D2292: step land slow ticks (synced with set-shape). */
     public static int stepLandSlowTicks(boolean setShapeSync) {
         return stepLandSlowTicks(setShapeSync, false);

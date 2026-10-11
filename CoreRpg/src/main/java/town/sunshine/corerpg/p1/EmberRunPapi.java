@@ -553,7 +553,7 @@ public final class EmberRunPapi {
         if (key.startsWith("pledge_")) return runs.pledgePapi(d, key.substring(7)); // D174 stage 2b 自选誓约
         EmberRunMaps.MapDef rm = maps.rush.get(key.substring(5)); // rush_<entry>
         if (rm == null) return null; // old chain: not a rush entry → per-map tail
-        if (!runs.progressFlag(d, rm.requires)) return needFirstClear(rm.requires);
+        if (!EmberSkillKit.mapAccessUnlocked(d, runs, rm.requires)) return "§8需本人首进或首通 " + rm.requires.toUpperCase(java.util.Locale.ROOT);
         for (String ck : rm.chainKeys) if (!runs.progressFlag(d, ck)) return needFirstClear(ck);
         int used = runs.rushWeek(d, p.getUniqueId(), rm);
         return rushEntryLine(EmberRunRules.rushPaysReward(used, rm.rushWeekly), used, rm.rushWeekly);

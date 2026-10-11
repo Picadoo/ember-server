@@ -532,3 +532,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - Imprint/Dual enter D5217–D5280: Q02首进烙印 · Q03首进双签（无 clear-gate）
 - Gem/Forge enter D5281–D5344: Q01首进宝石路径 · T2←符文首进 · T3←调律首进
 - Season/Abyss enter D5345–D5408: 深渊/周目标←调律首进；精选 late 印记仍卡通关
+- Raid/Short enter D5409–D5472: 短征←Q01首进 · 团本←Q07首进（周帽/结算不变）

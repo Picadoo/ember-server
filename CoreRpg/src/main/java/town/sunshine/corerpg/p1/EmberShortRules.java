@@ -141,7 +141,7 @@ public final class EmberShortRules {
 
     /** Bukkit-free entry gate wording. Null = may enter. */
     public static String entryProblemText(String playerName, boolean q01Done) {
-        if (!q01Done) return playerName + " 未解锁短征（需本人首通 " + REQUIRES.toUpperCase(Locale.ROOT) + "）";
+        if (!q01Done) return playerName + " 未解锁短征（需本人首进或首通 " + REQUIRES.toUpperCase(Locale.ROOT) + "）";
         return null;
     }
 
