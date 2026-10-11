@@ -2465,3 +2465,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack26-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack26.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack26-d12230-2026-10-12.md` |
+
+### 13.139 Affix Pack 27 剪斩/谷地（CoreRpg 1.65.749，D12231，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12231 |
+| jar | CoreRpg **1.65.749-d12231.local** |
+| balance_version | 113 → **114** |
+| 行为 | 词缀池 54→56：+`snip` 剪斩 / `vale` 谷地；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack27-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack27.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack27-d12231-2026-10-12.md` |
