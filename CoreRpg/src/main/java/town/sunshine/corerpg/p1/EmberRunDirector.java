@@ -2730,11 +2730,19 @@ final class EmberRunDirector {
     private void splitAdds(Tracked t) {
         EmberRunMaps.Variety v = svc.maps().variety;
         EmberRunMaps.Role role = def.role("melee", ch);
-        if (role == null || AffixSplit.count(v) <= 0) return;
+        int splitN = AffixSplit.count(v);
+        try {
+            int soft = EmberSplitCountSoft.consumeCount(s == null ? null : s.runId, splitN); // D8321
+            if (soft < splitN) {
+                splitN = soft;
+                svc.tellRun(s, "§a分裂减员 · 分身 −1（本局一次 · 现 " + splitN + "）");
+            }
+        } catch (Throwable ignored) { }
+        if (role == null || splitN <= 0) return;
         Location l = t.le.getLocation();
         EmberRunMaps.Pt pt = new EmberRunMaps.Pt(Math.floor(l.getX()), Math.floor(l.getY()), Math.floor(l.getZ()));
         int n = 0;
-        for (int i = 0; i < AffixSplit.count(v); i++) {
+        for (int i = 0; i < splitN; i++) {
             Tracked a = spawn(role, "melee", t.roomId, pt, t.leash);
             if (a == null) continue;
             a.splitAdd = true;
@@ -3430,6 +3438,7 @@ final class EmberRunDirector {
 
     void finish() {
         try { EmberKillStreakSpeed.clear(s == null ? null : s.runId); } catch (Throwable ignored) { }
+        try { EmberSplitCountSoft.clear(s == null ? null : s.runId); } catch (Throwable ignored) { }
         doorPending = null;
         doorOpenAt = 0;
         finished = true;

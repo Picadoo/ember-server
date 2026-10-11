@@ -334,6 +334,20 @@ public final class EmberCombatListener implements Listener {
             }
         } else {
             pipe = "B12 环境管道（原值，不乘 M）";
+            if (e.getCause() == DamageCause.FALL) {
+                try {
+                    PlayerData pdF = plugin.getDataStore().get(p.getUniqueId());
+                    double soft = EmberFallDamageSoft.consume(pdF, base); // D8289
+                    if (soft < base) {
+                        base = soft;
+                        pipe += " · 首坠减伤 ×0.5";
+                        try {
+                            p.sendMessage(EmberRunService.P + "§a首坠减伤 · ×0.5（今日一次）");
+                            p.sendActionBar("§a首坠减伤");
+                        } catch (Throwable ignored) { }
+                    }
+                } catch (Throwable ignored) { }
+            }
         }
         e.setDamage(base);
         String z = zeroVanilla(e);

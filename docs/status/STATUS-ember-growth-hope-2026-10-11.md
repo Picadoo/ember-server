@@ -1,3 +1,6 @@
+Live jar: **1.65.661-d8352.local** · D8289–D8352 FallDamageSoft + SplitCountSoft + ChallengeCoreBoost
+Prior: Melee/AbyssBone/ForgeBone
+
 Live jar: **1.65.660-d8288.local** · D8225–D8288 MeleeFirstSlow + AbyssNewBestBone + ForgeRollBone
 Prior: SlashHeal/KillStreak/EnhBone
 
