@@ -357,6 +357,7 @@ public final class FriendService {
         dataStore.flushMutation(otherId);
         p.sendMessage(PREFIX + ChatColor.GREEN + "已与 §f" + otherName + ChatColor.GREEN + " 成为好友。");
         EmberFriendPath.afterBound(p, otherName); // D806
+        try { town.sunshine.corerpg.p1.EmberFriendAcceptWinBone.maybeGift(p, self); } catch (Throwable ignored) { } // D11553
         Player online = Bukkit.getPlayer(otherId);
         if (online != null && online.isOnline()) {
             online.sendMessage(PREFIX + ChatColor.GREEN + p.getName() + " 已接受你的好友申请。");

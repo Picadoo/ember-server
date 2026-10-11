@@ -491,6 +491,10 @@ public final class AuctionService {
                 + ChatColor.WHITE + display + ChatColor.GRAY + " ×" + amount
                 + ChatColor.YELLOW + " · " + price + " 币"
                 + ChatColor.DARK_GRAY + "（成交实收 " + sellerReceive(price) + "，税 " + pctLabel() + "）");
+        try {
+            PlayerData pd = dataStore.get(p.getUniqueId());
+            town.sunshine.corerpg.p1.EmberAuctionSellWinShard.maybeGift(p, pd); // D11585
+        } catch (Throwable ignored) { }
     }
 
     private void cmdBuy(Player p, int id) {
@@ -539,6 +543,7 @@ public final class AuctionService {
                 + ChatColor.WHITE + displayOf(L) + ChatColor.GRAY + " ×" + L.amount
                 + ChatColor.YELLOW + " · 花费 " + L.price + " 币"
                 + ChatColor.GRAY + "（余额 " + buyer.getCoin() + "）");
+        try { town.sunshine.corerpg.p1.EmberAuctionBuyWinBlank.maybeGift(p, buyer); } catch (Throwable ignored) { } // D11601
 
         // D537 deal path: live / queue digest / mute
         Player sellerOnline = Bukkit.getPlayer(L.sellerUuid);
