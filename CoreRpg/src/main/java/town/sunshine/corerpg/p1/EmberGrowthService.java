@@ -2452,6 +2452,35 @@ public final class EmberGrowthService implements Listener {
         runs.flushData(id);
     }
 
+    /**
+     * D5025: auto pin along brandpath after craft (mats/charges gated inside brandPin).
+     * @return true when pin payment started or completed path entered
+     */
+    boolean autoBrandPin(Player p, String slot, String affixId) {
+        if (p == null || slot == null || affixId == null) return false;
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) return false;
+        // brandPin always returns true (command-style); detect refuse via precheck
+        EmberItemData t = target(p, slot);
+        if (t == null) return false;
+        if (EmberAffix.eligible(t) != null) return false;
+        int used = afcUsed(d, t);
+        if (EmberBrandRules.pinRefusal(t.tier, used, affixId, reroll, t.slot) != null) return false;
+        int brands = EmberBrandRules.pinBrands(t.tier);
+        int coins = EmberBrandRules.pinCoins(t.tier);
+        if (brands < 0) return false;
+        int haveBrand = 0;
+        try {
+            if (plugin.getNiBridge() != null)
+                haveBrand = plugin.getNiBridge().countInInventory(p, EmberBrandRules.MAT_BRAND);
+        } catch (Throwable ignored) { }
+        if (!EmberBrandSure.pinReady(haveBrand, brands, d.getCoin(), coins)) return false;
+        p.sendMessage(P + "§a烙纹路径直办 · §f" + affixId + " §8（合成后自动定向 · 不改价）");
+        try { p.sendActionBar("§a路径定向 · 直办"); } catch (Throwable ignored) { }
+        brandPin(p, d, slot, affixId, true);
+        return true;
+    }
+
     /** /corerpg p1 brand | craft [confirm] | pin <blade|charm> <affixId> [confirm] | menu */
     public boolean brandCommand(Player p, String[] args) {
         if (reroll == null) { p.sendMessage(P + "词条表未加载，烙纹不可用"); return true; }
@@ -2515,7 +2544,9 @@ public final class EmberGrowthService implements Listener {
             pay.settled(id, rid);
             if (p.isOnline()) {
                 p.sendMessage(P + "§a已合成 §f余烬烙纹 ×1 §7（花费 " + need + " 碎片）");
-                EmberBrandLoop.afterCraft(p, data(id)); // D471 craft→pin loop
+                PlayerData nd = data(id);
+                if (!EmberBrandSure.maybeAutoPinAfterCraft(p, nd, EmberGrowthService.this)) // D5025
+                    EmberBrandLoop.afterCraft(p, nd); // D471 craft→pin loop when no auto
             }
         }, err -> { if (p.isOnline()) p.sendMessage(P + "§c没有合成：" + err); });
         return true;
@@ -2540,6 +2571,15 @@ public final class EmberGrowthService implements Listener {
         int coins = EmberBrandRules.pinCoins(t.tier);
         EmberAffix.Def want = reroll.def(affixId);
         int left = EmberBrandRules.chargesLeft(used);
+        // D5025: already same type at quality cap — refuse waste (tier cannot rise)
+        int curEnc = affixOf(d, t);
+        EmberAffix.Def curDef = EmberAffix.decodeDef(reroll, curEnc);
+        int cap = reroll.cap(t.quality);
+        if (curDef != null && want != null && curDef.id.equals(want.id)
+                && Math.min(EmberAffix.decodeTier(curEnc), cap) >= cap) {
+            p.sendMessage(P + "§c" + want.name + " 已是成色上限档（" + cap + "），定向无意义");
+            return true;
+        }
         if (!confirm) {
             // D1343: brand/coin have-need honesty
             int haveBrand = 0;

@@ -526,3 +526,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - RerollPitySure D4833–D4896: 洗练保底必出预览直办（零 pity 改）
 - Attune/Reroll edges D4897–D4960: 城内先闸/后扫；直办前 brand/gate
 - BrandSure D4961–D5024: 烙纹合成/定向料齐直办（零价改；非 forge sure twin）
+- BrandSure edges D5025–D5088: craft→path auto-pin；同类型 cap 拒

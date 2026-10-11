@@ -74,6 +74,19 @@ public final class EmberBrandPath {
         return "/corerpg p1 brand menu";
     }
 
+    public static String pinAffixId(int id) {
+        if (id == HUNT) return "b_affix";
+        if (id == EMBER) return "b_set";
+        if (id == BIND) return "c_tele";
+        return null;
+    }
+
+    public static String pinSlot(int id) {
+        if (id == BIND) return "charm";
+        if (id == HUNT || id == EMBER) return "blade";
+        return null;
+    }
+
     public static String pinLabel(int id) {
         if (id == HUNT) return "[去定向猎缀]";
         if (id == EMBER) return "[去定向余烬]";
