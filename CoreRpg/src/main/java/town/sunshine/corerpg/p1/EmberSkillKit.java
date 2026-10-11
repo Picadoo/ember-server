@@ -93,6 +93,8 @@ public final class EmberSkillKit {
     public static final String C_ATTUNE_ENTER = "p1_attune_enter";
     /** D2330: entered Q06 → pledge/trial without clear-gate. */
     public static final String C_PLEDGE_ENTER = "p1_pledge_enter";
+    /** D2378: entered Q01 → stride path without clear-gate. */
+    public static final String C_STRIDE_ENTER = "p1_stride_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -191,6 +193,20 @@ public final class EmberSkillKit {
         return true;
     }
 
+    public static boolean markStrideEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_STRIDE_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_STRIDE_ENTER, "all", 1);
+        return true;
+    }
+
+    /** D2378: Q01 clear OR first-enter unlocks stride path (still needs Q05 step). */
+    public static boolean strideMapUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_STRIDE_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
     /** D2330: Q06 clear OR first-enter unlocks pledge/trial paths. */
     public static boolean pledgeUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
@@ -250,6 +266,47 @@ public final class EmberSkillKit {
     /** D2367: signature skill_shield_max multiplier when synced. */
     public static double sigShieldMaxMult(boolean setShapeSync) {
         return setShapeSync ? 1.25 : 1.0;
+    }
+
+    /** D2380: dodge_heal ICD secs when synced. */
+    public static double sigDodgeIcdSecs(double baseSecs, boolean setShapeSync) {
+        if (baseSecs <= 0) return baseSecs;
+        return setShapeSync ? baseSecs * 0.85 : baseSecs;
+    }
+
+    /** D2379: burn_spread ICD secs when synced. */
+    public static double sigSpreadIcdSecs(double baseSecs, boolean setShapeSync) {
+        if (baseSecs <= 0) return baseSecs;
+        return setShapeSync ? baseSecs * 0.85 : baseSecs;
+    }
+
+    /** D2379: burn_spread search radius. */
+    public static double sigBurnSpreadRadius(boolean setShapeSync) {
+        return setShapeSync ? 4.5 : 4.0;
+    }
+
+    /** D2381: skill_ignite_n when synced (+1 target · zero skill_mult). */
+    public static int sigIgniteN(int baseN, boolean setShapeSync) {
+        if (baseN <= 0) return baseN;
+        return setShapeSync ? baseN + 1 : baseN;
+    }
+
+    /** D2382: sustain_low HP fraction when synced. */
+    public static double sigSustainLow(double baseFrac, boolean setShapeSync) {
+        if (baseFrac <= 0) return baseFrac;
+        return setShapeSync ? Math.min(0.55, baseFrac + 0.05) : baseFrac;
+    }
+
+    /** D2394: potion mult when signature already ≠1 and synced. */
+    public static double sigPotionMult(double base, boolean setShapeSync) {
+        if (base == 1.0) return base;
+        return setShapeSync ? base * 1.05 : base;
+    }
+
+    /** D2395: sustain_every delta when signature already shortens and synced. */
+    public static int sigSustainEvery(int baseDelta, boolean setShapeSync) {
+        if (!setShapeSync || baseDelta >= 0) return baseDelta;
+        return Math.max(-2, baseDelta - 1);
     }
 
     public static boolean stepVariantUnlocked(PlayerData d, EmberRunService runs) {

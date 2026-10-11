@@ -266,8 +266,10 @@ public final class EmberGrowthService implements Listener {
         if (heal > 0) {
             Long cd = dodgeHealCd.get(p.getUniqueId());
             if (cd == null || now >= cd) {
-                dodgeHealCd.put(p.getUniqueId(), now + (long) (m.get("dodge_icd") * 1000));
-                if (shapeSyncedFor(p)) heal *= 1.25; // D2319 set×shape · zero skill_mult
+                boolean syncD = shapeSyncedFor(p);
+                double icd = EmberSkillKit.sigDodgeIcdSecs(m.get("dodge_icd"), syncD);
+                dodgeHealCd.put(p.getUniqueId(), now + (long) (icd * 1000));
+                if (syncD) heal *= 1.25; // D2319 set×shape · zero skill_mult
                 EmberHeal.heal(p, heal * EmberHeal.maxHp(p), "D141 踏步回气 " + pct(heal));
                 if (!flashSigOwned(p, "dodge_heal", "躲开回气")) {
                     // talent-only path keeps a thin ActionBar (was silent)
@@ -287,7 +289,11 @@ public final class EmberGrowthService implements Listener {
         }
     }
 
-    public double potionMult(Player p) { return mods(p).get("potion"); }
+    public double potionMult(Player p) {
+        double v = mods(p).get("potion");
+        // D2394: set×shape · mild potion feel when signature already moves potion (zero skill_mult)
+        return EmberSkillKit.sigPotionMult(v, shapeSyncedFor(p));
+    }
     public double shareWeight(Player p) { return Math.max(0.1, mods(p).get("share_w")); }
     public double shareTaken(Player p) { return mods(p).get("share_taken"); }
 
@@ -295,9 +301,15 @@ public final class EmberGrowthService implements Listener {
     public EmberSetEngine.Tune setTune(Player p) {
         EmberGrowth.Mods m = mods(p);
         if (m.isEmpty()) return EmberSetEngine.Tune.NONE;
-        return new EmberSetEngine.Tune((int) Math.round(m.get("burst_every")), (int) Math.round(m.get("sustain_every")),
-                m.get("burn_mult"), m.get("burst_mult"), m.get("sustain_mult"), (int) Math.round(m.get("burn_ticks")), m.get("burn_spread"), m.get("spread_icd"),
-                m.get("sustain_low"), (int) Math.round(m.get("sustain_low_every"))); // D174 L12
+        boolean sync = shapeSyncedFor(p);
+        double spreadIcd = EmberSkillKit.sigSpreadIcdSecs(m.get("spread_icd"), sync);
+        double sustainLow = EmberSkillKit.sigSustainLow(m.get("sustain_low"), sync);
+        int sustainEvery = (int) Math.round(m.get("sustain_every"));
+        // D2395: if signature already shortens 炽愈, synced shaves one more hit (floor −2 total delta)
+        sustainEvery = EmberSkillKit.sigSustainEvery(sustainEvery, sync);
+        return new EmberSetEngine.Tune((int) Math.round(m.get("burst_every")), sustainEvery,
+                m.get("burn_mult"), m.get("burst_mult"), m.get("sustain_mult"), (int) Math.round(m.get("burn_ticks")), m.get("burn_spread"), spreadIcd,
+                sustainLow, (int) Math.round(m.get("sustain_low_every"))); // D174 L12 + D2379/D2382 sync
     }
 
     // ------------------------------------------------------------------ D174 stage 2a: 烬斩 shield (L11) — absorbs P1 enemy damage
@@ -309,6 +321,9 @@ public final class EmberGrowthService implements Listener {
      * 烬斩 hit {@code n} targets: shield = skill_shield × H per target, capped at skill_shield_max × H, for skill_shield_secs;
      * does not stack (keeps the larger of the still-active one and the new one; p1sim skill_variant).
      */
+
+    /** D2379: public for SetService burn-spread radius. */
+    public boolean shapeSyncedPublic(Player p) { return shapeSyncedFor(p); }
 
     /** D2306: loadout set × current shape sync (zero skill_mult). */
     private boolean shapeSyncedFor(Player p) {

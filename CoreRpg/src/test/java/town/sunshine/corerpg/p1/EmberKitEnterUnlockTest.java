@@ -73,4 +73,26 @@ public class EmberKitEnterUnlockTest {
         assertEquals(1.0, EmberSkillKit.sigShieldMaxMult(false), 1e-9);
         assertEquals(1.25, EmberSkillKit.sigShieldMaxMult(true), 1e-9);
     }
+
+    @Test
+    public void strideEnterAndSigFeelSync() {
+        PlayerData d = new PlayerData();
+        assertTrue(EmberSkillKit.markStrideEnter(d));
+        assertFalse(EmberSkillKit.markStrideEnter(d));
+        assertTrue(EmberSkillKit.strideMapUnlocked(d, null));
+        assertEquals(15.0 * 0.85, EmberSkillKit.sigDodgeIcdSecs(15.0, true), 1e-9);
+        assertEquals(10.0 * 0.85, EmberSkillKit.sigSpreadIcdSecs(10.0, true), 1e-9);
+        assertEquals(4.0, EmberSkillKit.sigBurnSpreadRadius(false), 1e-9);
+        assertEquals(4.5, EmberSkillKit.sigBurnSpreadRadius(true), 1e-9);
+        assertEquals(2, EmberSkillKit.sigIgniteN(1, true));
+        assertEquals(0.45, EmberSkillKit.sigSustainLow(0.4, true), 1e-9);
+    }
+
+    @Test
+    public void potionAndSustainEverySync() {
+        assertEquals(1.05 * 1.05, EmberSkillKit.sigPotionMult(1.05, true), 1e-9);
+        assertEquals(1.0, EmberSkillKit.sigPotionMult(1.0, true), 1e-9);
+        assertEquals(-2, EmberSkillKit.sigSustainEvery(-1, true));
+        assertEquals(0, EmberSkillKit.sigSustainEvery(0, true));
+    }
 }

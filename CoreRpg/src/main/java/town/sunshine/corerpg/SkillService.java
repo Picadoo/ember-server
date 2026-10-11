@@ -946,6 +946,12 @@ public final class SkillService implements Listener {
         try {
             int n = 0;
             int igniteN = variant && gmods.get("skill_ignite") > 0 ? (int) Math.round(gmods.get("skill_ignite_n") > 0 ? gmods.get("skill_ignite_n") : 5) : 0;
+            if (igniteN > 0) {
+                try {
+                    String famI = plugin.getEmberLoadouts().get(player).activeSet;
+                    igniteN = town.sunshine.corerpg.p1.EmberSkillKit.sigIgniteN(igniteN, dashShapeSynced(player, famI));
+                } catch (Throwable ignored) { }
+            }
             for (LivingEntity le : targets) {
                 if (n++ >= maxTargets) break;
                 town.sunshine.corerpg.p1.EmberCombatListener.dealP1(player, le, dmg,

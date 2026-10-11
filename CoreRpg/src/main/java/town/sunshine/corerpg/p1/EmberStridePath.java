@@ -150,9 +150,10 @@ public final class EmberStridePath {
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
         boolean stepOk = EmberSkillKit.stepVariantUnlocked(d, runs);
-        if (!runs.progressFlag(d, "q01") || !stepOk) {
-            p.sendMessage(EmberRunService.P + "§c步态需本人首通 Q01（轻技）与 Q05（身法）。"
-                    + (!runs.progressFlag(d, "q01") ? " §8· 缺 Q01" : "")
+        boolean q01Ok = EmberSkillKit.strideMapUnlocked(d, runs);
+        if (!q01Ok || !stepOk) {
+            p.sendMessage(EmberRunService.P + "§c步态需本人首进/首进/首通 Q01（轻技）与 Q05（身法）。"
+                    + (!q01Ok ? " §8· 缺 Q01" : "")
                     + (!stepOk ? " §8· 缺 Q05" : ""));
             return;
         }

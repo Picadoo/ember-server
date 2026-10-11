@@ -57,7 +57,10 @@ public final class EmberMapEnterFeel {
         if (pd != null && m != null && m.key != null) {
             String k = m.key.toLowerCase(java.util.Locale.ROOT);
             try {
-                if ("q02".equals(k) && EmberSkillKit.markDashEnter(pd)) {
+                if ("q01".equals(k) && EmberSkillKit.markStrideEnter(pd)) {
+                    p.sendMessage(EmberRunService.P + "§a步态路径已开放 · §f/corerpg p1 stridepath §7（首进 Q01 · 仍需 Q05 身法）");
+                    p.sendActionBar("§a步态开放 · §fstridepath");
+                } else if ("q02".equals(k) && EmberSkillKit.markDashEnter(pd)) {
                     p.sendMessage(EmberRunService.P + "§a烬突已解锁 · §f潜行+F §7（首进 Q02 · 不锁通关）");
                     p.sendActionBar("§a烬突解锁 · §f潜行+F");
                 } else if ("q03".equals(k) && EmberSkillKit.markParryEnter(pd)) {

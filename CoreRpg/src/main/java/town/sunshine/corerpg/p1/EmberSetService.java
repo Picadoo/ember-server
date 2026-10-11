@@ -503,7 +503,13 @@ public final class EmberSetService implements Listener {
             if (p == null || p.getWorld() != e.getEntity().getWorld()) continue;
             LivingEntity best = null;
             double bd = 16.0;
-            for (Entity x : e.getEntity().getNearbyEntities(4, 3, 4)) {
+            boolean syncSp = false;
+            try {
+                EmberGrowthService g0 = EmberGrowthService.get();
+                if (g0 != null) syncSp = g0.shapeSyncedPublic(p);
+            } catch (Throwable ignored) { }
+            double spr = EmberSkillKit.sigBurnSpreadRadius(syncSp);
+            for (Entity x : e.getEntity().getNearbyEntities(spr, 3, spr)) {
                 if (!(x instanceof LivingEntity) || x.isDead() || !isEnemy((LivingEntity) x)) continue;
                 if (s.engine.burns().get(x.getUniqueId().toString()) != null) continue;
                 double d = x.getLocation().distanceSquared(e.getEntity().getLocation());

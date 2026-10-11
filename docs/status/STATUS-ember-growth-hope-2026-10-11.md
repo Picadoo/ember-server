@@ -1,15 +1,14 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.528-d2376.local**
-- D2289–D2376 real behavioral
-- pushes: f3bd0f59 → 98a3099b → 404fa247 → 537aa2b6 → 605fed92 → (this)
+- jar **1.65.530-d2404.local**
+- D2377–D2404 signature non-dmg + Q01 stride enter
 
-## Arc
-- Non-clear-gate unlocks: Q02–Q07 enter OR clear (dash/parry/shape/step/pledge/attune)
-- Enter shape/step pick on Q04/Q05
-- set×shape: land Slow/heal, dash hitR, parry window, dodge_heal, shield secs/max, charge wind-up×0.8
+## This window
+- D2378: Q01 first-enter → stride path (still needs Q05)
+- D2379–D2382: sync spread_icd×0.85 · radius 4.5 · dodge_icd×0.85 · ignite_n+1 · sustain_low+0.05
+- D2394–D2395: sync potion×1.05 (if ≠1) · sustain_every −1 (if already shortened)
 
-Talent HOLD · ConfirmTokens/remain STOP · zero skill_mult · hard bans held
+Talent HOLD · ConfirmTokens/remain STOP · zero skill_mult
 
-Updated 2026-10-11 07:58 CST
+Updated 2026-10-11 08:01 CST
