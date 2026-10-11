@@ -1,3 +1,6 @@
+Live jar: **1.65.677-d9376.local** · D9313–D9376 RaidEnterBrace + RushEnterBrace + OffhandBuySoft
+Prior: ConvertCap/Reforge/Magic
+
 Live jar: **1.65.676-d9312.local** · D9249–D9312 ConvertCapSoft + ReforgeStoneSoft + MagicDotSoft
 Prior: Void/Cram/Falling
 

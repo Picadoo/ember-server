@@ -330,8 +330,13 @@ public final class EmberEntryService {
     String enteringLine(Player p, EmberRunMaps.MapDef m, EmberRunMaps.AbyssTier at, int abyss, boolean challenge, int cost) {
         if (at != null) return "§5深渊 · 余烬层 第 " + abyss + " 层 §7→ §e" + m.key.toUpperCase(Locale.ROOT) + " " + m.name
                 + " §7正在创建实例……（已预留体力 " + cost + (at.fee > 0 ? " · 余烬币 " + at.fee : "") + "）";
-        if (m.rush) return "§c" + m.rushLabel + " §7正在创建实例……（不耗体力 · " + EmberRushService.ruleText(m) + " · "
+        if (m.rush) {
+            try {
+                EmberRushEnterBrace.maybeBrace(p, runs.dataOf(p.getUniqueId())); // D9345
+            } catch (Throwable ignored) { }
+            return "§c" + m.rushLabel + " §7正在创建实例……（不耗体力 · " + EmberRushService.ruleText(m) + " · "
                 + (EmberRunRules.rushPaysReward(runs.rush().week(runs.dataOf(p.getUniqueId()), p.getUniqueId(), m), m.rushWeekly) ? "§a你本周奖励未领完§7" : "§e你本周已领完，这局是练习（无奖励）§7") + "）";
+        }
         if (m.shortExpedition) return runs.shortExpedition().enteringLine(p, m, cost);
         if (m.event) {
             EmberFestival festival = runs.festival();
@@ -345,6 +350,9 @@ public final class EmberEntryService {
             } catch (Throwable ignored) { }
         }
         if (m.raid) { // D755
+            try {
+                EmberRaidEnterBrace.maybeBrace(p, runs.dataOf(p.getUniqueId())); // D9313
+            } catch (Throwable ignored) { }
             PlayerData rd = runs.dataOf(p.getUniqueId());
             int rp = EmberRaidPath.get(rd);
             if (EmberRaidPath.valid(rp)) {
