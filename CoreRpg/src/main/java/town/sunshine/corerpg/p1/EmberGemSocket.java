@@ -84,7 +84,8 @@ public final class EmberGemSocket {
         EmberItems.Read r = loadouts.items().read(hand);
         if (r == null || !r.ok()) { p.sendMessage(P + "请手持已签名的余烬刃/护符"); return true; }
         EmberItemData d = r.data;
-        if (!d.sockUnlocked(hole)) {
+        PlayerData holePd = plugin != null && plugin.getDataStore() != null ? plugin.getDataStore().get(p.getUniqueId()) : null;
+        if (!d.sockUnlocked(hole) && !EmberGemHoleUnlockSoft.unlocked(d, hole, holePd)) {
             p.sendMessage(P + "该孔未解锁（刃第二孔需强化≥5 · 护符孔需强化≥3）");
             try { p.sendActionBar("§c孔未解锁 · 先强化开孔"); } catch (Throwable ignored) { } // D1311
             ConfirmTokens.sendButtons(p, P + "§7去解锁：", // D871

@@ -667,6 +667,7 @@ public final class EmberSettleService {
             if (chp2 != null && chp2.isOnline()) {
                 EmberChallengePath.afterSettle(chp2, pd, true, chalFirstNow, m.key);
                 try { EmberChallengeCoreBoost.maybeGift(chp2, pd); } catch (Throwable ignored) { } // D8337
+                try { EmberChallengeShardBoost.maybeGift(chp2, pd); } catch (Throwable ignored) { } // D10817
             }
         }
         if (in.firstClear != null) {
@@ -706,6 +707,7 @@ public final class EmberSettleService {
                 Player bp = Bukkit.getPlayer(u);
                 if (bp != null && bp.isOnline())
                     EmberAbyssNewBestBone.maybeGift(bp, pd); // D8257
+                    try { EmberAbyssNewBestShard.maybeGift(bp, pd); } catch (Throwable ignored) { } // D10801
             } catch (Throwable ignored) { }
         }
         if (growth != null && gp != null) growth.refreshHonors(gp); // D142: one-time unlock notice
