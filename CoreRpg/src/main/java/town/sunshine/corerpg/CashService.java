@@ -389,6 +389,7 @@ public final class CashService {
         data.setDailyTicketsGranted(data.getDailyTicketsGranted() + 1);
         dataStore.flushMutation(player.getUniqueId());
         player.sendMessage(ChatColor.GREEN + "[商城] 已购买体力药 ×1（-" + shopPrice + " 晶钻）");
+        try { town.sunshine.corerpg.p1.EmberCrystalPotWinBlank.maybeGift(player, data); } catch (Throwable ignored) { } // D11793
     }
 
     public void cmdShopBuyPassUnlock(Player player) {
@@ -558,6 +559,7 @@ public final class CashService {
         data.setPassFreeClaimDate(today);
         dataStore.flushMutation(player.getUniqueId());
         player.sendMessage(ChatColor.GREEN + "[战令·免费轨] 今日补给已寄出（每日 1 次）");
+        try { town.sunshine.corerpg.p1.EmberPassFreeWinBone.maybeGift(player, data); } catch (Throwable ignored) { } // D11745
     }
 
     public void cmdPassShow(Player player) {
@@ -638,6 +640,7 @@ public final class CashService {
         dataStore.flushMutation(player.getUniqueId());
         player.sendMessage(ChatColor.GREEN + "[月卡] 已开通/续期至 " + newExpire
                 + (staminaOk > 0 ? ChatColor.GRAY + " · 体力 +" + staminaOk : ""));
+        try { town.sunshine.corerpg.p1.EmberMonthlyBuyWinShard.maybeGift(player, data); } catch (Throwable ignored) { } // D11777
     }
 
     private boolean giveTickets(Player player, int amount) {
