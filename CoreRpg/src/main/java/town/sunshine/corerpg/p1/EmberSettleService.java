@@ -313,8 +313,18 @@ public final class EmberSettleService {
                 }
             }
         } catch (Throwable ignored) { }
-        if (m.raid) // P2-5 + P2-9 (D82): one targeted T3 roll (floor 精良) + 1 T3 mark; titles / trail are cosmetic (D233 → EmberRaidService)
+        if (m.raid) { // P2-5 + P2-9 (D82): one targeted T3 roll (floor 精良) + 1 T3 mark; titles / trail are cosmetic (D233 → EmberRaidService)
             grants.addAll(EmberRaidService.settleGrants(in, m, runs.maps().raidItemQualityFloor, s.tier));
+            try {
+                if (EmberRaidMarkBoost.apply(pd, grants)) { // D10241
+                    Player tip = Bukkit.getPlayer(u);
+                    if (tip != null && tip.isOnline()) {
+                        tip.sendMessage(EmberRunService.P + "§a团本加码 · 印记 +" + EmberRaidMarkBoost.BONUS + "（今日一次）");
+                        try { tip.sendActionBar("§a团本加码"); } catch (Throwable ignored) { }
+                    }
+                }
+            } catch (Throwable ignored) { }
+        }
         if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), rotMarks, null));
         // D174 签名传奇: repeat NORMAL clear of a signature map → 1 insignia + maybe a signature stamp on the base item;
         // the map's first clear → the first-clear insignia, once per map (not per content version, C_FC)
@@ -324,6 +334,22 @@ public final class EmberSettleService {
             for (EmberRunRules.Grant g : grants) if ("base_item".equals(g.key)) base = g;
             boolean forceSig = EmberSigStampPity.ready(pd); // D6433
             grants.addAll(EmberRunRules.signatureGrants(m.key, in, base, forceSig));
+            try {
+                for (int i = 0; i < grants.size(); i++) {
+                    EmberRunRules.Grant g = grants.get(i);
+                    if (g == null || !"sig_mark".equals(g.key)) continue;
+                    int boosted = EmberSigMarkBoost.apply(pd, g.amount); // D10209
+                    if (boosted > g.amount) {
+                        grants.set(i, new EmberRunRules.Grant(g.key, g.kind, g.id, boosted, g.item));
+                        Player tip = Bukkit.getPlayer(u);
+                        if (tip != null && tip.isOnline()) {
+                            tip.sendMessage(EmberRunService.P + "§a签名加码 · 徽记 +" + EmberSigMarkBoost.BONUS + "（今日一次）");
+                            try { tip.sendActionBar("§a签名加码"); } catch (Throwable ignored) { }
+                        }
+                    }
+                    break;
+                }
+            } catch (Throwable ignored) { }
             if (EmberMarkNearBreak.maybeBoost(pd, m.key, grants)) { // D6625
                 Player cue2 = Bukkit.getPlayer(u);
                 if (cue2 != null && cue2.isOnline()) {
@@ -358,7 +384,21 @@ public final class EmberSettleService {
             }
         }
         final boolean sigFc = sigRun && in.firstClear != null && pd.periodCount(EmberSignature.C_FC + m.key, "all") <= 0;
-        if (sigFc) grants.add(new EmberRunRules.Grant("fc_sigmark", EmberRunRules.Kind.SIGMARK, m.key, EmberSignature.fcMarks(), null));
+        if (sigFc) {
+            int fcAmt = EmberSignature.fcMarks();
+            try {
+                int boosted = EmberFcSigMarkBoost.apply(pd, fcAmt); // D10225
+                if (boosted > fcAmt) {
+                    fcAmt = boosted;
+                    Player tip = Bukkit.getPlayer(u);
+                    if (tip != null && tip.isOnline()) {
+                        tip.sendMessage(EmberRunService.P + "§a首通加码 · 徽记 +" + EmberFcSigMarkBoost.BONUS + "（今日一次）");
+                        try { tip.sendActionBar("§a首通加码"); } catch (Throwable ignored) { }
+                    }
+                }
+            } catch (Throwable ignored) { }
+            grants.add(new EmberRunRules.Grant("fc_sigmark", EmberRunRules.Kind.SIGMARK, m.key, fcAmt, null));
+        }
         boolean affixBoost = false;
         if (!s.challenge && s.abyss == 0 && !m.raid) { // D138 repeat-run variety (rolled only when every member had the first clear)
             grants.addAll(EmberRunRules.varietyGrants(in.firstClear != null, s.affixDone, runs.maps().variety.affixShard, s.eventDone, runs.maps().variety.eventCore, s.eventKind));
