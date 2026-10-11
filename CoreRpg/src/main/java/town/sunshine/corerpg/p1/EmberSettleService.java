@@ -355,6 +355,25 @@ public final class EmberSettleService {
             if (prev < vb.count) { pd.addPeriodCount(EmberRunService.C_VBOUNTY + vb.kind, bDay, 1); vbMoved = true; }
             if (!g.isEmpty()) { grants.addAll(g); vbDone.add(vb.label() + "（" + vb.rewardText() + "）"); }
         }
+        try {
+            if (fresh && !s.challenge && s.abyss == 0 && !m.raid && !m.event && !m.rush
+                    && EmberMainlineCoinBoost.consume(pd)) { // D8417
+                grants.add(new EmberRunRules.Grant("main_coin_boost", EmberRunRules.Kind.COIN, null, EmberMainlineCoinBoost.BONUS, null));
+                Player mp = Bukkit.getPlayer(u);
+                if (mp != null && mp.isOnline()) {
+                    mp.sendMessage(EmberRunService.P + "§a主线加赠 · 余烬币 +§f" + EmberMainlineCoinBoost.BONUS + "§a（今日一次）");
+                    try { mp.sendActionBar("§a主线加赠 · 币+" + EmberMainlineCoinBoost.BONUS); } catch (Throwable ignored) { }
+                }
+            }
+            if (fresh && m.raid && EmberRaidCoinBoost.consume(pd)) { // D8465
+                grants.add(new EmberRunRules.Grant("raid_coin_boost", EmberRunRules.Kind.COIN, null, EmberRaidCoinBoost.BONUS, null));
+                Player rp = Bukkit.getPlayer(u);
+                if (rp != null && rp.isOnline()) {
+                    rp.sendMessage(EmberRunService.P + "§a团本加赠 · 余烬币 +§f" + EmberRaidCoinBoost.BONUS + "§a（今日一次）");
+                    try { rp.sendActionBar("§a团本加赠 · 币+" + EmberRaidCoinBoost.BONUS); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
         EmberGrowthService growth = EmberGrowthService.get(); // D142 余烬勋记: settlement coin % / +shards (own ledger rows)
         Player gp = Bukkit.getPlayer(u);
         if (growth != null && gp != null) {

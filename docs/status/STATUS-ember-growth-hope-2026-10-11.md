@@ -1,3 +1,6 @@
+Live jar: **1.65.663-d8480.local** · D8417–D8480 MainlineCoinBoost + ExplosionSoft + RaidCoinBoost
+Prior: PotSip/GemShard/Iframe
+
 Live jar: **1.65.662-d8416.local** · D8353–D8416 PotSipBoost + GemCraftShardRefund + IframeForgive
 Prior: Fall/Split/ChalCore
 

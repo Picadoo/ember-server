@@ -573,3 +573,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D8225–D8288: MeleeFirstSlow + AbyssNewBestBone + ForgeRollBone. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D8289–D8352: FallDamageSoft + SplitCountSoft + ChallengeCoreBoost. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D8353–D8416: PotSipBoost + GemCraftShardRefund + IframeForgive. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D8417–D8480: MainlineCoinBoost + ExplosionSoft + RaidCoinBoost. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
