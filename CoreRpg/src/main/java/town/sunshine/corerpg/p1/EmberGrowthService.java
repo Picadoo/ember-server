@@ -47,6 +47,10 @@ public final class EmberGrowthService implements Listener {
     public static final String C_CHAL = "p4_chal_";   // + map key, period all: challenge first clear (D141 point source)
 
     private static volatile EmberGrowthService instance;
+    EmberRunService runsPublic() { return runs; }
+
+    PlayerData dataPublic(java.util.UUID id) { return data(id); }
+
     public static EmberGrowthService get() { return instance; }
 
     private final CoreRpgPlugin plugin;
@@ -1499,6 +1503,8 @@ public final class EmberGrowthService implements Listener {
         d.addPeriodCount(EmberSignature.C_ALT + sd.id, "all", 1 - d.periodCount(EmberSignature.C_ALT + sd.id, "all"));
         int ar = d.periodCount(C_ATTUNE_READY, "all");
         if (ar > 0) d.addPeriodCount(C_ATTUNE_READY, "all", -ar);
+        int aq = d.periodCount(C_ATTUNE_QUIET, "all");
+        if (aq > 0) d.addPeriodCount(C_ATTUNE_QUIET, "all", -aq);
         boolean saved = plugin.getDataStore().flushMutationChecked(p.getUniqueId());
         plugin.getLogger().info("[P1 sig] " + p.getName() + " attune unlock AUTO " + sd.id
                 + " (-" + EmberSignature.altMarks() + " " + sd.map + " marks, saved=" + saved + ")");
@@ -2057,25 +2063,18 @@ public final class EmberGrowthService implements Listener {
                     : shard + " 余烬碎片") + (lock ? " + 锁定 " + lockShard + " 碎片" : "") + " + " + coin + " 余烬币";
             p.sendMessage(P + "花费：" + pay);
             if (dup && !haveDup) { p.sendMessage(P + "§7没有重复件时可以改用碎片：" + (shard + (lock ? lockShard : 0)) + " 碎片 + " + coin + " 币"); return true; }
-            // D4833: pity-forced cap preview-do (zero pity math / pool / STAMP). Not forge ConfirmTokens densify.
-            if (pity >= reroll.pity) {
-                boolean matsOk = d.getCoin() >= coin;
-                if (!dup) {
-                    int haveSh = 0;
-                    try {
-                        if (plugin.getNiBridge() != null)
-                            haveSh = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_SHARD);
-                    } catch (Throwable ignored) { }
-                    matsOk = matsOk && haveSh >= needShard;
-                } else {
-                    matsOk = matsOk && haveDup;
-                }
-                if (matsOk) {
+            // D4833/D4929: pity-forced cap preview-do (zero pity math / pool / STAMP). Not forge ConfirmTokens densify.
+            if (EmberRerollSure.forced(pity, reroll.pity)) {
+                if (gate(p)) return true; // town first — avoid 直办 then fail
+                if (!EmberRerollSure.brandOk(d, t, this)) {
+                    p.sendMessage(P + "§e保底已就绪 · 锻造次数已用完，换底子后再洗");
+                } else if (EmberRerollSure.matsOk(p, d, dup, haveDup, needShard, coin, plugin)) {
                     p.sendMessage(P + "§a保底必出上限档 · 材料齐 · 预览直办（不改保底规则）");
                     try { p.sendActionBar("§a洗练保底 · 直办上限档"); } catch (Throwable ignored) { }
                     return reroll(p, d, slot, dup, lock, true);
+                } else {
+                    p.sendMessage(P + "§e保底已就绪 · 材料不够仍需补齐后再洗");
                 }
-                p.sendMessage(P + "§e保底已就绪 · 材料不够仍需补齐后再洗");
             }
             List<String[]> btn = new ArrayList<String[]>();
             btn.add(new String[]{"[确认洗练]", "/corerpg p1 reroll " + slot + " " + mode + " confirm", "扣上面的花费，" + (lock ? "锁定「" + cur.name + "」重抽档位" : "抽一次" + name + "的词条"), "GREEN"});
@@ -2444,6 +2443,8 @@ public final class EmberGrowthService implements Listener {
         if (d == null || it == null) return 0;
         return d.periodCount(C_AFC + it.uid, "all");
     }
+
+    int afcUsedPublic(PlayerData d, EmberItemData t) { return afcUsed(d, t); }
 
     void afcBump(UUID id, PlayerData d, EmberItemData it) {
         if (d == null || it == null) return;
