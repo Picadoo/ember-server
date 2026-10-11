@@ -43,12 +43,8 @@ Icons:
       material: book
       name: '§e我的成绩'
       lore:
-        - ''
-        - '§7查看本人战力 / 深渊 / 竞速'
-        - ''
         - '§7战力展示分：§f%ember_power_score%'
         - '§7余烬币：§f%corerpg_coin%'
-        - ''
         - '§e➥ §f点击查询'
     actions:
       all:
@@ -60,10 +56,8 @@ Icons:
       material: sign
       name: '§7全息榜说明'
       lore:
-        - ''
         - '§7挂机庭西侧三块全息（战力·深渊·竞速）· 每分钟刷新'
         - '§8位置：主世界 §f-44/-40/-36 · 67 · 265'
-        - ''
         - '§7➥ §f聊天提示路径'
     actions:
       all:
@@ -75,14 +69,8 @@ Icons:
       material: diamond
       name: '§b战力榜'
       lore:
-        - ''
         - '§7按展示分排名'
-        - '§8展示分 · 不乘伤害公式'
-        - '§8周结算：外观称号'
-        - ''
-        - '§8全息：战力榜'
         - '§7榜首：§f%ember_ladder_power_1_name% §7(%ember_ladder_power_1_value%)'
-        - ''
         - '§b➥ §f查看说明'
     actions:
       all:
@@ -96,14 +84,8 @@ Icons:
       material: obsidian
       name: '§5深渊层数榜'
       lore:
-        - ''
-        - '§7本周 / 历史最高层'
         - '§8对齐深渊层数'
-        - '§8周结算：外观'
-        - ''
-        - '§8全息：深渊榜'
         - '§7榜首：§f%ember_ladder_abyss_1_name% §7(%ember_ladder_abyss_1_value%层)'
-        - ''
         - '§5➥ §f查看说明'
     actions:
       all:
@@ -117,14 +99,8 @@ Icons:
       material: watch
       name: '§c周本竞速榜'
       lore:
-        - ''
-        - '§7周本通关秒数'
         - '§8越低越好'
-        - '§8周结算：外观'
-        - ''
-        - '§8全息：竞速榜'
         - '§7榜首：§f%ember_ladder_speed_1_name% §7(%ember_ladder_speed_1_value%s)'
-        - ''
         - '§c➥ §f查看说明'
     actions:
       all:

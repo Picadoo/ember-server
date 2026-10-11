@@ -33,12 +33,9 @@ Icons:
       material: glowstone dust
       name: '§e余烬体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
       lore:
-        - ''
-        - '§e七线终厅：读条提示后环伤 · 拉开可躲'
         - '§7今日还能进 §f%ember_daily_left% §7次日常（按当前体力）'
         - '§7每日 §f0:00 §7（上海）回满'
         - '§7日常消耗 §e%corerpg_stamina_cost_daily% §7体力'
-        - '§8出本后再进约等 5 秒（缓存冷却），不是进本坏了'
 
   B:
     display:
@@ -59,10 +56,7 @@ Icons:
           material: gray stained glass pane
           name: '§8余烬窟·庭院 · 体力不足'
           lore:
-            - ''
-            - '§8门廊 → 前厅 → 回廊 → Boss 垫'
             - '§a终厅 · 读条提示后环伤 · 拉开可躲'
-            - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
         actions:
@@ -76,14 +70,8 @@ Icons:
       material: iron sword
       name: '§a余烬窟·庭院'
       lore:
-        - ''
-        - '§8门廊 → 前厅 → 回廊 → Boss 垫'
-        - '§a终厅 · 读条提示后环伤 · 拉开可躲'
-        - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - '§7进本失败退还 · 通关不退'
-        - ''
         - '§e➥ §f点击进本'
     actions:
       all:
@@ -102,10 +90,7 @@ Icons:
           material: gray stained glass pane
           name: '§8余烬窟·焦骨甬道 · 体力不足'
           lore:
-            - ''
             - '§7狭长焦土甬道 · 假岔 · 尽端鼓室'
-            - '§c终厅 · 读条提示后环伤 · 拉开可躲'
-            - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
         actions:
@@ -119,14 +104,8 @@ Icons:
       material: netherrack
       name: '§c余烬窟·焦骨甬道'
       lore:
-        - ''
-        - '§7狭长焦土甬道 · 假岔 · 尽端鼓室'
-        - '§c终厅 · 读条提示后环伤 · 拉开可躲'
-        - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - '§7进本失败退还 · 通关不退'
-        - ''
         - '§e➥ §f点击进本'
     actions:
       all:
@@ -145,10 +124,7 @@ Icons:
           material: gray stained glass pane
           name: '§8余烬窟·残誓地窖 · 体力不足'
           lore:
-            - ''
             - '§7多层下阶地窖 · 中厅 · 底层圆厅'
-            - '§8终厅 · 读条提示后环伤 · 拉开可躲'
-            - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
         actions:
@@ -162,14 +138,8 @@ Icons:
       material: mossy cobblestone
       name: '§8余烬窟·残誓地窖'
       lore:
-        - ''
-        - '§7多层下阶地窖 · 中厅 · 底层圆厅'
-        - '§8终厅 · 读条提示后环伤 · 拉开可躲'
-        - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - '§7进本失败退还 · 通关不退'
-        - ''
         - '§e➥ §f点击进本'
     actions:
       all:
@@ -188,10 +158,7 @@ Icons:
           material: gray stained glass pane
           name: '§8余烬窟·潮蚀水道 · 体力不足'
           lore:
-            - ''
-            - '§7淹水运河 · 桥闸横推 · 闸厅 Boss'
             - '§3终厅 · 读条提示后环伤 · 拉开可躲'
-            - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
         actions:
@@ -205,14 +172,8 @@ Icons:
       material: prismarine
       name: '§3余烬窟·潮蚀水道'
       lore:
-        - ''
-        - '§7淹水运河 · 桥闸横推 · 闸厅 Boss'
-        - '§3终厅 · 读条提示后环伤 · 拉开可躲'
-        - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - '§7进本失败退还 · 通关不退'
-        - ''
         - '§e➥ §f点击进本'
     actions:
       all:
@@ -231,10 +192,7 @@ Icons:
           material: gray stained glass pane
           name: '§8余烬窟·断塔回廊 · 体力不足'
           lore:
-            - ''
-            - '§7断塔上攀 · 中层环廊 · 顶台 Boss'
             - '§7终厅 · 读条提示后环伤 · 拉开可躲'
-            - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
         actions:
@@ -248,14 +206,8 @@ Icons:
       material: cobblestone
       name: '§7余烬窟·断塔回廊'
       lore:
-        - ''
-        - '§7断塔上攀 · 中层环廊 · 顶台 Boss'
-        - '§7终厅 · 读条提示后环伤 · 拉开可躲'
-        - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - '§7进本失败退还 · 通关不退'
-        - ''
         - '§e➥ §f点击进本'
     actions:
       all:
@@ -274,10 +226,7 @@ Icons:
           material: gray stained glass pane
           name: '§8余烬窟·霜晶裂隙 · 体力不足'
           lore:
-            - ''
-            - '§7冰蓝裂隙 · 冻台横移 · 霜厅 Boss'
             - '§b终厅 · 读条提示后环伤 · 拉开可躲'
-            - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
         actions:
@@ -291,14 +240,8 @@ Icons:
       material: packed ice
       name: '§b余烬窟·霜晶裂隙'
       lore:
-        - ''
-        - '§7冰蓝裂隙 · 冻台横移 · 霜厅 Boss'
-        - '§b终厅 · 读条提示后环伤 · 拉开可躲'
-        - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - '§7进本失败退还 · 通关不退'
-        - ''
         - '§e➥ §f点击进本'
     actions:
       all:
@@ -317,10 +260,7 @@ Icons:
           material: gray stained glass pane
           name: '§8余烬窟·锈轨矿道 · 体力不足'
           lore:
-            - ''
-            - '§7废弃矿轨 · 短支洞 · 机房 Boss'
             - '§6终厅 · 读条提示后环伤 · 拉开可躲'
-            - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
         actions:
@@ -334,14 +274,8 @@ Icons:
       material: rail
       name: '§6余烬窟·锈轨矿道'
       lore:
-        - ''
-        - '§7废弃矿轨 · 短支洞 · 机房 Boss'
-        - '§6终厅 · 读条提示后环伤 · 拉开可躲'
-        - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - '§7进本失败退还 · 通关不退'
-        - ''
         - '§e➥ §f点击进本'
     actions:
       all:
@@ -355,14 +289,8 @@ Icons:
       material: chest
       name: '§6奖励预览'
       lore:
-        - ''
         - '§7通关箱材料（各线相同）：'
-        - '  §e核心碎片 ×1 · 附魔晶 ×1 · 碎片 ×5'
-        - ''
         - '§7Boss 掉落（各线对应材料）：'
-        - '  §fBoss 核心 ×1 · 碎片 / 骨尘'
-        - '  §f各线均有概率获得：刃 / 符 / T1 装备'
-        - ''
         - '§e➥ §f点击打开预览页'
     actions:
       all:
@@ -374,12 +302,9 @@ Icons:
       material: watch
       name: '§e体力说明'
       lore:
-        - ''
         - '§7日常消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7上限 §f%corerpg_stamina_max% §7（月卡 +30）'
-        - '§7重置：§f今日 0:00'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - '§8出本后再进约等 5 秒（缓存冷却），不是进本坏了'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

@@ -62,7 +62,6 @@ Icons:
           material: gray dye
           name: '§7短征'
           lore:
-            - ''
             - '§c先通主线 Q01'
             - '§7解锁后：十三条短本 · 各体力30 · 日有奖帽分开'
     update: 20
@@ -70,7 +69,6 @@ Icons:
       material: shield
       name: '§6短征'
       lore:
-        - ''
         - '§d今日剩余有奖：§f%corerpg_p1_sx_day_left_sum%'
         - '§7生涯首通未领：§f%corerpg_p1_sx_fc_left% §7本'
         - '§e➥ §f短征选本页'
@@ -86,18 +84,9 @@ Icons:
       material: paper
       name: '§e每日委托'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_bounty%'
         - '§e希望：§f%corerpg_p1_bounty_hope%'
-        # D144: numbers = ember-v1.yml bounty.variety
-        - '§e花样委托 §8（重打已首通的普通版时才有花样）'
         - '§7%corerpg_p1_vbounty%'
-        - '§7当天击败 2 只词缀精英：20 余烬币 · 当天 1 次房间事件达标：20 余烬币'
-        - '§a达标通关时聊天栏立刻刷「花样委托 +1」· 本行进度同步'
-        - '§8和上面的局数委托分开计，各发一次'
-        - ''
-        - '§b一眼短目标 §8（左上「本周短目标」）'
-        - '§7本周精选剩次 · 事件池 · 誓约 · 残响 claim'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
@@ -114,7 +103,6 @@ Icons:
       material: diamond chestplate
       name: '§b团本'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_raid_r02% §7· 3～5人 · 周3次'
         - '§e➥ §f左：开本 · 右：招募'
     actions:
@@ -139,7 +127,6 @@ Icons:
       shiny: true
       name: '§6团本'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_raid_r03% §7· 3～5人 · 周3次'
         - '§e➥ §f左：开本 · 右：招募'
     actions:
@@ -163,7 +150,6 @@ Icons:
       material: blaze powder
       name: '§c余烬连战'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_rush% §7· 不耗体力'
         - '§e➥ §f左：开始 · 右：规则榜'
     actions:
@@ -186,7 +172,6 @@ Icons:
       material: writable book
       name: '§d进阶模式'
       lore:
-        - ''
         - '§7自选誓约：%corerpg_p1_pledge_head%'
         - '§7残响本周 claim：§f%corerpg_p1_rush_echo_q01% §8（七首领共用 3 次）'
         - '§e➥ §f打开'
@@ -201,7 +186,6 @@ Icons:
       material: glowstone dust
       name: '§e余烬体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
       lore:
-        - ''
         - '§a下一步：§f%corerpg_p1_next%'
         - '§7主线本每次 §e30 §7体力 · 每天 0 点回满'
 
@@ -212,7 +196,6 @@ Icons:
       material: map
       name: '§e本周短目标'
       lore:
-        - ''
         - '§b本周精选：§f%corerpg_p1_featured%'
         - '§b本周规则：§f%corerpg_p1_modifier%'
         - '§e➥ §f左：进阶模式（残响 / 前哨 / 誓约） · 右：挑战版（看精选图）'
@@ -230,15 +213,8 @@ Icons:
       material: book
       name: '§b我的进度'
       lore:
-        - ''
         - '§7掉落目标族：§f%corerpg_p1_target%'
         - '§7T1 锻造印记：§f%corerpg_p1_marks_t1% §7/ 8'
-        # D138: numbers = ember-v1-runs.yml variety (affix_shard / event_secs / event_core)
-        - '§6重复刷图花样 §8（已首通的普通版）'
-        - '§7每局 1 只发光的§6词缀精英§7：炽热/分裂/厚甲/再生/冲锋/凝霜/投弹/亡爆/毒十字/禁锢/旋光/火链'
-        - '§7  击败 → §f余烬碎片 +2'
-        - '§7约一半的局有§b房间事件§7：限时清房/砸晶/护宝兔/占点/护灯/传火/裂隙/连斩/无伤 → §f余烬核心碎片 +1'
-        - ''
         - '§e➥ §f聊天栏查看详细（解锁 / 当前局）'
     actions:
       all:
@@ -251,7 +227,6 @@ Icons:
       material: iron sword
       name: '§aQ01 §f%corerpg_p1_q01_name%'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_q01_state% %corerpg_p1_rule_q01%'
         - '§7消耗：§e%corerpg_p1_q01_cost%'
         - '§e➥ §f点击进本（队长点；队员需各自满足条件）'
@@ -266,7 +241,6 @@ Icons:
       material: iron sword
       name: '§aQ02 §f%corerpg_p1_q02_name%'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_q02_state% %corerpg_p1_rule_q02%'
         - '§7消耗：§e%corerpg_p1_q02_cost%'
         - '§e➥ §f点击进本（需 Q01 首通）'
@@ -281,7 +255,6 @@ Icons:
       material: diamond sword
       name: '§aQ03 §f%corerpg_p1_q03_name%'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_q03_state% %corerpg_p1_rule_q03%'
         - '§7消耗：§e%corerpg_p1_q03_cost%'
         - '§e➥ §f点击进本（需 Q02 首通）'
@@ -296,7 +269,6 @@ Icons:
       material: prismarine shard
       name: '§bQ04 §f%corerpg_p1_q04_name%'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_q04_state% %corerpg_p1_rule_q04%'
         - '§7消耗：§e%corerpg_p1_q04_cost%'
         - '§e➥ §f点击进本（需 Q03 首通）'
@@ -311,7 +283,6 @@ Icons:
       material: iron axe
       name: '§bQ05 §f%corerpg_p1_q05_name%'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_q05_state% %corerpg_p1_rule_q05%'
         - '§7消耗：§e%corerpg_p1_q05_cost%'
         - '§e➥ §f点击进本（需 Q04 首通）'
@@ -327,7 +298,6 @@ Icons:
       material: packed ice
       name: '§bQ06 §f%corerpg_p1_q06_name%'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_q06_state% %corerpg_p1_rule_q06%'
         - '§7消耗：§e%corerpg_p1_q06_cost%'
         - '§e➥ §f点击进本（需 Q05 首通）'
@@ -342,7 +312,6 @@ Icons:
       material: rail
       name: '§6Q07 §f%corerpg_p1_q07_name%'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_q07_state% %corerpg_p1_rule_q07%'
         - '§7消耗：§e%corerpg_p1_q07_cost%'
         - '§e➥ §f点击进本（需 Q06 首通）'
@@ -360,7 +329,6 @@ Icons:
           material: gray dye
           name: '§7Q07 之后：挑战 / 深渊 / 团本'
           lore:
-            - ''
             - '§a现在：§f%corerpg_p1_next%'
             - '§7首通 Q07 锈轨矿道后开放：'
         actions:
@@ -371,7 +339,6 @@ Icons:
       material: blaze rod
       name: '§c挑战版 · 七图'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_challenge%'
         - '§b本周精选：§f%corerpg_p1_featured%'
         - '§e➥ §f挑战版选图'
@@ -392,7 +359,6 @@ Icons:
       material: ender eye
       name: '§5深渊 · 余烬层'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_abyss_state%'
         - '%corerpg_p1_abyss_hope%'
         - '§e➥ §f深渊选层'
@@ -413,7 +379,6 @@ Icons:
       material: iron chestplate
       name: '§6团本'
       lore:
-        - ''
         - '§7状态：§f%corerpg_p1_raid_r01% §7· 3～5人 · 周3次'
         - '§e➥ §f左：开本 · 右：招募'
     actions:
@@ -431,7 +396,6 @@ Icons:
       material: blaze powder
       name: '§6目标族 · 焚烬'
       lore:
-        - ''
         - '§7之后入场的局：焚烬约 60%'
         - '§e图身份：§f%corerpg_p1_mapid_board%'
     actions:
@@ -465,7 +429,6 @@ Icons:
       material: paper
       name: '§e图身份板 · 哪里刷什么'
       lore:
-        - ''
         - '§7目标族不指定时：本图偏向 50%，另两族各 25%'
         - '§f%corerpg_p1_mapid_board%'
         - '§e➥ §f左：目标族·不指定 · 右：打开装备图录（哪里刷什么）'
@@ -481,7 +444,6 @@ Icons:
       material: nether star
       name: '§d锻造印记'
       lore:
-        - ''
         - '§7Boss 结算每局 1 枚同阶印记（账户绑定）'
         - '§78 枚同阶 → 指定族 + 部位的标准件'
     actions:
@@ -493,7 +455,6 @@ Icons:
       material: book and quill
       name: '§e首通自选'
       lore:
-        - ''
         - '§7Q01 首通：自选族 T1 护符'
         - '§7Q03～Q07 首通为材料，直接发放（见各本「首通」）'
     actions:
@@ -518,7 +479,6 @@ Icons:
       name: '§6图录 · 主线首领'
       lore:
         - '§7七个首领的生命、招式、预警与躲法'
-        - ''
         - '§e➥ §f打开'
     actions:
       all:
