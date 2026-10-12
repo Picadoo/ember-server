@@ -1,6 +1,6 @@
 # tip · TIP-AK ForgeHeldNext 手持护甲诚实对齐（可施工薄 · 可感 UX）· D12664–D12679
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 20:11 Asia/Shanghai  
+> **状态：** **CLOSED live** `1.65.776-d12679.local` · 批 **A · 方案 M** · feat `83d3c2b55` · chore `c9931197a` · 2026-10-12 20:16 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-forge-held-armor-honesty-2026-10-12.md`](../design/RESEARCH-ember-forge-held-armor-honesty-2026-10-12.md) · DESIGN [`DESIGN-ember-forge-held-armor-honesty-2026-10-12.md`](../design/DESIGN-ember-forge-held-armor-honesty-2026-10-12.md) · TIP-AJ CLOSED live `1.65.775-d12663` · TIP-AH CLOSED live `1.65.774-d12631` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径（非 densify）** — ForgeHeldNext 甲闸诚实；正交 AJ 签名轴 / L13 HOLD  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberForgeHeldNext.line` 甲早退 + 单测；吃 SoT：`EmberForgeService#heldNextLine` / `EmberCommand` status）  
