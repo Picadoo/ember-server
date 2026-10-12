@@ -6,3 +6,4 @@
 - **落地**：SettleService 未触发时 chat+AB remainLine；forced 仅触发句；`drop_craft_pity.settle_remain` 热关缺省 true
 - **验收**：NEED=5 FLOOR=1 未改；单测 6/6；SEVERE 待重启确认
 - **硬禁**：零 Affix / 伤乘 / 抬表 / glance twin
+- **热更**：play 重启 · Enabling `1.65.770-d12423.local` · SEVERE=0 · Picado OP · `ce40239b`/`60782eac`
