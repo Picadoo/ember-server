@@ -142,6 +142,7 @@ public final class EmberRunPapi {
                 // D601 hope meters: enhance pity glance (worn + held)
                 || "enhance_blade_pity".equals(key) || "enhance_charm_pity".equals(key)
                 || "held_enhance_pity".equals(key)
+                || "held_enhance_rate".equals(key) // TIP-BN
                 // D602 quality hope meters
                 || "quality_blade_hope".equals(key) || "quality_charm_hope".equals(key)
                 || "held_quality_hope".equals(key)
@@ -830,6 +831,11 @@ public final class EmberRunPapi {
                 EmberItemData hd = heldTrusted(p);
                 if (hd == null) return EmberHopeMeter.emptySlot("手持");
                 return EmberHopeMeter.enhance(hd);
+            }
+            case "held_enhance_rate": { // TIP-BN forge preview success rate
+                EmberItemData hrate = heldTrusted(p);
+                if (hrate == null) return EmberHopeMeter.emptySlot("手持");
+                return EmberHopeMeter.enhanceRate(hrate);
             }
             case "quality_blade_hope": { // D602 · TIP-AS soft
                 PlayerData softPd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());

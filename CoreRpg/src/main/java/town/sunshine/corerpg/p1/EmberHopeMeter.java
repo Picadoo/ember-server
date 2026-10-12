@@ -66,6 +66,26 @@ public final class EmberHopeMeter {
     }
 
     /**
+     * TIP-BN D13128–D13143: next-enhance success rate for forge preview (display only).
+     * SoT: {@code round(RATE[enhance+1]*100)} + "%"; pity-guaranteed → {@code 必成}
+     * (same {@link EmberUpgradeRules#guaranteed} as chat「本次必成»). Empty/armor isomorphic to {@link #enhance}.
+     * Zero change to RATE / MAX_TRIES / cost / pity math.
+     */
+    public static String enhanceRate(EmberItemData d) {
+        if (d == null) return emptySlot("无件");
+        if (d.isArmor()) return emptySlot("甲不可强");
+        EmberUpgradeRules.Plan c = EmberUpgradeRules.enhanceCheck(d);
+        if (!c.ok()) {
+            if (d.enhance >= EmberTables.MAX_ENHANCE) return "§8强化已满 +" + EmberTables.MAX_ENHANCE;
+            return "§8" + (c.error == null ? "不可强化" : c.error);
+        }
+        if (EmberUpgradeRules.guaranteed(d)) return "必成";
+        int t = d.enhance + 1;
+        int ratePct = (int) Math.round(EmberUpgradeRules.rate(t) * 100);
+        return ratePct + "%";
+    }
+
+    /**
      * D602: quality deterministic-bypass hope meter.
      * Workshop can raise 标准→精良→卓越 ({@link #QUALITY_FORGE_CAP}); 极品 drop-only.
      * Progress cur = min(quality, cap) / need = cap; next step names the guaranteed target.
