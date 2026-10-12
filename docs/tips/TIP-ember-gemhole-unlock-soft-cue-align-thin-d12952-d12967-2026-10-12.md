@@ -47,7 +47,7 @@
 | D12962 | HOLD：L13 施工；刃 L11/L13 mods；扩 stampable；甲闸再扫；glance twin/深化 densify；ForgeChoice densify；SetChase 六槽；ConvertCap densify；CostSoft·pity·soft-glance·firstsoft·cook soft·life-buy soft 再叠；soft-latch 假耗再叠；xp-boost cue 再叠；LifeCap/UndoWindow/FestivalEntry/Anvil densify；topUpTo 扩 soft；再降开孔门槛 densify | 文内硬句 |
 | D12963 | 批后派单句：**余烬-插件**；策划 docs-only | 派单句 |
 | D12964 | 玩家口径：ready → 预告门槛−1；soft 过锁才消耗；已用无尾；DELTA/硬表不动 | 可核 |
-| D12965–D12967 | 缓冲：错链/错戳/文案过长压行；禁借号抬 DELTA 或开 L13 施工或扩 stampable/SetChase/甲闸再扫/soft 假耗再叠/再降门槛；Anvil soft / enhance「+5开孔」硬文案另 tip | 超额新 tip |
+| D12965–D12967 | 缓冲：错链/错戳/文案过长压行；禁借号抬 DELTA 或开 L13 施工或扩 stampable/SetChase/甲闸再扫/soft 假耗再叠/再降门槛；Anvil soft 另 tip；enhance「+5开孔」硬文案 → **TIP-BD OPEN** | 超额新 tip |
 
 ### 玩家口径（固定）
 
@@ -97,6 +97,6 @@
 
 - [x] 总控批 **A · 方案 M** · 已批 · 已派插件  
 - 选题：TIP-BB 后 · **离开 soft-latch / xp-boost cue** — GemHoleUnlockSoft 门槛预告/拒线诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 soft 假耗再叠 · 非再降 DELTA**）  
-- **批注：** GemHoleUnlockSoft 已 live，Open 不预告、拒线固定 ≥5/≥3 → 变强途径静默/撒谎；ready 尾「今日开孔门槛−1待用（刃二孔≥4·护符≥2）」；拒线跟 ready；零改 DELTA/硬表；零新 PAPI；批后派 **余烬-插件**；**L13 施工 HOLD**；Anvil soft / enhance「+5开孔」硬文案旁债；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / soft-latch·CostSoft·pity·soft-glance·firstsoft·cook·life-buy soft 再叠 / xp-boost cue 再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 仍冻  
+- **批注：** GemHoleUnlockSoft 已 live，Open 不预告、拒线固定 ≥5/≥3 → 变强途径静默/撒谎；ready 尾「今日开孔门槛−1待用（刃二孔≥4·护符≥2）」；拒线跟 ready；零改 DELTA/硬表；零新 PAPI；批后派 **余烬-插件**；**L13 施工 HOLD**；Anvil soft densify 旁债仍冻；enhance「+5开孔」硬文案 → **TIP-BD OPEN**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / soft-latch·CostSoft·pity·soft-glance·firstsoft·cook·life-buy soft 再叠 / xp-boost cue 再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 仍冻  
 
 ## STATUS: CLOSED live `1.65.794-d12967` · tip D12952–D12967 · 2026-10-12 22:52 Asia/Shanghai · feat `b13c47c69`

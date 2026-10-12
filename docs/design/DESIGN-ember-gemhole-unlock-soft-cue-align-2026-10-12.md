@@ -92,6 +92,6 @@ insert 拒线 (伪码):
 1. AnvilRepair Soft 假耗（硬禁 densify 未解冻前不开）  
 2. topUpTo 是否接 soft（须另批 · 现禁 densify）  
 3. 主线解锁 DESIGN / stampable 空 / L13 HOLD 观察  
-4. enhance 预览「冲到+5开孔」硬门槛文案（若仍撒谎 · 另 tip 诚实）
+4. enhance 预览「冲到+5开孔」硬门槛文案 → **TIP-BD OPEN** `TIP-ember-enhance-plus5-hole-copy-align-thin-d12968-d12983-2026-10-12.md`
 
 ## STATUS: CLOSED live `1.65.794-d12967` · TIP-BC · 2026-10-12 22:52 Asia/Shanghai · feat `b13c47c69`
