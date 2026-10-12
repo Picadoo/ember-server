@@ -1,6 +1,6 @@
 # tip · TIP-K 技能手感包（形状 / 身法 / 套装差 · 烬斩太素深化）· D12320–D12335
 
-> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:19 Asia/Shanghai）· 交插件岗  
+> **状态：** CLOSED · live 1.65.766-d12335（2026-10-12 16:24 Asia/Shanghai）  
 > **上游：** [`RESEARCH-ember-skill-architecture-2026-10-06.md`](../design/RESEARCH-ember-skill-architecture-2026-10-06.md)（D209 · 业主「烬斩太素了」）· [`DESIGN-ember-skill-kit-2026-10-06.md`](../design/DESIGN-ember-skill-kit-2026-10-06.md)（D210）· [`TIP-ember-power-skill-feel-glance-d12280-d12287-2026-10-12.md`](TIP-ember-power-skill-feel-glance-d12280-d12287-2026-10-12.md)（**TIP-F 入口**）· TIP-J 停窗 P1  
 > **施工岗：** 插件岗（战斗反馈 / 既有标签拼装；**零改 skill_mult / CD / 几何数值 / Affix**）  
 > **硬禁：** **零抬 skill_mult** · **零 Affix Pack** · **零 power-glance densify twin**（不重开 TIP-A～I 同构一眼）· 零伤乘 · 不发明新主循环 / 第四主动键 · 不复活灰印/聚火/守招（D210/D212 HOLD）· 不改 Economy/pom 脏树
@@ -95,11 +95,11 @@ TIP-F 已让枢纽看见「三套烬斩差」；本包让 **形状 / 身法 / �
 ## 6. 验收清单
 
 - [x] 总控批 **A · 方案 M**  
-- [ ] D12322–D12325 行为符合「一次/低频」；无每刀刷屏  
-- [ ] D12326：hub / skill_kit lore 非空行 ≤3；无新 glance  
-- [ ] `git show` 无 Affix / skill 数值表无关脏文件；密码检查 0  
-- [ ] skill_mult / CD / 几何单测基线不变  
-- [ ] HOLD（D12327）未被本包打开  
+- [x] D12322–D12325 行为符合「一次/低频」；无每刀刷屏  
+- [x] D12326：hub / skill_kit lore 非空行 ≤3；无新 glance  
+- [x] `git show` 无 Affix / skill 数值表无关脏文件；密码检查 0  
+- [x] skill_mult / CD / 几何单测基线不变  
+- [x] HOLD（D12327）未被本包打开  
 - [ ] 交总控批后由总控派插件；策划本 tip **docs-first**
 
 ---
@@ -111,4 +111,7 @@ TIP-F 已让枢纽看见「三套烬斩差」；本包让 **形状 / 身法 / �
 - 变强途径 glance：**仍停**（TIP-J）；本窗不重开 A～I twin
 - **批注：** D12322–25 一次/低频 cue；复用 shapeShort/preferredShapeLabel/setFalloutLabel/slashConfirmWithSet；禁 trmenu densify；HOLD 守招·灰印·聚火·SF4
 
-## STATUS: 批 A·M · 交插件 · 2026-10-12 16:19 CST
+## STATUS: CLOSED · live 1.65.766-d12335 · 2026-10-12 16:24 CST
+- feat `6e25eff6` · chore 版本/STATUS 另附
+- 形状/身法角色 AB + 错形状一次 + slashConfirm 空半行；零 skill_mult/TrMenu
+- 偏差接受：角色句挂命中闪现（蓄力路径可见）

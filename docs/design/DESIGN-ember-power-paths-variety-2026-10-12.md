@@ -186,4 +186,4 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - TIP-H：**CLOSED live**（trmenu `82512b4d`）
 - TIP-I：**CLOSED live**（1.65.765-d12311）
 - **TIP-J CLOSED 停窗** · `TIP-ember-power-paths-stop-window-d12312-d12319` · Batch1–3+A～I 收束；默认不再开 power-glance
-- **TIP-K 批 A·M** · tip `TIP-ember-skill-feel-pack-d12320-d12335` · 交插件岗（战斗手感 cue；非 glance）
+- **TIP-K CLOSED live** 1.65.766-d12335（技能手感包 cue）
