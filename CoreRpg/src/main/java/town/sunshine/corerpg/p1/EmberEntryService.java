@@ -217,8 +217,14 @@ public final class EmberEntryService {
             if (runs.openSessionOf(p.getUniqueId()) != null) problems.add(busyText(p.getName()));
             if (inDungeonWorld(p.getWorld().getName())) problems.add(inDungeonText(p.getName()));
             if (st != null) {
-                String why = staminaProblem(p.getName(), st.staminaOf(p), cost);
-                if (why != null) problems.add(why);
+                // TIP-AX: gate on peekCost (SessionService consume still on full cost)
+                int need = EmberStaminaFirstSoft.peekCost(d, cost);
+                String why = staminaProblem(p.getName(), st.staminaOf(p), need);
+                if (why != null) {
+                    if (EmberStaminaFirstSoft.ready(d) && need < cost)
+                        why = why + EmberGearNextHint.softTail(true);
+                    problems.add(why);
+                }
             }
         }
         if (!problems.isEmpty()) {

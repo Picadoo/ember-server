@@ -700,14 +700,18 @@ public final class EmberRunPapi {
 
     private String abyss(PlayerData d, String key, EmberRunMaps maps) {
         if ("abyss_best".equals(key)) return String.valueOf(runs.abyssBest(d)); // P2-2
-        if ("abyss_hope".equals(key)) { // D624
+        if ("abyss_hope".equals(key)) { // D624 · TIP-AX peekFee
             if (maps.abyss.isEmpty() || !runs.abyssOpen(d)) return EmberHopeMeter.abyssHope(0, 0, 0, false);
             int best = runs.abyssBest(d);
             int max = runs.abyssMaxStart(d);
             EmberRunMaps.AbyssTier next = maps.abyssTier(max);
-            int fee = next == null ? 0 : next.fee;
-            boolean afford = fee <= 0 || d.getCoin() >= fee || runs.feeMarks(d, fee) > 0;
-            return EmberHopeMeter.abyssHope(best, max, fee, afford);
+            int fee0 = next == null ? 0 : next.fee;
+            int feeShow = EmberAbyssFeeSoft.peekFee(d, fee0);
+            boolean afford = feeShow <= 0 || d.getCoin() >= feeShow || runs.feeMarks(d, feeShow) > 0;
+            String hope = EmberHopeMeter.abyssHope(best, max, feeShow, afford);
+            if (EmberAbyssFeeSoft.ready(d) && feeShow < fee0)
+                hope = hope + EmberGearNextHint.softTail(true);
+            return hope;
         }
         if ("abyss_state".equals(key)) {
             boolean configured = !maps.abyss.isEmpty();

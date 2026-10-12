@@ -225,8 +225,14 @@ public final class EmberAbyssService {
         if (!open(d)) out.add(lockedText(p.getName(), maps.abyssRequires));
         else if (tier > maxStart(d)) out.add(tierTooHighText(p.getName(), maxStart(d), best(d)));
         int fee0 = feeFor(p, at.fee); // D142 深渊行者
-        if (d.getCoin() < fee0 && feeMarks(d, fee0) == 0)
-            out.add(feeShortText(p.getName(), fee0, d.getCoin(), maps.abyssFeeMarkCoin, EmberCosmetics.MARK_RESERVE));
+        // TIP-AX: gate on peekFee (SessionService consume still on full fee)
+        int feeShow = EmberAbyssFeeSoft.peekFee(d, fee0);
+        if (d.getCoin() < feeShow && feeMarks(d, feeShow) == 0) {
+            String shortFee = feeShortText(p.getName(), feeShow, d.getCoin(), maps.abyssFeeMarkCoin, EmberCosmetics.MARK_RESERVE);
+            if (EmberAbyssFeeSoft.ready(d) && feeShow < fee0)
+                shortFee = shortFee + EmberGearNextHint.softTail(true);
+            out.add(shortFee);
+        }
     }
 
     /** D142 深渊行者: this player's segment fee (honors may discount). */

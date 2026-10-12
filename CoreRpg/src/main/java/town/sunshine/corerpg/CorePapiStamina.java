@@ -10,8 +10,13 @@ final class CorePapiStamina {
         if (st == null) return null;
         if ("stamina".equals(key)) return String.valueOf(st.getStamina(d));
         if ("stamina_max".equals(key)) return String.valueOf(st.getMax(d));
-        if ("stamina_hope".equals(key)) { // D629
-            return town.sunshine.corerpg.p1.EmberHopeMeter.staminaHope(st.getStamina(d), st.getMax(d), st.costOf("daily"));
+        if ("stamina_hope".equals(key)) { // D629 · TIP-AX peekCost
+            int full = st.costOf("daily");
+            int hopeCost = town.sunshine.corerpg.p1.EmberStaminaFirstSoft.peekCost(d, full);
+            String hope = town.sunshine.corerpg.p1.EmberHopeMeter.staminaHope(st.getStamina(d), st.getMax(d), hopeCost);
+            if (town.sunshine.corerpg.p1.EmberStaminaFirstSoft.ready(d) && hopeCost < full)
+                hope = hope + " · " + town.sunshine.corerpg.p1.EmberGearNextHint.SOFT_TAIL;
+            return hope;
         }
         if ("stamina_bank".equals(key)) { st.ensure(d); return String.valueOf(d.getStaminaBank()); }
         if ("stamina_cost_daily".equals(key)) return String.valueOf(st.costOf("daily"));
@@ -27,17 +32,20 @@ final class CorePapiStamina {
         if ("stamina_blocked_weekly".equals(key)) {
             st.ensure(d);
             if (d.getWeeklyGrantCreditWeekly() > 0) return "0";
-            return st.getStamina(d) < st.costOf("weekly") ? "1" : "0";
+            int need = town.sunshine.corerpg.p1.EmberStaminaFirstSoft.peekCost(d, st.costOf("weekly"));
+            return st.getStamina(d) < need ? "1" : "0";
         }
         if ("stamina_blocked_raid".equals(key)) {
             st.ensure(d);
             if (d.getWeeklyGrantCreditRaid() > 0) return "0";
-            return st.getStamina(d) < st.costOf("raid") ? "1" : "0";
+            int need = town.sunshine.corerpg.p1.EmberStaminaFirstSoft.peekCost(d, st.costOf("raid"));
+            return st.getStamina(d) < need ? "1" : "0";
         }
         if ("stamina_blocked_elite".equals(key)) {
             st.ensure(d);
             if (d.getWeeklyGrantCreditElite() > 0) return "0";
-            return st.getStamina(d) < st.costOf("elite") ? "1" : "0";
+            int need = town.sunshine.corerpg.p1.EmberStaminaFirstSoft.peekCost(d, st.costOf("elite"));
+            return st.getStamina(d) < need ? "1" : "0";
         }
         return null;
     }
