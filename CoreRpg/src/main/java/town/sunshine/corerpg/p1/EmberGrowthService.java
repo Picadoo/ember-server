@@ -1080,7 +1080,8 @@ public final class EmberGrowthService implements Listener {
         EmberSignature.Def chase = EmberSigChase.get(d);
         int marks = (d == null || chase == null) ? 0
                 : d.periodCount(EmberSignature.C_MARK + chase.map, "all");
-        return EmberSigFeel.menuLine(active, off, chase, marks, lo);
+        int need = EmberImprintMarkSoft.need(d, false); // D12830 soft peek
+        return EmberSigFeel.menuLine(active, off, chase, marks, lo, need);
     }
 
     private String mapLabel(String key) {
@@ -1623,16 +1624,17 @@ public final class EmberGrowthService implements Listener {
     EmberSignature.Def pickAttuneReadyPublic(PlayerData d) { return pickAttuneReady(d); }
 
     private EmberSignature.Def pickAttuneReady(PlayerData d) {
+        int needA = EmberAttuneUnlockSoft.need(d, false); // D12831 soft peek so auto can fire
         EmberSignature.Def chase = EmberSigChase.get(d);
         if (chase != null && EmberSignature.alt(chase) != null && !altUnlocked(d, chase)
                 && runs.progressFlag(d, chase.map)
-                && d.periodCount(EmberSignature.C_MARK + chase.map, "all") >= EmberSignature.altMarks())
+                && d.periodCount(EmberSignature.C_MARK + chase.map, "all") >= needA)
             return chase;
         for (EmberSignature.Def sd : EmberSignature.DEFS) {
             if (EmberSignature.alt(sd) == null) continue;
             if (altUnlocked(d, sd)) continue;
             if (!runs.progressFlag(d, sd.map)) continue;
-            if (d.periodCount(EmberSignature.C_MARK + sd.map, "all") < EmberSignature.altMarks()) continue;
+            if (d.periodCount(EmberSignature.C_MARK + sd.map, "all") < needA) continue;
             return sd;
         }
         return null;
@@ -1656,10 +1658,16 @@ public final class EmberGrowthService implements Listener {
         if (d == null) return false;
         if (altUnlocked(d, sd)) return false;
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
+        int needA = EmberAttuneUnlockSoft.need(d, false); // D12831 peek
         String why = EmberSignature.attuneCheck(sd, EmberSkillKit.attuneUnlocked(d, runs),
-                runs.progressFlag(d, sd.map), false, marks);
+                runs.progressFlag(d, sd.map), false, marks, needA);
         if (why != null) return false;
-        if (!EmberEconomy.spendInsignia(d, "C13", sd.map, EmberSignature.altMarks())) return false;
+        int needPay = EmberAttuneUnlockSoft.need(d, true); // D12831 soft consume
+        if (needPay < EmberSignature.altMarks()) {
+            p.sendMessage(P + "§a调律解锁减负 · 徽记 ×0.5（今日一次）");
+            try { p.sendActionBar("§a调律解锁减负"); } catch (Throwable ignored) { }
+        }
+        if (!EmberEconomy.spendInsignia(d, "C13", sd.map, needPay)) return false;
         d.addPeriodCount(EmberSignature.C_ALTU + sd.id, "all", 1);
         d.addPeriodCount(EmberSignature.C_ALT + sd.id, "all", 1 - d.periodCount(EmberSignature.C_ALT + sd.id, "all"));
         int ar = d.periodCount(C_ATTUNE_READY, "all");
@@ -1668,7 +1676,7 @@ public final class EmberGrowthService implements Listener {
         if (aq > 0) d.addPeriodCount(C_ATTUNE_QUIET, "all", -aq);
         boolean saved = plugin.getDataStore().flushMutationChecked(p.getUniqueId());
         plugin.getLogger().info("[P1 sig] " + p.getName() + " attune unlock AUTO " + sd.id
-                + " (-" + EmberSignature.altMarks() + " " + sd.map + " marks, saved=" + saved + ")");
+                + " (-" + needPay + " " + sd.map + " marks, saved=" + saved + ")");
         p.sendMessage(P + "§a调律自动解锁 · §6" + sd.name + " §7→ 调律版（代价："
                 + EmberSignature.alt(sd).bad + "）· 剩 "
                 + d.periodCount(EmberSignature.C_MARK + sd.map, "all") + " 枚徽记"
@@ -1689,17 +1697,19 @@ public final class EmberGrowthService implements Listener {
         }
         if (EmberAttuneBreak.maybeAuto(p, d, this)) return true; // D4769 auto before button
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
+        int needA = EmberAttuneUnlockSoft.need(d, false);
         int latched = d.periodCount(C_ATTUNE_READY, "all");
         if (latched == def.code) return false;
         d.addPeriodCount(C_ATTUNE_READY, "all", def.code - latched);
         runs.flushData(p.getUniqueId());
         String line = "§d调律就绪 · §f" + def.id + " " + def.name + " §7· 徽记 §f"
-                + marks + "/" + EmberSignature.altMarks();
+                + marks + "/" + needA
+                + EmberGearNextHint.softTail(EmberAttuneUnlockSoft.ready(d));
         p.sendMessage(P + line);
         try { p.sendActionBar(line); } catch (Throwable ignored) { }
         town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7一键：",
                 "[一键调律·" + def.id + "]", "/corerpg p1 sig attune " + def.id + " go",
-                EmberSignature.altMarks() + " 枚徽记解锁调律版（永久）");
+                needA + " 枚徽记解锁调律版（永久）");
         return true;
     }
 
@@ -1716,12 +1726,14 @@ public final class EmberGrowthService implements Listener {
             return false;
         }
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
+        int needA = EmberAttuneUnlockSoft.need(d, false);
         int latched = d.periodCount(C_ATTUNE_QUIET, "all");
         if (latched == def.code) return false;
         d.addPeriodCount(C_ATTUNE_QUIET, "all", def.code - latched);
         runs.flushData(p.getUniqueId());
         String line = "§d调律可解锁 · §f" + def.id + " " + def.name + " §7· 徽记 §f"
-                + marks + "/" + EmberSignature.altMarks()
+                + marks + "/" + needA
+                + EmberGearNextHint.softTail(EmberAttuneUnlockSoft.ready(d))
                 + " §8· /corerpg p1 sig attune " + def.id;
         p.sendMessage(P + line);
         try { p.sendActionBar("§d调律就绪 · §f" + def.id + " §7无按钮"); } catch (Throwable ignored) { }
@@ -1881,17 +1893,21 @@ public final class EmberGrowthService implements Listener {
         if ("acq".equals(key) || "acq_line".equals(key)) return EmberSigAcq.menuLine(); // D456
         if ("chase".equals(key) || "chase_line".equals(key) || "chase_hope".equals(key)) return EmberSigChase.glance(d); // D464/D604
         if ("feel".equals(key) || "feel_line".equals(key)) return sigFeelLine(d, lo); // D12290 hub/gear feel glance
-        if ("imprint_hope".equals(key)) { // D615 / D12654: spend hope; defense-side tier via imprintWornTarget
+        if ("imprint_hope".equals(key)) { // D615 / D12654 / D12828: soft peek + softTail
             EmberSignature.Def cd = EmberSigChase.get(d);
             if (cd == null) return "§8追烙未选 · /corerpg p1 sig chase";
             int marks = d.periodCount(EmberSignature.C_MARK + cd.map, "all");
             EmberLoadout loImp = runs.loadouts().get(p);
             EmberItemData worn = loImp == null ? null : imprintWornTarget(loImp, cd);
             int tier = worn != null && worn.tier >= 1 ? worn.tier : 1;
-            int coinNeed = EmberSignature.imprintCoin(tier);
-            return EmberHopeMeter.imprintSpend(marks, EmberSignature.imprintMarks(), d.getCoin(), coinNeed);
+            int needM = EmberImprintMarkSoft.need(d, false);
+            int coinNeed = EmberImprintCoinSoft.apply(d, EmberSignature.imprintCoin(tier), false);
+            return EmberHopeMeter.imprintSpend(marks, needM, d.getCoin(), coinNeed)
+                    + EmberGearNextHint.softTail(EmberImprintMarkSoft.ready(d) || EmberImprintCoinSoft.ready(d));
         }
-        if ("attune_hope".equals(key)) { // D615 attune unlock hope
+        if ("attune_hope".equals(key)) { // D615 / D12828: soft peek + softTail
+            int needA = EmberAttuneUnlockSoft.need(d, false);
+            String soft = EmberGearNextHint.softTail(EmberAttuneUnlockSoft.ready(d));
             EmberSignature.Def cd = EmberSigChase.get(d);
             if (cd == null) {
                 int bestM = 0;
@@ -1900,11 +1916,11 @@ public final class EmberGrowthService implements Listener {
                     int mk = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
                     if (mk > bestM) bestM = mk;
                 }
-                return EmberHopeMeter.attuneUnlock(bestM, EmberSignature.altMarks()) + " §8· 选追烙后更准";
+                return EmberHopeMeter.attuneUnlock(bestM, needA) + soft + " §8· 选追烙后更准";
             }
             if (EmberSignature.alt(cd) == null) return "§8追烙签名无调律版";
             int marks = d.periodCount(EmberSignature.C_MARK + cd.map, "all");
-            return EmberHopeMeter.attuneUnlock(marks, EmberSignature.altMarks()) + " §7· " + cd.map.toUpperCase(java.util.Locale.ROOT);
+            return EmberHopeMeter.attuneUnlock(marks, needA) + soft + " §7· " + cd.map.toUpperCase(java.util.Locale.ROOT);
         }
         if ("marks".equals(key)) {
             StringBuilder sb = new StringBuilder("§7首领徽记：");
@@ -1958,8 +1974,13 @@ public final class EmberGrowthService implements Listener {
                 default:
                     if (!cl) return "§8首通 " + mapLabel(sd.map) + " 后解锁：重打掉签名件和徽记";
                     if (!imp) return "§8重打 " + sd.map.toUpperCase(Locale.ROOT) + " 有机会掉 · 烙印在首进或首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
-                    return "§e➥ 点击：烙印到自己的" + imprintActionWhere(sd) + "上 §7（" + EmberSignature.imprintMarks() + " 枚徽记 + "
-                            + EmberSignature.IMPRINT_COIN_PER_TIER + "×阶级 币）";
+                    {
+                        int needM = EmberImprintMarkSoft.need(d, false);
+                        int coinPer = EmberImprintCoinSoft.apply(d, EmberSignature.IMPRINT_COIN_PER_TIER, false);
+                        return "§e➥ 点击：烙印到自己的" + imprintActionWhere(sd) + "上 §7（" + needM + " 枚徽记 + "
+                                + coinPer + "×阶级 币）"
+                                + EmberGearNextHint.softTail(EmberImprintMarkSoft.ready(d) || EmberImprintCoinSoft.ready(d));
+                    }
             }
         }
         if ("run".equals(key)) return runPreviewLine(d, lo);
@@ -1987,8 +2008,10 @@ public final class EmberGrowthService implements Listener {
         if (!cleared) return "§8先首通 " + mapLabel(sd.map);
         if (!altUnlocked(d, sd)) {
             int mk = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
-            return (mk >= EmberSignature.altMarks() ? "§e➥ Shift+点击解锁调律版" : "§7解锁调律版") + " §7（" + EmberSignature.altMarks() + " 枚 "
-                    + sd.map.toUpperCase(Locale.ROOT) + " 徽记，有 " + mk + "）";
+            int needA = EmberAttuneUnlockSoft.need(d, false);
+            return (mk >= needA ? "§e➥ Shift+点击解锁调律版" : "§7解锁调律版") + " §7（" + needA + " 枚 "
+                    + sd.map.toUpperCase(Locale.ROOT) + " 徽记，有 " + mk + "）"
+                    + EmberGearNextHint.softTail(EmberAttuneUnlockSoft.ready(d));
         }
         return sigAlt(d, sd) ? "§d▶ 调律版生效中 §e➥ 点击换回原版" : "§a▶ 原版生效中 §e➥ 点击换成调律版";
     }
@@ -2034,9 +2057,11 @@ public final class EmberGrowthService implements Listener {
                 return ("held".equals(which) ? "§a▶ 已选 · " : "§7") + lab;
             }
             case "cost": {
-                int coin = t == null ? EmberSignature.imprintCoin(1) : EmberSignature.imprintCoin(t.tier);
-                return "§7花费：§f" + EmberSignature.imprintMarks() + " §7枚 " + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + (marks >= EmberSignature.imprintMarks() ? "§a" : "§c") + marks
-                        + "§7）+ §f" + coin + " §7余烬币（有 " + (d.getCoin() >= coin ? "§a" : "§c") + d.getCoin() + "§7）" + (t == null ? " §8（按 T1 算）" : "");
+                // needM/needC already soft-peeked above (D12829)
+                return "§7花费：§f" + needM + " §7枚 " + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + (marks >= needM ? "§a" : "§c") + marks
+                        + "§7）+ §f" + needC + " §7余烬币（有 " + (d.getCoin() >= needC ? "§a" : "§c") + d.getCoin() + "§7）"
+                        + EmberGearNextHint.softTail(EmberImprintMarkSoft.ready(d) || EmberImprintCoinSoft.ready(d))
+                        + (t == null ? " §8（按 T1 算）" : "");
             }
             case "warn": {
                 EmberSignature.Def old = EmberSignature.byCode(cur);

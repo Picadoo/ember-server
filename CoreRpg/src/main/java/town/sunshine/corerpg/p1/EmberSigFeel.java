@@ -91,6 +91,14 @@ public final class EmberSigFeel {
      */
     public static String menuLine(List<EmberSignature.Def> active, List<EmberSignature.Def> wornOff,
                                   EmberSignature.Def chaseDef, int chaseMarks, EmberLoadout lo) {
+        return menuLine(active, wornOff, chaseDef, chaseMarks, lo, EmberSignature.imprintMarks());
+    }
+
+    /**
+     * D12830 / TIP-AU: chase branch may use soft imprint need (caller peeks ImprintMarkSoft).
+     */
+    public static String menuLine(List<EmberSignature.Def> active, List<EmberSignature.Def> wornOff,
+                                  EmberSignature.Def chaseDef, int chaseMarks, EmberLoadout lo, int need) {
         if (active != null && !active.isEmpty()) {
             StringBuilder sb = new StringBuilder("§d签名 ");
             int n = 0;
@@ -114,13 +122,13 @@ public final class EmberSigFeel {
             }
         }
         if (chaseDef != null) {
-            int need = EmberSignature.imprintMarks();
+            int n = need > 0 ? need : EmberSignature.imprintMarks();
             int m = Math.max(0, chaseMarks);
             String nm = chaseDef.name == null ? chaseDef.id : chaseDef.name;
-            if (m >= need) {
+            if (m >= n) {
                 return "§e追烙就绪 §f" + chaseDef.id + " " + nm + " §7· " + EmberSigChase.readyTail(lo, chaseDef);
             }
-            return "§e追烙 §f" + chaseDef.id + " " + nm + " §7· 徽记 " + m + "/" + need;
+            return "§e追烙 §f" + chaseDef.id + " " + nm + " §7· 徽记 " + m + "/" + n;
         }
         return "§8无签名 · 点左开页 · 右选追烙";
     }

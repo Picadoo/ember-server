@@ -19,6 +19,7 @@ import town.sunshine.corerpg.PlayerData;
  * D604: hope-meter style via EmberHopeMeter.sigChase.
  * D12712–D12727 TIP-AN: chase-ready defense align (fitsDefense + imprintWornTarget).
  * D12728–D12743 TIP-AO: remain/progress/readyTail align with readyCueSlotWord target.
+ * D12824–D12839 TIP-AU: remain/progress/readyCue/tip display soft imprint need when pd.
  * Zero STAMP_RATE / imprint price / ALTS / clear-gate change.
  */
 public final class EmberSigChase {
@@ -91,8 +92,19 @@ public final class EmberSigChase {
     }
 
     public static String tip(EmberSignature.Def def) {
+        return tip(def, EmberSignature.imprintMarks());
+    }
+
+    /** D12830: tip with soft/full imprint need. */
+    public static String tip(EmberSignature.Def def, int need) {
         if (def == null) return "点选一条签名当追烙目标";
-        return "回 " + def.map.toUpperCase(Locale.ROOT) + " 刷徽记 · " + EmberSignature.imprintMarks() + " 枚可烙";
+        int n = need > 0 ? need : EmberSignature.imprintMarks();
+        return "回 " + def.map.toUpperCase(Locale.ROOT) + " 刷徽记 · " + n + " 枚可烙";
+    }
+
+    /** D12830: tip when pd available → ImprintMarkSoft peek. */
+    public static String tip(EmberSignature.Def def, PlayerData d) {
+        return tip(def, EmberImprintMarkSoft.need(d, false));
     }
 
     /** Progress / ready line — D604 hope-meter style (still imprint-ready when full). */
@@ -102,7 +114,12 @@ public final class EmberSigChase {
 
     /** D12733: progress with loadout for full-tier readyTail. */
     public static String progressLine(EmberSignature.Def def, int marks, EmberLoadout lo) {
-        return EmberHopeMeter.sigChase(def, marks, lo);
+        return progressLine(def, marks, lo, EmberSignature.imprintMarks());
+    }
+
+    /** D12830: progress with soft/full imprint need. */
+    public static String progressLine(EmberSignature.Def def, int marks, EmberLoadout lo, int need) {
+        return EmberHopeMeter.sigChase(def, marks, lo, need);
     }
 
     /** D1355: non-hope remain toward imprint（聊天可并行 hope glance）. */
@@ -115,12 +132,19 @@ public final class EmberSigChase {
      * Old binary overload delegates {@code lo=null}.
      */
     public static String remainLine(EmberSignature.Def def, int marks, EmberLoadout lo) {
+        return remainLine(def, marks, lo, EmberSignature.imprintMarks());
+    }
+
+    /**
+     * D12830 / TIP-AU: remain with soft/full imprint need (caller peeks ImprintMarkSoft when pd).
+     */
+    public static String remainLine(EmberSignature.Def def, int marks, EmberLoadout lo, int need) {
         if (def == null) return "未选追烙目标 · /corerpg p1 sig chase";
-        int need = EmberSignature.imprintMarks();
+        int n = need > 0 ? need : EmberSignature.imprintMarks();
         int m = Math.max(0, marks);
-        int gap = Math.max(0, need - m);
+        int gap = Math.max(0, n - m);
         if (gap == 0) return "追烙 " + def.id + " · 徽记够 · " + readyTail(lo, def);
-        return "追烙 " + def.id + " · 徽记 " + m + "/" + need + " · 还差" + gap;
+        return "追烙 " + def.id + " · 徽记 " + m + "/" + n + " · 还差" + gap;
     }
 
     /**
@@ -138,7 +162,7 @@ public final class EmberSigChase {
         EmberSignature.Def def = get(d);
         if (def == null) return "";
         int marks = d == null ? 0 : d.periodCount(EmberSignature.C_MARK + def.map, "all");
-        return remainLine(def, marks);
+        return remainLine(def, marks, null, EmberImprintMarkSoft.need(d, false));
     }
 
     /** True when chase targets this map key (q01…). */
@@ -178,7 +202,8 @@ public final class EmberSigChase {
         if (pick == null) return false;
         if (!set(d, pick)) return false;
         flush(p);
-        String rem = remainLine(pick, d.periodCount(EmberSignature.C_MARK + pick.map, "all"));
+        int mk = d.periodCount(EmberSignature.C_MARK + pick.map, "all");
+        String rem = remainLine(pick, mk, null, EmberImprintMarkSoft.need(d, false));
         p.sendMessage(EmberRunService.P + "§e追烙已按本图钉选 · §f" + label(pick)
                 + " §7· " + rem + " §8· /corerpg p1 sig chase");
         try { p.sendActionBar("§e追烙 · §f" + pick.id + " §7" + rem); } catch (Throwable ignored) { }
@@ -190,7 +215,7 @@ public final class EmberSigChase {
         EmberSignature.Def def = get(d);
         if (def == null) return EmberHopeMeter.sigChase(null, 0);
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
-        return progressLine(def, marks);
+        return progressLine(def, marks, null, EmberImprintMarkSoft.need(d, false));
     }
 
     /** Append to D456 miss line when settle map matches chase. */
@@ -198,7 +223,7 @@ public final class EmberSigChase {
         EmberSignature.Def def = get(d);
         if (def == null || mapKey == null || !def.map.equalsIgnoreCase(mapKey)) return "";
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
-        int need = EmberSignature.imprintMarks();
+        int need = EmberImprintMarkSoft.need(d, false);
         if (marks >= need) return " §a· 追烙 " + def.id + " 已够烙";
         return String.format(Locale.ROOT, " §8· 追烙 %s %d/%d", def.id, marks, need);
     }
@@ -244,7 +269,7 @@ public final class EmberSigChase {
         String[][] btns = new String[n + 2][];
         for (int i = 0; i < n; i++) {
             EmberSignature.Def def = opts.get(i);
-            btns[i] = new String[]{"[" + def.id + "]", "/corerpg p1 sig chase " + def.id, tip(def), "GOLD"};
+            btns[i] = new String[]{"[" + def.id + "]", "/corerpg p1 sig chase " + def.id, tip(def, d), "GOLD"};
         }
         btns[n] = new String[]{"[取消追烙]", "/corerpg p1 sig chase clear", "清空目标", "GRAY"};
         btns[n + 1] = new String[]{"[签名页]", "/corerpg p1 sig menu", "图鉴烙印", "AQUA"};
@@ -306,7 +331,8 @@ public final class EmberSigChase {
         if (lib != null && lib.usable() && EmberMapStashPin.unlocked(d, runs)) {
             lib.pinMapFilter(p, pick.map);
         }
-        String rem = remainLine(pick, d.periodCount(EmberSignature.C_MARK + pick.map, "all"));
+        int mk = d.periodCount(EmberSignature.C_MARK + pick.map, "all");
+        String rem = remainLine(pick, mk, null, EmberImprintMarkSoft.need(d, false));
         p.sendMessage(EmberRunService.P + "§e下一追烙已钉 · §f" + label(pick)
                 + " §7· " + rem + " §8· 出处筛 " + pick.map.toUpperCase(java.util.Locale.ROOT));
         try { p.sendActionBar("§e下一追烙 · §f" + pick.id + " §7" + pick.map.toUpperCase(java.util.Locale.ROOT)); } catch (Throwable ignored) { }
@@ -376,7 +402,7 @@ public final class EmberSigChase {
             return false;
         }
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
-        int need = EmberSignature.imprintMarks();
+        int need = EmberImprintMarkSoft.need(d, false); // D12830 soft peek
         int latched = d.periodCount(C_READY, "all");
         if (marks < need) {
             if (latched > 0) clearReadyLatch(d);
@@ -392,16 +418,16 @@ public final class EmberSigChase {
         CoreRpgPlugin pl = plugin();
         EmberRunService runs = pl == null ? null : pl.getEmberRuns();
         EmberLoadout lo = runs == null || runs.loadouts() == null ? null : runs.loadouts().refresh(p);
-        String line = progressLine(def, marks, lo);
+        String line = progressLine(def, marks, lo, need);
         p.sendMessage(P + line);
-        String rem = remainLine(def, marks, lo);
+        String rem = remainLine(def, marks, lo, need);
         p.sendMessage(P + "§7" + rem);
         try { p.sendActionBar("§e" + rem); } catch (Throwable ignored) { }
         // D4641: empty-sig auto imprint (no ConfirmTokens); overwrite keeps button
         if (EmberImprintBreak.maybeAuto(p, d, lo, runs)) return true;
         ConfirmTokens.sendButton(p, P + "§7下一步：", // D753 one-click when no overwrite needed
                 "[一键烙印·" + def.id + "]", "/corerpg p1 sig imprint " + def.id + " go",
-                EmberSignature.imprintMarks() + " 枚徽记 · 烙到穿着" + readyCueSlotWord(lo, def) + "（无覆盖则直接花）");
+                need + " 枚徽记 · 烙到穿着" + readyCueSlotWord(lo, def) + "（无覆盖则直接花）");
         return true;
     }
 
@@ -418,7 +444,7 @@ public final class EmberSigChase {
             return false;
         }
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
-        int need = EmberSignature.imprintMarks();
+        int need = EmberImprintMarkSoft.need(d, false); // D12830 soft peek
         if (marks < need) {
             clearHeldTipLatch(d);
             return false;

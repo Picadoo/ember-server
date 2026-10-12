@@ -125,16 +125,24 @@ public final class EmberHopeMeter {
      * Under-mark string unchanged. {@code lo==null} → readyTail falls back to def.slot name.
      */
     public static String sigChase(EmberSignature.Def def, int marks, EmberLoadout lo) {
+        return sigChase(def, marks, lo, EmberSignature.imprintMarks());
+    }
+
+    /**
+     * D12830 / TIP-AU: caller may feed {@link EmberImprintMarkSoft#need} peek so full-tier
+     * matches day-one soft threshold. {@code need<=0} falls back to imprintMarks().
+     */
+    public static String sigChase(EmberSignature.Def def, int marks, EmberLoadout lo, int need) {
         if (def == null) return "§8追烙未选 · /corerpg p1 sig chase";
-        int need = EmberSignature.imprintMarks();
+        int n = need > 0 ? need : EmberSignature.imprintMarks();
         int m = Math.max(0, marks);
         String who = def.id + " " + def.name;
         String map = def.map == null ? "?" : def.map.toUpperCase(Locale.ROOT);
-        if (m >= need) {
+        if (m >= n) {
             return String.format(Locale.ROOT, "§a追烙就绪 %d/%d · %s · %s · %s（不锁通关）",
-                    need, need, who, map, EmberSigChase.readyTail(lo, def));
+                    n, n, who, map, EmberSigChase.readyTail(lo, def));
         }
-        return String.format(Locale.ROOT, "§e追烙 %d/%d · %s · %s 徽记 · 满可烙印（不锁通关）", m, need, who, map);
+        return String.format(Locale.ROOT, "§e追烙 %d/%d · %s · %s 徽记 · 满可烙印（不锁通关）", m, n, who, map);
     }
 
     /**
@@ -480,8 +488,9 @@ public final class EmberHopeMeter {
                 "通关攒石",
                 EmberForgeGoal.GEM));
         if (chaseDef != null) {
+            int chaseNeed = EmberImprintMarkSoft.need(pd, false); // D12830 soft peek
             out.add(new Track("sig", "签名追烙",
-                    sigChase(chaseDef, chaseMarks, lo),
+                    sigChase(chaseDef, chaseMarks, lo, chaseNeed),
                     "材料够",
                     "去追烙",
                     EmberForgeGoal.NONE));
