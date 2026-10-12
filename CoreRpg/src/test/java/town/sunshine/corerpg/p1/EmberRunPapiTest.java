@@ -35,7 +35,7 @@ public final class EmberRunPapiTest {
         r(RUSH, "vbounty", "rush", "rush_q0r1", "rush_nosuch", "pledge_head", "pledge_n_lean", "pledge_ok");
         r(GROWTH, "sign_state", "online_d1", "online_min", "afk_today", "afk_t1", "afk_remain", "afk_eta_min", "afk_remain_line", "afk_next_farm", "sig_q01", "reroll_blade_cap",
                 "honor_name_1", "spec_x");
-        r(GATE, "forge_t2", "forge_t3", "challenge", "q07done", "q04done", "q05done", "q06done", "q09done");
+        r(GATE, "forge_t2", "forge_t3", "challenge", "access_q01", "access_q07", "q07done", "q04done", "q05done", "q06done", "q09done");
         r(ROTATION, "featured", "featured_key", "modifier", "rule_q01", "bounty", "loot_q01", "loot_r01");
         r(BOARD, "top_abyss_1", "top_abyss_10", "top_featured_3", "top_abyss_x");
         r(SEASON, "goals", "goal_core", "goal_short", "goalnosuch", "season", "season_week", "sboard_1", "srank_abyss", "badges"); // D401 goal_short
@@ -162,7 +162,7 @@ public final class EmberRunPapiTest {
         assertEquals(-1, EmberRunPapi.topRank("top_abyss_0"));
         assertEquals(-1, EmberRunPapi.topRank("top_abyss_x"));
         assertEquals("未配置", EmberRunPapi.abyssStateLine(false, false, "q04", 0, 0));
-        assertEquals("需本人首通 Q04", EmberRunPapi.abyssStateLine(true, false, "q04", 0, 0));
+        assertEquals("需本人首进或首通 Q04", EmberRunPapi.abyssStateLine(true, false, "q04", 0, 0)); // MG2 SoT cue (live abyssStateLine)
         assertEquals("最高第 7 层 · 可开 1～5 层", EmberRunPapi.abyssStateLine(true, true, "q04", 7, 5));
         assertEquals("攻击 12.3 · 生命 140 · 防御 8（承伤 ×0.87）· Lv12", EmberRunPapi.statsLine(12.34, 140.2, 8.4, 0.8712, 12));
         assertEquals("", EmberRunPapi.awakenRouteLine(Collections.<String>emptyList()));

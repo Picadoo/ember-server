@@ -27,7 +27,7 @@ public final class EmberRunPapi {
         RUSH,
         /** sign_ / online_ / afk_ / sig_ / reroll_ / honor_ / spec_ (delegated services) */
         GROWTH,
-        /** forge_t2 / forge_t3 / challenge / q07done / q0Ndone */
+        /** forge_t2 / forge_t3 / challenge / access_q01 / access_q07 / q07done / q0Ndone */
         GATE,
         /** featured / featured_key / modifier / rule_ / bounty / loot_ / mapid_ */
         ROTATION,
@@ -80,7 +80,8 @@ public final class EmberRunPapi {
         if (key.startsWith("passd_")) return Section.ENTRY;
         if (key.startsWith("sign_") || key.startsWith("online_") || key.startsWith("afk_") || key.startsWith("sig_")
                 || key.startsWith("reroll_") || key.startsWith("honor_") || key.startsWith("spec_")) return Section.GROWTH;
-        if ("forge_t2".equals(key) || "forge_t3".equals(key) || "challenge".equals(key) || "q07done".equals(key)) return Section.GATE;
+        if ("forge_t2".equals(key) || "forge_t3".equals(key) || "challenge".equals(key) || "q07done".equals(key)
+                || "access_q01".equals(key) || "access_q07".equals(key)) return Section.GATE; // TIP-BR MG2
         if (isQDone(key)) return Section.GATE;
         if ("featured".equals(key) || "modifier".equals(key) || key.startsWith("rule_")) return Section.ROTATION;
         if (key.startsWith("top_abyss_") || key.startsWith("top_featured_")) return Section.BOARD;
@@ -614,8 +615,18 @@ public final class EmberRunPapi {
         if ("forge_t2".equals(key)) return EmberSkillKit.directedForgeOpen(d, runs, 2) ? "已开放" : "需本人首进或首通 Q04";
         if ("forge_t3".equals(key)) return EmberSkillKit.directedForgeOpen(d, runs, 3) ? "已开放" : "需本人首进或首通 Q07";
         if ("challenge".equals(key)) return runs.challengeOpen(d) ? "已开放" : "需本人首进/首通 Q07";
+        if ("access_q01".equals(key)) return accessBit(EmberSkillKit.gemPathUnlocked(d, runs)); // TIP-BR MG2
+        if ("access_q07".equals(key)) return accessBit(EmberSkillKit.endgameUnlocked(d, runs)); // TIP-BR MG2
         if ("q07done".equals(key)) return runs.progressFlag(d, "q07") ? "1" : "0"; // D99 menu condition (post-Q07 icons)
         return runs.progressFlag(d, key.substring(0, 3)) ? "1" : "0"; // D174 stage 2b: q04done / q05done / q06done
+    }
+
+    /**
+     * TIP-BR MG2: menu access flag from SoT unlock boolean ({@link EmberSkillKit#gemPathUnlocked} /
+     * {@link EmberSkillKit#endgameUnlocked}). Display only — zero unlock math edits.
+     */
+    static String accessBit(boolean unlocked) {
+        return unlocked ? "1" : "0";
     }
 
     private String rotation(PlayerData d, String key, EmberRunMaps maps) {
