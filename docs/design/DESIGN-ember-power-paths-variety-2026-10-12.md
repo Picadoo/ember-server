@@ -205,4 +205,5 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live**（2026-10-12 16:51）· 1.65.769-d12407
 - **TIP-Q CLOSED PASS live `1.65.770-d12423`** · `TIP-ember-drop-craft-pity-settle-thin-d12408-d12423-2026-10-12.md` · 精工软保底结算进度（对齐成色 · 非 glance）
 - **TIP-R CLOSED PASS live `1.65.771-d12439`** · `TIP-ember-map-res-wear-cue-thin-d12424-d12439-2026-10-12.md` · 局内换装共鸣升沿（图装身份 · 非 glance）
-- **TIP-S OPEN** · `TIP-ember-forge-choice-stable-gamble-thin-d12440-d12455-2026-10-12.md` · 稳/旁路「选的是」补齐（工坊选择感 · 非 glance）
+- **TIP-S CLOSED PASS live `1.65.772-d12455`** · `TIP-ember-forge-choice-stable-gamble-thin-d12440-d12455-2026-10-12.md` · 稳/旁路「选的是」补齐（工坊选择感 · 非 glance）
+- **TIP-T OPEN** · `TIP-ember-power-paths-deepen-observe-d12456-d12463-2026-10-12.md` · 深化轴观察停窗（P～S 收束 · 无码）
