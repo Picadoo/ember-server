@@ -1,6 +1,6 @@
 # tip · TIP-AP 宝石通关保底加码 remain 诚实对齐（可施工薄 · 可感 UX）· D12744–D12759
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:00 Asia/Shanghai  
+> **状态：** **CLOSED** · live `1.65.781-d12759` · feat `c5c7ae391` · 2026-10-12 21:03 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-gem-pity-nudge-remain-align-2026-10-12.md`](../design/RESEARCH-ember-gem-pity-nudge-remain-align-2026-10-12.md) · DESIGN [`DESIGN-ember-gem-pity-nudge-remain-align-2026-10-12.md`](../design/DESIGN-ember-gem-pity-nudge-remain-align-2026-10-12.md) · TIP-AO CLOSED live `1.65.780-d12743` · TIP-E CLOSED live gem glance · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径（非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify）** — **换轴离开追烙**；宝石日首加码 vs remain/hub 说谎  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberGemAcquire.remainLine` / `clearsLeft` / `hopeLine` + 单测）  
@@ -87,10 +87,10 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12748–D12751；D12753 `git show` 干净  
-- [ ] 菜单默认不动；lore≤3  
-- [ ] 插件 jar live 后策划 docs close  
-- [ ] **L13 施工仍 HOLD**  
+- [x] 批后插件：D12748–D12751；D12753 `git show` 干净  
+- [x] 菜单默认不动；lore≤3  
+- [x] 插件 jar live `1.65.781-d12759` · feat `c5c7ae391`  
+- [x] **L13 施工仍 HOLD**  
 
 ---
 
