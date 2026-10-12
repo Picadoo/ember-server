@@ -101,7 +101,8 @@ Icons:
       name: '§d升阶 · 预览'
       lore:
         - '§e本次：§f%corerpg_p1_held_upgrade_cost%'
-        - '§c%corerpg_p1_held_upgrade_lack%'
+        - '§a确定 · 保留强化/成色/精工 §c%corerpg_p1_held_upgrade_lack%'
+        - '§e➥ §f点预览'
     actions:
       all:
         - 'command: corerpg p1 upgrade'
@@ -124,8 +125,8 @@ Icons:
       name: '§d升阶 · 确认'
       lore:
         - '§e本次：§f%corerpg_p1_held_upgrade_cost%'
-        - '§c%corerpg_p1_held_upgrade_lack%'
-        - '§8与预览一致'
+        - '§a确定 · 保留强化/成色/精工 §c%corerpg_p1_held_upgrade_lack%'
+        - '§e➥ §f点确认'
     actions:
       all:
         - 'command: corerpg p1 upgrade confirm'
