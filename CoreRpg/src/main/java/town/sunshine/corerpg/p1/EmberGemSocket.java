@@ -46,7 +46,8 @@ public final class EmberGemSocket {
             p.sendMessage(P + "请手持已签名的余烬刃/护符（或 /corerpg p1 gem pity 看保底）");
             if (plugin != null && plugin.getDataStore() != null) {
                 PlayerData d = plugin.getDataStore().get(p.getUniqueId());
-                p.sendMessage(P + "§e宝石通关保底：§f" + EmberGemAcquire.remainLine(d));
+                p.sendMessage(P + "§e宝石通关保底：§f" + EmberGemAcquire.remainLine(d)
+                        + unlockSoftListTail(d)); // TIP-BC · ready peek · never unlocked()
             }
             return true;
         }
@@ -54,16 +55,24 @@ public final class EmberGemSocket {
         String line = d.socketLoreLine();
         p.sendMessage(P + d.shortLabel() + " · " + (line == null ? "无孔" : line));
         p.sendMessage(P + "§7镶嵌：/corerpg p1 gem insert <孔> <sharp|steady|drain|gale> · 拆：remove <孔>");
-        try { // D683 hole glance
+        PlayerData pdList = plugin != null && plugin.getDataStore() != null
+                ? plugin.getDataStore().get(p.getUniqueId()) : null;
+        try { // D683 hole glance · TIP-BC optional soft-ok short mark (ready peek only)
             String h0 = d.sockUnlocked(0) ? (d.sockAt(0) == 0 ? "空" : EmberItemData.gemName(d.sockAt(0))) : "锁";
             String h1 = d.sockUnlocked(1) ? (d.sockAt(1) == 0 ? "空" : EmberItemData.gemName(d.sockAt(1))) : "锁";
-            p.sendActionBar("§5孔0 §f" + h0 + " §8· §5孔1 §f" + h1);
+            String bar = "§5孔0 §f" + h0 + " §8· §5孔1 §f" + h1;
+            if (EmberGemHoleUnlockSoft.ready(pdList)
+                    && (( !d.sockUnlocked(0) && EmberGemHoleUnlockSoft.softEligible(d, 0))
+                    || ( !d.sockUnlocked(1) && EmberGemHoleUnlockSoft.softEligible(d, 1)))) {
+                bar = bar + " §a· 可软开";
+            }
+            p.sendActionBar(bar);
         } catch (Throwable ignored) { }
         EmberGemInsertChase.listHint(p, d, plugin); // D727
         p.sendMessage(P + "§8锋利战斗：刃 T2+ 才计入 · 稳/汲/疾全程 · 不走旧 /corerpg socket");
-        if (plugin != null && plugin.getDataStore() != null) {
-            PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
-            p.sendMessage(P + "§e宝石通关保底：§f" + EmberGemAcquire.remainLine(pd));
+        if (pdList != null) {
+            p.sendMessage(P + "§e宝石通关保底：§f" + EmberGemAcquire.remainLine(pdList)
+                    + unlockSoftListTail(pdList)); // TIP-BC · ready peek · never unlocked()
             p.sendMessage(P + "§7合成：/corerpg p1 gem craft <sharp|steady|drain|gale> · 碎"
                     + EmberGemAcquire.CRAFT_SHARD + "+骨" + EmberGemAcquire.CRAFT_BONE + "+币" + EmberGemAcquire.CRAFT_COIN);
         }
@@ -99,7 +108,7 @@ public final class EmberGemSocket {
         EmberItemData d = r.data;
         PlayerData holePd = plugin != null && plugin.getDataStore() != null ? plugin.getDataStore().get(p.getUniqueId()) : null;
         if (!d.sockUnlocked(hole) && !EmberGemHoleUnlockSoft.unlocked(d, hole, holePd)) {
-            p.sendMessage(P + "该孔未解锁（刃第二孔需强化≥5 · 护符孔需强化≥3）");
+            p.sendMessage(P + unlockRejectLine(holePd)); // TIP-BC · ready→soft / used→hard
             try { p.sendActionBar("§c孔未解锁 · 先强化开孔"); } catch (Throwable ignored) { } // D1311
             ConfirmTokens.sendButtons(p, P + "§7去解锁：", // D871
                     new String[]{"[强化预览]", "/corerpg p1 enhance", "手持冲强化开孔", "GREEN"},
@@ -235,6 +244,23 @@ public final class EmberGemSocket {
                 EmberForgeCommitNext.enhance(),
                 new String[]{"[宝石列表]", "/corerpg p1 gem list", "换石", "AQUA"});
         return true;
+    }
+
+
+    /** TIP-BC: Ready cue for Open/list; peek only — never calls unlocked(). */
+    static String unlockSoftListTail(PlayerData pd) {
+        if (EmberGemHoleUnlockSoft.ready(pd)) {
+            return " · " + EmberGemHoleUnlockSoft.CUE;
+        }
+        return "";
+    }
+
+    /** TIP-BC: Insert reject copy — ready → soft thresholds; used → hard table. */
+    static String unlockRejectLine(PlayerData pd) {
+        if (EmberGemHoleUnlockSoft.ready(pd)) {
+            return "该孔未解锁（今日门槛−1：刃二孔≥4 · 护符≥2；表额≥5/≥3）";
+        }
+        return "该孔未解锁（刃第二孔需强化≥5 · 护符孔需强化≥3）";
     }
 
     static boolean write(Player p, EmberLoadoutService loadouts, EmberItemData before, int s0, int s1) {
