@@ -196,9 +196,9 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-V 批 A·M** · tip D12480–D12495 · 交施工 sx09–sx12
+- **TIP-W 待批 A·M** · tip D12496–D12511 · 荐 sx13–sx16 叠饰（换轴续 · 非变强 densify）
 
-- **TIP-V 待批 A·M** · tip D12480–D12495 · 荐 sx09–sx12 叠饰（换轴续 · 非变强 densify）
+- **TIP-V CLOSED PASS** live `bae53046` · tip D12480–D12495 · sx09–sx12 `@d12480`
 
 - **TIP-U CLOSED PASS** live `a3590b41` · tip D12464–D12479 · sx05–sx08 `@d12464`
 
@@ -216,4 +216,5 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-S CLOSED PASS live `1.65.772-d12455`** · `TIP-ember-forge-choice-stable-gamble-thin-d12440-d12455-2026-10-12.md` · 稳/旁路「选的是」补齐（工坊选择感 · 非 glance）
 - **TIP-T CLOSED（观察停窗 · 无码 · `510740e0`）** · `TIP-ember-power-paths-deepen-observe-d12456-d12463-2026-10-12.md` · 深化轴观察停窗（P～S 收束 · 无码）
 - **TIP-U CLOSED PASS** live `a3590b41` · `TIP-ember-short-visual-sx05-sx08-thin-d12464-d12479-2026-10-12.md` · 短征视觉续 sx05–sx08 `@d12464`
-- **TIP-V OPEN** · `TIP-ember-short-visual-sx09-sx12-thin-d12480-d12495-2026-10-12.md` · 短征视觉续 sx09–sx12（换轴续 · 非变强 densify）
+- **TIP-V CLOSED PASS** live `bae53046` · `TIP-ember-short-visual-sx09-sx12-thin-d12480-d12495-2026-10-12.md` · 短征视觉续 sx09–sx12 `@d12480`
+- **TIP-W OPEN** · `TIP-ember-short-visual-sx13-sx16-thin-d12496-d12511-2026-10-12.md` · 短征视觉续 sx13–sx16（换轴续 · 非变强 densify）
