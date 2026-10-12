@@ -1,6 +1,6 @@
 # DESIGN · 防具签名规格 + 叠合门禁（stage0 · HOLD 施工）· 2026-10-12
 
-> **状态：** OPEN · stage0 · **可批、不可施工** · 对接 TIP-AB · 2026-10-12 Asia/Shanghai  
+> **状态：** APPROVED stage0 · TIP-AB 批 A·M · **HOLD 施工** · 2026-10-12 17:41 Asia/Shanghai  
 > **对接 tip：** [`TIP-ember-armor-signature-gate-design-stage0-thin-d12552-d12559-2026-10-12.md`](../tips/TIP-ember-armor-signature-gate-design-stage0-thin-d12552-d12559-2026-10-12.md)  
 > **上游：** TIP-AA CLOSED docs-only `79247dab2` · [`RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md`](RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md) · D174 [`DESIGN-ember-mainline-unlocks-2026-10-04.md`](DESIGN-ember-mainline-unlocks-2026-10-04.md) §2.1 / §5 · COORD-legendary-effects（行为型 · ≤2 生效 · 禁伤乘）  
 > **硬禁：** 零 Affix densify · 零伤乘 · 零抬表 · 零 glance twin · 零深化 densify · 零 sx20 · 零 skill_mult · 零 ForgeChoice·wear·pity·awkDelta densify · **零 jar / 零插件派单 / 零 Economy-pom** 直至门禁过线 **且** 总控显式开工
@@ -143,11 +143,11 @@
 
 ## 7. 成功标准（本 stage0）
 
-- [ ] 文首勘误 D174「2c」可核（甲槽另轨 live；真债=防具签名+叠合）  
-- [ ] 防具签名规格 §2 可批（槽、封顶、tag、stampable 默认、优先级）  
-- [ ] 门禁 S1–S4 过线条件可核；HOLD / 开工令分离写清  
-- [ ] legendary 预算关系与 NON-goals / 硬禁对齐  
-- [ ] **零**施工指引冒充开工令；**零** jar
+- [x] 文首勘误 D174「2c」可核（甲槽另轨 live；真债=防具签名+叠合）  
+- [x] 防具签名规格 §2 可批（槽、封顶、tag、stampable 默认、优先级）  
+- [x] 门禁 S1–S4 过线条件可核；HOLD / 开工令分离写清  
+- [x] legendary 预算关系与 NON-goals / 硬禁对齐  
+- [x] **零**施工指引冒充开工令；**零** jar
 
 ---
 

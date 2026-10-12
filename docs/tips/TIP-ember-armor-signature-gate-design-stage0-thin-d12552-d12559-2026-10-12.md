@@ -1,6 +1,6 @@
 # tip · TIP-AB 防具签名 + 叠合门禁 DESIGN stage0（docs-only · HOLD 施工）· D12552–D12559
 
-> **状态：** OPEN · 待批 **A · 方案 M** · docs-only（2026-10-12 Asia/Shanghai）  
+> **状态：** CLOSED · 批 **A · 方案 M** · docs-only · HOLD 施工（总控 2026-10-12 17:41 Asia/Shanghai）  
 > **上游：** [`DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md`](../design/DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md) · TIP-AA CLOSED docs-only `79247dab2` · RESEARCH [`RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md`](../design/RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md) · D174 2c 勘误  
 > **前置：** TIP-AA 真债钉死=防具签名+叠合；甲槽另轨 live；深化 densify **仍冻**；烬斩门闩 TIP-Y **仍有效**  
 > **施工岗：** **无码**（策划 DESIGN + tip；**不**派插件；勿借机改 Signature / Loadout / loot / STAMP / TrMenu / Economy）  
@@ -72,11 +72,11 @@ TIP-AA 后开 **独立 DESIGN stage0**：钉防具签名规格 + 叠合门禁 S1
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] DESIGN + tip 路径可点；勘误 / 规格 / S1–S4 可核  
-- [ ] DESIGN power-paths：TIP-AA CLOSED `79247dab2` + TIP-AB OPEN  
-- [ ] **无**插件施工派单；**无** jar  
-- [ ] `git show` docs-only；密码检查 0  
+- [x] 总控批 **A · 方案 M**  
+- [x] DESIGN + tip 路径可点；勘误 / 规格 / S1–S4 可核  
+- [x] DESIGN power-paths：TIP-AA CLOSED `79247dab2` + TIP-AB CLOSED  
+- [x] **无**插件施工派单；**无** jar  
+- [x] `git show` docs-only；密码检查 0  
 
 ---
 
