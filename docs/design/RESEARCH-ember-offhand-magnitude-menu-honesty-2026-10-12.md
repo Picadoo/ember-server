@@ -1,6 +1,6 @@
 # RESEARCH · 副手「微量」守势数字诚实（TrMenu 购/炼入口 · 离开烙纹档幅度）· 2026-10-12
 
-> **状态：** APPROVED · TIP-BM · 已派余烬-物品 · 不派插件 · 2026-10-13 00:01 Asia/Shanghai  
+> **状态：** CLOSED live items `91300ad65` · TIP-BM · TrMenu reload 77 · jar 未改 · 2026-10-13 00:03 Asia/Shanghai  
 > **起因：** TIP-BL CLOSED live 后总控「离开烙纹档幅度链 · 开下一可感变强途径」。BL DESIGN 旁债 #9 已点名「副手「微量」守势数字诚实」。扫 AH…BL / power-paths：NI 持件已写 `物理防御: +2` / `生命力: +8` / `物理防御: +1`；**购/炼入口菜单仍「微量」无数字**——D12199/D12200 lore≤3 压缩把 D289/D294 诚实行（含灰箍 `物理防御: +1`）整段删掉。  
 > **上游：** TIP-BL CLOSED live items `2f0507813` · TrMenu reload · docs `65b5250fc` · jar 未改 `1.65.799-d13079` · NI `ember-gear-offhand.yml` / `ember-gear-parts.yml` · `ember_life.yml` O/W · `ember_set.yml` O · `ember_part.yml` A · `ember_forge.yml` P · D289/D294 · power-paths [`DESIGN-ember-power-paths-variety-2026-10-12.md`](DESIGN-ember-power-paths-variety-2026-10-12.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify（禁改 values/weights/pool）· 零伤乘 · 零抬表 · 零抬 talent/gem flat · 零 soft·开孔再叠 · 零 Anvil densify · 零 topUpTo · 零 SF4 U2U3 · 零灰印/聚火 · 零签名 lore 再叠 · 零调律 live bad 进持件 · 零套装 blurb 再叠 · 零宝石短效果再叠 · 零天赋悬停再叠 · 零烙纹档幅度再叠 · 零 SetRules/Formula 抬 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 ConvertCap densify · 零 sx20 · 零 skill_mult · 零开 L13 施工 tip · 零效果长墙 densify · 零 lore>3 · 零抬副手 Stat 数值 / 零并轨方案 B**
@@ -87,4 +87,4 @@
 | 禁止「微量」无数字糊弄选择 | 禁购/炼入口定性-only |
 | BK 压回 D12200 误删效果 | 同构压回副手数字 |
 
-## STATUS: APPROVED · TIP-BM · 已派余烬-物品 · 不派插件 · 2026-10-13 00:01 Asia/Shanghai
+## STATUS: CLOSED live items `91300ad65` · TIP-BM · TrMenu reload 77 · jar 未改 · 2026-10-13 00:03 Asia/Shanghai
