@@ -1,6 +1,6 @@
 # tip · TIP-H 工坊稳/赌一眼（WS3 表面化 · 并排半行 · 点进工坊）· D12296–D12303
 
-> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:07 Asia/Shanghai）· 交插件岗  
+> **状态：** CLOSED · live trmenu `82512b4d`（2026-10-12 16:08 Asia/Shanghai）  
 > **上游：** [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md) §3.2 **WS3** · [`DESIGN-ember-growth-variety-thin-2026-10-12.md`](../design/DESIGN-ember-growth-variety-thin-2026-10-12.md) §2B · forge-choice K1/K2 已 SHIP · TIP-B CLOSED（d12263，F 格已写下限）  
 > **前置：** TIP-A～G CLOSED live（至 1.65.764-d12295）  
 > **施工岗：** 插件岗（TrMenu 为主；**零改价 / 零抬表**）  
@@ -69,11 +69,11 @@
 
 ## 4. 验收清单
 
-- [ ] 枢纽 `p`：三行内分清稳/赌  
-- [ ] 工坊主页：WS3 并排半行可见（专格或等价 Open+F）  
-- [ ] F → forgeroll；E/e 等稳线命令不变  
-- [ ] hub + forge lore overs>3 = 0  
-- [ ] `git show` 无 Affix / Economy / pom 无关脏文件；密码检查 0  
+- [x] 枢纽 `p`：三行内分清稳/赌  
+- [x] 工坊主页：WS3 并排半行可见（专格或等价 Open+F）  
+- [x] F → forgeroll；E/e 等稳线命令不变  
+- [x] hub + forge lore overs>3 = 0  
+- [x] `git show` 无 Affix / Economy / pom 无关脏文件；密码检查 0  
 - [ ] reload 记「待恢复服后实测」
 
 ---
@@ -84,3 +84,7 @@
 - tip 已推 · 交插件岗
 - 变强途径续：**TIP-H · WS3**；TIP-B 已收 commit，本批只表面化稳/赌对照
 - **批注补强：** 优先占格 `N`（Layout 底栏 `#FGPmWbB#` 旁 `#`→`N`，或第2行右空）；Open 教学 tell 压到 ≤2（现墙过长）；F 三行不动；枢纽 `p` 现仅2行→补满3行稳/赌
+
+## STATUS: CLOSED · live trmenu 82512b4d · 2026-10-12 16:08 CST
+- hub `p` 稳/赌三行 · forge `N` 认路格 · Open≤2 · F 未动
+- 纯 YAML；无 JAR bump；零 Affix/Economy/数值
