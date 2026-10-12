@@ -1,6 +1,6 @@
 # DESIGN · 签名页防具侧生效摘要对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-AJ · 荐批 A·M · 2026-10-12 Asia/Shanghai  
+> **状态：** APPROVED · TIP-AJ 批 A·M · 已派插件+物品 · 2026-10-12 20:00 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-sig-page-defense-summary-align-2026-10-12.md`](RESEARCH-ember-sig-page-defense-summary-align-2026-10-12.md)  
 > **对接 live：** TIP-AE defense-side · TIP-AH runPreview 对齐 · `ember_p1_sig.yml` C/W  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI `STAGE1_L13_OFFLINE=FAIL` · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  

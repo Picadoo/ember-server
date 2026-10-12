@@ -1,6 +1,6 @@
 # tip · TIP-AJ 签名页防具侧生效摘要对齐（可施工薄 · 可感 UX）· D12648–D12663
 
-> **状态：** **OPEN** · 荐批 **A · 方案 M** · 2026-10-12 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件**（+物品 C 名）· 2026-10-12 20:00 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-sig-page-defense-summary-align-2026-10-12.md`](../design/RESEARCH-ember-sig-page-defense-summary-align-2026-10-12.md) · DESIGN [`DESIGN-ember-sig-page-defense-summary-align-2026-10-12.md`](../design/DESIGN-ember-sig-page-defense-summary-align-2026-10-12.md) · TIP-AH CLOSED live `1.65.774-d12631`（run 预览已齐）· TIP-AE CLOSED live `1.65.773-d12599` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径（非 densify）** — AH E9「签名页摘要另债」；正交刃 L13 HOLD  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberGrowthService` sigPapi/toggle/imprint_hope/图鉴 a_）；**余烬-物品** TrMenu `ember_p1_sig.yml` C 名（**禁**加 lore 行）  
@@ -82,8 +82,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12652–D12655；D12657 `git show` 干净  
 - [ ] 物品：D12656 C 名 only · lore≤3  
 - [ ] 插件 jar live 后策划 docs close  

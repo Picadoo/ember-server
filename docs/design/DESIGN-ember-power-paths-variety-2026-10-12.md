@@ -196,6 +196,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
+- **TIP-AJ APPROVED** · 签名页防具侧摘要对齐 · 已派插件+物品 · L13 HOLD
+
 - **TIP-AJ OPEN** · `TIP-ember-sig-page-defense-summary-align-thin-d12648-d12663-2026-10-12.md` · RESEARCH `RESEARCH-ember-sig-page-defense-summary-align-2026-10-12.md` · DESIGN `DESIGN-ember-sig-page-defense-summary-align-2026-10-12.md` · 签名页防具侧生效摘要对齐（可施工薄 · 可感 UX · 零功率表）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· 深化 densify 仍冻 · 策划 docs-only
 
 - **TIP-AI CLOSED** · L13 stage1 离线门禁 · `STAGE1_L13_OFFLINE=FAIL` · HOLD 施工 · commit `ebe752be4` · **显式开工前不开 L13 施工 tip**
