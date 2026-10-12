@@ -196,10 +196,11 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-AA CLOSED** · 主线解锁 2c 研究 docs-only · 真债=防具签名+叠合 · HOLD 至独立 DESIGN stage0
+- **TIP-AA CLOSED** docs-only `79247dab2` · 主线解锁 2c 研究 · 真债=防具签名+叠合 · HOLD 至独立 DESIGN stage0
+- **TIP-AB OPEN** · `TIP-ember-armor-signature-gate-design-stage0-thin-d12552-d12559-2026-10-12.md` · DESIGN `DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md` · 防具签名规格 + 叠合门禁 S1–S4 stage0（文首勘误 D174「2c」· HOLD 施工 · 零 jar 至门禁+显式开工）· 无码 · 深化 densify 仍冻
+
 
 - **TIP-Z CLOSED** docs-only `923e031f1` · 主线内容轴观察停窗 · densify 仍冻 · P0 试玩 / P1 解锁研究 / P2 烬斩门闩
-- **TIP-AA OPEN** · `TIP-ember-mainline-unlock-2c-research-thin-d12544-d12551-2026-10-12.md` · RESEARCH `RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md` · 主线解锁 2c 研究（甲槽已 live · 真债防具签名 · HOLD 至独立 DESIGN）· 无码 · 深化 densify 仍冻
 
 - **TIP-Y CLOSED** docs-only `a838781ed` · 烬斩手感研究 · 门闩已立 · 无码
 - **TIP-Z CLOSED** · `TIP-ember-mainline-content-observe-thin-d12536-d12543-2026-10-12.md` · RESEARCH `RESEARCH-ember-mainline-content-observe-2026-10-12.md` · 主线内容轴观察停窗（TIP-L 闭环后无新薄断环 · 解锁 2c 须 DESIGN）· 无码 · 深化 densify 仍冻 · hash `923e031f1`
