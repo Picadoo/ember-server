@@ -422,6 +422,9 @@ def spread_burn(owner, mobs, t):
 #                      新键族（禁复用旧 kit_mark_* cand 小数）；独立 CD；无 kit_sec_shared / 无花烬斩；
 #                      A=标记 N 秒缓慢（每次攻击 +slow）；B=下一次攻击 defer 秒；opt_win>0=仅目标即将出手时按。
 #                      禁永久伤税 / 易伤% / *d。
+#   SF4 U1 微缓 (TIP-BF T0 · offline): kit_sf4_mark_secs / kit_sf4_slow
+#                      烬斩命中后短缓（套装无关）；自然 ICD=烬斩充能；禁 skill_mult / 常驻光环。
+#                      形状偏好（LINE/套装推荐）= 施工接线层；本离线代理 = keys 开即生效。
 KIT_KEYS = frozenset(('kit_guard_cd', 'kit_int_cd', 'kit_gather_cd', 'kit_dash_cd', 'kit_mark_cd', 'kit_step_cd',
                       'kit_guard_parry_cd', 'kit_ash_cd'))
 
@@ -613,7 +616,7 @@ def _sec_cost(owner, t, period):
 
 
 def kit_slash_flavor(owner, hit, t):
-    """D438 烬斩套装落点（禁改 skill_mult）。hit = list of mobs just struck by 烬斩."""
+    """D438 烬斩套装落点 + TIP-BF SF4 U1 微缓（禁改 skill_mult）。hit = mobs just struck by 烬斩."""
     st = owner.st
     if not hit or not st.get('mods'):
         return
@@ -633,6 +636,15 @@ def kit_slash_flavor(owner, hit, t):
         owner.hp = min(st['H'], owner.hp + h)
         if owner.rec is not None:
             owner.rec['heal_slash'] = owner.rec.get('heal_slash', 0.0) + h
+    # TIP-BF SF4 U1: set-agnostic short Slow on slash hit (natural ICD = 烬斩 charge).
+    # Shape preference (LINE / set-rec) is a live-wiring concern; offline proxy = always-on when keys set.
+    # Ban skill_mult / permanent aura. Does not touch kit_slash_* set-flavor paths above.
+    sf4_mark = gm(st, 'kit_sf4_mark_secs', 0.0)
+    if sf4_mark > 0:
+        slow = gm(st, 'kit_sf4_slow', 0.12)
+        for m in hit[:3]:
+            m['ash_until'] = t + sf4_mark
+            m['ash_slow'] = slow
 
 def kit_step(owner, alive, t, period):
     """身法步 on CD: family via kit_step_set (default scorch=火痕 ignite).
@@ -1030,7 +1042,7 @@ class Fight:
                         _hit = alive[:getattr(self, '_sh', kn.skill_hits)]
                         for m in _hit:
                             self.hit(m, cfg['skill_mult'] * st['B'] * dmult(st, m, t, self), 'skill')
-                        if st.get('mods') and any(k.startswith('kit_slash_') for k in st['mods']):
+                        if st.get('mods') and any(k.startswith(('kit_slash_', 'kit_sf4_')) for k in st['mods']):
                             kit_slash_flavor(self, _hit, t)
                     next_skill = t + cfg['skill_cd']
                 self._nsk = next_skill

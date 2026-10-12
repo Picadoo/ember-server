@@ -1,6 +1,6 @@
 # RESEARCH · 烬斩手感 · SF4 战斗微效用（TIP-Y 后下一档 · 禁 skill_mult）· 2026-10-12
 
-> **状态：** OPEN · TIP-BE · docs-only · DESIGN stage0 前置 · 2026-10-12 23:04 Asia/Shanghai  
+> **状态：** CLOSED · TIP-BE stage0 前置 · 后继 TIP-BF T0 · 2026-10-12 23:10 Asia/Shanghai  
 > **起因：** TIP-BD CLOSED live 后 soft/开孔文案链已齐；总控离 soft densify（Anvil/topUpTo 仍冻），换轴 **可感变强途径**。TIP-Y 门闩仍有效；本窗盘清 **已 live vs 仍 HOLD**，荐 **SF4 DESIGN stage0**。  
 > **上游：** TIP-Y CLOSED docs-only `a838781ed` · RESEARCH [`RESEARCH-ember-skill-feel-post-k-next-2026-10-12.md`](RESEARCH-ember-skill-feel-post-k-next-2026-10-12.md) · DESIGN [`DESIGN-ember-skill-feel-stage2-micro-stage0-2026-10-11.md`](DESIGN-ember-skill-feel-stage2-micro-stage0-2026-10-11.md) · TIP-K CLOSED live `1.65.766-d12335` · D301 余烬招架 LIVE · power-paths [`DESIGN-ember-power-paths-variety-2026-10-12.md`](DESIGN-ember-power-paths-variety-2026-10-12.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零抬 skill_mult · 零伤乘 · 零 Affix densify · 零抬表 · 零 glance twin · 零深化 densify · 零 sx20 · 零粒子 densify · 不重开 TIP-K 同构 cue · 零 Anvil densify · 零 topUpTo 扩 soft · 零 soft-latch/CostSoft/pity/Cap/firstsoft/cook/life-buy soft 再叠 · 零 GemHole/enhance+5 开孔文案再叠 · 零开 L13 施工 tip · 零再扫甲闸 · 零扩 stampable · 零 SetChase 六槽 densify**
