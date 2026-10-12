@@ -1,6 +1,6 @@
 # tip · TIP-AY 生活烹饪日首 CookCoinSoft 批次门禁/费用诚实对齐（可施工薄 · 可感 UX）· D12888–D12903
 
-> **状态：** **OPEN** · 荐总控批 **A · 方案 M** · 2026-10-12 22:15 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 22:18 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-cook-coin-soft-batch-gate-align-2026-10-12.md`](../design/RESEARCH-ember-cook-coin-soft-batch-gate-align-2026-10-12.md) · DESIGN [`DESIGN-ember-cook-coin-soft-batch-gate-align-2026-10-12.md`](../design/DESIGN-ember-cook-coin-soft-batch-gate-align-2026-10-12.md) · TIP-AX CLOSED live `1.65.789-d12887` · feat `95ea4e614` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径** — **离开 CostSoft·pity·soft-glance / ConvertCap / firstsoft / 甲闸 / 追烙**（AS→AV / AP–AR / AW / AX / AK–AM / AN–AO 已齐）；烹饪币 soft 批次门禁 leftover（面包/熬药已 peek、烹饪漏）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberCookCoinSoft.peekFee` · `LifeService.cook` 裁批/实付文案/退款 · 可选 show SOFT_TAIL + 单测）  
@@ -86,8 +86,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12892–D12896；D12898 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] peek 不吞 soft；扣币才 consume；L13 施工仍 HOLD  
