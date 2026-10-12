@@ -12,7 +12,8 @@ import town.sunshine.corerpg.PlayerData;
  * D680/D681: economy sink visibility — forge glance for held piece.
  * TIP-AM: armor early-return ≡ ARMOR_REFUSE (± dismantle half); never fake quality/refine/upgrade costs.
  * TIP-AS D12798: non-armor feeds soft-aware GearNextHint Lines + soft lack peek.
- * TIP-AT D12814: BRAND/CONVERT/ROLL lack soft peek（LOCK/甲不动）.
+ * TIP-AT D12814: BRAND/CONVERT/ROLL lack soft peek.
+ * TIP-AV D12846: LOCK soft lack via lockRerollCost(tier,pd); 甲早退不动.
  * Not a PAPI hope-meter twin. Zero price / AFK / yield change.
  */
 public final class EmberSinkGlance {
@@ -67,6 +68,10 @@ public final class EmberSinkGlance {
                 // D1192: craftShards mirror · 非 K3；TIP-AT soft peek
                 cost = EmberGearNextHint.softCost("brand", pd,
                         new EmberUpgradeRules.Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0));
+            } else if (goal == EmberForgeGoal.LOCK) {
+                focus = "锁定洗练";
+                // TIP-AV D12846: soft peek lock_shard (+ coin); reuse HeldNext SoT
+                cost = EmberForgeHeldNext.lockRerollCost(d.tier, pd);
             } else {
                 EmberUpgradeRules.Plan plan = EmberUpgradeRules.enhanceCheck(d);
                 if (plan != null && plan.ok()) cost = EmberGearNextHint.softCost("enhance", pd, plan.cost);

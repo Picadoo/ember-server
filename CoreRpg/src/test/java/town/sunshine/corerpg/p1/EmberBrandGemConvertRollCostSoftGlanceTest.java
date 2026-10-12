@@ -9,7 +9,7 @@ import town.sunshine.corerpg.p1.EmberUpgradeRules.Cost;
 
 /**
  * TIP-AT DESIGN §2.3: Brand/Gem/Convert/Roll(+Pin) CostSoft glance honesty.
- * Zero MULT / economy / pay-path / LOCK soft invent.
+ * Zero MULT / economy / pay-path invent. LOCK soft → TIP-AV.
  */
 public class EmberBrandGemConvertRollCostSoftGlanceTest {
 
@@ -121,15 +121,20 @@ public class EmberBrandGemConvertRollCostSoftGlanceTest {
         assertFalse(EmberRunPapi.forgeGapPin(1, soft[0], soft[1], null).equals("烙差0·币差0"));
     }
 
-    /** LOCK / 一元无 pd → 全额回归 */
+    /** 一元无 pd → LOCK/brand 全额回归（TIP-AV 软 peek 另测） */
     @Test
     public void lockAndNullPd_fullPrice() {
         Cost lock = EmberForgeHeldNext.lockRerollCost(1);
-        // half lock bag — still short under LOCK (no soft invent)
+        Cost lockNull = EmberForgeHeldNext.lockRerollCost(1, null);
+        assertEquals(lock.shards, lockNull.shards);
+        assertEquals(lock.coins, lockNull.coins);
+        // unary ≡ null pd
+        assertEquals(lock.shards, EmberForgeHeldNext.lockRerollCost(1, null).shards);
+        // half bag vs full cost still short when soft not applied (null pd)
         EmberForgeHeldNext.Mats halfBag = new EmberForgeHeldNext.Mats(
                 Math.max(1, lock.shards / 2), 0, 0, Math.max(1, lock.coins / 2));
         assertFalse(EmberForgeHeldNext.canPay(lock, halfBag));
-        String line = EmberForgeHeldNext.line(blade(), halfBag, true, EmberForgeGoal.LOCK, softReady());
+        String line = EmberForgeHeldNext.line(blade(), halfBag, true, EmberForgeGoal.LOCK, null);
         assertTrue(line, line.contains("锁定洗练"));
         assertTrue(line, line.contains("还差"));
         assertFalse(line, line.contains(EmberGearNextHint.SOFT_TAIL));

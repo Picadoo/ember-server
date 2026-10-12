@@ -2330,7 +2330,8 @@ public final class EmberGrowthService implements Listener {
             List<String[]> btn = new ArrayList<String[]>();
             btn.add(new String[]{"[确认洗练]", "/corerpg p1 reroll " + slot + " " + mode + " confirm", "扣上面的花费，" + (lock ? "锁定「" + cur.name + "」重抽档位" : "抽一次" + name + "的词条"), "GREEN"});
             if (!lock && cur != null && cur.rollable && lockShard > 0 && Math.min(EmberAffix.decodeTier(affixOf(d, t)), cap) < cap)
-                btn.add(new String[]{"[锁定" + cur.name + "再洗]", "/corerpg p1 reroll " + slot + " " + (dup ? "dup" : "shard") + " lock", "保留「" + cur.name + "」只重抽档位，另加 " + lockShard + " 碎片", "AQUA"});
+                btn.add(new String[]{"[锁定" + cur.name + "再洗]", "/corerpg p1 reroll " + slot + " " + (dup ? "dup" : "shard") + " lock",
+                        "保留「" + cur.name + "」只重抽档位，另加 " + EmberForgeHeldNext.lockShardExtra(d, lockShard), "AQUA"});
             btn.add(new String[]{"[回洗练页]", "/corerpg p1 reroll from " + rfromKey(p), "不洗，回去看看", "GRAY"});
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, btn.toArray(new String[0][]));
             return true;
@@ -2711,14 +2712,15 @@ public final class EmberGrowthService implements Listener {
             return "§8背包或装备库里没有重复件（同部位 T" + t.tier + "、掉落来的、没投入、未锁定/收藏）";
         }
         if ("shard".equals(k)) return "§7" + reroll.shardFor(t.tier) + " 碎片 + " + rerollCoin(p, t) + " 币";
-        if ("lock".equals(k)) { // D148
+        if ("lock".equals(k)) { // D148 / TIP-AV D12847 soft peek
             EmberAffix.Def cur = EmberAffix.decodeDef(reroll, affixOf(d, t));
-            int ls = reroll.lockShardFor(t.tier);
-            if (ls <= 0) return "";
+            int lsFull = reroll.lockShardFor(t.tier);
+            if (lsFull <= 0) return "";
             if (cur == null) return "§8锁定词条：词条槽还是空的";
             if (!cur.rollable) return "§8" + cur.name + " 已移出洗练池，不能锁定（普通洗会换成别的词条）";
             if (Math.min(EmberAffix.decodeTier(affixOf(d, t)), reroll.cap(t.quality)) >= reroll.cap(t.quality)) return "§a" + cur.name + " 已是上限档";
-            return "§bShift+点击：锁定「" + cur.name + "」只重抽档位（另加 " + ls + " 碎片）";
+            return "§bShift+点击：锁定「" + cur.name + "」只重抽档位（另加 "
+                    + EmberForgeHeldNext.lockShardExtra(d, lsFull) + "）";
         }
         return "";
     }

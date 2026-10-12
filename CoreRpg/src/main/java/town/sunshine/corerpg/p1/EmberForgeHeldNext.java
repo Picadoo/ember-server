@@ -7,7 +7,8 @@ import town.sunshine.corerpg.p1.EmberUpgradeRules.Cost;
  * D1943 FH1: held-piece next deterministic forge step — display only.
  * Prefers an affordable quality → refine → enhance step; else nearest gap.
  * TIP-AS D12797: optional pd → soft peek CostSoft for quality/refine/enhance/upgrade canPay/shortfall/展示.
- * Armor early-return unchanged (TIP-AK). TIP-AT: brand/gem/convert/roll soft peek; LOCK stays full.
+ * Armor early-return unchanged (TIP-AK). TIP-AT: brand/gem/convert/roll soft peek.
+ * TIP-AV: LOCK LockShard/Coin soft peek via RerollLockShardSoft/RerollCoinSoft (no invent soft).
  * Zero price / rate / pity invent.
  */
 public final class EmberForgeHeldNext {
@@ -39,8 +40,16 @@ public final class EmberForgeHeldNext {
         return s;
     }
 
-    /** D2446: C11 lock-reroll mat (shard+lock_shard + coin) from economy SoT. */
+    /** D2446: C11 lock-reroll mat (shard+lock_shard + coin) from economy SoT. Unary ≡ full. */
     public static Cost lockRerollCost(int tier) {
+        return lockRerollCost(tier, null);
+    }
+
+    /**
+     * TIP-AV D12844: soft peek lock_shard (+ coin) via existing RerollLockShardSoft / RerollCoinSoft.
+     * Never consume. Null pd → full. Base shard stays full.
+     */
+    public static Cost lockRerollCost(int tier, PlayerData pd) {
         int t = Math.max(1, Math.min(3, tier <= 0 ? 1 : tier));
         int shard = EmberEconomy.amount("C11", "t" + t + ".shard");
         int lock = EmberEconomy.amount("C11", "t" + t + ".lock_shard");
@@ -48,7 +57,20 @@ public final class EmberForgeHeldNext {
         if (shard < 0) shard = 40 * t;
         if (lock < 0) lock = 40 * t;
         if (coin < 0) coin = 300 * t;
+        if (pd != null) {
+            lock = EmberRerollLockShardSoft.apply(pd, lock, false);
+            coin = EmberRerollCoinSoft.apply(pd, coin, false);
+        }
         return new Cost(shard + lock, 0, 0, 0, coin);
+    }
+
+    /**
+     * TIP-AV D12847: menu/invite lock_shard display — soft peek + optional softTail.
+     * Null pd / full when not ready. Never consume.
+     */
+    static String lockShardExtra(PlayerData pd, int lockShardFull) {
+        int ls = EmberRerollLockShardSoft.apply(pd, lockShardFull, false);
+        return ls + " 碎片" + EmberGearNextHint.softTail(EmberRerollLockShardSoft.ready(pd));
     }
 
     /** Convenience: assume upgrade gate open for glance. */
@@ -68,7 +90,8 @@ public final class EmberForgeHeldNext {
      * One-glance next step for held blade/charm (TIP-AK: armor early-return ≡ K0).
      * Affordable order: quality → refine → enhance → upgrade;
      * D2434/D2446: when forgeGoal is CONVERT/BRAND/GEM/LOCK/ROLL/QUALITY, those sinks surface first if payable.
-     * TIP-AS: {@code pd} soft-peeks four forge CostSoft; TIP-AT: brand/gem/convert/roll soft canPay; LOCK full.
+     * TIP-AS: {@code pd} soft-peeks four forge CostSoft; TIP-AT: brand/gem/convert/roll soft canPay;
+     * TIP-AV: LOCK soft canPay/shortfall + softTail (RerollLockShardSoft / RerollCoinSoft).
      * {@code gateOk} = first-clear for upgradeFlag(tier).
      */
     public static String line(EmberItemData d, Mats m, boolean gateOk, int forgeGoal, PlayerData pd) {
@@ -88,11 +111,11 @@ public final class EmberForgeHeldNext {
         EmberUpgradeRules.Plan enh = EmberUpgradeRules.enhanceCheck(d);
         Cost e = (enh != null && enh.ok()) ? EmberGearNextHint.softCost("enhance", pd, enh.cost) : null;
         Cost u = EmberGearNextHint.softCost("upgrade", pd, EmberUpgradeRules.upgradeCost(d.tier));
-        // TIP-AT: brand/gem/convert/roll soft peek; LOCK stays full (no invent soft)
+        // TIP-AT: brand/gem/convert/roll soft peek; TIP-AV: LOCK soft peek (reuse RerollLockShardSoft/CoinSoft)
         Cost conv = EmberGearNextHint.softCost("convert", pd, EmberConvertRules.cost(d.tier));
         Cost brand = EmberGearNextHint.softCost("brand", pd, new Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0));
         Cost gem = EmberGearNextHint.softCost("gem", pd, EmberGemAcquire.craftCost());
-        Cost lock = lockRerollCost(d.tier);
+        Cost lock = lockRerollCost(d.tier, pd);
         Cost roll = EmberGearNextHint.softCost("roll", pd, EmberForgeRollRules.matCost());
 
         // D2434/D2446 forge determinism: goal-locked sinks first when payable (not K3 / not pity)
@@ -109,7 +132,9 @@ public final class EmberForgeHeldNext {
                     + EmberGearNextHint.softTail(EmberGemCraftCostSoft.ready(pd))
                     + " · /corerpg p1 gem craft sharp";
         if (forgeGoal == EmberForgeGoal.LOCK && lock != null && canPay(lock, m))
-            return "下一确定 · 锁定洗练 · 料够 · /corerpg p1 reroll from forge";
+            return "下一确定 · 锁定洗练 · 料够"
+                    + EmberGearNextHint.softTail(EmberRerollLockShardSoft.ready(pd) || EmberRerollCoinSoft.ready(pd))
+                    + " · /corerpg p1 reroll from forge";
         if (forgeGoal == EmberForgeGoal.ROLL && roll != null && canPay(roll, m))
             return "下一确定 · 随机锻 · 料够"
                     + EmberGearNextHint.softTail(EmberForgeRollCostSoft.ready(pd))
