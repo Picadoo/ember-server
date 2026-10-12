@@ -181,8 +181,8 @@ Icons:
       material: nether star
       name: '§6签名传奇'
       lore:
-        - '%corerpg_p1_sig_head%'
-        - '%corerpg_p1_sig_blade%'
+        - '§f%corerpg_p1_sig_feel%'
+        - '§8详细图鉴在签名页'
         - '§e➥ §f签名页'
     actions:
       all:

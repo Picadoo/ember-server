@@ -16,7 +16,7 @@ Options:
   Min-Click-Delay: 200
 Layout:
   - 'LnHowpvFS'
-  - 'TBmXg k i'
+  - 'TBmXgek i'
   - 'ZR c Y d '
   - 'Q A G U j'
 Events:
@@ -120,6 +120,24 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_gem'
+
+  # D12291–D12293 签名手感一眼（邻宝石 · menuLine · 左签名页 · 右追烙 · 零抬 stamp）
+  e:
+    update: 20
+    display:
+      material: enchanted book
+      name: '§d签名'
+      lore:
+        - '§f%corerpg_p1_sig_feel%'
+        - '§8左：签名页 · 右：追烙目标'
+        - '§e➥ §f手感名 · 改打法不加伤'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 sig from hub'
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sig chase'
 
   # D12267–D12269 套装一眼（焦点 have/need · 左成套追 · 右选焦点 · 零数值）
   v:

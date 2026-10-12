@@ -1014,6 +1014,35 @@ public final class EmberGrowthService implements Listener {
         return EmberSignature.active(b, c, lo.activeSet, picks(d).values(), EmberSkillKit.dualUnlocked(d, runs));
     }
 
+    /** D12289: worn defs present on gear but not in {@link #signatures} (sigOff / family / dual gate). */
+    List<EmberSignature.Def> wornInactive(PlayerData d, EmberLoadout lo, List<EmberSignature.Def> active) {
+        if (d == null || lo == null) return Collections.<EmberSignature.Def>emptyList();
+        List<EmberSignature.Def> out = new ArrayList<EmberSignature.Def>();
+        for (EmberItemData it : new EmberItemData[]{lo.blade, lo.charm}) {
+            if (it == null) continue;
+            EmberSignature.Worn w = worn(d, it);
+            if (w == null || w.def == null) continue;
+            boolean on = false;
+            if (active != null) {
+                for (EmberSignature.Def a : active) {
+                    if (a != null && a.code == w.def.code) { on = true; break; }
+                }
+            }
+            if (!on) out.add(w.def);
+        }
+        return out;
+    }
+
+    /** D12289/D12290: hub/gear %corerpg_p1_sig_feel% — thin resolve → EmberSigFeel.menuLine. */
+    public String sigFeelLine(PlayerData d, EmberLoadout lo) {
+        List<EmberSignature.Def> active = signatures(d, lo);
+        List<EmberSignature.Def> off = wornInactive(d, lo, active);
+        EmberSignature.Def chase = EmberSigChase.get(d);
+        int marks = (d == null || chase == null) ? 0
+                : d.periodCount(EmberSignature.C_MARK + chase.map, "all");
+        return EmberSigFeel.menuLine(active, off, chase, marks);
+    }
+
     private String mapLabel(String key) {
         EmberRunMaps.MapDef md = runs.maps() == null ? null : runs.maps().byKey(key);
         return key.toUpperCase(Locale.ROOT) + (md == null ? "" : " " + md.name);
@@ -1750,6 +1779,7 @@ public final class EmberGrowthService implements Listener {
         if ("rules".equals(key)) return imp ? "§7烬炉烙印：§a已开放 §7（点一条签名开始）" : "§7烬炉烙印：§8首进或首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
         if ("acq".equals(key) || "acq_line".equals(key)) return EmberSigAcq.menuLine(); // D456
         if ("chase".equals(key) || "chase_line".equals(key) || "chase_hope".equals(key)) return EmberSigChase.glance(d); // D464/D604
+        if ("feel".equals(key) || "feel_line".equals(key)) return sigFeelLine(d, lo); // D12290 hub/gear feel glance
         if ("imprint_hope".equals(key)) { // D615 spend hope for chase target (or tip if none)
             EmberSignature.Def cd = EmberSigChase.get(d);
             if (cd == null) return "§8追烙未选 · /corerpg p1 sig chase";

@@ -70,4 +70,46 @@ public final class EmberSigFeel {
         EmberSignature.Def d = owner(active, key);
         return d == null ? "-" : d.id;
     }
+
+    /**
+     * D12289: hub/gear one-line signature feel (display only).
+     * Priority: active names → worn-but-off/inactive → chase remain → empty hint.
+     * Only Def.name (+ optional 改打法·不加伤 half); no mods / stamp / new codes.
+     */
+    public static String menuLine(List<EmberSignature.Def> active, EmberSignature.Def chaseDef, int chaseMarks) {
+        return menuLine(active, null, chaseDef, chaseMarks);
+    }
+
+    public static String menuLine(List<EmberSignature.Def> active, List<EmberSignature.Def> wornOff,
+                                  EmberSignature.Def chaseDef, int chaseMarks) {
+        if (active != null && !active.isEmpty()) {
+            StringBuilder sb = new StringBuilder("§d签名 ");
+            int n = 0;
+            for (EmberSignature.Def d : active) {
+                if (d == null || d.name == null) continue;
+                if (n > 0) sb.append("§7·");
+                sb.append("§f").append(d.name);
+                n++;
+                if (n >= 2) break;
+            }
+            if (n == 0) {
+                // fall through
+            } else {
+                return sb.append(" §8改打法·不加伤").toString();
+            }
+        }
+        if (wornOff != null && !wornOff.isEmpty()) {
+            for (EmberSignature.Def d : wornOff) {
+                if (d == null || d.name == null) continue;
+                return "§c签名关闭 §7· §f" + d.name + " §8点页重开";
+            }
+        }
+        if (chaseDef != null) {
+            int need = EmberSignature.imprintMarks();
+            int m = Math.max(0, chaseMarks);
+            String nm = chaseDef.name == null ? chaseDef.id : chaseDef.name;
+            return "§e追烙 §f" + chaseDef.id + " " + nm + " §7· 徽记 " + m + "/" + need;
+        }
+        return "§8无签名 · 点左开页 · 右选追烙";
+    }
 }
