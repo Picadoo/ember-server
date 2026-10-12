@@ -1,6 +1,6 @@
 # 余烬 · 套装手感 · 觉醒升档白话薄窗
 
-STATUS=**批 A · 方案 M · 交施工** · 2026-10-12 16:48 CST  
+STATUS=**CLOSED live** 1.65.769-d12407 · 2026-10-12 16:51 CST
 上游 RESEARCH [`RESEARCH-ember-set-awaken-feel-thin-2026-10-12.md`](RESEARCH-ember-set-awaken-feel-thin-2026-10-12.md) · tip `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md`  
 资产：`EmberSetRules` · `EmberAwakenBreak` · `EmberSetFeel`
 

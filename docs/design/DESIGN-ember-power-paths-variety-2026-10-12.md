@@ -193,7 +193,7 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-M CLOSED 停窗观察** · hub 挤度纪要；确认挤后再开 F1；无码
 - **TIP-N CLOSED live** 1.65.768-d12375（warn_bar_hold + pre_half_cue）
 - **TIP-O CLOSED PASS** live `b566bfe4`（sx01–04 叠饰 @d12376）
-- **TIP-P OPEN** · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话（读表不改表 · 非 glance）
+- **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-P 批 A·M**（2026-10-12）· tip D12392–D12407 · 交插件
+- **TIP-P CLOSED live**（2026-10-12 16:51）· 1.65.769-d12407
