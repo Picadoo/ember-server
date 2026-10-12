@@ -1,6 +1,6 @@
 # tip · TIP-AY 生活烹饪日首 CookCoinSoft 批次门禁/费用诚实对齐（可施工薄 · 可感 UX）· D12888–D12903
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 22:18 Asia/Shanghai  
+> **状态：** **CLOSED** · live `1.65.790-d12903` · feat `5fdccde66` · 2026-10-12 22:21 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-cook-coin-soft-batch-gate-align-2026-10-12.md`](../design/RESEARCH-ember-cook-coin-soft-batch-gate-align-2026-10-12.md) · DESIGN [`DESIGN-ember-cook-coin-soft-batch-gate-align-2026-10-12.md`](../design/DESIGN-ember-cook-coin-soft-batch-gate-align-2026-10-12.md) · TIP-AX CLOSED live `1.65.789-d12887` · feat `95ea4e614` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径** — **离开 CostSoft·pity·soft-glance / ConvertCap / firstsoft / 甲闸 / 追烙**（AS→AV / AP–AR / AW / AX / AK–AM / AN–AO 已齐）；烹饪币 soft 批次门禁 leftover（面包/熬药已 peek、烹饪漏）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberCookCoinSoft.peekFee` · `LifeService.cook` 裁批/实付文案/退款 · 可选 show SOFT_TAIL + 单测）  
@@ -88,9 +88,9 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12892–D12896；D12898 `git show` 干净  
-- [ ] 菜单默认不动；lore≤3  
-- [ ] peek 不吞 soft；扣币才 consume；L13 施工仍 HOLD  
+- [x] 批后插件：D12892–D12896；D12898 `git show` 干净  
+- [x] 菜单默认不动；lore≤3  
+- [x] peek 不吞 soft；扣币才 consume；live `1.65.790-d12903` · feat `5fdccde66`；L13 施工仍 HOLD  
 
 ---
 
@@ -100,4 +100,4 @@
 - 选题：TIP-AX 后 · **离开 CostSoft/pity/ConvertCap/firstsoft/甲闸/追烙** — 烹饪 CookCoinSoft 批次门禁/费用诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 ConvertCap densify · 非 CostSoft·pity·soft-glance·firstsoft 再叠**）  
 - **批注：** 面包/熬药日首币减负门禁已 peek；烹饪 `cook` 仍全额裁批 → 假拒/欠烤/文案多报；peekFee + 裁批/实付文案对齐；零改 MULT/coin_each；零新 PAPI；批后派 **余烬-插件**；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / ConvertCap densify / CostSoft·pity·soft-glance·firstsoft 再叠 仍冻  
 
-## STATUS: OPEN · TIP-AY · 荐 A·M · 2026-10-12 22:15 CST
+## STATUS: CLOSED · live 1.65.790-d12903 · 5fdccde66 · 2026-10-12 22:21 CST

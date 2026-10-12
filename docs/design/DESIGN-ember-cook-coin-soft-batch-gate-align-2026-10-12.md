@@ -1,6 +1,6 @@
 # DESIGN · 生活烹饪日首 CookCoinSoft 批次门禁/费用诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-AY 批 A·M · 已派插件 · 2026-10-12 22:18 Asia/Shanghai  
+> **状态：** CLOSED · live `1.65.790-d12903` · feat `5fdccde66` · 2026-10-12 22:21 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-cook-coin-soft-batch-gate-align-2026-10-12.md`](RESEARCH-ember-cook-coin-soft-batch-gate-align-2026-10-12.md)  
 > **对接 live：** TIP-AX CLOSED live `1.65.789-d12887` · feat `95ea4e614` · CookCoinSoft D8849 · BreadBuySoft/BrewCoinSoft 门禁 peek 对照 · LifeService.cook · cook.coin_each C17  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
@@ -102,4 +102,4 @@ show() cook 行（可选）：
 - 菜单默认不动；lore≤3  
 - L13 施工仍 HOLD；CostSoft·pity·soft-glance·firstsoft / ConvertCap / 甲闸 / SetChase 六槽仍冻  
 
-## STATUS: OPEN · TIP-AY · 2026-10-12
+## STATUS: CLOSED · live 1.65.790-d12903 · 5fdccde66 · 2026-10-12 22:21 CST
