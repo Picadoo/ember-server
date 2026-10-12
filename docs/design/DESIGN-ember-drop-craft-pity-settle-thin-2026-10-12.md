@@ -1,6 +1,6 @@
 # 余烬 · 可见保底 · 精工软保底结算进度薄窗
 
-STATUS=**待批 A · 荐方案 M** · 2026-10-12  
+STATUS=**批 A · 方案 M · 交施工** · 2026-10-12 16:54 CST  
 上游 RESEARCH [`RESEARCH-ember-drop-craft-pity-settle-thin-2026-10-12.md`](RESEARCH-ember-drop-craft-pity-settle-thin-2026-10-12.md) · tip `TIP-ember-drop-craft-pity-settle-thin-d12408-d12423-2026-10-12.md`  
 资产：`EmberDropCraftPity` · `EmberSettleService`（对齐 `DropQualityPity` 结算 else）
 
@@ -29,3 +29,6 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-12
 |------|------|
 | R · 枢纽再挂精工保底格 | **否**（glance twin / hub 挤） |
 | W · 抬 NEED 或强制更高精工当假变强 | **否决** |
+
+## 进度戳
+- **TIP-Q 批 A·M**（2026-10-12）· tip D12408–D12423 · 交插件
