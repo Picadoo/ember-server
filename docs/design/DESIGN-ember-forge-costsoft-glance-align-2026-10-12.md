@@ -123,4 +123,4 @@ RunPapi *_next_* / held_*_cost：传 pd → soft-aware 重载
 - 刃 L11/L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify / glance twin / 深化 densify / ForgeChoice densify / Affix / 伤乘 / 抬表 / sx20 / skill_mult / STAMP  
 - Brand/Gem/Convert/ForgeRoll CostSoft glance 旁债；pity-remain 再叠禁  
 
-## STATUS: OPEN · TIP-AS · 2026-10-12
+## STATUS: CLOSED · live 1.65.784-d12807 · 468a08943 · TIP-AS · 2026-10-12

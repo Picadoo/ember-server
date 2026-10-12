@@ -82,4 +82,4 @@
 | L13 施工 tip | **否** — PASS≠开工；**HOLD** |
 | 观察停窗 only | **否** — 有可感诚实债 |
 
-## STATUS: OPEN · TIP-AS · 2026-10-12
+## STATUS: CLOSED · live 1.65.784-d12807 · 468a08943 · TIP-AS · 2026-10-12
