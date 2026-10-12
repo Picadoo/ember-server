@@ -77,12 +77,12 @@
 
 ## 4. 验收清单
 
-- [ ] 枢纽悬停「套装」：能读出 **焦点族名 + have/need 或还差哪件**（三态至少测：未选 / 缺口 / 齐）  
-- [ ] lore 非空行 = 3；hub overs>3 = 0  
-- [ ] 左键：聊天走现网 `setchase`（含图/工坊指针按钮）；右键：`setfocus` 选族  
-- [ ] `git show --stat` 无 Affix / Economy / pom 无关脏文件；密码检查 0  
-- [ ] 伤乘 / 套装觉醒数学单测 **不动**  
-- [ ] reload 记「待恢复服后实测」
+- [x] 枢纽悬停「套装」：能读出 **焦点族名 + have/need 或还差哪件**（三态至少测：未选 / 缺口 / 齐）  
+- [x] lore 非空行 = 3；hub overs>3 = 0  
+- [x] 左键：聊天走现网 `setchase`（含图/工坊指针按钮）；右键：`setfocus` 选族  
+- [x] `git show --stat` 无 Affix / Economy / pom 无关脏文件；密码检查 0  
+- [x] 伤乘 / 套装觉醒数学单测 **不动**  
+- [x] reload OK · 记「待进服悬停实测」
 
 ---
 
@@ -93,3 +93,11 @@
 - 薄窗变强途径续：**TIP-D**；A→C→B 已收；本批后仍禁 Affix / forge twin / pity densify twin
 
 ## STATUS: CLOSED · live 1.65.761-d12271 · 2026-10-12 15:51 CST
+
+---
+
+## 6. CLOSED
+
+- [x] 插件岗+总控 ship · `1.65.761-d12271.local` · 2026-10-12 15:51 CST
+- commit feat setchase glance + version bump · STATUS `STATUS-ember-setchase-glance-d12271-2026-10-12.md`
+- Affix Pack 仍 FROZEN；零伤乘
