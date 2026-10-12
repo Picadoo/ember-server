@@ -1,6 +1,6 @@
 # tip · TIP-G 签名手感一眼（枢纽/装备 · 手感名 · 点进签名/追烙）· D12288–D12295
 
-> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:01 Asia/Shanghai）· 交插件岗  
+> **状态：** CLOSED · live 1.65.764-d12295（2026-10-12 16:05 Asia/Shanghai）  
 > **上游：** [`DESIGN-ember-growth-variety-thin-2026-10-12.md`](../design/DESIGN-ember-growth-variety-thin-2026-10-12.md) · [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md) · D174 / D455 / D464 / D604  
 > **前置：** TIP-A～F CLOSED live（至 1.65.763-d12287）  
 > **施工岗：** 插件岗（TrMenu + 纯展示短串；**零改签名 mods / stamp / 烙印价**）  
@@ -83,10 +83,10 @@
 
 ## 4. 验收清单
 
-- [ ] 枢纽 `e`：三行内见手感名或追烙；overs>3=0  
-- [ ] 左 → 签名页；右 → `sig chase`  
-- [ ] 装备 `L` lore≤3 且偏手感名  
-- [ ] `git show` 无 Affix / Economy stamp 无关脏文件；密码检查 0  
+- [x] 枢纽 `e`：三行内见手感名或追烙；overs>3=0  
+- [x] 左 → 签名页；右 → `sig chase`  
+- [x] 装备 `L` lore≤3 且偏手感名  
+- [x] `git show` 无 Affix / Economy stamp 无关脏文件；密码检查 0  
 - [ ] reload 记「待恢复服后实测」
 
 ---
@@ -96,3 +96,8 @@
 - [x] 总控批 **A · 方案 M** · 2026-10-12 16:01 CST
 - tip 已推 · 交插件岗
 - 变强途径续：**TIP-G**；复用 D174/D455/D464，不发明新主循环
+
+## STATUS: CLOSED · live 1.65.764-d12295 · 2026-10-12 16:05 CST
+- feat `5ad890e2` · chore 版本/STATUS 另附
+- hub `e` + gear `L` + `%corerpg_p1_sig_feel%`；零 STAMP_RATE/imprintMarks/Affix
+- 偏差接受：gear L2 固定「详细图鉴在签名页」

@@ -182,4 +182,5 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - TIP-D：**CLOSED live**（1.65.761-d12271）
 - TIP-E：**CLOSED live**（1.65.762-d12279）
 - TIP-F：**CLOSED live**（1.65.763-d12287）
-- 下窗：**TIP-G 签名手感一眼** → tip 已开 `docs/tips/TIP-ember-power-sig-feel-glance-d12288-d12295-2026-10-12.md`（待批 A·M）
+- **TIP-G CLOSED live** 1.65.764-d12295（hub `e` 签名手感一眼）
+- 下窗：策划开 **TIP-H**（工坊稳/赌一眼或剩余 power-path 表面化；零 Affix / 零伤乘）
