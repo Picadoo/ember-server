@@ -396,7 +396,14 @@ public final class SkillService implements Listener {
             player.sendMessage(PREFIX + ChatColor.YELLOW + "已是 " + sn
                     + ChatColor.GRAY + " · 充能仍转满（" + cd + "s）");
         }
-        try { player.sendActionBar("§e烬斩 · §f" + sn); } catch (Throwable ignored) { }
+        // D12322: shape role AB once per session on change (preferred over bare name)
+        try {
+            if (changed && town.sunshine.corerpg.p1.EmberSkillFeelSf.tryMarkShapeRole(player.getUniqueId(), id)) {
+                player.sendActionBar("§e" + town.sunshine.corerpg.p1.EmberSkillFeelSf.shapeRoleLine(id));
+            } else {
+                player.sendActionBar("§e烬斩 · §f" + sn);
+            }
+        } catch (Throwable ignored) { }
         town.sunshine.corerpg.ConfirmTokens.sendButtons(player, PREFIX + "§7下一步：", // D898
                 new String[]{"[进冒险]", "/ember_p1_adventure", "体感符文", "GREEN"},
                 new String[]{"[工坊]", "/corerpg p1 forge", "养成后再打", "GOLD"},
@@ -445,7 +452,14 @@ public final class SkillService implements Listener {
             player.sendMessage(PREFIX + ChatColor.YELLOW + "已是 " + dn
                     + ChatColor.GRAY + " · 身法冷却仍转满（" + cd + "s）");
         }
-        try { player.sendActionBar("§e身法 · §f" + dn); } catch (Throwable ignored) { }
+        // D12324: step dir role AB once per session on first switch
+        try {
+            if (changed && town.sunshine.corerpg.p1.EmberSkillFeelSf.tryMarkStepDir(player.getUniqueId(), id)) {
+                player.sendActionBar("§e" + town.sunshine.corerpg.p1.EmberSkillFeelSf.stepDirRoleLine(id));
+            } else {
+                player.sendActionBar("§e身法 · §f" + dn);
+            }
+        } catch (Throwable ignored) { }
         town.sunshine.corerpg.ConfirmTokens.sendButtons(player, PREFIX + "§7下一步：", // D899
                 new String[]{"[进冒险]", "/ember_p1_adventure", "体感身法", "GREEN"},
                 new String[]{"[工坊]", "/corerpg p1 forge", "养成后再打", "GOLD"},
@@ -725,6 +739,7 @@ public final class SkillService implements Listener {
             } catch (Throwable ignored) { }
         }
         // D621: shape feel telegraph (geometry only · zero skill_mult)
+        // D12322/D12323 role+wrong flash in maybeFlashSlashHit/Miss (survives AB overwrite)
         String geo;
         if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_LINE)
             geo = "§b直线 · 正前穿刺";
@@ -1128,6 +1143,7 @@ public final class SkillService implements Listener {
         return displacementOk;
     }
 
+
     /** D445 / D1155: ActionBar 烬斩命中 — shape fork + hit count + set fallout (zero skill_mult). */
     private void maybeFlashSlashHit(Player player, int hitCount, int shapeId) {
         if (player == null) return;
@@ -1140,9 +1156,22 @@ public final class SkillService implements Listener {
         String fam = null;
         town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
         if (ls != null) fam = ls.get(player).activeSet;
+        // D12325: empty half + known fam still appends fallout (shapeShort already in base)
         String msg = town.sunshine.corerpg.p1.EmberSkillFeelSf.slashConfirmWithSet(
-                shapeId, hitCount, town.sunshine.corerpg.p1.EmberSkillFeelSf.setFalloutActionHalf(fam));
+                shapeId, hitCount, town.sunshine.corerpg.p1.EmberSkillFeelSf.setFalloutActionHalf(fam), fam);
         if (msg.isEmpty()) return;
+        // D12322: first cast of this shape this session → prepend role (change-time also marks)
+        try {
+            if (town.sunshine.corerpg.p1.EmberSkillFeelSf.tryMarkShapeRole(player.getUniqueId(), shapeId)) {
+                msg = town.sunshine.corerpg.p1.EmberSkillFeelSf.shapeRoleLine(shapeId) + " · " + msg;
+            }
+        } catch (Throwable ignored) { }
+        // D12323: wrong-shape tip once per set period
+        try {
+            String wrong = town.sunshine.corerpg.p1.EmberSkillFeelSf.maybeConsumeWrongShapeTip(
+                    player.getUniqueId(), fam, shapeId);
+            if (wrong != null && !wrong.isEmpty()) msg = msg + " §7" + wrong;
+        } catch (Throwable ignored) { }
         if (sets.flashSkillConfirm(player, ChatColor.GOLD + msg)) {
             lastSkillHitFlashAt.put(player.getUniqueId(), Long.valueOf(now));
         }
@@ -1158,6 +1187,19 @@ public final class SkillService implements Listener {
         town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
         if (sets == null) return;
         String msg = town.sunshine.corerpg.p1.EmberSkillFeelSf.slashMiss(shapeId);
+        try {
+            if (town.sunshine.corerpg.p1.EmberSkillFeelSf.tryMarkShapeRole(player.getUniqueId(), shapeId)) {
+                msg = town.sunshine.corerpg.p1.EmberSkillFeelSf.shapeRoleLine(shapeId) + " · " + msg;
+            }
+        } catch (Throwable ignored) { }
+        try {
+            String famM = null;
+            town.sunshine.corerpg.p1.EmberLoadoutService lsM = plugin.getEmberLoadouts();
+            if (lsM != null) famM = lsM.get(player).activeSet;
+            String wrong = town.sunshine.corerpg.p1.EmberSkillFeelSf.maybeConsumeWrongShapeTip(
+                    player.getUniqueId(), famM, shapeId);
+            if (wrong != null && !wrong.isEmpty()) msg = msg + " §7" + wrong;
+        } catch (Throwable ignored) { }
         if (sets.flashSkillConfirm(player, ChatColor.GRAY + msg)) {
             lastSkillHitFlashAt.put(player.getUniqueId(), Long.valueOf(now));
         }

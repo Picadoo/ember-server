@@ -1,10 +1,27 @@
 package town.sunshine.corerpg.p1;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * D1154 · skill Stage2 SF1–SF3: shape feel clarity (display only).
+ * D12320–D12325 · TIP-K skill feel pack: shape/step role AB once + wrong-shape tip + slashConfirm empty path.
  * Zero skill_mult / CD / damage / sticky.
  */
 public final class EmberSkillFeelSf {
+
+    /** Session: shapeIds that already flashed shapeRoleLine for this UUID. */
+    private static final Map<UUID, Set<Integer>> SHAPE_ROLE_SEEN = new ConcurrentHashMap<UUID, Set<Integer>>();
+    /** Per-set-period: family that already got wrong-shape tip (cleared when active set changes). */
+    private static final Map<UUID, String> WRONG_SHAPE_MARKED = new ConcurrentHashMap<UUID, String>();
+    private static final Map<UUID, String> LAST_ACTIVE_SET = new ConcurrentHashMap<UUID, String>();
+    /** Session: step variants that already flashed stepVariantRoleLine. */
+    private static final Map<UUID, Set<Integer>> STEP_VARIANT_SEEN = new ConcurrentHashMap<UUID, Set<Integer>>();
+    /** Session: step dirs that already flashed stepDirRoleLine. */
+    private static final Map<UUID, Set<Integer>> STEP_DIR_SEEN = new ConcurrentHashMap<UUID, Set<Integer>>();
 
     private EmberSkillFeelSf() {}
 
@@ -13,6 +30,159 @@ public final class EmberSkillFeelSf {
         if (shapeId == EmberSkillKit.SHAPE_LINE) return "直线";
         if (shapeId == EmberSkillKit.SHAPE_RING) return "环斩";
         return "扇形";
+    }
+
+    /**
+     * D12322: shape role one-liner (display only).
+     * FAN → 扇形·清近 / LINE → 直线·穿远 / RING → 环斩·围身.
+     */
+    public static String shapeRoleLine(int shapeId) {
+        if (shapeId == EmberSkillKit.SHAPE_LINE) return "直线·穿远";
+        if (shapeId == EmberSkillKit.SHAPE_RING) return "环斩·围身";
+        return "扇形·清近";
+    }
+
+    /**
+     * Optional family half-word after shape role (e.g. {@code · 焚烬}). Empty when unknown/none.
+     */
+    public static String shapeRoleWithFamily(int shapeId, String family) {
+        String base = shapeRoleLine(shapeId);
+        if (family == null || family.isEmpty() || "none".equals(family)) return base;
+        String name = EmberItemData.familyName(family);
+        if (name == null || name.isEmpty() || name.equals(family)) return base;
+        return base + " · " + name;
+    }
+
+    /**
+     * Session latch: first time this UUID sees this shapeId → true (and records).
+     * Same shape must not spam.
+     */
+    public static boolean tryMarkShapeRole(UUID id, int shapeId) {
+        if (id == null) return false;
+        Set<Integer> set = SHAPE_ROLE_SEEN.get(id);
+        if (set == null) {
+            set = Collections.newSetFromMap(new ConcurrentHashMap<Integer, Boolean>());
+            Set<Integer> raced = SHAPE_ROLE_SEEN.putIfAbsent(id, set);
+            if (raced != null) set = raced;
+        }
+        return set.add(Integer.valueOf(shapeId));
+    }
+
+    /** Pure: whether shape role would still flash (does not mutate). */
+    public static boolean wouldMarkShapeRole(Set<Integer> seen, int shapeId) {
+        return seen == null || !seen.contains(Integer.valueOf(shapeId));
+    }
+
+    /**
+     * D12323: wrong-shape half-line {@code 荐：{shapeShort}·{setFalloutLabel}}.
+     * Empty when family unknown / unset.
+     */
+    public static String wrongShapeTip(String family) {
+        if (family == null || family.isEmpty() || "none".equals(family)) return "";
+        String fall = setFalloutLabel(family);
+        if (fall.isEmpty()) return "";
+        return "荐：" + shapeShort(EmberSkillKit.preferredShape(family)) + "·" + fall;
+    }
+
+    /**
+     * Track active set; clears wrong-shape latch when family changes / unequip.
+     */
+    public static void noteActiveSet(UUID id, String family) {
+        if (id == null) return;
+        String f = family == null ? "" : family;
+        String prev = LAST_ACTIVE_SET.put(id, f);
+        if (prev != null && !prev.equals(f)) {
+            WRONG_SHAPE_MARKED.remove(id);
+        }
+        if (f.isEmpty() || "none".equals(f)) {
+            WRONG_SHAPE_MARKED.remove(id);
+        }
+    }
+
+    /**
+     * Once per set period: mark wrong-shape tip consumed for this family.
+     * @return true if this is the first tip for the current set period
+     */
+    public static boolean tryMarkWrongShape(UUID id, String family) {
+        if (id == null || family == null || family.isEmpty() || "none".equals(family)) return false;
+        if (setFalloutLabel(family).isEmpty()) return false;
+        noteActiveSet(id, family);
+        return WRONG_SHAPE_MARKED.putIfAbsent(id, family) == null;
+    }
+
+    /**
+     * D12323 consume: if activeSet present and shape ≠ preferred, return tip once per set period; else "".
+     */
+    public static String maybeConsumeWrongShapeTip(UUID id, String family, int shapeId) {
+        if (id == null) return "";
+        noteActiveSet(id, family);
+        if (family == null || family.isEmpty() || "none".equals(family)) return "";
+        if (setFalloutLabel(family).isEmpty()) return "";
+        if (shapeId == EmberSkillKit.preferredShape(family)) return "";
+        if (!tryMarkWrongShape(id, family)) return "";
+        return wrongShapeTip(family);
+    }
+
+    /**
+     * D12324: family step role one-liner (display only). Empty for plain / unknown.
+     */
+    public static String stepVariantRoleLine(int variant) {
+        if (variant == EmberSkillKit.STEP_VARIANT_HUOHEN) return "火痕步·点燃起跳";
+        if (variant == EmberSkillKit.STEP_VARIANT_BAOSHAN) return "爆闪步·拉开";
+        if (variant == EmberSkillKit.STEP_VARIANT_CHENGHU) return "承护步·站桩";
+        return "";
+    }
+
+    /**
+     * D12324: step direction role one-liner.
+     * back → 后撤·拉开; forward → 前冲·突进.
+     */
+    public static String stepDirRoleLine(int dirId) {
+        if (dirId == EmberSkillKit.DIR_BACK) return "后撤·拉开";
+        return "前冲·突进";
+    }
+
+    /** Combined step role: prefer variant line; if plain + backward → dir line. */
+    public static String stepRoleLine(int variant, boolean backward) {
+        String v = stepVariantRoleLine(variant);
+        if (!v.isEmpty()) return v;
+        if (backward) return stepDirRoleLine(EmberSkillKit.DIR_BACK);
+        return "";
+    }
+
+    /** Session latch: first time this UUID sees this step variant → true. */
+    public static boolean tryMarkStepVariant(UUID id, int variant) {
+        if (id == null) return false;
+        if (variant == EmberSkillKit.STEP_VARIANT_PLAIN) return false;
+        Set<Integer> set = STEP_VARIANT_SEEN.get(id);
+        if (set == null) {
+            set = Collections.newSetFromMap(new ConcurrentHashMap<Integer, Boolean>());
+            Set<Integer> raced = STEP_VARIANT_SEEN.putIfAbsent(id, set);
+            if (raced != null) set = raced;
+        }
+        return set.add(Integer.valueOf(variant));
+    }
+
+    /** Session latch: first time this UUID sees this step dir → true. */
+    public static boolean tryMarkStepDir(UUID id, int dirId) {
+        if (id == null) return false;
+        Set<Integer> set = STEP_DIR_SEEN.get(id);
+        if (set == null) {
+            set = Collections.newSetFromMap(new ConcurrentHashMap<Integer, Boolean>());
+            Set<Integer> raced = STEP_DIR_SEEN.putIfAbsent(id, set);
+            if (raced != null) set = raced;
+        }
+        return set.add(Integer.valueOf(dirId));
+    }
+
+    /** Clear all session / per-set latches for a player (quit / tests). */
+    public static void clearSession(UUID id) {
+        if (id == null) return;
+        SHAPE_ROLE_SEEN.remove(id);
+        WRONG_SHAPE_MARKED.remove(id);
+        LAST_ACTIVE_SET.remove(id);
+        STEP_VARIANT_SEEN.remove(id);
+        STEP_DIR_SEEN.remove(id);
     }
 
     /**
@@ -44,12 +214,34 @@ public final class EmberSkillFeelSf {
 
     /**
      * SF1–SF3: confirm + optional set-fallout half (e.g. {@code " · 烬刃余烬"}).
+     * Empty/null half → base only (no family to fall back).
      */
     public static String slashConfirmWithSet(int shapeId, int hits, String setFalloutHalf) {
         String base = slashConfirm(shapeId, hits);
         if (base.isEmpty()) return "";
         if (setFalloutHalf == null || setFalloutHalf.isEmpty()) return base;
         return base + setFalloutHalf;
+    }
+
+    /**
+     * D12325: confirm + fallout half; when half null/empty but family known, fall back to
+     * {@link #setFalloutActionHalf} or {@code " · "+setFalloutLabel}. Zero coef.
+     */
+    public static String slashConfirmWithSet(int shapeId, int hits, String setFalloutHalf, String family) {
+        String base = slashConfirm(shapeId, hits);
+        if (base.isEmpty()) return "";
+        String half = setFalloutHalf;
+        if (half == null || half.isEmpty()) {
+            if (family != null && !family.isEmpty() && !"none".equals(family)) {
+                half = setFalloutActionHalf(family);
+                if (half == null || half.isEmpty()) {
+                    String lab = setFalloutLabel(family);
+                    if (!lab.isEmpty()) half = " · " + lab;
+                }
+            }
+        }
+        if (half == null || half.isEmpty()) return base;
+        return base + half;
     }
 
     /** SF3: 形状与套装落点同屏半行（展示 only）。 */

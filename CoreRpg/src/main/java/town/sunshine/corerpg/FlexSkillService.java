@@ -401,8 +401,25 @@ public final class FlexSkillService implements Listener {
         }
         lastStepVariant.put(player.getUniqueId(), Integer.valueOf(variant));
         lastBack.put(player.getUniqueId(), Boolean.valueOf(back));
+        // D12324: first family-step / first dir this session → role line once; else land AB
         try {
-            if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN)
+            java.util.UUID sid = player.getUniqueId();
+            String role = "";
+            if (variant != town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_PLAIN
+                    && town.sunshine.corerpg.p1.EmberSkillFeelSf.tryMarkStepVariant(sid, variant)) {
+                role = town.sunshine.corerpg.p1.EmberSkillFeelSf.stepVariantRoleLine(variant);
+            } else if (back && town.sunshine.corerpg.p1.EmberSkillFeelSf.tryMarkStepDir(
+                    sid, town.sunshine.corerpg.p1.EmberSkillKit.DIR_BACK)) {
+                role = town.sunshine.corerpg.p1.EmberSkillFeelSf.stepDirRoleLine(
+                        town.sunshine.corerpg.p1.EmberSkillKit.DIR_BACK);
+            }
+            if (!role.isEmpty()) {
+                ChatColor col = ChatColor.YELLOW;
+                if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN) col = ChatColor.GOLD;
+                else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN) col = ChatColor.AQUA;
+                else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU) col = ChatColor.GREEN;
+                player.sendActionBar(col + role);
+            } else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN)
                 player.sendActionBar(ChatColor.GOLD + "火痕步 · 落地点燃");
             else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN)
                 player.sendActionBar(ChatColor.AQUA + "爆闪步 · 落地缓速");
