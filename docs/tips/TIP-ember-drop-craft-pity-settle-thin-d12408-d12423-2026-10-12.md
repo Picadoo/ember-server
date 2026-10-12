@@ -1,6 +1,6 @@
 # tip · TIP-Q 可见保底 · 精工软保底结算进度（对齐成色 · 非改表）· D12408–D12423
 
-> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:54 Asia/Shanghai）· 交插件岗  
+> **状态：** CLOSED · live 1.65.770-d12423.local（2026-10-12 16:57 Asia/Shanghai）  
 > **上游：** [`RESEARCH-ember-drop-craft-pity-settle-thin-2026-10-12.md`](../design/RESEARCH-ember-drop-craft-pity-settle-thin-2026-10-12.md) · [`DESIGN-ember-drop-craft-pity-settle-thin-2026-10-12.md`](../design/DESIGN-ember-drop-craft-pity-settle-thin-2026-10-12.md) · `EmberDropCraftPity` / `EmberSettleService` · TIP-J 停 glance  
 > **前置：** TIP-P CLOSED PASS live `1.65.769-d12407`；power-glance densify **仍停**  
 > **施工岗：** 插件岗（结算文案对齐；**零改 NEED/FLOOR/权重**）  
@@ -58,7 +58,7 @@
 ## 4. 验收清单
 
 - [x] 总控批 **A · 方案 M**  
-- [ ] D12410–D12413 结算挂点+热关  
+- [x] D12410–D12413 结算挂点+热关  
 - [ ] NEED/FLOOR `git show` 无抬  
 - [ ] 不跑 p1sim（文案级）
 
@@ -70,4 +70,4 @@
 - 选题：变强途径 · 可见保底深化（精工结算进度对齐成色）· 非 glance  
 - **批注：** 镜像成色 else；零改 NEED/FLOOR；热关 settle_remain；forced 不叠 remain；硬禁 Affix/伤乘/抬表/glance twin
 
-## STATUS: 批 A·M · 交施工 · 2026-10-12 16:54 CST
+## STATUS: CLOSED · live 1.65.770-d12423.local · 2026-10-12 16:57 CST
