@@ -1,6 +1,6 @@
 # DESIGN · 强化预览成功率菜单诚实（工坊 TrMenu · 薄窗 · 可施工）· 2026-10-13
 
-> **状态：** OPEN · TIP-BN · 2026-10-13 00:05 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BN · 已派插件+物品 · 2026-10-13 00:08 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-enhance-preview-rate-honesty-2026-10-13.md`](RESEARCH-ember-enhance-preview-rate-honesty-2026-10-13.md)  
 > **对接 live：** TIP-BM CLOSED live items `91300ad65` · `EmberUpgradeRules.RATE` · `EmberForgeService.enhance` 聊天预览 · `ember_p1_forge.yml` E/e · `EmberRunPapi` held_enhance_* · power-paths WS2  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量数字再叠 / soft·开孔再叠 **仍冻**  
@@ -106,4 +106,4 @@
 | 10 | Affix densify / 抬 RATE | **仍冻** |
 | 11 | SF4 U1 技能页形缓展示诚实 | **另 tip · 可选**（离接线链） |
 
-## STATUS: OPEN · TIP-BN · 2026-10-13 00:05 Asia/Shanghai
+## STATUS: APPROVED · TIP-BN · 已派插件+物品 · 2026-10-13 00:08 Asia/Shanghai
