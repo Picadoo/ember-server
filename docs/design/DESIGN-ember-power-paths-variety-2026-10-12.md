@@ -179,4 +179,4 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 
 - Batch1 TIP-A / Batch2 TIP-C / Batch3 TIP-B：**CLOSED live**（至 1.65.760-d12263）
 - Affix Pack：**FROZEN**
-- 下窗：**TIP-D 套装追一眼**（变强途径续；非难度 densify）
+- 下窗：**TIP-D 套装追一眼** → tip 已开 `docs/tips/TIP-ember-power-setchase-glance-d12264-d12271-2026-10-12.md`（待批 A·M）
