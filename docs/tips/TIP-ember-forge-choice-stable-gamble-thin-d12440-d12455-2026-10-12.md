@@ -1,6 +1,6 @@
 # tip · TIP-S 工坊选择感 · 稳/旁路「选的是」补齐（非改价 · 非 glance）· D12440–D12455
 
-> **状态：** OPEN · 待批 A · 荐方案 M（2026-10-12 Asia/Shanghai）  
+> **状态：** 批 **A · 方案 M**（总控 2026-10-12 17:04 Asia/Shanghai）· 交插件岗  
 > **上游：** [`RESEARCH-ember-forge-choice-stable-gamble-thin-2026-10-12.md`](../design/RESEARCH-ember-forge-choice-stable-gamble-thin-2026-10-12.md) · [`DESIGN-ember-forge-choice-stable-gamble-thin-2026-10-12.md`](../design/DESIGN-ember-forge-choice-stable-gamble-thin-2026-10-12.md) · `EmberForgeChoice` · TIP-B/H · TIP-J 停 glance  
 > **前置：** TIP-R CLOSED PASS live `1.65.771-d12439`；power-glance densify **仍停**  
 > **施工岗：** 插件岗（ForgeChoice 扩 API + 预览 chat；**零改价/率**）  
@@ -60,7 +60,7 @@
 
 ## 4. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [ ] D12442–D12448 API+挂点+热关  
 - [ ] 价/率 `git show` 无抬  
 - [ ] 不跑 p1sim（文案级）
@@ -69,8 +69,8 @@
 
 ## 5. 批注
 
-- [ ] 总控批 **A · 方案 M** · （待）  
+- [x] 总控批 **A · 方案 M** · 2026-10-12 17:04 CST  
 - 选题：变强途径 · 工坊选择感深化（稳/旁路选的是）· 非 glance  
-- **批注预填：** 扩 ForgeChoice；挂预览 chat；零改价；硬禁 Affix/伤乘/抬表/glance twin
+- **批注：** 扩 ForgeChoice stable/gamble；挂成色精工强化+forgeroll 预览；可选目标冲突半行；零改价率极品权；硬禁 Affix/伤乘/抬表/glance twin/K3
 
-## STATUS: OPEN · 待批 A · 荐 M · D12440–D12455
+## STATUS: 批 A·M · 交施工 · 2026-10-12 17:04 CST

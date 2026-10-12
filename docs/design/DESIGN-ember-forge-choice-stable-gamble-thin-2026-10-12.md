@@ -1,6 +1,6 @@
 # 余烬 · 工坊选择感 · 稳/旁路「选的是」薄窗
 
-STATUS=**待批 A · 荐方案 M** · 2026-10-12  
+STATUS=**批 A · 方案 M · 交施工** · 2026-10-12 17:04 CST  
 上游 RESEARCH [`RESEARCH-ember-forge-choice-stable-gamble-thin-2026-10-12.md`](RESEARCH-ember-forge-choice-stable-gamble-thin-2026-10-12.md) · tip `TIP-ember-forge-choice-stable-gamble-thin-d12440-d12455-2026-10-12.md`  
 资产：`EmberForgeChoice` · `EmberForgeService` · `EmberRunService.cmdForgeRoll`
 
@@ -29,3 +29,6 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-12
 |------|------|
 | R · 菜单再并排稳赌格 | **否**（TIP-H 已齐 · glance twin） |
 | W · 抬下限权当假选择 | **否决** |
+
+## 进度戳
+- **TIP-S 批 A·M**（2026-10-12）· tip D12440–D12455 · 交插件
