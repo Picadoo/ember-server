@@ -1,6 +1,6 @@
 # tip · TIP-BF 烬斩 SF4 U1 微缓 T0 离线 p1sim（G-within · docs+tools）· D13000–D13015
 
-> **状态：** OPEN · 待批 **A · 方案 M** · docs+tools · **sim `STAGE0_SF4_U1_T0=PASS`** · HOLD 施工 · PASS≠开工 · 2026-10-12 23:14 Asia/Shanghai  
+> **状态：** CLOSED · 批 **A · 方案 M** · docs+tools · **sim `STAGE0_SF4_U1_T0=PASS`** · HOLD 施工 · PASS≠开工（总控 2026-10-12 23:15 Asia/Shanghai）  
 > **上游：** TIP-BE CLOSED stage0 APPROVED HOLD push `02db68148`（OPEN `6553fd1b`）· DESIGN [`DESIGN-ember-skill-sf4-u1-t0-p1sim-2026-10-12.md`](../design/DESIGN-ember-skill-sf4-u1-t0-p1sim-2026-10-12.md) · stage0 [`DESIGN-ember-skill-sf4-micro-utility-stage0-2026-10-12.md`](../design/DESIGN-ember-skill-sf4-micro-utility-stage0-2026-10-12.md) · RESEARCH [`RESEARCH-ember-skill-sf4-micro-utility-2026-10-12.md`](../design/RESEARCH-ember-skill-sf4-micro-utility-2026-10-12.md) · 范式 TIP-AI / D438 / guard-parry T0  
 > **结果落点：** [`RESULT-ember-skill-sf4-u1-t0-p1sim-2026-10-12.md`](../design/RESULT-ember-skill-sf4-u1-t0-p1sim-2026-10-12.md)  
 > **选题：** 总控点名 **另窗 T0 p1sim（U1 cand · G-within）**；离开 soft/开孔；**勿开 Anvil densify / L13 施工**  
@@ -86,7 +86,7 @@ TIP-BE 后开 **SF4 U1 微缓 T0 离线门禁**：钉 H-U1 cand → 跑 G-within
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [x] DESIGN + tip + RESULT 路径可点；H-U1 / cand 可核  
 - [x] power-paths：TIP-BE CLOSED + TIP-BF OPEN；L13 HOLD  
 - [x] harness checklist/cmds；离线 `kit_sf4_*` 钩  
@@ -98,8 +98,8 @@ TIP-BE 后开 **SF4 U1 微缓 T0 离线门禁**：钉 H-U1 cand → 跑 G-within
 
 ## 6. 批注（荐）
 
-- [ ] 总控批 **A · 方案 M** · 荐批  
+- [x] 总控批 **A · 方案 M** · 已批  
 - 选题：TIP-BE 后 · **SF4 U1 T0 离线 p1sim（G-within）**（docs+tools；零 skill_mult；PASS≠开工）  
 - **批注：** H-U1 主荐 U1_sl10；形状偏好施工层；离线代理 kit_sf4_*；FAIL 停；PASS 仍 HOLD 至显式开工；不派插件；L13 施工 HOLD；Anvil densify / topUpTo / soft·开孔再叠 / 灰印·聚火 / Affix / 伤乘 / 抬表 / glance twin / sx20 / 粒子 densify / ForgeChoice densify / 甲闸再扫 / 扩 stampable / SetChase 六槽 densify 仍冻  
 
-## STATUS: OPEN · 待批 A·M · sim PASS · 2026-10-12 23:14 CST · docs+tools · 零 skill_mult · 零业务 jar · HOLD 施工 · PASS≠开工
+## STATUS: CLOSED · 批 A·M · sim PASS · 总控 2026-10-12 23:15 Asia/Shanghai · docs+tools · 零 skill_mult · 零业务 jar · HOLD 施工 · PASS≠开工 · 不派插件

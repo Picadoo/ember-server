@@ -1,6 +1,6 @@
 # DESIGN · 烬斩 SF4 U1 微缓 T0 离线 p1sim（G-within）· 2026-10-12
 
-> **状态：** OPEN · TIP-BF · docs+tools · **sim PASS** · **HOLD 施工 · PASS≠开工** · 2026-10-12 23:14 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BF CLOSED · docs+tools · **sim PASS** · **HOLD 施工 · PASS≠开工** · 总控 2026-10-12 23:15 Asia/Shanghai  
 > **文首硬句：** 本文件 = **T0 离线门禁协议 + 可跑包**；**PASS ≠ 开工**。须总控 **显式开工** tip 才改 CoreRpg。**零改 skill_mult / CD / 几何盒 · 零业务 jar · 零插件派单** 直至显式开工。  
 > **对接 tip：** [`TIP-ember-skill-sf4-u1-t0-p1sim-thin-d13000-d13015-2026-10-12.md`](../tips/TIP-ember-skill-sf4-u1-t0-p1sim-thin-d13000-d13015-2026-10-12.md)  
 > **上游：** TIP-BE CLOSED stage0 APPROVED HOLD push `02db68148` · DESIGN [`DESIGN-ember-skill-sf4-micro-utility-stage0-2026-10-12.md`](DESIGN-ember-skill-sf4-micro-utility-stage0-2026-10-12.md) · RESEARCH [`RESEARCH-ember-skill-sf4-micro-utility-2026-10-12.md`](RESEARCH-ember-skill-sf4-micro-utility-2026-10-12.md)  
@@ -107,4 +107,4 @@ python3 sf4_u1_gate_t0.py judge ../../docs/design/out-sf4-u1-t0-p1sim.md
 | 范式 | tip-AI L13 stage1 · guard-parry T0 · D438 slash |
 | 旁轨 HOLD | L13 · Anvil soft densify · 灰印/聚火 |
 
-## STATUS: OPEN · TIP-BF T0 · sim PASS · HOLD 施工 · PASS≠开工 · 2026-10-12 23:14 Asia/Shanghai
+## STATUS: APPROVED · TIP-BF CLOSED T0 · sim PASS · HOLD 施工 · PASS≠开工 · 总控 2026-10-12 23:15 Asia/Shanghai · 不派插件
