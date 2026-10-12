@@ -1,6 +1,6 @@
 # RESEARCH · 装备页套装效果行跟随成套族诚实 · 2026-10-12
 
-> **状态：** OPEN · TIP-BI · docs + 可施工薄窗 · 2026-10-12  
+> **状态：** CLOSED live `1.65.798-d13063` · TIP-BI · feat `de89241c2` · 2026-10-12 23:38 Asia/Shanghai  
 > **起因：** TIP-BH CLOSED live 后总控「离开签名 lore 链 · 开下一可感变强途径」。扫 AH…BH / power-paths / DESIGN 剩债：装备页套装格 **标题已跟成套族**，**效果行写死炽愈**——成套焚烬/烬爆玩家读到错族说明；`familyBlurb` 自称与装备页同口径却未接线，且炽愈仍写 ×1.12（D293 live `sustain_hp_mult=1.00`）。  
 > **上游：** TIP-BH CLOSED live `1.65.797-d13047` · feat `ce5a4b66b` · docs `82f86182a` · TIP-P 觉醒升档白话 live · D325 四件套 live · power-paths [`DESIGN-ember-power-paths-variety-2026-10-12.md`](DESIGN-ember-power-paths-variety-2026-10-12.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify · 零伤乘 · 零抬表 · 零 SetRules/Formula 改系数 · 零改 sustain_hp_mult · 零签名 lore 再叠 · 零调律 live bad 进持件 · 零 soft·开孔再叠 · 零 Anvil densify · 零 topUpTo · 零 SF4 U2U3 · 零灰印/聚火 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 sx20 · 零 skill_mult · 零开 L13 施工 tip**
