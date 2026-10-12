@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * D241 / ARCH S3-12: registry of the 72 affix primitives, in {@link EmberRunMaps.Variety#KNOWN} order. Unknown id → null
+ * D241 / ARCH S3-12: registry of the 74 affix primitives, in {@link EmberRunMaps.Variety#KNOWN} order. Unknown id → null
  * (the Director then keeps its old fallbacks: blazing cadence, END_ROD glow, the raw id as intro).
  */
 public final class EmberAffixes {
@@ -48,7 +48,8 @@ public final class EmberAffixes {
                 AffixScore.INSTANCE, AffixPit.INSTANCE,
                 AffixEtch.INSTANCE, AffixCrater.INSTANCE,
                 AffixSever.INSTANCE, AffixChasm.INSTANCE,
-                AffixRend.INSTANCE, AffixGulf.INSTANCE}) m.put(b.id(), b);
+                AffixRend.INSTANCE, AffixGulf.INSTANCE,
+                AffixRip.INSTANCE, AffixCove.INSTANCE}) m.put(b.id(), b);
         ALL = Collections.unmodifiableMap(m);
     }
 

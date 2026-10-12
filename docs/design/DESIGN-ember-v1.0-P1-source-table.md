@@ -2578,3 +2578,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 门禁 | `tools/p1sim/affixpack35.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack35-d12239-2026-10-12.md` |
 
+### 13.148 Affix Pack 36 裂斩/澳洼（CoreRpg 1.65.758，D12240，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12240 |
+| jar | CoreRpg **1.65.758-d12240.local** |
+| balance_version | 122 → **123** |
+| 行为 | 词缀池 72→74：+`rip` 裂斩 / `cove` 澳洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack36-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack36.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack36-d12240-2026-10-12.md` |
+
