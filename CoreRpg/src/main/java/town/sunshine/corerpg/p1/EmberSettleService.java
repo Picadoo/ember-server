@@ -736,10 +736,14 @@ public final class EmberSettleService {
                 try { gp.sendActionBar("§e掉落成色 · §f" + rem); } catch (Throwable ignored) { }
             }
         }
-        if (gp != null && gp.isOnline() && EmberDropCraftPity.applicable(s, m)) { // D6817
+        if (gp != null && gp.isOnline() && EmberDropCraftPity.applicable(s, m)) { // D6817 / D12410–D12413 TIP-Q
             if (dropCForced) {
                 gp.sendMessage(EmberRunService.P + "§a精工软保底触发 · §f本次主线装≥精工1");
                 try { gp.sendActionBar("§a精工软保底 · §f精工1底"); } catch (Throwable ignored) { }
+            } else if (EmberDropCraftPity.settleRemainEnabled()) {
+                String rem = EmberDropCraftPity.remainLine(pd);
+                gp.sendMessage(EmberRunService.P + "§7掉落精工 · §f" + rem);
+                try { gp.sendActionBar("§e掉落精工 · §f" + rem); } catch (Throwable ignored) { }
             }
         }
         if (gp != null && gp.isOnline() && affixBoost) {

@@ -160,6 +160,7 @@ public final class EmberMode {
         }
         loadBoardExclude(y);
         try { EmberSetFeel.loadAwkDelta(y); } catch (Throwable ignored) { } // D12397 TIP-P
+        try { EmberDropCraftPity.loadSettleRemain(y); } catch (Throwable ignored) { } // D12413 TIP-Q
         checkConflicts();
         checkEconomyYmlMirror();
         plugin.getLogger().info("[" + MODE_ID + "] config enabled=" + configEnabled + " worlds=" + cfgWorlds

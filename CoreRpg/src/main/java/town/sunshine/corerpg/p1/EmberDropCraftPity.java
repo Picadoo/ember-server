@@ -17,6 +17,9 @@ public final class EmberDropCraftPity {
     public static final int NEED = 5;
     public static final int FLOOR = 1;
 
+    /** D12413: {@code drop_craft_pity.settle_remain}; default true when key / section absent. */
+    private static volatile boolean settleRemain = true;
+
     private EmberDropCraftPity() {}
 
     public static int get(PlayerData d) {
@@ -55,6 +58,38 @@ public final class EmberDropCraftPity {
 
     public static boolean applicable(EmberRunSession s, EmberRunMaps.MapDef m) {
         return EmberDropQualityPity.applicable(s, m);
+    }
+
+    /** D12413 TIP-Q hot flag; default true. */
+    public static boolean settleRemainEnabled() {
+        return settleRemain;
+    }
+
+    /** Apply from ember-v1.yml root (or null); absent {@code drop_craft_pity.settle_remain} → true. */
+    public static void loadSettleRemain(org.bukkit.configuration.ConfigurationSection root) {
+        if (root == null) {
+            settleRemain = true;
+            return;
+        }
+        org.bukkit.configuration.ConfigurationSection sec = root.getConfigurationSection("drop_craft_pity");
+        if (sec == null) {
+            settleRemain = true;
+            return;
+        }
+        settleRemain = sec.getBoolean("settle_remain", true);
+    }
+
+    /** Test hook; {@code null} restores default true. */
+    public static void setSettleRemainEnabledForTest(Boolean enabled) {
+        settleRemain = enabled == null || enabled.booleanValue();
+    }
+
+    /**
+     * D12410–D12413: settle chat/AB remain only when applicable, not forced, and hot flag on.
+     * Forced trigger path must never stack remain.
+     */
+    public static boolean shouldAnnounceSettleRemain(boolean applicable, boolean forced, boolean enabled) {
+        return applicable && !forced && enabled;
     }
 
     public static String remainLine(int cur) {

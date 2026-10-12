@@ -258,3 +258,7 @@ gear:
 # D12397 TIP-P set awaken vernacular feel (演出级热关；缺省 true；不抬 balance_version)
 set_feel:
   awk_delta: true
+
+# D12413 TIP-Q drop craft pity settle remain (镜像成色 else；缺省 true；不抬 NEED/FLOOR)
+drop_craft_pity:
+  settle_remain: true
