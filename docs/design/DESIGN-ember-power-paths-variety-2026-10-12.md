@@ -196,7 +196,10 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-AI CLOSED** · L13 stage1 离线门禁 · `STAGE1_L13_OFFLINE=FAIL` · HOLD 施工
+- **TIP-AJ OPEN** · `TIP-ember-sig-page-defense-summary-align-thin-d12648-d12663-2026-10-12.md` · RESEARCH `RESEARCH-ember-sig-page-defense-summary-align-2026-10-12.md` · DESIGN `DESIGN-ember-sig-page-defense-summary-align-2026-10-12.md` · 签名页防具侧生效摘要对齐（可施工薄 · 可感 UX · 零功率表）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· 深化 densify 仍冻 · 策划 docs-only
+
+- **TIP-AI CLOSED** · L13 stage1 离线门禁 · `STAGE1_L13_OFFLINE=FAIL` · HOLD 施工 · commit `ebe752be4` · **显式开工前不开 L13 施工 tip**
+
 
 - **TIP-AI OPEN** · `TIP-ember-blade-sig-l13-stage1-offline-thin-d12632-d12647-2026-10-12.md` · DESIGN `DESIGN-ember-blade-sig-l13-stage1-offline-2026-10-12.md` · RESULT PENDING · 刃 L13 stage1 离线门禁（钉 **R1+R2** · docs+tools · 零改 L13 mods · 零业务 jar · PASS≠开工）· R5 升级轨 · TIP-AD exclude 保留 · 深化 densify / STAMP / skill_mult 仍冻
 
