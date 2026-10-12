@@ -1,6 +1,6 @@
 # tip · TIP-BJ 宝石效果短诚实（合成/镶嵌/石物 lore · 可施工薄 · 可感变强途径）· D13064–D13079
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** + **余烬-物品** · 2026-10-12 23:44 Asia/Shanghai  
+> **状态：** **CLOSED live `1.65.799-d13079`** · feat `72cba2db4` · items `bc1e63407` · 批 A·M · 2026-10-12 23:46 Asia/Shanghai  
 > **上游门禁：** TIP-BI CLOSED live `1.65.798-d13063` · feat `de89241c2` · items `2cb3917e7` · docs `1040ffb39` · RESEARCH [`RESEARCH-ember-gem-effect-short-honesty-2026-10-12.md`](../design/RESEARCH-ember-gem-effect-short-honesty-2026-10-12.md) · DESIGN [`DESIGN-ember-gem-effect-short-honesty-2026-10-12.md`](../design/DESIGN-ember-gem-effect-short-honesty-2026-10-12.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 离开套装 blurb 链 → **宝石效果短诚实**（**非 densify · 非抬 gem flat · 非 soft/开孔再叠 · 非 SF4 · 非 Anvil · 非签名 lore · 非套装 blurb 再叠 · 非效果长墙**）  
 > **施工岗（批后派单）：** **余烬-插件**（`shortEffect` / `effectLine` 幅度对齐 · 座椅 cue · 单测）；**余烬-物品**（`ember-enhance-gems.yml` · `ember_p1_gem.yml` · 可选 `ember_socket.yml`）  
@@ -93,7 +93,7 @@
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [x] 文首 HOLD / 选题否决表可核  
-- [ ] 批后才派 **余烬-插件** + **余烬-物品**；策划本窗 **无**业务 jar  
+- [x] 批后才派 **余烬-插件** + **余烬-物品**；策划本窗 **无**业务 jar  
 - [x] `git show` docs-only（本 commit）；L13 施工仍 HOLD  
 
 ---
@@ -105,4 +105,4 @@
 - **批后派岗：** 余烬-插件 + 余烬-物品  
 - **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；调律 live bad 进持件；签名 lore 再叠；套装 blurb 再叠；甲闸再扫；扩 stampable；SetChase 六槽 densify；效果长墙  
 
-## STATUS: APPROVED · 批 A·M · 已派余烬-插件+余烬-物品 · 2026-10-12 23:44 Asia/Shanghai
+## STATUS: CLOSED live `1.65.799-d13079` · feat `72cba2db4` · items `bc1e63407` · 批 A·M · Enabling+Done 5.2s · 2026-10-12 23:46 Asia/Shanghai
