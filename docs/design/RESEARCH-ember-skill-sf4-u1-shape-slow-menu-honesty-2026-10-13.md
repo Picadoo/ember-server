@@ -1,6 +1,6 @@
 # RESEARCH · 烬斩 SF4 U1 技能页形缓展示诚实（离开升阶保留 · 非工坊半行）· 2026-10-13
 
-> **状态：** OPEN · TIP-BP · 待批 A·M · 2026-10-13 00:21 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BP · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:24 Asia/Shanghai  
 > **起因：** TIP-BO CLOSED live 后总控「离开升阶保留链 · 开下一可感变强途径」。prefer **非**工坊 TrMenu lore 半行；扫 AH…BO / power-paths / BO 旁债 #12：SF4 U1_sl10 **已 live**（TIP-BG），技能页仍不写形缓。  
 > **上游：** TIP-BO CLOSED live items `64fe9f46e` · jar 未改 `1.65.800-d13143` · TIP-BG CLOSED live `1.65.796-d13031` · `EmberSkillSf4` · `ember_skill_kit.yml` · power-paths · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify · 零伤乘 · 零抬表 · 零抬 RATE/upgradeCost · 零抬 talent/gem/副手 flat · 零 soft·开孔再叠 · 零 Anvil densify · 零 topUpTo · 零 SF4 U2U3 · 零改 skill_mult/CD/几何/MARK_TICKS · 零灰印/聚火 · 零签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留再叠 · 零调律 live bad · 零并轨 B · 零 SetRules/Formula 抬 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 ConvertCap densify · 零 sx20 · 零开 L13 施工 tip · 零效果长墙 · 零 lore>3**
@@ -77,4 +77,4 @@
 - 升阶保留 / 强化率 / 签名 lore / 套装 blurb / 宝石 / 天赋 / 烙纹 / 副手再叠  
 - 把 D438 套装缓与 SF4 形缓写成同一「缓速表」 · 效果长墙 · lore>3 · 新 PAPI
 
-## STATUS: OPEN · TIP-BP · 待批 A·M · 2026-10-13 00:21 Asia/Shanghai
+## STATUS: APPROVED · TIP-BP · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:24 Asia/Shanghai

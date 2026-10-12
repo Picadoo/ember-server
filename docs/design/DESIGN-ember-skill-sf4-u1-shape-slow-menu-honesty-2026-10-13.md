@@ -1,6 +1,6 @@
 # DESIGN · 烬斩 SF4 U1 技能页形缓展示诚实（技能 TrMenu · 薄窗 · 可施工）· 2026-10-13
 
-> **状态：** OPEN · TIP-BP · 待批 A·M · 2026-10-13 00:21 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BP · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:24 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-skill-sf4-u1-shape-slow-menu-honesty-2026-10-13.md`](RESEARCH-ember-skill-sf4-u1-shape-slow-menu-honesty-2026-10-13.md)  
 > **对接 live：** TIP-BO CLOSED live items `64fe9f46e` · TIP-BG CLOSED live `1.65.796-d13031` · `EmberSkillSf4`（MARK_TICKS=20 · SLOW_AMP=0 · HIT_LIM=3）· `ember_skill_kit.yml` Icon `A` · BO 旁债 #12  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留再叠 / soft·开孔再叠 **仍冻**  
@@ -98,4 +98,4 @@
 | 11 | Affix densify / 抬 skill_mult | **仍冻** |
 | 12 | cook/AFK 已齐轴再叠 | **仍冻再叠** |
 
-## STATUS: OPEN · TIP-BP · 待批 A·M · 2026-10-13 00:21 Asia/Shanghai
+## STATUS: APPROVED · TIP-BP · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:24 Asia/Shanghai
