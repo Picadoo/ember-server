@@ -100,4 +100,4 @@
 - 选题：TIP-AO 后 · **换轴可感 UX** — 宝石通关保底加码 remain 诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify**）  
 - **批注：** AN→AO 追烙链已齐；`GemPityNudge` 日首 +1 live 但 remain/hub 仍按裸 cur/5 多报「再通关 n 次」；`ready && left>1 → left-1` + 尾缀「今日加码待用」；零改 NEED/BONUS；零新 PAPI；批后派 **余烬-插件**；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 仍冻  
 
-## STATUS: OPEN · TIP-AP · 2026-10-12
+## STATUS: CLOSED · live 1.65.781-d12759 · c5c7ae391 · 2026-10-12 21:03 CST
