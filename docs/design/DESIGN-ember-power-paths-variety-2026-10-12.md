@@ -181,4 +181,5 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - Affix Pack：**FROZEN**
 - TIP-D：**CLOSED live**（1.65.761-d12271）
 - TIP-E：**CLOSED live**（1.65.762-d12279）
-- 下窗：**TIP-F 技能手感一眼** → tip 已开 `docs/tips/TIP-ember-power-skill-feel-glance-d12280-d12287-2026-10-12.md`（待批 A·M）
+- TIP-F：**CLOSED live**（1.65.763-d12287）
+- 下窗：**TIP-G 签名手感一眼** → tip 已开 `docs/tips/TIP-ember-power-sig-feel-glance-d12288-d12295-2026-10-12.md`（待批 A·M）
