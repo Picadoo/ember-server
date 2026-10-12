@@ -254,3 +254,7 @@ gear:
     enabled: true
     migrate: true
     set_bonus: true  # D325 Stage2 四件套减伤；须 enabled
+
+# D12397 TIP-P set awaken vernacular feel (演出级热关；缺省 true；不抬 balance_version)
+set_feel:
+  awk_delta: true

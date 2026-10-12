@@ -81,11 +81,21 @@ public final class EmberAwakenBreak {
         if (d != null && d.periodCount(key, "all") == 0) {
             d.addPeriodCount(key, "all", 1);
             String roman = after.awakening == 3 ? "III" : after.awakening == 2 ? "II" : "I";
+            // D12396 TIP-P: append set-feel awk delta half-line (vernacular; zero coef change)
+            String delta = "";
+            try {
+                if (EmberSetFeel.awkDeltaEnabled()) {
+                    delta = EmberSetFeel.awkDeltaLine(after.activeSet, prevAwk, after.awakening);
+                    if (delta == null) delta = "";
+                }
+            } catch (Throwable ignored) { delta = ""; }
+            String deltaSuffix = delta.isEmpty() ? "" : " · " + delta;
             p.sendMessage(EmberRunService.P + "§a觉醒突破 · §f觉醒" + roman
                     + " §7· " + after.setLabel()
-                    + (after.awakening < 3 ? " §8· " + after.awakeningRemain() : " §8· 已满"));
+                    + (after.awakening < 3 ? " §8· " + after.awakeningRemain() : " §8· 已满")
+                    + deltaSuffix);
             try {
-                p.sendActionBar("§a觉醒" + roman + " · §f" + after.setLabel());
+                p.sendActionBar("§a觉醒" + roman + " · §f" + after.setLabel() + deltaSuffix);
             } catch (Throwable ignored) { }
             try { EmberAwakenBlankGift.maybeGift(p, d); } catch (Throwable ignored) { } // D10865
         }
@@ -152,6 +162,7 @@ public final class EmberAwakenBreak {
         loadouts.refresh(p);
         return true;
     }
+
 
     private static CoreRpgPlugin plugin() {
         org.bukkit.plugin.Plugin pl = org.bukkit.Bukkit.getPluginManager().getPlugin("CoreRpg");

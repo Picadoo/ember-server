@@ -37,4 +37,14 @@ public class EmberAwakenBreakTest {
         assertFalse(EmberAwakenBreak.shouldSwapEnhance(neu, old));
         assertFalse(EmberAwakenBreak.shouldSwapEnhance(old, old));
     }
+
+    @Test
+    public void awkDeltaLine_wiredForBreakPath() {
+        // D12396: break path appends EmberSetFeel.awkDeltaLine; pure helper stays non-empty for rises
+        assertTrue(EmberSetFeel.awkDeltaEnabled());
+        assertTrue(EmberSetFeel.awkDeltaLine("scorch", 1, 2).contains("燃跳更烫"));
+        EmberSetFeel.setAwkDeltaEnabledForTest(Boolean.FALSE);
+        assertFalse(EmberSetFeel.awkDeltaEnabled());
+        EmberSetFeel.setAwkDeltaEnabledForTest(null);
+    }
 }

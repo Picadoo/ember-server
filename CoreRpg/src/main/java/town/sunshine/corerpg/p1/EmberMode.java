@@ -159,6 +159,7 @@ public final class EmberMode {
             plugin.getLogger().log(Level.WARNING, "[" + MODE_ID + "] bad tables in " + FILE + ", using book defaults: " + ex.getMessage());
         }
         loadBoardExclude(y);
+        try { EmberSetFeel.loadAwkDelta(y); } catch (Throwable ignored) { } // D12397 TIP-P
         checkConflicts();
         checkEconomyYmlMirror();
         plugin.getLogger().info("[" + MODE_ID + "] config enabled=" + configEnabled + " worlds=" + cfgWorlds
