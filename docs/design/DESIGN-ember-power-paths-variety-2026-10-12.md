@@ -184,4 +184,4 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - TIP-F：**CLOSED live**（1.65.763-d12287）
 - TIP-G：**CLOSED live**（1.65.764-d12295）
 - TIP-H：**CLOSED live**（trmenu `82512b4d`）
-- 下窗：**TIP-I 希望/图装补漏（HD1+MG1）** → tip 已开 `docs/tips/TIP-ember-power-hope-map-remain-glance-d12304-d12311-2026-10-12.md`（待批 A·M）
+- **TIP-I 批 A·M** · tip `TIP-ember-power-hope-map-remain-glance-d12304-d12311` · 交插件岗（HD1+MG1）

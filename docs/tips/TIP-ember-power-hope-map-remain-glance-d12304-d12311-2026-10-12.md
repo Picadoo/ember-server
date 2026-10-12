@@ -1,6 +1,6 @@
 # tip · TIP-I 希望表盘补漏 + 图装下一缺（HD1/MG1 剩余表面化）· D12304–D12311
 
-> **状态：** 待批 A（策划 tip · 2026-10-12 16:10 Asia/Shanghai）· 方案 **M**  
+> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:11 Asia/Shanghai）· 交插件岗  
 > **上游：** [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md) **§3.1 HD1** · **§3.3 MG1** · TIP-A/C 已 CLOSED（薄窗单轨 / Q 格 mapid）  
 > **前置：** TIP-A～H CLOSED live（至 TIP-H `82512b4d`）  
 > **施工岗：** 插件岗（展示短串 + TrMenu；**零改 pity/掉率**）  
@@ -66,6 +66,7 @@
 
 ## 4. 批注
 
-- [ ] 总控批 **A · 方案 M**
-- tip 待推 · 交插件岗
+- [x] 总控批 **A · 方案 M** · 2026-10-12 16:11 CST
+- tip 已推 · 交插件岗
 - 变强途径续：**TIP-I · HD1/MG1 补漏**；§3 其余轴不借机 densify
+- **批注：** `menuNow` 复用 `priorityTracks`+`progressLine`；`mapid_focus` 新建一处即可；`nextMissing` 压缩去「下一缺 · 」空格防串爆；hub `w` 现静态 L1→换 `hope_now`；冒险七格结构不动
