@@ -54,4 +54,56 @@ public class EmberForgeCommitNextTest {
         assertEquals("/corerpg p1 quality", EmberForgeCommitNext.quality(blade(0, 0))[1]);
         assertEquals("/corerpg p1 refine", EmberForgeCommitNext.refine(blade(0, 0))[1]);
     }
+
+    private static EmberItemData armor(String slot, int q, int craft) {
+        return new EmberItemData("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                EmberItemData.templateId("scorch", slot, 2), "scorch", slot, 2, q, craft, 0, 0, true, "drop", 1, 1);
+    }
+
+    /** TIP-AL DESIGN §2.3: armor quality/refine → null. */
+    @Test
+    public void armorQualityRefineNull() {
+        for (String slot : new String[]{"head", "chest", "legs", "boots"}) {
+            EmberItemData a = armor(slot, 0, 0);
+            assertTrue(a.isArmor());
+            assertNull("quality null for " + slot, EmberForgeCommitNext.quality(a));
+            assertNull("refine null for " + slot, EmberForgeCommitNext.refine(a));
+        }
+    }
+
+    /** TIP-AL DESIGN §2.3: blade quality/refine still open at q0/c0 (regression). */
+    @Test
+    public void bladeQualityRefineStillOpen() {
+        assertNotNull(EmberForgeCommitNext.quality(blade(0, 0)));
+        assertNotNull(EmberForgeCommitNext.refine(blade(0, 0)));
+        assertEquals("/corerpg p1 quality", EmberForgeCommitNext.quality(blade(0, 0))[1]);
+        assertEquals("/corerpg p1 refine", EmberForgeCommitNext.refine(blade(0, 0))[1]);
+    }
+
+    /** TIP-AL DESIGN §2.3: armorHonestPack has no enhance/quality/refine/upgrade cmds. */
+    @Test
+    public void armorHonestPackForbidsForgeProgressCmds() {
+        String[][] pack = EmberForgeCommitNext.armorHonestPack();
+        assertEquals(3, pack.length);
+        String joined = "";
+        for (String[] btn : pack) {
+            assertNotNull(btn);
+            assertTrue(btn.length >= 2);
+            joined += btn[1] + " ";
+        }
+        assertFalse(joined.contains("/corerpg p1 enhance"));
+        assertFalse(joined.contains("/corerpg p1 quality"));
+        assertFalse(joined.contains("/corerpg p1 refine"));
+        assertFalse(joined.contains("/corerpg p1 upgrade"));
+        assertTrue(joined.contains("/corerpg p1 dismantle"));
+        assertTrue(joined.contains("/corerpg p1 setchase"));
+        assertTrue(joined.contains("/corerpg p1 forge"));
+    }
+
+    /** TIP-AL DESIGN §2.3: enhance() no-item API retained. */
+    @Test
+    public void enhanceNoItemApiRetained() {
+        assertEquals("/corerpg p1 enhance", EmberForgeCommitNext.enhance()[1]);
+        assertEquals("[去强化]", EmberForgeCommitNext.enhance()[0]);
+    }
 }

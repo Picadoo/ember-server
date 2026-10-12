@@ -6,6 +6,7 @@ import town.sunshine.corerpg.ConfirmTokens;
 
 /**
  * D2086 CN1: shared piece-aware deterministic next buttons after forge spends.
+ * TIP-AL: armor paths use {@link #armorHonestPack} (no fake enhance/quality/refine/upgrade).
  * Zero price / rate invent. Not a status remainLine twin.
  */
 public final class EmberForgeCommitNext {
@@ -17,15 +18,33 @@ public final class EmberForgeCommitNext {
     }
 
     public static String[] quality(EmberItemData d) {
+        // TIP-AL D12684: armor never projects quality (≡ K0 / AK HeldNext)
+        if (d != null && d.isArmor()) return null;
         if (d != null && EmberUpgradeRules.qualityCost(d.quality) != null)
             return new String[]{"[去成色]", "/corerpg p1 quality", "确定升成色", "YELLOW"};
         return null;
     }
 
     public static String[] refine(EmberItemData d) {
+        // TIP-AL D12684: armor never projects refine
+        if (d != null && d.isArmor()) return null;
         if (d != null && EmberUpgradeRules.refineCost(d.craft) != null)
             return new String[]{"[去精工]", "/corerpg p1 refine", "确定升精工", "AQUA"};
         return null;
+    }
+
+    /**
+     * TIP-AL D12685: armor honest next pack — dismantle / setchase / forge.
+     * Never enhance / quality / refine / upgrade command strings.
+     * Package-visible shape for unit tests ({@link #armorHonestPack}).
+     */
+    public static String[] dismantleTenthsBtn() {
+        return new String[]{"[分解零头]", "/corerpg p1 dismantle", "护甲随护符·可分解零头", "YELLOW"};
+    }
+
+    /** TIP-AL: three-button pack [dismantle, setchase, forge] for armor paths. */
+    public static String[][] armorHonestPack() {
+        return new String[][]{dismantleTenthsBtn(), setchase(), forge()};
     }
 
     public static String[] lock(EmberItemData d) {
@@ -115,6 +134,12 @@ public final class EmberForgeCommitNext {
      * {@code held} may be null → generic upgrade/brand.
      */
     public static void afterBlanks(Player p, EmberItemData held) {
+        // TIP-AL D12686: holding armor → honest pack (no quality/refine/upgrade push)
+        if (held != null && held.isArmor()) {
+            String[][] pack = armorHonestPack();
+            send3(p, EmberRunService.P + "§7胚料下一环：", pack[0], pack[1], pack[2]);
+            return;
+        }
         String[] a = quality(held);
         if (a == null) a = refine(held);
         if (a == null) a = new String[]{"[去升阶]", "/corerpg p1 upgrade", "手持件升阶（花胚料）", "GREEN"};
@@ -132,6 +157,12 @@ public final class EmberForgeCommitNext {
 
     /** After gear delivery into backpack: commit first craft on that piece. */
     public static void afterGearDeliver(Player p, EmberItemData piece) {
+        // TIP-AL D12685: armor deliver → honest pack (forbid enhance/quality/refine/upgrade)
+        if (piece != null && piece.isArmor()) {
+            String[][] pack = armorHonestPack();
+            send3(p, EmberRunService.P + "§7到账下一环：", pack[0], pack[1], pack[2]);
+            return;
+        }
         String[] a = enhance();
         String[] b = quality(piece);
         if (b == null) b = refine(piece);

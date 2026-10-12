@@ -49,9 +49,10 @@ public final class EmberBlankLoop {
         String[] a = new String[]{"[再分解]", "/corerpg p1 scrap", "继续攒零头", "YELLOW"};
         String[] b = EmberForgeCommitNext.quality(held);
         if (b == null) b = EmberForgeCommitNext.refine(held);
-        if (b == null) b = new String[]{"[去升阶]", "/corerpg p1 upgrade", "有整胚再升阶", "GOLD"};
+        // TIP-AL D12687: when quality/refine both null (armor / empty), never hardcode upgrade-on-armor
+        if (b == null) b = EmberForgeCommitNext.setchase();
         EmberForgeCommitNext.send3(p, P + "§7零头下一环：", a, b,
-                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GRAY"});
+                EmberForgeCommitNext.forge());
     }
 
     static EmberItemData heldGear(Player p) {
