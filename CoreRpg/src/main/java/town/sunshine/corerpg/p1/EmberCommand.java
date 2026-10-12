@@ -52,6 +52,8 @@ public final class EmberCommand {
         }
         if ("setchase".equals(sub) || "成套追".equals(sub))
             return EmberSetChase.cmd(s, args, runs, loadouts);
+        if ("hope".equals(sub) || "希望".equals(sub)) // D12242–D12244 hope glance
+            return hopeGlanceCmd(s, args);
         if ("status".equals(sub)) return status(s);
         if ("charm".equals(sub)) return charm(s, args);
         if ("inspect".equals(sub)) return inspect(s);
@@ -6925,4 +6927,90 @@ public final class EmberCommand {
                     + (runs != null && runs.hasPendingAlert(t) ? "（有预告）" : "（无预告）"));
             return true;
     }
+
+    /** D12242–D12244: hub「希望」— 三行聊天 + 开工坊 / cycle / peek. Display only. */
+    private boolean hopeGlanceCmd(CommandSender s, String[] args) {
+        if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+        Player p = (Player) s;
+        PlayerData d = runs == null ? null : runs.dataOf(p.getUniqueId());
+        EmberItemData held = null;
+        try {
+            if (loadouts != null) {
+                org.bukkit.inventory.ItemStack hand = p.getInventory().getItemInMainHand();
+                if (hand != null && loadouts.items().hasData(hand)) {
+                    EmberItems.Read r = loadouts.items().read(hand);
+                    if (r != null && r.ok()) held = r.data;
+                }
+            }
+        } catch (Throwable ignored) { }
+        EmberForgeHeldNext.Mats mats = new EmberForgeHeldNext.Mats(0, 0, 0, d == null ? 0 : Math.max(0, d.getCoin()));
+        try {
+            if (runs != null && runs.plugin() != null && runs.plugin().getNiBridge() != null) {
+                town.sunshine.corerpg.NiBridge ni = runs.plugin().getNiBridge();
+                long shard = ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD);
+                long blank = ni.countInInventory(p, EmberUpgradeRules.MAT_BLANK);
+                long bone = ni.countInInventory(p, EmberUpgradeRules.MAT_BONE);
+                long coin = d == null ? 0L : Math.max(0L, d.getCoin());
+                mats = new EmberForgeHeldNext.Mats(shard, blank, bone, coin);
+            }
+        } catch (Throwable ignored) { }
+        int rerollPity = 0, rerollNeed = 5;
+        try {
+            EmberGrowthService gs = EmberGrowthService.get();
+            if (gs != null && gs.reroll() != null) rerollNeed = Math.max(1, gs.reroll().pity);
+            if (gs != null && d != null) {
+                // Prefer held blade/charm with afPity; else any loadout piece with progress
+                if (held != null && (held.isBlade() || held.isCharm())) {
+                    rerollPity = Math.max(0, gs.afPityOf(d, held));
+                }
+                if (rerollPity <= 0 && loadouts != null) {
+                    try {
+                        EmberLoadout lo = loadouts.get(p);
+                        if (lo != null) {
+                            for (EmberItemData it : new EmberItemData[] { lo.blade, lo.charm }) {
+                                if (it == null) continue;
+                                int pity = Math.max(0, gs.afPityOf(d, it));
+                                if (pity > rerollPity) rerollPity = pity;
+                            }
+                        }
+                    } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
+        EmberSignature.Def chase = EmberSigChase.get(d);
+        int marks = 0;
+        if (chase != null && d != null) {
+            marks = d.periodCount(EmberSignature.C_MARK + chase.map, "all");
+        }
+        java.util.List<EmberHopeMeter.Track> tracks = EmberHopeMeter.priorityTracks(
+                held, d, mats, rerollPity, rerollNeed, chase, marks);
+        String mode = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+        if ("cycle".equals(mode) || "next".equals(mode) || "切换".equals(mode)) { // D12243
+            int idx = EmberHopeMeter.cycle(d, tracks.size());
+            if (runs != null) runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+            EmberHopeMeter.Track t = tracks.get(idx % tracks.size());
+            p.sendMessage(P + "§e希望轨 → §f" + t.title);
+            return true;
+        }
+        EmberHopeMeter.Track cur = EmberHopeMeter.current(d, tracks);
+        if ("peek".equals(mode) || "openline".equals(mode) || "line".equals(mode)) { // D12244
+            p.sendMessage(P + EmberHopeMeter.openTellLine(cur));
+            return true;
+        }
+        // D12242: three chat lines + open forge
+        for (String line : EmberHopeMeter.chatLines(cur)) {
+            p.sendMessage(P + line);
+        }
+        if (d != null && cur.forgeGoal != EmberForgeGoal.NONE) {
+            try {
+                EmberForgeGoal.set(d, cur.forgeGoal);
+                if (runs != null) runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+            } catch (Throwable ignored) { }
+        }
+        org.bukkit.Bukkit.dispatchCommand(org.bukkit.Bukkit.getConsoleSender(),
+                "trmenu open ember_p1_forge " + p.getName());
+        return true;
+    }
+
+
 }

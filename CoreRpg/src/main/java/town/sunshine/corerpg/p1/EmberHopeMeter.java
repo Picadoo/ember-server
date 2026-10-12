@@ -1,5 +1,7 @@
 package town.sunshine.corerpg.p1;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import town.sunshine.corerpg.PlayerData;
@@ -324,6 +326,188 @@ public final class EmberHopeMeter {
     public static String convertHope(String line) {
         if (line == null || line.isEmpty()) return "§8转化希望 · 未选目标";
         return "§e转化希望 · " + line;
+    }
+
+
+    // ------------------------------------------------------------------ D12241 hope-glance priority track (display only)
+
+    /** Soft index into {@link #priorityTracks}; not pity math. */
+    public static final String C_HOPE_I = "p1_hope_i";
+
+    /** One priority track for hub「希望」glance (D12241). */
+    public static final class Track {
+        public final String id;
+        public final String title;
+        public final String progressLine;
+        public final String matHalf;
+        public final String forgeHint;
+        public final int forgeGoal; // EmberForgeGoal id or NONE
+
+        public Track(String id, String title, String progressLine, String matHalf, String forgeHint, int forgeGoal) {
+            this.id = id == null ? "" : id;
+            this.title = title == null ? "" : title;
+            this.progressLine = progressLine == null ? "" : progressLine;
+            this.matHalf = (matHalf == null || matHalf.isEmpty()) ? "材料够" : matHalf;
+            this.forgeHint = forgeHint == null ? "打开工坊" : forgeHint;
+            this.forgeGoal = forgeGoal;
+        }
+    }
+
+    public static final Track FALLBACK = new Track(
+            "fallback",
+            "稳养",
+            "§8今天可稳养：分解差装 → 工坊强化",
+            "材料够",
+            "点强化",
+            EmberForgeGoal.ENHANCE);
+
+    /**
+     * Material half-line for forge costs (display). Empty lack → {@code 材料够}.
+     * Mirrors {@link EmberGearNextHint#lackHalf} style without Bukkit.
+     */
+    public static String matHalfOf(EmberUpgradeRules.Cost c, EmberForgeHeldNext.Mats m) {
+        if (c == null) return "材料够";
+        if (m == null) return "材料够";
+        if (EmberForgeHeldNext.canPay(c, m)) return "材料够";
+        List<String> lack = new ArrayList<String>(4);
+        if (c.shards > m.shard) lack.add("碎片 " + m.shard + "/" + c.shards);
+        if (c.blanks > m.blank) lack.add("胚料 " + m.blank + "/" + c.blanks);
+        if (c.bone > m.bone) lack.add("骨尘 " + m.bone + "/" + c.bone);
+        if (c.coins > m.coin) lack.add("余烬币 " + m.coin + "/" + c.coins);
+        String half = EmberGearNextHint.lackHalf(lack);
+        return half.isEmpty() ? "材料够" : half;
+    }
+
+    /** Prefer precomputed lackHalf string from forge.lackingFor when available. */
+    public static String matHalfFromLack(List<String> lack) {
+        String half = EmberGearNextHint.lackHalf(lack);
+        return half == null || half.isEmpty() ? "材料够" : half;
+    }
+
+    /**
+     * D12241: ordered tracks — enhance → quality → refine → reroll(progress) → drop_q → gem → sig.
+     * Empty hand → fallback only. Holding a piece: skip ineligible held tracks; account tracks follow.
+     * Zero pity/RATE/cost change.
+     */
+    public static List<Track> priorityTracks(EmberItemData held, PlayerData pd,
+                                            EmberForgeHeldNext.Mats mats,
+                                            int rerollPity, int rerollNeed,
+                                            EmberSignature.Def chaseDef, int chaseMarks) {
+        List<Track> out = new ArrayList<Track>(8);
+        if (held == null) {
+            out.add(FALLBACK);
+            return out;
+        }
+        boolean heldOk = !held.isArmor();
+        if (heldOk) {
+            EmberUpgradeRules.Plan enh = EmberUpgradeRules.enhanceCheck(held);
+            if (enh != null && enh.ok()) {
+                out.add(new Track("enhance", "强化保底",
+                        enhance(held),
+                        matHalfOf(enh.cost, mats),
+                        "点强化",
+                        EmberForgeGoal.ENHANCE));
+            }
+            if (held.quality < QUALITY_FORGE_CAP) {
+                EmberUpgradeRules.Cost qc = EmberUpgradeRules.qualityCost(held.quality);
+                out.add(new Track("quality", "成色希望",
+                        quality(held),
+                        matHalfOf(qc, mats),
+                        "点成色",
+                        EmberForgeGoal.QUALITY));
+            }
+            if (held.craft < EmberTables.MAX_CRAFT) {
+                EmberUpgradeRules.Cost rc = EmberUpgradeRules.refineCost(held.craft);
+                out.add(new Track("refine", "精工希望",
+                        refine(held),
+                        matHalfOf(rc, mats),
+                        "点精工",
+                        EmberForgeGoal.REFINE));
+            }
+        }
+        // Reroll: blade/charm with pity progress (caller prefers held, else loadout)
+        if (rerollPity > 0 && rerollNeed > 0) {
+            out.add(new Track("reroll", "洗练保底",
+                    EmberRerollPity.glance(rerollPity, rerollNeed),
+                    "材料够",
+                    "去洗练",
+                    EmberForgeGoal.LOCK));
+        }
+        // Account tracks when holding something
+        out.add(new Track("drop_q", "掉落成色",
+                EmberDropQualityPity.hope(pd),
+                "材料够",
+                "看掉落成色",
+                EmberForgeGoal.NONE));
+        out.add(new Track("gem", "宝石通关保底",
+                EmberGemAcquire.hopeLine(pd),
+                "材料够",
+                "通关攒石",
+                EmberForgeGoal.GEM));
+        if (chaseDef != null) {
+            out.add(new Track("sig", "签名追烙",
+                    sigChase(chaseDef, chaseMarks),
+                    "材料够",
+                    "去追烙",
+                    EmberForgeGoal.NONE));
+        }
+        if (out.isEmpty()) out.add(FALLBACK);
+        return out;
+    }
+
+    public static int hopeIndex(PlayerData d) {
+        if (d == null) return 0;
+        return Math.max(0, d.periodCount(C_HOPE_I, "all"));
+    }
+
+    /** Current track by soft index {@link #C_HOPE_I}. */
+    public static Track current(PlayerData d, List<Track> tracks) {
+        if (tracks == null || tracks.isEmpty()) return FALLBACK;
+        int i = hopeIndex(d) % tracks.size();
+        return tracks.get(i);
+    }
+
+    /**
+     * Pure/testable current: builds tracks then selects by soft index.
+     * Optional matHalfOverride replaces matHalf on the selected track when non-null/non-empty
+     * (e.g. live forge.lackingFor → lackHalf).
+     */
+    public static Track current(EmberItemData held, PlayerData pd,
+                                EmberForgeHeldNext.Mats mats,
+                                int rerollPity, int rerollNeed,
+                                EmberSignature.Def chaseDef, int chaseMarks,
+                                String matHalfOverride) {
+        List<Track> tracks = priorityTracks(held, pd, mats, rerollPity, rerollNeed, chaseDef, chaseMarks);
+        Track t = current(pd, tracks);
+        if (matHalfOverride != null && !matHalfOverride.isEmpty() && t != FALLBACK) {
+            return new Track(t.id, t.title, t.progressLine, matHalfOverride, t.forgeHint, t.forgeGoal);
+        }
+        return t;
+    }
+
+    /** D12243: advance soft index; returns new index. Does not touch pity math. */
+    public static int cycle(PlayerData d, int size) {
+        if (d == null || size <= 0) return 0;
+        int cur = hopeIndex(d);
+        int next = (cur + 1) % size;
+        d.addPeriodCount(C_HOPE_I, "all", next - cur);
+        return next;
+    }
+
+    /** Hub Open / peek one-liner (D12244): current progressLine only. */
+    public static String openTellLine(Track t) {
+        if (t == null) t = FALLBACK;
+        return t.progressLine;
+    }
+
+    /** Chat three lines skeleton (D12242). */
+    public static List<String> chatLines(Track t) {
+        if (t == null) t = FALLBACK;
+        List<String> lines = new ArrayList<String>(3);
+        lines.add("§e希望 · " + t.title);
+        lines.add("§7" + t.progressLine + " §8· " + t.matHalf);
+        lines.add("§e➥ §f打开工坊 · " + t.forgeHint);
+        return lines;
     }
 
 }

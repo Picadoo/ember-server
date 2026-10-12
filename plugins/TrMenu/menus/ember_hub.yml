@@ -15,7 +15,7 @@ Options:
   Hide-Player-Inventory: false
   Min-Click-Delay: 200
 Layout:
-  - 'LnHo p FS'
+  - 'LnHowp FS'
   - 'TBmX k i '
   - 'ZR c Y d '
   - 'Q A G U j'
@@ -24,6 +24,7 @@ Events:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'tell: §e今天：§f%corerpg_p1_route_pri%'
     - 'tell: §8%corerpg_p1_route_sec%'
+    - 'command: corerpg p1 hope peek'
     - 'tell: §7右键手中「余烬星」随时打开本页 · 勿敲指令'
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
@@ -85,6 +86,25 @@ Icons:
       right:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_short'
+
+
+  # D12245–D12247 希望一眼（单轨优先 · 左汇报开工坊 · 右切轨 · 零新 PAPI）
+  w:
+    update: 20
+    display:
+      material: ender pearl
+      name: '§e希望'
+      lore:
+        - '§7当前优先轨（点左看进度）'
+        - '§8右键切换 · 不改数值'
+        - '§e➥ §f左：汇报并开工坊 · 右：下一条'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 hope'
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 hope cycle'
 
   # D177 rev 2 挂机庭（P1）：按主线首通开放四层，自动战斗；币 + 经验 + 账号绑定材料，每日 2400 只
   Z:
