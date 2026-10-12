@@ -16,18 +16,7 @@ public final class EmberGemSeatLive {
     private EmberGemSeatLive() {}
 
     public static String effectLine(int code) {
-        switch (code) {
-            case EmberGems.CODE_SHARP:
-                return "锋利 · 计入攻击（刃 T" + EmberGems.SHARP_MIN_TIER + "+）";
-            case EmberGems.CODE_STEADY:
-                return "稳御 · 计入防御";
-            case EmberGems.CODE_DRAIN:
-                return "汲魂 · 命中吸血";
-            case EmberGems.CODE_GALE:
-                return "疾风 · 移速";
-            default:
-                return null;
-        }
+        return EmberGems.shortEffect(code);
     }
 
     /** True when this code would contribute to loadout combat right now. */

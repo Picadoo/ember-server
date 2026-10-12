@@ -57,4 +57,31 @@ public final class EmberGems {
         }
         return n;
     }
+
+    /**
+     * TIP-BJ: ≤1-line short effect from live constants (display only; zero flat raise).
+     * Stone names: 锋利/稳固/汲取/疾风. Sharp notes blade T{SHARP_MIN_TIER}+.
+     */
+    public static String shortEffect(int code) {
+        switch (code) {
+            case CODE_SHARP:
+                return "锋利 · 攻击+" + fmtFlat(SHARP_ATK) + "（刃 T" + SHARP_MIN_TIER + "+ 才计）";
+            case CODE_STEADY:
+                return "稳固 · 防御+" + fmtFlat(STEADY_DEF);
+            case CODE_DRAIN:
+                return "汲取 · 吸血+" + fmtPct(DRAIN_LS);
+            case CODE_GALE:
+                return "疾风 · 移速+" + fmtPct(GALE_MS);
+            default:
+                return null;
+        }
+    }
+
+    static String fmtFlat(double v) {
+        return java.math.BigDecimal.valueOf(v).stripTrailingZeros().toPlainString();
+    }
+
+    static String fmtPct(double v) {
+        return java.math.BigDecimal.valueOf(v * 100.0).stripTrailingZeros().toPlainString() + "%";
+    }
 }
