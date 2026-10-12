@@ -119,6 +119,7 @@ public final class EmberRunPapi {
 
     static boolean isLoadoutKey(String key) {
         return "awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "set_run".equals(key)
+                || "set_blurb".equals(key) // TIP-BI D13054 gear page set effect follows activeSet
                 || "set_focus".equals(key) || "set_focus_line".equals(key)
                 || "setchase_line".equals(key)
                 || "dual_lead".equals(key) || "dual_lead_line".equals(key) || "dual_hope".equals(key)
@@ -784,6 +785,8 @@ public final class EmberRunPapi {
                 if ("convert_hope".equals(key)) return EmberHopeMeter.convertHope(g);
                 return g;
             }
+            case "set_blurb": // TIP-BI D13054: gear page set effect follows activeSet
+                return EmberItemData.setBlurb(l.activeSet);
             case "set_run": { // D457 enter-run style line (also for menus)
                 EmberItemData[] worn = l.armorCopy();
                 if (worn == null) worn = new EmberItemData[4];

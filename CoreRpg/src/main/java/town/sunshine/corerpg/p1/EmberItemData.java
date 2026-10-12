@@ -377,8 +377,17 @@ public final class EmberItemData {
     public static String familyBlurb(String fam) {
         if ("scorch".equals(fam)) return "焚烬：每 3 次普攻点燃敌人（持续伤害），适合打首领";
         if ("burst".equals(fam)) return "烬爆：每 5 次普攻炸开一圈（3 格范围伤害），适合清一群";
-        if ("sustain".equals(fam)) return "炽愈：生命 ×1.12，每 5 次普攻回最大生命 2.5%（觉醒后最多 4%，6 秒一次），最稳";
+        // TIP-BI D13053: align with D293 sustain_hp_mult=1.00 (was ×1.12 lie)
+        if ("sustain".equals(fam)) return "炽愈：生命 ×1.00，每 5 次普攻回最大生命 2.5%（觉醒后最多 4%，6 秒一次），最稳";
         return "";
+    }
+
+    /** TIP-BI D13049: gear page set effect line · follows activeSet. */
+    public static String setBlurb(String activeSet) {
+        if (activeSet == null || activeSet.isEmpty() || "none".equals(activeSet))
+            return "§7刃+护符同族启用套装效果";
+        String b = familyBlurb(activeSet);
+        return b == null || b.isEmpty() ? "§7刃+护符同族启用套装效果" : b;
     }
 
     public static String familyName(String fam) {
