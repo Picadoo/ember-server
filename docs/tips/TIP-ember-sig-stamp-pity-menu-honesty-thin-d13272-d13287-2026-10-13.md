@@ -1,6 +1,6 @@
 # tip · TIP-BW 签名盖章软保底「连空 n/N」菜单诚实（签名 TrMenu · 可施工薄 · 可感变强途径）· D13272–D13287
 
-> **状态：** **OPEN** · 荐批 **A · 方案 M** · 2026-10-13 01:04 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** + **余烬-物品** · 2026-10-13 01:06 Asia/Shanghai  
 > **上游门禁：** TIP-BV CLOSED live items `9bac5aef8` · docs `dda74b0d5` · TrMenu reload 77 · jar 未改 `1.65.801-d13207` · RESEARCH [`RESEARCH-ember-sig-stamp-pity-menu-honesty-2026-10-13.md`](../design/RESEARCH-ember-sig-stamp-pity-menu-honesty-2026-10-13.md) · DESIGN [`DESIGN-ember-sig-stamp-pity-menu-honesty-2026-10-13.md`](../design/DESIGN-ember-sig-stamp-pity-menu-honesty-2026-10-13.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 离开烙纹直办链 → **签名盖章软保底「连空 n/N」菜单诚实**（**非 STAMP densify · 非抬 STAMP_RATE · 非扩 stampable · 非签名效果 lore 再叠 · 非 forge/洗练 sure·keep·直办半行再叠 · 非 Affix densify · 非伤乘 · 非抬表 · 非 soft/开孔再叠 · 非 SF4 · 非 Anvil · 非效果长墙 · 非 lore>3 · 非并轨 B**）  
 > **施工岗（批后派单）：** **余烬-插件**（`sig_stamp_hope` → `EmberSigStampDry.glance` · `sigPapi` + 单测；零改 need/STAMP_RATE）+ **余烬-物品**（`ember_p1_sig` Icon `I` + Open tell；`ember_p1_sig_imprint` Open tell）  
@@ -93,19 +93,19 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点（本 commit）  
 - [x] 文首 HOLD / 选题否决表可核  
-- [ ] 批后才派 **余烬-插件** + **余烬-物品**；策划本窗 **无**业务 jar  
+- [x] 批后才派 **余烬-插件** + **余烬-物品**；策划本窗 **无**业务 jar  
 - [x] `git show` docs-only（本 commit）；L13 施工仍 HOLD  
 
 ---
 
 ## 6. 批注（荐）
 
-- **批：** **A · 方案 M**（荐）  
+- **批：** **A · 方案 M** · 已批 · 已派余烬-插件 + 余烬-物品  
 - **选题：** TIP-BV 后 · **离开烙纹直办** · **签名盖章软保底「连空 n/N」菜单诚实**（可感变强途径 · **非抬 STAMP · 非扩 stampable · 非 sure/直办半行再叠 · 非签名效果 lore 再叠** · 对位 SUR3 / BV 旁债 #14 / `EmberSigStampDry.glance` SoT）  
 - **批后派岗：** 余烬-插件 + 余烬-物品  
 - **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；调律 live bad 进持件；签名效果 lore 再叠；套装 blurb 再叠；宝石短效果再叠；天赋悬停再叠；烙纹档幅度再叠；副手微量再叠；强化率再叠；升阶保留再叠；形缓 Icon A 再叠；转化保留再叠；access_* 再叠；成色·精工确定成功再叠；互换免费确定再叠；洗练直留再叠；**烙纹直办再叠**；甲闸再扫；扩 stampable；SetChase 六槽 densify；效果长墙；**Affix densify**；**ConvertCap densify**；**forgeroll 权重 densify**；**抬 STAMP_RATE**；**SigStamp densify**  
 
-## STATUS: OPEN · 荐批 A·M · 2026-10-13 01:04 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-插件 + 余烬-物品 · 2026-10-13 01:06 Asia/Shanghai

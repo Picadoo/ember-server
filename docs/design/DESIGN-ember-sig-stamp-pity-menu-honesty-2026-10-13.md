@@ -1,6 +1,6 @@
 # DESIGN · 签名盖章软保底「连空 n/N」菜单诚实（签名 TrMenu · 薄窗 · 可施工）· 2026-10-13
 
-> **状态：** OPEN · TIP-BW · 荐批 A·M · 2026-10-13 01:04 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BW · 批 A·M · 已派余烬-插件 + 余烬-物品 · 2026-10-13 01:06 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-sig-stamp-pity-menu-honesty-2026-10-13.md`](RESEARCH-ember-sig-stamp-pity-menu-honesty-2026-10-13.md)  
 > **对接 live：** TIP-BV CLOSED live items `9bac5aef8` · `EmberSigStampPity` · `EmberSigStampDry.glance` · `ember_p1_sig.yml` / `ember_p1_sig_imprint.yml` · `EmberGrowthService.sigPapi` · power-paths SUR3  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名效果 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留 / 形缓 / 转化 / access_* / 成色·精工确定成功 / 互换免费确定 / 洗练直留 / 烙纹直办再叠 / soft·开孔再叠 / **抬 STAMP_RATE · 扩 stampable · SigStamp densify** **仍冻**  

@@ -1,6 +1,6 @@
 # RESEARCH · 签名盖章软保底「连空 n/N」菜单诚实（离开烙纹直办链 · SUR3）· 2026-10-13
 
-> **状态：** **OPEN** · TIP-BW · 荐批 A·M · 2026-10-13 01:04 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BW · 批 A·M · 已派余烬-插件 + 余烬-物品 · 2026-10-13 01:06 Asia/Shanghai  
 > **起因：** TIP-BV CLOSED live 后总控「离开烙纹直办链 · 开下一可感变强途径」。硬禁含烙纹直办再叠 · forge/洗练 sure·keep·预览直办半行族 · Affix densify · STAMP densify。扫 AH…BV / power-paths / BV 旁债 #14：**SigStampPity/Dry 已 live（结算/glance「连空 n/N · 软保底已满 · 下次必出盖章候选」）**，签名/烙印菜单仍写「连空局数见结算提示」——**无 n/N 一眼**。  
 > **上游：** TIP-BV CLOSED live items `9bac5aef8` · docs `dda74b0d5` · TrMenu reload 77 · jar 未改 `1.65.801-d13207` · `EmberSigStampPity` · `EmberSigStampDry.glance` · `ember_p1_sig.yml` / `ember_p1_sig_imprint.yml` · power-paths SUR3 · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零抬 STAMP_RATE/C12 · 零扩 stampable · 零 SigStampPity densify（禁改 need/force 数学）· 零伤乘 · 零抬表 · 零 Affix densify · 零改解锁数学 · 零 ConvertCap densify · 零抬 RATE/upgradeCost · 零抬 talent/gem/副手 flat · 零 Anvil densify / soft·开孔再叠 / topUpTo · 零 SF4 U2U3 · 零灰印·聚火 · 零签名 lore（效果持件）再叠 · 零套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留 / 形缓 Icon A / 转化保留 / access_* / 成色·精工确定成功 / 互换免费确定 / 洗练直留 / 烙纹直办再叠 · 零调律 live bad · 零并轨 B · 零 SetRules/Formula 抬 · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 forgeroll 权重 densify · 零 sx20 · 零 skill_mult · 零开 L13 施工 tip · 零效果长墙 · 零 lore>3 · 零改 pity/pool/craftShards · 零发明第二套 dry 计数器 / celebration**
