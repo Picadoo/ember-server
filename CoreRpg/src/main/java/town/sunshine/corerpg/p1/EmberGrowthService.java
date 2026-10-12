@@ -1132,15 +1132,30 @@ public final class EmberGrowthService implements Listener {
                 alt ? "调律" : "原版", EmberSignature.badOf(w.def, alt), other);
     }
 
-    /** D297 W1a: empty unless Q07 open and at least one active signature. */
+    /**
+     * D297 W1a / D12620: empty unless Q07 open and at least one active signature.
+     * Blade + defense-side first non-empty previewSlot in prio charm→head→chest→legs→boots
+     * (same order as pickDefense / sigWhy; losers already null via previewSlot→sigWhy).
+     */
     String runPreviewLine(PlayerData d, EmberLoadout lo) {
         if (d == null || lo == null || !runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return "";
-        return EmberSigAttunePreview.runLine(EmberSigAttunePreview.listOf(previewSlot(d, lo, "blade"), previewSlot(d, lo, "charm")));
+        return EmberSigAttunePreview.runLine(previewActiveSlots(d, lo));
     }
 
     String runPreviewCost(PlayerData d, EmberLoadout lo) {
         if (d == null || lo == null || !runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return "";
-        return EmberSigAttunePreview.costLine(EmberSigAttunePreview.listOf(previewSlot(d, lo, "blade"), previewSlot(d, lo, "charm")));
+        return EmberSigAttunePreview.costLine(previewActiveSlots(d, lo));
+    }
+
+    /** D12620: blade + ≤1 defense-side slot matching combat signatures() prio. */
+    private List<EmberSigAttunePreview.Slot> previewActiveSlots(PlayerData d, EmberLoadout lo) {
+        EmberSigAttunePreview.Slot blade = previewSlot(d, lo, "blade");
+        EmberSigAttunePreview.Slot def = null;
+        for (String slot : new String[]{"charm", "head", "chest", "legs", "boots"}) {
+            def = previewSlot(d, lo, slot);
+            if (def != null) break;
+        }
+        return EmberSigAttunePreview.listOf(blade, def);
     }
 
     /** true if at least one worn active sig has unlocked attune. */

@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * D297 方案 M：进本前「本局生效」只读文案（无 Bukkit）。
- * 不改 ALTS / 烙印价 / 掉率。
+ * D297 方案 M / D12621：进本前「本局生效」只读文案（无 Bukkit）。
+ * 槽标签 = EmberItemData.slotName：刃 / 防具侧（护符|头盔|胸甲|护腿|靴子）。
+ * 不改格式前缀、不新 PAPI key；不改 ALTS / 烙印价 / 掉率。
  */
 public final class EmberSigAttunePreview {
 
     public static final class Slot {
-        public final String slotLabel; // 刃 / 护符
+        public final String slotLabel; // 刃 / 护符|头盔|胸甲|护腿|靴子
         public final String edition;   // 原版 / 调律
         public final String costNow;
         public final String costOther; // may be null
@@ -25,7 +26,7 @@ public final class EmberSigAttunePreview {
 
     private EmberSigAttunePreview() {}
 
-    /** §7本局生效：§f刃·调律 §8/ §f护符·原版 — empty if no slots */
+    /** §7本局生效：§f刃·调律 §8/ §f护符|头盔|…·原版 — empty if no slots；仍最多两段 */
     public static String runLine(List<Slot> slots) {
         if (slots == null || slots.isEmpty()) return "";
         StringBuilder sb = new StringBuilder("§7本局生效：");
