@@ -1,6 +1,6 @@
 # tip · TIP-Y 烬斩手感研究薄窗（TIP-K 后盘点 · docs-only · 禁 skill_mult）· D12528–D12535
 
-> **状态：** OPEN · 待总控批 **A · 方案 M**（2026-10-12 17:28 Asia/Shanghai）  
+> **状态：** CLOSED · 批 **A · 方案 M** · docs-only（总控 2026-10-12 17:33 Asia/Shanghai）  
 > **上游：** [`RESEARCH-ember-skill-feel-post-k-next-2026-10-12.md`](../design/RESEARCH-ember-skill-feel-post-k-next-2026-10-12.md) · TIP-K CLOSED live `1.65.766-d12335` · TIP-F CLOSED · TIP-X CLOSED PASS live `77a768df1`（短征 O→X 闭合）· TIP-T 深化 densify 冻  
 > **前置：** 短征视觉线 **已闭合**；深化 densify **仍冻**；glance densify **仍停**；须 **换轴**  
 > **施工岗：** **无码**（策划 RESEARCH + tip；**不**派插件；勿借机改 skill_mult / CD / 几何 / Affix）  
@@ -32,7 +32,7 @@
 | ID | 项 | 验收 |
 |----|-----|------|
 | D12528 | 本 tip + RESEARCH `RESEARCH-ember-skill-feel-post-k-next-2026-10-12.md` | 路径可点 |
-| D12529 | DESIGN power-paths 进度戳：**TIP-X CLOSED PASS `77a768df1`**；**TIP-Y OPEN**（烬斩手感研究 · 无码）；短征 O→X 闭合；深化 densify 仍冻 | 戳可见 |
+| D12529 | DESIGN power-paths 进度戳：**TIP-X CLOSED PASS `77a768df1`**；**TIP-Y CLOSED**（烬斩手感研究 · 无码 · 门闩已立）；短征 O→X 闭合；深化 densify 仍冻 | 戳可见 |
 | D12530 | 盘点写入 RESEARCH：TIP-F/K 已落地层；combat-feel NEAR-SAT；**不**发明新 cue 表 | 可核 |
 | D12531 | HOLD 重申（对齐 TIP-K D12327）：守招 / 灰印 / 聚火 / SF4 战斗微效用 / 独立副招 CD / **skill_mult**；本 tip **不打开** | 插件勿顺手 |
 | D12532 | 下一档门闩：P0 试玩可复现单缺口；P1 守招须新思路+p1sim；P2 SF4 须 p1sim within；解冻 → **新 tip 单主题** | 文档 |
@@ -62,11 +62,11 @@
 
 ## 4. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] RESEARCH + tip 路径可点；HOLD/门闩与 TIP-K 对齐且未开码  
-- [ ] DESIGN power-paths：TIP-X CLOSED `77a768df1` + TIP-Y OPEN  
-- [ ] **无**插件施工派单  
-- [ ] `git show` docs-only；密码检查 0  
+- [x] 总控批 **A · 方案 M**  
+- [x] RESEARCH + tip 路径可点；HOLD/门闩与 TIP-K 对齐且未开码  
+- [x] DESIGN power-paths：TIP-X CLOSED `77a768df1` + TIP-Y OPEN  
+- [x] **无**插件施工派单  
+- [x] `git show` docs-only；密码检查 0  
 
 ---
 

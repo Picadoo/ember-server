@@ -196,6 +196,9 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
+- **TIP-X CLOSED** `77a768df1` · sx01–19 视觉线闭合
+- **TIP-Y CLOSED** · 烬斩手感研究 docs-only · 门闩已立 · 无码
+
 - **TIP-Y 待批 A·M** · tip D12528–D12535 · 烬斩手感研究 docs-only（禁 skill_mult · 不重开 TIP-K cue）· 无码
 - **TIP-Y OPEN** · `TIP-ember-skill-feel-research-thin-d12528-d12535-2026-10-12.md` · RESEARCH `RESEARCH-ember-skill-feel-post-k-next-2026-10-12.md` · TIP-X CLOSED PASS `77a768df1`；短征视觉线闭合；换轴手感研究
 - **TIP-X CLOSED PASS** live `77a768df1` · tip D12512–D12527 · sx17–sx19 收尾 · O→X 闭合

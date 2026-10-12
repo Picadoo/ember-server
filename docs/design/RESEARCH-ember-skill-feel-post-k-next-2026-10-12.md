@@ -1,6 +1,6 @@
 # RESEARCH · 烬斩手感 · TIP-K 之后下一档（禁 skill_mult）· 2026-10-12
 
-> **状态：** 调研定稿 · 对接 tip `TIP-ember-skill-feel-research-thin-d12528-d12535-2026-10-12.md`  
+> **状态：** CLOSED · TIP-Y 已批 A·M · docs-only · 2026-10-12 17:33 · 对接 tip `TIP-ember-skill-feel-research-thin-d12528-d12535-2026-10-12.md`  
 > **起因：** TIP-X 闭合短征视觉线后换轴；总控可选烬斩手感研究 / 主线 / 观察窗。业主旧诉「烬斩太素了」（D209）。  
 > **硬禁：** **零抬 skill_mult · 零伤乘 · 零 Affix densify · 零 glance twin · 零粒子 densify twin · 不重开 TIP-K 同构 cue**
 
