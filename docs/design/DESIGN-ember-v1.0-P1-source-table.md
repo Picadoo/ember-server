@@ -2542,3 +2542,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 门禁 | `tools/p1sim/affixpack32.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack32-d12236-2026-10-12.md` |
 
+### 13.145 Affix Pack 33 蚀斩/陨洼（CoreRpg 1.65.755，D12237，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12237 |
+| jar | CoreRpg **1.65.755-d12237.local** |
+| balance_version | 119 → **120** |
+| 行为 | 词缀池 66→68：+`etch` 蚀斩 / `crater` 陨洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack33-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack33.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack33-d12237-2026-10-12.md` |
+
