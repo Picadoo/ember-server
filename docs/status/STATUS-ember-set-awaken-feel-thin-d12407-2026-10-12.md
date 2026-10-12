@@ -5,3 +5,4 @@
 - **落地**：`EmberSetFeel.awkDeltaLine` 读表白话；`EmberAwakenBreak` 突破后追加；`set_feel.awk_delta` 热关（缺省 true）
 - **验收**：单测 PASS；`git show` SetRules 数组未改；SEVERE=0；version 控制台确认
 - **硬禁**：零 Affix / 伤乘 / 抬表 / glance twin
+- **热更**：play 重启 · Enabling `1.65.769-d12407.local` · SEVERE=0 · Picado OP · `5c3ae5a6`/`51004b9c`/`36f0b3cf`
