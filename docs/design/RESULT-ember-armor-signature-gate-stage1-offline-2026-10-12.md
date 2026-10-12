@@ -1,10 +1,10 @@
 # RESULT · 防具签名门禁 stage1 离线（S3 / S4）· 2026-10-12
 
-> **状态：** FILLED · TIP-AC CLOSED FAIL `469cc1a46`（包 APPROVED `2578d812e`）· 跑数 2026-10-12 18:34–19:18 Asia/Shanghai  
-> **TIP-AD：** S3 评测集补丁 OPEN · 见 §6 · `judge-s3` 2026-10-12 19:19 Asia/Shanghai  
+> **状态：** STAGE1_OFFLINE = **PASS（TIP-AD patched）** · TIP-AC 全表 FAIL 历史保留 `469cc1a46` · 跑数 18:34–19:18 · judge-s3 19:22  
+> **TIP-AD：** CLOSED 批 A·M `abc3875d0` · 见 §6 · 总控显式开工令已发（等施工 tip）  
 > **上游 DESIGN：** [`DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md)  
 > **stage0：** TIP-AB CLOSED `a5b264fce`  
-> **硬句：** FAIL → 停、禁抬表凑线；**PASS ≠ 开工**（仍须总控显式批「开工」才开施工 tip）
+> **硬句：** FAIL → 停、禁抬表凑线；PASS ≠ 自动开工；**总控已显式开工**（防具签名最小切片 · 见 STATUS-AD）
 
 ---
 
