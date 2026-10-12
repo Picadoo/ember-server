@@ -2110,6 +2110,8 @@ public final class EmberGrowthService implements Listener {
         String mode = (dup ? "dup" : "shard") + (lock ? " lock" : "");
         if (!confirm) {
             p.sendMessage(P + "§6词条洗练 · " + t.shortLabel());
+            // D12259: choice feel — lock vs random (pool stays out of menu lore)
+            p.sendMessage(P + EmberForgeChoice.rerollChoice(lock));
             // D1249: pity remain honesty（非 hope PAPI twin）
             String rem = EmberRerollPity.remainLine(pity, reroll.pity);
             p.sendMessage(P + "现在：" + affixText(affixOf(d, t), t.quality) + " §7· 成色" + EmberItemData.qualityName(t.quality)
@@ -2749,6 +2751,8 @@ public final class EmberGrowthService implements Listener {
             int gapBrand = Math.max(0, brandsPay - haveBrand);
             int gapCoin = Math.max(0, coinsPay - haveCoin);
             p.sendMessage(P + "§6烙纹定向 · " + t.shortLabel());
+            // D12257: choice feel — will-get handfeel, not damage
+            p.sendMessage(P + EmberForgeChoice.brandWillGet(want == null ? null : want.name));
             p.sendMessage(P + "现在：" + affixText(affixOf(d, t), t.quality) + " §7· 锻造次数剩余 §f" + left + "/" + EmberBrandRules.MAX_CHARGES);
             p.sendMessage(P + "写入类型：§b" + want.name + " §7（档位仍随机，成色上限截断）");
             p.sendMessage(P + "花费：§f烙纹 " + haveBrand + "/" + brandsPay + " §7+ §f币 " + haveCoin + "/" + coinsPay
@@ -2979,6 +2983,19 @@ public final class EmberGrowthService implements Listener {
                             try { EmberConvertWinBone.maybeGift(q, nd); } catch (Throwable ignored) { } // D11073
                             q.sendMessage(P + "§a转化完成：§f" + planned.shortLabel()
                                     + " §7· 强化+0 · 本周已用 §f" + (usedNow + 1) + "/" + EmberConvertRules.WEEKLY_CAP);
+                            // D12258: weekly left + next gap (zero weekly-cap change)
+                            int leftAfter = Math.max(0, EmberConvertRules.WEEKLY_CAP - (usedNow + 1));
+                            String gapHint = null;
+                            if (leftAfter > 0) {
+                                int pathId = EmberConvertPath.get(nd);
+                                if (EmberConvertPath.valid(pathId))
+                                    gapHint = "§f" + EmberConvertPath.label(pathId);
+                                else
+                                    gapHint = "§f同价再转";
+                            }
+                            String leftover = EmberForgeChoice.convertLeftover(leftAfter, gapHint);
+                            q.sendMessage(P + leftover);
+                            try { q.sendActionBar(leftover); } catch (Throwable ignored) { }
                             EmberConvertLoop.afterConvert(q, nd, toFam, before.enhance > 0, planned); // D2089
                             openMenu(q, "ember_p1_convert");
                         }

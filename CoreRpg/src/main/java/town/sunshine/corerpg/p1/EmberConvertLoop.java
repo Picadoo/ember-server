@@ -2,7 +2,6 @@ package town.sunshine.corerpg.p1;
 
 import org.bukkit.entity.Player;
 
-import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.PlayerData;
 
 /**
@@ -51,8 +50,9 @@ public final class EmberConvertLoop {
         }
 
         // enhance wiped — piece-aware enhance commit; optional align setfocus
+        // D12262: route through send3 (禁 K3 自动跳页)
         if (goalHit) {
-            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+            EmberForgeCommitNext.send3(p, P + "§7下一步：",
                     EmberForgeCommitNext.enhance(),
                     new String[]{"[换下周目标]", "/corerpg p1 forgegoal", "选强化/精工/烙纹…", "GREEN"},
                     new String[]{"[对齐套装焦点]", "/corerpg p1 setfocus " + toFam,
@@ -62,7 +62,7 @@ public final class EmberConvertLoop {
             if (b == null) b = EmberForgeCommitNext.refine(after);
             if (b == null) b = new String[]{"[对齐套装焦点]", "/corerpg p1 setfocus " + toFam,
                     "套装焦点也设成" + famName, "AQUA"};
-            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+            EmberForgeCommitNext.send3(p, P + "§7下一步：",
                     EmberForgeCommitNext.enhance(),
                     b,
                     new String[]{"[转化页]", "/corerpg p1 convert menu", "看本周剩余", "GRAY"});

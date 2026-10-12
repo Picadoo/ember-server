@@ -62,8 +62,9 @@ Icons:
       material: anvil
       name: '§c强化 · 预览'
       lore:
-        - '§e保底进度：§f%corerpg_p1_held_enhance_pity%'
-        - '§e本次：§f%corerpg_p1_held_enhance_cost%'
+        - '§e花费：§f%corerpg_p1_held_enhance_cost%'
+        - '§e保底：§f%corerpg_p1_held_enhance_pity%'
+        - '§e➥ §f点预览'
     actions:
       all:
         - 'command: corerpg p1 enhance'
@@ -86,8 +87,9 @@ Icons:
       material: redstone
       name: '§c强化 · 确认一次'
       lore:
-        - '§e保底进度：§f%corerpg_p1_held_enhance_pity%'
-        - '§e本次：§f%corerpg_p1_held_enhance_cost%'
+        - '§e花费：§f%corerpg_p1_held_enhance_cost%'
+        - '§e保底：§f%corerpg_p1_held_enhance_pity%'
+        - '§e➥ §f点确认'
     actions:
       all:
         - 'command: corerpg p1 enhance confirm'
@@ -157,8 +159,9 @@ Icons:
       material: blaze powder
       name: '§6精工 · 预览'
       lore:
-        - '§7让这件的成长 +2%/档（0→2%→4%→6%）：材料确定升'
-        - '§e精工进度：§f%corerpg_p1_held_refine_hope%'
+        - '§e花费：§f%corerpg_p1_held_next_c%'
+        - '§e进度：§f%corerpg_p1_held_refine_hope%'
+        - '§e➥ §f点预览'
     actions:
       all:
         - 'command: corerpg p1 refine craft'
@@ -180,8 +183,9 @@ Icons:
       material: blaze powder
       name: '§6精工 · 确认'
       lore:
-        - '§e精工进度：§f%corerpg_p1_held_refine_hope%'
-        - '§e手持件：§f%corerpg_p1_held_next_c%'
+        - '§e花费：§f%corerpg_p1_held_next_c%'
+        - '§e进度：§f%corerpg_p1_held_refine_hope%'
+        - '§e➥ §f点确认'
     actions:
       all:
         - 'command: corerpg p1 refine craft confirm'
@@ -203,8 +207,9 @@ Icons:
       material: gold nugget
       name: '§e成色 · 预览'
       lore:
-        - '§8强化一档 +4%～8%，通常先强化更划算'
-        - '§e成色进度：§f%corerpg_p1_held_quality_hope%'
+        - '§e花费：§f%corerpg_p1_held_next_q%'
+        - '§e进度：§f%corerpg_p1_held_quality_hope%'
+        - '§e➥ §f点预览'
     actions:
       all:
         - 'command: corerpg p1 refine quality'
@@ -226,8 +231,9 @@ Icons:
       material: gold nugget
       name: '§e成色 · 确认'
       lore:
-        - '§e成色进度：§f%corerpg_p1_held_quality_hope%'
-        - '§e手持件：§f%corerpg_p1_held_next_q%'
+        - '§e花费：§f%corerpg_p1_held_next_q%'
+        - '§e进度：§f%corerpg_p1_held_quality_hope%'
+        - '§e➥ §f点确认'
     actions:
       all:
         - 'command: corerpg p1 refine quality confirm'
@@ -329,9 +335,9 @@ Icons:
       material: anvil
       name: '§6旁路 · 随机锻造'
       lore:
-        - '§8旁路赌线 · 主养仍用上方强化/成色/精工'
-        - '§78 印记 + 4 胚料 + 500 币'
-        - '§e➥ §f随机锻造页'
+        - '§8旁路赌线'
+        - '§e有下限：§f下页第二排加料买下限（极品仍0）'
+        - '§e➥ §f打开'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'

@@ -22,10 +22,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_ANVIL_LAND-0.4-1.2'
-    - 'tell: §6旁路赌线§7 · 主养请回工坊强化/成色/精工'
-    - 'tell: §e上两排普通锻 · 下两排§f成色下限§7（再扣胚8+骨8+币800 → 必≥精良）'
-    - 'tell: §88 印记+4胚料+500币 · 成色标准70%/精良23%/卓越7% · 出不了极品'
-    - 'tell: §c普通还差：§f%corerpg_p1_forge_gap_roll% §8· 下限还差：§f%corerpg_p1_forge_gap_roll_floor%'
+    - 'tell: §6旁路赌线§7 · 上排普通 / 下排加料买下限 · 主养回工坊稳线'
 
 Icons:
   '#':

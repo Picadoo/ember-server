@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.p1.EmberItemStore.TxnItem;
 
@@ -23,7 +22,8 @@ public final class EmberQualityLoop {
         if (goalHit) {
             p.sendMessage(P + "§a本周工坊目标完成：§f成色升档");
             try { p.sendActionBar("§a工坊目标 · 成色完成"); } catch (Throwable ignored) { }
-            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+            // D12262: send3
+            EmberForgeCommitNext.send3(p, P + "§7下一步：",
                     new String[]{"[换下周目标]", "/corerpg p1 forgegoal", "选强化/精工/烙纹…", "GREEN"},
                     new String[]{"[再成色]", "/corerpg p1 quality", "同件再投", "YELLOW"},
                     EmberForgeCommitNext.refine(after) != null

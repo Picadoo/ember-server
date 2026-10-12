@@ -41,4 +41,17 @@ public class EmberForgeCommitNextTest {
         assertTrue(EmberQualityLoop.followHint().contains("精工"));
         assertTrue(EmberRefineLoop.followHint(false).contains("强化"));
     }
+
+    @Test
+    public void forgerollFollowHintMentionsDeliver() {
+        assertTrue(EmberForgeRollLoop.followHint(false).contains("装备库到账"));
+        assertTrue(EmberForgeRollLoop.followHint(false).contains("去强化"));
+    }
+
+    @Test
+    public void commitCmdsPointAtP1() {
+        assertEquals("/corerpg p1 enhance", EmberForgeCommitNext.enhance()[1]);
+        assertEquals("/corerpg p1 quality", EmberForgeCommitNext.quality(blade(0, 0))[1]);
+        assertEquals("/corerpg p1 refine", EmberForgeCommitNext.refine(blade(0, 0))[1]);
+    }
 }

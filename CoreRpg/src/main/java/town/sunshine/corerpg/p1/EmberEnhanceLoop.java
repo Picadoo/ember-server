@@ -44,7 +44,8 @@ public final class EmberEnhanceLoop {
         if (goalHit) { // D660
             p.sendMessage(P + "§a本周工坊目标完成：§f强化+1");
             try { p.sendActionBar("§a工坊目标 · 强化完成"); } catch (Throwable ignored) { }
-            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+            // D12262: send3
+            EmberForgeCommitNext.send3(p, P + "§7下一步：",
                     new String[]{"[换下周目标]", "/corerpg p1 forgegoal", "选精工/烙纹/转化…", "GREEN"},
                     new String[]{"[再强化]", "/corerpg p1 enhance", "手持件再冲一档", "GOLD"},
                     new String[]{"[去成色]", "/corerpg p1 quality", "成色预览", "AQUA"});
@@ -56,7 +57,8 @@ public final class EmberEnhanceLoop {
             // D2076: piece-aware quality/refine (same spirit as UpgradeLoop)
             String[] b = nextCraftBtn(after);
             String[] c = nextCraftBtn2(after);
-            ConfirmTokens.sendButtons(p, P + "§7强化下一环：",
+            // D12262: send3
+            EmberForgeCommitNext.send3(p, P + "§7强化下一环：",
                     new String[]{"[再强化]", "/corerpg p1 enhance", "手持件再冲一档", "GREEN"},
                     b, c);
         } else {
@@ -77,7 +79,8 @@ public final class EmberEnhanceLoop {
             String[] b = EmberForgeCommitNext.quality(failAfter);
             if (b == null) b = EmberForgeCommitNext.refine(failAfter);
             if (b == null) b = new String[]{"[成套追]", "/corerpg p1 setchase", "换件再冲", "GOLD"};
-            ConfirmTokens.sendButtons(p, P, // D886 / D2194
+            // D12262: send3 (D886 / D2194)
+            EmberForgeCommitNext.send3(p, P,
                     new String[]{"[再试一次]", "/corerpg p1 enhance", "同件再强化（保底累计）", "GREEN"},
                     b,
                     new String[]{"[去精工]", "/corerpg p1 refine", "先投精工", "AQUA"});

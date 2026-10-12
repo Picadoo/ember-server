@@ -2,7 +2,6 @@ package town.sunshine.corerpg.p1;
 
 import org.bukkit.entity.Player;
 
-import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.PlayerData;
 
 /**
@@ -27,7 +26,7 @@ public final class EmberForgeRollLoop {
         if (goalHit) {
             p.sendMessage(P + "§a本周工坊目标完成：§f随机锻造" + (floor ? "·下限" : "") + " → T" + tier + " " + famName + " " + slotName);
             try { p.sendActionBar("§a工坊目标 · 随机锻完成"); } catch (Throwable ignored) { }
-            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+            EmberForgeCommitNext.send3(p, P + "§7下一步：",
                     new String[]{"[换下周目标]", "/corerpg p1 forgegoal", "选强化/精工/转化…", "GREEN"},
                     new String[]{"[装备库到账]", "/corerpg p1 deliver", "领进背包/库", "GOLD"},
                     new String[]{"[对齐套装]", "/corerpg p1 setfocus " + (fam == null ? "burst" : fam),
@@ -40,14 +39,14 @@ public final class EmberForgeRollLoop {
         if (floor) {
             p.sendMessage(P + "§7旁路下限已出件 · §a下一刀走稳线：到手后强化/精工");
         }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[装备库到账]", "/corerpg p1 deliver", "领进背包/库", "GOLD"},
-                EmberForgeCommitNext.enhance(),
-                new String[]{"[去成色]", "/corerpg p1 quality", "稳线·成色", "YELLOW"},
-                new String[]{"[去精工]", "/corerpg p1 refine", "稳线·精工", "AQUA"});
+        // D12262: commit-next via send3 (deliver → 稳线强化 → 成色/精工)；禁 K3 自动跳页
+        String[] a = new String[]{"[装备库到账]", "/corerpg p1 deliver", "领进背包/库", "GOLD"};
+        String[] b = EmberForgeCommitNext.enhance();
+        String[] c = new String[]{"[去成色]", "/corerpg p1 quality", "稳线·成色", "YELLOW"};
+        EmberForgeCommitNext.send3(p, P + "§7下一步：", a, b, c);
     }
 
     public static String followHint(boolean goalHit) {
-        return goalHit ? "[换下周目标]|[装备库到账]" : "[装备库到账]|[去强化]|[对齐套装]";
+        return goalHit ? "[换下周目标]|[装备库到账]" : "[装备库到账]|[去强化]|[去成色]";
     }
 }
