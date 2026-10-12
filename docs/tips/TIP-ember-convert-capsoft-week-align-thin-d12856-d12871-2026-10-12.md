@@ -1,6 +1,6 @@
 # tip · TIP-AW 转化周次容错 CapSoft 预览/weekLine 诚实对齐（可施工薄 · 可感 UX）· D12856–D12871
 
-> **状态：** **OPEN** · 2026-10-12 21:57 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 22:00 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-convert-capsoft-week-align-2026-10-12.md`](../design/RESEARCH-ember-convert-capsoft-week-align-2026-10-12.md) · DESIGN [`DESIGN-ember-convert-capsoft-week-align-2026-10-12.md`](../design/DESIGN-ember-convert-capsoft-week-align-2026-10-12.md) · TIP-AV CLOSED live `1.65.787-d12855` · feat `901632f09` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径** — **离开 soft-glance / pity-remain / 甲闸 / 追烙摘要族**（AS→AV / AP–AR / AK–AM / AN–AO / AU 已齐）；ConvertCapSoft 周次容错 leftover  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `GrowthService.convertHeld` 预览 peek / 确认 consume · `EmberConvertPath.weekLine` / afterSet 余次 · ConvertSure 直办同 SoT · 可选 CapSoft `effectiveExtra` + 单测）  
@@ -89,8 +89,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12860–D12864；D12866 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] 预览不吞 soft；确认才 consume；L13 施工仍 HOLD  

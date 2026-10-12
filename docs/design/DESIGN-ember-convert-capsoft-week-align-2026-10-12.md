@@ -1,6 +1,6 @@
 # DESIGN · 转化周次容错 CapSoft 预览/weekLine 诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-AW · 2026-10-12 21:57 Asia/Shanghai  
+> **状态：** APPROVED · TIP-AW 批 A·M · 已派插件 · 2026-10-12 22:00 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-convert-capsoft-week-align-2026-10-12.md`](RESEARCH-ember-convert-capsoft-week-align-2026-10-12.md)  
 > **对接 live：** TIP-AV CLOSED live `1.65.787-d12855` · feat `901632f09` · ConvertCapSoft D9249 · ConvertPath.weekLine D732 · ConvertCostSoft（TIP-AT）· ConvertSure D5857  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
