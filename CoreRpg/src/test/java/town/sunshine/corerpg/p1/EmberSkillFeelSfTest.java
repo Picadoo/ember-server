@@ -47,4 +47,29 @@ public class EmberSkillFeelSfTest {
         assertEquals("扇形充能 3s", EmberSkillFeelSf.chargeCdLine(EmberSkillKit.SHAPE_FAN, 3));
         assertEquals("直线充能 0s", EmberSkillFeelSf.chargeCdLine(EmberSkillKit.SHAPE_LINE, 0));
     }
+    @Test
+    public void menuLine_knownFamilies() {
+        assertEquals("§e焚烬烬斩 §f扇形 §8· 点燃/火痕", EmberSkillFeelSf.menuLine("scorch"));
+        assertEquals("§e烬爆烬斩 §f直线 §8· 缓速/闪", EmberSkillFeelSf.menuLine("burst"));
+        assertEquals("§e炽愈烬斩 §f环斩 §8· 微疗/护", EmberSkillFeelSf.menuLine("sustain"));
+    }
+
+    @Test
+    public void menuLine_unset() {
+        String u = "§8未成套 · 成套后烬斩形状与落点随族变";
+        assertEquals(u, EmberSkillFeelSf.menuLine((String) null));
+        assertEquals(u, EmberSkillFeelSf.menuLine(""));
+        assertEquals(u, EmberSkillFeelSf.menuLine("none"));
+        assertEquals(u, EmberSkillFeelSf.menuLine("unknown"));
+        assertEquals(u, EmberSkillFeelSf.menuLine((EmberLoadout) null));
+    }
+
+    @Test
+    public void menuLine_loadoutBladeFamily() {
+        EmberTables tables = EmberTables.defaults();
+        EmberItemData blade = EmberItemData.create("scorch", "blade", 1, 0, 0, 0, true, "admin");
+        EmberLoadout lo = EmberLoadout.compute(tables, blade, null, 10);
+        assertEquals("§e焚烬烬斩 §f扇形 §8· 点燃/火痕", EmberSkillFeelSf.menuLine(lo));
+    }
+
 }

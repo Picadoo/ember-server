@@ -316,13 +316,14 @@ Icons:
         - 'menu: ember_bestiary'
 
 
-  # D211 余烬技能组 S1：烬斩 / 烬突 / 烬斩符文
+  # D211 / D12283 余烬技能组：套装手感一眼 + 形状/身法 · 点进技能组
   S:
     update: 40
     display:
       material: blaze powder
       name: '§6技能组'
       lore:
+        - '§f%corerpg_kit_set_hope%'
         - '§7形状 §f%corerpg_kit_shape% §7· 身法 §b%corerpg_kit_step_dir%'
         - '§e➥ §f打开技能组'
     actions:

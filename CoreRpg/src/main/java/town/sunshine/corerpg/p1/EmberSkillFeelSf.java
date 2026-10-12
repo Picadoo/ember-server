@@ -82,4 +82,28 @@ public final class EmberSkillFeelSf {
         if ("sustain".equals(family)) return " · 烬刃微疗";
         return "";
     }
+    /**
+     * D12281: TrMenu one-line set-feel (display only).
+     * Known family → {@code §e焚烬烬斩 §f扇形 §8· 点燃/火痕}; unset/unknown → 未成套半行.
+     * Reuses familyName + shapeShort(preferredShape) + setFalloutLabel — zero coef/geometry.
+     */
+    public static String menuLine(String family) {
+        if (family == null || family.isEmpty() || "none".equals(family)) {
+            return "§8未成套 · 成套后烬斩形状与落点随族变";
+        }
+        String fall = setFalloutLabel(family);
+        if (fall.isEmpty()) {
+            return "§8未成套 · 成套后烬斩形状与落点随族变";
+        }
+        String name = EmberItemData.familyName(family);
+        String shape = shapeShort(EmberSkillKit.preferredShape(family));
+        return "§e" + name + "烬斩 §f" + shape + " §8· " + fall;
+    }
+
+    /** D12281: loadout overload — blade family when present, else unset. */
+    public static String menuLine(EmberLoadout lo) {
+        if (lo == null || lo.blade == null) return menuLine((String) null);
+        return menuLine(lo.blade.family);
+    }
+
 }

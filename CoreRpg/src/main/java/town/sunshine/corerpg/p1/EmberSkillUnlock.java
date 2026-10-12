@@ -178,12 +178,21 @@ public final class EmberSkillUnlock {
     }
 
     /**
-     * D617: worn-family set-fork + preferred-shape hope (display only · zero skill_mult).
+     * D617 / D12282: worn-family set-feel hope for PAPI {@code %corerpg_kit_set_hope%}.
+     * Display via {@link EmberSkillFeelSf#menuLine(EmberLoadout)} (short menu form).
+     * Zero skill_mult.
      */
     public static String setHope(EmberLoadout lo) {
+        return EmberSkillFeelSf.menuLine(lo);
+    }
+
+    /**
+     * D617 long chat form (kept if callers need the older "套装手感 · 形状 · 落点" line).
+     * Menus/PAPI use {@link #setHope} → menuLine.
+     */
+    public static String setHopeLong(EmberLoadout lo) {
         if (lo == null || lo.blade == null) return "§8拿手持刃看套装差与推荐形状";
         String fam = lo.blade.family;
-        // D1156 SF3: 形状 + 落点同屏半行（推荐形状；零 skill_mult）
         return "§e套装手感 · §f" + EmberItemData.familyName(fam) + " §8· " + EmberSkillFeelSf.setShapeHalf(fam);
     }
 

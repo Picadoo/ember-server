@@ -11,6 +11,7 @@
 # D291 · P「推荐打法」深链
 # D301 · 守招·余烬招架（Q03 · 单按 Q · G2_parry_B2）
 # D12197 · lore ≤3 行（Karen）
+# D12284/D12285 · 套装手感短串 + 三套对照（零改系数）
 
 Title: '§6技能 · §e%corerpg_kit_shape% §8· §b%corerpg_kit_step_dir% §8· %corerpg_kit_charge%'
 
@@ -31,7 +32,6 @@ Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
     - 'tell: §e每 8 秒二选一：§fF 烬斩 §7/ §f潜行+F 烬突 §8（共享充能 · 挂机不自动烬突）'
-    - 'tell: §bStage2 几何：§f扇≥110° · 直线6格半宽0.7 · 环3.5格最多4'
     - 'tell: §7当前 §f%corerpg_kit_shape% §7· 身法 §f%corerpg_kit_step_dir% §7· %corerpg_kit_charge%'
     - 'tell: §b守招 §f%corerpg_kit_parry_name% §7· 解锁 §f%corerpg_kit_parry_unlock% §7· %corerpg_kit_parry_cd%'
     - 'tell: §a招架成功会闪 ActionBar「招架成功 · 反打」§8（D666 · 不改 CD）'
@@ -71,16 +71,16 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-0'
         - 'menu: ember_hub'
 
-  # —— 一眼状态条 ——
+  # —— 一眼状态条 · D12284 当前短串 + 三套对照 ——
   S:
     update: 20
     display:
       material: nether star
       name: '§6此刻状态'
       lore:
-        - '§7充能 §f%corerpg_kit_charge% §7· 形状 §f%corerpg_kit_shape% §7· 身法 §b%corerpg_kit_step_dir%'
-        - '§7守招 §f%corerpg_kit_parry_name% §8· %corerpg_kit_parry_cd% §8（%corerpg_kit_parry_unlock%）'
-        - '§e希望：§f%corerpg_kit_next_hope% §7· §f%corerpg_kit_set_hope%'
+        - '§f%corerpg_kit_set_hope%'
+        - '§7对照 §6焚烬§7扇·点燃 §c烬爆§7直·缓速 §a炽愈§7环·微疗'
+        - '§e希望：§f%corerpg_kit_next_hope%'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -139,7 +139,7 @@ Icons:
       lore:
         - '§f扇≥110° · 半径3.5 · 最多5 §8（Stage2）'
         - '§7当前 §f%corerpg_kit_shape% §8· 解锁 %corerpg_kit_shape_unlock%（Q04）'
-        - '§e➥ §f出本切扇形 · 换后充能转满'
+        - '§8荐：焚扇/爆直/愈环 §e➥ §f切扇形'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
