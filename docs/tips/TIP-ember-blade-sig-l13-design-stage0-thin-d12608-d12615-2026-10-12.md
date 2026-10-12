@@ -1,6 +1,6 @@
 # tip · TIP-AG 刃签 L13 蓄力身份 DESIGN stage0（docs-only · HOLD 施工）· D12608–D12615
 
-> **状态：** OPEN · 荐批 **A · 方案 M** · docs-only · HOLD 施工 · 2026-10-12 Asia/Shanghai  
+> **状态：** CLOSED · 批 **A · 方案 M** · docs-only · HOLD 施工（总控 2026-10-12 19:41 Asia/Shanghai）  
 > **上游：** [`DESIGN-ember-blade-sig-l13-charge-identity-stage0-2026-10-12.md`](../design/DESIGN-ember-blade-sig-l13-charge-identity-stage0-2026-10-12.md) · TIP-AF CLOSED docs-only `f6e16ea46` · RESEARCH [`RESEARCH-ember-blade-sig-l11-l13-next-2026-10-12.md`](../design/RESEARCH-ember-blade-sig-l11-l13-next-2026-10-12.md) · TIP-AD exclude 保留 · TIP-AE 甲轨正交  
 > **前置：** RESEARCH 荐先 L13 蓄力身份；短线维持 exclude+观察 HOLD；深化 densify **仍冻**；烬斩门闩 TIP-Y **仍有效**  
 > **施工岗：** **无码**（策划 DESIGN + tip；**不**派插件；勿借机改 `DEFS`/`SIGS` / SkillService / skill_mult / Affix / 甲 fits）  
@@ -73,11 +73,11 @@ TIP-AF 后开 **L13 蓄力身份独立 DESIGN stage0**：钉炉锁巨锤 feel/id
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] DESIGN + tip 路径可点；问题 / 规格 R1–R5 / 门禁可核  
-- [ ] DESIGN power-paths：TIP-AF CLOSED `f6e16ea46` + TIP-AG OPEN  
-- [ ] **无**插件施工派单；**无** L11/L13 数值改动；**无**业务 jar  
-- [ ] `git show` docs-only；密码检查 0  
+- [x] 总控批 **A · 方案 M**  
+- [x] DESIGN + tip 路径可点；问题 / 规格 R1–R5 / 门禁可核  
+- [x] DESIGN power-paths：TIP-AF CLOSED `f6e16ea46` + TIP-AG CLOSED  
+- [x] **无**插件施工派单；**无** L11/L13 数值改动；**无**业务 jar  
+- [x] `git show` docs-only；密码检查 0  
 
 ---
 
