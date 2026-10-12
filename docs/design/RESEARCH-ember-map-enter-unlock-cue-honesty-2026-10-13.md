@@ -1,6 +1,6 @@
 # RESEARCH · 主线/短征解锁「进过即开」菜单诚实（MG2 · 离开转化保留链）· 2026-10-13
 
-> **状态：** OPEN · TIP-BR · 荐批 A·M · 2026-10-13 00:33 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BR · 批 A·M · 已派余烬-插件+物品 · 2026-10-13 00:35 Asia/Shanghai  
 > **起因：** TIP-BQ CLOSED live 后总控「离开转化保留/代价 · 形缓 · 升阶保留链 · 开下一可感变强途径」。prefer **非**再叠 TrMenu 保留/代价半行；扫 AH…BQ / power-paths：**MG2「进过即开 / 清过也开」**仍缺口——服务端 `gemPathUnlocked` / `endgameUnlocked` 已是首进∨首通，短征/挑战/冒险灰锁文案与条件仍写「首通/通关」。  
 > **上游：** TIP-BQ CLOSED live items `a5c3f49d7` · docs `6040733da` · jar 未改 `1.65.800-d13143` · power-paths Batch2 MG2 · `EmberSkillKit.gemPathUnlocked` / `endgameUnlocked` / `mapAccessUnlocked` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify · 零伤乘 · 零抬表 · 零改 WEEKLY_CAP/MARK_TICKS/RATE/upgradeCost · 零抬 talent/gem/副手 flat · 零 ConvertCap densify · 零改 unlock 数学（C_*_ENTER / firstCleared）· 零 soft·开孔再叠 · 零 Anvil densify · 零 topUpTo · 零 SF4 U2U3 · 零灰印/聚火 · 零签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留 / 形缓 Icon A / 转化保留再叠 · 零调律 live bad 进持件 · 零并轨 B · 零 SetRules/Formula 抬 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 sx20 · 零 skill_mult · 零开 L13 施工 tip · 零效果长墙 · 零 lore>3**
@@ -77,4 +77,4 @@
 - 转化保留 / 形缓 / 升阶保留 / 签名·套装·宝石·天赋·烙纹·副手·强化率再叠  
 - 效果长墙 · lore>3 · 并轨 B
 
-## STATUS: OPEN · TIP-BR · 荐批 A·M · 2026-10-13 00:33 Asia/Shanghai
+## STATUS: APPROVED · TIP-BR · 批 A·M · 已派余烬-插件+物品 · 2026-10-13 00:35 Asia/Shanghai

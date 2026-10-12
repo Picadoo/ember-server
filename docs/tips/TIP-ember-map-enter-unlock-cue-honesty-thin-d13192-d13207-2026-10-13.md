@@ -1,6 +1,6 @@
 # tip · TIP-BR 主线/短征解锁「进过即开」菜单诚实（MG2 · 可施工薄 · 可感变强途径）· D13192–D13207
 
-> **状态：** **OPEN** · 荐批 **A · 方案 M** · 2026-10-13 00:33 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件 + 余烬-物品** · 2026-10-13 00:35 Asia/Shanghai  
 > **上游门禁：** TIP-BQ CLOSED live items `a5c3f49d7` · TrMenu reload 77 · docs `6040733da` · jar 未改 `1.65.800-d13143` · RESEARCH [`RESEARCH-ember-map-enter-unlock-cue-honesty-2026-10-13.md`](../design/RESEARCH-ember-map-enter-unlock-cue-honesty-2026-10-13.md) · DESIGN [`DESIGN-ember-map-enter-unlock-cue-honesty-2026-10-13.md`](../design/DESIGN-ember-map-enter-unlock-cue-honesty-2026-10-13.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 离开转化保留/代价 · 形缓 · 升阶保留链 → **主线/短征解锁「进过即开」菜单诚实（MG2）**（**非 densify · 非改解锁数学 · 非 Affix densify · 非伤乘 · 非抬表 · 非 soft/开孔再叠 · 非 SF4 · 非 Anvil · 非签名/套装/宝石/天赋/烙纹/副手/强化率/升阶保留/形缓/转化保留再叠 · 非效果长墙 · 非 lore>3 · 非并轨 B**）  
 > **施工岗（批后派单）：** **余烬-插件**（PAPI `access_q01`/`access_q07` + 单测）；**余烬-物品**（short / adventure / challenge 灰锁条件+文案）；策划本窗 **docs-only**  
@@ -90,19 +90,19 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 文首 HOLD / 选题否决表可核  
-- [ ] 批后才派 **余烬-插件 + 余烬-物品**；策划本窗 **无**业务 jar  
-- [ ] `git show` docs-only（本 commit）；L13 施工仍 HOLD  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 文首 HOLD / 选题否决表可核  
+- [x] 批后才派 **余烬-插件 + 余烬-物品**；策划本窗 **无**业务 jar  
+- [x] `git show` docs-only（本 commit）；L13 施工仍 HOLD  
 
 ---
 
 ## 6. 批注（荐）
 
-- **批：** **A · 方案 M** · 待总控批 · 批后派余烬-插件+物品  
+- **批：** **A · 方案 M** · 已批 · 已派余烬-插件+物品  
 - **选题：** TIP-BQ 后 · **离开转化保留/代价 · 形缓 · 升阶保留** · **主线/短征解锁「进过即开」菜单诚实（MG2）**（可感变强途径 · **非 densify · 非改解锁数学** · 对位 gemPath/endgame SoT / power-paths MG2）  
 - **批后派岗：** 余烬-插件 + 余烬-物品  
 - **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；调律 live bad 进持件；签名 lore 再叠；套装 blurb 再叠；宝石短效果再叠；天赋悬停再叠；烙纹档幅度再叠；副手微量数字再叠；强化率再叠；升阶保留再叠；形缓 Icon A 再叠；转化保留再叠；甲闸再扫；扩 stampable；SetChase 六槽 densify；效果长墙；**Affix densify**；**ConvertCap densify**；**改解锁数学**  
 
-## STATUS: OPEN · 荐批 A·M · 2026-10-13 00:33 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-插件+物品 · 2026-10-13 00:35 Asia/Shanghai

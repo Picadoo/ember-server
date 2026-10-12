@@ -1,6 +1,6 @@
 # DESIGN · 主线/短征解锁「进过即开」菜单诚实（MG2 · 薄窗 · 可施工）· 2026-10-13
 
-> **状态：** OPEN · TIP-BR · 荐批 A·M · 2026-10-13 00:33 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BR · 批 A·M · 已派余烬-插件+物品 · 2026-10-13 00:35 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-map-enter-unlock-cue-honesty-2026-10-13.md`](RESEARCH-ember-map-enter-unlock-cue-honesty-2026-10-13.md)  
 > **对接 live：** TIP-BQ CLOSED live items `a5c3f49d7` · `EmberSkillKit.gemPathUnlocked` / `endgameUnlocked` / `mapAccessUnlocked` · `EmberRunService.challengeOpen` · `ember_p1_short.yml` / `ember_p1_adventure.yml` / `ember_p1_challenge.yml` · power-paths MG2  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留 / 形缓 Icon A / 转化保留再叠 / soft·开孔再叠 **仍冻**  
@@ -126,4 +126,4 @@
 | 11 | Affix densify / ConvertCap densify / 抬表 | **仍冻** |
 | 12 | raid/深渊页其它「通关才开」字面扫尾 | **另 tip · 可选**（本窗优先 short+adventure+challenge） |
 
-## STATUS: OPEN · TIP-BR · 荐批 A·M · 2026-10-13 00:33 Asia/Shanghai
+## STATUS: APPROVED · TIP-BR · 批 A·M · 已派余烬-插件+物品 · 2026-10-13 00:35 Asia/Shanghai
