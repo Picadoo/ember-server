@@ -196,9 +196,11 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-AF CLOSED** · 刃 L11/L13 另轨研究 docs-only · exclude+观察 HOLD · 下一刃 DESIGN stage0
+- **TIP-AG OPEN** · `TIP-ember-blade-sig-l13-design-stage0-thin-d12608-d12615-2026-10-12.md` · DESIGN `DESIGN-ember-blade-sig-l13-charge-identity-stage0-2026-10-12.md` · 刃 L13 蓄力身份 DESIGN stage0（docs-only · HOLD 施工 · 零改 mods · 零 jar 直至门禁+显式开工）· L11 HOLD 另轨 · TIP-AD exclude 保留 · 深化 densify 仍冻 · 无码
 
-- **TIP-AF OPEN** · `TIP-ember-blade-sig-l11-l13-research-thin-d12600-d12607-2026-10-12.md` · RESEARCH `RESEARCH-ember-blade-sig-l11-l13-next-2026-10-12.md` · 刃 L11/L13 另轨研究 docs-only（清 TIP-AD HOLD · 禁改 mods / 抬表 / skill_mult）· 深化 densify 仍冻 · 无码
+- **TIP-AF CLOSED** docs-only `f6e16ea46` · 刃 L11/L13 另轨研究 · exclude+观察 HOLD · 荐下一 L13 DESIGN stage0 → TIP-AG
+
+- **TIP-AF OPEN** · `TIP-ember-blade-sig-l11-l13-research-thin-d12600-d12607-2026-10-12.md` · RESEARCH `RESEARCH-ember-blade-sig-l11-l13-next-2026-10-12.md` · 刃 L11/L13 另轨研究 docs-only（清 TIP-AD HOLD · 禁改 mods / 抬表 / skill_mult）· 深化 densify 仍冻 · 无码 · **（历史 OPEN 行；已 CLOSED）**
 
 - **TIP-AE CLOSED** live `1.65.773-d12599`（`f3a1073cb`/`abe84cb22`）· 烙印扩甲/defense fits · 甲 stampable 仍空 · L11/L13 未动 · 刃债交 TIP-AF
 
