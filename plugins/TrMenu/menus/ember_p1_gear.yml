@@ -84,7 +84,7 @@ Icons:
       material: nether star
       name: '§d套装：§f%corerpg_p1_awaken%'
       lore:
-        - '§a炽愈：生命 ×1.00，每 5 次普攻回最大生命 2.5%（觉醒后最多 4%，6 秒一次），最稳'
+        - '%corerpg_p1_set_blurb%'
         - '§8护甲四件套：§f%corerpg_p1_armor_set%'
 
   N:
