@@ -1,6 +1,6 @@
 # tip · TIP-R 图装身份 · 局内换装共鸣升沿（非加宽 · 非 glance）· D12424–D12439
 
-> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:59 Asia/Shanghai）· 交插件岗  
+> **状态：** CLOSED · live 1.65.771-d12439.local（2026-10-12 17:02 Asia/Shanghai）  
 > **上游：** [`RESEARCH-ember-map-res-wear-cue-thin-2026-10-12.md`](../design/RESEARCH-ember-map-res-wear-cue-thin-2026-10-12.md) · [`DESIGN-ember-map-res-wear-cue-thin-2026-10-12.md`](../design/DESIGN-ember-map-res-wear-cue-thin-2026-10-12.md) · `EmberMapResonance` · TIP-J 停 glance  
 > **前置：** TIP-Q CLOSED PASS live `1.65.770-d12423`；power-glance densify **仍停**  
 > **施工岗：** 插件岗（升沿 cue + latch；**零改加宽数值**）  
@@ -59,7 +59,7 @@
 ## 4. 验收清单
 
 - [x] 总控批 **A · 方案 M**  
-- [ ] D12426–D12430 升沿+latch+热关  
+- [x] D12426–D12430 升沿+latch+热关  
 - [ ] 加宽表 `git show` 无抬  
 - [ ] 不跑 p1sim（文案级）
 
@@ -71,4 +71,4 @@
 - 选题：变强途径 · 图装身份深度（局内换装共鸣升沿）· 非 glance  
 - **批注：** 既有 active 升沿表面化；每 run 一次 latch；WearBone 仅复用零加量；零改加宽；硬禁 Affix/伤乘/抬表/glance twin/soft densify
 
-## STATUS: 批 A·M · 交施工 · 2026-10-12 16:59 CST
+## STATUS: CLOSED · live 1.65.771-d12439.local · 2026-10-12 17:02 CST
