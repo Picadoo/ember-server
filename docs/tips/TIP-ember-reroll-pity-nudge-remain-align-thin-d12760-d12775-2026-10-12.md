@@ -103,4 +103,4 @@
 - 选题：TIP-AP 后 · **续可感 UX** — 洗练保底日首加码 remain 诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify**）  
 - **批注：** AP 宝石加码 remain 已齐；`RerollPityNudge` 日首 +1 live 但 remain/Hope 仍按裸 pity/need 多报「含本次≤n 次」；`ready && incl>1 → incl-1` + 尾缀「今日加码待用」；Hope 洗练轨改吃 remain；零改 pity/BONUS；零新 PAPI；批后派 **余烬-插件**；**L13 施工 HOLD**；DropCraft/Q 加码 remain 另 tip；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 仍冻  
 
-## STATUS: OPEN · pending A·M · 2026-10-12
+## STATUS: CLOSED · live 1.65.782-d12775 · 58e9ac299 · 2026-10-12 21:11 CST
