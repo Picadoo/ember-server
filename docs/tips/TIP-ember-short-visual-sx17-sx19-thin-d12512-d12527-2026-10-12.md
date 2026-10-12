@@ -1,6 +1,6 @@
 # tip · TIP-X 短征轻视觉收尾（sx17–sx19 叠饰）· D12512–D12527
 
-> **状态：** 待批 A · 方案 M · 荐交施工（2026-10-12 17:23 Asia/Shanghai）  
+> **状态：** 批 **A · 方案 M**（总控 2026-10-12 17:24 Asia/Shanghai）· 交地图/脚本岗  
 > **上游：** [`RESEARCH-ember-short-visual-sx17-sx19-thin-2026-10-12.md`](../design/RESEARCH-ember-short-visual-sx17-sx19-thin-2026-10-12.md) · [`DESIGN-ember-short-visual-sx17-sx19-thin-2026-10-12.md`](../design/DESIGN-ember-short-visual-sx17-sx19-thin-2026-10-12.md) · TIP-W sx13–sx16 CLOSED `fb4debc2` · TIP-V · TIP-U · TIP-O · TIP-T 深化停窗  
 > **前置：** TIP-W CLOSED PASS live `fb4debc2`（sx13–16 `@d12496`）；深化 densify **仍冻**；glance densify **仍停**  
 > **施工岗：** 地图/脚本岗（`tools/p1map` 叠饰；**零改 jar 数值表**；runs 仅 `map_version` 戳）  
@@ -61,7 +61,7 @@
 
 ## 4. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [ ] D12514–D12519 脚本+三本叠饰+map_version+脚下实心  
 - [ ] 奖励 / Cast / afk `git show` 无抬  
 - [ ] 不跑 p1sim（叠饰级）
@@ -70,8 +70,8 @@
 
 ## 5. 批注
 
-- [ ] 总控批 **A · 方案 M** · （待填）  
+- [x] 总控批 **A · 方案 M** · 2026-10-12 17:24 CST  
 - 选题：短征白模叠饰收尾 sx17–sx19（TIP-W 范式 · 闭合 O→U→V→W→X）  
-- **批注（荐）：** 叠饰禁重铺；对齐 d12496/d12480/d12464/d12376；sx20/粒子 densify HOLD；仅 map_version `@d12512`；零 jar 数值；硬禁含变强 densify 冻
+- **批注：** 叠饰禁重铺；对齐 d12496 系；sx20/粒子 densify HOLD；仅 map_version `@d12512`；零 jar 数值；硬禁含变强 densify 冻
 
-## STATUS: 待批 A · 方案 M · 2026-10-12 17:23 CST
+## STATUS: 批 A·M · 交施工 · 2026-10-12 17:24 CST

@@ -196,6 +196,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
+- **TIP-X 批 A·M** · tip D12512–D12527 · 交施工 sx17–sx19 收尾
+
 - **TIP-X 待批 A·M** · tip D12512–D12527 · 荐 sx17–sx19 叠饰收尾（换轴续 · 非变强 densify · 闭合 O→U→V→W→X）
 
 - **TIP-W CLOSED PASS** live `fb4debc2` · tip D12496–D12511 · sx13–sx16 `@d12496`
