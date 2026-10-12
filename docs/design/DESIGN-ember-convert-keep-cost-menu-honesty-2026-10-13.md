@@ -1,6 +1,6 @@
 # DESIGN · 每周转化保留/代价菜单诚实（转化 TrMenu · 薄窗 · 可施工）· 2026-10-13
 
-> **状态：** OPEN · TIP-BQ · 2026-10-13 00:27 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BQ · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:29 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-convert-keep-cost-menu-honesty-2026-10-13.md`](RESEARCH-ember-convert-keep-cost-menu-honesty-2026-10-13.md)  
 > **对接 live：** TIP-BP CLOSED live items `ae8ad1c70` · jar 未改 `1.65.800-d13143` · `EmberConvertRules.plan` · `EmberGrowthService.convertHeld` 聊天预览 · `ember_p1_convert.yml` · forge Icon `V` · power-paths · TIP-AW CapSoft live（**禁 densify**）  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留 / 形缓 Icon A 再叠 / soft·开孔再叠 / ConvertCap densify **仍冻**  
@@ -105,4 +105,4 @@
 | 11 | Affix densify / ConvertCap densify / 抬 WEEKLY_CAP | **仍冻** |
 | 12 | 成色/精工「确定成功」字面再压 | **另 tip · 可选**（hope 已齐 · 弱） |
 
-## STATUS: OPEN · TIP-BQ · 2026-10-13 00:27 Asia/Shanghai
+## STATUS: APPROVED · TIP-BQ · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:29 Asia/Shanghai

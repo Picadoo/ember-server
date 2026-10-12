@@ -1,6 +1,6 @@
 # tip · TIP-BQ 每周转化保留/代价菜单诚实（转化 TrMenu · 可施工薄 · 可感变强途径）· D13176–D13191
 
-> **状态：** OPEN · 荐批 **A · 方案 M** · docs-only · 2026-10-13 00:27 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-物品** · **不派插件** · 2026-10-13 00:29 Asia/Shanghai  
 > **上游门禁：** TIP-BP CLOSED live items `ae8ad1c70` · TrMenu reload 77 · docs `078926fe8` · jar 未改 `1.65.800-d13143` · RESEARCH [`RESEARCH-ember-convert-keep-cost-menu-honesty-2026-10-13.md`](../design/RESEARCH-ember-convert-keep-cost-menu-honesty-2026-10-13.md) · DESIGN [`DESIGN-ember-convert-keep-cost-menu-honesty-2026-10-13.md`](../design/DESIGN-ember-convert-keep-cost-menu-honesty-2026-10-13.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 离开技能页形缓 / 升阶保留链 → **每周转化保留/代价菜单诚实**（**非 ConvertCap densify · 非抬 WEEKLY_CAP/价 · 非 Affix densify · 非伤乘 · 非抬表 · 非 soft/开孔再叠 · 非 SF4 · 非 Anvil · 非签名/套装/宝石/天赋/烙纹/副手/强化率/升阶保留/形缓再叠 · 非效果长墙 · 非 lore>3 · 非并轨 B**）  
 > **施工岗（批后派单）：** **余烬-物品**（`ember_p1_convert` Icons `1`/`2`/`3`/`N` + Open tell；可选 forge `V`）；**不派插件**（零新 PAPI · 零 jar）  
@@ -92,19 +92,19 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [x] 文首 HOLD / 选题否决表可核  
-- [ ] 批后才派 **余烬-物品**；**不派插件**；策划本窗 **无**业务 jar  
-- [ ] `git show` docs-only（本 commit）；L13 施工仍 HOLD  
+- [x] 批后才派 **余烬-物品**；**不派插件**；策划本窗 **无**业务 jar  
+- [x] `git show` docs-only（本 commit）；L13 施工仍 HOLD  
 
 ---
 
 ## 6. 批注（荐）
 
-- **批：** **A · 方案 M**（荐）  
+- **批：** **A · 方案 M** · 已批 · 已派余烬-物品 · 不派插件  
 - **选题：** TIP-BP 后 · **离开技能页形缓 / 升阶保留** · **每周转化保留/代价菜单诚实**（可感变强途径 · **非 ConvertCap densify** · 对位 convertHeld 聊天 SoT / 跨族变强环）  
 - **批后派岗：** 余烬-物品；不派插件  
 - **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；调律 live bad 进持件；签名 lore 再叠；套装 blurb 再叠；宝石短效果再叠；天赋悬停再叠；烙纹档幅度再叠；副手微量数字再叠；强化率再叠；升阶保留再叠；形缓 Icon A 再叠；甲闸再扫；扩 stampable；SetChase 六槽 densify；效果长墙；**Affix densify**；**ConvertCap densify**  
 
-## STATUS: OPEN · 荐批 A·M · TIP-BQ · docs-only · 2026-10-13 00:27 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:29 Asia/Shanghai

@@ -1,6 +1,6 @@
 # RESEARCH · 每周转化保留/代价菜单诚实（离开技能页形缓 · 非升阶保留再叠）· 2026-10-13
 
-> **状态：** OPEN · TIP-BQ · 2026-10-13 00:27 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BQ · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:29 Asia/Shanghai  
 > **起因：** TIP-BP CLOSED live 后总控「离开技能页形缓 / 升阶保留链 · 开下一可感变强途径」。prefer **非**幅度半行叠层；扫 AH…BP / power-paths：强化率 / 升阶保留 / 形缓 Icon A 已齐；**每周转化**聊天预览已写保留/代价，转化页目标格 **无 lore**、工坊入口只写代价半句——跨族变强途径在点选前静默。  
 > **上游：** TIP-BP CLOSED live items `ae8ad1c70` · TrMenu reload 77 · docs `078926fe8` · jar 未改 `1.65.800-d13143` · `EmberConvertRules.plan` · `EmberGrowthService.convertHeld` 预览 · `ember_p1_convert.yml` · forge Icon `V` · power-paths · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify · 零伤乘 · 零抬表 · 零改 MARK_TICKS · 零抬 RATE/upgradeCost · 零抬 talent/gem/副手 flat · 零 soft·开孔再叠 · 零 Anvil densify · 零 topUpTo · 零 SF4 U2U3 · 零改 skill_mult · 零灰印/聚火 · 零签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留 / 形缓 Icon A 再叠 · 零调律 live bad · 零并轨 B · 零 SetRules/Formula 抬 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 ConvertCap densify · 零 sx20 · 零开 L13 施工 tip · 零效果长墙 · 零 lore>3**
@@ -78,4 +78,4 @@
 - 形缓 Icon A / 升阶保留 / 强化率 / 签名 lore / 套装 / 宝石 / 天赋 / 烙纹 / 副手再叠  
 - 效果长墙 · lore>3 · 新 PAPI · 并轨方案 B
 
-## STATUS: OPEN · TIP-BQ · 2026-10-13 00:27 Asia/Shanghai
+## STATUS: APPROVED · TIP-BQ · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:29 Asia/Shanghai
