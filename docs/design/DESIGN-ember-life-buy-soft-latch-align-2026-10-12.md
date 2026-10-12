@@ -1,6 +1,6 @@
 # DESIGN · 生活购币 Soft 假耗（扣空）诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-AZ · 2026-10-12  
+> **状态：** APPROVED · TIP-AZ 批 A·M · 已派插件 · 2026-10-12 22:27 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-life-buy-soft-latch-align-2026-10-12.md`](RESEARCH-ember-life-buy-soft-latch-align-2026-10-12.md)  
 > **对接 live：** TIP-AY CLOSED live `1.65.790-d12903` · feat `5fdccde66` · CookCoinSoft.peekFee 范本 · LifeService.buy 八族 Soft · life.yml / C17 `*.coin`  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
@@ -101,4 +101,4 @@ LifeService.buy (币段，伪码):
 2. AnvilRepair Soft 假耗（硬禁 densify 未解冻前不开）  
 3. 主线解锁 / stampable 空 / L13 HOLD 观察  
 
-## STATUS: OPEN · TIP-AZ · 2026-10-12
+## STATUS: APPROVED · TIP-AZ · 2026-10-12 22:27 Asia/Shanghai · 已派余烬-插件
