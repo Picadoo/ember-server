@@ -2619,7 +2619,7 @@ short:
     tier: 1
     drop_label: 短征
     content_version: v1
-    map_version: ember_short_sx17@d442
+    map_version: ember_short_sx17@d12512
     requires: q01
     unlocks: ""
     purpose: "Q01 首通开放：5～8 分钟三房短征（潮门庭/回廊潮道/潮冠终厅）；日有奖 3 次与 sx01–sx16 分开；首通另加。不重开旧日常，不抬挂机。"
@@ -2695,7 +2695,7 @@ short:
     tier: 1
     drop_label: 短征
     content_version: v1
-    map_version: ember_short_sx18@d442
+    map_version: ember_short_sx18@d12512
     requires: q01
     unlocks: ""
     purpose: "Q01 首通开放：5～8 分钟三房短征（晶门庭/折棱廊/晶冠终厅）；日有奖 3 次与 sx01–sx17 分开；首通另加。不重开旧日常，不抬挂机。"
@@ -2771,7 +2771,7 @@ short:
     tier: 1
     drop_label: 短征
     content_version: v1
-    map_version: ember_short_sx19@d442
+    map_version: ember_short_sx19@d12512
     requires: q01
     unlocks: ""
     purpose: "Q01 首通开放：5～8 分钟三房短征（弦门庭/共鸣廊/弦冠终厅）；日有奖 3 次与 sx01–sx18 分开；首通另加。不重开旧日常，不抬挂机。"
