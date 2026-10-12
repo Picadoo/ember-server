@@ -1,6 +1,6 @@
 # RESULT · 防具签名门禁 stage1 离线（S3 / S4）· 2026-10-12
 
-> **状态：** PENDING · 等待 S3/S4 跑数填入 · TIP-AC 开窗  
+> **状态：** FILLED · TIP-AC CLOSED `2578d812e` · 跑数 2026-10-12 18:34–19:18 Asia/Shanghai  
 > **上游 DESIGN：** [`DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md)  
 > **stage0：** TIP-AB CLOSED `a5b264fce`  
 > **硬句：** FAIL → 停、禁抬表凑线；**PASS ≠ 开工**（仍须总控显式批「开工」才开施工 tip）
@@ -11,21 +11,23 @@
 
 | ID | 结果 | 注 |
 |----|------|-----|
-| S1 规则规格 | ☐ PASS（继承 stage0） | 5 取 1 · §2.6 · tag/excl |
-| S2 烙印扩甲 / 掉落不扩 | ☐ PASS（继承 stage0） | STAMP/价不变 |
+| S1 规则规格 | ✅ PASS（继承 stage0） | 5 取 1 · §2.6 · tag/excl |
+| S2 烙印扩甲 / 掉落不扩 | ✅ PASS（继承 stage0） | STAMP/价不变；本窗未改掉落/STAMP |
 
 ---
 
-## 1. 跑次元数据（填）
+## 1. 跑次元数据
 
 | 项 | 值 |
 |----|-----|
-| 日期 (Asia/Shanghai) | |
-| rules sha256 | |
-| balance_version | |
-| players / weeks / dodge | |
-| ML_SEEDS / NPROC | |
-| 操作者 | |
+| 日期 (Asia/Shanghai) | 2026-10-12 17:43–19:18 CST |
+| rules sha256 | `070e08cdb5c42e6d` |
+| balance_version | 123 |
+| players / weeks / dodge | S4：300 / 12 / 0.5（`--abyss --raid --goals`） |
+| ML_SEEDS / NPROC | `7,11` / 6 |
+| S3 N | **2000** / cell·seed |
+| ML_BEST（S3-E） | `{"burst":["L04+L14"],"scorch":["L01+L14"],"sustain":["L05+L14"]}`（pairs 可达硬线内各族最高均 Δ） |
+| 操作者 | Grok Bot executor（docs-only · 零业务 jar） |
 
 ---
 
@@ -35,69 +37,92 @@
 
 ```
 命令：python3 tools/p1sim/armor_sig_gate_s1.py rules
-结果：☐ PASS / ☐ FAIL
-摘录：
+结果：✅ PASS
+摘录：PASS zero_worn / one_charm / prio_charm / prio_head / dual_locked /
+      blade_same_tag / blade_same_tag_all / talent_excl / cap_one → S3-R PASS
 ```
 
 ### 2.2 S3-T / S3-P / S3-E
 
+判定口径：D174 §8；表以 **可达格** 为主（历史同）；🟡 = 硬线内（mean\|Δ\|≤1 且无格超 ±3）可记 PASS 行；❌ = 超硬线。
+
 | 包 | 产物路径 | 判定 |
 |----|----------|------|
-| S3-T tol | `docs/design/out-armor-sig-stage1-tol.md`（或 `tools/p1sim/out-*-armor-sig-42.md`） | ☐ |
-| S3-P pairs | `docs/design/out-armor-sig-stage1-pairs.md` | ☐ |
-| S3-E talent | `docs/design/out-armor-sig-stage1-talent.md` | ☐ |
+| S3-T tol | [`out-armor-sig-stage1-tol.md`](out-armor-sig-stage1-tol.md) | ❌ FAIL |
+| S3-P pairs | [`out-armor-sig-stage1-pairs.md`](out-armor-sig-stage1-pairs.md) | ❌ FAIL |
+| S3-E talent | [`out-armor-sig-stage1-talent.md`](out-armor-sig-stage1-talent.md) | ✅ PASS |
 
-过线精神（D174 §8）：目标 ±2 pp；硬线 mean\|Δ\|≤1 pp 且无格超 ±3 pp。
+**分拆（防具侧 vs 刃侧既有债）：**
 
-失败格（如有）：
+| 透镜 | 结果 |
+|------|------|
+| 防具侧 alone（charm L02/L03/L06/L08/L10/L12/L14/L15）可达 | 全部 ✅/🟡 · **0 条超硬线** |
+| 刃侧 alone 可达 | **L11** burst/sustain ❌；**L13** 三族 ❌（既有刃签债，非本窗新乘区） |
+| 合法对（无 L11/L13）可达 | 绝大多数 ✅/🟡（例 L01+L02 / L04+L03 / L05+L06 ✅） |
+| 含 L11/L13 的对可达 | 大量 ❌（随刃债） |
+| S3-E 最强对+tal（EXCL 开）可达 | 三族全部 ✅ |
 
-| 变体 | 格 | Δ pp | 处置 |
-|------|-----|------|------|
+失败格（可达 · 代表；完整见 out）：
+
+| 变体 | 格/摘要 | Δ pp | 处置 |
+|------|---------|------|------|
+| L11 · burst · 可达 | 最低 q02c d0.5 | **−3.025**（恰超 ±3） | 刃签另轨改规格/砍对；**禁抬表** |
+| L11 · sustain · 可达 | 最低 q01c d0.3；mabs 1.02 | **−5.5** | 同上 |
+| L13 · burst/scorch/sustain · 可达 | 多格 \|Δ\|≫3；mabs 1.85–2.70 | 至 **−13.8** | 同上（skill_charge 等既有方差） |
+| L11+\* / L13+\* pairs · 可达 | 同上族扩散 | 多格超硬线 | 砍对或先修刃 alone |
 
 ### 2.3 S3-X ×0.97 正交清单
 
-- [ ] 无新伤乘 / skill_mult  
-- [ ] 未改 ×0.97 / 共鸣 F  
-- [ ] 行为型叙事  
-- [ ] FAIL 路径不含抬表  
+- [x] 无新伤乘 / skill_mult（未改 `SIGS` / 未发明新 mods 键）  
+- [x] 未改 ×0.97 / 共鸣 F  
+- [x] 行为型叙事（防具侧 = 原 charm 语义升格）  
+- [x] FAIL 路径不含抬表（处置=改规格/砍对）
 
-**S3 总判：** ☐ PASS / ☐ FAIL
+**S3 总判：** ❌ **FAIL**（S3-T / S3-P 刃侧 L11/L13 超 D174 ±3pp 硬线；S3-R / S3-E / S3-X / 防具侧 alone PASS）
 
 ---
 
 ## 3. S4 结果（W30）
 
-| 路线 | BASE W30 | CAND W30 | Δ 周 | 带内 (±0.5) |
-|------|----------|----------|------|-------------|
-| 无轮换 | | | | ☐ |
-| P2-1 轮换 | | | | ☐ |
-| P2-2 深渊 | | | | ☐ |
-| 轮换 + 团本 | | | | ☐ |
-| 团本 + 周目标 | | | | ☐ |
-| 深渊 + 周目标 | | | | ☐ |
+度量：`growthrun.py weeks` · 「两件极品」≥30% 插值周。  
+CAND = day-1 佩戴既有刃+护符（与防具侧升格后 mods 同构；S2 不扩掉落）。
+
+| 路线 | BASE W30 | CAND W30 (L01+L02) | Δ 周 | 带内 (±0.5) |
+|------|----------|---------------------|------|-------------|
+| 无轮换 | 6.46 | 6.73 | +0.27 | ✅ |
+| P2-1 轮换 | 6.43 | 6.67 | +0.24 | ✅ |
+| P2-2 深渊 | 5.10 | 4.95 | −0.15 | ✅ |
+| 轮换 + 团本 | 7.75 | 7.56 | −0.19 | ✅ |
+| 团本 + 周目标 | 6.53 | 6.17 | −0.37 | ✅ |
+| 深渊 + 周目标 | 5.88 | 5.88 | +0.00 | ✅ |
 
 产物：
 
-- BASE：`docs/design/out-armor-sig-stage1-w30-base.md`
-- CAND：`docs/design/out-armor-sig-stage1-w30-cand-*.md`
+- BASE：[`out-armor-sig-stage1-w30-base.md`](out-armor-sig-stage1-w30-base.md)
+- CAND：[`out-armor-sig-stage1-w30-cand-L01L02.md`](out-armor-sig-stage1-w30-cand-L01L02.md)
 
-若总控重钉阈值：写此处 ______ 周，签 ______。
+未另跑第二族对（可选；主代表对已满 ±0.5）。
 
-**S4 总判：** ☐ PASS / ☐ FAIL
+**S4 总判：** ✅ **PASS**（六路线 \|ΔW30\|≤0.5；符合「掉落不扩 → Δ≈0」预期）
 
 ---
 
 ## 4. STAGE1_OFFLINE 总判
 
 ```
-STAGE1_OFFLINE = PENDING | PASS | FAIL
+STAGE1_OFFLINE = FAIL
 ```
 
-- PASS 后：**仍 HOLD 施工**；下一步 = 总控显式「开工」令 → 另开施工 tip（单主题）。  
-- FAIL：**停**；回 stage0 / 本 DESIGN 迭代；禁 Affix / 伤乘 / STAMP 凑线。
+- 因：**S3-T / S3-P** 在 D174 §8 硬线下 FAIL（刃 L11/L13 既有债穿透到 alone + 组合）。  
+- S1/S2 继承 PASS · S3-R PASS · S3-E PASS · S3-X PASS · **S4 PASS** · 防具侧 alone 无新乘区超线。  
+- **仍 HOLD 施工**；即使日后 S3 补绿，亦须总控显式「开工」令 → 另开施工 tip。  
+- **FAIL 处置：** 停；回 stage0 / 刃签另轨改 L11·L13 规格或砍对后重跑 S3-T/P；**禁止** Affix / 伤乘 / STAMP / skill_mult 凑线。防具侧升格语义本身未证明引入新乘区。
 
 ---
 
 ## 5. 备注
 
-（跑数异常、seed 噪声、未建模键等）
+- 全格（含不可达）❌ 中，L10 alone / 部分对的早期格大负偏为「未掉落即可戴」噪声；历史口径以可达为准。  
+- L11 burst 可达硬线贴边：max\|Δ\|=3.025 → 判定 ❌（非 🟡）。  
+- 零业务 jar；未改 CoreRpg / TrMenu / Economy / loot / STAMP 表。  
+- pkl 缓存：`/tmp/ml-armor-sig/{tol,pairs,talent}.pkl`（未入库）。
