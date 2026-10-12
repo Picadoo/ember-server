@@ -176,7 +176,7 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - 本文件 **docs only**；本回合 **不改 jar**、不 push（除非 tip 管线另需）。
 
 ## 进度
-- **TIP-O 批 A·M** · 交施工 sx01–sx04
+- **TIP-O CLOSED PASS** · sx01–04 叠饰
 戳 · 2026-10-12 15:44 CST
 
 - Batch1 TIP-A / Batch2 TIP-C / Batch3 TIP-B：**CLOSED live**（至 1.65.760-d12263）
@@ -192,3 +192,5 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-L CLOSED live** 1.65.767-d12351（Q07 charm + 下一环追烙）
 - **TIP-M CLOSED 停窗观察** · hub 挤度纪要；确认挤后再开 F1；无码
 - **TIP-N CLOSED live** 1.65.768-d12375（warn_bar_hold + pre_half_cue）
+- **TIP-O CLOSED PASS** live `b566bfe4`（sx01–04 叠饰 @d12376）
+- **TIP-P OPEN** · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话（读表不改表 · 非 glance）
