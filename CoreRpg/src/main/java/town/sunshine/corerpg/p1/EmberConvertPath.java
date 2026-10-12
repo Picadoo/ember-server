@@ -85,14 +85,52 @@ public final class EmberConvertPath {
     }
 
     
+    /** D732 / TIP-AW D12863: week convert remain line — CapSoft ready → 容错待用. */
+    public static String weekLineFor(int used, boolean capSoftReady) {
+        int left = Math.max(0, EmberConvertRules.WEEKLY_CAP - used);
+        if (left > 0)
+            return "§e本周转化剩余：§f" + left + "/" + EmberConvertRules.WEEKLY_CAP;
+        if (capSoftReady)
+            return "§e本周转化 · 周次容错待用 · 还可 1 次";
+        return "§a本周转化环已完成 §8· 下周重置";
+    }
+
     /** D732: week convert remain line. */
     public static String weekLine(PlayerData d) {
         if (d == null) return "§8本周转化：—";
         String week = town.sunshine.corerpg.DailyService.weekId();
         int used = d.periodCount(EmberConvertRules.C_CONV, week);
+        return weekLineFor(used, EmberConvertCapSoft.ready(d));
+    }
+
+    /** TIP-AW: preview message fragment after · (no leading §7). */
+    public static String weekRemainFrag(int used, boolean capSoftReady) {
         int left = Math.max(0, EmberConvertRules.WEEKLY_CAP - used);
-        if (left <= 0) return "§a本周转化环已完成 §8· 下周重置";
-        return "§e本周转化剩余：§f" + left + "/" + EmberConvertRules.WEEKLY_CAP;
+        if (left > 0)
+            return "本周剩余 §f" + left + "/" + EmberConvertRules.WEEKLY_CAP;
+        if (capSoftReady)
+            return "本周 · §e容错待用 · 还可 1 次";
+        return "本周剩余 §f0/" + EmberConvertRules.WEEKLY_CAP;
+    }
+
+    /** TIP-AW: ActionBar week-remain short. */
+    public static String weekRemainAb(int used, boolean capSoftReady) {
+        int left = Math.max(0, EmberConvertRules.WEEKLY_CAP - used);
+        if (left > 0)
+            return "§e转化 · 周余 §f" + left;
+        if (capSoftReady)
+            return "§e转化 · 容错待用 · 还可 1 次";
+        return "§e转化 · 周余 §f0";
+    }
+
+    /** TIP-AW: afterSet ActionBar remain. */
+    public static String weekRemainAbAfterSet(int used, boolean capSoftReady) {
+        int left = Math.max(0, EmberConvertRules.WEEKLY_CAP - used);
+        if (left > 0)
+            return "§e转化环 · 余 §f" + left;
+        if (capSoftReady)
+            return "§e转化环 · 容错待用 · 还可 1 次";
+        return "§e转化环 · 余 §f0";
     }
 
 
@@ -105,13 +143,14 @@ public final class EmberConvertPath {
                 + (changed ? "" : " §8· 已是该路径"));
         p.sendMessage(P + glance(id, EmberSetFocus.familyKey(setFocusId), lootTarget));
         p.sendMessage(P + weekLine(d));
-        int left = 0;
+        int used = 0;
+        boolean softReady = false;
         if (d != null) {
             String week = town.sunshine.corerpg.DailyService.weekId();
-            int used = d.periodCount(EmberConvertRules.C_CONV, week);
-            left = Math.max(0, EmberConvertRules.WEEKLY_CAP - used);
+            used = d.periodCount(EmberConvertRules.C_CONV, week);
+            softReady = EmberConvertCapSoft.ready(d);
         }
-        try { p.sendActionBar("§e转化环 · 余 §f" + left); } catch (Throwable ignored) { }
+        try { p.sendActionBar(weekRemainAbAfterSet(used, softReady)); } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P + "§7转化环：", // D887
                 new String[]{"[去转化成" + label(id) + "]", "/corerpg p1 convert " + fk,
                         "手持刃/护符后确认（周 1 次）", "GREEN"},

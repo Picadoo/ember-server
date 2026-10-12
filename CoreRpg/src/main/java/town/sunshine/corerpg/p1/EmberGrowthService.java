@@ -3043,9 +3043,10 @@ public final class EmberGrowthService implements Listener {
         String refuse = EmberConvertRules.refusal(t, toFam, used, gate);
         if (refuse != null && used >= EmberConvertRules.WEEKLY_CAP) {
             try {
-                if (EmberConvertCapSoft.consume(d)) { // D9249
+                // TIP-AW D12860–D12861: !confirm peek only; confirm=true then consume + shout
+                if (EmberConvertCapSoft.tryWeekCapSoft(d, confirm)) { // D9249
                     refuse = EmberConvertRules.refusal(t, toFam, used - 1, gate);
-                    if (refuse == null) {
+                    if (refuse == null && confirm) {
                         p.sendMessage(P + "§a转化周次容错 · 额外 1 次（本周一次）");
                         try { p.sendActionBar("§a转化 · 周次容错"); } catch (Throwable ignored) { }
                     }
@@ -3076,8 +3077,8 @@ public final class EmberGrowthService implements Listener {
         final int coinsPay = coins;
         int qAfter = EmberConvertRules.qualityAfter(t.quality);
         if (!confirm) {
-            // D1296: weekly remain + mat gap honesty（非 K3）
-            int weekLeft = EmberConvertRules.WEEKLY_CAP - used;
+            // D1296 / TIP-AW D12862: weekly remain + mat gap honesty（非 K3）；CapSoft peek 后 ready 仍真
+            boolean softReady = EmberConvertCapSoft.ready(d);
             int haveBlank = 0;
             try {
                 if (plugin.getNiBridge() != null)
@@ -3094,7 +3095,7 @@ public final class EmberGrowthService implements Listener {
                 p.sendMessage(P + "§e转化环：§f" + EmberConvertPath.label(path) + hit);
             }
             p.sendMessage(P + "目标族：§f" + EmberItemData.familyName(toFam)
-                    + " §7· 本周剩余 §f" + weekLeft + "/" + EmberConvertRules.WEEKLY_CAP);
+                    + " §7· " + EmberConvertPath.weekRemainFrag(used, softReady));
             p.sendMessage(P + "成色：§f" + EmberItemData.qualityName(t.quality) + " §7→ §f" + EmberItemData.qualityName(qAfter)
                     + (t.quality > EmberConvertRules.QUALITY_CAP ? " §c（极品截到卓越）" : "")
                     + " §7· 强化 §f+" + t.enhance + " §7→ §f+0");
@@ -3105,7 +3106,7 @@ public final class EmberGrowthService implements Listener {
                         + (gapC > 0 ? " 币" + gapC : "")) : " §a· 料够"));
             if (t.enhance > 0) p.sendMessage(P + "§e提示：可先用工坊「互换」挪走强化再转化");
             try {
-                String ab = "§e转化 · 周余 §f" + weekLeft;
+                String ab = EmberConvertPath.weekRemainAb(used, softReady);
                 if (gapB + gapC > 0) ab += " §c· 缺料";
                 else ab += " §a· 料够";
                 p.sendActionBar(ab);

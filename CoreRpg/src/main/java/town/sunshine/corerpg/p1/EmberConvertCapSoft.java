@@ -5,6 +5,7 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D9249: first convert weekly-cap forgive of the week (one extra convert when weekly full).
  * Zero {@link EmberConvertRules#WEEKLY_CAP}. Not ConvertSure densify (cap soft, not ConfirmTokens).
+ * TIP-AW D12860–D12861: preview peek only; confirm path consume.
  */
 public final class EmberConvertCapSoft {
 
@@ -24,5 +25,25 @@ public final class EmberConvertCapSoft {
         if (!ready(d)) return false;
         d.addPeriodCount(C_USED, "week", 1);
         return true;
+    }
+
+    /**
+     * TIP-AW: when weekly used already at/over CAP, how many extra converts CapSoft still grants (0 or 1).
+     * Pure peek — never consumes.
+     */
+    public static int effectiveExtra(PlayerData pd, int used) {
+        if (pd == null || used < EmberConvertRules.WEEKLY_CAP) return 0;
+        return ready(pd) ? 1 : 0;
+    }
+
+    /**
+     * TIP-AW D12860–D12861: CapSoft gate for convertHeld.
+     * {@code !confirm} → peek only (never consume). {@code confirm} → consume if ready.
+     * Returns true iff soft opens the weekly-cap gate (caller recomputes refusal with used-1).
+     */
+    public static boolean tryWeekCapSoft(PlayerData d, boolean confirm) {
+        if (d == null) return false;
+        if (!confirm) return ready(d);
+        return consume(d);
     }
 }
