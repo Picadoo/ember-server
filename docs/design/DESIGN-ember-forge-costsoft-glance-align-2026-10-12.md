@@ -1,6 +1,6 @@
 # DESIGN · 工坊日首 CostSoft 预览/glance 诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-AS 批 A·M · 已派插件 · 2026-10-12 21:21 Asia/Shanghai  
+> **状态：** CLOSED · live `1.65.784-d12807` · feat `468a08943` · 2026-10-12 21:26 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-forge-costsoft-glance-align-2026-10-12.md`](RESEARCH-ember-forge-costsoft-glance-align-2026-10-12.md)  
 > **对接 live：** TIP-AR CLOSED live `1.65.783-d12791` · TIP-AK/AL/AM 甲诚实 · EnhanceCostSoft D9569 · UpgradeCostSoft D9601 · RefineCostSoft D9617 · QualityCostSoft D9921 · GearNextHint D307/D299  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  

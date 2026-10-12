@@ -1,6 +1,6 @@
 # tip · TIP-AS 工坊日首 CostSoft 预览/glance 诚实对齐（可施工薄 · 可感 UX）· D12792–D12807
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:21 Asia/Shanghai  
+> **状态：** **CLOSED** · live `1.65.784-d12807` · feat `468a08943` · 2026-10-12 21:26 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-forge-costsoft-glance-align-2026-10-12.md`](../design/RESEARCH-ember-forge-costsoft-glance-align-2026-10-12.md) · DESIGN [`DESIGN-ember-forge-costsoft-glance-align-2026-10-12.md`](../design/DESIGN-ember-forge-costsoft-glance-align-2026-10-12.md) · TIP-AR CLOSED live `1.65.783-d12791` · feat `489271b08` · TIP-AK/AL/AM 甲诚实链齐 · TIP forgecost-softs D9569–D9632 / QualityCostSoft D9921 · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径** — **离开 pity-remain 族**（AP/AQ/AR 已齐）；锻造非甲 CostSoft glance 说谎  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberGearNextHint` soft-aware Line · `EmberForgeHeldNext` pd/canPay · SinkGlance / HopeMeter 费用 · RunPapi next/cost + 单测）  
@@ -92,9 +92,9 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12796–D12799；D12801 `git show` 干净  
-- [ ] 菜单默认不动；lore≤3  
-- [ ] 甲早退回归；L13 施工仍 HOLD  
+- [x] 批后插件：D12796–D12799；D12801 `git show` 干净  
+- [x] 菜单默认不动；lore≤3  
+- [x] 甲早退回归；live `1.65.784-d12807` · feat `468a08943`；L13 施工仍 HOLD  
 
 ---
 
@@ -104,4 +104,4 @@
 - 选题：TIP-AR 后 · **离开 pity-remain** — 工坊日首 CostSoft glance 诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify**）  
 - **批注：** AP/AQ/AR 加码 remain 已齐；Enhance/Quality/Refine/Upgrade CostSoft 付费+命令预览已 live，但 GearNextHint/HeldNext/Sink/Hope/Papi 仍全额 → 「还差料」假负、费用多报；soft peek +「今日减负待用」+ canPay 同 peek；零改 MULT/经济表；零新 PAPI；甲早退不动；批后派 **余烬-插件**；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / Brand·Gem soft / pity-remain 再叠 仍冻  
 
-## STATUS: OPEN · TIP-AS · D12792–D12807 · 2026-10-12 21:18 CST
+## STATUS: CLOSED · live 1.65.784-d12807 · 468a08943 · 2026-10-12 21:26 CST
