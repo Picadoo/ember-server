@@ -1,6 +1,6 @@
 # 余烬 · 短征轻视觉续 · sx05–sx08 叠饰
 
-STATUS=**待批 A · 荐方案 M** · 2026-10-12  
+STATUS=**批 A · 方案 M · 交施工** · 2026-10-12 17:09 CST  
 上游 RESEARCH [`RESEARCH-ember-short-visual-sx05-sx08-thin-2026-10-12.md`](RESEARCH-ember-short-visual-sx05-sx08-thin-2026-10-12.md) · tip `TIP-ember-short-visual-sx05-sx08-thin-d12464-d12479-2026-10-12.md`  
 范式：TIP-O / `d12376_sx01_sx04_visual_pass.py` · D450 采实心+占位 skip
 
@@ -30,3 +30,6 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-12
 |------|------|
 | R · 一次铺满 sx05–sx19 | **否**（TIP-O 已禁；拆批） |
 | W · 重铺地形或抬短征奖 | **否决** |
+
+## 进度戳
+- **TIP-U 批 A·M**（2026-10-12）· tip D12464–D12479 · 交施工
