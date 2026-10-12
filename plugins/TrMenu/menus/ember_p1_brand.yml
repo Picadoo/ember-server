@@ -40,6 +40,7 @@ Icons:
       lore:
         - '§c仓差：§f碎差 %corerpg_p1_forge_gap_brand% §8（合成需×40）'
         - '§c定向还差：§f%corerpg_p1_forge_gap_pin% §8（手持阶；空手T1）'
+        - '§7档位仍随机 · 成色上限截断 · 本窗不改表'
 
   C:
     display:
@@ -61,7 +62,7 @@ Icons:
       material: iron sword
       name: '§6刃 · 猎缀纹'
       lore:
-        - '§7对词缀精英伤害'
+        - '§7对词缀精英 · 档 +4%～+16%（仅主线重打）'
         - '§e➥ §f点击预览定向'
     actions:
       all:
@@ -72,7 +73,7 @@ Icons:
       material: blaze powder
       name: '§6刃 · 余烬纹'
       lore:
-        - '§7套装事件伤害'
+        - '§7套装事件伤害 · 档 +0.25%～+1%'
         - '§e➥ §f点击预览定向'
     actions:
       all:
@@ -84,7 +85,7 @@ Icons:
       material: ender eye
       name: '§6护符 · 定身纹'
       lore:
-        - '§7受到首领预警招伤害'
+        - '§7受预警招伤害 · 档 −0.5%～−2%'
         - '§e➥ §f点击预览定向'
     actions:
       all:
@@ -95,7 +96,7 @@ Icons:
       material: magma cream
       name: '§6护符 · 分核纹'
       lore:
-        - '§7烬核自己那份'
+        - '§7烬核自己份 · 档 −1%～−4%'
         - '§e➥ §f点击预览定向'
     actions:
       all:
@@ -106,7 +107,7 @@ Icons:
       material: shield
       name: '§6护符 · 抗缀纹'
       lore:
-        - '§7受到词缀精英伤害'
+        - '§7受词缀精英伤害 · 档 −4%～−16%（仅主线重打）'
         - '§e➥ §f点击预览定向'
     actions:
       all:
