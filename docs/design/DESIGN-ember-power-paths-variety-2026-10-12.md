@@ -198,7 +198,9 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 ## 进度戳
 - **TIP-AP CLOSED** live `1.65.781-d12759` · feat `c5c7ae391` · 宝石加码 remain 诚实 · L13 HOLD
 
-- **TIP-AP OPEN** · `TIP-ember-gem-pity-nudge-remain-align-thin-d12744-d12759-2026-10-12.md` · RESEARCH `RESEARCH-ember-gem-pity-nudge-remain-align-2026-10-12.md` · DESIGN `DESIGN-ember-gem-pity-nudge-remain-align-2026-10-12.md` · 宝石通关保底加码 remain 诚实对齐（可施工薄 · 可感 UX · **换轴离开追烙** · **非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify** · 零改 PITY_NEED/BONUS · 零新 PAPI）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AO CLOSED live · 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify 仍冻 · 策划 docs-only
+- **TIP-AQ OPEN** · `TIP-ember-reroll-pity-nudge-remain-align-thin-d12760-d12775-2026-10-12.md` · RESEARCH `RESEARCH-ember-reroll-pity-nudge-remain-align-2026-10-12.md` · DESIGN `DESIGN-ember-reroll-pity-nudge-remain-align-2026-10-12.md` · 洗练保底日首加码 remain 诚实对齐（可施工薄 · 可感 UX · **续 AP 同构** · **非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify** · 零改 reroll.pity/BONUS · 零新 PAPI）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AP CLOSED live · DropCraft/Q 加码 remain 另 tip · 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify 仍冻 · 策划 docs-only
+
+- **TIP-AP OPEN** · `TIP-ember-gem-pity-nudge-remain-align-thin-d12744-d12759-2026-10-12.md` · RESEARCH `RESEARCH-ember-gem-pity-nudge-remain-align-2026-10-12.md` · DESIGN `DESIGN-ember-gem-pity-nudge-remain-align-2026-10-12.md` · 宝石通关保底加码 remain 诚实对齐（可施工薄 · 可感 UX · **换轴离开追烙** · **非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify** · 零改 PITY_NEED/BONUS · 零新 PAPI）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AO CLOSED live · 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify 仍冻 · 策划 docs-only · **（历史 OPEN 行；已 CLOSED live）**
 
 - **TIP-AO CLOSED live** `1.65.780-d12743.local` · feat `8fb9c51d9` · SigFeel/Hope/remain 追烙就绪目标件对齐 · **L13 施工仍 HOLD**
 
