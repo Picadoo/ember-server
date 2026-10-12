@@ -1,6 +1,6 @@
 # tip · TIP-AU 烙印/调律花费 Hope 诚实对齐（可施工薄 · 可感 UX）· D12824–D12839
 
-> **状态：** **OPEN** · 待总控批 A·M · 2026-10-12 21:38 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:41 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-imprint-attune-spend-hope-soft-align-2026-10-12.md`](../design/RESEARCH-ember-imprint-attune-spend-hope-soft-align-2026-10-12.md) · DESIGN [`DESIGN-ember-imprint-attune-spend-hope-soft-align-2026-10-12.md`](../design/DESIGN-ember-imprint-attune-spend-hope-soft-align-2026-10-12.md) · TIP-AT CLOSED live `1.65.785-d12823` · feat `5d29316a6` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径** — **离开 CostSoft / pity-remain 族**（AS+AT / AP–AR 已齐）；HopeMeter 烙印/调律花费 leftover  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `GrowthService` imprint_hope/attune_hope/impPapi cost + 签名页门槛文案 · `EmberSigChase` remain/readyCue soft need · `autoAttuneUnlock` soft 扣费 · 复用 Imprint*Soft/AttuneUnlockSoft/`GearNextHint.softTail` + 单测）  
@@ -89,8 +89,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12828–D12832；D12834 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] soft 已用全额回归；L13 施工仍 HOLD  
