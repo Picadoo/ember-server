@@ -197,3 +197,4 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 
 ## 进度戳
 - **TIP-P CLOSED live**（2026-10-12 16:51）· 1.65.769-d12407
+- **TIP-Q OPEN** · `TIP-ember-drop-craft-pity-settle-thin-d12408-d12423-2026-10-12.md` · 精工软保底结算进度（对齐成色 · 非 glance）
