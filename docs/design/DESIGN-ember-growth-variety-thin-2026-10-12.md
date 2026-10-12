@@ -124,3 +124,7 @@
 - TIP-A（希望一眼）已 CLOSED（1.65.758-d12247）。
 - TIP-C（图装身份）CLOSED（1.65.759-d12255）。
 - TIP-B（工坊选择感）已开：`TIP-ember-power-forge-commit-d12256-d12263-2026-10-12.md`。
+
+## 进度戳 · TIP-K
+
+- TIP-K OPEN：`docs/tips/TIP-ember-skill-feel-pack-d12320-d12335-2026-10-12.md` · 技能手感包；入口 TIP-F；禁 skill_mult / Affix / glance densify twin
