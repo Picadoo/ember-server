@@ -93,6 +93,6 @@ familyBlurb("sustain") // 旧：生命 ×1.12，每 5 次普攻回…
 | 4 | L13 施工 | **HOLD** |
 | 5 | 调律 live bad 进持件 | **仍冻** |
 | 6 | 签名 lore 再叠 | **仍冻** |
-| 7 | 宝石镶嵌效果持件/菜单细述 | 另 tip · 非本窗 |
+| 7 | 宝石镶嵌效果短诚实 | **→ TIP-BJ OPEN** · 短行非长墙 |
 
 ## STATUS: CLOSED live `1.65.798-d13063` · TIP-BI · feat `de89241c2` · items `2cb3917e7` · 2026-10-12 23:38 Asia/Shanghai
