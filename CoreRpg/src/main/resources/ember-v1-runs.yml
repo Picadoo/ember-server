@@ -1336,7 +1336,7 @@ short:
     tier: 1
     drop_label: 短征
     content_version: v1
-    map_version: ember_short_sx01@d443
+    map_version: ember_short_sx01@d12376
     requires: q01
     unlocks: ""
     purpose: "Q01 首通开放：5～8 分钟三房短征；日有奖 3 次（币/碎片/骨尘）回盘工坊；首通另加币/碎片/胚料。不重开旧日常，不抬挂机。"
@@ -1415,7 +1415,7 @@ short:
     tier: 1
     drop_label: 短征
     content_version: v1
-    map_version: ember_short_sx02@d443
+    map_version: ember_short_sx02@d12376
     requires: q01
     unlocks: ""
     purpose: "Q01 首通开放：5～8 分钟三房短征（栈道/灯桥/灯塔）；日有奖 3 次与 sx01 分开；首通另加。不重开旧日常，不抬挂机。"
@@ -1494,7 +1494,7 @@ short:
     tier: 1
     drop_label: 短征
     content_version: v1
-    map_version: ember_short_sx03@d443
+    map_version: ember_short_sx03@d12376
     requires: q01
     unlocks: ""
     purpose: "Q01 首通开放：5～8 分钟三房短征（雾廊/双闸/霜窖）；日有奖 3 次与 sx01/sx02 分开；首通另加。不重开旧日常，不抬挂机。"
@@ -1575,7 +1575,7 @@ short:
     tier: 1
     drop_label: 短征
     content_version: v1
-    map_version: ember_short_sx04@d444
+    map_version: ember_short_sx04@d12376
     requires: q01
     unlocks: ""
     purpose: "Q01 首通开放：5～8 分钟三房短征（井口/螺旋下井/炉心）；日有奖 3 次与 sx01–sx03 分开；首通另加。不重开旧日常，不抬挂机。"
