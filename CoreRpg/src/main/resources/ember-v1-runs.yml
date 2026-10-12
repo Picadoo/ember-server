@@ -762,7 +762,7 @@ maps:
   q05:
     name: 断塔回廊
     hint: "半血破招（塔心聚裂）"  # D283 名片（纯文案）; D12209
-    loot: {family: burst, slot: blade}  # P2-9 loot identity (D81)
+    loot: {family: burst, slot: blade}  # P2-9 loot identity (D81); D12341 TIP-L: main farm = L09 shape blade; L10 secondary
     dungeon: EmberQ05
     template: ember_daily_spire_v1
     tier: 2
@@ -914,7 +914,7 @@ maps:
   q07:
     name: 锈轨矿道
     hint: "冲撞撞墙 + 炉心破招"  # D283 名片（纯文案）
-    loot: {family: burst}  # P2-9 loot identity (D81)
+    loot: {family: burst, slot: charm}  # P2-9 loot identity (D81) + D12338 TIP-L charm bias
     dungeon: EmberQ07
     template: ember_daily_rail_v1
     tier: 3

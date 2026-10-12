@@ -904,7 +904,7 @@ public class EmberRunRulesTest {
         EmberRunMaps.MapDef q1 = m.byKey("q01"), q7 = m.byKey("q07");
         assertEquals("scorch", q1.lootFamily);
         assertEquals("blade", q1.lootSlot);
-        assertNull(q7.lootSlot);
+        assertEquals("charm", q7.lootSlot); // D12338 TIP-L
         assertEquals("sustain", m.raids.get("r02").lootFamily);
         assertEquals(1, m.raidItemQualityFloor);
         EmberRunRules.LootBias lb = m.lootBias(q1);

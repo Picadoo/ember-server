@@ -11,7 +11,9 @@ import town.sunshine.corerpg.PlayerData;
 
 /**
  * D679: map gear farm loop — one chat line naming the next chase piece vs worn.
- * Not a PAPI hope-meter twin. Zero drop rate / clear-gate change.
+ * D12340 TIP-L: when map identity complete ∧ (sig chase set ∨ map marks≥1 under imprint need)
+ * → 「图装下一环」 prefers chase/imprint buttons; forge/setchase secondary.
+ * Not a PAPI hope-meter twin. Zero drop rate / clear-gate / STAMP_RATE change.
  */
 public final class EmberMapFarmCue {
 
@@ -116,10 +118,6 @@ public final class EmberMapFarmCue {
         try {
             p.sendActionBar("§e图装 · §f" + method);
         } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：", // D914
-                new String[]{"[强化预览]", "/corerpg p1 enhance", "手持同族冲档", "GREEN"},
-                new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口", "GOLD"},
-                new String[]{"[再进]", "/corerpg p1 enter " + m.key, "继续刷", "AQUA"});
         // D704: if set focus matches map family, append set-completion gap (no button)
         PlayerData pd = dataOf(p);
         if (pd != null && lo != null && mapFam != null && EmberRunRules.validFamily(mapFam)) {
@@ -141,14 +139,8 @@ public final class EmberMapFarmCue {
                     : "§e下一件 · §7本图装";
             p.sendActionBar(shortBar);
         } catch (Throwable ignored) { }
-        // D833 re-farm same map
-        if (mapFam != null && EmberRunRules.validFamily(mapFam)) {
-            ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：",
-                    new String[]{"[再进·" + (m.name != null ? m.name : m.key) + "]", "/corerpg p1 enter " + m.key,
-                            "刷同族 " + EmberItemData.familyName(mapFam), "GREEN"},
-                    EmberForgeCommitNext.enhance(),
-                    new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口", "AQUA"});
-        }
+        // D914 / D833 / D12340: single next-ring row (sig priority when identity 齐)
+        sendNextRingButtons(p, m, pd);
     }
 
 
@@ -298,15 +290,74 @@ public final class EmberMapFarmCue {
             else {
                 // D838 still offer re-enter + chase glance
                 EmberRunMaps.MapDef md = runs.maps() == null ? null : runs.maps().byKey(key);
-                if (md != null) cue(p, md, lo);
-                else p.sendMessage(EmberRunService.P + "§7图装追 · 上次 §f" + key.toUpperCase());
-                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：",
-                        new String[]{"[再进·" + key.toUpperCase() + "]", "/corerpg p1 enter " + key, "继续刷", "GREEN"},
-                        EmberForgeCommitNext.enhance(),
-                        new String[]{"[冒险页]", "/ember_p1_adventure", "换图", "AQUA"});
+                if (md != null) {
+                    cue(p, md, lo); // D12340 next-ring inside cue
+                } else {
+                    p.sendMessage(EmberRunService.P + "§7图装追 · 上次 §f" + key.toUpperCase());
+                    ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：",
+                            new String[]{"[再进·" + key.toUpperCase() + "]", "/corerpg p1 enter " + key, "继续刷", "GREEN"},
+                            EmberForgeCommitNext.enhance(),
+                            new String[]{"[冒险页]", "/ember_p1_adventure", "换图", "AQUA"});
+                }
             }
         }
         return true;
+    }
+
+
+    /**
+     * D12340: identity complete (have≥need) ∧ (chase set ∨ this map marks∈[1, imprintNeed)).
+     * Pure — no new PAPI / remainLine.
+     */
+    static boolean preferSigNextRing(EmberRunMaps.MapDef m, PlayerData pd) {
+        if (m == null || pd == null) return false;
+        int[] hn = EmberMapIdentity.haveNeed(m, pd);
+        if (hn[1] <= 0 || hn[0] < hn[1]) return false;
+        if (EmberSigChase.get(pd) != null) return true;
+        if (m.key == null || m.key.isEmpty()) return false;
+        int marks = pd.periodCount(EmberSignature.C_MARK + m.key, "all");
+        int need = EmberSignature.imprintMarks();
+        return marks >= 1 && marks < need;
+    }
+
+    /**
+     * D12340 / D914 / D833: one 「图装下一环」 row.
+     * When {@link #preferSigNextRing}: [追烙]/[去烙印|签名页] + [再进] secondary.
+     * Else: re-enter + forge enhance + setchase (identity still incomplete).
+     */
+    static void sendNextRingButtons(Player p, EmberRunMaps.MapDef m, PlayerData pd) {
+        if (p == null || m == null) return;
+        String title = EmberRunService.P + "§7图装下一环：";
+        if (preferSigNextRing(m, pd)) {
+            EmberSignature.Def chase = EmberSigChase.get(pd);
+            String[] a;
+            String[] b;
+            if (chase != null) {
+                int marks = pd.periodCount(EmberSignature.C_MARK + chase.map, "all");
+                a = new String[]{"[追烙]", "/corerpg p1 sig chase",
+                        EmberSigChase.remainLine(chase, marks), "GOLD"};
+                if (marks >= EmberSignature.imprintMarks()) {
+                    b = new String[]{"[去烙印]", "/corerpg p1 sig pick " + chase.id,
+                            "徽记够可烙到件上", "YELLOW"};
+                } else {
+                    b = new String[]{"[签名页]", "/corerpg p1 sig menu", "图鉴 / 烙印", "AQUA"};
+                }
+            } else {
+                a = new String[]{"[追烙]", "/corerpg p1 sig chase", "设烙印目标", "GOLD"};
+                b = new String[]{"[签名页]", "/corerpg p1 sig menu", "图鉴 / 烙印", "AQUA"};
+            }
+            ConfirmTokens.sendButtons(p, title, a, b,
+                    new String[]{"[再进]", "/corerpg p1 enter " + m.key, "继续刷", "GRAY"});
+            return;
+        }
+        String mapFam = m.lootFamily;
+        String reEnterLabel = "[再进·" + (m.name != null ? m.name : (m.key != null ? m.key.toUpperCase() : "?")) + "]";
+        String reHover = mapFam != null && EmberRunRules.validFamily(mapFam)
+                ? ("刷同族 " + EmberItemData.familyName(mapFam)) : "继续刷";
+        ConfirmTokens.sendButtons(p, title,
+                new String[]{reEnterLabel, "/corerpg p1 enter " + m.key, reHover, "GREEN"},
+                EmberForgeCommitNext.enhance(),
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
