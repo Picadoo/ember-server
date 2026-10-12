@@ -104,7 +104,7 @@
 | 5 | 调律 live bad 进持件 | **仍冻** |
 | 6 | 签名 lore / 套装 blurb / 宝石短效果再叠 | **仍冻** |
 | 7 | soft·开孔·GemHole 再叠 | **仍冻** |
-| 8 | 烙纹定向幅度菜单诚实 | **另 tip · Affix 旁近慎开** |
+| 8 | 烙纹定向幅度菜单诚实 | **→ TIP-BL OPEN**（非 Affix densify · 只展示） |
 | 9 | 一层中段节点进 TrMenu | **另 tip · 非本窗 densify** |
 
 ## STATUS: CLOSED live items `4c2c38485` · TIP-BK · TrMenu reload 77 · jar 未改 · 2026-10-12 23:52 Asia/Shanghai
