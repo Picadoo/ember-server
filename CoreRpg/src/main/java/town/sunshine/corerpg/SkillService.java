@@ -1110,6 +1110,11 @@ public final class SkillService implements Listener {
             } catch (Throwable ignored) { }
         }
         applySlashSetIdentity(player, hit);
+        try {
+            String famSf4 = ls == null ? "none" : ls.get(player).activeSet;
+            if (famSf4 == null || famSf4.isEmpty()) famSf4 = "none";
+            town.sunshine.corerpg.p1.EmberSkillSf4.maybeApply(player, hit, shapeId, famSf4); // TIP-BG D13023
+        } catch (Throwable ignored) { }
         if (!hit.isEmpty()) {
             try {
                 town.sunshine.corerpg.PlayerData pdS = plugin.getDataStore().get(player.getUniqueId());
