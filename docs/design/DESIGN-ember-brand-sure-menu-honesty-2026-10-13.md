@@ -105,6 +105,6 @@
 | 11 | Affix densify / ConvertCap densify / 抬表 / forgeroll 权重 densify | **仍冻** |
 | 12 | 分解菜单「确定」字面再压 | **另 tip · 可选**（弱） |
 | 13 | 烙纹 BrandSure 再叠 / Open tell densify | **本窗后冻再叠** |
-| 14 | SigStampPity 菜单 n/N 一眼 | **另 tip · 可选**（签名邻 · prefer 离 brand 后再评） |
+| 14 | SigStampPity 菜单 n/N 一眼 | **→ TIP-BW OPEN** · `TIP-ember-sig-stamp-pity-menu-honesty-thin-d13272-d13287-2026-10-13.md` |
 
 ## STATUS: OPEN · TIP-BV · 荐批 A·M · 2026-10-13 00:58 Asia/Shanghai
