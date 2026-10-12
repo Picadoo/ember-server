@@ -1,6 +1,6 @@
 # DESIGN · 防具签名叠合门禁 stage1 离线（S3 p1sim + S4 W30）· 2026-10-12
 
-> **状态：** OPEN · TIP-AC 待批 A·M · docs+tools · **HOLD 施工 / 零业务 jar** · 2026-10-12 17:41 Asia/Shanghai  
+> **状态：** APPROVED · TIP-AC 批 A·M · docs+tools · **HOLD 施工 / 零业务 jar** · RESULT 数字后继 · 2026-10-12 17:44 Asia/Shanghai  
 > **对接 tip：** [`TIP-ember-armor-signature-gate-stage1-offline-thin-d12560-d12575-2026-10-12.md`](../tips/TIP-ember-armor-signature-gate-stage1-offline-thin-d12560-d12575-2026-10-12.md)  
 > **上游：** TIP-AB CLOSED DESIGN stage0 APPROVED HOLD `a5b264fce` · [`DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md`](DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md) · RESEARCH [`RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md`](RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md)  
 > **结果落点：** [`RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md)（跑完填；本窗可只建空壳）  

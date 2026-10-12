@@ -196,6 +196,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
+- **TIP-AC CLOSED** · 防具签名门禁 stage1 离线包 APPROVED · S3-R PASS · RESULT 数字后继 · HOLD 施工
+
 - **TIP-AB CLOSED** `a5b264fce` · 防具签名+叠合门禁 DESIGN stage0 APPROVED · HOLD 施工至 S1–S4+显式开工
 - **TIP-AC OPEN** · `TIP-ember-armor-signature-gate-stage1-offline-thin-d12560-d12575-2026-10-12.md` · DESIGN `DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md` · stage1 离线门禁 S3 p1sim + S4 W30（docs+tools · RESULT PENDING · 零业务 jar · PASS≠开工）· 深化 densify 仍冻
 

@@ -1,6 +1,6 @@
 # tip · TIP-AC 防具签名门禁 stage1 离线（S3 p1sim + S4 W30 · docs+tools）· D12560–D12575
 
-> **状态：** OPEN · 待批 **A · 方案 M** · docs+tools · HOLD 施工（2026-10-12 17:41 Asia/Shanghai）  
+> **状态：** CLOSED · 批 **A · 方案 M** · docs+tools · HOLD 施工 · RESULT 数字后继（总控 2026-10-12 17:44 Asia/Shanghai）  
 > **上游：** [`DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](../design/DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md) · TIP-AB CLOSED DESIGN stage0 APPROVED HOLD `a5b264fce` · stage0 [`DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md`](../design/DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md)  
 > **结果落点：** [`RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](../design/RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md)  
 > **前置：** S1/S2 书面继承 stage0；深化 densify **仍冻**；烬斩门闩 TIP-Y **仍有效**  
@@ -80,12 +80,12 @@ TIP-AB 后开 **stage1 离线门禁**：可执行 **S3（p1sim 单条/组合/exc
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] DESIGN + tip + RESULT 路径可点；S3/S4 命令可核  
-- [ ] power-paths：TIP-AB CLOSED `a5b264fce` + TIP-AC OPEN  
-- [ ] harness `armor_sig_gate_s1.py rules` 本地可 PASS（本 commit 已跑）  
-- [ ] **无**插件施工派单；**无**业务 jar  
-- [ ] `git show` 仅 docs + 该 tools 薄文件；密码检查 0  
+- [x] 总控批 **A · 方案 M**  
+- [x] DESIGN + tip + RESULT 路径可点；S3/S4 命令可核  
+- [x] power-paths：TIP-AB CLOSED `a5b264fce` + TIP-AC CLOSED  
+- [x] harness `armor_sig_gate_s1.py rules` 本地可 PASS（总控复跑 PASS）  
+- [x] **无**插件施工派单；**无**业务 jar  
+- [x] `git show` 仅 docs + 该 tools 薄文件；密码检查 0  
 - [ ] （可后继）S3/S4 数字填入 RESULT → `STAGE1_OFFLINE=PASS|FAIL`
 
 ---
