@@ -198,7 +198,7 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 ## 进度戳
 - **TIP-AU CLOSED** live `1.65.786-d12839` · feat `53a9fe3b8` · 烙印/调律花费 Hope 诚实 · L13 HOLD
 
-- **TIP-AV OPEN** · `TIP-ember-lockshard-soft-glance-align-thin-d12840-d12855-2026-10-12.md` · RESEARCH `RESEARCH-ember-lockshard-soft-glance-align-2026-10-12.md` · DESIGN `DESIGN-ember-lockshard-soft-glance-align-2026-10-12.md` · LOCK LockShard soft glance 诚实对齐（可施工薄 · 可感 UX · **总控显式旁债 · soft 已 live 非发明** · **非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify** · 零改 MULT/C11 · 零新 PAPI · 甲早退不动）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AU CLOSED live · AS/AT densify 再叠 / pity-remain 再叠 / 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify 仍冻 · 策划 docs-only
+- **TIP-AV APPROVED · 已派插件** · `TIP-ember-lockshard-soft-glance-align-thin-d12840-d12855-2026-10-12.md` · RESEARCH `RESEARCH-ember-lockshard-soft-glance-align-2026-10-12.md` · DESIGN `DESIGN-ember-lockshard-soft-glance-align-2026-10-12.md` · LOCK LockShard soft glance 诚实对齐（可施工薄 · 可感 UX · **总控显式旁债 · soft 已 live 非发明** · **非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify** · 零改 MULT/C11 · 零新 PAPI · 甲早退不动）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AU CLOSED live · AS/AT densify 再叠 / pity-remain 再叠 / 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify 仍冻 · 策划 docs-only
 
 - **TIP-AT CLOSED** live `1.65.785-d12823` · feat `5d29316a6` · Brand/Gem/Convert/Roll CostSoft glance 诚实 · L13 HOLD
 

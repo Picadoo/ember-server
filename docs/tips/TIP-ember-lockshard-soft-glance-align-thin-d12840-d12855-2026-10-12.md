@@ -1,6 +1,6 @@
 # tip · TIP-AV LOCK LockShard soft 预览/glance 诚实对齐（可施工薄 · 可感 UX）· D12840–D12855
 
-> **状态：** **OPEN** · 待总控批 A·M · 2026-10-12  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:52 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-lockshard-soft-glance-align-2026-10-12.md`](../design/RESEARCH-ember-lockshard-soft-glance-align-2026-10-12.md) · DESIGN [`DESIGN-ember-lockshard-soft-glance-align-2026-10-12.md`](../design/DESIGN-ember-lockshard-soft-glance-align-2026-10-12.md) · TIP-AU CLOSED live `1.65.786-d12839` · feat `53a9fe3b8` · TIP-AT CLOSED live `1.65.785-d12823` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **显式旁债** — LOCK LockShard soft glance（AS/AT 曾误写「无 soft」；**RerollLockShardSoft 已 live**，对齐 peek）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberForgeHeldNext` lockRerollCost soft · LOCK canPay/softTail · `EmberSinkGlance` LOCK soft lack · GrowthService 菜单 lock/邀请 ls soft · 复用 `RerollLockShardSoft`/`RerollCoinSoft`/`SOFT_TAIL` + 单测）  
@@ -89,8 +89,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12844–D12848；D12850 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] 甲早退回归；soft 已用全额回归；L13 施工仍 HOLD  
