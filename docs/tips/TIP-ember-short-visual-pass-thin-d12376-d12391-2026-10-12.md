@@ -1,6 +1,6 @@
 # tip · TIP-O 短征轻视觉点缀薄窗（sx01–sx04 叠饰）· D12376–D12391
 
-> **状态：** OPEN · 待批 A · 荐方案 M（2026-10-12 Asia/Shanghai）  
+> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:41 Asia/Shanghai）· 交地图/脚本岗  
 > **上游：** [`RESEARCH-ember-short-visual-pass-thin-2026-10-12.md`](../design/RESEARCH-ember-short-visual-pass-thin-2026-10-12.md) · [`DESIGN-ember-short-visual-pass-thin-2026-10-12.md`](../design/DESIGN-ember-short-visual-pass-thin-2026-10-12.md) · D443/D444 真地形 · D449/D450 主线范式  
 > **前置：** TIP-N Boss 预警 R 薄热修 CLOSED live 1.65.768-d12375；glance densify **仍停**  
 > **施工岗：** 地图/脚本岗（`tools/p1map` 叠饰；**零改 jar 数值表**；runs 仅 `map_version` 戳）  
@@ -62,7 +62,7 @@
 
 ## 4. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [ ] D12378–D12384 脚本+四本叠饰+map_version+脚下实心  
 - [ ] 奖励 / Cast / afk / STAMP `git show` 无抬  
 - [ ] 不跑 p1sim（叠饰级）
@@ -71,8 +71,8 @@
 
 ## 5. 批注
 
-- [ ] 总控批 **A · 方案 M** · （待）  
+- [x] 总控批 **A · 方案 M** · 2026-10-12 16:41 CST  
 - 选题：短征白模叠饰（主线 D449/D450 范式迁 sx）  
-- **批注预填：** 首批 sx01–sx04；叠饰禁重铺；sx05+ 另 tip；硬禁 Affix/伤乘/抬表/glance twin
+- **批注：** 首批 sx01–sx04；叠饰禁重铺；对齐 d450 采实心+占位 skip；sx05+ 另 tip；仅 map_version 戳；零 jar 数值
 
-## STATUS: OPEN · 待批 A · 荐 M · D12376–D12391
+## STATUS: 批 A·M · 交施工 · 2026-10-12 16:41 CST
