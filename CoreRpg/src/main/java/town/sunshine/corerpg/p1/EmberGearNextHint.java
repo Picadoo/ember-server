@@ -1,12 +1,17 @@
 package town.sunshine.corerpg.p1;
 
+import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.p1.EmberUpgradeRules.Cost;
 
 /**
  * D299 · 再刷短反馈：成色 / 精工近档；D307 · 工坊菜单诚实：强化/升阶/互换/分解费用行 + 缺料半行。
+ * TIP-AS D12796: soft-aware *Line(d,pd) peek CostSoft（apply false）+「今日减负待用」；一元 ≡ null pd。
  * Bukkit-free so unit tests pin the strings.
  */
 public final class EmberGearNextHint {
+
+    /** TIP-AS: soft ready display tail (zero new PAPI). */
+    public static final String SOFT_TAIL = "今日减负待用";
 
     private EmberGearNextHint() {}
 
@@ -30,18 +35,40 @@ public final class EmberGearNextHint {
         return (Math.max(0, craft) * 2) + "%";
     }
 
+    /** TIP-AS: peek soft cost; never consume. Null pd / null full → full. */
+    public static Cost softCost(String kind, PlayerData pd, Cost full) {
+        if (full == null) return null;
+        if (pd == null) return full;
+        if ("enhance".equals(kind)) return EmberEnhanceCostSoft.apply(pd, full, false);
+        if ("quality".equals(kind)) return EmberQualityCostSoft.apply(pd, full, false);
+        if ("refine".equals(kind)) return EmberRefineCostSoft.apply(pd, full, false);
+        if ("upgrade".equals(kind)) return EmberUpgradeCostSoft.apply(pd, full, false);
+        return full;
+    }
+
+    static String softTail(boolean ready) {
+        return ready ? " · " + SOFT_TAIL : "";
+    }
+
     /**
      * 成色近档一行。{@code null} piece → empty (caller shows「无穿着」).
      * q0→1 / 1→2：下一档 + 费用；q2：极品仅掉落；q3：已满。
      */
     public static String qualityLine(EmberItemData d) {
+        return qualityLine(d, null);
+    }
+
+    /** TIP-AS D12796: soft peek +「今日减负待用」when QualityCostSoft.ready. */
+    public static String qualityLine(EmberItemData d, PlayerData pd) {
         if (d == null) return "";
         String cur = EmberItemData.qualityName(d.quality);
-        Cost c = EmberUpgradeRules.qualityCost(d.quality);
+        Cost full = EmberUpgradeRules.qualityCost(d.quality);
+        Cost c = softCost("quality", pd, full);
         // D1917 GS3-C: append certainty dial fraction
         String dial = " · 表盘" + EmberQualityCraftDial.qualityStep(d.quality) + "/" + EmberQualityCraftDial.qualityMax();
         if (c != null && d.quality < 2) {
-            return "成色 " + cur + " → " + EmberItemData.qualityName(d.quality + 1) + "（" + costShort(c) + "·确定）" + dial;
+            return "成色 " + cur + " → " + EmberItemData.qualityName(d.quality + 1)
+                    + "（" + costShort(c) + "·确定）" + dial + softTail(EmberQualityCostSoft.ready(pd));
         }
         if (d.quality == 2) return "成色 " + cur + " → 极品仅掉落" + dial;
         if (d.quality >= 3) return "成色 " + cur + " · 已满";
@@ -52,12 +79,18 @@ public final class EmberGearNextHint {
      * 精工近档一行。满档「已满」；否则当前% → 下一档% + 费用。
      */
     public static String craftLine(EmberItemData d) {
+        return craftLine(d, null);
+    }
+
+    /** TIP-AS D12796: soft peek +「今日减负待用」when RefineCostSoft.ready. */
+    public static String craftLine(EmberItemData d, PlayerData pd) {
         if (d == null) return "";
-        Cost c = EmberUpgradeRules.refineCost(d.craft);
+        Cost full = EmberUpgradeRules.refineCost(d.craft);
+        Cost c = softCost("refine", pd, full);
         String dial = " · 表盘" + EmberQualityCraftDial.craftStep(d.craft) + "/" + EmberQualityCraftDial.craftMax();
         if (c == null) return "精工 " + craftPct(d.craft) + " · 已满" + dial;
         return "精工 " + craftPct(d.craft) + " → " + craftPct(d.craft + 1)
-                + "（" + costShort(c) + "·确定）" + dial;
+                + "（" + costShort(c) + "·确定）" + dial + softTail(EmberRefineCostSoft.ready(pd));
     }
 
     /**
@@ -65,6 +98,11 @@ public final class EmberGearNextHint {
      * 形：{@code +3→+4 · 碎片12 币120 · 85%（1/3）}；保底次加「必成」。
      */
     public static String enhanceLine(EmberItemData d) {
+        return enhanceLine(d, null);
+    }
+
+    /** TIP-AS D12796: soft peek +「今日减负待用」when EnhanceCostSoft.ready && plan.ok. */
+    public static String enhanceLine(EmberItemData d, PlayerData pd) {
         if (d == null) return "";
         EmberUpgradeRules.Plan c = EmberUpgradeRules.enhanceCheck(d);
         if (!c.ok()) return c.error;
@@ -80,7 +118,9 @@ public final class EmberGearNextHint {
             int incl = Math.max(1, max - d.pity);
             pity = "第" + n + "/" + max + " · 含本次≤" + incl + "次必成";
         }
-        return "+" + d.enhance + "→+" + t + " · " + costShort(c.cost) + " · " + pct + "%（" + pity + "）";
+        Cost cost = softCost("enhance", pd, c.cost);
+        String base = "+" + d.enhance + "→+" + t + " · " + costShort(cost) + " · " + pct + "%（" + pity + "）";
+        return base + softTail(EmberEnhanceCostSoft.ready(pd));
     }
 
     /** D1174 pure: remaining attempts incl. current until pity guarantee. */
@@ -95,15 +135,22 @@ public final class EmberGearNextHint {
      * {@code gateOk} = 本人已首通 upgradeFlag(tier)。
      */
     public static String upgradeLine(EmberItemData d, boolean gateOk) {
+        return upgradeLine(d, gateOk, null);
+    }
+
+    /** TIP-AS D12796: soft peek +「今日减负待用」when UpgradeCostSoft.ready && cost exists. */
+    public static String upgradeLine(EmberItemData d, boolean gateOk, PlayerData pd) {
         if (d == null) return "";
-        Cost c = EmberUpgradeRules.upgradeCost(d.tier);
-        if (c == null) {
+        Cost full = EmberUpgradeRules.upgradeCost(d.tier);
+        if (full == null) {
             if (d.tier == 0) return "T0 不能升阶";
             return "已是最高阶 T" + d.tier;
         }
+        Cost c = softCost("upgrade", pd, full);
         String flag = EmberUpgradeRules.upgradeFlag(d.tier);
-        String step = "T" + d.tier + "→T" + (d.tier + 1) + " · " + costShort(c);
-        if (!gateOk) return "需首通 " + flag.toUpperCase(java.util.Locale.ROOT) + " · " + costShort(c);
+        String tail = softTail(EmberUpgradeCostSoft.ready(pd));
+        String step = "T" + d.tier + "→T" + (d.tier + 1) + " · " + costShort(c) + tail;
+        if (!gateOk) return "需首通 " + flag.toUpperCase(java.util.Locale.ROOT) + " · " + costShort(c) + tail;
         return step;
     }
 

@@ -759,11 +759,23 @@ public final class EmberRunPapi {
             case "ehp": return String.format(Locale.ROOT, "%.0f", l.ehp());
             case "blade": return l.blade == null ? "主手没拿余烬刃" : l.blade.shortLabel();
             case "charm": return l.charm == null ? "未选定护符" : l.charm.shortLabel();
-            // D299 W1a：穿着刃/护符成色·精工近档
-            case "blade_next_q": return l.blade == null ? "§8主手无刃" : EmberGearNextHint.qualityLine(l.blade);
-            case "blade_next_c": return l.blade == null ? "§8主手无刃" : EmberGearNextHint.craftLine(l.blade);
-            case "charm_next_q": return l.charm == null ? "§8未选护符" : EmberGearNextHint.qualityLine(l.charm);
-            case "charm_next_c": return l.charm == null ? "§8未选护符" : EmberGearNextHint.craftLine(l.charm);
+            // D299 W1a：穿着刃/护符成色·精工近档 · TIP-AS soft-aware
+            case "blade_next_q": {
+                PlayerData softPd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                return l.blade == null ? "§8主手无刃" : EmberGearNextHint.qualityLine(l.blade, softPd);
+            }
+            case "blade_next_c": {
+                PlayerData softPd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                return l.blade == null ? "§8主手无刃" : EmberGearNextHint.craftLine(l.blade, softPd);
+            }
+            case "charm_next_q": {
+                PlayerData softPd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                return l.charm == null ? "§8未选护符" : EmberGearNextHint.qualityLine(l.charm, softPd);
+            }
+            case "charm_next_c": {
+                PlayerData softPd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                return l.charm == null ? "§8未选护符" : EmberGearNextHint.craftLine(l.charm, softPd);
+            }
             // D299 W1b：工坊手持件近档（无手持 / 非 P1 → 提示）
             case "held_next_q": return heldNext(p, true);
             case "held_next_c": return heldNext(p, false);
@@ -777,23 +789,33 @@ public final class EmberRunPapi {
                 if (hd == null) return EmberHopeMeter.emptySlot("手持");
                 return EmberHopeMeter.enhance(hd);
             }
-            case "quality_blade_hope": // D602
-                return l.blade == null ? EmberHopeMeter.emptySlot("刃") : EmberHopeMeter.quality(l.blade);
-            case "quality_charm_hope": // D602
-                return l.charm == null ? EmberHopeMeter.emptySlot("护符") : EmberHopeMeter.quality(l.charm);
+            case "quality_blade_hope": { // D602 · TIP-AS soft
+                PlayerData softPd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                return l.blade == null ? EmberHopeMeter.emptySlot("刃") : EmberHopeMeter.quality(l.blade, softPd);
+            }
+            case "quality_charm_hope": {
+                PlayerData softPd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                return l.charm == null ? EmberHopeMeter.emptySlot("护符") : EmberHopeMeter.quality(l.charm, softPd);
+            }
             case "held_quality_hope": { // D602 forge preview
                 EmberItemData hq = heldTrusted(p);
                 if (hq == null) return EmberHopeMeter.emptySlot("手持");
-                return EmberHopeMeter.quality(hq);
+                PlayerData softPd = runs.plugin().getDataStore().get(p.getUniqueId());
+                return EmberHopeMeter.quality(hq, softPd);
             }
-            case "refine_blade_hope": // D603
-                return l.blade == null ? EmberHopeMeter.emptySlot("刃") : EmberHopeMeter.refine(l.blade);
-            case "refine_charm_hope": // D603
-                return l.charm == null ? EmberHopeMeter.emptySlot("护符") : EmberHopeMeter.refine(l.charm);
+            case "refine_blade_hope": { // D603 · TIP-AS soft
+                PlayerData softPd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                return l.blade == null ? EmberHopeMeter.emptySlot("刃") : EmberHopeMeter.refine(l.blade, softPd);
+            }
+            case "refine_charm_hope": {
+                PlayerData softPd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                return l.charm == null ? EmberHopeMeter.emptySlot("护符") : EmberHopeMeter.refine(l.charm, softPd);
+            }
             case "held_refine_hope": { // D603 forge preview
                 EmberItemData hr = heldTrusted(p);
                 if (hr == null) return EmberHopeMeter.emptySlot("手持");
-                return EmberHopeMeter.refine(hr);
+                PlayerData softPd = runs.plugin().getDataStore().get(p.getUniqueId());
+                return EmberHopeMeter.refine(hr, softPd);
             }
             case "hope_now": { // D12306 hub hope L1 — menuNow of current priority track
                 return hopeNowLine(p);
@@ -830,12 +852,13 @@ public final class EmberRunPapi {
         }
     }
 
-    /** D299 W1b：主手 P1 件的成色/精工近档；非 P1 或空手则短提示。 */
+    /** D299 W1b：主手 P1 件的成色/精工近档；非 P1 或空手则短提示。 TIP-AS soft. */
     private String heldNext(Player p, boolean quality) {
         EmberItemData d = heldTrusted(p);
         if (d == null) return "§8手持刃或护符看近档";
         if (d.isArmor()) return EmberSixPapi.heldArmorLine(d, "next"); // D318 K0
-        return quality ? EmberGearNextHint.qualityLine(d) : EmberGearNextHint.craftLine(d);
+        PlayerData softPd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+        return quality ? EmberGearNextHint.qualityLine(d, softPd) : EmberGearNextHint.craftLine(d, softPd);
     }
 
     /**
@@ -897,40 +920,42 @@ public final class EmberRunPapi {
         return r.data;
     }
 
-    /** D307 W1a：费用/闸/得胚行（与 UpgradeRules / Forge 预览同源）。 */
+    /** D307 W1a：费用/闸/得胚行（与 UpgradeRules / Forge 预览同源）。 TIP-AS soft. */
     private String heldForgeLine(Player p, String kind) {
         EmberItemData d = heldTrusted(p);
         if (d == null) return "§8手持刃或护符";
         if (d.isArmor()) return EmberSixPapi.heldArmorLine(d, kind); // D318 K0 / 分解 ×0.1
-        if ("enhance".equals(kind)) return EmberGearNextHint.enhanceLine(d);
+        PlayerData softPd = runs.plugin().getDataStore().get(p.getUniqueId());
+        if ("enhance".equals(kind)) return EmberGearNextHint.enhanceLine(d, softPd);
         if ("upgrade".equals(kind)) {
             String flag = EmberUpgradeRules.upgradeFlag(d.tier);
-            boolean gate = flag != null && runs.progressFlag(runs.plugin().getDataStore().get(p.getUniqueId()), flag);
-            return EmberGearNextHint.upgradeLine(d, gate);
+            boolean gate = flag != null && runs.progressFlag(softPd, flag);
+            return EmberGearNextHint.upgradeLine(d, gate, softPd);
         }
         if ("dismantle".equals(kind)) return EmberGearNextHint.dismantleYieldLine(d);
         return "";
     }
 
-    /** D307 W1b：缺料半行；材料够 / 无费用 → 空。 */
+    /** D307 W1b：缺料半行；材料够 / 无费用 → 空。 TIP-AS soft peek. */
     private String heldForgeLack(Player p, String kind) {
         EmberItemData d = heldTrusted(p);
         if (d == null || d.isArmor()) return ""; // D318: armor pays nothing (K0)
+        PlayerData softPd = runs.plugin().getDataStore().get(p.getUniqueId());
         EmberUpgradeRules.Cost cost = null;
         if ("enhance".equals(kind)) {
             EmberUpgradeRules.Plan c = EmberUpgradeRules.enhanceCheck(d);
             if (!c.ok()) return "";
-            cost = c.cost;
+            cost = EmberGearNextHint.softCost("enhance", softPd, c.cost);
         } else if ("upgrade".equals(kind)) {
-            cost = EmberUpgradeRules.upgradeCost(d.tier);
+            cost = EmberGearNextHint.softCost("upgrade", softPd, EmberUpgradeRules.upgradeCost(d.tier));
             if (cost == null) return "";
             String flag = EmberUpgradeRules.upgradeFlag(d.tier);
-            boolean gate = flag != null && runs.progressFlag(runs.plugin().getDataStore().get(p.getUniqueId()), flag);
+            boolean gate = flag != null && runs.progressFlag(softPd, flag);
             if (!gate) return ""; // gate message already on cost line
         } else if ("refine".equals(kind)) {
-            cost = EmberUpgradeRules.refineCost(d.craft);
+            cost = EmberGearNextHint.softCost("refine", softPd, EmberUpgradeRules.refineCost(d.craft));
         } else if ("quality".equals(kind)) {
-            cost = EmberUpgradeRules.qualityCost(d.quality);
+            cost = EmberGearNextHint.softCost("quality", softPd, EmberUpgradeRules.qualityCost(d.quality));
         }
         if (cost == null) return "";
         EmberForgeService forge = runs.plugin().getEmberForge();

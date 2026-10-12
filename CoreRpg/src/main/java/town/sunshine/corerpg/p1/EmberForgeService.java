@@ -169,7 +169,8 @@ public final class EmberForgeService implements Listener {
                 gateOk = flag == null || EmberFirstClear.fact(d, flag);
             }
             int goal = d == null ? EmberForgeGoal.NONE : EmberForgeGoal.get(d);
-            return EmberForgeHeldNext.line(data, new EmberForgeHeldNext.Mats(shard, blank, bone, coin), gateOk, goal);
+            // TIP-AS: pass pd for CostSoft peek on held next (pay/preview paths unchanged)
+            return EmberForgeHeldNext.line(data, new EmberForgeHeldNext.Mats(shard, blank, bone, coin), gateOk, goal, d);
         } catch (Throwable ignored) {
             return null;
         }

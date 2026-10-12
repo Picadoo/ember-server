@@ -11,6 +11,7 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D680/D681: economy sink visibility — forge glance for held piece.
  * TIP-AM: armor early-return ≡ ARMOR_REFUSE (± dismantle half); never fake quality/refine/upgrade costs.
+ * TIP-AS D12798: non-armor feeds soft-aware GearNextHint Lines + soft lack peek.
  * Not a PAPI hope-meter twin. Zero price / AFK / yield change.
  */
 public final class EmberSinkGlance {
@@ -42,18 +43,18 @@ public final class EmberSinkGlance {
             } catch (Throwable ignored) { }
             return;
         }
-        List<String> bits = costBits(d);
+        List<String> bits = costBits(d, pd);
         int goal = EmberForgeGoal.get(pd);
         String lack = "";
         String focus = "强化";
         if (forge != null) {
             EmberUpgradeRules.Cost cost = null;
             if (goal == EmberForgeGoal.REFINE) {
-                cost = EmberUpgradeRules.refineCost(d.craft);
+                cost = EmberGearNextHint.softCost("refine", pd, EmberUpgradeRules.refineCost(d.craft));
                 focus = "精工";
             } else if (goal == EmberForgeGoal.ROLL) {
                 focus = "随机锻";
-                // D1200: ordinary roll matCost（非 floor · 禁 K3）
+                // D1200: ordinary roll matCost（非 floor · 禁 K3）— Brand/Gem/Convert/Roll soft 本窗不改
                 cost = EmberForgeRollRules.matCost();
             } else if (goal == EmberForgeGoal.CONVERT) {
                 focus = "转化";
@@ -65,17 +66,17 @@ public final class EmberSinkGlance {
                 cost = new EmberUpgradeRules.Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0);
             } else {
                 EmberUpgradeRules.Plan plan = EmberUpgradeRules.enhanceCheck(d);
-                if (plan != null && plan.ok()) cost = plan.cost;
+                if (plan != null && plan.ok()) cost = EmberGearNextHint.softCost("enhance", pd, plan.cost);
                 focus = goal == EmberForgeGoal.ENHANCE ? "强化(目标)" : "强化";
             }
             if (cost != null) lack = EmberGearNextHint.lackHalf(forge.lackingFor(p, cost));
-            // D1176: always surface 成色/精工缺料 honesty（稳线 · 非 K3）
-            EmberUpgradeRules.Cost qc = EmberUpgradeRules.qualityCost(d.quality);
+            // D1176: always surface 成色/精工缺料 honesty（稳线 · 非 K3）；TIP-AS soft peek
+            EmberUpgradeRules.Cost qc = EmberGearNextHint.softCost("quality", pd, EmberUpgradeRules.qualityCost(d.quality));
             if (qc != null) {
                 String ql = EmberGearNextHint.lackHalf(forge.lackingFor(p, qc));
                 if (!ql.isEmpty()) bits.add("成色升" + ql);
             }
-            EmberUpgradeRules.Cost rc = EmberUpgradeRules.refineCost(d.craft);
+            EmberUpgradeRules.Cost rc = EmberGearNextHint.softCost("refine", pd, EmberUpgradeRules.refineCost(d.craft));
             if (rc != null && goal != EmberForgeGoal.REFINE) {
                 String rl = EmberGearNextHint.lackHalf(forge.lackingFor(p, rc));
                 if (!rl.isEmpty()) bits.add("精工" + rl);
@@ -130,16 +131,21 @@ public final class EmberSinkGlance {
      * Never call for armor (caller gates with {@link #shouldSkipForgeCosts}).
      */
     static List<String> costBits(EmberItemData d) {
+        return costBits(d, null);
+    }
+
+    /** TIP-AS D12798: soft-aware Line bits when pd present. */
+    static List<String> costBits(EmberItemData d, PlayerData pd) {
         List<String> bits = new ArrayList<String>(4);
         if (d == null) return bits;
-        String enh = EmberGearNextHint.enhanceLine(d);
+        String enh = EmberGearNextHint.enhanceLine(d, pd);
         if (enh != null && !enh.isEmpty()) bits.add("强化 " + enh);
-        String q = EmberGearNextHint.qualityLine(d);
+        String q = EmberGearNextHint.qualityLine(d, pd);
         if (q != null && !q.isEmpty()) bits.add(q);
-        String c = EmberGearNextHint.craftLine(d);
+        String c = EmberGearNextHint.craftLine(d, pd);
         if (c != null && !c.isEmpty()) bits.add(c);
         // D1224: 升阶费用近档（gateOk=true 只示费用；闸文案仍走升阶预览）
-        String up = EmberGearNextHint.upgradeLine(d, true);
+        String up = EmberGearNextHint.upgradeLine(d, true, pd);
         if (up != null && !up.isEmpty() && !up.startsWith("已是") && !up.startsWith("T0")) bits.add("升阶 " + up);
         return bits;
     }

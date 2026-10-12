@@ -1,10 +1,13 @@
 package town.sunshine.corerpg.p1;
 
+import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.p1.EmberUpgradeRules.Cost;
 
 /**
  * D1943 FH1: held-piece next deterministic forge step — display only.
  * Prefers an affordable quality → refine → enhance step; else nearest gap.
+ * TIP-AS D12797: optional pd → soft peek CostSoft for quality/refine/enhance/upgrade canPay/shortfall/展示.
+ * Armor early-return unchanged (TIP-AK). Brand/gem/convert/lock/roll stay full price this window.
  * Zero price / rate / pity invent.
  */
 public final class EmberForgeHeldNext {
@@ -50,20 +53,25 @@ public final class EmberForgeHeldNext {
 
     /** Convenience: assume upgrade gate open for glance. */
     public static String line(EmberItemData d, Mats m) {
-        return line(d, m, true, EmberForgeGoal.NONE);
+        return line(d, m, true, EmberForgeGoal.NONE, null);
     }
 
     public static String line(EmberItemData d, Mats m, boolean gateOk) {
-        return line(d, m, gateOk, EmberForgeGoal.NONE);
+        return line(d, m, gateOk, EmberForgeGoal.NONE, null);
+    }
+
+    public static String line(EmberItemData d, Mats m, boolean gateOk, int forgeGoal) {
+        return line(d, m, gateOk, forgeGoal, null);
     }
 
     /**
      * One-glance next step for held blade/charm (TIP-AK: armor early-return ≡ K0).
      * Affordable order: quality → refine → enhance → upgrade;
      * D2434/D2446: when forgeGoal is CONVERT/BRAND/GEM/LOCK/ROLL/QUALITY, those sinks surface first if payable.
+     * TIP-AS: {@code pd} soft-peeks four forge CostSoft for canPay/shortfall/展示; brand/gem/convert/lock/roll full.
      * {@code gateOk} = first-clear for upgradeFlag(tier).
      */
-    public static String line(EmberItemData d, Mats m, boolean gateOk, int forgeGoal) {
+    public static String line(EmberItemData d, Mats m, boolean gateOk, int forgeGoal, PlayerData pd) {
         if (d == null) return "下一确定 · 空手 · 手持刃/护符";
         // TIP-AK D12668/D12669: armor ≡ ARMOR_REFUSE (± dismantle half-line); never fake quality/refine/enhance/upgrade
         if (d.isArmor()) {
@@ -75,11 +83,11 @@ public final class EmberForgeHeldNext {
         }
         if (m == null) m = new Mats(0, 0, 0, 0);
 
-        Cost q = EmberUpgradeRules.qualityCost(d.quality);
-        Cost r = EmberUpgradeRules.refineCost(d.craft);
+        Cost q = EmberGearNextHint.softCost("quality", pd, EmberUpgradeRules.qualityCost(d.quality));
+        Cost r = EmberGearNextHint.softCost("refine", pd, EmberUpgradeRules.refineCost(d.craft));
         EmberUpgradeRules.Plan enh = EmberUpgradeRules.enhanceCheck(d);
-        Cost e = (enh != null && enh.ok()) ? enh.cost : null;
-        Cost u = EmberUpgradeRules.upgradeCost(d.tier);
+        Cost e = (enh != null && enh.ok()) ? EmberGearNextHint.softCost("enhance", pd, enh.cost) : null;
+        Cost u = EmberGearNextHint.softCost("upgrade", pd, EmberUpgradeRules.upgradeCost(d.tier));
         Cost conv = EmberConvertRules.cost(d.tier);
         Cost brand = new Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0);
         Cost gem = EmberGemAcquire.craftCost();
@@ -102,18 +110,18 @@ public final class EmberForgeHeldNext {
         if (forgeGoal == EmberForgeGoal.REFINE && r != null && canPay(r, m))
             return "下一确定 · " + EmberQualityCraftDial.craftDial(d) + " · 料够 · /corerpg p1 refine";
         if (forgeGoal == EmberForgeGoal.ENHANCE && e != null && canPay(e, m))
-            return "下一确定 · " + EmberGearNextHint.enhanceLine(d) + " · 料够 · /corerpg p1 enhance";
+            return "下一确定 · " + EmberGearNextHint.enhanceLine(d, pd) + " · 料够 · /corerpg p1 enhance";
         if (forgeGoal == EmberForgeGoal.UPGRADE && u != null && gateOk && canPay(u, m))
-            return "下一确定 · " + EmberGearNextHint.upgradeLine(d, true) + " · 料够 · /corerpg p1 upgrade";
+            return "下一确定 · " + EmberGearNextHint.upgradeLine(d, true, pd) + " · 料够 · /corerpg p1 upgrade";
 
         if (q != null && canPay(q, m))
             return "下一确定 · " + EmberQualityCraftDial.qualityDial(d) + " · 料够 · /corerpg p1 quality";
         if (r != null && canPay(r, m))
             return "下一确定 · " + EmberQualityCraftDial.craftDial(d) + " · 料够 · /corerpg p1 refine";
         if (e != null && canPay(e, m))
-            return "下一确定 · " + EmberGearNextHint.enhanceLine(d) + " · 料够 · /corerpg p1 enhance";
+            return "下一确定 · " + EmberGearNextHint.enhanceLine(d, pd) + " · 料够 · /corerpg p1 enhance";
         if (u != null && gateOk && canPay(u, m))
-            return "下一确定 · " + EmberGearNextHint.upgradeLine(d, true) + " · 料够 · /corerpg p1 upgrade";
+            return "下一确定 · " + EmberGearNextHint.upgradeLine(d, true, pd) + " · 料够 · /corerpg p1 upgrade";
 
         long best = Long.MAX_VALUE / 4;
         String pick = null;
@@ -127,14 +135,14 @@ public final class EmberForgeHeldNext {
         }
         if (e != null) {
             long g = shortfall(e, m);
-            if (g < best) { best = g; pick = "强化 · " + EmberGearNextHint.enhanceLine(d) + " · 还差料 · /corerpg p1 enhance"; }
+            if (g < best) { best = g; pick = "强化 · " + EmberGearNextHint.enhanceLine(d, pd) + " · 还差料 · /corerpg p1 enhance"; }
         }
         if (u != null) {
             long g = shortfall(u, m);
             // gate closed still surfaces honesty via upgradeLine
             if (g < best || (!gateOk && pick == null)) {
                 best = Math.min(best, g);
-                pick = "升阶 · " + EmberGearNextHint.upgradeLine(d, gateOk)
+                pick = "升阶 · " + EmberGearNextHint.upgradeLine(d, gateOk, pd)
                         + (gateOk && g > 0 ? " · 还差料" : "")
                         + " · /corerpg p1 upgrade";
             }
@@ -187,7 +195,7 @@ public final class EmberForgeHeldNext {
         String cDone = EmberQualityCraftDial.craftDial(d);
         if (e == null && u == null)
             return "下一确定 · 手持满档 · " + qDone + " · " + cDone;
-        if (e != null) return "下一确定 · " + EmberGearNextHint.enhanceLine(d);
-        return "下一确定 · " + EmberGearNextHint.upgradeLine(d, gateOk);
+        if (e != null) return "下一确定 · " + EmberGearNextHint.enhanceLine(d, pd);
+        return "下一确定 · " + EmberGearNextHint.upgradeLine(d, gateOk, pd);
     }
 }

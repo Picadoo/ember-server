@@ -62,6 +62,11 @@ public final class EmberHopeMeter {
      * Progress cur = min(quality, cap) / need = cap; next step names the guaranteed target.
      */
     public static String quality(EmberItemData d) {
+        return quality(d, null);
+    }
+
+    /** TIP-AS D12798: soft costShort + optional「今日减负待用」when QualityCostSoft.ready. */
+    public static String quality(EmberItemData d, PlayerData pd) {
         if (d == null) return emptySlot("无件");
         if (d.isArmor()) return emptySlot("甲看掉落");
         int q = Math.max(0, d.quality);
@@ -73,8 +78,10 @@ public final class EmberHopeMeter {
         }
         // next guaranteed workshop step
         String next = EmberItemData.qualityName(q + 1);
-        EmberUpgradeRules.Cost c = EmberUpgradeRules.qualityCost(q);
+        EmberUpgradeRules.Cost full = EmberUpgradeRules.qualityCost(q);
+        EmberUpgradeRules.Cost c = EmberGearNextHint.softCost("quality", pd, full);
         String cost = c == null ? "" : " · " + EmberGearNextHint.costShort(c);
+        if (c != null && EmberQualityCostSoft.ready(pd)) cost = cost + " · " + EmberGearNextHint.SOFT_TAIL;
         return String.format(Locale.ROOT, "§a成色 %d/%d · 下次确定升%s%s", cur, need, next, cost);
     }
 
@@ -83,6 +90,11 @@ public final class EmberHopeMeter {
      * Workshop raises craft 0→1→2→3 (0%→2%→4%→6%); always succeeds when paid.
      */
     public static String refine(EmberItemData d) {
+        return refine(d, null);
+    }
+
+    /** TIP-AS D12798: soft costShort + optional「今日减负待用」when RefineCostSoft.ready. */
+    public static String refine(EmberItemData d, PlayerData pd) {
         if (d == null) return emptySlot("无件");
         if (d.isArmor()) return emptySlot("甲看掉落");
         int craft = Math.max(0, d.craft);
@@ -91,8 +103,10 @@ public final class EmberHopeMeter {
         if (craft >= need) {
             return String.format(Locale.ROOT, "§a精工 %d/%d · 已满 6%%", need, need);
         }
-        EmberUpgradeRules.Cost c = EmberUpgradeRules.refineCost(craft);
+        EmberUpgradeRules.Cost full = EmberUpgradeRules.refineCost(craft);
+        EmberUpgradeRules.Cost c = EmberGearNextHint.softCost("refine", pd, full);
         String cost = c == null ? "" : " · " + EmberGearNextHint.costShort(c);
+        if (c != null && EmberRefineCostSoft.ready(pd)) cost = cost + " · " + EmberGearNextHint.SOFT_TAIL;
         int nextPct = (craft + 1) * 2;
         return String.format(Locale.ROOT, "§a精工 %d/%d · 下次确定升%d%%%s", cur, need, nextPct, cost);
     }
@@ -420,24 +434,27 @@ public final class EmberHopeMeter {
         if (heldOk) {
             EmberUpgradeRules.Plan enh = EmberUpgradeRules.enhanceCheck(held);
             if (enh != null && enh.ok()) {
+                EmberUpgradeRules.Cost ec = EmberGearNextHint.softCost("enhance", pd, enh.cost);
                 out.add(new Track("enhance", "强化保底",
                         enhance(held),
-                        matHalfOf(enh.cost, mats),
+                        matHalfOf(ec, mats),
                         "点强化",
                         EmberForgeGoal.ENHANCE));
             }
             if (held.quality < QUALITY_FORGE_CAP) {
-                EmberUpgradeRules.Cost qc = EmberUpgradeRules.qualityCost(held.quality);
+                EmberUpgradeRules.Cost qc = EmberGearNextHint.softCost("quality", pd,
+                        EmberUpgradeRules.qualityCost(held.quality));
                 out.add(new Track("quality", "成色希望",
-                        quality(held),
+                        quality(held, pd),
                         matHalfOf(qc, mats),
                         "点成色",
                         EmberForgeGoal.QUALITY));
             }
             if (held.craft < EmberTables.MAX_CRAFT) {
-                EmberUpgradeRules.Cost rc = EmberUpgradeRules.refineCost(held.craft);
+                EmberUpgradeRules.Cost rc = EmberGearNextHint.softCost("refine", pd,
+                        EmberUpgradeRules.refineCost(held.craft));
                 out.add(new Track("refine", "精工希望",
-                        refine(held),
+                        refine(held, pd),
                         matHalfOf(rc, mats),
                         "点精工",
                         EmberForgeGoal.REFINE));
