@@ -1,6 +1,10 @@
 # STATUS · TIP-AE 防具签名最小切片 D12584–D12599
 
-- **何时**：2026-10-12 19:25 CST
-- **裁决**：批 **A · 方案 M** · APPROVED · **已派余烬-插件**
-- **范围**：烙印扩甲 / defense-side fits；stampable 甲仍空；5 取 1；零抬 STAMP/C12；零动 L11/L13
-- **待**：插件落地 + 单测 + jar bump + live → tip CLOSED
+- **何时**：2026-10-12 19:31 CST
+- **裁决**：批 **A · 方案 M** · CLOSED · **live**
+- **版本**：CoreRpg `1.65.773-d12599.local`
+- **feat**：`f3a1073cb` · chore bump 本窗
+- **落地**：fitsStamp/fitsDefense 分轨；甲 stampable 空；5 取 1；Growth/ImprintBreak 扫六槽
+- **单测**：EmberSignatureTest 20/0 · EmberImprintBreakTest 3/0
+- **NON**：无 STAMP/C12 抬；无 L11/L13 mods
+- **热更**：play 重启 · Enabling 后记

@@ -196,7 +196,7 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-AE APPROVED** · 防具签名最小切片 · 已派插件 · 烙印扩甲/defense fits
+- **TIP-AE CLOSED** live `1.65.773-d12599` · 烙印扩甲/defense fits · 甲 stampable 仍空
 
 - **TIP-AE OPEN** · `TIP-ember-armor-signature-min-slice-build-thin-d12584-d12599-2026-10-12.md` · build DESIGN `DESIGN-ember-armor-signature-min-slice-build-2026-10-12.md` · **开工最小切片**（烙印扩甲 / defense-side fits · 不扩掉落 · 不改 L11/L13 · 不抬 STAMP）· 对接 stage0+TIP-AD · 批后派插件 · 深化 densify 仍冻 · 刃 L11/L13 HOLD 另轨
 - **TIP-AD CLOSED PASS patched** `abc3875d0` / RESULT head `b4c43551e` · S3 评测集砍刃 L11/L13 · judge-s3 PASS · STAGE1_OFFLINE=PASS(patched) · **显式开工令已发** → TIP-AE
