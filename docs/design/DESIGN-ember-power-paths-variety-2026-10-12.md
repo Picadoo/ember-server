@@ -170,5 +170,6 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 ## 9. 批注
 
 - [x] 总控批 **A · 方案 M** · 2026-10-12  
-- Batch1：TIP-A 希望一眼（优先单轨，非三轨并行墙）  
+- Batch1：TIP-A 希望一眼（优先单轨，非三轨并行墙）
+- Batch2：TIP-C 已开 `TIP-ember-power-map-id-line-d12248-d12255-2026-10-12.md`（menuLine 短串 + Q 格 L2）  
 - 本文件 **docs only**；本回合 **不改 jar**、不 push（除非 tip 管线另需）。
