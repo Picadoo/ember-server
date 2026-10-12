@@ -1,6 +1,6 @@
 # tip · TIP-N Boss 预警 R 薄热修（持续蓄力条 · 半血前提示）· D12360–D12375
 
-> **状态：** 待总控批 **A · 方案 M**（本 tip 的施工方案名；对应 DESIGN 原「方案 R」演出子集）  
+> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:34 Asia/Shanghai）· 交插件岗 · = DESIGN 方案 R 演出子集  
 > **上游：** [`RESEARCH-ember-boss-telegraph-r-thin-2026-10-12.md`](../design/RESEARCH-ember-boss-telegraph-r-thin-2026-10-12.md) · [`DESIGN-ember-boss-telegraph-honesty-2026-10-08.md`](../design/DESIGN-ember-boss-telegraph-honesty-2026-10-08.md) §2.2 · D304 STATUS  
 > **前置：** D304 M CLOSED live；TIP-M 停窗观察 CLOSED；glance densify **仍停**  
 > **施工岗：** 插件岗（Director / Counterplay 演出；**零改技能数值表**）  
@@ -54,7 +54,7 @@
 
 ## 4. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [ ] D12362–D12365 行为 + 热关  
 - [ ] 数值表 / STAMP / 体力 / 掉率 `git show` 无抬  
 - [ ] 不跑 p1sim（演出级）  
@@ -63,8 +63,9 @@
 
 ## 5. 批注
 
-- [ ] 总控批 **A · 方案 M** · _待填_  
+- [x] 总控批 **A · 方案 M** · 2026-10-12 16:34 CST  
 - 对应 DESIGN **方案 R 演出子集**；非 Pack、非 glance  
 - 选题：硬债 Boss 可读性热修（D304 R 后置升主）
+- **批注：** 续写挂 startWarn→castStartBar；pre_half@55% 一次；yml 热关 warn_bar_hold/pre_half_cue；禁 adds 门延迟
 
-## STATUS: OPEN · 待批 A·M · 2026-10-12 Asia/Shanghai
+## STATUS: 批 A·M · 交插件 · 2026-10-12 16:34 CST

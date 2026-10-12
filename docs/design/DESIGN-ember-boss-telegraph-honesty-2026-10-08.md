@@ -174,4 +174,4 @@
 
 ## 进度戳 · TIP-N（2026-10-12）
 
-- TIP-N OPEN：`docs/tips/TIP-ember-boss-telegraph-r-thin-d12360-d12375-2026-10-12.md` · RESEARCH `RESEARCH-ember-boss-telegraph-r-thin-2026-10-12.md` · 方案 R 演出子集（持续蓄力条 + 半血前提示）· 待批 A·M
+- **TIP-N 批 A·M** · tip `TIP-ember-boss-telegraph-r-thin-d12360-d12375` · 交插件岗（R 演出子集）
