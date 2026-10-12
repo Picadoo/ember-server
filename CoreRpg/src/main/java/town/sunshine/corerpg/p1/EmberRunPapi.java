@@ -221,9 +221,14 @@ public final class EmberRunPapi {
                 + "·币差" + recipeGap(co, coinHave);
     }
 
-    /** D1983 gem craft gap 碎/骨/币（镜像 EmberGemAcquire.craftCost）. */
+    /** D1983 gem craft gap 碎/骨/币（镜像 EmberGemAcquire.craftCost）. 一元 ≡ null pd 全额. */
     static String recipeGapGemCraft(long shardHave, long boneHave, long coinHave) {
-        EmberUpgradeRules.Cost c = EmberGemAcquire.craftCost();
+        return recipeGapGemCraft(shardHave, boneHave, coinHave, null);
+    }
+
+    /** TIP-AT: soft peek GemCraftCostSoft when pd ready. */
+    static String recipeGapGemCraft(long shardHave, long boneHave, long coinHave, PlayerData pd) {
+        EmberUpgradeRules.Cost c = EmberGearNextHint.softCost("gem", pd, EmberGemAcquire.craftCost());
         return "碎差" + recipeGap(c.shards, shardHave) + "·骨差" + recipeGap(c.bone, boneHave)
                 + "·币差" + recipeGap(c.coins, coinHave);
     }
@@ -236,19 +241,37 @@ public final class EmberRunPapi {
         return "碎差" + recipeGap(shard, shardHave) + "·币差" + recipeGap(coin, coinHave);
     }
 
-    /** D432 %corerpg_p1_forge_gap_brand% — 烙纹合成碎差（镜像 EmberBrandRules.craftShards()=40）. */
+    /** D432 %corerpg_p1_forge_gap_brand% — 烙纹合成碎差（镜像 EmberBrandRules.craftShards()=40）. 一元 ≡ null pd. */
     static String forgeGapBrand(long shardHave) {
-        return String.valueOf(recipeGap(EmberBrandRules.craftShards(), shardHave));
+        return forgeGapBrand(shardHave, null);
     }
 
-    /** D432 %corerpg_p1_forge_gap_roll% — 随机锻胚/币差（4 胚 + 500 币）. */
+    /** TIP-AT: soft peek BrandCraftSoft when pd ready. */
+    static String forgeGapBrand(long shardHave, PlayerData pd) {
+        EmberUpgradeRules.Cost c = EmberGearNextHint.softCost("brand", pd,
+                new EmberUpgradeRules.Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0));
+        return String.valueOf(recipeGap(c.shards, shardHave));
+    }
+
+    /** D432 %corerpg_p1_forge_gap_roll% — 随机锻胚/币差（4 胚 + 500 币）. 一元 ≡ null pd. */
     static String forgeGapRoll(long blankHave, long coinHave) {
-        return "胚差" + recipeGap(EmberForgeRollRules.blanks(), blankHave) + "·币差" + recipeGap(EmberForgeRollRules.coins(), coinHave);
+        return forgeGapRoll(blankHave, coinHave, null);
     }
 
-    /** D1165 %corerpg_p1_forge_gap_roll_floor% — 下限锻胚/骨/币差（配方差 · 非 hope）. */
+    /** TIP-AT: soft peek ForgeRollCostSoft when pd ready. */
+    static String forgeGapRoll(long blankHave, long coinHave, PlayerData pd) {
+        EmberUpgradeRules.Cost c = EmberGearNextHint.softCost("roll", pd, EmberForgeRollRules.matCost());
+        return "胚差" + recipeGap(c.blanks, blankHave) + "·币差" + recipeGap(c.coins, coinHave);
+    }
+
+    /** D1165 %corerpg_p1_forge_gap_roll_floor% — 下限锻胚/骨/币差（配方差 · 非 hope）. 一元 ≡ null pd. */
     static String forgeGapRollFloor(long blankHave, long boneHave, long coinHave) {
-        EmberUpgradeRules.Cost c = EmberForgeRollRules.matCostFloor();
+        return forgeGapRollFloor(blankHave, boneHave, coinHave, null);
+    }
+
+    /** TIP-AT: soft peek ForgeRollCostSoft on floor mat when pd ready. */
+    static String forgeGapRollFloor(long blankHave, long boneHave, long coinHave, PlayerData pd) {
+        EmberUpgradeRules.Cost c = EmberGearNextHint.softCost("roll", pd, EmberForgeRollRules.matCostFloor());
         return "胚差" + recipeGap(c.blanks, blankHave)
                 + "·骨差" + recipeGap(c.bone, boneHave)
                 + "·币差" + recipeGap(c.coins, coinHave);
@@ -256,21 +279,33 @@ public final class EmberRunPapi {
 
     /**
      * D432 %corerpg_p1_forge_gap_convert% — 转化胚/币差。
-     * {@code tier} 1–3 from held piece; else T1 defaults.
+     * {@code tier} 1–3 from held piece; else T1 defaults. 一元 ≡ null pd.
      */
     static String forgeGapConvert(int tier, long blankHave, long coinHave) {
-        int t = (tier >= 1 && tier <= 3) ? tier : 1;
-        return "胚差" + recipeGap(EmberConvertRules.blanks(t), blankHave)
-                + "·币差" + recipeGap(EmberConvertRules.coins(t), coinHave);
+        return forgeGapConvert(tier, blankHave, coinHave, null);
     }
 
-    /** D433 %corerpg_p1_forge_gap_pin% — 定向烙纹/币差（镜像 pinBrands/pinCoins；空手 T1）. */
+    /** TIP-AT: soft peek ConvertCostSoft when pd ready. */
+    static String forgeGapConvert(int tier, long blankHave, long coinHave, PlayerData pd) {
+        int t = (tier >= 1 && tier <= 3) ? tier : 1;
+        EmberUpgradeRules.Cost c = EmberGearNextHint.softCost("convert", pd, EmberConvertRules.cost(t));
+        return "胚差" + recipeGap(c.blanks, blankHave)
+                + "·币差" + recipeGap(c.coins, coinHave);
+    }
+
+    /** D433 %corerpg_p1_forge_gap_pin% — 定向烙纹/币差（镜像 pinBrands/pinCoins；空手 T1）. 一元 ≡ null pd. */
     static String forgeGapPin(int tier, long brandHave, long coinHave) {
+        return forgeGapPin(tier, brandHave, coinHave, null);
+    }
+
+    /** TIP-AT: soft peek BrandPinCostSoft when pd ready. */
+    static String forgeGapPin(int tier, long brandHave, long coinHave, PlayerData pd) {
         int t = (tier >= 1 && tier <= 3) ? tier : 1;
         int brands = EmberBrandRules.pinBrands(t);
         int coins = EmberBrandRules.pinCoins(t);
         if (brands < 0) { brands = EmberBrandRules.pinBrands(1); coins = EmberBrandRules.pinCoins(1); }
-        return "烙差" + recipeGap(brands, brandHave) + "·币差" + recipeGap(coins, coinHave);
+        int[] soft = EmberGearNextHint.softPin(pd, brands, coins);
+        return "烙差" + recipeGap(soft[0], brandHave) + "·币差" + recipeGap(soft[1], coinHave);
     }
 
 
@@ -425,24 +460,24 @@ public final class EmberRunPapi {
         if ("recipe_gap_upgrade_t2".equals(key)) return recipeGapUpgradeT2(shard, core, blank);
         if ("recipe_gap_refine1".equals(key)) return recipeGapRefine1(blank, bone);
         if ("recipe_gap_quality1".equals(key)) return recipeGapQuality1(blank, bone, coin);
-        if ("recipe_gap_gem".equals(key)) return recipeGapGemCraft(shard, bone, coin);
+        if ("recipe_gap_gem".equals(key)) return recipeGapGemCraft(shard, bone, coin, pd);
         if ("recipe_gap_lock".equals(key)) {
             EmberGrowthService gs = EmberGrowthService.get();
             return recipeGapLock(shard, coin, gs == null ? null : gs.reroll());
         }
-        // D432 烬砧仓差（镜像 Brand/Roll/Convert 价；不抬 AFK 表）
-        if ("forge_gap_brand".equals(key)) return forgeGapBrand(shard);
-        if ("forge_gap_roll".equals(key)) return forgeGapRoll(blank, coin);
-        if ("forge_gap_roll_floor".equals(key)) return forgeGapRollFloor(blank, bone, coin);
+        // D432 烬砧仓差（镜像 Brand/Roll/Convert 价；不抬 AFK 表）；TIP-AT soft peek
+        if ("forge_gap_brand".equals(key)) return forgeGapBrand(shard, pd);
+        if ("forge_gap_roll".equals(key)) return forgeGapRoll(blank, coin, pd);
+        if ("forge_gap_roll_floor".equals(key)) return forgeGapRollFloor(blank, bone, coin, pd);
         if ("forge_gap_convert".equals(key)) {
             EmberItemData held = p == null ? null : heldTrusted(p);
             int tier = (held != null && held.tier >= 1 && held.tier <= 3) ? held.tier : 1;
-            return forgeGapConvert(tier, blank, coin);
+            return forgeGapConvert(tier, blank, coin, pd);
         }
         if ("forge_gap_pin".equals(key)) {
             EmberItemData held = p == null ? null : heldTrusted(p);
             int tier = (held != null && held.tier >= 1 && held.tier <= 3) ? held.tier : 1;
-            return forgeGapPin(tier, brandCount(p), coin);
+            return forgeGapPin(tier, brandCount(p), coin, pd);
         }
         // D461 forge craft-goal path
         if ("forge_goal".equals(key) || "forge_goal_gap".equals(key) || "forge_goal_line".equals(key)
@@ -452,11 +487,11 @@ public final class EmberRunPapi {
             int tier = (held != null && held.tier >= 1 && held.tier <= 3) ? held.tier : 1;
             String enh = recipeGapEnhance1(shard);
             String ref = recipeGapRefine1(blank, bone);
-            String br = forgeGapBrand(shard);
-            String ro = forgeGapRoll(blank, coin);
-            String cv = forgeGapConvert(tier, blank, coin);
+            String br = forgeGapBrand(shard, pd);
+            String ro = forgeGapRoll(blank, coin, pd);
+            String cv = forgeGapConvert(tier, blank, coin, pd);
             String qg = recipeGapQuality1(blank, bone, coin);
-            String gg = recipeGapGemCraft(shard, bone, coin);
+            String gg = recipeGapGemCraft(shard, bone, coin, pd);
             EmberGrowthService gsL = EmberGrowthService.get();
             String lg = recipeGapLock(shard, coin, gsL == null ? null : gsL.reroll());
             String ug = recipeGapUpgradeT2(shard, core, blank);

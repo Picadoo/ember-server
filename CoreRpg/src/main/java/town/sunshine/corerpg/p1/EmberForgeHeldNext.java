@@ -7,7 +7,7 @@ import town.sunshine.corerpg.p1.EmberUpgradeRules.Cost;
  * D1943 FH1: held-piece next deterministic forge step — display only.
  * Prefers an affordable quality → refine → enhance step; else nearest gap.
  * TIP-AS D12797: optional pd → soft peek CostSoft for quality/refine/enhance/upgrade canPay/shortfall/展示.
- * Armor early-return unchanged (TIP-AK). Brand/gem/convert/lock/roll stay full price this window.
+ * Armor early-return unchanged (TIP-AK). TIP-AT: brand/gem/convert/roll soft peek; LOCK stays full.
  * Zero price / rate / pity invent.
  */
 public final class EmberForgeHeldNext {
@@ -68,7 +68,7 @@ public final class EmberForgeHeldNext {
      * One-glance next step for held blade/charm (TIP-AK: armor early-return ≡ K0).
      * Affordable order: quality → refine → enhance → upgrade;
      * D2434/D2446: when forgeGoal is CONVERT/BRAND/GEM/LOCK/ROLL/QUALITY, those sinks surface first if payable.
-     * TIP-AS: {@code pd} soft-peeks four forge CostSoft for canPay/shortfall/展示; brand/gem/convert/lock/roll full.
+     * TIP-AS: {@code pd} soft-peeks four forge CostSoft; TIP-AT: brand/gem/convert/roll soft canPay; LOCK full.
      * {@code gateOk} = first-clear for upgradeFlag(tier).
      */
     public static String line(EmberItemData d, Mats m, boolean gateOk, int forgeGoal, PlayerData pd) {
@@ -88,23 +88,32 @@ public final class EmberForgeHeldNext {
         EmberUpgradeRules.Plan enh = EmberUpgradeRules.enhanceCheck(d);
         Cost e = (enh != null && enh.ok()) ? EmberGearNextHint.softCost("enhance", pd, enh.cost) : null;
         Cost u = EmberGearNextHint.softCost("upgrade", pd, EmberUpgradeRules.upgradeCost(d.tier));
-        Cost conv = EmberConvertRules.cost(d.tier);
-        Cost brand = new Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0);
-        Cost gem = EmberGemAcquire.craftCost();
+        // TIP-AT: brand/gem/convert/roll soft peek; LOCK stays full (no invent soft)
+        Cost conv = EmberGearNextHint.softCost("convert", pd, EmberConvertRules.cost(d.tier));
+        Cost brand = EmberGearNextHint.softCost("brand", pd, new Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0));
+        Cost gem = EmberGearNextHint.softCost("gem", pd, EmberGemAcquire.craftCost());
         Cost lock = lockRerollCost(d.tier);
-        Cost roll = EmberForgeRollRules.matCost();
+        Cost roll = EmberGearNextHint.softCost("roll", pd, EmberForgeRollRules.matCost());
 
         // D2434/D2446 forge determinism: goal-locked sinks first when payable (not K3 / not pity)
         if (forgeGoal == EmberForgeGoal.CONVERT && conv != null && canPay(conv, m))
-            return "下一确定 · 跨族转化 · 料够 · /corerpg p1 convert";
+            return "下一确定 · 跨族转化 · 料够"
+                    + EmberGearNextHint.softTail(EmberConvertCostSoft.ready(pd))
+                    + " · /corerpg p1 convert";
         if (forgeGoal == EmberForgeGoal.BRAND && canPay(brand, m))
-            return "下一确定 · 合成烙纹 · 料够 · /corerpg p1 brand craft";
+            return "下一确定 · 合成烙纹 · 料够"
+                    + EmberGearNextHint.softTail(EmberBrandCraftSoft.ready(pd))
+                    + " · /corerpg p1 brand craft";
         if (forgeGoal == EmberForgeGoal.GEM && gem != null && canPay(gem, m))
-            return "下一确定 · 合成宝石 · 料够 · /corerpg p1 gem craft sharp";
+            return "下一确定 · 合成宝石 · 料够"
+                    + EmberGearNextHint.softTail(EmberGemCraftCostSoft.ready(pd))
+                    + " · /corerpg p1 gem craft sharp";
         if (forgeGoal == EmberForgeGoal.LOCK && lock != null && canPay(lock, m))
             return "下一确定 · 锁定洗练 · 料够 · /corerpg p1 reroll from forge";
         if (forgeGoal == EmberForgeGoal.ROLL && roll != null && canPay(roll, m))
-            return "下一确定 · 随机锻 · 料够 · /corerpg p1 forgeroll";
+            return "下一确定 · 随机锻 · 料够"
+                    + EmberGearNextHint.softTail(EmberForgeRollCostSoft.ready(pd))
+                    + " · /corerpg p1 forgeroll";
         if (forgeGoal == EmberForgeGoal.QUALITY && q != null && canPay(q, m))
             return "下一确定 · " + EmberQualityCraftDial.qualityDial(d) + " · 料够 · /corerpg p1 quality";
         if (forgeGoal == EmberForgeGoal.REFINE && r != null && canPay(r, m))

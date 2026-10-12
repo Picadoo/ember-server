@@ -6,6 +6,7 @@ import town.sunshine.corerpg.p1.EmberUpgradeRules.Cost;
 /**
  * D299 · 再刷短反馈：成色 / 精工近档；D307 · 工坊菜单诚实：强化/升阶/互换/分解费用行 + 缺料半行。
  * TIP-AS D12796: soft-aware *Line(d,pd) peek CostSoft（apply false）+「今日减负待用」；一元 ≡ null pd。
+ * TIP-AT D12812: softCost 扩 brand/gem/convert/roll；softPin 定向烙纹 peek。
  * Bukkit-free so unit tests pin the strings.
  */
 public final class EmberGearNextHint {
@@ -35,7 +36,10 @@ public final class EmberGearNextHint {
         return (Math.max(0, craft) * 2) + "%";
     }
 
-    /** TIP-AS: peek soft cost; never consume. Null pd / null full → full. */
+    /**
+     * TIP-AS/AT: peek soft cost; never consume. Null pd / null full → full.
+     * AT adds brand/gem/convert/roll (LOCK invent soft forbidden).
+     */
     public static Cost softCost(String kind, PlayerData pd, Cost full) {
         if (full == null) return null;
         if (pd == null) return full;
@@ -43,7 +47,28 @@ public final class EmberGearNextHint {
         if ("quality".equals(kind)) return EmberQualityCostSoft.apply(pd, full, false);
         if ("refine".equals(kind)) return EmberRefineCostSoft.apply(pd, full, false);
         if ("upgrade".equals(kind)) return EmberUpgradeCostSoft.apply(pd, full, false);
+        if ("brand".equals(kind)) {
+            int soft = EmberBrandCraftSoft.apply(pd, full.shards, false);
+            if (soft == full.shards) return full;
+            return new Cost(soft, full.cores, full.blanks, full.bone, full.coins);
+        }
+        if ("gem".equals(kind)) return EmberGemCraftCostSoft.peek(pd, full);
+        if ("convert".equals(kind)) {
+            int[] soft = EmberConvertCostSoft.apply(pd, full.blanks, full.coins, false);
+            if (soft[0] == full.blanks && soft[1] == full.coins) return full;
+            return new Cost(full.shards, full.cores, soft[0], full.bone, soft[1]);
+        }
+        if ("roll".equals(kind)) {
+            if (!EmberForgeRollCostSoft.ready(pd)) return full;
+            return EmberForgeRollCostSoft.softCost(full);
+        }
         return full;
+    }
+
+    /** TIP-AT: peek BrandPinCostSoft; never consume. Null pd → full brands/coins. */
+    public static int[] softPin(PlayerData pd, int brands, int coins) {
+        if (pd == null) return new int[]{brands, coins};
+        return EmberBrandPinCostSoft.apply(pd, brands, coins, false);
     }
 
     static String softTail(boolean ready) {

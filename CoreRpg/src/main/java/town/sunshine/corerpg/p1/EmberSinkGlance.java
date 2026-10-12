@@ -12,6 +12,7 @@ import town.sunshine.corerpg.PlayerData;
  * D680/D681: economy sink visibility — forge glance for held piece.
  * TIP-AM: armor early-return ≡ ARMOR_REFUSE (± dismantle half); never fake quality/refine/upgrade costs.
  * TIP-AS D12798: non-armor feeds soft-aware GearNextHint Lines + soft lack peek.
+ * TIP-AT D12814: BRAND/CONVERT/ROLL lack soft peek（LOCK/甲不动）.
  * Not a PAPI hope-meter twin. Zero price / AFK / yield change.
  */
 public final class EmberSinkGlance {
@@ -54,16 +55,18 @@ public final class EmberSinkGlance {
                 focus = "精工";
             } else if (goal == EmberForgeGoal.ROLL) {
                 focus = "随机锻";
-                // D1200: ordinary roll matCost（非 floor · 禁 K3）— Brand/Gem/Convert/Roll soft 本窗不改
-                cost = EmberForgeRollRules.matCost();
+                // D1200: ordinary roll matCost（非 floor · 禁 K3）；TIP-AT soft peek
+                cost = EmberGearNextHint.softCost("roll", pd, EmberForgeRollRules.matCost());
             } else if (goal == EmberForgeGoal.CONVERT) {
                 focus = "转化";
-                // D1216: weekly convert cost by held tier
-                if (d.tier >= 1 && d.tier <= 3) cost = EmberConvertRules.cost(d.tier);
+                // D1216: weekly convert cost by held tier；TIP-AT soft peek
+                if (d.tier >= 1 && d.tier <= 3)
+                    cost = EmberGearNextHint.softCost("convert", pd, EmberConvertRules.cost(d.tier));
             } else if (goal == EmberForgeGoal.BRAND) {
                 focus = "烙纹";
-                // D1192: craftShards mirror · 非 K3
-                cost = new EmberUpgradeRules.Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0);
+                // D1192: craftShards mirror · 非 K3；TIP-AT soft peek
+                cost = EmberGearNextHint.softCost("brand", pd,
+                        new EmberUpgradeRules.Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0));
             } else {
                 EmberUpgradeRules.Plan plan = EmberUpgradeRules.enhanceCheck(d);
                 if (plan != null && plan.ok()) cost = EmberGearNextHint.softCost("enhance", pd, plan.cost);
