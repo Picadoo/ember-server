@@ -17,6 +17,7 @@ import town.sunshine.corerpg.PlayerData;
  * D470: rising-edge imprint-ready cue when chase marks hit threshold.
  * D472: imprint-complete feel + chase-close offer (acquisition loop close).
  * D604: hope-meter style via EmberHopeMeter.sigChase.
+ * D12712–D12727 TIP-AN: chase-ready defense align (fitsDefense + imprintWornTarget).
  * Zero STAMP_RATE / imprint price / ALTS / clear-gate change.
  */
 public final class EmberSigChase {
@@ -375,7 +376,7 @@ public final class EmberSigChase {
         if (EmberImprintBreak.maybeAuto(p, d, lo, runs)) return true;
         ConfirmTokens.sendButton(p, P + "§7下一步：", // D753 one-click when no overwrite needed
                 "[一键烙印·" + def.id + "]", "/corerpg p1 sig imprint " + def.id + " go",
-                EmberSignature.imprintMarks() + " 枚徽记 · 烙到穿着" + EmberItemData.slotName(def.slot) + "（无覆盖则直接花）");
+                EmberSignature.imprintMarks() + " 枚徽记 · 烙到穿着" + readyCueSlotWord(lo, def) + "（无覆盖则直接花）");
         return true;
     }
 
@@ -406,8 +407,8 @@ public final class EmberSigChase {
         flush(p);
         String P = EmberRunService.P;
         boolean held = isHeldUid(p, target.uid);
-        boolean worn = lo != null && (("charm".equals(def.slot) ? lo.charm : lo.blade) != null)
-                && target.uid.equals(("charm".equals(def.slot) ? lo.charm : lo.blade).uid);
+        EmberItemData wornPiece = imprintWornTarget(lo, def);
+        boolean worn = wornPiece != null && target.uid.equals(wornPiece.uid);
         String where = worn ? "穿着" : (held ? "主手" : "同部位");
         String how = worn
                 ? ("/corerpg p1 sig imprint " + def.id)
@@ -423,10 +424,39 @@ public final class EmberSigChase {
         return true;
     }
 
-    /** Bukkit-free slot match: worn loadout piece or main-hand P1 piece of chase slot. */
+    /**
+     * D12716 / TIP-AN: imprint worn target shared with GrowthService.
+     * blade-def → blade; charm-def → first fitting worn by prio charm>head>chest>legs>boots.
+     */
+    public static EmberItemData imprintWornTarget(EmberLoadout lo, EmberSignature.Def sd) {
+        if (lo == null || sd == null) return null;
+        if ("blade".equals(sd.slot)) return lo.blade;
+        if (lo.charm != null && EmberSignature.fitsDefense(sd, lo.charm.slot, lo.charm.family)) return lo.charm;
+        for (int i = 0; i < 4; i++) {
+            EmberItemData a = lo.armor(i);
+            if (a != null && EmberSignature.fitsDefense(sd, a.slot, a.family)) return a;
+        }
+        return null;
+    }
+
+    /**
+     * D12718: ready-cue slot word follows actual worn target (never force 护符 when armor wins).
+     * Falls back to def.slot name when no worn target.
+     */
+    public static String readyCueSlotWord(EmberLoadout lo, EmberSignature.Def def) {
+        if (def == null) return "";
+        EmberItemData t = imprintWornTarget(lo, def);
+        if (t != null && t.slot != null) return EmberItemData.slotName(t.slot);
+        return EmberItemData.slotName(def.slot);
+    }
+
+    /**
+     * D12716 / TIP-AN: held first via fitsDefense, then worn via imprintWornTarget order.
+     * Bukkit-free when p is null (worn-only).
+     */
     public static EmberItemData sameSlotPiece(Player p, PlayerData d, EmberLoadout lo, EmberSignature.Def def) {
         if (def == null) return null;
-        // prefer main-hand same-slot (手持) then worn
+        // prefer main-hand fitsDefense (手持) then worn
         if (p != null) {
             try {
                 CoreRpgPlugin pl = plugin();
@@ -436,18 +466,15 @@ public final class EmberSigChase {
                         EmberItems items = pl.getEmberRuns().loadouts().items();
                         if (items != null && items.hasData(st)) {
                             EmberItems.Read r = items.read(st);
-                            if (r != null && r.ok() && r.data != null && def.slot.equals(r.data.slot))
+                            if (r != null && r.ok() && r.data != null
+                                    && EmberSignature.fitsDefense(def, r.data.slot, r.data.family))
                                 return r.data;
                         }
                     }
                 }
             } catch (Throwable ignored) { }
         }
-        if (lo != null) {
-            EmberItemData worn = "charm".equals(def.slot) ? lo.charm : lo.blade;
-            if (worn != null && def.slot.equals(worn.slot)) return worn;
-        }
-        return null;
+        return imprintWornTarget(lo, def);
     }
 
     static boolean isHeldUid(Player p, String uid) {

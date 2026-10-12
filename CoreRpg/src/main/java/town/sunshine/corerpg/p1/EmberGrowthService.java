@@ -1033,17 +1033,10 @@ public final class EmberGrowthService implements Listener {
     }
 
     /**
-     * Imprint worn target (D12591): blade-def → blade; charm-def → first fitting worn by prio charm&gt;head&gt;chest&gt;legs&gt;boots.
+     * Imprint worn target (D12591 / D12719): delegates to {@link EmberSigChase#imprintWornTarget} (one prio).
      */
     EmberItemData imprintWornTarget(EmberLoadout lo, EmberSignature.Def sd) {
-        if (lo == null || sd == null) return null;
-        if ("blade".equals(sd.slot)) return lo.blade;
-        if (lo.charm != null && EmberSignature.fitsDefense(sd, lo.charm.slot, lo.charm.family)) return lo.charm;
-        for (int i = 0; i < 4; i++) {
-            EmberItemData a = lo.armor(i);
-            if (a != null && EmberSignature.fitsDefense(sd, a.slot, a.family)) return a;
-        }
-        return null;
+        return EmberSigChase.imprintWornTarget(lo, sd);
     }
 
     /** the active signatures of this loadout (≤ 2; blade + defense-side 5-pick-1; D12590) */
