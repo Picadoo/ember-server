@@ -1,6 +1,6 @@
 # tip · TIP-D 套装追一眼（枢纽一格 · 焦点 have/need · 还差哪件）· D12264–D12271
 
-> **状态：** 批 **A · 方案 M**（总控 2026-10-12 15:46 Asia/Shanghai）· 交插件岗  
+> **状态：** CLOSED · live 1.65.761-d12271（2026-10-12 15:51 Asia/Shanghai）  
 > **上游：** [`DESIGN-ember-growth-variety-thin-2026-10-12.md`](../design/DESIGN-ember-growth-variety-thin-2026-10-12.md) · [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md)（A→C→B 已 CLOSED live；本窗续变强途径）  
 > **前置：** TIP-A CLOSED（d12247）· TIP-C CLOSED（d12255）· TIP-B CLOSED（1.65.760-d12263）  
 > **施工岗：** 插件岗（TrMenu 文案 + 纯展示短串；**零改套装战力**）  
@@ -91,3 +91,5 @@
 - [x] 总控批 **A · 方案 M** · 2026-10-12 15:46 CST
 - tip 已推 · 交插件岗
 - 薄窗变强途径续：**TIP-D**；A→C→B 已收；本批后仍禁 Affix / forge twin / pity densify twin
+
+## STATUS: CLOSED · live 1.65.761-d12271 · 2026-10-12 15:51 CST
