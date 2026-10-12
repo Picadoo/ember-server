@@ -1,6 +1,6 @@
 # tip · TIP-L 主线每图农场闭环（内容/掉落结构 · 非 glance）· D12336–D12351
 
-> **状态：** 待总控批 **A · 方案 M** · docs-first  
+> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:27 Asia/Shanghai）· 交插件岗  
 > **上游：** [`RESEARCH-ember-mainline-farm-loop-2026-10-12.md`](../design/RESEARCH-ember-mainline-farm-loop-2026-10-12.md) · [`DESIGN-ember-mainline-unlocks-2026-10-04.md`](../design/DESIGN-ember-mainline-unlocks-2026-10-04.md)（D174）· TIP-C / TIP-J P1  
 > **前置：** TIP-K CLOSED live `1.65.766-d12335`；power-glance **仍停**（TIP-J）  
 > **施工岗：** 插件岗（yml 偏置对齐 + 既有下一环按钮优先级；**零抬表**）  
@@ -57,7 +57,7 @@
 
 ## 4. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [ ] D12338 q07 slot=charm；lootLabel / FarmCue 部位可辨  
 - [ ] D12340 仅改按钮优先级，无新进度轨  
 - [ ] `git show` 无 Affix / 数值表无关脏文件  
@@ -67,8 +67,9 @@
 
 ## 5. 批注
 
-- [ ] 总控批 **A · 方案 M** · _待填_  
+- [x] 总控批 **A · 方案 M** · 2026-10-12 16:27 CST  
 - 身份入口：TIP-C CLOSED；本 tip = **掉落结构闭环**  
 - 枢纽折叠：不排本窗
+- **批注：** 已核 q07 `loot: {family: burst}` 无 slot；P0 加 charm；D12340 只改 ConfirmTokens 优先级；Q05 不改；src+plugins 两份 yml 对齐
 
-## STATUS: OPEN · 待批 A·M · 2026-10-12 Asia/Shanghai
+## STATUS: 批 A·M · 交插件 · 2026-10-12 16:27 CST

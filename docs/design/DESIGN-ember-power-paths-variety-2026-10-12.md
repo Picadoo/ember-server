@@ -187,4 +187,4 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - TIP-I：**CLOSED live**（1.65.765-d12311）
 - **TIP-J CLOSED 停窗** · `TIP-ember-power-paths-stop-window-d12312-d12319` · Batch1–3+A～I 收束；默认不再开 power-glance
 - **TIP-K CLOSED live** 1.65.766-d12335（技能手感包 cue）
-- **TIP-L OPEN** · `TIP-ember-mainline-farm-loop-d12336-d12351-2026-10-12.md` · 主线每图农场闭环（掉落结构）；RESEARCH 同日；禁 Affix/伤乘/抬表/glance · 待批 A·M
+- **TIP-L 批 A·M** · tip `TIP-ember-mainline-farm-loop-d12336-d12351` · 交插件岗（Q07 charm + 下一环指针）
