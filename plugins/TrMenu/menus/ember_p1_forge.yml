@@ -28,27 +28,16 @@ Layout:
   - '# e u r #'
   - '# Q S D #'
   - '# q s d #'
-  - '#FGPmWbB#'
+  - 'NFGPmWbB#'
 # D100 (review #10): every confirm sits directly under its preview (same column); 分解 confirms in chat (one-shot token)
 
 Events:
   Open:
     - 'command: corerpg p1 setchase'
-    # D680: sink glance also via /corerpg p1 forge entry; reinforce here
-    - 'tell: §a稳线：§f强化 / 成色 / 精工 / 烙纹定向（材料→确定一步）§8 · §6旁路：§7随机锻（赌成色/精工，出不了极品）'
-    - 'tell: §e强化保底：§f失败不掉级 · 每档有次数上限 · 预览写「含本次≤N次必成」'
-    - 'tell: §e消耗一瞥：§f手持件看强化/成色/精工本次费用 · 缺料半行在聊天（开菜单前已刷）'
-    - 'tell: §8烙纹路径 %corerpg_p1_brand_path%'
-    - 'tell: §8转化路径 %corerpg_p1_convert_path%'
+    # D12301 TIP-H: 教学 tell ≤2 · 稳/赌并排 + 缺料/配方/本周指针
+    - 'tell: §a稳§7上排确定+1 §8· §6赌§7点F（有下限·极品0）'
+    - 'tell: §8缺料→材料哪来 · 配方速览 · 本周：%corerpg_p1_forge_goal_line%'
     - 'sound: BLOCK_ANVIL_LAND-1-0.6'
-    - 'tell: §8缺料？点「材料哪来」回挂机庭 · 产→仓→本页花'
-    - 'tell: §8未持件也能看费用：点「配方速览」'
-    - 'tell: §8挂机仓差→烙纹/随机锻/转化见配方速览与挂机战况'
-    - 'tell: §8词条洗练（普通随机 / Shift 锁定保类型只重抽档）在本页「洗练」'
-    - 'tell: §e本周工坊目标：§f%corerpg_p1_forge_goal_line%'
-    - 'tell: §e%corerpg_p1_forge_goal_hope%'
-    - 'tell: §e%corerpg_p1_vault_hope%'
-    - 'tell: §e掉落成色希望：§f%corerpg_p1_drop_q_hope%'
     - 'command: corerpg p1 forgegoal nudge'
 
 Icons:
@@ -329,6 +318,18 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_afk'
+  # D12300 TIP-H: 稳/赌并排认路格（零经济 · 不跳 K3）
+  N:
+    display:
+      material: paper
+      name: '§a稳§8/§6赌'
+      lore:
+        - '§a稳：§f上排 强化/成色/精工'
+        - '§6赌：§f点 F · 下页第二排买下限'
+        - '§e➥ §f认路 · 不改数值'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
   # D430: 随机锻造（印记+胚料+币 · 出不了极品）
   F:
     display:
