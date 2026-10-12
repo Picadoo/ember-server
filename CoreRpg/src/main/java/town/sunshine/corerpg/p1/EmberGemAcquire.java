@@ -38,8 +38,9 @@ public final class EmberGemAcquire {
         return d == null ? 0 : Math.max(0, d.periodCount(C_PITY, "all"));
     }
 
+    /** D12750: same effective remain as {@link #remainLine(PlayerData)} (nudge-aware). */
     public static String hopeLine(PlayerData d) {
-        return EmberHopeMeter.gemPity(pity(d), PITY_NEED);
+        return remainLine(d);
     }
 
     /** D1258: clears remaining until gem (incl. current progress already counted). */
@@ -49,16 +50,36 @@ public final class EmberGemAcquire {
         return PITY_NEED - c;
     }
 
-    /** D1258: non-hope remain — {@code 通关保底 2/5 · 再通关3次得石}. */
+    /**
+     * D12748: when day-first pity nudge is still ready and more than one clear remains,
+     * report one fewer clear (next clear will also add {@link EmberGemPityNudge#BONUS}).
+     */
+    public static int clearsLeft(int cur, boolean nudgeReady) {
+        int left = clearsLeft(cur);
+        if (nudgeReady && left > 1) return left - 1;
+        return left;
+    }
+
+    /** D1258: unary remain — no nudge (tests / no PlayerData). */
     public static String remainLine(int cur) {
+        return remainLine(cur, false);
+    }
+
+    /**
+     * D12749: non-hope remain with optional day-first nudge honesty —
+     * {@code 通关保底 3/5 · 再通关1次得石 · 今日加码待用}.
+     */
+    public static String remainLine(int cur, boolean nudgeReady) {
         int c = Math.max(0, cur);
         if (c >= PITY_NEED) return "通关保底已满 · 下次通关得石";
-        int left = clearsLeft(c);
-        return "通关保底 " + c + "/" + PITY_NEED + " · 再通关" + left + "次得石";
+        int left = clearsLeft(c, nudgeReady);
+        String base = "通关保底 " + c + "/" + PITY_NEED + " · 再通关" + left + "次得石";
+        if (nudgeReady && c < PITY_NEED) return base + " · 今日加码待用";
+        return base;
     }
 
     public static String remainLine(PlayerData d) {
-        return remainLine(pity(d));
+        return remainLine(pity(d), EmberGemPityNudge.ready(d));
     }
 
     /** True for Q01–Q07 mainline maps (normal or challenge); excludes raid / abyss / event / short. */
