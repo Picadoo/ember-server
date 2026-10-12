@@ -230,6 +230,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 
 - **TIP-BJ CLOSED live `1.65.799-d13079` · feat `72cba2db4` · items `bc1e63407`** · 宝石短效果诚实 · shortEffect · NI/合成/镶入 · 零抬 gem flat
 
+- **TIP-BL APPROVED** · 烙纹定向幅度菜单诚实 · 批 A·M · 已派物品 · 不派插件 · values→档区间 · 非 Affix densify · docs `f855e502`
+
 - **TIP-BL OPEN** · `TIP-ember-brand-pin-magnitude-menu-honesty-thin-d13096-d13111-2026-10-12.md` · RESEARCH `RESEARCH-ember-brand-pin-magnitude-menu-honesty-2026-10-12.md` · DESIGN `DESIGN-ember-brand-pin-magnitude-menu-honesty-2026-10-12.md` · 烙纹定向幅度菜单诚实（TrMenu 类型格 · 可施工薄 · 可感变强途径 · **离开天赋悬停链** · **非 Affix densify · 非伤乘 · 非抬表 · 非 soft·开孔再叠 · 非 Anvil densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 SF4 U2U3 · 非灰印/聚火 · 非签名 lore 再叠 · 非调律 live bad · 非套装 blurb 再叠 · 非宝石短效果再叠 · 非天赋悬停再叠 · 非效果长墙 · 非 lore>3** · 零改 affix values/weights/pool/pity/rollable · growth SoT → 五格档区间 · signedPct 口径）· **批后派余烬-物品** · **不派插件** · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-BK CLOSED live · soft-latch/CostSoft/pity/soft-glance/firstsoft/cook/life-buy soft 再叠 / xp-boost cue 再叠 / GemHole Open 再叠 / enhance+5 开孔再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 densify / 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify / SF4 U2U3 / 灰印·聚火 / 调律 live bad 进持件 / 签名 lore 再叠 / 套装 blurb 再叠 / 宝石短效果再叠 / 天赋悬停再叠 / Affix densify 仍冻 · 策划 docs-only
 
 - **TIP-BK CLOSED live items `4c2c38485`** · 天赋悬停短效果 · TrMenu reload 77 · jar 未改 `1.65.799-d13079`

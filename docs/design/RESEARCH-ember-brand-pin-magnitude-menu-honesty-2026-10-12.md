@@ -1,6 +1,6 @@
 # RESEARCH · 烙纹定向幅度菜单诚实（TrMenu 类型格 · 离开天赋悬停）· 2026-10-12
 
-> **状态：** OPEN · TIP-BL · 2026-10-12 23:54 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BL · 已派余烬-物品 · 不派插件 · 2026-10-12 23:56 Asia/Shanghai  
 > **起因：** TIP-BK CLOSED live 后总控「离开天赋悬停链 · 开下一可感变强途径」。BK DESIGN 旁债 #8 已点名「烙纹定向幅度菜单诚实」。扫 AH…BK / power-paths：`ember-v1-growth.yml` affix **values SoT 已有**；烙纹页五格只写定性「对词缀精英伤害」等，**无档位幅度区间**——点类型前不知变强多少。  
 > **上游：** TIP-BK CLOSED live items `4c2c38485` · TrMenu reload 77 · docs `4f0794c15` · jar 未改 `1.65.799-d13079` · `ember-v1-growth.yml` affix defs · `ember_p1_brand.yml` · `EmberAffix.Def.text` / `signedPct` · power-paths [`DESIGN-ember-power-paths-variety-2026-10-12.md`](DESIGN-ember-power-paths-variety-2026-10-12.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify（禁改 values/weights/pool/pity/rollable）· 零伤乘 · 零抬表 · 零抬 talent/gem flat · 零 soft·开孔再叠 · 零 Anvil densify · 零 topUpTo · 零 SF4 U2U3 · 零灰印/聚火 · 零签名 lore 再叠 · 零调律 live bad 进持件 · 零套装 blurb 再叠 · 零宝石短效果再叠 · 零天赋悬停再叠 · 零 SetRules/Formula 抬 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 ConvertCap densify · 零 sx20 · 零 skill_mult · 零开 L13 施工 tip · 零效果长墙 densify · 零 lore>3 · 零一层中段塞菜单**
