@@ -1158,6 +1158,43 @@ public final class EmberGrowthService implements Listener {
         return EmberSigAttunePreview.listOf(blade, def);
     }
 
+    /**
+     * D12652: defense-side slot for sig-page C summary / toggle (same prio as AH preview / pickDefense).
+     * Prefer combat-active ({@link #previewSlot} non-null); else first worn piece with a signature
+     * (toggle-back when the winner was just switched off); else null → honest empty.
+     */
+    String defenseActiveSlot(PlayerData d, EmberLoadout lo) {
+        if (d == null || lo == null) return null;
+        for (String slot : new String[]{"charm", "head", "chest", "legs", "boots"}) {
+            if (previewSlot(d, lo, slot) != null) return slot;
+        }
+        for (String slot : new String[]{"charm", "head", "chest", "legs", "boots"}) {
+            EmberItemData it = pieceOf(lo, slot);
+            if (it == null) continue;
+            EmberSignature.Worn w = worn(d, it);
+            if (w != null && w.def != null) return slot;
+        }
+        return null;
+    }
+
+    /** D12652: pure picker for unit tests — active[] / signed[] align with charm→head→chest→legs→boots. */
+    static String pickDefenseSummarySlot(boolean[] active, boolean[] signed) {
+        String[] prio = {"charm", "head", "chest", "legs", "boots"};
+        if (active != null) {
+            for (int i = 0; i < prio.length; i++) if (i < active.length && active[i]) return prio[i];
+        }
+        if (signed != null) {
+            for (int i = 0; i < prio.length; i++) if (i < signed.length && signed[i]) return prio[i];
+        }
+        return null;
+    }
+
+    /** D12654: catalog a_ action where-clause (blade vs defense-side). */
+    static String imprintActionWhere(EmberSignature.Def sd) {
+        if (sd == null) return "护符或防具";
+        return "blade".equals(sd.slot) ? EmberItemData.slotName("blade") : "护符或防具";
+    }
+
     /** true if at least one worn active sig has unlocked attune. */
     boolean anyUnlockedAttuneWorn(PlayerData d, EmberLoadout lo) {
         if (d == null || lo == null || !runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return false;
@@ -1376,7 +1413,8 @@ public final class EmberGrowthService implements Listener {
         p.sendMessage(P + "§6签名传奇§7（每张主线图首领自己的效果；同时最多 " + (dual ? 2 : 1) + " 条"
                 + (dual ? "" : "，首进或首通 " + EmberSignature.DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后 2 条") + "；同类不叠）");
         p.sendMessage(P + wornLine(d, lo, "blade"));
-        p.sendMessage(P + wornLine(d, lo, "charm"));
+        String defSlot = defenseActiveSlot(d, lo);
+        p.sendMessage(P + (defSlot == null ? "§7防具侧：§8没有" : wornLine(d, lo, defSlot)));
         for (String mk : EmberSignature.maps()) {
             boolean cl = runs.progressFlag(d, mk);
             p.sendMessage(P + "§e" + mapLabel(mk) + " §7· 首领徽记 §f" + d.periodCount(EmberSignature.C_MARK + mk, "all")
@@ -1569,9 +1607,15 @@ public final class EmberGrowthService implements Listener {
     /** uuid → {signature id, "worn" | "held"} — the imprint page's current choice */
     private static final Map<UUID, String[]> SPICK = new ConcurrentHashMap<UUID, String[]>();
 
-    private boolean sigToggle(Player p, PlayerData d, EmberLoadout lo, String slot) {
-        if (!"blade".equals(slot) && !"charm".equals(slot)) { openMenu(p, SIG_MENU); return true; }
+    private boolean sigToggle(Player p, PlayerData d, EmberLoadout lo, String arg) {
+        if (!"blade".equals(arg) && !"charm".equals(arg)) { openMenu(p, SIG_MENU); return true; }
         if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后再开关签名（副本里不能改）"); return true; }
+        String slot = "blade".equals(arg) ? "blade" : defenseActiveSlot(d, lo);
+        if (slot == null) {
+            p.sendMessage(P + "§c防具侧没有生效签名可开关");
+            openMenu(p, SIG_MENU);
+            return true;
+        }
         boolean off = sigOff(d, slot);
         d.addPeriodCount(C_SIGOFF + slot, "all", off ? -1 : 1);
         runs.flushData(p.getUniqueId());
@@ -1844,12 +1888,12 @@ public final class EmberGrowthService implements Listener {
         if ("acq".equals(key) || "acq_line".equals(key)) return EmberSigAcq.menuLine(); // D456
         if ("chase".equals(key) || "chase_line".equals(key) || "chase_hope".equals(key)) return EmberSigChase.glance(d); // D464/D604
         if ("feel".equals(key) || "feel_line".equals(key)) return sigFeelLine(d, lo); // D12290 hub/gear feel glance
-        if ("imprint_hope".equals(key)) { // D615 spend hope for chase target (or tip if none)
+        if ("imprint_hope".equals(key)) { // D615 / D12654: spend hope; defense-side tier via imprintWornTarget
             EmberSignature.Def cd = EmberSigChase.get(d);
             if (cd == null) return "§8追烙未选 · /corerpg p1 sig chase";
             int marks = d.periodCount(EmberSignature.C_MARK + cd.map, "all");
             EmberLoadout loImp = runs.loadouts().get(p);
-            EmberItemData worn = loImp == null ? null : ("blade".equals(cd.slot) ? loImp.blade : loImp.charm);
+            EmberItemData worn = loImp == null ? null : imprintWornTarget(loImp, cd);
             int tier = worn != null && worn.tier >= 1 ? worn.tier : 1;
             int coinNeed = EmberSignature.imprintCoin(tier);
             return EmberHopeMeter.imprintSpend(marks, EmberSignature.imprintMarks(), d.getCoin(), coinNeed);
@@ -1881,7 +1925,11 @@ public final class EmberGrowthService implements Listener {
             String f = SFROM.get(p.getUniqueId());
             return "gear".equals(f) ? "§7返回装备页" : "hub".equals(f) ? "§7返回主菜单" : "skill".equals(f) ? "§7返回技能组" : "§7关闭";
         }
-        if ("blade".equals(key) || "charm".equals(key)) return wornLine(d, lo, key);
+        if ("blade".equals(key)) return wornLine(d, lo, "blade");
+        if ("charm".equals(key)) { // D12652: defense-side winner summary (key name kept)
+            String slot = defenseActiveSlot(d, lo);
+            return slot == null ? "§7防具侧：§8没有" : wornLine(d, lo, slot);
+        }
         if (key.startsWith("mn_") || key.startsWith("m_")) { // per map: mn_q01 = name line, m_q01 = first clear + insignia
             String mk = key.substring(key.indexOf('_') + 1).toLowerCase(Locale.ROOT);
             if (!EmberSignature.hasMap(mk)) return "";
@@ -1892,8 +1940,9 @@ public final class EmberGrowthService implements Listener {
                     + "，基础掉落 " + Math.round(EmberSignature.stampRate() * 100) + "% 是签名件";
         }
         if ("blade_t".equals(key) || "charm_t".equals(key)) {
-            String slot = key.substring(0, 5);
-            EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+            String slot = "blade_t".equals(key) ? "blade" : defenseActiveSlot(d, lo);
+            if (slot == null) return "§8防具侧没有生效签名可开关";
+            EmberItemData it = pieceOf(lo, slot);
             if (sigOff(d, slot)) return "§e➥ 点击重新打开这条签名";
             if (it == null || sigOf(d, it) <= 0) return "§8这件没有签名（在下面点一条签名可以烙印）";
             return "§e➥ 点击关闭这条签名 §8（有代价时可以先关掉；随时再开）";
@@ -1916,14 +1965,17 @@ public final class EmberGrowthService implements Listener {
                 default:
                     if (!cl) return "§8首通 " + mapLabel(sd.map) + " 后解锁：重打掉签名件和徽记";
                     if (!imp) return "§8重打 " + sd.map.toUpperCase(Locale.ROOT) + " 有机会掉 · 烙印在首进或首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
-                    return "§e➥ 点击：烙印到自己的" + EmberItemData.slotName(sd.slot) + "上 §7（" + EmberSignature.imprintMarks() + " 枚徽记 + "
+                    return "§e➥ 点击：烙印到自己的" + imprintActionWhere(sd) + "上 §7（" + EmberSignature.imprintMarks() + " 枚徽记 + "
                             + EmberSignature.IMPRINT_COIN_PER_TIER + "×阶级 币）";
             }
         }
         if ("run".equals(key)) return runPreviewLine(d, lo);
         if ("run_cost".equals(key)) return runPreviewCost(d, lo);
         if ("blade_o".equals(key)) return wornOtherCost(d, lo, "blade");
-        if ("charm_o".equals(key)) return wornOtherCost(d, lo, "charm");
+        if ("charm_o".equals(key)) { // D12652: other-edition cost for defense winner
+            String slot = defenseActiveSlot(d, lo);
+            return slot == null ? "" : wornOtherCost(d, lo, slot);
+        }
         if (key.startsWith("p_")) return impPapi(p, d, lo, key.substring(2));
         return "";
     }
@@ -2051,7 +2103,9 @@ public final class EmberGrowthService implements Listener {
             }
         } else { s.sendMessage(usage); return true; }
         runs.flushData(t.getUniqueId());
-        s.sendMessage(P + t.getName() + " · " + wornLine(d, lo, "blade") + " §7| " + wornLine(d, lo, "charm"));
+        String admDef = defenseActiveSlot(d, lo);
+        s.sendMessage(P + t.getName() + " · " + wornLine(d, lo, "blade") + " §7| "
+                + (admDef == null ? "§7防具侧：§8没有" : wornLine(d, lo, admDef)));
         StringBuilder sb = new StringBuilder();
         for (String mk : EmberSignature.maps()) sb.append(mk).append('=').append(d.periodCount(EmberSignature.C_MARK + mk, "all")).append(' ');
         StringBuilder seen = new StringBuilder();
