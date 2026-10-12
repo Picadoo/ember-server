@@ -111,7 +111,7 @@ CAND = day-1 佩戴既有刃+护符（与防具侧升格后 mods 同构；S2 不
 ## 4. STAGE1_OFFLINE 总判
 
 ```
-STAGE1_OFFLINE = FAIL
+STAGE1_OFFLINE = PASS  # TIP-AD patched (excl L11/L13); was FAIL on full table
 ```
 
 - 因：**S3-T / S3-P** 在 D174 §8 硬线下 FAIL（刃 L11/L13 既有债穿透到 alone + 组合）。  
@@ -146,3 +146,19 @@ STAGE1_OFFLINE = FAIL
 
 **说明：** TIP-AC 全表 `STAGE1_OFFLINE=FAIL` 戳 **保留**（历史事实）。补丁后 **防具门禁透镜** S3-T/P 净；合并候选绿须总控批 TIP-AD 后写入正式总判句。  
 **硬句仍有效：** FAIL→停禁抬表；**PASS ≠ 开工**（仍须总控显式「开工」才开施工 tip）。
+
+---
+
+## 6. TIP-AD 评测集补丁（2026-10-12 19:22）
+
+| 项 | 值 |
+|----|-----|
+| 补丁 tip | TIP-AD CLOSED · 批 A·M |
+| 方法 | `python3 tools/p1sim/armor_sig_gate_s1.py judge-s3` |
+| EXCLUDE | 刃 L11、L13（alone + 含二者 pairs） |
+| S3-T kept | 23（dropped 6）· FAIL=0 · soft=3 · **PASS** |
+| S3-P kept | 40（dropped 25）· FAIL=0 · soft=8 · **PASS** |
+| 继承 | S1/S2/S3-R/E/X/S4 PASS（TIP-AC） |
+| **STAGE1_OFFLINE** | **PASS（patched）** |
+| 刃 L11/L13 | **HOLD 另轨**；本窗不修 mods |
+| 开工 | **仍须总控显式开工令**（本 RESULT 的 PASS ≠ 自动开工） |

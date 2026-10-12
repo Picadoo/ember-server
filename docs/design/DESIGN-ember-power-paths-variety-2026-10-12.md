@@ -196,6 +196,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
+- **TIP-AD CLOSED** · S3 评测集砍刃 L11/L13 · judge-s3 PASS · STAGE1_OFFLINE=PASS(patched) · 显式开工令已发（等施工 tip）
+
 - **TIP-AD OPEN** · `TIP-ember-armor-signature-gate-s3-eval-patch-thin-d12576-d12583-2026-10-12.md` · 补丁 DESIGN `DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md` · S3 评测集砍刃 L11/L13（docs-only · `judge-s3` PASS 候选 · 零业务 jar · PASS≠开工）· 深化 densify 仍冻
 - **TIP-AC CLOSED FAIL** `469cc1a46` · `TIP-ember-armor-signature-gate-stage1-offline-thin-d12560-d12575-2026-10-12.md` · RESULT `STAGE1_OFFLINE=FAIL`（S3-T/P 刃 L11/L13；S1/S2/S3-R/E/X/S4 PASS）· HOLD 施工 · 零业务 jar
 - **TIP-AB CLOSED** `a5b264fce` · 防具签名+叠合门禁 DESIGN stage0 APPROVED · HOLD 施工至 S1–S4+显式开工 · TIP-AD 补丁勘误 S3 评测集

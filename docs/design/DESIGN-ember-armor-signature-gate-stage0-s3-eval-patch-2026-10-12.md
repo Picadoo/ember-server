@@ -1,6 +1,6 @@
 # DESIGN · 防具签名门禁 stage0 补丁 · S3 评测集砍刃 L11/L13 · 2026-10-12
 
-> **状态：** OPEN · 对接 TIP-AD · docs-only · **HOLD 施工 / 零业务 jar** · 2026-10-12 19:19 Asia/Shanghai  
+> **状态：** APPROVED · TIP-AD 批 A·M · docs-only · judge-s3 PASS · 2026-10-12 19:22 Asia/Shanghai  
 > **对接 tip：** [`TIP-ember-armor-signature-gate-s3-eval-patch-thin-d12576-d12583-2026-10-12.md`](../tips/TIP-ember-armor-signature-gate-s3-eval-patch-thin-d12576-d12583-2026-10-12.md)  
 > **上游：** TIP-AC CLOSED FAIL `469cc1a46` · RESULT [`RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md) · stage0 [`DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md`](DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md) · stage1 [`DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md)  
 > **硬禁：** 零 Affix densify · 零伤乘 · 零抬表 · 零 glance twin · 零深化 densify · 零 sx20 · 零 skill_mult · **不改 SIGS / 修饰键数值** · 零业务 jar · PASS≠开工
@@ -96,8 +96,8 @@ PASS（补丁后 S3-T/P 净）→ 可与既有 S3-R/E/X + S4 PASS 合并记 `STA
 
 ## 7. 成功标准（本补丁 tip）
 
-- [ ] 本 DESIGN + TIP-AD 可点；勘误 / 评测集 / HOLD 刃另轨可核  
-- [ ] stage0 §3 S3 注 + stage1 §3 + harness exclude 对齐  
-- [ ] power-paths：TIP-AC CLOSED FAIL `469cc1a46`；TIP-AD OPEN  
-- [ ] 零业务 jar；不改平衡数值表  
-- [ ] （可后继）`judge-s3` 或重跑后 RESULT 记 S3-T/P 补丁后判；FAIL 停；PASS≠开工
+- [x] 本 DESIGN + TIP-AD 可点；勘误 / 评测集 / HOLD 刃另轨可核  
+- [x] stage0 §3 S3 注 + stage1 §3 + harness exclude 对齐  
+- [x] power-paths：TIP-AC CLOSED FAIL `469cc1a46`；TIP-AD OPEN  
+- [x] 零业务 jar；不改平衡数值表  
+- [x] （可后继）`judge-s3` 或重跑后 RESULT 记 S3-T/P 补丁后判；FAIL 停；PASS≠开工

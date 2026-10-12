@@ -1,6 +1,6 @@
 # tip · TIP-AD 防具签名门禁 S3 评测集补丁（砍刃 L11/L13 · docs-only）· D12576–D12583
 
-> **状态：** OPEN · 待批 **A · 方案 M** · docs-only · HOLD 施工 · 2026-10-12 19:19 Asia/Shanghai  
+> **状态：** CLOSED · 批 **A · 方案 M** · docs-only · judge-s3 PASS · HOLD 施工至显式开工（总控 2026-10-12 19:22 Asia/Shanghai）  
 > **上游：** TIP-AC CLOSED FAIL `469cc1a46` · RESULT [`RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](../design/RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md) · 补丁 DESIGN [`DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md`](../design/DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md) · stage0 / stage1 DESIGN  
 > **前置：** S1/S2/S3-R/S3-E/S3-X/S4 已 PASS；S3-T/P FAIL 仅刃 L11/L13；深化 densify **仍冻**；烬斩门闩 TIP-Y **仍有效**  
 > **施工岗：** **无码业务**（策划 docs + harness 评测成员注释）；**零业务 jar**；**不**派插件；**不**改 SIGS 数值  
@@ -71,13 +71,13 @@ TIP-AC 后开 **stage0 评测集补丁**：S3-T/P 防具门禁判定 **排除刃
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] 补丁 DESIGN + tip 路径可点；exclude / HOLD 刃另轨可核  
-- [ ] power-paths：TIP-AC CLOSED FAIL `469cc1a46` + TIP-AD OPEN  
-- [ ] harness exclude + `judge-s3` 可跑  
-- [ ] **无**插件施工派单；**无**业务 jar；**无** SIGS 数值改动  
-- [ ] `git show` 仅 docs + harness 评测成员；密码检查 0  
-- [ ] （批后可继）RESULT 记补丁后 S3-T/P；FAIL 停；PASS≠开工
+- [x] 总控批 **A · 方案 M**  
+- [x] 补丁 DESIGN + tip 路径可点；exclude / HOLD 刃另轨可核  
+- [x] power-paths：TIP-AC CLOSED FAIL `469cc1a46` + TIP-AD CLOSED  
+- [x] harness exclude + `judge-s3` PASS（总控复跑）  
+- [x] **无**插件施工派单；**无**业务 jar；**无** SIGS 数值改动  
+- [x] `git show` 仅 docs + harness 评测成员；密码检查 0  
+- [x] （批后）RESULT 记补丁后 S3-T/P；FAIL 停；PASS≠开工
 
 ---
 
