@@ -26,7 +26,7 @@ public class EmberDropQualityPityTest {
         s.abyss = 0;
         assertTrue(EmberDropQualityPity.applicable(s, q));
         s.challenge = true;
-        assertFalse(EmberDropQualityPity.applicable(s, q));
+        assertTrue(EmberDropQualityPity.applicable(s, q)); // D6209 challenge shares soft floor
     }
 
     @Test
@@ -44,6 +44,8 @@ public class EmberDropQualityPityTest {
     @Test
     public void increment_on_standard() {
         PlayerData pd = new PlayerData();
+        // Isolate from D10721 daily quality nudge (+BONUS on first 标准 of day) — NEED path only
+        pd.addPeriodCount(EmberDropQualityNudge.C_USED, "day", 1);
         List<EmberRunRules.Grant> g = new ArrayList<EmberRunRules.Grant>();
         g.add(new EmberRunRules.Grant("base_item", EmberRunRules.Kind.ITEM, "uid", 1,
                 new EmberRunRules.ItemRoll("scorch", "blade", 1, 0, 0)));

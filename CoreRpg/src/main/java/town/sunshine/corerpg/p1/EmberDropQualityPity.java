@@ -23,8 +23,12 @@ public final class EmberDropQualityPity {
         return d == null ? 0 : Math.max(0, d.periodCount(C_PITY, "all"));
     }
 
+    /**
+     * D12782: hope display → remainLine(pd) so HopeMeter/RunPapi eat nudge-aware SoT.
+     * Binary {@link EmberHopeMeter#dropQuality} glance kept for regression/other callers.
+     */
     public static String hope(PlayerData d) {
-        return EmberHopeMeter.dropQuality(get(d), NEED);
+        return remainLine(d);
     }
 
     /** D1323: non-hope remain — 标准连 drop toward 精良 soft floor. */
@@ -34,15 +38,36 @@ public final class EmberDropQualityPity {
         return NEED - c;
     }
 
+    /**
+     * D12781: when day-first quality pity nudge is still ready and more than one clear remains,
+     * report one fewer clear (next 标准 tick will also add {@link EmberDropQualityNudge#BONUS}).
+     */
+    public static int clearsLeft(int cur, boolean nudgeReady) {
+        int left = clearsLeft(cur);
+        if (nudgeReady && left > 1) return left - 1;
+        return left;
+    }
+
+    /** Unary remain — no nudge (tests / no PlayerData). */
     public static String remainLine(int cur) {
+        return remainLine(cur, false);
+    }
+
+    /**
+     * D12781: non-hope remain with optional day-first nudge honesty —
+     * {@code 成色软保底 3/5 · 再连出标准1次触发精良底 · 今日加码待用}.
+     */
+    public static String remainLine(int cur, boolean nudgeReady) {
         int c = Math.max(0, cur);
         if (c >= NEED) return "成色软保底已满 · 下次主线装必≥精良";
-        int left = clearsLeft(c);
-        return "成色软保底 " + c + "/" + NEED + " · 再连出标准" + left + "次触发精良底";
+        int left = clearsLeft(c, nudgeReady);
+        String base = "成色软保底 " + c + "/" + NEED + " · 再连出标准" + left + "次触发精良底";
+        if (nudgeReady && c < NEED) return base + " · 今日加码待用";
+        return base;
     }
 
     public static String remainLine(PlayerData d) {
-        return remainLine(get(d));
+        return remainLine(get(d), EmberDropQualityNudge.ready(d));
     }
 
     /**

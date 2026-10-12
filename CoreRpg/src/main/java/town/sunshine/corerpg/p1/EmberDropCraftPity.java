@@ -92,14 +92,42 @@ public final class EmberDropCraftPity {
         return applicable && !forced && enabled;
     }
 
+    /** D1323-style: clears remaining until craft floor (unary / no nudge). */
+    public static int clearsLeft(int cur) {
+        int c = Math.max(0, cur);
+        if (c >= NEED) return 0;
+        return NEED - c;
+    }
+
+    /**
+     * D12780: when day-first craft pity nudge is still ready and more than one clear remains,
+     * report one fewer clear (next craft0 tick will also add {@link EmberDropCraftNudge#BONUS}).
+     */
+    public static int clearsLeft(int cur, boolean nudgeReady) {
+        int left = clearsLeft(cur);
+        if (nudgeReady && left > 1) return left - 1;
+        return left;
+    }
+
+    /** Unary remain — no nudge (tests / no PlayerData). */
     public static String remainLine(int cur) {
+        return remainLine(cur, false);
+    }
+
+    /**
+     * D12780: non-hope remain with optional day-first nudge honesty —
+     * {@code 精工软保底 3/5 · 再连出精工0×1触发精工1底 · 今日加码待用}.
+     */
+    public static String remainLine(int cur, boolean nudgeReady) {
         int c = Math.max(0, cur);
         if (c >= NEED) return "精工软保底已满 · 下次主线装必≥精工1";
-        int left = NEED - c;
-        return "精工软保底 " + c + "/" + NEED + " · 再连出精工0×" + left + "触发精工1底";
+        int left = clearsLeft(c, nudgeReady);
+        String base = "精工软保底 " + c + "/" + NEED + " · 再连出精工0×" + left + "触发精工1底";
+        if (nudgeReady && c < NEED) return base + " · 今日加码待用";
+        return base;
     }
 
     public static String remainLine(PlayerData d) {
-        return remainLine(get(d));
+        return remainLine(get(d), EmberDropCraftNudge.ready(d));
     }
 }
