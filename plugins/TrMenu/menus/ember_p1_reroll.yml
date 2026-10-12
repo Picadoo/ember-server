@@ -41,8 +41,8 @@ Icons:
       name: '§6说明'
       lore:
         - '§7用重复件或碎片洗词条'
-        - '§7Shift 锁定词条'
-        - '§e➥ §f点下方按钮开始'
+        - '§a更优档直留 · 自动保留新'
+        - '§e➥ §f点下方按钮 · Shift锁词'
 
   a:
     update: 20
@@ -127,6 +127,7 @@ Icons:
       name: '§a保留新'
       lore:
         - '%corerpg_p1_reroll_pending%'
+        - '§7更优已直留 · 本格自选较差/同档'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
