@@ -1,6 +1,6 @@
 # RESEARCH · 强化预览成功率菜单诚实（工坊 TrMenu · 离开副手购/炼数字）· 2026-10-13
 
-> **状态：** APPROVED · TIP-BN · 已派插件+物品 · 2026-10-13 00:08 Asia/Shanghai  
+> **状态：** CLOSED live `1.65.800-d13143` · TIP-BN · feat `059891b38` · items `284e5dc7c` · 2026-10-13 00:14 Asia/Shanghai  
 > **起因：** TIP-BM CLOSED live 后总控「离开副手购/炼数字链 · 开下一可感变强途径」。扫 AH…BM / power-paths：幅度半行族（签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量）已齐；**WS2 预览三态「花费 · 成功率或 n/N · 点确认」未齐**——聊天预览已写「成功率 N%」，工坊菜单仅花费+保底。  
 > **上游：** TIP-BM CLOSED live items `91300ad65` · TrMenu reload 77 · docs `cfbfacadb` · jar 未改 `1.65.799-d13079` · `EmberUpgradeRules.RATE` / `EmberForgeService.enhance` 预览聊天 · `ember_p1_forge.yml` E/e · power-paths [`DESIGN-ember-power-paths-variety-2026-10-12.md`](DESIGN-ember-power-paths-variety-2026-10-12.md) §3.2 WS2 · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify · 零伤乘 · 零抬表 · 零抬 RATE/MAX_TRIES/cost · 零抬 talent/gem/副手 flat · 零 soft·开孔再叠 · 零 Anvil densify · 零 topUpTo · 零 SF4 U2U3 · 零灰印/聚火 · 零签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量数字再叠 · 零调律 live bad 进持件 · 零并轨 B · 零 SetRules/Formula 抬 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 ConvertCap densify · 零 sx20 · 零 skill_mult · 零开 L13 施工 tip · 零效果长墙 · 零 lore>3**
@@ -91,4 +91,4 @@
 | WS2 三态：花费·率/保底·确认 | 补齐缺的「率」半行 |
 | 禁止只见保底不见率 | 禁菜单只 pity-only |
 
-## STATUS: APPROVED · TIP-BN · 已派插件+物品 · 2026-10-13 00:08 Asia/Shanghai
+## STATUS: CLOSED live `1.65.800-d13143` · TIP-BN · feat `059891b38` · items `284e5dc7c` · 2026-10-13 00:14 Asia/Shanghai
