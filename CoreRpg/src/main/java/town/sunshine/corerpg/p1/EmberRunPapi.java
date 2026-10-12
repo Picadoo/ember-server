@@ -93,6 +93,7 @@ public final class EmberRunPapi {
         if ("abyss_best".equals(key) || "abyss_hope".equals(key)) return Section.ABYSS;
         if ("bounty".equals(key) || "bounty_hope".equals(key) || "featured_hope".equals(key)) return Section.ROTATION;
         if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
+        if ("setchase_line".equals(key)) return Section.LOADOUT; // D12266 hub 套装 menuLine
         if ("dual_lead".equals(key) || "dual_lead_line".equals(key) || "dual_hope".equals(key)) return Section.LOADOUT; // D466/D636
         if ("brand_path".equals(key) || "brand_path_line".equals(key) || "brand_hope".equals(key)) return Section.LOADOUT; // D467/D638
         if ("echo_path".equals(key) || "echo_path_line".equals(key) || "echo_hope".equals(key)) return Section.LOADOUT; // D468
@@ -119,6 +120,7 @@ public final class EmberRunPapi {
     static boolean isLoadoutKey(String key) {
         return "awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "set_run".equals(key)
                 || "set_focus".equals(key) || "set_focus_line".equals(key)
+                || "setchase_line".equals(key)
                 || "dual_lead".equals(key) || "dual_lead_line".equals(key) || "dual_hope".equals(key)
                 || "brand_path".equals(key) || "brand_path_line".equals(key) || "brand_hope".equals(key)
                 || "echo_hope".equals(key) || "convert_hope".equals(key)
@@ -692,6 +694,10 @@ public final class EmberRunPapi {
                 PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
                 int fid = EmberSetFocus.get(pd);
                 return EmberSetFocus.glance(fid, l.activeSet, l.awakening, runs.target(pd));
+            }
+            case "setchase_line": { // D12266 hub 套装一眼 — do not alter set_focus chat glance
+                PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                return EmberSetChase.menuLine(pd, l);
             }
             case "dual_lead":
             case "dual_lead_line":

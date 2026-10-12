@@ -50,6 +50,97 @@ public final class EmberSetChase {
         return "焦点图鉴 · " + EmberItemData.familyName(fk) + " 还差" + miss + "种 · 先 " + first;
     }
 
+    /**
+     * D12265: one-line TrMenu short for hub「套装」— focus have/need + gap / awakening remain.
+     * Display only; reuses focusGap / awakeningRemain / focusCodexRemain. No new counters.
+     */
+    public static String menuLine(PlayerData d, EmberLoadout lo) {
+        if (d == null || !EmberSetFocus.valid(EmberSetFocus.get(d)))
+            return "§8套装焦点：未选 · 点右选焚烬/烬爆/炽愈";
+        int focus = EmberSetFocus.get(d);
+        String label = EmberSetFocus.label(focus);
+        String fk = EmberSetFocus.familyKey(focus);
+        int have = 0;
+        if (lo != null) {
+            if (lo.blade != null && fk.equals(lo.blade.family)) have++;
+            if (lo.charm != null && fk.equals(lo.charm.family)) have++;
+        }
+        boolean wearing = lo != null && fk.equals(lo.activeSet);
+        if (!wearing) {
+            String gap = gapNeedWord(d, lo);
+            return "§e焦点§f" + label + " §7· 同族 " + have + "/2 §8· §e还差" + gap;
+        }
+        if (lo.awakening < 3) {
+            String awk = "觉醒" + EmberSetFocus.toRoman(Math.max(1, lo.awakening));
+            String remain = compressAwakeningRemain(lo.awakeningRemain());
+            return "§e焦点§f" + label + " §a穿着 §7· " + awk + " §8· §e还差 " + remain;
+        }
+        String base = "§a焦点§f" + label + " §a觉醒III · 齐";
+        String fcr = focusCodexRemain(d);
+        if (fcr != null && !fcr.isEmpty()) {
+            if (fcr.contains("齐")) return base + " §8图鉴齐";
+            int miss = codexMissCount(d, fk);
+            if (miss > 0) return base + " §8还差" + miss + "种";
+        }
+        return base;
+    }
+
+    /** Strip focusGap to the short need word (缺同族护符 → 同族护符; 换焚烬刃 stays). */
+    static String gapNeedWord(PlayerData d, EmberLoadout lo) {
+        String gap = focusGap(d, lo);
+        if (gap != null && !gap.isEmpty()) {
+            String plain = plainSection(gap);
+            int idx = plain.lastIndexOf(" · ");
+            String need = idx >= 0 ? plain.substring(idx + 3).trim() : plain.trim();
+            if (need.startsWith("缺")) need = need.substring(1);
+            if (!need.isEmpty()) return need;
+        }
+        // lo null / empty focusGap: same rules as focusGap need branch
+        if (lo == null || lo.blade == null) return "刃";
+        String fk = EmberSetFocus.familyKey(EmberSetFocus.get(d));
+        if (fk == null) return "件";
+        if (lo.charm == null) return "同族护符";
+        if (!fk.equals(lo.blade.family) && !fk.equals(lo.charm.family))
+            return "刃/符都不是" + EmberItemData.familyName(fk);
+        if (!fk.equals(lo.blade.family)) return "换" + EmberItemData.familyName(fk) + "刃";
+        return "换" + EmberItemData.familyName(fk) + "护符";
+    }
+
+    static String compressAwakeningRemain(String awk) {
+        if (awk == null || awk.isEmpty()) return "";
+        if ("觉醒满".equals(awk)) return "满";
+        int i = awk.indexOf("缺：");
+        if (i >= 0) {
+            String rest = awk.substring(i + 2).trim();
+            int semi = rest.indexOf('；');
+            if (semi > 0) rest = rest.substring(0, semi).trim();
+            return rest.isEmpty() ? awk : rest;
+        }
+        return awk;
+    }
+
+    static int codexMissCount(PlayerData d, String fk) {
+        if (d == null || fk == null) return 0;
+        int miss = 0;
+        for (int t = 1; t <= 3; t++) {
+            for (String slot : new String[] {"blade", "charm"}) {
+                if (!EmberCodex.has(d, EmberCodex.key(fk, slot, t))) miss++;
+            }
+        }
+        return miss;
+    }
+
+    static String plainSection(String s) {
+        if (s == null || s.isEmpty()) return "";
+        StringBuilder b = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '§' && i + 1 < s.length()) { i++; continue; }
+            b.append(c);
+        }
+        return b.toString();
+    }
+
     public static String focusGap(PlayerData d, EmberLoadout lo) {
         if (d == null || lo == null) return "";
         int focus = EmberSetFocus.get(d);

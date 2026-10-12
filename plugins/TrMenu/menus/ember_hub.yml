@@ -15,7 +15,7 @@ Options:
   Hide-Player-Inventory: false
   Min-Click-Delay: 200
 Layout:
-  - 'LnHowp FS'
+  - 'LnHowpvFS'
   - 'TBmX k i '
   - 'ZR c Y d '
   - 'Q A G U j'
@@ -105,6 +105,24 @@ Icons:
       right:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - 'command: corerpg p1 hope cycle'
+
+  # D12267–D12269 套装一眼（焦点 have/need · 左成套追 · 右选焦点 · 零数值）
+  v:
+    update: 20
+    display:
+      material: nether star
+      name: '§d套装'
+      lore:
+        - '§f%corerpg_p1_setchase_line%'
+        - '§8左：成套追（图/工坊指针）· 右：选焦点'
+        - '§e➥ §f一眼还差哪件 · 不改数值'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 setchase'
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 setfocus'
 
   # D177 rev 2 挂机庭（P1）：按主线首通开放四层，自动战斗；币 + 经验 + 账号绑定材料，每日 2400 只
   Z:
@@ -207,6 +225,7 @@ Icons:
       name: '§6装备'
       lore:
         - '§7套装：§f%corerpg_p1_awaken% §7· 护甲：§f%corerpg_p1_armor_set%'
+        - '§8套装追 → 枢纽「套装」'
         - '§e➥ §f打开装备页'
     actions:
       all:
