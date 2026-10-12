@@ -1,6 +1,6 @@
 # tip · TIP-AR DropCraft/Q 日首加码 remain 诚实对齐（可施工薄 · 可感 UX）· D12776–D12791
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:14 Asia/Shanghai  
+> **状态：** **CLOSED** · live `1.65.783-d12791` · feat `489271b08` · 2026-10-12 21:17 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md`](../design/RESEARCH-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md) · DESIGN [`DESIGN-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md`](../design/DESIGN-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md) · TIP-AQ CLOSED live `1.65.782-d12775` · feat `58e9ac299` · TIP-AP CLOSED live gem 加码 remain · TIP-Q CLOSED live craft settle · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **显式下一 tip：DropCraft/Q 加码 remain 旁债** — 同构 AP 宝石 + AQ 洗练；可感 UX（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify**）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberDropCraftPity` / `EmberDropQualityPity` remain·clearsLeft·hope + 单测；Settle/Hope/RunPapi 吃 SoT）  
@@ -91,10 +91,10 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12780–D12783；D12785 `git show` 干净  
-- [ ] 菜单默认不动；lore≤3；无新精工 Hope 轨  
-- [ ] 插件 jar live 后 stamp CLOSED  
-- [ ] **L13 施工仍 HOLD**  
+- [x] 批后插件：D12780–D12783；D12785 `git show` 干净  
+- [x] 菜单默认不动；lore≤3；无新精工 Hope 轨  
+- [x] 插件 jar live `1.65.783-d12791` · feat `489271b08`  
+- [x] **L13 施工仍 HOLD**  
 
 ---
 
@@ -104,4 +104,4 @@
 - 选题：TIP-AQ 后 · **总控显式** — DropCraft/Q 日首加码 remain 诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify**）  
 - **批注：** AP/AQ 加码 remain 已齐；`DropCraftNudge`/`DropQualityNudge` 日首 +1 live 但 remain/hope/结算仍按裸 cur/5 多报「再连出×n」；`ready && left>1 → left-1` + 尾缀「今日加码待用」；Q hope→remain；零改 NEED/FLOOR/BONUS/权重；零新 PAPI；零新开精工 Hope 轨；批后派 **余烬-插件**；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 仍冻  
 
-## STATUS: OPEN · TIP-AR · 待批 A·M · 2026-10-12 21:12 CST
+## STATUS: CLOSED · live 1.65.783-d12791 · 489271b08 · 2026-10-12 21:17 CST
