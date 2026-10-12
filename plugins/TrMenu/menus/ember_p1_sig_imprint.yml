@@ -25,7 +25,7 @@ Events:
     - 'sound: BLOCK_ANVIL_LAND-0.4-1.2'
     - 'tell: §e烙印花费希望：§f%corerpg_p1_sig_imprint_hope%'
     - 'tell: §7烙印成功后会引导穿戴/开签名/追烙（花费闭环）'
-    - 'tell: §8掉落连空见结算提示 · 烙印用徽记保底（不改12%掉率）'
+    - 'tell: §e签名连空：§f%corerpg_p1_sig_stamp_hope%'
     - 'tell: §7徽记满+币够 → 点确认确定花（不改价）'
 
 Icons:

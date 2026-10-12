@@ -31,7 +31,7 @@ Layout:
 
 Events:
   Open:
-    - 'tell: §8签名掉落约12% · 连空局数见结算提示 · 烙印徽记可保底（不改掉率）'
+    - 'tell: §e签名连空：§f%corerpg_p1_sig_stamp_hope%'
     - 'tell: §e双签路径：§f%corerpg_p1_dual_lead% §8· /corerpg p1 duallead'
     - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-0.6-1.2'
     - 'tell: §8战斗中签名触发会抬头短闪名字（躲开回气/借势/点燃/护盾/传火）'
@@ -63,7 +63,8 @@ Icons:
       name: '§6签名传奇 · 说明'
       lore:
         - '%corerpg_p1_sig_head%'
-        - '§7来源：首通后普通重打这张图 → 每局 1 枚首领徽记，基础掉落 12% 是签名件'
+        - '%corerpg_p1_sig_stamp_hope%'
+        - '§7来源：重打得徽记 · 烙印可保底（不改掉率）'
 
   M:
     update: 20
