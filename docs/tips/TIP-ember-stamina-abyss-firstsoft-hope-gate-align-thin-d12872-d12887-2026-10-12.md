@@ -1,6 +1,6 @@
 # tip · TIP-AX 进本日首减负（体力+层费）门禁/Hope 诚实对齐（可施工薄 · 可感 UX）· D12872–D12887
 
-> **状态：** **OPEN** · docs-only · 待总控批 A·M · 2026-10-12 22:07 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 22:09 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-stamina-abyss-firstsoft-hope-gate-align-2026-10-12.md`](../design/RESEARCH-ember-stamina-abyss-firstsoft-hope-gate-align-2026-10-12.md) · DESIGN [`DESIGN-ember-stamina-abyss-firstsoft-hope-gate-align-2026-10-12.md`](../design/DESIGN-ember-stamina-abyss-firstsoft-hope-gate-align-2026-10-12.md) · TIP-AW CLOSED live `1.65.788-d12871` · feat `07923c868` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径** — **离开 soft-glance / pity-remain / ConvertCapSoft / 甲闸 / 追烙摘要族**（AS→AV / AP–AR / AW / AK–AM / AN–AO / AU 已齐）；进本日首减负门禁/Hope leftover  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `StaminaFirstSoft.peekCost` / `AbyssFeeSoft.peekFee` · `EntryService.admit` 体力门禁 · `AbyssService.entryProblems` 层费门禁 · `CorePapiStamina` hope/blocked · `RunPapi` abyss_hope · 可选 SOFT_TAIL + 单测）  
@@ -88,8 +88,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12876–D12880；D12882 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] peek 不吞 soft；进本预留才 consume；L13 施工仍 HOLD  
