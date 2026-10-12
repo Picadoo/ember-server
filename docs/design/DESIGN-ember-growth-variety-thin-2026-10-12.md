@@ -128,3 +128,7 @@
 ## 进度戳 · TIP-K
 
 - TIP-K OPEN：`docs/tips/TIP-ember-skill-feel-pack-d12320-d12335-2026-10-12.md` · 技能手感包；入口 TIP-F；禁 skill_mult / Affix / glance densify twin
+
+## 进度戳 · TIP-L
+
+- TIP-L OPEN：`docs/tips/TIP-ember-mainline-farm-loop-d12336-d12351-2026-10-12.md` · RESEARCH `RESEARCH-ember-mainline-farm-loop-2026-10-12.md` · 主线农场闭环（结构）；禁 Affix/伤乘/抬表/glance
