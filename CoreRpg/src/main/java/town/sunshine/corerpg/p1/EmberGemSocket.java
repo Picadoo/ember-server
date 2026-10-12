@@ -110,8 +110,8 @@ public final class EmberGemSocket {
         if (!d.sockUnlocked(hole) && !EmberGemHoleUnlockSoft.unlocked(d, hole, holePd)) {
             p.sendMessage(P + unlockRejectLine(holePd)); // TIP-BC · ready→soft / used→hard
             try { p.sendActionBar("§c孔未解锁 · 先强化开孔"); } catch (Throwable ignored) { } // D1311
-            ConfirmTokens.sendButtons(p, P + "§7去解锁：", // D871
-                    new String[]{"[强化预览]", "/corerpg p1 enhance", "手持冲强化开孔", "GREEN"},
+            ConfirmTokens.sendButtons(p, P + "§7去解锁：", // D871 · TIP-BD soft/hard sublabel
+                    new String[]{"[强化预览]", "/corerpg p1 enhance", enhanceUnlockButtonHint(holePd), "GREEN"},
                     new String[]{"[工坊]", "/corerpg p1 forge", "养成页", "GOLD"});
             return true;
         }
@@ -261,6 +261,28 @@ public final class EmberGemSocket {
             return "该孔未解锁（今日门槛−1：刃二孔≥4 · 护符≥2；表额≥5/≥3）";
         }
         return "该孔未解锁（刃第二孔需强化≥5 · 护符孔需强化≥3）";
+    }
+
+    /** TIP-BD: blade hole1 or charm hole0 still table-locked. */
+    static boolean heldHasLockedHole(EmberItemData d) {
+        if (d == null) return false;
+        if (d.isBlade()) return !d.sockUnlocked(1);
+        if (d.isCharm()) return !d.sockUnlocked(0);
+        return false;
+    }
+
+    /** TIP-BD enhance preview tail · ready ∩ locked · never unlocked(). */
+    static String enhancePreviewHoleTail(PlayerData pd, EmberItemData d) {
+        if (EmberGemHoleUnlockSoft.ready(pd) && heldHasLockedHole(d)) {
+            return " · " + EmberGemHoleUnlockSoft.CUE;
+        }
+        return "";
+    }
+
+    /** TIP-BD locked-hole → enhance button sublabel · ready soft / used table. */
+    static String enhanceUnlockButtonHint(PlayerData pd) {
+        if (EmberGemHoleUnlockSoft.ready(pd)) return "冲软开孔（≥4/≥2）";
+        return "冲强化开孔（≥5/≥3）";
     }
 
     static boolean write(Player p, EmberLoadoutService loadouts, EmberItemData before, int s0, int s1) {

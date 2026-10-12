@@ -388,8 +388,9 @@ public final class EmberForgeService implements Listener {
         Plan c = EmberUpgradeRules.enhanceCheck(d);
         if (!c.ok()) { p.sendMessage(P + ChatColor.RED + c.error); return true; }
         Cost payCost = c.cost;
+        PlayerData pdE = null;
         try {
-            PlayerData pdE = plugin.getDataStore().get(p.getUniqueId());
+            pdE = plugin.getDataStore().get(p.getUniqueId());
             Cost soft = EmberEnhanceCostSoft.apply(pdE, c.cost, go); // D9569
             if (soft != null && soft != c.cost) {
                 payCost = soft;
@@ -414,7 +415,9 @@ public final class EmberForgeService implements Listener {
             // D1175 pity honesty（聊天/ActionBar · 非 hope PAPI）
             String pityChat = sure ? ChatColor.GREEN + "（本次必成）" + ChatColor.GRAY
                     : "  本档第 " + attempt + "/" + max + " 次 · 含本次≤" + EmberGearNextHint.enhanceAttemptsUntilSure(d) + " 次必成";
-            p.sendMessage(P + "强化预览: +" + d.enhance + " → +" + target + "  成功率 " + ratePct + "%" + pityChat);
+            // TIP-BD: ready ∩ locked hole → UnlockSoft.CUE; never unlocked()
+            p.sendMessage(P + "强化预览: +" + d.enhance + " → +" + target + "  成功率 " + ratePct + "%" + pityChat
+                    + EmberGemSocket.enhancePreviewHoleTail(pdE, d));
             if (sure) {
                 p.sendMessage(P + ChatColor.GREEN + "下次必成已就绪 · 材料齐则预览直办（不改保底规则）");
                 try { p.sendActionBar("§a下次必成 · 直办 +" + target); } catch (Throwable ignored) { }

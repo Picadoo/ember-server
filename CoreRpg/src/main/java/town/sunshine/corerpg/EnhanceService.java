@@ -24,6 +24,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 
+import town.sunshine.corerpg.p1.EmberGemHoleUnlockSoft;
+
 /** Enhance + socket per docs/design/DESIGN-ember-enhance-socket.md (reads enhance.yml). */
 public final class EnhanceService {
 
@@ -352,10 +354,16 @@ public final class EnhanceService {
             }
         }
         p.sendMessage(ChatColor.GRAY + "  孔位:");
+        PlayerData pdInfo = pdata(p);
+        boolean softReady = false;
+        try { softReady = EmberGemHoleUnlockSoft.ready(pdInfo); } catch (Throwable ignored) { }
         for (int i = 0; i < def.max; i++) {
             String state;
-            if (socks[i] == null) state = ChatColor.DARK_GRAY + "未解锁(需+" + def.unlockAt[i] + ")";
-            else if (socks[i].isEmpty()) state = ChatColor.GRAY + "空";
+            if (socks[i] == null) {
+                state = ChatColor.DARK_GRAY + "未解锁(需+" + def.unlockAt[i] + ")";
+                // TIP-BD optional: ready footnote · unlock_at unchanged
+                if (softReady) state = state + ChatColor.DARK_GRAY + " · 日首门槛−1";
+            } else if (socks[i].isEmpty()) state = ChatColor.GRAY + "空";
             else state = ChatColor.WHITE + socks[i];
             p.sendMessage(ChatColor.GRAY + "    孔" + (i + 1) + ": " + state);
         }

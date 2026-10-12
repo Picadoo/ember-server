@@ -44,6 +44,11 @@ public final class EmberHopeMeter {
      * Progress = next attempt number ({@code pity + 1}); full / unforgeable → honest short line.
      */
     public static String enhance(EmberItemData d) {
+        return enhance(d, null);
+    }
+
+    /** TIP-BD: optional UnlockSoft.CUE when ready ∩ locked hole; pity numbers unchanged. */
+    public static String enhance(EmberItemData d, PlayerData pd) {
         if (d == null) return emptySlot("无件");
         if (d.isArmor()) return emptySlot("甲不可强");
         EmberUpgradeRules.Plan c = EmberUpgradeRules.enhanceCheck(d);
@@ -53,7 +58,11 @@ public final class EmberHopeMeter {
         }
         int need = EmberUpgradeRules.maxTries(d.enhance + 1);
         int cur = EmberUpgradeRules.attemptNo(d);
-        return glance(cur, need, READY_ENHANCE);
+        String base = glance(cur, need, READY_ENHANCE);
+        if (pd != null && EmberGemHoleUnlockSoft.ready(pd) && EmberGemSocket.heldHasLockedHole(d)) {
+            base = base + " · " + EmberGemHoleUnlockSoft.CUE;
+        }
+        return base;
     }
 
     /**
@@ -444,7 +453,7 @@ public final class EmberHopeMeter {
             if (enh != null && enh.ok()) {
                 EmberUpgradeRules.Cost ec = EmberGearNextHint.softCost("enhance", pd, enh.cost);
                 out.add(new Track("enhance", "强化保底",
-                        enhance(held),
+                        enhance(held, pd),
                         matHalfOf(ec, mats),
                         "点强化",
                         EmberForgeGoal.ENHANCE));
