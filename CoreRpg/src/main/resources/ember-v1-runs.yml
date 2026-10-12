@@ -1979,7 +1979,7 @@ short:
     tier: 1
     drop_label: 短征
     content_version: v1
-    map_version: ember_short_sx09@d444
+    map_version: ember_short_sx09@d12480
     requires: q01
     unlocks: ""
     purpose: "Q01 首通开放：5～8 分钟三房短征（渠岸庭/跳石渡渠/对岸终厅）；日有奖 3 次与 sx01–sx08 分开；首通另加。不重开旧日常，不抬挂机。"
@@ -2060,7 +2060,7 @@ short:
     tier: 1
     drop_label: 短征
     content_version: v1
-    map_version: ember_short_sx10@d446
+    map_version: ember_short_sx10@d12480
     requires: q01
     unlocks: ""
     purpose: "Q01 首通开放：5～8 分钟三房短征（外闸庭/递闸密封室/末室终厅）；日有奖 3 次与 sx01–sx09 分开；首通另加。不重开旧日常，不抬挂机。"
@@ -2143,7 +2143,7 @@ short:
     tier: 1
     drop_label: 短征
     content_version: v1
-    map_version: ember_short_sx11@d446
+    map_version: ember_short_sx11@d12480
     requires: q01
     unlocks: ""
     purpose: "Q01 首通开放：5～8 分钟三房短征（对廊前厅/左右对称双廊/合镜终厅）；日有奖 3 次与 sx01–sx10 分开；首通另加。不重开旧日常，不抬挂机。"
@@ -2225,7 +2225,7 @@ short:
     tier: 1
     drop_label: 短征
     content_version: v1
-    map_version: ember_short_sx12@d446
+    map_version: ember_short_sx12@d12480
     requires: q01
     unlocks: ""
     purpose: "Q01 首通开放：5～8 分钟三房短征（入枢庭/环枢侧厢/枢冠终厅）；日有奖 3 次与 sx01–sx11 分开；首通另加。不重开旧日常，不抬挂机。"
