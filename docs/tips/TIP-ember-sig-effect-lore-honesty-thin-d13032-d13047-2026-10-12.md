@@ -1,6 +1,6 @@
 # tip · TIP-BH 签名传奇效果持件 lore 诚实（可施工薄 · CoreRpg）· D13032–D13047
 
-> **状态：** **OPEN** · 荐批 **A · 方案 M** · 2026-10-12 23:24 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 23:26 Asia/Shanghai  
 > **上游门禁：** TIP-BG CLOSED live `1.65.796-d13031` · feat `0bdcfa1ea` · docs `8298116c5` · RESEARCH [`RESEARCH-ember-sig-effect-lore-honesty-2026-10-12.md`](../design/RESEARCH-ember-sig-effect-lore-honesty-2026-10-12.md) · DESIGN [`DESIGN-ember-sig-effect-lore-honesty-2026-10-12.md`](../design/DESIGN-ember-sig-effect-lore-honesty-2026-10-12.md) · TIP-AE 烙印扩甲 live · TIP-AJ 签名页摘要 live · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 离开 SF4 接线链 → **签名传奇行为效果持件/甲 lore 诚实**（**非 densify · 非伤乘 · 非 SF4 · 非 Anvil · 非 soft/开孔**）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberItems.applyLore` · `EmberSixSlot.armorLore` · `EmberGearLib` 同构；零改 DEFS.mods/ALTS/STAMP）；**不**派余烬-物品（无 TrMenu 必改）  
@@ -87,19 +87,19 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 文首 HOLD / 选题否决表可核  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 文首 HOLD / 选题否决表可核  
 - [ ] 批后才派 **余烬-插件**；策划本窗 **无**业务 jar  
-- [ ] `git show` docs-only（本 commit）；L13 施工仍 HOLD  
+- [x] `git show` docs-only（本 commit）；L13 施工仍 HOLD  
 
 ---
 
 ## 6. 批注（荐）
 
-- [ ] 总控批 **A · 方案 M** · 待批  
+- [x] 总控批 **A · 方案 M** · 已批 · 已派余烬-插件  
 - 选题：TIP-BG 后 · **离开 SF4** · **签名效果持件 lore 诚实**（可感变强途径 · 零改 mods）  
 - **批后派岗：** 余烬-插件；不派物品  
 - **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；甲闸再扫；扩 stampable；SetChase 六槽 densify  
 
-## STATUS: OPEN · 荐批 A·M · D13032–D13047 · 2026-10-12 23:24 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-插件 · D13032–D13047 · 2026-10-12 23:26 Asia/Shanghai
