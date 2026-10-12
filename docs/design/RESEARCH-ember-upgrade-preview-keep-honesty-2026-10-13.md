@@ -1,6 +1,6 @@
 # RESEARCH · 升阶预览「确定·保留」菜单诚实（工坊 TrMenu · 离开强化预览成功率）· 2026-10-13
 
-> **状态：** APPROVED · TIP-BO · 已派余烬-物品 · 不派插件 · 2026-10-13 00:18 Asia/Shanghai  
+> **状态：** CLOSED live items `64fe9f46e` · TIP-BO · TrMenu reload 77 · jar 未改 · 2026-10-13 00:19 Asia/Shanghai  
 > **起因：** TIP-BN CLOSED live 后总控「离开强化预览成功率链 · 开下一可感变强途径」。BN DESIGN 旁债 #9 已点名「成色/精工/升阶预览再压 WS2 同构」。扫 AH…BN / power-paths：强化 E/e 已有成功率；成色/精工已有花费·进度·点预览；**升阶 U/u 仅「本次+缺料」、无「确定·保留」、无点预览/确认 cue**——聊天 Plan.note 已写「强化/成色/精工/绑定全部保留」。  
 > **上游：** TIP-BN CLOSED live `1.65.800-d13143` · feat `059891b38` · items `284e5dc7c` · docs `2e0dd355e` · `EmberUpgradeRules.upgrade` Plan.note · `EmberGearNextHint.upgradeLine` · `ember_p1_forge.yml` U/u · power-paths WS2 · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify · 零伤乘 · 零抬表 · 零抬 RATE/MAX_TRIES/cost · 零抬 upgradeCost/C04 · 零抬 talent/gem/副手 flat · 零 soft·开孔再叠 · 零 Anvil densify · 零 topUpTo · 零 SF4 U2U3 · 零灰印/聚火 · 零签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量数字 / 强化率再叠 · 零调律 live bad 进持件 · 零并轨 B · 零 SetRules/Formula 抬 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 ConvertCap densify · 零 sx20 · 零 skill_mult · 零开 L13 施工 tip · 零效果长墙 · 零 lore>3**
@@ -76,4 +76,4 @@
 - 强化率 / 签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量再叠  
 - 成色/精工本窗再叠 · 效果长墙 · lore>3 · 印记「另一条路」长文进菜单（另 tip）
 
-## STATUS: APPROVED · TIP-BO · 已派余烬-物品 · 不派插件 · 2026-10-13 00:18 Asia/Shanghai
+## STATUS: CLOSED live items `64fe9f46e` · TIP-BO · TrMenu reload 77 · jar 未改 · 2026-10-13 00:19 Asia/Shanghai

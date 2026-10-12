@@ -1,6 +1,6 @@
 # DESIGN · 升阶预览「确定·保留」菜单诚实（工坊 TrMenu · 薄窗 · 可施工）· 2026-10-13
 
-> **状态：** APPROVED · TIP-BO · 已派余烬-物品 · 不派插件 · 2026-10-13 00:18 Asia/Shanghai  
+> **状态：** CLOSED live items `64fe9f46e` · TIP-BO · TrMenu reload 77 · jar 未改 · 2026-10-13 00:19 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-upgrade-preview-keep-honesty-2026-10-13.md`](RESEARCH-ember-upgrade-preview-keep-honesty-2026-10-13.md)  
 > **对接 live：** TIP-BN CLOSED live `1.65.800-d13143` · `EmberUpgradeRules.upgrade` Plan.note · `held_upgrade_cost` / `held_upgrade_lack` · `ember_p1_forge.yml` U/u · power-paths WS2 · BN 旁债 #9  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率再叠 / soft·开孔再叠 **仍冻**  
@@ -101,4 +101,4 @@
 | 11 | Affix densify / 抬 upgradeCost | **仍冻** |
 | 12 | SF4 U1 技能页形缓展示诚实 | **另 tip · 可选**（离接线链） |
 
-## STATUS: APPROVED · TIP-BO · 已派余烬-物品 · 不派插件 · 2026-10-13 00:18 Asia/Shanghai
+## STATUS: CLOSED live items `64fe9f46e` · TIP-BO · TrMenu reload 77 · jar 未改 · 2026-10-13 00:19 Asia/Shanghai
