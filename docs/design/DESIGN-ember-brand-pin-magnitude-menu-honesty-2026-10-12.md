@@ -97,7 +97,7 @@
 | 6 | 签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停再叠 | **仍冻** |
 | 7 | soft·开孔·GemHole 再叠 | **仍冻** |
 | 8 | pin 预览气泡补档区间（pctList） | **另 tip · 可选** |
-| 9 | 副手「微量」守势数字诚实 | **另 tip** |
+| 9 | 副手「微量」守势数字诚实 | **→ TIP-BM OPEN** |
 | 10 | Affix densify / 抬 values | **仍冻** |
 
 ## STATUS: CLOSED live items `2f0507813` · TIP-BL · TrMenu reload · jar 未改 · 2026-10-12 23:57 Asia/Shanghai
