@@ -287,25 +287,26 @@ public final class EmberSupplyService implements Listener {
     public boolean cmd(CommandSender s, String[] args) {
         if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
         Player p = (Player) s;
-        int price = price();
+        int priceFull = price();
         PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
         int coins = pd == null ? 0 : pd.getCoin();
         boolean buy = args.length >= 3 && ("buy".equalsIgnoreCase(args[2]) || "买".equals(args[2]));
+        // TIP-BA D12924–D12926: peek for preview/afford; consume only when n>0 before spendCoin
+        int priceShow = priceFull;
         try {
-            int soft = EmberSupplyShopSoft.apply(pd, price, buy); // D9809
-            if (soft < price) {
-                price = soft;
-                if (buy) {
-                    p.sendMessage(P + "§a补给减负 · 单价 ×0.5（今日一次）");
-                    try { p.sendActionBar("§a补给减负"); } catch (Throwable ignored) { }
-                }
-            }
+            priceShow = EmberSupplyShopSoft.peekPrice(pd, priceFull);
         } catch (Throwable ignored) { }
         if (!buy) {
-            p.sendMessage(P + "余烬回复药：" + price + " 余烬币 / 瓶 · 回复最大生命 20% · 所有回复药共用 15 秒冷却 · 绑定、不回售");
+            String preview = P + "余烬回复药：" + priceShow + " 余烬币 / 瓶 · 回复最大生命 20% · 所有回复药共用 15 秒冷却 · 绑定、不回售";
+            try {
+                if (priceShow < priceFull && EmberSupplyShopSoft.ready(pd)) {
+                    preview = preview + ChatColor.DARK_GRAY + " · " + EmberGearNextHint.SOFT_TAIL;
+                }
+            } catch (Throwable ignored) { }
+            p.sendMessage(preview);
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "余烬币 " + coins + " · ",
-                    new String[]{"[买 1 瓶]", "/corerpg p1 shop buy 1", price + " 余烬币", "GREEN"},
-                    new String[]{"[买 5 瓶]", "/corerpg p1 shop buy 5", (5 * price) + " 余烬币", "GREEN"}); // D99
+                    new String[]{"[买 1 瓶]", "/corerpg p1 shop buy 1", priceShow + " 余烬币", "GREEN"},
+                    new String[]{"[买 5 瓶]", "/corerpg p1 shop buy 5", (5 * priceShow) + " 余烬币", "GREEN"}); // D99
             return true;
         }
         if (!EmberMode.active()) { p.sendMessage(P + ChatColor.RED + "新模式未开启"); return true; }
@@ -315,17 +316,25 @@ public final class EmberSupplyService implements Listener {
             try { want = Integer.parseInt(args[3]); } catch (NumberFormatException e) { p.sendMessage(P + ChatColor.RED + "数量须为 1–" + MAX_PER_BUY); return true; }
         }
         if (want < 1 || want > MAX_PER_BUY) { p.sendMessage(P + ChatColor.RED + "数量须为 1–" + MAX_PER_BUY); return true; }
-        int n = affordable(want, coins, price, freeSlots(p));
+        int n = affordable(want, coins, priceShow, freeSlots(p));
         if (n <= 0) {
-            p.sendMessage(P + ChatColor.RED + (coins < price ? "余烬币不足（需要 " + price + "，现有 " + coins + "）" : "背包没有空格"));
-            return true;
+            p.sendMessage(P + ChatColor.RED + (coins < priceShow ? "余烬币不足（需要 " + priceShow + "，现有 " + coins + "）" : "背包没有空格"));
+            return true; // TIP-BA: refuse never latches soft
         }
-        if (pd == null || !EmberEconomy.spendCoin(pd, "C14", n * price)) { p.sendMessage(P + ChatColor.RED + "扣除余烬币失败"); return true; }
+        int pricePay = priceShow;
+        try {
+            pricePay = EmberSupplyShopSoft.apply(pd, priceFull, true); // consume only here
+            if (pricePay < priceFull) {
+                p.sendMessage(P + "§a补给减负 · 单价 ×0.5（今日一次）");
+                try { p.sendActionBar("§a补给减负"); } catch (Throwable ignored) { }
+            }
+        } catch (Throwable ignored) { }
+        if (pd == null || !EmberEconomy.spendCoin(pd, "C14", n * pricePay)) { p.sendMessage(P + ChatColor.RED + "扣除余烬币失败"); return true; }
         int got = give(p, n, "shop");
-        if (got < n) pd.addCoin((n - got) * price); // rollback only — not a REG source
+        if (got < n) pd.addCoin((n - got) * pricePay); // rollback only — not a REG source
         plugin.getDataStore().flushMutation(p.getUniqueId());
-        plugin.getLogger().info("[P1 supply] shop " + p.getName() + " bought " + got + " heal potion(s) for " + (got * price) + " coin");
-        p.sendMessage(P + ChatColor.GREEN + "购买余烬回复药 ×" + got + "，花费 " + (got * price) + " 余烬币（剩余 " + pd.getCoin() + "）"
+        plugin.getLogger().info("[P1 supply] shop " + p.getName() + " bought " + got + " heal potion(s) for " + (got * pricePay) + " coin");
+        p.sendMessage(P + ChatColor.GREEN + "购买余烬回复药 ×" + got + "，花费 " + (got * pricePay) + " 余烬币（剩余 " + pd.getCoin() + "）"
                 + (got < want ? ChatColor.YELLOW + " · 只买了 " + got + " 瓶（余烬币或背包空格不足）" : ""));
         return true;
     }
