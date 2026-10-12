@@ -94,8 +94,8 @@ Icons:
       name: '§6① 烬斩 · F'
       lore:
         - '§a主招 · F · 1.5B · 形状 §e%corerpg_kit_shape%'
-        - '§7充能：§f%corerpg_kit_charge% §8· 与烬突二选一'
-        - '§8不暴击 · 不吸血 · 不触发套装计数'
+        - '§e荐形命中 → 缓速I·1秒 §8（无套装·直线）'
+        - '§7充能 §f%corerpg_kit_charge% §8· 不暴击/吸血/套计'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
