@@ -1,6 +1,6 @@
 # tip · TIP-AT Brand/Gem/Convert/Roll 日首 CostSoft 预览/glance 诚实对齐（可施工薄 · 可感 UX）· D12808–D12823
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:31 Asia/Shanghai  
+> **状态：** **CLOSED** · live `1.65.785-d12823` · feat `5d29316a6` · 2026-10-12 21:37 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-brand-gem-convert-roll-costsoft-glance-align-2026-10-12.md`](../design/RESEARCH-ember-brand-gem-convert-roll-costsoft-glance-align-2026-10-12.md) · DESIGN [`DESIGN-ember-brand-gem-convert-roll-costsoft-glance-align-2026-10-12.md`](../design/DESIGN-ember-brand-gem-convert-roll-costsoft-glance-align-2026-10-12.md) · TIP-AS CLOSED live `1.65.784-d12807` · feat `468a08943` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **显式旁债** — Brand/Gem/Convert/Roll soft glance（同构 AS CostSoft peek 诚实）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberGearNextHint` softCost 扩 brand/gem/convert/roll(+pin) · `EmberForgeHeldNext` 四轨 soft canPay · `EmberSinkGlance` BRAND/CONVERT/ROLL soft lack · `EmberRunPapi` forge_gap_*/recipe_gap_gem soft + 单测）  
@@ -90,9 +90,9 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12812–D12815；D12817 `git show` 干净  
-- [ ] 菜单默认不动；lore≤3  
-- [ ] 甲早退回归；LOCK 全额；L13 施工仍 HOLD  
+- [x] 批后插件：D12812–D12815；D12817 `git show` 干净  
+- [x] 菜单默认不动；lore≤3  
+- [x] 甲早退回归；LOCK 全额；live `1.65.785-d12823` · feat `5d29316a6`；L13 施工仍 HOLD  
 
 ---
 
@@ -102,4 +102,4 @@
 - 选题：TIP-AS 后 · **总控显式旁债** — Brand/Gem/Convert/Roll(+Pin) CostSoft glance 诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify**）  
 - **批注：** AS 锻四软 glance 已齐；BrandCraft/Pin/Gem/Convert/ForgeRoll 付费+命令预览已 live，但 HeldNext/Sink/Papi 仓差仍全额 → 「还差料」假负、仓差多报；soft peek +「今日减负待用」+ canPay 同 peek；零改 MULT/经济表；零新 PAPI；LOCK 不发明 soft；甲早退不动；批后派 **余烬-插件**；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / 锻四软再 densify / pity-remain 再叠 / LOCK soft 仍冻  
 
-## STATUS: OPEN · TIP-AT · 荐批 A·M · 2026-10-12
+## STATUS: CLOSED · live 1.65.785-d12823 · 5d29316a6 · 2026-10-12 21:37 CST

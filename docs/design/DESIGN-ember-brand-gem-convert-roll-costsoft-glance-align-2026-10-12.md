@@ -1,6 +1,6 @@
 # DESIGN · Brand/Gem/Convert/Roll 日首 CostSoft 预览/glance 诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-AT 批 A·M · 已派插件 · 2026-10-12 21:31 Asia/Shanghai  
+> **状态：** CLOSED · live `1.65.785-d12823` · feat `5d29316a6` · 2026-10-12 21:37 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-brand-gem-convert-roll-costsoft-glance-align-2026-10-12.md`](RESEARCH-ember-brand-gem-convert-roll-costsoft-glance-align-2026-10-12.md)  
 > **对接 live：** TIP-AS CLOSED live `1.65.784-d12807` · BrandCraftSoft D9697 · BrandPinCostSoft D9729 · ConvertCostSoft D9761 · ForgeRollCostSoft D9889 · GemCraftCostSoft D10657 · GearNextHint softCost/SOFT_TAIL（TIP-AS）  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
