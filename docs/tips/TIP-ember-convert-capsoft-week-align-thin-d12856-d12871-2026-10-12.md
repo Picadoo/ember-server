@@ -1,6 +1,6 @@
 # tip · TIP-AW 转化周次容错 CapSoft 预览/weekLine 诚实对齐（可施工薄 · 可感 UX）· D12856–D12871
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 22:00 Asia/Shanghai  
+> **状态：** **CLOSED** · live `1.65.788-d12871` · feat `07923c868` · 2026-10-12 22:05 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-convert-capsoft-week-align-2026-10-12.md`](../design/RESEARCH-ember-convert-capsoft-week-align-2026-10-12.md) · DESIGN [`DESIGN-ember-convert-capsoft-week-align-2026-10-12.md`](../design/DESIGN-ember-convert-capsoft-week-align-2026-10-12.md) · TIP-AV CLOSED live `1.65.787-d12855` · feat `901632f09` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径** — **离开 soft-glance / pity-remain / 甲闸 / 追烙摘要族**（AS→AV / AP–AR / AK–AM / AN–AO / AU 已齐）；ConvertCapSoft 周次容错 leftover  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `GrowthService.convertHeld` 预览 peek / 确认 consume · `EmberConvertPath.weekLine` / afterSet 余次 · ConvertSure 直办同 SoT · 可选 CapSoft `effectiveExtra` + 单测）  
@@ -91,9 +91,9 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12860–D12864；D12866 `git show` 干净  
-- [ ] 菜单默认不动；lore≤3  
-- [ ] 预览不吞 soft；确认才 consume；L13 施工仍 HOLD  
+- [x] 批后插件：D12860–D12864；D12866 `git show` 干净  
+- [x] 菜单默认不动；lore≤3  
+- [x] 预览不吞 soft；确认才 consume；live `1.65.788-d12871` · feat `07923c868`；L13 施工仍 HOLD  
 
 ---
 
@@ -103,4 +103,4 @@
 - 选题：TIP-AV 后 · **离开 soft-glance/pity/甲闸/追烙** — 转化周次容错 CapSoft 诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify**）  
 - **批注：** AS→AV CostSoft glance 已齐；ConvertCapSoft 已 live，但 `convertHeld` 预览即 `consume` 且 weekLine 满周写「环已完成」→ 预览吞容错、确认拒办、假完成拦人；预览 peek + 确认 consume + weekLine「容错待用 · 还可 1 次」；零改 WEEKLY_CAP；零新 PAPI；零发明第二容错；批后派 **余烬-插件**；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / ConvertCap densify / CostSoft·pity·soft-glance 再叠 仍冻  
 
-## STATUS: OPEN · TIP-AW · 2026-10-12 21:57 CST
+## STATUS: CLOSED · live 1.65.788-d12871 · 07923c868 · 2026-10-12 22:05 CST
