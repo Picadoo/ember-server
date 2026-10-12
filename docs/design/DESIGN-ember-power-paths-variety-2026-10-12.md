@@ -196,6 +196,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
+- **TIP-AF CLOSED** · 刃 L11/L13 另轨研究 docs-only · exclude+观察 HOLD · 下一刃 DESIGN stage0
+
 - **TIP-AF OPEN** · `TIP-ember-blade-sig-l11-l13-research-thin-d12600-d12607-2026-10-12.md` · RESEARCH `RESEARCH-ember-blade-sig-l11-l13-next-2026-10-12.md` · 刃 L11/L13 另轨研究 docs-only（清 TIP-AD HOLD · 禁改 mods / 抬表 / skill_mult）· 深化 densify 仍冻 · 无码
 
 - **TIP-AE CLOSED** live `1.65.773-d12599`（`f3a1073cb`/`abe84cb22`）· 烙印扩甲/defense fits · 甲 stampable 仍空 · L11/L13 未动 · 刃债交 TIP-AF

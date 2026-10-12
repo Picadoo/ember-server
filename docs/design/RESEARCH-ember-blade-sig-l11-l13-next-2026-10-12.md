@@ -1,6 +1,6 @@
 # RESEARCH · 刃签 L11 / L13 另轨（TIP-AD HOLD 清债）· 2026-10-12
 
-> **状态：** OPEN · TIP-AF docs-only · 对接 tip `TIP-ember-blade-sig-l11-l13-research-thin-d12600-d12607-2026-10-12.md`  
+> **状态：** CLOSED · TIP-AF 批 A·M · docs-only · 2026-10-12 19:39 · 对接 tip `TIP-ember-blade-sig-l11-l13-research-thin-d12600-d12607-2026-10-12.md`  
 > **起因：** TIP-AC `STAGE1_OFFLINE=FAIL`（S3-T/P 刃 L11/L13 可达超 D174 ±3pp）；TIP-AD 评测集砍出后防具门禁 PASS(patched)；TIP-AE 防具最小切片已 live **未动** L11/L13。总控点名下一 tip = **刃另轨研究**。  
 > **硬禁：** **零抬表凑线 · 零 skill_mult 再拧 · 零 Affix densify · 零伤乘 · 零 glance twin · 零深化 densify · 零 sx20 · 不绑防具 stampable / 不回改 TIP-AE fits**
 

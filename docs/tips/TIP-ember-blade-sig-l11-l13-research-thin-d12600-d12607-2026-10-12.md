@@ -1,6 +1,6 @@
 # tip · TIP-AF 刃签 L11/L13 另轨研究薄窗（docs-only · 清 TIP-AD HOLD）· D12600–D12607
 
-> **状态：** OPEN · 待批 **A · 方案 M** · docs-only · 2026-10-12 19:37 Asia/Shanghai  
+> **状态：** CLOSED · 批 **A · 方案 M** · docs-only（总控 2026-10-12 19:39 Asia/Shanghai）  
 > **上游：** [`RESEARCH-ember-blade-sig-l11-l13-next-2026-10-12.md`](../design/RESEARCH-ember-blade-sig-l11-l13-next-2026-10-12.md) · TIP-AE CLOSED live `1.65.773-d12599`（`f3a1073cb`/`abe84cb22`）· TIP-AD CLOSED PASS patched `abc3875d0` · RESULT [`RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](../design/RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md) · 补丁 [`DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md`](../design/DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md) · stage0 [`DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md`](../design/DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md)  
 > **前置：** 防具最小切片已 live；甲 stampable 仍空；L11/L13 **未动**；深化 densify **仍冻**；烬斩门闩 TIP-Y **仍有效**  
 > **施工岗：** **无码**（策划 RESEARCH + tip；**不**派插件；勿借机改 `DEFS`/`SIGS` / skill_mult / Affix / 甲 fits）  
@@ -61,11 +61,11 @@ TIP-AE 后开 **刃 L11/L13 另轨研究**：盘清 TIP-AC 超线根因与候选
 
 ## 4. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] RESEARCH + tip 路径可点；超线分类 / 路径 A–E / 门闩可核  
-- [ ] DESIGN power-paths：TIP-AE CLOSED live + TIP-AF OPEN  
-- [ ] **无**插件施工派单；**无** L11/L13 数值改动；**无**业务 jar  
-- [ ] `git show` docs-only；密码检查 0  
+- [x] 总控批 **A · 方案 M**  
+- [x] RESEARCH + tip 路径可点；超线分类 / 路径 A–E / 门闩可核  
+- [x] DESIGN power-paths：TIP-AE CLOSED live + TIP-AF CLOSED  
+- [x] **无**插件施工派单；**无** L11/L13 数值改动；**无**业务 jar  
+- [x] `git show` docs-only；密码检查 0  
 
 ---
 
