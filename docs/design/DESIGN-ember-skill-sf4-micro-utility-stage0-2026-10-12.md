@@ -88,7 +88,7 @@
 |----|--------|------|
 | **本窗 stage0** | RESEARCH + 本 DESIGN + tip · power-paths 戳 | docs-only |
 | **T0** | p1sim 登记 SF4 cand（主荐 U1）· within 门禁 → **TIP-BF OPEN** | STATUS ✅/❌ · 见 `DESIGN-ember-skill-sf4-u1-t0-p1sim-2026-10-12.md` |
-| **T1** | 仅 T0 ✅ + 显式开工：CoreRpg 接线 + 可选 TrMenu 一句 | jar |
+| **T1** | 仅 T0 ✅ + 显式开工：CoreRpg 接线 + 可选 TrMenu 一句 | **TIP-BG OPEN** · jar（批后） |
 | **T2** | 单测 + 轻冒烟 | 测报 |
 
 ---
@@ -109,7 +109,7 @@
 
 ## 6. 旁债（下一 prefer · 非本窗）
 
-1. SF4 T0 p1sim → **TIP-BF OPEN**（本窗后继）  
+1. SF4 T0 p1sim → TIP-BF CLOSED PASS → **TIP-BG OPEN 显式开工**  
 2. 灰印 / 聚火重设计（另 tip）  
 3. AnvilRepair Soft 假耗（硬禁 densify 未解冻前不开）  
 4. L13 施工 HOLD 观察  

@@ -102,4 +102,4 @@ TIP-BE 后开 **SF4 U1 微缓 T0 离线门禁**：钉 H-U1 cand → 跑 G-within
 - 选题：TIP-BE 后 · **SF4 U1 T0 离线 p1sim（G-within）**（docs+tools；零 skill_mult；PASS≠开工）  
 - **批注：** H-U1 主荐 U1_sl10；形状偏好施工层；离线代理 kit_sf4_*；FAIL 停；PASS 仍 HOLD 至显式开工；不派插件；L13 施工 HOLD；Anvil densify / topUpTo / soft·开孔再叠 / 灰印·聚火 / Affix / 伤乘 / 抬表 / glance twin / sx20 / 粒子 densify / ForgeChoice densify / 甲闸再扫 / 扩 stampable / SetChase 六槽 densify 仍冻  
 
-## STATUS: CLOSED · 批 A·M · sim PASS · 总控 2026-10-12 23:15 Asia/Shanghai · docs+tools · 零 skill_mult · 零业务 jar · HOLD 施工 · PASS≠开工 · 不派插件
+## STATUS: CLOSED · 批 A·M · sim PASS · 总控 2026-10-12 23:15 Asia/Shanghai · docs+tools · 零 skill_mult · 零业务 jar · HOLD 本窗 jar · PASS≠开工 · 不派插件 · **显式开工 → TIP-BG OPEN**

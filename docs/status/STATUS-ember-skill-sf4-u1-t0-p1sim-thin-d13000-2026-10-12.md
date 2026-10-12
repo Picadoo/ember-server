@@ -5,4 +5,4 @@
 - **sim**：`STAGE0_SF4_U1_T0=PASS`（U1_sl10 三族 ✅ · n=1500 · 39 格 · 总控复跑 judge PASS）
 - **产出**：DESIGN T0；RESULT；harness `sf4_u1_gate_t0.py`；离线 `kit_sf4_*`；报告 `out-sf4-u1-t0-p1sim.md`
 - **HOLD**：零 jar 直至显式开工；L13 施工；Anvil soft densify；topUpTo；soft/开孔再叠；灰印/聚火；skill_mult / 伤乘 / Affix / 抬表 / glance twin / sx20 / 粒子 densify / 甲闸再扫 / 扩 stampable / SetChase 六槽 densify
-- **下一**：可开「显式开工」施工 tip（U1_sl10 · 禁 skill_mult）；**不**自动派插件
+- **下一**：显式开工已开 → **TIP-BG OPEN**（U1_sl10 接线 · 批后派余烬-插件）；本窗仍 HOLD 施工 / 零业务 jar

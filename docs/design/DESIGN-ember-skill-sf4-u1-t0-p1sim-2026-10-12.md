@@ -22,7 +22,7 @@
 |----|------|------|
 | 0 · 规格 | TIP-BE DESIGN stage0 APPROVED · U1 主荐 | **已 CLOSED** |
 | **T0 · 离线门禁** | 钉 cand + 跑 G-within；docs+tools；禁业务 jar | **本窗** |
-| T1 · 施工 | 仅 T0 ✅ **且** 显式开工：CoreRpg 接线 | **另 tip**；本窗 **不是**开工令 |
+| T1 · 施工 | 仅 T0 ✅ **且** 显式开工：CoreRpg 接线 | **TIP-BG OPEN**（显式开工令） |
 
 ---
 
@@ -92,7 +92,7 @@ python3 sf4_u1_gate_t0.py judge ../../docs/design/out-sf4-u1-t0-p1sim.md
 |----|--------|------|
 | stage0（TIP-BE） | 身份核 + 门禁草案 | CLOSED |
 | **T0（本窗）** | cand + 跑 G-within + RESULT | docs+tools |
-| T1 | 显式开工后 CoreRpg 接线 | 另 tip |
+| T1 | 显式开工后 CoreRpg 接线 | **TIP-BG OPEN** |
 
 ---
 
