@@ -2516,3 +2516,16 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack30-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack30.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack30-d12234-2026-10-12.md` |
+
+
+### 13.143 Affix Pack 31 剜斩/坳洼（CoreRpg 1.65.753，D12235，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12235 |
+| jar | CoreRpg **1.65.753-d12235.local** |
+| balance_version | 117 → **118** |
+| 行为 | 词缀池 62→64：+`carve` 剜斩 / `hollow` 坳洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack31-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack31.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack31-d12235-2026-10-12.md` |

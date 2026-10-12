@@ -463,6 +463,18 @@ public final class EmberAffixExportTest {
                 periodic(o, b, v, k.warn, v.sladeEvery);
                 o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1);
                 o.put("shape", shape(k));
+            } else if ("carve".equals(id)) {
+                EmberRunMaps.Skill k = AffixCarve.skill(1.0, v);
+                o.put("engage", AffixCarve.ENGAGE); o.put("reach", AffixCarve.REACH);
+                periodic(o, b, v, k.warn, v.carveEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1); o.put("strips", 1);
+                o.put("shape", shape(k));
+            } else if ("hollow".equals(id)) {
+                EmberRunMaps.Skill k = AffixHollow.skill(1.0, v);
+                o.put("engage", AffixHollow.ENGAGE); o.put("reach", AffixHollow.REACH);
+                periodic(o, b, v, k.warn, v.hollowEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1);
+                o.put("shape", shape(k));
             }
             Object raw = yml.get(id);
             Map<String, Object> in = new TreeMap<String, Object>();
@@ -531,7 +543,7 @@ public final class EmberAffixExportTest {
         Map<?, ?> yml = liveVariety();
         EmberRunMaps.Variety v = new EmberRunMaps.Variety(yml);
         Map<?, ?> aff = (Map<?, ?>) table(yml, balanceVersion()).get("affixes");
-        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom", "lance", "nova", "shear", "brace", "hook", "skew", "fan", "sink", "crest", "pond", "edge", "well", "seam", "mire", "ridge", "marsh", "spur", "fen", "gleam", "bog", "slash", "basin", "draw", "tarn", "hew", "dell", "chip", "glen", "snip", "vale", "nick", "dale", "rasp", "combe", "gash", "slade"}) {
+        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom", "lance", "nova", "shear", "brace", "hook", "skew", "fan", "sink", "crest", "pond", "edge", "well", "seam", "mire", "ridge", "marsh", "spur", "fen", "gleam", "bog", "slash", "basin", "draw", "tarn", "hew", "dell", "chip", "glen", "snip", "vale", "nick", "dale", "rasp", "combe", "gash", "slade", "carve", "hollow"}) {
             List<String> log = AffixReplay.run(new PrimitiveAffixPath(), id, AffixReplay.Script.of(1L), v);
             String promote = null;
             for (String l : log) if (l.contains("PROMOTE")) { promote = l; break; }
