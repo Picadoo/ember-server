@@ -1,6 +1,6 @@
 # DESIGN · 补给店 Soft 假耗（扣空）诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-BA 批 A·M · 已派插件 · 2026-10-12 22:36 Asia/Shanghai  
+> **状态：** CLOSED live `1.65.792-d12935` · TIP-BA · feat `366b0a645` · 2026-10-12 22:39 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-supply-shop-soft-latch-align-2026-10-12.md`](RESEARCH-ember-supply-shop-soft-latch-align-2026-10-12.md)  
 > **对接 live：** TIP-AZ CLOSED live `1.65.791-d12919` · feat `1984f551b` · Life peekCoin 范本 · TIP-AY Cook peekFee · EmberSupplyShopSoft / EmberSupplyService.cmd · C14 `coin=10`  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
@@ -96,4 +96,4 @@ EmberSupplyService.cmd (伪码):
 2. 主线解锁 / stampable 空 / L13 HOLD 观察  
 3. topUpTo 是否接 soft（须另批 · 现禁 densify）
 
-## STATUS: APPROVED · TIP-BA · 2026-10-12 22:36 Asia/Shanghai · 已派余烬-插件
+## STATUS: CLOSED live `1.65.792-d12935` · TIP-BA · 2026-10-12 22:39 Asia/Shanghai · feat `366b0a645`
