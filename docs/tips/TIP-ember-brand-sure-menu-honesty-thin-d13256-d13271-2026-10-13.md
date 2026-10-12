@@ -1,6 +1,6 @@
 # tip · TIP-BV 烙纹合成/定向「预览直办」菜单诚实（烙纹 TrMenu · 可施工薄 · 可感变强途径）· D13256–D13271
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-物品** · **不派插件** · 2026-10-13 01:00 Asia/Shanghai  
+> **状态：** **CLOSED live** items `9bac5aef8` · 批 A·M · TrMenu reload 77 · jar 未改 `1.65.801-d13207` · 2026-10-13 01:01 Asia/Shanghai  
 > **上游门禁：** TIP-BU CLOSED live items `f59b9beae` · docs `b7756f94e` · TrMenu reload 77 · jar 未改 `1.65.801-d13207` · RESEARCH [`RESEARCH-ember-brand-sure-menu-honesty-2026-10-13.md`](../design/RESEARCH-ember-brand-sure-menu-honesty-2026-10-13.md) · DESIGN [`DESIGN-ember-brand-sure-menu-honesty-2026-10-13.md`](../design/DESIGN-ember-brand-sure-menu-honesty-2026-10-13.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 离开洗练直留链 → **烙纹合成/定向「预览直办」菜单诚实**（**非 densify · 非 Affix densify · 非改 craftShards/pin 价/MAX_CHARGES · 非 forgeroll 权重 densify · 非伤乘 · 非抬表 · 非 soft/开孔再叠 · 非 SF4 · 非 Anvil · 非 access_* 再叠 · 非成色精工确定成功再叠 · 非互换免费确定再叠 · 非洗练直留再叠 · 非签名/套装/宝石/天赋/烙纹档幅度/副手/强化率/升阶保留/形缓/转化再叠 · 非效果长墙 · 非 lore>3 · 非并轨 B**）  
 > **施工岗（批后派单）：** **余烬-物品**（`ember_p1_brand` Icon `N`/`C`/`1`–`5` lore；可选 Open tell）；**不派插件**（零新 PAPI · 零 jar）  
@@ -110,4 +110,4 @@
 - **批后派岗：** 余烬-物品；不派插件  
 - **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；调律 live bad 进持件；签名 lore 再叠；套装 blurb 再叠；宝石短效果再叠；天赋悬停再叠；烙纹档幅度再叠；副手微量再叠；强化率再叠；升阶保留再叠；形缓 Icon A 再叠；转化保留再叠；access_* 再叠；成色·精工确定成功再叠；互换免费确定再叠；**洗练直留再叠**；甲闸再扫；扩 stampable；SetChase 六槽 densify；效果长墙；**Affix densify**；**ConvertCap densify**；**forgeroll 权重 densify**；**抬成色/精工 cost**；**抬 swap 收费**；**改 craftShards/pin 价**  
 
-## STATUS: APPROVED · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 01:00 Asia/Shanghai
+## STATUS: CLOSED live items `9bac5aef8` · 批 A·M · TrMenu reload 77 · jar 未改 · 2026-10-13 01:01 Asia/Shanghai
