@@ -1,6 +1,6 @@
 # DESIGN · ForgeHeldNext 手持护甲诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-AK · 荐批 A·M · 2026-10-12  
+> **状态：** APPROVED · TIP-AK 批 A·M · 已派插件 · 2026-10-12 20:11 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-forge-held-armor-honesty-2026-10-12.md`](RESEARCH-ember-forge-held-armor-honesty-2026-10-12.md)  
 > **对接 live：** D318 K0 `ARMOR_REFUSE` · D1943/D1944 ForgeHeldNext · RunPapi `held_next_*` 已甲闸 · TIP-AJ CLOSED live `1.65.775-d12663`  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI `STAGE1_L13_OFFLINE=FAIL` · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
