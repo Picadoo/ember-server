@@ -2503,3 +2503,16 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack29-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack29.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack29-d12233-2026-10-12.md` |
+
+
+### 13.142 Affix Pack 30 裂斩/坡洼（CoreRpg 1.65.752，D12234，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12234 |
+| jar | CoreRpg **1.65.752-d12234.local** |
+| balance_version | 116 → **117** |
+| 行为 | 词缀池 60→62：+`gash` 裂斩 / `slade` 坡洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack30-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack30.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack30-d12234-2026-10-12.md` |

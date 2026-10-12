@@ -27,7 +27,7 @@ import town.sunshine.corerpg.PlayerData;
  * (drift → SEVERE / refuse). Unrouted paths still call {@code PlayerData.addCoin}/{@code takeCoin} directly.
  * <p>{@code EmberEconomyTest} pins loaded yml amounts to Java golden, proves settle / shop / sign / fest / AFK / delivery /
  * grant* routing, scans {@code p1/} for direct {@code addCoin}/{@code takeCoin} outside the allowlist, and fails on drift.
- * Amounts unchanged from bv57; balance_version tracks runs (116 = D12233 Affix Pack 29; was 115 D12232).
+ * Amounts unchanged from bv57; balance_version tracks runs (117 = D12234 Affix Pack 30; was 116 D12233).
  * D229 (S2-9): abyss floor settle tags as S13 via {@link #sourceForGrant} (run-id head {@code <map>a<n>});
  * vault write scan in {@code EmberEconomyTest} (callers must {@code grantMat} first or tag {@code econ-ok:}).
  * D243 (S4-2): S33 codex stage coin (run {@code codex} → tagged grantCoin), S34 chest extra gear roll, S35 starter kit,
@@ -833,7 +833,7 @@ public final class EmberEconomy {
     public static final String ECONOMY_YML = "ember-v1-economy.yml";
 
     /** Expected balance_version in economy yml (must match ember-v1.yml). */
-    public static final int ECONOMY_BV = 116; // D12233 Affix Pack 29 align runs bv116
+    public static final int ECONOMY_BV = 117; // D12234 Affix Pack 30 align runs bv117
 
     /** id → (key → amount) from the last successful {@link #loadEconomyYml}. */
     private static volatile Map<String, Map<String, Double>> ymlAmounts = Collections.emptyMap();

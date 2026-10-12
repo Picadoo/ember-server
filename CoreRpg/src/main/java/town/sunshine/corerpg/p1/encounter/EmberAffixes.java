@@ -42,7 +42,8 @@ public final class EmberAffixes {
                 AffixChip.INSTANCE, AffixGlen.INSTANCE,
                 AffixSnip.INSTANCE, AffixVale.INSTANCE,
                 AffixNick.INSTANCE, AffixDale.INSTANCE,
-                AffixRasp.INSTANCE, AffixCombe.INSTANCE}) m.put(b.id(), b);
+                AffixRasp.INSTANCE, AffixCombe.INSTANCE,
+                AffixGash.INSTANCE, AffixSlade.INSTANCE}) m.put(b.id(), b);
         ALL = Collections.unmodifiableMap(m);
     }
 
