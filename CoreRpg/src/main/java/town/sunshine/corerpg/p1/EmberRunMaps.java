@@ -612,6 +612,10 @@ public final class EmberRunMaps {
     /** P2-9 (D81) loot bias weights; P2-9 (D82) raid_item quality floor */
     public final double lootOwnFamily, lootMapShare, lootSlotWeight;
     public final int raidItemQualityFloor;
+    /** D12363 TIP-N: hold castStartBar through warn (default true when yml key absent). */
+    public final boolean bossWarnBarHold;
+    /** D12365 TIP-N: once-per-boss pre-half cue at ≤55% (default true when yml key absent). */
+    public final boolean bossPreHalfCue;
     /** P2-8 weekly rotation modifiers (on the featured challenge map only; no multipliers, rewards unchanged) */
     public final List<Modifier> modifiers;
 
@@ -1585,6 +1589,17 @@ public final class EmberRunMaps {
 
     private static double clamp01(double v) { return Math.max(0.0, Math.min(1.0, v)); }
 
+    /** D12363: yml feel flag; missing key → {@code defTrue}. */
+    private static boolean flagDefaultTrue(Map<?, ?> m, String key) {
+        if (m == null || !m.containsKey(key)) return true;
+        Object v = m.get(key);
+        if (v instanceof Boolean) return ((Boolean) v).booleanValue();
+        String s = String.valueOf(v).trim();
+        if ("false".equalsIgnoreCase(s) || "0".equals(s) || "no".equalsIgnoreCase(s)) return false;
+        if ("true".equalsIgnoreCase(s) || "1".equals(s) || "yes".equalsIgnoreCase(s)) return true;
+        return true;
+    }
+
     /** P2-9: the loot pool of map {@code d} for settlement (null when the map has no identity). */
     public EmberRunRules.LootBias lootBias(MapDef d) {
         if (d == null || (d.lootFamily == null && d.lootSlot == null)) return null;
@@ -1723,6 +1738,10 @@ public final class EmberRunMaps {
         lootSlotWeight = clamp01(num(lb.get("slot"), 0.5));
         Map<?, ?> ri = root.get("raid_item") instanceof Map ? (Map<?, ?>) root.get("raid_item") : Collections.emptyMap();
         raidItemQualityFloor = Math.max(0, Math.min(3, (int) num(ri.get("quality_floor"), 0)));
+        // D12363/D12365 TIP-N boss_feel: absent keys default true (no balance_version bump)
+        Map<?, ?> bf = root.get("boss_feel") instanceof Map ? (Map<?, ?>) root.get("boss_feel") : Collections.emptyMap();
+        bossWarnBarHold = flagDefaultTrue(bf, "warn_bar_hold");
+        bossPreHalfCue = flagDefaultTrue(bf, "pre_half_cue");
         List<Modifier> mods = new ArrayList<Modifier>();
         if (rot.get("modifiers") instanceof List) for (Object o : (List<?>) rot.get("modifiers")) if (o instanceof Map) mods.add(new Modifier((Map<?, ?>) o));
         modifiers = Collections.unmodifiableList(mods);

@@ -94,6 +94,7 @@ import town.sunshine.corerpg.p1.encounter.EmberAffixes;
 import town.sunshine.corerpg.p1.encounter.EmberBossMove;
 import town.sunshine.corerpg.p1.encounter.EmberShape;
 import town.sunshine.corerpg.p1.encounter.CounterplayKind;
+import town.sunshine.corerpg.p1.encounter.EmberBossFeel;
 import town.sunshine.corerpg.p1.encounter.EmberCounterplay;
 import town.sunshine.corerpg.p1.encounter.EmberTelegraph;
 import town.sunshine.corerpg.p1.encounter.EmberAffixTelegraph;
@@ -286,6 +287,9 @@ final class EmberRunDirector {
     private boolean pendingArmed;        // D192 落空破绽: someone stood inside the pending telegraph when its warning began
     private long stunUntil;              // D188: boss stunned (no skills, no melee) until this
     private long lastCounterplayFlashAt; // D448: debounce clock for every-success ActionBar (0 = never)
+    private long lastWarnHoldAt;             // D12362: last castStartBar hold refresh (0 = none)
+    private String lastWarnHoldMsg;          // D12362: same castStartBar text to reclaim
+    private boolean preHalfTold;             // D12364: once-per-boss pre-half cue
     private double breakNeed;            // D193 破招: player damage needed to break the pending channel (0 = none armed)
     private double breakDone;            // D193: player damage dealt to the boss since that channel's warning began
     private long breakBarAt;             // D193: next action-bar progress line
@@ -6069,6 +6073,9 @@ final class EmberRunDirector {
             addsDone = false;
             addsAt = 0;
             phaseTold = false;
+            preHalfTold = false;
+            lastWarnHoldAt = 0L;
+            lastWarnHoldMsg = null;
             belowCache = null;
             lastRevAt = 0;
             lastRevDone = false;
@@ -6169,6 +6176,11 @@ final class EmberRunDirector {
         if (le.isDead()) return;
         double ratio = le.getHealth() / Math.max(1.0, le.getMaxHealth());
         EmberRunMaps.Boss b = bossDef();
+        // D12364: pre-half cue at ≤55% once/boss (does not change 50% halfHpTellLine / adds timing)
+        if (EmberBossFeel.shouldPreHalfCue(ratio, preHalfTold, svc.maps().bossPreHalfCue)) {
+            preHalfTold = true;
+            flashCounterplayTip(EmberBossFeel.preHalfCueLine(s.mapKey));
+        }
         // D173: half-HP team line when any top-level or follow skill is gated at below≤1.0 (Pack 2 + existing 踏地/横扫)
         if (!phaseTold && ratio < 0.5 && hasBelowPressure(b)) {
             phaseTold = true;
@@ -6205,11 +6217,13 @@ final class EmberRunDirector {
             telegraphInsideFeel(pending, lockOrigin, lockDir, urg, now); // D3305
             if (broken(breakNeed, breakDone) && !le.isDead()) { breakCast(pending, now, le, b); return; }
             if (breakNeed > 0 && now >= breakBarAt) { breakBarAt = now + 250; breakBar(); }
+            else maybeHoldWarnBar(now); // D12362: castStartBar hold (skip when breakBar owns AB)
             if (now >= pendingAt) {
                 breakNeed = 0;
                 int landed = execute(pending, lockOrigin, lockDir, le);
                 EmberRunMaps.Skill done = pending;
                 pending = null;
+                clearWarnHold();
                 recoverUntil = now + (long) ((Double.isNaN(done.recover) ? b.recover : done.recover) * 1000);
                 if (recoverUntil > now) EmberGapPath.maybeAfterGap(s); // D587
                 if (done.follow != null && ratio < done.follow.below) {
@@ -6413,7 +6427,10 @@ final class EmberRunDirector {
         who += EmberCounterplay.breakHint(breakNeed, sk.breakStun, fmt(sk.breakStun));
         svc.tellRun(s, "§c" + bossDef().name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
         // D304 W1a: cast-start ActionBar each cast (chat kept); charge 0-cell already returned above
-        flashActionBar(EmberCounterplay.castStartBar(sk.name, sk.type, sk.warn, sk.wallStun, sk.whiffStun, breakNeed, sk.share));
+        String startBar = EmberCounterplay.castStartBar(sk.name, sk.type, sk.warn, sk.wallStun, sk.whiffStun, breakNeed, sk.share);
+        flashActionBar(startBar);
+        lastWarnHoldAt = now; // D12362: seed so first refresh waits WARN_BAR_HOLD_MS
+        lastWarnHoldMsg = startBar;
         EmberCounterPath.maybeCastStartCue(s, svc, sk.wallStun > 0, pendingArmed, breakNeed > 0); // D3074
         if (sk.share) EmberSoakPath.maybeAfterSoak(s); // D584
         if (breakNeed > 0) EmberPressPath.maybeAfterPress(s); // D581
@@ -6439,6 +6456,35 @@ final class EmberRunDirector {
             try { p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(msg)); } catch (Throwable ignored) { }
             try { p.sendTitle("", msg, 5, 35, 10); } catch (Throwable ignored) { }
         }
+    }
+
+    /** D12362: stop castStartBar hold (warn end / cancel / break). */
+    private void clearWarnHold() {
+        lastWarnHoldAt = 0L;
+        lastWarnHoldMsg = null;
+    }
+
+    /**
+     * D12362: re-send the same castStartBar at most every {@link EmberBossFeel#WARN_BAR_HOLD_MS}
+     * while warn is active. Reclaims AB if telegraphInsideFeel / other flash overwrote it.
+     * Skipped when breakNeed > 0 so breakBar keeps the channel progress HUD.
+     */
+    private void maybeHoldWarnBar(long now) {
+        if (pending == null || now >= pendingAt) return;
+        if (breakNeed > 0) return;
+        boolean hold = svc.maps().bossWarnBarHold;
+        boolean active = pending != null && now < pendingAt;
+        if (!EmberBossFeel.shouldRefreshWarnBar(now, lastWarnHoldAt, EmberBossFeel.WARN_BAR_HOLD_MS, hold, active)) {
+            return;
+        }
+        String msg = lastWarnHoldMsg;
+        if (msg == null || msg.isEmpty()) {
+            EmberRunMaps.Skill sk = pending;
+            msg = EmberCounterplay.castStartBar(sk.name, sk.type, sk.warn, sk.wallStun, sk.whiffStun, breakNeed, sk.share);
+        }
+        flashActionBar(msg);
+        lastWarnHoldAt = now;
+        lastWarnHoldMsg = msg;
     }
 
     /** D296 W1c: ActionBar only (short event name). */
@@ -6477,6 +6523,7 @@ final class EmberRunDirector {
     private void breakCast(EmberRunMaps.Skill sk, long now, LivingEntity le, EmberRunMaps.Boss b) {
         double need = breakNeed, done = breakDone;
         pending = null;
+        clearWarnHold();
         breakNeed = 0;
         pendingCrash = false;
         pendingArmed = false;

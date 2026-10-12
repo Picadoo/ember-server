@@ -33,6 +33,11 @@ loot_bias:
   map_share: 0.75
   slot: 0.55
 
+# D12363/D12365 TIP-N boss telegraph R-thin (演出级热关；缺省 true；不抬 balance_version)
+boss_feel:
+  warn_bar_hold: true
+  pre_half_cue: true
+
 # P2-9 (D82) raid_item: the extra raid roll is the player's entry target family (raid `loot.family` without a target),
 # slot 50/50, challenge quality table with this floor (1 = 精良; 极品 odds unchanged). Model: p2econ.py --raid.
 raid_item:
