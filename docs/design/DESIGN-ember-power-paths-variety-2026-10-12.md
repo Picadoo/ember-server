@@ -196,10 +196,11 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-Z CLOSED** · 主线内容轴观察停窗 docs-only · densify 仍冻 · 下阶段 P0 试玩 / P1 解锁研究 / P2 烬斩门闩
+- **TIP-Z CLOSED** docs-only `923e031f1` · 主线内容轴观察停窗 · densify 仍冻 · P0 试玩 / P1 解锁研究 / P2 烬斩门闩
+- **TIP-AA OPEN** · `TIP-ember-mainline-unlock-2c-research-thin-d12544-d12551-2026-10-12.md` · RESEARCH `RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md` · 主线解锁 2c 研究（甲槽已 live · 真债防具签名 · HOLD 至独立 DESIGN）· 无码 · 深化 densify 仍冻
 
 - **TIP-Y CLOSED** docs-only `a838781ed` · 烬斩手感研究 · 门闩已立 · 无码
-- **TIP-Z OPEN** · `TIP-ember-mainline-content-observe-thin-d12536-d12543-2026-10-12.md` · RESEARCH `RESEARCH-ember-mainline-content-observe-2026-10-12.md` · 主线内容轴观察停窗（TIP-L 闭环后无新薄断环 · 解锁 2c 须 DESIGN）· 无码 · 深化 densify 仍冻
+- **TIP-Z CLOSED** · `TIP-ember-mainline-content-observe-thin-d12536-d12543-2026-10-12.md` · RESEARCH `RESEARCH-ember-mainline-content-observe-2026-10-12.md` · 主线内容轴观察停窗（TIP-L 闭环后无新薄断环 · 解锁 2c 须 DESIGN）· 无码 · 深化 densify 仍冻 · hash `923e031f1`
 - **TIP-X CLOSED** `77a768df1` · sx01–19 视觉线闭合
 - **TIP-Y CLOSED** · 烬斩手感研究 docs-only · 门闩已立 · 无码
 
