@@ -1,6 +1,6 @@
 # tip · TIP-BK 天赋节点效果短诚实（TrMenu 悬停 · 可施工薄 · 可感变强途径）· D13080–D13095
 
-> **状态：** **OPEN** · 荐批 **A · 方案 M** · 2026-10-12 23:49 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-物品** · **不派插件** · 2026-10-12 23:51 Asia/Shanghai  
 > **上游门禁：** TIP-BJ CLOSED live `1.65.799-d13079` · feat `72cba2db4` · items `bc1e63407` · docs `05a2676fd` · RESEARCH [`RESEARCH-ember-talent-node-effect-short-honesty-2026-10-12.md`](../design/RESEARCH-ember-talent-node-effect-short-honesty-2026-10-12.md) · DESIGN [`DESIGN-ember-talent-node-effect-short-honesty-2026-10-12.md`](../design/DESIGN-ember-talent-node-effect-short-honesty-2026-10-12.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 离开宝石短效果链 → **天赋节点效果短诚实**（**非 densify · 非抬 talent stats · 非 soft/开孔再叠 · 非 SF4 · 非 Anvil · 非签名/套装/宝石再叠 · 非效果长墙 · 非 lore>3**）  
 > **施工岗（批后派单）：** **余烬-物品**（`ember_talent.yml` 13 格消耗行短效果）；**不派插件**（零 jar · 禁改 `talent.yml`）  
@@ -90,7 +90,7 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [x] 文首 HOLD / 选题否决表可核  
 - [ ] 批后才派 **余烬-物品**；**不派插件**；策划本窗 **无**业务 jar  
@@ -100,6 +100,8 @@
 
 ## 6. 批注（总控填）
 
-- **批：** （待）  
-- **批注：** （待）  
-- **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；调律 live bad 进持件；签名 lore 再叠；套装 blurb 再叠；宝石短效果再叠；甲闸再扫；扩 stampable；SetChase 六槽 densify；效果长墙  
+- **批：** **A · 方案 M** · 已批 · 已派余烬-物品 · 不派插件  
+- **批注：** 离开宝石短效果 · 压回 D12200 误删 · talent.yml SoT 合进消耗行 · lore≤3 · 零抬 talent stats  
+- **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；调律 live bad 进持件；签名 lore 再叠；套装 blurb 再叠；宝石短效果再叠；甲闸再扫；扩 stampable；SetChase 六槽 densify；效果长墙；一层中段塞菜单  
+
+## STATUS: APPROVED · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-12 23:51 Asia/Shanghai

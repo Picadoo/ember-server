@@ -1,6 +1,6 @@
 # RESEARCH · 天赋节点效果短诚实（TrMenu 悬停 · 压回 D12200 误删）· 2026-10-12
 
-> **状态：** OPEN · TIP-BK · 2026-10-12 23:49 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BK · 已派余烬-物品 · 不派插件 · 2026-10-12 23:51 Asia/Shanghai  
 > **起因：** TIP-BJ CLOSED live 后总控「离开宝石短效果链 · 开下一可感变强途径」。扫 AH…BJ / power-paths：`talent.yml` **stats SoT 已有**；B2.15 曾把二层裸键人话化上菜单；**D12200 lore≤3 压缩把效果半行整段删掉**——现网节点悬停只剩「被动 · 消耗 N」，玩家点天赋不知变强点。  
 > **上游：** TIP-BJ CLOSED live `1.65.799-d13079` · feat `72cba2db4` · items `bc1e63407` · docs `05a2676fd` · `talent.yml` · `ember_talent.yml` · B2.15 `design-ember-talent-attr-copy.md` · D12200 `c66ecdf3b` · power-paths [`DESIGN-ember-power-paths-variety-2026-10-12.md`](DESIGN-ember-power-paths-variety-2026-10-12.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify · 零伤乘 · 零抬表 · 零抬 talent.yml stats/cost/requires · 零 skill_mult · 零抬 gem flat · 零 soft·开孔再叠 · 零 Anvil densify · 零 topUpTo · 零 SF4 U2U3 · 零灰印/聚火 · 零签名 lore 再叠 · 零调律 live bad 进持件 · 零套装 blurb 再叠 · 零宝石短效果再叠 · 零 SetRules/Formula 抬 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 ConvertCap densify · 零 sx20 · 零开 L13 施工 tip · 零效果长墙 densify · 零 lore>3 行**
