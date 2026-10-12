@@ -1,6 +1,6 @@
 # tip · TIP-I 希望表盘补漏 + 图装下一缺（HD1/MG1 剩余表面化）· D12304–D12311
 
-> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:11 Asia/Shanghai）· 交插件岗  
+> **状态：** CLOSED · live 1.65.765-d12311（2026-10-12 16:15 Asia/Shanghai）  
 > **上游：** [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md) **§3.1 HD1** · **§3.3 MG1** · TIP-A/C 已 CLOSED（薄窗单轨 / Q 格 mapid）  
 > **前置：** TIP-A～H CLOSED live（至 TIP-H `82512b4d`）  
 > **施工岗：** 插件岗（展示短串 + TrMenu；**零改 pity/掉率**）  
@@ -55,11 +55,11 @@
 
 ## 3. 验收清单
 
-- [ ] 枢纽希望：不点左也能读出 **当前轨 n/N 或回落句**  
-- [ ] L2 焦点图：有焦点时见族/图鉴短串  
-- [ ] 冒险 Q 第二行：缺件时含 **下一缺**；齐则无冗尾  
-- [ ] hub + adventure lore overs>3 = 0  
-- [ ] `git show` 无 Affix / Economy / pom 无关脏文件；密码检查 0  
+- [x] 枢纽希望：不点左也能读出 **当前轨 n/N 或回落句**  
+- [x] L2 焦点图：有焦点时见族/图鉴短串  
+- [x] 冒险 Q 第二行：缺件时含 **下一缺**；齐则无冗尾  
+- [x] hub + adventure lore overs>3 = 0  
+- [x] `git show` 无 Affix / Economy / pom 无关脏文件；密码检查 0  
 - [ ] reload 记「待恢复服后实测」
 
 ---
@@ -70,3 +70,7 @@
 - tip 已推 · 交插件岗
 - 变强途径续：**TIP-I · HD1/MG1 补漏**；§3 其余轴不借机 densify
 - **批注：** `menuNow` 复用 `priorityTracks`+`progressLine`；`mapid_focus` 新建一处即可；`nextMissing` 压缩去「下一缺 · 」空格防串爆；hub `w` 现静态 L1→换 `hope_now`；冒险七格结构不动
+
+## STATUS: CLOSED · live 1.65.765-d12311 · 2026-10-12 16:15 CST
+- feat `f088fdaf` · chore 版本/STATUS 另附
+- hope_now + mapid_focus + menuLine nextMissing；零 pity/Affix
