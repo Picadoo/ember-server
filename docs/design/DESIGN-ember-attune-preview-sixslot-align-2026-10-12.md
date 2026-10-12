@@ -1,6 +1,6 @@
 # DESIGN · attune 预览六槽对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-AH · 荐批 A·M · 批后派 **余烬-插件**（可选 **余烬-物品** 仅 YAML 注释）  
+> **状态：** APPROVED · TIP-AH 批 A·M · 已派 **余烬-插件** · 2026-10-12 19:44 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-attune-preview-sixslot-align-2026-10-12.md`](RESEARCH-ember-attune-preview-sixslot-align-2026-10-12.md)  
 > **对接 live：** TIP-AE defense-side fits / 5 取 1 · D297 `EmberSigAttunePreview` / `%corerpg_p1_sig_run%`  
 > **HOLD 旁注：** L13 stage1 **下一 tip**；TIP-AD exclude 刃 L11/L13 **保留**  

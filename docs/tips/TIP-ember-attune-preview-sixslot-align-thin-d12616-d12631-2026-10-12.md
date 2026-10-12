@@ -1,6 +1,6 @@
 # tip · TIP-AH attune 预览六槽对齐（可施工薄 · 正交刃轨）· D12616–D12631
 
-> **状态：** OPEN · 待批 **A · 方案 M** · 2026-10-12 19:41 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件**（总控 2026-10-12 19:44 Asia/Shanghai）· 待 live 后 CLOSED  
 > **上游：** RESEARCH [`RESEARCH-ember-attune-preview-sixslot-align-2026-10-12.md`](../design/RESEARCH-ember-attune-preview-sixslot-align-2026-10-12.md) · DESIGN [`DESIGN-ember-attune-preview-sixslot-align-2026-10-12.md`](../design/DESIGN-ember-attune-preview-sixslot-align-2026-10-12.md) · TIP-AE CLOSED live `1.65.773-d12599`（defense-side 5 取 1）· TIP-AG CLOSED `7d61761e4`（L13 DESIGN stage0 APPROVED · **HOLD 施工**）  
 > **选题：** 总控 **(2) attune 预览六槽对齐** — 可感 UX；**非** densify；L13 stage1 **下一 tip HOLD**  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberGrowthService` runPreview* 主责）；**余烬-物品** 仅可选 TrMenu **注释**勘误（**禁**加 lore 行）  
@@ -81,8 +81,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12620–D12622；D12624 `git show` 干净  
 - [ ] 可选物品：D12623 注释 only · lore≤3  
 - [ ] 策划本窗 commit **docs-only**；**无**业务 jar  
