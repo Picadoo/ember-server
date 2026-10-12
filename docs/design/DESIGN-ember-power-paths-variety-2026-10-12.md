@@ -199,4 +199,5 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-Q 批 A·M** · tip D12408–D12423 · 交插件
 
 - **TIP-P CLOSED live**（2026-10-12 16:51）· 1.65.769-d12407
-- **TIP-Q OPEN** · `TIP-ember-drop-craft-pity-settle-thin-d12408-d12423-2026-10-12.md` · 精工软保底结算进度（对齐成色 · 非 glance）
+- **TIP-Q CLOSED PASS live `1.65.770-d12423`** · `TIP-ember-drop-craft-pity-settle-thin-d12408-d12423-2026-10-12.md` · 精工软保底结算进度（对齐成色 · 非 glance）
+- **TIP-R OPEN** · `TIP-ember-map-res-wear-cue-thin-d12424-d12439-2026-10-12.md` · 局内换装共鸣升沿（图装身份 · 非 glance）
