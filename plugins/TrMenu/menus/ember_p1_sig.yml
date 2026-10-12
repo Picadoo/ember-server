@@ -102,7 +102,7 @@ Icons:
     update: 20
     display:
       material: totem
-      name: '§6已选护符'
+      name: '§6防具侧生效'
       lore:
         - '%corerpg_p1_sig_charm%'
         - '%corerpg_p1_sig_charm_o%'
