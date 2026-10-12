@@ -390,7 +390,12 @@ public final class LifeService implements Listener {
             else
                 p.sendActionBar("§a生活 · Lv." + lv + " · 满级");
         } catch (Throwable ignored) { }
-        p.sendMessage(ChatColor.YELLOW + " cook" + ChatColor.GRAY + " — 代烤鱼：鳕鱼/鲑鱼 → 炭烤余烬鱼，每条 " + cookCoinEach + " 币");
+        String cookLine = ChatColor.YELLOW + " cook" + ChatColor.GRAY + " — 代烤鱼：鳕鱼/鲑鱼 → 炭烤余烬鱼，每条 " + cookCoinEach + " 币";
+        try { // TIP-AY D12895: ready → 今日减负待用
+            if (town.sunshine.corerpg.p1.EmberCookCoinSoft.ready(d))
+                cookLine = cookLine + ChatColor.DARK_GRAY + " · 今日减负待用（×0.5）";
+        } catch (Throwable ignored) { }
+        p.sendMessage(cookLine);
         for (Offer o : offers.values()) {
             StringBuilder sb = new StringBuilder();
             sb.append(ChatColor.YELLOW).append(" ").append(o.id).append(ChatColor.GRAY).append(" — ").append(ChatColor.WHITE).append(o.name).append(ChatColor.GRAY).append("：");
@@ -796,21 +801,31 @@ public final class LifeService implements Listener {
             try { p.sendActionBar("§e烹饪 · 缺鱼 · 去钓"); } catch (Throwable ignored) { }
             return;
         }
-        int fee = total * cookCoinEach;
-        if (d.getCoin() < fee) {
-            total = cookCoinEach > 0 ? d.getCoin() / cookCoinEach : total;
+        int feeFull = total * cookCoinEach;
+        int feeShow = feeFull;
+        try { // TIP-AY D12893: batch gate peeks soft — never consume here
+            feeShow = town.sunshine.corerpg.p1.EmberCookCoinSoft.peekFee(d, feeFull);
+        } catch (Throwable ignored) { }
+        int unitShow = total > 0 ? Math.max(1, feeShow / total) : cookCoinEach;
+        if (d.getCoin() < feeShow) {
+            total = unitShow > 0 ? d.getCoin() / unitShow : total;
             if (total <= 0) {
-                p.sendMessage(ChatColor.RED + "[生活] 余烬币不足（每条 " + cookCoinEach + " 币）");
-                try { p.sendActionBar("§e烹饪 · 还差币 §f" + cookCoinEach); } catch (Throwable ignored) { }
+                String refuse = ChatColor.RED + "[生活] 余烬币不足（每条 " + unitShow + " 币）";
+                try {
+                    if (town.sunshine.corerpg.p1.EmberCookCoinSoft.ready(d))
+                        refuse = refuse + ChatColor.GRAY + " · 今日减负待用";
+                } catch (Throwable ignored) { }
+                p.sendMessage(refuse);
+                try { p.sendActionBar("§e烹饪 · 还差币 §f" + unitShow); } catch (Throwable ignored) { }
                 return;
             }
-            fee = total * cookCoinEach;
+            feeFull = total * cookCoinEach;
             int left = total;
             for (Map.Entry<String, Integer> e : take.entrySet()) { int u = Math.min(left, e.getValue()); e.setValue(u); left -= u; }
         }
-        int cookFee = fee; // matches adjusted total
+        int cookFee = feeFull; // table fee for adjusted total; soft applied next
         try {
-            int soft = town.sunshine.corerpg.p1.EmberCookCoinSoft.consumeFee(d, cookFee); // D8849
+            int soft = town.sunshine.corerpg.p1.EmberCookCoinSoft.consumeFee(d, cookFee); // D8849 · TIP-AY consume only before deduct
             if (soft < cookFee) {
                 p.sendMessage(ChatColor.GREEN + "[生活] 烹饪减负 · 币 ×0.5（今日一次 · " + cookFee + "→" + soft + "）");
                 cookFee = soft;
@@ -822,17 +837,19 @@ public final class LifeService implements Listener {
         int cooked = 0;
         for (Map.Entry<String, Integer> e : take.entrySet()) if (e.getValue() > 0 && ni.consumeExact(p, e.getKey(), e.getValue())) cooked += e.getValue();
         if (cooked <= 0) {
-            if (cookFee > 0) d.addCoin(cookFee); // econ-ok: cook abort refund
+            if (cookFee > 0) d.addCoin(cookFee); // econ-ok: cook abort refund (actual paid)
             return;
         }
-        if (cooked < total && cookFee > 0) {
-            int back = (total - cooked) * cookCoinEach;
-            if (back > 0) d.addCoin(back); // econ-ok: partial cook refund
-            cookFee = cooked * cookCoinEach;
+        if (cooked < total && cookFee > 0 && total > 0) { // TIP-AY D12894: refund ≈ actual paid, not table×missed
+            int back = cookFee - cookFee * cooked / total;
+            if (back > 0) {
+                d.addCoin(back); // econ-ok: partial cook refund
+                cookFee -= back;
+            }
         }
         ni.giveNiItem(p, cookOutput, cooked);
         dataStore.flushMutation(p.getUniqueId());
-        p.sendMessage(ChatColor.GREEN + "[生活] 烤好了 " + ni.displayName(cookOutput) + "×" + cooked + ChatColor.GRAY + "（-" + cooked * cookCoinEach + " 币）");
+        p.sendMessage(ChatColor.GREEN + "[生活] 烤好了 " + ni.displayName(cookOutput) + "×" + cooked + ChatColor.GRAY + "（-" + cookFee + " 币）");
         try { p.sendActionBar("§a烹饪 · §f烤好×" + cooked); } catch (Throwable ignored) { }
         int cXp = cooked * cookXp;
         try {
