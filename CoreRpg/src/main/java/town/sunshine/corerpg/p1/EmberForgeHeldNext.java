@@ -58,13 +58,21 @@ public final class EmberForgeHeldNext {
     }
 
     /**
-     * One-glance next step for held blade/charm.
+     * One-glance next step for held blade/charm (TIP-AK: armor early-return ≡ K0).
      * Affordable order: quality → refine → enhance → upgrade;
      * D2434/D2446: when forgeGoal is CONVERT/BRAND/GEM/LOCK/ROLL/QUALITY, those sinks surface first if payable.
      * {@code gateOk} = first-clear for upgradeFlag(tier).
      */
     public static String line(EmberItemData d, Mats m, boolean gateOk, int forgeGoal) {
         if (d == null) return "下一确定 · 空手 · 手持刃/护符";
+        // TIP-AK D12668/D12669: armor ≡ ARMOR_REFUSE (± dismantle half-line); never fake quality/refine/enhance/upgrade
+        if (d.isArmor()) {
+            if (EmberUpgradeRules.dismantleCheck(d) == null
+                    && EmberUpgradeRules.armorDismantleTenths(d) > 0) {
+                return "下一确定 · 护甲 · 分解零头 · /corerpg p1 dismantle";
+            }
+            return "下一确定 · 护甲 · " + EmberUpgradeRules.ARMOR_REFUSE;
+        }
         if (m == null) m = new Mats(0, 0, 0, 0);
 
         Cost q = EmberUpgradeRules.qualityCost(d.quality);

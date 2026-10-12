@@ -9,6 +9,11 @@ public class EmberForgeHeldNextTest {
                 EmberItemData.templateId("scorch", "blade", 1), "scorch", "blade", 1, q, craft, enh, 0, true, "drop", 1, 1);
     }
 
+    private static EmberItemData armor(String slot, String src, int tier) {
+        return new EmberItemData(EmberItemData.newUid(), EmberItemData.templateId("scorch", slot, tier),
+                "scorch", slot, tier, 1, 1, 0, 0, true, src, EmberItemData.DATA_VERSION, 0);
+    }
+
     @Test public void prefersAffordableQuality() {
         EmberItemData d = blade(0, 0, 0);
         EmberUpgradeRules.Cost qc = EmberUpgradeRules.qualityCost(0);
@@ -39,5 +44,38 @@ public class EmberForgeHeldNextTest {
         assertNotNull(u);
         String line = EmberForgeHeldNext.line(d, new EmberForgeHeldNext.Mats(u.shards, u.blanks, u.bone, u.coins), true);
         assertTrue(line.contains("升阶") || line.contains("upgrade") || line.contains("T1"));
+    }
+
+    /** TIP-AK DESIGN §2.3: held armor never fakes quality/refine/enhance/upgrade. */
+    @Test public void armorRefusesForgeProjection() {
+        EmberForgeHeldNext.Mats rich = new EmberForgeHeldNext.Mats(9999, 9999, 9999, 9999);
+        for (String slot : new String[]{"head", "chest"}) {
+            EmberItemData a = armor(slot, "migrate", 2); // migrate → not dismantlable → ARMOR_REFUSE main
+            String line = EmberForgeHeldNext.line(a, rich);
+            assertTrue(line.contains(EmberUpgradeRules.ARMOR_REFUSE) || line.contains("护甲随护符"));
+            assertFalse(line.contains("料够 · /corerpg p1 quality"));
+            assertFalse(line.contains("/corerpg p1 refine"));
+            assertFalse(line.contains("/corerpg p1 enhance"));
+            assertFalse(line.contains("/corerpg p1 upgrade"));
+            // forgeGoal must not override armor refuse
+            String forced = EmberForgeHeldNext.line(a, rich, true, EmberForgeGoal.QUALITY);
+            assertTrue(forced.contains(EmberUpgradeRules.ARMOR_REFUSE) || forced.contains("护甲随护符"));
+            assertFalse(forced.contains("料够 · /corerpg p1 quality"));
+        }
+    }
+
+    /** TIP-AK DESIGN §2.3: dismantlable drop armor may hint dismantle; still no forge push. */
+    @Test public void dismantlableArmorHintsDismantle() {
+        EmberItemData drop = armor("legs", "drop", 2);
+        assertNull(EmberUpgradeRules.dismantleCheck(drop));
+        assertTrue(EmberUpgradeRules.armorDismantleTenths(drop) > 0);
+        String line = EmberForgeHeldNext.line(drop, new EmberForgeHeldNext.Mats(0, 0, 0, 0));
+        assertTrue(line.contains("分解"));
+        assertFalse(line.contains("成色"));
+        assertFalse(line.contains("强化"));
+        assertFalse(line.contains("/corerpg p1 quality"));
+        assertFalse(line.contains("/corerpg p1 enhance"));
+        assertFalse(line.contains("/corerpg p1 refine"));
+        assertFalse(line.contains("/corerpg p1 upgrade"));
     }
 }
