@@ -188,3 +188,4 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-J CLOSED 停窗** · `TIP-ember-power-paths-stop-window-d12312-d12319` · Batch1–3+A～I 收束；默认不再开 power-glance
 - **TIP-K CLOSED live** 1.65.766-d12335（技能手感包 cue）
 - **TIP-L CLOSED live** 1.65.767-d12351（Q07 charm + 下一环追烙）
+- **TIP-M OPEN** · `TIP-ember-hub-glance-fold-observe-d12352-d12359-2026-10-12.md` · 枢纽一眼挤度停窗观察；候选 F1 宝石并希望；本窗无码 · 待批 A·M

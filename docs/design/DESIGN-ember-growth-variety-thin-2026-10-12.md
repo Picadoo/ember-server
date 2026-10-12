@@ -132,3 +132,7 @@
 ## 进度戳 · TIP-L
 
 - TIP-L OPEN：`docs/tips/TIP-ember-mainline-farm-loop-d12336-d12351-2026-10-12.md` · RESEARCH `RESEARCH-ember-mainline-farm-loop-2026-10-12.md` · 主线农场闭环（结构）；禁 Affix/伤乘/抬表/glance
+
+## 进度戳 · TIP-M
+
+- TIP-M OPEN：`docs/tips/TIP-ember-hub-glance-fold-observe-d12352-d12359-2026-10-12.md` · 枢纽一眼挤度停窗观察（只合并候选；无码）
