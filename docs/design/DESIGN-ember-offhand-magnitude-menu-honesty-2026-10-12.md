@@ -1,6 +1,6 @@
 # DESIGN · 副手「微量」守势数字诚实（TrMenu 购/炼入口 · 薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-BM · 2026-10-12 23:59 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BM · 已派余烬-物品 · 不派插件 · 2026-10-13 00:01 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-offhand-magnitude-menu-honesty-2026-10-12.md`](RESEARCH-ember-offhand-magnitude-menu-honesty-2026-10-12.md)  
 > **对接 live：** TIP-BL CLOSED live items `2f0507813` · NI offhand/parts · `ember_life` / `ember_set` / `ember_part` / `ember_forge` · D289/D294/D309  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名 lore 再叠 / 套装 blurb 再叠 / 宝石短效果再叠 / 天赋悬停再叠 / 烙纹档幅度再叠 / soft·开孔再叠 **仍冻**  
@@ -100,4 +100,4 @@
 | 9 | Affix densify / 抬 values | **仍冻** |
 | 10 | 副手并轨方案 B | **仍冻（D309）** |
 
-## STATUS: OPEN · TIP-BM · 2026-10-12 23:59 Asia/Shanghai
+## STATUS: APPROVED · TIP-BM · 已派余烬-物品 · 不派插件 · 2026-10-13 00:01 Asia/Shanghai

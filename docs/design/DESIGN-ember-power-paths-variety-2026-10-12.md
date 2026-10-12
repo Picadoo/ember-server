@@ -232,9 +232,10 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 
 - **TIP-BL CLOSED live items `2f0507813`** · 烙纹档幅度菜单诚实 · TrMenu reload · jar 未改 `1.65.799-d13079`
 
+- **TIP-BM APPROVED** · 副手「微量」守势数字诚实 · 批 A·M · 已派物品 · 不派插件 · SoT +2/+8/+1 · 非抬 flat · docs `ab2ab912`
+
 - **TIP-BM OPEN** · `TIP-ember-offhand-magnitude-menu-honesty-thin-d13112-d13127-2026-10-12.md` · RESEARCH `RESEARCH-ember-offhand-magnitude-menu-honesty-2026-10-12.md` · DESIGN `DESIGN-ember-offhand-magnitude-menu-honesty-2026-10-12.md` · 副手「微量」守势数字诚实（TrMenu 购/炼入口 · 可施工薄 · 可感变强途径 · **离开烙纹档幅度链** · **非 densify · 非抬副手 flat · 非 soft·开孔再叠 · 非 Anvil densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 SF4 U2U3 · 非灰印/聚火 · 非签名 lore 再叠 · 非调律 live bad · 非套装 blurb 再叠 · 非宝石短效果再叠 · 非天赋悬停再叠 · 非烙纹档幅度再叠 · 非效果长墙 · 非 lore>3 · 非并轨方案 B** · 零改 NI 属性数字/Stat/life coin · D12199/D12200 误删数字压回 · life O/W · set O · part A · forge P · SoT +2/+8/+1）· **批后派余烬-物品** · **不派插件** · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-BL CLOSED live · soft-latch/CostSoft/pity/soft-glance/firstsoft/cook/life-buy soft 再叠 / xp-boost cue 再叠 / GemHole Open 再叠 / enhance+5 开孔再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 densify / 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify / SF4 U2U3 / 灰印·聚火 / 调律 live bad 进持件 / 签名 lore 再叠 / 套装 blurb 再叠 / 宝石短效果再叠 / 天赋悬停再叠 / 烙纹档幅度再叠 / Affix densify 仍冻 · 策划 docs-only
 
-- **TIP-BM 待批 A·M** · tip D13112–D13127 · 副手「微量」守势数字诚实 · 荐批后派物品 · 不派插件 · docs OPEN
 
 
 - **TIP-BL APPROVED** · 烙纹定向幅度菜单诚实 · 批 A·M · 已派物品 · 不派插件 · values→档区间 · 非 Affix densify · docs `f855e502`

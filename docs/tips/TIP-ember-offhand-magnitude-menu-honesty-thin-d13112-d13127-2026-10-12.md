@@ -1,6 +1,6 @@
 # tip · TIP-BM 副手「微量」守势数字诚实（TrMenu 购/炼入口 · 可施工薄 · 可感变强途径）· D13112–D13127
 
-> **状态：** **OPEN** · 待总控批 A·M · 2026-10-12 23:59 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-物品** · **不派插件** · 2026-10-13 00:01 Asia/Shanghai  
 > **上游门禁：** TIP-BL CLOSED live items `2f0507813` · TrMenu reload · docs `65b5250fc` · jar 未改 `1.65.799-d13079` · RESEARCH [`RESEARCH-ember-offhand-magnitude-menu-honesty-2026-10-12.md`](../design/RESEARCH-ember-offhand-magnitude-menu-honesty-2026-10-12.md) · DESIGN [`DESIGN-ember-offhand-magnitude-menu-honesty-2026-10-12.md`](../design/DESIGN-ember-offhand-magnitude-menu-honesty-2026-10-12.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 离开烙纹档幅度链 → **副手「微量」守势数字诚实**（**非抬副手 flat · 非 Affix densify · 非伤乘 · 非抬表 · 非 soft/开孔再叠 · 非 SF4 · 非 Anvil · 非签名/套装/宝石/天赋/烙纹幅度再叠 · 非效果长墙 · 非 lore>3 · 非并轨方案 B**）  
 > **施工岗（批后派单）：** **余烬-物品**（`ember_life` O/W · `ember_set` O · `ember_part` A±I · `ember_forge` P）；**不派插件**（零 jar · 禁改 NI 属性数字 / StatService / life coin）  
@@ -91,19 +91,19 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 文首 HOLD / 选题否决表可核  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 文首 HOLD / 选题否决表可核  
 - [ ] 批后才派 **余烬-物品**；**不派插件**；策划本窗 **无**业务 jar  
-- [ ] `git show` docs-only（本 commit）；L13 施工仍 HOLD  
+- [x] `git show` docs-only（本 commit）；L13 施工仍 HOLD  
 
 ---
 
 ## 6. 批注（荐）
 
-- **批：** **A · 方案 M**（荐）  
+- **批：** **A · 方案 M** · 已批 · 已派余烬-物品 · 不派插件  
 - **选题：** TIP-BL 后 · **离开烙纹档幅度** · **副手「微量」守势数字诚实**（可感变强途径 · **非抬 flat** · 压回 D12199/D12200 误删）  
 - **批后派岗：** 余烬-物品；**不派插件**  
 - **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；调律 live bad 进持件；签名 lore 再叠；套装 blurb 再叠；宝石短效果再叠；天赋悬停再叠；烙纹档幅度再叠；甲闸再扫；扩 stampable；SetChase 六槽 densify；效果长墙；**Affix densify**；并轨方案 B  
 
-## STATUS: OPEN · 待总控批 A·M · 2026-10-12 23:59 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:01 Asia/Shanghai
