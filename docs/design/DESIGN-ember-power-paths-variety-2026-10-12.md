@@ -228,6 +228,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 
 - **TIP-BI CLOSED live `1.65.798-d13063` · feat `de89241c2` · items `2cb3917e7`** · 套装效果行跟成套族 · familyBlurb×1.00 · set_blurb · 零改 SetRules
 
+- **TIP-BJ APPROVED** · 宝石效果短诚实 · 批 A·M · 已派插件+物品 · shortEffect+NI/合成 · 零抬 gem flat · docs `7fdb413f`
+
 - **TIP-BJ OPEN** · `TIP-ember-gem-effect-short-honesty-thin-d13064-d13079-2026-10-12.md` · RESEARCH `RESEARCH-ember-gem-effect-short-honesty-2026-10-12.md` · DESIGN `DESIGN-ember-gem-effect-short-honesty-2026-10-12.md` · 宝石效果短诚实（合成/镶嵌/石物 lore · 可施工薄 · 可感变强途径 · **离开套装 blurb 链** · **非 densify · 非抬 gem flat · 非 soft·开孔再叠 · 非 Anvil densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 SF4 U2U3 · 非灰印/聚火 · 非签名 lore 再叠 · 非调律 live bad · 非套装 blurb 再叠 · 非效果长墙** · 零改 SHARP_ATK/STEADY_DEF/DRAIN_LS/GALE_MS/CAP_* · EmberGems 常量 → ≤1 行短效果 · 锋利含刃 T2+ · 座椅 cue 复用 · NI/合成/镶入接线）· **批后派余烬-插件 + 余烬-物品** · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-BI CLOSED live · soft-latch/CostSoft/pity/soft-glance/firstsoft/cook/life-buy soft 再叠 / xp-boost cue 再叠 / GemHole Open 再叠 / enhance+5 开孔再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 densify / 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify / SF4 U2U3 / 灰印·聚火 / 调律 live bad 进持件 / 签名 lore 再叠 / 套装 blurb 再叠 仍冻 · 策划 docs-only
 
 - **TIP-BI APPROVED** · 装备页套装效果行跟成套族 · 批 A·M · 已派插件+物品 · familyBlurb+set_blurb · docs `7f8f59b1`

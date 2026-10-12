@@ -1,6 +1,6 @@
 # DESIGN · 宝石效果短诚实（合成/镶嵌/石物 lore · 薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-BJ · 2026-10-12 23:41 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BJ · 已派余烬-插件+余烬-物品 · 2026-10-12 23:44 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-gem-effect-short-honesty-2026-10-12.md`](RESEARCH-ember-gem-effect-short-honesty-2026-10-12.md)  
 > **对接 live：** TIP-BI CLOSED live `1.65.798-d13063` · `EmberGems` · `EmberGemSeatLive` · `ember_p1_gem.yml` · `ember-enhance-gems.yml` · `ember_socket.yml`  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名 lore 再叠 / 套装 blurb 再叠 / soft·开孔再叠 **仍冻**  
@@ -99,4 +99,4 @@ CODE_GALE   → "疾风 · 移速+" + pct(GALE_MS)    // 0.02 → 2%
 | 7 | soft·开孔·GemHole 再叠 | **仍冻** |
 | 8 | 持件孔位逐孔效果长墙 | **另 tip · 禁本窗扩** |
 
-## STATUS: OPEN · TIP-BJ · 2026-10-12 23:41 Asia/Shanghai
+## STATUS: APPROVED · TIP-BJ · 已派余烬-插件+余烬-物品 · 2026-10-12 23:44 Asia/Shanghai

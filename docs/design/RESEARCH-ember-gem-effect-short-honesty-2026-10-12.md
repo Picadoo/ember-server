@@ -1,6 +1,6 @@
 # RESEARCH · 宝石效果短诚实（合成/镶嵌/石物 lore）· 2026-10-12
 
-> **状态：** OPEN · TIP-BJ · 2026-10-12 23:41 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BJ · 已派余烬-插件+余烬-物品 · 2026-10-12 23:44 Asia/Shanghai  
 > **起因：** TIP-BI CLOSED live 后总控「离开套装 blurb 链 · 开下一可感变强途径」。BI DESIGN 旁债已点名「宝石镶嵌效果持件/菜单细述」另 tip。扫 AH…BI / power-paths：宝石 **数值 SoT 已有**（`EmberGems` 常量），合成/镶嵌/NI 石物仍写「微量××」或只写族名，**锋利 T2+ 门闩几乎不可见**——玩家合成/镶嵌前不知真正变强点。  
 > **上游：** TIP-BI CLOSED live `1.65.798-d13063` · feat `de89241c2` · items `2cb3917e7` · docs `1040ffb39` · `EmberGems` / `EmberGemSeatLive.effectLine` · `ember_p1_gem.yml` · `ember-enhance-gems.yml` · power-paths [`DESIGN-ember-power-paths-variety-2026-10-12.md`](DESIGN-ember-power-paths-variety-2026-10-12.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify · 零伤乘 · 零抬表 · 零抬 `SHARP_ATK`/`STEADY_DEF`/`DRAIN_LS`/`GALE_MS`/CAP_* · 零 gem flat densify · 零 soft·开孔再叠 · 零 Anvil densify · 零 topUpTo · 零 SF4 U2U3 · 零灰印/聚火 · 零签名 lore 再叠 · 零调律 live bad 进持件 · 零套装 blurb 再叠 · 零 SetRules/Formula 抬 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 ConvertCap densify · 零 sx20 · 零 skill_mult · 零开 L13 施工 tip · 零效果长墙 densify**
