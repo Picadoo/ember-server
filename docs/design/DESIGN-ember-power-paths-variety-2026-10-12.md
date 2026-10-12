@@ -196,9 +196,11 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-AG CLOSED** · L13 蓄力身份 DESIGN stage0 APPROVED · HOLD 施工 · R1–R5
+- **TIP-AH OPEN** · `TIP-ember-attune-preview-sixslot-align-thin-d12616-d12631-2026-10-12.md` · RESEARCH `RESEARCH-ember-attune-preview-sixslot-align-2026-10-12.md` · DESIGN `DESIGN-ember-attune-preview-sixslot-align-2026-10-12.md` · attune 预览六槽对齐（可施工薄 · 正交刃轨 · 零功率表）· 批后派插件 · **L13 stage1 HOLD 下一 tip** · 深化 densify 仍冻 · 策划 docs-only
 
-- **TIP-AG OPEN** · `TIP-ember-blade-sig-l13-design-stage0-thin-d12608-d12615-2026-10-12.md` · DESIGN `DESIGN-ember-blade-sig-l13-charge-identity-stage0-2026-10-12.md` · 刃 L13 蓄力身份 DESIGN stage0（docs-only · HOLD 施工 · 零改 mods · 零 jar 直至门禁+显式开工）· L11 HOLD 另轨 · TIP-AD exclude 保留 · 深化 densify 仍冻 · 无码
+- **TIP-AG CLOSED** `7d61761e4` · L13 蓄力身份 DESIGN stage0 APPROVED · HOLD 施工 · R1–R5 · **L13 stage1 未开**（下一 tip after TIP-AH）
+
+- **TIP-AG OPEN** · `TIP-ember-blade-sig-l13-design-stage0-thin-d12608-d12615-2026-10-12.md` · DESIGN `DESIGN-ember-blade-sig-l13-charge-identity-stage0-2026-10-12.md` · 刃 L13 蓄力身份 DESIGN stage0（docs-only · HOLD 施工 · 零改 mods · 零 jar 直至门禁+显式开工）· L11 HOLD 另轨 · TIP-AD exclude 保留 · 深化 densify 仍冻 · 无码 · **（历史 OPEN 行；已 CLOSED）**
 
 - **TIP-AF CLOSED** docs-only `f6e16ea46` · 刃 L11/L13 另轨研究 · exclude+观察 HOLD · 荐下一 L13 DESIGN stage0 → TIP-AG
 
