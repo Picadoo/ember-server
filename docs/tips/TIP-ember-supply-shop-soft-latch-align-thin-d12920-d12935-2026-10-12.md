@@ -1,6 +1,6 @@
 # tip · TIP-BA 补给店 Soft 假耗（扣空）诚实对齐（可施工薄 · 可感 UX）· D12920–D12935
 
-> **状态：** **OPEN** · 待批 A·M · 2026-10-12 22:34 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 22:36 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-supply-shop-soft-latch-align-2026-10-12.md`](../design/RESEARCH-ember-supply-shop-soft-latch-align-2026-10-12.md) · DESIGN [`DESIGN-ember-supply-shop-soft-latch-align-2026-10-12.md`](../design/DESIGN-ember-supply-shop-soft-latch-align-2026-10-12.md) · TIP-AZ CLOSED live `1.65.791-d12919` · feat `1984f551b` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **显式旁债** SupplyShop Soft 假耗 — **离开 CostSoft·pity·soft-glance·firstsoft·cook soft·life-buy soft / ConvertCap / 甲闸 / 追烙**（AS→AV / AP–AR / AW / AX / AY / AZ / AK–AM / AN–AO 已齐）；同构 AZ latch-before-gate  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberSupplyShopSoft.peekPrice` · `EmberSupplyService.cmd` 门禁 peek / spend 前 consume · 可选预览 SOFT_TAIL + 单测）  
@@ -85,8 +85,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12924–D12927；D12929 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] peek 不吞 soft；成交才 consume；L13 施工仍 HOLD  
@@ -95,8 +95,8 @@
 
 ## 6. 批注（荐）
 
-- [ ] 总控批 **A · 方案 M** · 待批  
+- [x] 总控批 **A · 方案 M** · 已批 · 已派插件  
 - 选题：TIP-AZ 后 · **总控显式旁债** SupplyShop Soft 假耗诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 ConvertCap densify · 非 CostSoft·pity·soft-glance·firstsoft·cook soft·life-buy soft 再叠**）  
 - **批注：** AZ 生活购已 peek+成交 consume；`EmberSupplyService.cmd` buy=true 仍先 `apply(consume)` 再 `affordable` → 软价仍不够或空格不够时白吞日首减负；peekPrice + 门禁/成交 consume；零改 MULT/C14；零新 PAPI；批后派 **余烬-插件**；**L13 施工 HOLD**；Anvil 假耗旁债；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / ConvertCap densify / CostSoft·pity·soft-glance·firstsoft·cook·life-buy soft 再叠 / topUpTo 扩 soft 仍冻  
 
-## STATUS: OPEN · tip D12920–D12935 · 2026-10-12 22:34 Asia/Shanghai · 待批 A·M
+## STATUS: APPROVED · tip D12920–D12935 · 2026-10-12 22:36 Asia/Shanghai · 已派余烬-插件
