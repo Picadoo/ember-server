@@ -1,6 +1,6 @@
 # tip · TIP-AA 主线解锁 2c / 六槽结构研究薄窗（docs-only · 禁 densify）· D12544–D12551
 
-> **状态：** OPEN · 待批 **A · 方案 M** · docs-only（2026-10-12 Asia/Shanghai）  
+> **状态：** CLOSED · 批 **A · 方案 M** · docs-only（总控 2026-10-12 17:39 Asia/Shanghai）  
 > **上游：** [`RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md`](../design/RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md) · TIP-Z CLOSED docs-only `923e031f1` · TIP-L CLOSED live `1.65.767-d12351` · D174 2c 暂缓 · 六槽 Stage1+2 live + D453 绿出口 PASS  
 > **前置：** TIP-Z 下阶段 P1 = 解锁研究稿；深化 densify **仍冻**；短征 O→X **闭合**；烬斩门闩 TIP-Y **仍有效**  
 > **施工岗：** **无码**（策划 RESEARCH + tip；**不**派插件；勿借机改 Signature / Loadout / loot / STAMP / TrMenu）  
@@ -62,11 +62,11 @@ TIP-Z 后开 **P1 解锁研究**：盘清 D174「2c 六槽」——甲槽已另�
 
 ## 4. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] RESEARCH + tip 路径可点；2c 勘误与 S1–S8 可核  
-- [ ] DESIGN power-paths：TIP-Z CLOSED `923e031f1` + TIP-AA OPEN  
-- [ ] **无**插件施工派单；**无**独立 DESIGN 文件冒充已批施工（本窗仅 RESEARCH）  
-- [ ] `git show` docs-only；密码检查 0  
+- [x] 总控批 **A · 方案 M**  
+- [x] RESEARCH + tip 路径可点；2c 勘误与 S1–S8 可核  
+- [x] DESIGN power-paths：TIP-Z CLOSED `923e031f1` + TIP-AA CLOSED  
+- [x] **无**插件施工派单；**无**独立 DESIGN 文件冒充已批施工（本窗仅 RESEARCH）  
+- [x] `git show` docs-only；密码检查 0  
 
 ---
 

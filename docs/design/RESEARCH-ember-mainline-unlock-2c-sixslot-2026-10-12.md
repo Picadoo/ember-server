@@ -1,6 +1,6 @@
 # RESEARCH · 主线解锁 2c / 六槽结构债（TIP-Z 后 P1 · docs-only）· 2026-10-12
 
-> **状态：** OPEN · TIP-AA 待批 A·M · docs-only · 2026-10-12 Asia/Shanghai  
+> **状态：** CLOSED · TIP-AA 已批 A·M · docs-only · 2026-10-12 17:39 Asia/Shanghai  
 > **对接 tip：** [`TIP-ember-mainline-unlock-2c-research-thin-d12544-d12551-2026-10-12.md`](../tips/TIP-ember-mainline-unlock-2c-research-thin-d12544-d12551-2026-10-12.md)  
 > **上游：** TIP-Z CLOSED docs-only `923e031f1` · TIP-L CLOSED live `1.65.767-d12351` · D174 DESIGN（2c 暂缓）· 六槽 Stage1+2 live + D453 绿出口 PASS  
 > **硬禁：** 零 Affix densify · 零伤乘 · 零抬表 · 零 glance twin · 零深化 densify · 零 sx20 · 零 skill_mult · 零 ForgeChoice·wear·pity·awkDelta densify · **本窗零 jar / 零插件派单 / 零当薄 densify 施工**
