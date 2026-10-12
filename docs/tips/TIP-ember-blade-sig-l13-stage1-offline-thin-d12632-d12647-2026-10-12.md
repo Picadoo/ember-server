@@ -1,6 +1,6 @@
 # tip · TIP-AI 刃签 L13 stage1 离线门禁（R1+R2 · docs+tools）· D12632–D12647
 
-> **状态：** OPEN · 待批 **A · 方案 M** · docs+tools · HOLD 施工 · 零改 L13 mods · 零业务 jar · 2026-10-12 19:53 Asia/Shanghai  
+> **状态：** CLOSED · 批 **A · 方案 M** · `STAGE1_L13_OFFLINE=FAIL`（基线 alone 三族 · 预期）· HOLD 施工 · 零改 L13 mods · 零业务 jar · 2026-10-12 19:56 Asia/Shanghai  
 > **上游：** [`DESIGN-ember-blade-sig-l13-stage1-offline-2026-10-12.md`](../design/DESIGN-ember-blade-sig-l13-stage1-offline-2026-10-12.md) · TIP-AG CLOSED DESIGN stage0 APPROVED HOLD `7d61761e4` · TIP-AH CLOSED live `1.65.774-d12631` · RESEARCH [`RESEARCH-ember-blade-sig-l11-l13-next-2026-10-12.md`](../design/RESEARCH-ember-blade-sig-l11-l13-next-2026-10-12.md) · 范式 TIP-AC stage1  
 > **结果落点：** [`RESULT-ember-blade-sig-l13-stage1-offline-2026-10-12.md`](../design/RESULT-ember-blade-sig-l13-stage1-offline-2026-10-12.md)（PENDING）  
 > **前置：** L13 stage0 已批；TIP-AD exclude **保留**；深化 densify / STAMP / skill_mult **仍冻**；烬斩门闩 TIP-Y **仍有效**  
@@ -83,13 +83,13 @@ TIP-AH 后开 **L13 stage1 离线门禁**：钉死评测假设 **R1+R2**（蓄�
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [x] DESIGN + tip + RESULT 路径可点；假设 R1+R2 可核  
 - [x] power-paths：TIP-AH CLOSED live + TIP-AI OPEN  
 - [x] harness checklist/cmds；`judge-alone` 基线 L13 FAIL 可复现  
 - [x] **无**插件施工派单；**无** L13/L11 数值改动；**无**业务 jar  
-- [ ] `git show` 仅 docs + 该 tools 薄文件；密码检查 0  
-- [ ] （可后继）数字填入 RESULT → `STAGE1_L13_OFFLINE=PASS|FAIL`
+- [x] `git show` 仅 docs + 该 tools 薄文件；密码检查 0  
+- [x] RESULT 填基线 → `STAGE1_L13_OFFLINE=FAIL`（预期 · HOLD）
 
 ---
 

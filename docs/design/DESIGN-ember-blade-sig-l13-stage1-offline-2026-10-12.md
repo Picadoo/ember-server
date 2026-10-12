@@ -1,6 +1,6 @@
 # DESIGN · 刃签 L13 stage1 离线门禁（R1+R2 假设 · docs+tools）· 2026-10-12
 
-> **状态：** OPEN · TIP-AI · docs+tools · **HOLD 施工 / 零业务 jar / 零改 L13 mods** · 2026-10-12 19:53 Asia/Shanghai  
+> **状态：** CLOSED · TIP-AI 批 A·M · `STAGE1_L13_OFFLINE=FAIL`（基线）· **HOLD 施工** · 2026-10-12 19:56 Asia/Shanghai  
 > **文首硬句：** 本窗 **只** 钉评测假设 + 可执行门禁包；**不是**开工令。**零改** `DEFS` / `SIGS` / SkillService / 业务 jar。FAIL→**停**、**禁抬表**；PASS ≠ 开工（仍须总控显式开工才开施工 tip）。  
 > **对接 tip：** [`TIP-ember-blade-sig-l13-stage1-offline-thin-d12632-d12647-2026-10-12.md`](../tips/TIP-ember-blade-sig-l13-stage1-offline-thin-d12632-d12647-2026-10-12.md)  
 > **上游：** TIP-AG CLOSED DESIGN stage0 APPROVED HOLD `7d61761e4` · [`DESIGN-ember-blade-sig-l13-charge-identity-stage0-2026-10-12.md`](DESIGN-ember-blade-sig-l13-charge-identity-stage0-2026-10-12.md) · TIP-AH CLOSED live `1.65.774-d12631` · RESEARCH [`RESEARCH-ember-blade-sig-l11-l13-next-2026-10-12.md`](RESEARCH-ember-blade-sig-l11-l13-next-2026-10-12.md) · 范式 [`DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md)  
