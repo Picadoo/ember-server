@@ -1,6 +1,6 @@
 # tip · TIP-F 技能手感一眼（枢纽/技能页 · 三套烬斩分型可辨 · 点进技能组）· D12280–D12287
 
-> **状态：** 批 **A · 方案 M**（总控 2026-10-12 15:56 Asia/Shanghai）· 交插件岗  
+> **状态：** CLOSED · live 1.65.763-d12287（2026-10-12 16:00 Asia/Shanghai）  
 > **上游：** [`DESIGN-ember-growth-variety-thin-2026-10-12.md`](../design/DESIGN-ember-growth-variety-thin-2026-10-12.md) · [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md) · 既有 skill-kit / SF1–SF3 / D617  
 > **前置：** TIP-A～E CLOSED live（至 1.65.762-d12279）  
 > **施工岗：** 插件岗（TrMenu + 纯展示短串；**零改 skill_mult / CD / 几何数值**）  
@@ -94,3 +94,5 @@
 - [x] 总控批 **A · 方案 M** · 2026-10-12 15:56 CST
 - tip 已推 · 交插件岗
 - 变强途径续：**TIP-F**；研究既有分型，不发明新主循环
+
+## STATUS: CLOSED · live 1.65.763-d12287 · 2026-10-12 16:00 CST
