@@ -21,7 +21,7 @@ Events:
     - 'tell: §e转化路径：§f%corerpg_p1_convert_path% §8· /corerpg p1 convertpath'
     - 'command: corerpg p1 convertpath nudge'
     - 'sound: BLOCK_ANVIL_LAND-0.4-1.2'
-    - 'tell: §8手持刃/护符 · 每周 1 次 · 成色截卓越 · 强化归零 · uid 不变'
+    - 'tell: §8手持刃/护符 · 每周 1 次 · 保留精工/词条/签名/孔 · 强化归零 · 成色截卓越'
 
 Icons:
   '#':
@@ -33,25 +33,37 @@ Icons:
       material: book
       name: '§6每周转化 · 说明'
       lore:
-        - ''
-        - '§c还差：§f%corerpg_p1_forge_gap_convert% §8（手持阶；空手按T1）'
-        - '§7把手持件转到另一族（同部位同阶）'
+        - '§7每周 1 次 · 手持刃/护符'
+        - '§a保留精工/词条/签名/孔 · uid 不变'
+        - '§c还差：§f%corerpg_p1_forge_gap_convert%'
   '1':
     display:
       material: blaze powder
       name: '§c转到 · 焚烬'
+      lore:
+        - '§7同阶同部位改族'
+        - '§a保留精工/词条/签名/孔 · §c强化归零 · 成色截卓越'
+        - '§e➥ §f点选 · 聊天预览'
     actions:
       all: [close, 'command: corerpg p1 convert scorch']
   '2':
     display:
       material: magma cream
       name: '§6转到 · 烬爆'
+      lore:
+        - '§7同阶同部位改族'
+        - '§a保留精工/词条/签名/孔 · §c强化归零 · 成色截卓越'
+        - '§e➥ §f点选 · 聊天预览'
     actions:
       all: [close, 'command: corerpg p1 convert burst']
   '3':
     display:
       material: slime ball
       name: '§a转到 · 承烬'
+      lore:
+        - '§7同阶同部位改族'
+        - '§a保留精工/词条/签名/孔 · §c强化归零 · 成色截卓越'
+        - '§e➥ §f点选 · 聊天预览'
     actions:
       all: [close, 'command: corerpg p1 convert sustain']
   R:
