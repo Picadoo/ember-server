@@ -1,6 +1,6 @@
 # tip · TIP-M 枢纽一眼格挤度 · 停窗观察纪要（只合并/折叠候选 · 本窗无码）· D12352–D12359
 
-> **状态：** 待总控批 **A · 方案 M（停窗观察）** · docs-only · **不派插件**  
+> **状态：** CLOSED · 批 **A · 方案 M（停窗观察）**（总控 2026-10-12 16:32 Asia/Shanghai）· 无码  
 > **上游：** [`TIP-ember-power-paths-stop-window-d12312-d12319-2026-10-12.md`](TIP-ember-power-paths-stop-window-d12312-d12319-2026-10-12.md) §3 P0 · [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md) HD1  
 > **前置：** TIP-L CLOSED live `1.65.767-d12351`；TIP-A～I glance **CLOSED**；TIP-J 停窗仍有效  
 > **硬禁：** **零 Affix · 零伤乘 · 零抬表 · 零 glance densify twin**（不新造进度串 / 不新占 Layout 字母）· lore 非空 ≤3 · 不改 Economy/pom
@@ -91,17 +91,18 @@ Q A G U j
 
 ## 6. 验收（文档）
 
-- [ ] 总控批 **A · 方案 M（停窗观察）**  
-- [ ] 矩阵 §1 与现网 Layout 一致  
-- [ ] 明确 **不派插件**  
-- [ ] 候选 F1–F4 冻结，触发条件写入 §4  
+- [x] 总控批 **A · 方案 M（停窗观察）**  
+- [x] 矩阵 §1 与现网 Layout 一致  
+- [x] 明确 **不派插件**  
+- [x] 候选 F1–F4 冻结，触发条件写入 §4  
 
 ---
 
 ## 7. 批注
 
-- [ ] 总控批 **A · 方案 M（停窗观察）** · _待填_  
+- [x] 总控批 **A · 方案 M（停窗观察）** · 2026-10-12 16:32 CST  
 - glance densify：**仍停**；本 tip 只观察  
 - 下步：确认挤 → F1 专 tip；未确认 → 保持停窗
+- **批注：** 矩阵与 Layout 一致；F1 宝石并回希望为默认候选；无真人反馈前不派码
 
-## STATUS: OPEN · 待批 A·M（停窗观察）· 2026-10-12 Asia/Shanghai
+## STATUS: CLOSED · 停窗观察 · 2026-10-12 16:32 CST
