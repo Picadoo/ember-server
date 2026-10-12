@@ -15,5 +15,5 @@
 | 挑刺 | stage1-6slot HOLD 未推（fdcda0c4） |
 | COORD | COORD-routine-0947 |
 | backup | `/workspace/backup/CoreRpg-plugins-1.65.754-pre-1.65.755-d12237.jar` + runtime twin |
-| commit | TBD |
+| commit | 497aa12dcb4776aa87e6d0276af6c5913ded6807 (code) + STATUS stamp |
 | live | Enabling CoreRpg v1.65.755-d12237.local @09:59:20 CST · MySQL×2 · SEVERE 0 · smoke PASS |
