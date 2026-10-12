@@ -1,6 +1,6 @@
 # tip · TIP-BC 宝石开孔日首门槛 Soft 预告/拒线诚实对齐（可施工薄 · 可感 UX）· D12952–D12967
 
-> **状态：** **OPEN** · 待批 A·M · 2026-10-12  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 22:49 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-gemhole-unlock-soft-cue-align-2026-10-12.md`](../design/RESEARCH-ember-gemhole-unlock-soft-cue-align-2026-10-12.md) · DESIGN [`DESIGN-ember-gemhole-unlock-soft-cue-align-2026-10-12.md`](../design/DESIGN-ember-gemhole-unlock-soft-cue-align-2026-10-12.md) · TIP-BB CLOSED live `1.65.793-d12951` · feat `6f7d01e91` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **离开 soft-latch / xp-boost cue** — **可感 UX / 变强途径**；GemHoleUnlockSoft **已 live**、Open/拒线撒谎或静默（**诚实 ≠ densify**）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberGemSocket` Open ready 尾 + insert 拒线 soft/硬对齐 · 可选 UnlockSoft 旁 CUE 常量 · 单测；零改 DELTA/C_USED/sockUnlocked 硬表）  
@@ -85,8 +85,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12956–D12959；D12961 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] Open 不吞 soft；仅 unlocked 过锁 consume；L13 施工仍 HOLD  
@@ -95,8 +95,8 @@
 
 ## 6. 批注（荐）
 
-- [ ] 总控批 **A · 方案 M** · 待批  
+- [x] 总控批 **A · 方案 M** · 已批 · 已派插件  
 - 选题：TIP-BB 后 · **离开 soft-latch / xp-boost cue** — GemHoleUnlockSoft 门槛预告/拒线诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 soft 假耗再叠 · 非再降 DELTA**）  
 - **批注：** GemHoleUnlockSoft 已 live，Open 不预告、拒线固定 ≥5/≥3 → 变强途径静默/撒谎；ready 尾「今日开孔门槛−1待用（刃二孔≥4·护符≥2）」；拒线跟 ready；零改 DELTA/硬表；零新 PAPI；批后派 **余烬-插件**；**L13 施工 HOLD**；Anvil soft / enhance「+5开孔」硬文案旁债；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / soft-latch·CostSoft·pity·soft-glance·firstsoft·cook·life-buy soft 再叠 / xp-boost cue 再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 仍冻  
 
-## STATUS: OPEN · tip D12952–D12967 · 2026-10-12 · 待批 A·M
+## STATUS: APPROVED · tip D12952–D12967 · 2026-10-12 22:49 Asia/Shanghai · 已派余烬-插件

@@ -1,6 +1,6 @@
 # DESIGN · 宝石开孔日首门槛 Soft 预告/拒线诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-BC · 待批 A·M · 2026-10-12  
+> **状态：** APPROVED · TIP-BC 批 A·M · 已派插件 · 2026-10-12 22:49 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-gemhole-unlock-soft-cue-align-2026-10-12.md`](RESEARCH-ember-gemhole-unlock-soft-cue-align-2026-10-12.md)  
 > **对接 live：** TIP-BB CLOSED live `1.65.793-d12951` · feat `6f7d01e91` · GemHoleUnlockSoft D10785 · `EmberGemSocket` Open/insert · `EmberItemData.sockUnlocked` 硬表  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
@@ -94,4 +94,4 @@ insert 拒线 (伪码):
 3. 主线解锁 DESIGN / stampable 空 / L13 HOLD 观察  
 4. enhance 预览「冲到+5开孔」硬门槛文案（若仍撒谎 · 另 tip 诚实）
 
-## STATUS: OPEN · TIP-BC · 2026-10-12
+## STATUS: APPROVED · TIP-BC · 2026-10-12 22:49 Asia/Shanghai · 已派余烬-插件
