@@ -1,6 +1,6 @@
 # tip · TIP-Z 主线内容轴观察停窗（TIP-L / 解锁后 · 无码）· D12536–D12543
 
-> **状态：** OPEN · 荐批 **A · 方案 M（观察停窗）** · 无码（2026-10-12 17:35 Asia/Shanghai）  
+> **状态：** CLOSED · 批 **A · 方案 M（观察停窗）** · docs-only（总控 2026-10-12 17:36 Asia/Shanghai）  
 > **上游：** [`RESEARCH-ember-mainline-content-observe-2026-10-12.md`](../design/RESEARCH-ember-mainline-content-observe-2026-10-12.md) · TIP-L CLOSED live `1.65.767-d12351` · TIP-Y CLOSED docs-only `a838781ed` · TIP-T 深化 densify 冻 · TIP-X CLOSED PASS `77a768df1`  
 > **前置：** 短征视觉 O→X **闭合**；烬斩手感研究 **门闩已立**；深化 densify **仍冻**；须 **内容轴** 而非 densify  
 > **施工岗：** **无码**（策划 RESEARCH + tip；**不**派插件；勿借机改 loot / STAMP / TrMenu / 地图）  
@@ -62,11 +62,11 @@ TIP-Y 后门闩已立、短征已收：主线 **可动农场断环已被 TIP-L �
 
 ## 4. 验收清单
 
-- [ ] 总控批 **A · 方案 M（观察停窗）**  
-- [ ] RESEARCH + tip 路径可点；盘点与冻结可核  
-- [ ] DESIGN power-paths：TIP-Y CLOSED `a838781ed` + TIP-Z OPEN  
-- [ ] **无**插件施工派单  
-- [ ] `git show` docs-only；密码检查 0  
+- [x] 总控批 **A · 方案 M（观察停窗）**  
+- [x] RESEARCH + tip 路径可点；盘点与冻结可核  
+- [x] DESIGN power-paths：TIP-Y CLOSED `a838781ed` + TIP-Z CLOSED  
+- [x] **无**插件施工派单  
+- [x] `git show` docs-only；密码检查 0  
 
 ---
 

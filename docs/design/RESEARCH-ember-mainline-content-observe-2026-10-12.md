@@ -1,6 +1,7 @@
 # RESEARCH · 主线内容轴 · 观察停窗（TIP-L / 解锁后盘点）· 2026-10-12
 
-> **状态：** 对接 tip `TIP-ember-mainline-content-observe-thin-d12536-d12543-2026-10-12.md`（TIP-Z）  
+> **状态：** CLOSED · TIP-Z 已批 A·M（观察停窗）· docs-only · 2026-10-12 17:36
+> **对接 tip `TIP-ember-mainline-content-observe-thin-d12536-d12543-2026-10-12.md`（TIP-Z）  
 > **上游：** TIP-L CLOSED live `1.65.767-d12351` · TIP-Y CLOSED docs-only `a838781ed` · TIP-T 深化 densify 冻 · TIP-X 短征视觉闭合  
 > **硬禁：** 零 Affix / 伤乘 / 抬表 / glance twin · 零深化 densify · 零 sx20 · 零 skill_mult · 零 ForgeChoice·wear·pity·awkDelta densify
 
