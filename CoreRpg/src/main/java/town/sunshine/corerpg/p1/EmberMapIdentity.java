@@ -7,6 +7,7 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D1341: map gear-identity remain (图鉴 have/need) — display only for remain lines.
  * D2206: soft SetFocus when identity completes (non-clear-gate unlock · zero ConfirmTokens).
+ * D12249: menuLine short display for TrMenu Q lore.
  * Never gates clears; never changes drop rates. Not a hope PAPI twin.
  */
 public final class EmberMapIdentity {
@@ -34,18 +35,35 @@ public final class EmberMapIdentity {
         return new int[]{have, need};
     }
 
-    /** Plain remain: {@code 图身份 焚烬·T1 · 图鉴 1/2 · 还差1件 · 每局1装不锁通关}. */
-    public static String remainLine(EmberRunMaps.MapDef lm, PlayerData pd) {
-        if (lm == null) return "本图身份未登记 · 每局仍必掉1装 · 不锁通关";
+    /**
+     * D12249: short menu line for Q lore L2 — no long tail.
+     * Shape: {@code 焚烬 · 图鉴 1/2 · 还差1} / {@code 焚烬 · 图鉴齐}.
+     */
+    public static String menuLine(EmberRunMaps.MapDef lm, PlayerData pd) {
+        if (lm == null) return "本图身份未登记";
         if (lm.lootFamily == null || lm.lootFamily.isEmpty())
-            return "本图无装备偏向 · 每局1装·差装可分解·不锁通关";
+            return "本图无装备偏向";
         int[] hn = haveNeed(lm, pd);
         int have = hn[0], need = hn[1];
         String label = EmberRunMaps.lootLabel(lm);
         int gap = Math.max(0, need - have);
         if (gap == 0)
-            return "图身份 " + label + " · 图鉴 " + have + "/" + need + " · 齐 · 每局1装不锁通关";
-        return "图身份 " + label + " · 图鉴 " + have + "/" + need + " · 还差" + gap + "件 · 每局1装不锁通关";
+            return label + " · 图鉴齐";
+        return label + " · 图鉴 " + have + "/" + need + " · 还差" + gap;
+    }
+
+    /** Plain remain: {@code 图身份 焚烬·T1 · 图鉴 1/2 · 还差1件 · 进过即计 · 通关不锁掉落}. */
+    public static String remainLine(EmberRunMaps.MapDef lm, PlayerData pd) {
+        if (lm == null) return "本图身份未登记 · 每局仍必掉1装 · 通关不锁掉落";
+        if (lm.lootFamily == null || lm.lootFamily.isEmpty())
+            return "本图无装备偏向 · 每局1装·差装可分解 · 通关不锁掉落";
+        int[] hn = haveNeed(lm, pd);
+        int have = hn[0], need = hn[1];
+        String label = EmberRunMaps.lootLabel(lm);
+        int gap = Math.max(0, need - have);
+        if (gap == 0)
+            return "图身份 " + label + " · 图鉴 " + have + "/" + need + " · 齐 · 进过即计 · 通关不锁掉落";
+        return "图身份 " + label + " · 图鉴 " + have + "/" + need + " · 还差" + gap + "件 · 进过即计 · 通关不锁掉落";
     }
 
     /** First missing codex piece for this map identity (blade then charm, low tier first). */

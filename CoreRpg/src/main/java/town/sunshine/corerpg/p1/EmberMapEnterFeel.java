@@ -240,10 +240,7 @@ public final class EmberMapEnterFeel {
             EmberSigChase.maybeAutoChaseOnEnter(p, pd, runsPin, m.key); // D3881
             if (EmberSigChase.chaseMap(pd, EmberMapStashPin.pinKey(m.key))) {
                 EmberSigChase.maybeReadyCue(p, pd); // D3913 rising-edge only
-                String gl = EmberSigChase.statusGlance(pd);
-                if (gl != null && !gl.isEmpty()) {
-                    try { p.sendMessage(EmberRunService.P + "§7" + gl); } catch (Throwable ignored) { }
-                }
+                // D12253: chase glance → ActionBar only (no chat; keep identity chat ≤1)
                 EmberLoadout loPin = null;
                 try {
                     if (runsPin != null && runsPin.loadouts() != null) loPin = runsPin.loadouts().get(p);
@@ -256,23 +253,19 @@ public final class EmberMapEnterFeel {
         String msg = line(m, ch, ab);
         if (m != null && m.lootFamily != null && !m.lootFamily.isEmpty() && ab == 0 && !ch
                 && (s == null || (!s.challenge && s.abyss == 0))) {
-            // D1816 EM1-A: short miss/齐 on AB; full methodLine once in chat (display only)
-            String meth = EmberMapIdentity.methodLine(m, pd);
+            // D12253: chat identity = remainLine once; AB keeps 下一缺 / 追烙 half
+            String rem = EmberMapIdentity.remainLine(m, pd);
             String miss = EmberMapIdentity.nextMissing(m, pd);
             if (miss != null && !miss.isEmpty() && !miss.contains("已齐"))
                 msg = msg + " §8· §f" + miss;
-            else if (meth != null && (meth.contains("身份齐") || meth.contains("齐·")))
+            else if (miss != null && miss.contains("已齐"))
                 msg = msg + " §a· 身份齐";
-            if (meth != null && !meth.isEmpty()) {
-                try { p.sendMessage(EmberRunService.P + "§7" + meth); } catch (Throwable ignored) { }
+            if (rem != null && !rem.isEmpty()) {
+                try { p.sendMessage(EmberRunService.P + "§7" + rem); } catch (Throwable ignored) { }
             }
-            // D1999 SC3: chase map match → remain half-line (non-hope)
+            // D1999/D12253: chase → ActionBar half only (no second chat line)
             if (pd != null && m.key != null && EmberSigChase.chaseMap(pd, m.key)) {
-                String cg = EmberSigChase.statusGlance(pd);
-                if (cg != null && !cg.isEmpty()) {
-                    try { p.sendMessage(EmberRunService.P + "§e" + cg); } catch (Throwable ignored) { }
-                    msg = msg + " §8· §e追烙";
-                }
+                msg = msg + " §8· §e追烙";
             }
         }
         try { p.sendActionBar(msg); } catch (Throwable ignored) { }

@@ -590,10 +590,10 @@ public final class EmberRunPapi {
         if ("mapid_board".equals(key)) { // D616 readable bias board
             return EmberHopeMeter.mapGearBoard(maps);
         }
-        if (key.startsWith("mapid_")) { // D610 map gear-identity hope
+        if (key.startsWith("mapid_")) { // D12250: per-map menuLine (board stays above)
             EmberRunMaps.MapDef lm = maps.byKey(key.substring(6));
             if (lm == null) lm = maps.raids.get(key.substring(6));
-            return EmberHopeMeter.mapGearIdentity(lm, d);
+            return EmberMapIdentity.menuLine(lm, d);
         }
         if ("bounty".equals(key)) return runs.bountyLabel(d); // P2-7 %corerpg_p1_bounty%
         if ("bounty_hope".equals(key)) { // D620

@@ -1,6 +1,6 @@
 # Open 挂 event_soft_hope (D729) + drop_q_hope（零改掉率）
 # D616: Open/目标族区挂 mapid_board 图身份一览
-# D610: 每图希望行 mapid_q0N（本图身份·图鉴进度·不锁通关）
+# D12251: 每图 L2 mapid_q0N → menuLine 短串（这图掉 / 图鉴进度）
 # D456: 签名获取半行 %corerpg_p1_sig_acq% · 未出仍拿徽记 · 零改掉率
 # 余烬 v1 (P1) 冒险页 — 书 §19.1：主线本 Q01–Q07 的解锁状态 / 消耗 / 掉落阶 / 用途 + 掉落目标族 + 印记 / 首通自选 / 补领 + 挑战版入口（§18.1，本人首通 Q07 后开放）。
 # 只转发到 CoreRpg 命令；解锁、体力、队伍校验全在服务端（锁定的本点了只会提示原因）。
@@ -32,7 +32,7 @@ Layout:
 
 Events:
   Open:
-    - 'tell: §e本图身份：§f偏向装族+签名+徽记 · §e进图提示下一件追 · §6普通/挑战首通保底本图族件 · §f每局必掉1装 · 差装可分解养工坊 · §a通关不锁掉落'
+    - 'tell: §6这图掉什么：§f看各 Q 第二行 · 图鉴进度 · 不锁通关'
     - 'tell: §e图身份板：§f%corerpg_p1_mapid_board%'
     - 'tell: §e房间事件保底：§f%corerpg_p1_event_soft_hope%'
     - 'tell: §e掉落成色希望：§f%corerpg_p1_drop_q_hope%'
@@ -227,9 +227,9 @@ Icons:
       material: iron sword
       name: '§aQ01 §f%corerpg_p1_q01_name%'
       lore:
-        - '§7状态：§f%corerpg_p1_q01_state% %corerpg_p1_rule_q01%'
-        - '§7消耗：§e%corerpg_p1_q01_cost%'
-        - '§e➥ §f点击进本（队长点；队员需各自满足条件）'
+        - '§7%corerpg_p1_q01_state% %corerpg_p1_rule_q01% §8· §e%corerpg_p1_q01_cost%'
+        - '§6这图掉：§f%corerpg_p1_mapid_q01%'
+        - '§e➥ §f点击进本'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -241,9 +241,9 @@ Icons:
       material: iron sword
       name: '§aQ02 §f%corerpg_p1_q02_name%'
       lore:
-        - '§7状态：§f%corerpg_p1_q02_state% %corerpg_p1_rule_q02%'
-        - '§7消耗：§e%corerpg_p1_q02_cost%'
-        - '§e➥ §f点击进本（需 Q01 首通）'
+        - '§7%corerpg_p1_q02_state% %corerpg_p1_rule_q02% §8· §e%corerpg_p1_q02_cost%'
+        - '§6这图掉：§f%corerpg_p1_mapid_q02%'
+        - '§e➥ §f点击进本'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -255,9 +255,9 @@ Icons:
       material: diamond sword
       name: '§aQ03 §f%corerpg_p1_q03_name%'
       lore:
-        - '§7状态：§f%corerpg_p1_q03_state% %corerpg_p1_rule_q03%'
-        - '§7消耗：§e%corerpg_p1_q03_cost%'
-        - '§e➥ §f点击进本（需 Q02 首通）'
+        - '§7%corerpg_p1_q03_state% %corerpg_p1_rule_q03% §8· §e%corerpg_p1_q03_cost%'
+        - '§6这图掉：§f%corerpg_p1_mapid_q03%'
+        - '§e➥ §f点击进本'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -269,9 +269,9 @@ Icons:
       material: prismarine shard
       name: '§bQ04 §f%corerpg_p1_q04_name%'
       lore:
-        - '§7状态：§f%corerpg_p1_q04_state% %corerpg_p1_rule_q04%'
-        - '§7消耗：§e%corerpg_p1_q04_cost%'
-        - '§e➥ §f点击进本（需 Q03 首通）'
+        - '§7%corerpg_p1_q04_state% %corerpg_p1_rule_q04% §8· §e%corerpg_p1_q04_cost%'
+        - '§6这图掉：§f%corerpg_p1_mapid_q04%'
+        - '§e➥ §f点击进本'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -283,9 +283,9 @@ Icons:
       material: iron axe
       name: '§bQ05 §f%corerpg_p1_q05_name%'
       lore:
-        - '§7状态：§f%corerpg_p1_q05_state% %corerpg_p1_rule_q05%'
-        - '§7消耗：§e%corerpg_p1_q05_cost%'
-        - '§e➥ §f点击进本（需 Q04 首通）'
+        - '§7%corerpg_p1_q05_state% %corerpg_p1_rule_q05% §8· §e%corerpg_p1_q05_cost%'
+        - '§6这图掉：§f%corerpg_p1_mapid_q05%'
+        - '§e➥ §f点击进本'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -298,9 +298,9 @@ Icons:
       material: packed ice
       name: '§bQ06 §f%corerpg_p1_q06_name%'
       lore:
-        - '§7状态：§f%corerpg_p1_q06_state% %corerpg_p1_rule_q06%'
-        - '§7消耗：§e%corerpg_p1_q06_cost%'
-        - '§e➥ §f点击进本（需 Q05 首通）'
+        - '§7%corerpg_p1_q06_state% %corerpg_p1_rule_q06% §8· §e%corerpg_p1_q06_cost%'
+        - '§6这图掉：§f%corerpg_p1_mapid_q06%'
+        - '§e➥ §f点击进本'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -312,9 +312,9 @@ Icons:
       material: rail
       name: '§6Q07 §f%corerpg_p1_q07_name%'
       lore:
-        - '§7状态：§f%corerpg_p1_q07_state% %corerpg_p1_rule_q07%'
-        - '§7消耗：§e%corerpg_p1_q07_cost%'
-        - '§e➥ §f点击进本（需 Q06 首通）'
+        - '§7%corerpg_p1_q07_state% %corerpg_p1_rule_q07% §8· §e%corerpg_p1_q07_cost%'
+        - '§6这图掉：§f%corerpg_p1_mapid_q07%'
+        - '§e➥ §f点击进本'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
