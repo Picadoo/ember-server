@@ -183,5 +183,5 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - TIP-E：**CLOSED live**（1.65.762-d12279）
 - TIP-F：**CLOSED live**（1.65.763-d12287）
 - TIP-G：**CLOSED live**（1.65.764-d12295）
-- **TIP-H CLOSED live** trmenu `82512b4d`（hub p + forge N 稳/赌一眼）
-- 下窗：策划开 **TIP-I**（剩余 power-path 表面化；优先希望表盘补漏 / 图装身份强化可见；零 Affix / 零伤乘）
+- TIP-H：**CLOSED live**（trmenu `82512b4d`）
+- 下窗：**TIP-I 希望/图装补漏（HD1+MG1）** → tip 已开 `docs/tips/TIP-ember-power-hope-map-remain-glance-d12304-d12311-2026-10-12.md`（待批 A·M）
