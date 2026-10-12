@@ -1,6 +1,6 @@
 # tip · TIP-AR DropCraft/Q 日首加码 remain 诚实对齐（可施工薄 · 可感 UX）· D12776–D12791
 
-> **状态：** **OPEN** · 待总控批 A·M · 2026-10-12 21:12 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:14 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md`](../design/RESEARCH-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md) · DESIGN [`DESIGN-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md`](../design/DESIGN-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md) · TIP-AQ CLOSED live `1.65.782-d12775` · feat `58e9ac299` · TIP-AP CLOSED live gem 加码 remain · TIP-Q CLOSED live craft settle · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **显式下一 tip：DropCraft/Q 加码 remain 旁债** — 同构 AP 宝石 + AQ 洗练；可感 UX（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify**）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberDropCraftPity` / `EmberDropQualityPity` remain·clearsLeft·hope + 单测；Settle/Hope/RunPapi 吃 SoT）  
@@ -89,8 +89,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12780–D12783；D12785 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3；无新精工 Hope 轨  
 - [ ] 插件 jar live 后 stamp CLOSED  

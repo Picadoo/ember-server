@@ -1,6 +1,6 @@
 # DESIGN · DropCraft/Q 日首加码 remain/希望串诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-AR · 2026-10-12  
+> **状态：** APPROVED · TIP-AR 批 A·M · 已派插件 · 2026-10-12 21:14 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md`](RESEARCH-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md)  
 > **对接 live：** TIP-AQ CLOSED live `1.65.782-d12775` · TIP-AP gem 加码 remain · TIP-Q craft settle · D10737 `EmberDropCraftNudge` · D10721 `EmberDropQualityNudge` · D6817/D611 pity  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
