@@ -1,6 +1,6 @@
 # tip · TIP-AS 工坊日首 CostSoft 预览/glance 诚实对齐（可施工薄 · 可感 UX）· D12792–D12807
 
-> **状态：** **OPEN** · 待总控批 **A · 方案 M** · 2026-10-12 21:18 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:21 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-forge-costsoft-glance-align-2026-10-12.md`](../design/RESEARCH-ember-forge-costsoft-glance-align-2026-10-12.md) · DESIGN [`DESIGN-ember-forge-costsoft-glance-align-2026-10-12.md`](../design/DESIGN-ember-forge-costsoft-glance-align-2026-10-12.md) · TIP-AR CLOSED live `1.65.783-d12791` · feat `489271b08` · TIP-AK/AL/AM 甲诚实链齐 · TIP forgecost-softs D9569–D9632 / QualityCostSoft D9921 · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径** — **离开 pity-remain 族**（AP/AQ/AR 已齐）；锻造非甲 CostSoft glance 说谎  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberGearNextHint` soft-aware Line · `EmberForgeHeldNext` pd/canPay · SinkGlance / HopeMeter 费用 · RunPapi next/cost + 单测）  
@@ -90,8 +90,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12796–D12799；D12801 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] 甲早退回归；L13 施工仍 HOLD  

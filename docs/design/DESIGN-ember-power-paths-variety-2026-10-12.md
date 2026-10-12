@@ -196,6 +196,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
+- **TIP-AS APPROVED** · 工坊 CostSoft glance 诚实 · 已派插件 · L13 HOLD
+
 - **TIP-AR CLOSED** live `1.65.783-d12791` · feat `489271b08` · DropCraft/Q 加码 remain 诚实 · L13 HOLD
 
 - **TIP-AS OPEN** · `TIP-ember-forge-costsoft-glance-align-thin-d12792-d12807-2026-10-12.md` · RESEARCH `RESEARCH-ember-forge-costsoft-glance-align-2026-10-12.md` · DESIGN `DESIGN-ember-forge-costsoft-glance-align-2026-10-12.md` · 工坊日首 CostSoft 预览/glance 诚实对齐（可施工薄 · 可感 UX · **离开 pity-remain** · **非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify** · 零改 MULT/经济表 · 零新 PAPI · 甲早退不动）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AR CLOSED live · Brand/Gem soft 旁债 · 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify / pity-remain 再叠 仍冻 · 策划 docs-only
