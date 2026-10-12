@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -72,8 +73,8 @@ public class EmberSignatureTest {
     public void activeRules() {
         List<String> none = Collections.emptyList();
         // blade scorch L01 needs the scorch set
-        assertEquals(1, EmberSignature.active(w("L01", "blade", "scorch"), null, "scorch", none, true).size());
-        assertEquals(0, EmberSignature.active(w("L01", "blade", "scorch"), null, "none", none, true).size());
+        assertEquals(1, EmberSignature.active(w("L01", "blade", "scorch"), (EmberSignature.Worn) null, "scorch", none, true).size());
+        assertEquals(0, EmberSignature.active(w("L01", "blade", "scorch"), (EmberSignature.Worn) null, "none", none, true).size());
         // two: blade + charm of different tags, only after the dual unlock
         assertEquals(2, EmberSignature.active(w("L01", "blade", "scorch"), w("L02", "charm", "scorch"), "scorch", none, true).size());
         List<EmberSignature.Def> one = EmberSignature.active(w("L01", "blade", "scorch"), w("L02", "charm", "scorch"), "scorch", none, false);
@@ -270,4 +271,129 @@ public class EmberSignatureTest {
             assertFalse(d.id, d.good.startsWith("@") || d.bad.startsWith("@") || d.good.isEmpty() || d.bad.isEmpty());
         }
     }
+
+    // ---- D12592 TIP-AE armor signature min slice (defense-side fits / stampable armor empty / 5-pick-1)
+
+    @Test
+    public void charmDefFitsDefenseOnArmorSlots_D12592() {
+        EmberSignature.Def l02 = EmberSignature.byId("L02"); // any / charm
+        EmberSignature.Def l03 = EmberSignature.byId("L03"); // burst / charm
+        for (String slot : new String[]{"head", "chest", "legs", "boots", "charm"}) {
+            assertTrue(slot, EmberSignature.fitsDefense(l02, slot, "scorch"));
+            assertTrue(slot, EmberSignature.fitsDefense(l02, slot, "burst"));
+            assertTrue(slot, EmberSignature.fitsDefense(l03, slot, "burst"));
+            assertFalse(slot + " wrong fam", EmberSignature.fitsDefense(l03, slot, "scorch"));
+        }
+        assertFalse(EmberSignature.fitsDefense(l02, "blade", "scorch"));
+    }
+
+    @Test
+    public void charmDefStampableArmorEmpty_D12592() {
+        // drop path must stay strict — armor stampable empty for every signature map
+        for (String map : EmberSignature.maps()) {
+            for (String slot : new String[]{"head", "chest", "legs", "boots"}) {
+                assertTrue(map + "/" + slot, EmberSignature.stampable(map, slot, "scorch").isEmpty());
+                assertTrue(map + "/" + slot, EmberSignature.stampable(map, slot, "burst").isEmpty());
+                assertTrue(map + "/" + slot, EmberSignature.stampable(map, slot, "sustain").isEmpty());
+                assertTrue(map + "/" + slot, EmberSignature.stampable(map, slot, "any").isEmpty());
+            }
+        }
+        // stampable still fills charm / blade
+        assertFalse(EmberSignature.stampable("q01", "charm", "burst").isEmpty());
+        assertFalse(EmberSignature.stampable("q01", "blade", "scorch").isEmpty());
+        // fits (stamp alias) must NOT accept armor for charm-def
+        assertFalse(EmberSignature.fits(EmberSignature.byId("L02"), "head", "scorch"));
+        assertFalse(EmberSignature.fitsStamp(EmberSignature.byId("L02"), "chest", "scorch"));
+    }
+
+    @Test
+    public void bladeDefFitsArmorFalse_D12592() {
+        EmberSignature.Def l01 = EmberSignature.byId("L01");
+        EmberSignature.Def l04 = EmberSignature.byId("L04");
+        for (String slot : new String[]{"head", "chest", "legs", "boots", "charm"}) {
+            assertFalse(EmberSignature.fitsDefense(l01, slot, "scorch"));
+            assertFalse(EmberSignature.fitsDefense(l04, slot, "burst"));
+            assertFalse(EmberSignature.fitsStamp(l01, slot, "scorch"));
+        }
+        assertTrue(EmberSignature.fitsDefense(l01, "blade", "scorch"));
+        assertTrue(EmberSignature.fitsStamp(l01, "blade", "scorch"));
+    }
+
+    @Test
+    public void defensePrioCharmWinsOverArmor_D12592() {
+        List<String> none = Collections.emptyList();
+        EmberSignature.Worn blade = w("L01", "blade", "scorch");
+        EmberSignature.Worn charm = w("L02", "charm", "scorch");
+        EmberSignature.Worn head = w("L06", "head", "scorch");
+        EmberSignature.Worn boots = w("L14", "boots", "scorch");
+        List<EmberSignature.Worn> side = new ArrayList<EmberSignature.Worn>();
+        side.add(boots);
+        side.add(head);
+        side.add(charm);
+        List<EmberSignature.Def> a = EmberSignature.active(blade, side, "scorch", none, true);
+        assertEquals(2, a.size());
+        assertEquals("L01", a.get(0).id);
+        assertEquals("L02", a.get(1).id); // charm prio over head/boots
+        EmberSignature.Worn win = EmberSignature.pickDefense(blade, side, "scorch", none, true);
+        assertEquals("charm", win.slot);
+        assertEquals("L02", win.def.id);
+    }
+
+    @Test
+    public void defensePrioHeadWinsOverBoots_D12592() {
+        List<String> none = Collections.emptyList();
+        EmberSignature.Worn blade = w("L07", "blade", "scorch");
+        EmberSignature.Worn head = w("L02", "head", "scorch");
+        EmberSignature.Worn boots = w("L06", "boots", "scorch");
+        List<EmberSignature.Worn> side = Arrays.asList(boots, head);
+        List<EmberSignature.Def> a = EmberSignature.active(blade, side, "scorch", none, true);
+        assertEquals(2, a.size());
+        assertEquals("L02", a.get(1).id);
+        assertEquals("head", EmberSignature.pickDefense(blade, side, "scorch", none, true).slot);
+        assertTrue(EmberSignature.offReason(boots, blade, side, "scorch", none, true).startsWith("防具侧已有生效签名"));
+        assertNull(EmberSignature.offReason(head, blade, side, "scorch", none, true));
+    }
+
+    @Test
+    public void sameTagAsBladeDefenseOff_D12592() {
+        List<String> none = Collections.emptyList();
+        // L01 burn + L08 burn on head → defense off
+        EmberSignature.Worn blade = w("L01", "blade", "scorch");
+        EmberSignature.Worn head = w("L08", "head", "scorch");
+        List<EmberSignature.Worn> side = Collections.singletonList(head);
+        assertEquals(1, EmberSignature.active(blade, side, "scorch", none, true).size());
+        assertEquals("与刃上的签名同类，不叠加", EmberSignature.offReason(head, blade, side, "scorch", none, true));
+    }
+
+    @Test
+    public void dualLockedDefenseOff_D12592() {
+        List<String> none = Collections.emptyList();
+        EmberSignature.Worn blade = w("L01", "blade", "scorch");
+        EmberSignature.Worn chest = w("L02", "chest", "scorch");
+        List<EmberSignature.Worn> side = Collections.singletonList(chest);
+        List<EmberSignature.Def> locked = EmberSignature.active(blade, side, "scorch", none, false);
+        assertEquals(1, locked.size());
+        assertEquals("L01", locked.get(0).id);
+        assertTrue(EmberSignature.offReason(chest, blade, side, "scorch", none, false).contains("Q03"));
+        // blade inactive (wrong set) → defense alone still works without dual
+        assertEquals("L02", EmberSignature.active(blade, side, "none", none, false).get(0).id);
+    }
+
+    @Test
+    public void imprintCheckWornChestL02_D12592() {
+        EmberSignature.Def l02 = EmberSignature.byId("L02");
+        EmberItemData chest = item("chest1", "scorch", "chest", 2);
+        assertNull(EmberSignature.imprintCheck(l02, chest, true, true, 5, 600, 0));
+        EmberItemData head = item("head1", "burst", "head", 1);
+        assertNull(EmberSignature.imprintCheck(l02, head, true, true, 5, 300, 0)); // any family
+        EmberSignature.Def l03 = EmberSignature.byId("L03"); // burst-only charm-def
+        assertNull(EmberSignature.imprintCheck(l03, item("c1", "burst", "chest", 1), true, true, 5, 300, 0));
+        assertNotNull(EmberSignature.imprintCheck(l03, item("c2", "scorch", "chest", 1), true, true, 5, 300, 0));
+        // blade-def still cannot imprint onto armor
+        assertNotNull(EmberSignature.imprintCheck(EmberSignature.byId("L01"), chest, true, true, 5, 600, 0));
+        // kindText / missing-target copy mention 防具
+        assertTrue(l02.kindText().endsWith("防具"));
+        assertTrue(EmberSignature.imprintCheck(l02, null, true, true, 5, 600, 0).contains("护符或防具"));
+    }
 }
+

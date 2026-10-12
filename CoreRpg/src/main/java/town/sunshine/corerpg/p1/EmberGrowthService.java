@@ -1006,20 +1006,67 @@ public final class EmberGrowthService implements Listener {
         if (d != null && sd != null && d.periodCount(C_SIGSEEN + sd.id, "all") <= 0) d.addPeriodCount(C_SIGSEEN + sd.id, "all", 1);
     }
 
-    /** the active signatures of this loadout (≤ 2; see EmberSignature.active) */
-    public List<EmberSignature.Def> signatures(PlayerData d, EmberLoadout lo) {
-        if (d == null || lo == null) return Collections.<EmberSignature.Def>emptyList();
-        EmberSignature.Worn b = wornOn(d, lo.blade), c = wornOn(d, lo.charm); // stage 1.5: menu toggle
-        if ((b == null || b.def == null) && (c == null || c.def == null)) return Collections.<EmberSignature.Def>emptyList();
-        return EmberSignature.active(b, c, lo.activeSet, picks(d).values(), EmberSkillKit.dualUnlocked(d, runs));
+    /** D12590: worn piece for blade / charm / armor slot name. */
+    private EmberItemData pieceOf(EmberLoadout lo, String slot) {
+        if (lo == null || slot == null) return null;
+        if ("blade".equals(slot)) return lo.blade;
+        if ("charm".equals(slot)) return lo.charm;
+        int i = EmberItemData.armorIndex(slot);
+        return i >= 0 ? lo.armor(i) : null;
     }
 
-    /** D12289: worn defs present on gear but not in {@link #signatures} (sigOff / family / dual gate). */
+    /** Defense-side Worn candidates (charm + armor 0..3) honoring menu toggle via wornOn. */
+    private List<EmberSignature.Worn> defenseWorn(PlayerData d, EmberLoadout lo) {
+        List<EmberSignature.Worn> out = new ArrayList<EmberSignature.Worn>(5);
+        if (lo == null) return out;
+        if (lo.charm != null) {
+            EmberSignature.Worn w = wornOn(d, lo.charm);
+            if (w != null && w.def != null) out.add(w);
+        }
+        for (int i = 0; i < 4; i++) {
+            EmberItemData a = lo.armor(i);
+            if (a == null) continue;
+            EmberSignature.Worn w = wornOn(d, a);
+            if (w != null && w.def != null) out.add(w);
+        }
+        return out;
+    }
+
+    /**
+     * Imprint worn target (D12591): blade-def → blade; charm-def → first fitting worn by prio charm&gt;head&gt;chest&gt;legs&gt;boots.
+     */
+    EmberItemData imprintWornTarget(EmberLoadout lo, EmberSignature.Def sd) {
+        if (lo == null || sd == null) return null;
+        if ("blade".equals(sd.slot)) return lo.blade;
+        if (lo.charm != null && EmberSignature.fitsDefense(sd, lo.charm.slot, lo.charm.family)) return lo.charm;
+        for (int i = 0; i < 4; i++) {
+            EmberItemData a = lo.armor(i);
+            if (a != null && EmberSignature.fitsDefense(sd, a.slot, a.family)) return a;
+        }
+        return null;
+    }
+
+    /** the active signatures of this loadout (≤ 2; blade + defense-side 5-pick-1; D12590) */
+    public List<EmberSignature.Def> signatures(PlayerData d, EmberLoadout lo) {
+        if (d == null || lo == null) return Collections.<EmberSignature.Def>emptyList();
+        EmberSignature.Worn b = wornOn(d, lo.blade);
+        List<EmberSignature.Worn> defense = defenseWorn(d, lo);
+        if ((b == null || b.def == null) && defense.isEmpty()) return Collections.<EmberSignature.Def>emptyList();
+        return EmberSignature.active(b, defense, lo.activeSet, picks(d).values(), EmberSkillKit.dualUnlocked(d, runs));
+    }
+
+    /** D12289/D12590: worn defs on blade+charm+armor not in {@link #signatures} (sigOff / family / dual / prio). */
     List<EmberSignature.Def> wornInactive(PlayerData d, EmberLoadout lo, List<EmberSignature.Def> active) {
         if (d == null || lo == null) return Collections.<EmberSignature.Def>emptyList();
         List<EmberSignature.Def> out = new ArrayList<EmberSignature.Def>();
-        for (EmberItemData it : new EmberItemData[]{lo.blade, lo.charm}) {
-            if (it == null) continue;
+        List<EmberItemData> pieces = new ArrayList<EmberItemData>(6);
+        if (lo.blade != null) pieces.add(lo.blade);
+        if (lo.charm != null) pieces.add(lo.charm);
+        for (int i = 0; i < 4; i++) {
+            EmberItemData a = lo.armor(i);
+            if (a != null) pieces.add(a);
+        }
+        for (EmberItemData it : pieces) {
             EmberSignature.Worn w = worn(d, it);
             if (w == null || w.def == null) continue;
             boolean on = false;
@@ -1049,7 +1096,7 @@ public final class EmberGrowthService implements Listener {
     }
 
     private String wornLine(PlayerData d, EmberLoadout lo, String slot) {
-        EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+        EmberItemData it = pieceOf(lo, slot);
         if (it == null) return "§7" + EmberItemData.slotName(slot) + "：§8没有";
         EmberSignature.Worn w = worn(d, it);
         if (w.def == null) return "§7" + EmberItemData.slotName(slot) + "：§f" + it.shortLabel() + " §8（无签名）";
@@ -1063,7 +1110,7 @@ public final class EmberGrowthService implements Listener {
 
     /** D297 W1b: other-edition cost for the worn slot (empty if none / locked). */
     private String wornOtherCost(PlayerData d, EmberLoadout lo, String slot) {
-        EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+        EmberItemData it = pieceOf(lo, slot);
         if (it == null) return "";
         EmberSignature.Worn w = worn(d, it);
         if (w == null || w.def == null || EmberSignature.alt(w.def) == null) return "";
@@ -1073,7 +1120,7 @@ public final class EmberGrowthService implements Listener {
 
     /** D297: active worn signatures that participate in combat (same as signatures()). */
     private EmberSigAttunePreview.Slot previewSlot(PlayerData d, EmberLoadout lo, String slot) {
-        EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+        EmberItemData it = pieceOf(lo, slot);
         if (it == null || sigOff(d, slot)) return null;
         EmberSignature.Worn w = worn(d, it);
         if (w == null || w.def == null) return null;
@@ -1099,8 +1146,8 @@ public final class EmberGrowthService implements Listener {
     /** true if at least one worn active sig has unlocked attune. */
     boolean anyUnlockedAttuneWorn(PlayerData d, EmberLoadout lo) {
         if (d == null || lo == null || !runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return false;
-        for (String slot : new String[]{"blade", "charm"}) {
-            EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+        for (String slot : new String[]{"blade", "charm", "head", "chest", "legs", "boots"}) {
+            EmberItemData it = pieceOf(lo, slot);
             if (it == null || sigOff(d, slot)) continue;
             EmberSignature.Worn w = worn(d, it);
             if (w == null || w.def == null || sigWhy(d, lo, slot) != null) continue;
@@ -1167,13 +1214,15 @@ public final class EmberGrowthService implements Listener {
 
     /** why the worn {@code slot} signature is off (null = on; "无" = no signature) */
     String sigWhy(PlayerData d, EmberLoadout lo, String slot) {
-        EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+        EmberItemData it = pieceOf(lo, slot);
         if (it == null) return "无";
         EmberSignature.Worn w = worn(d, it);
         if (w.def == null) return "无";
         if (sigOff(d, slot)) return "你在签名页关掉了";
-        return "blade".equals(slot) ? EmberSignature.offReason(w, null, lo.activeSet, picks(d).values(), true)
-                : EmberSignature.offReason(w, wornOn(d, lo.blade), lo.activeSet, picks(d).values(), EmberSkillKit.dualUnlocked(d, runs));
+        if ("blade".equals(slot))
+            return EmberSignature.offReason(w, null, lo.activeSet, picks(d).values(), true);
+        return EmberSignature.offReason(w, wornOn(d, lo.blade), defenseWorn(d, lo), lo.activeSet, picks(d).values(),
+                EmberSkillKit.dualUnlocked(d, runs));
     }
 
     /**
@@ -1321,7 +1370,7 @@ public final class EmberGrowthService implements Listener {
                 String line = P + "  §6" + sd.name + " §7" + sd.kindText() + "：§f" + sd.good + " §7/ 代价：" + EmberSignature.badOf(sd, sigAlt(d, sd))
                         + (!sd.excl.isEmpty() && picks(d).values().contains(sd.excl) ? " §c（与已选天赋同类，不生效）" : "");
                 if (cl && imp) town.sunshine.corerpg.ConfirmTokens.sendClick(p, line + " ", "[烙印]", "/corerpg p1 sig imprint " + sd.id,
-                        "把「" + sd.name + "」烙到正在用的" + EmberItemData.slotName(sd.slot) + "上\n" + EmberSignature.imprintMarks() + " 枚 "
+                        "把「" + sd.name + "」烙到正在用的" + ("blade".equals(sd.slot) ? EmberItemData.slotName("blade") : "护符或防具") + "上\n" + EmberSignature.imprintMarks() + " 枚 "
                                 + mk.toUpperCase(Locale.ROOT) + " 首领徽记 + " + EmberSignature.IMPRINT_COIN_PER_TIER + "×阶级 余烬币；覆盖原来的签名");
                 else p.sendMessage(line);
             }
@@ -1337,7 +1386,7 @@ public final class EmberGrowthService implements Listener {
         String hold = EmberAssetGuard.hold(p);
         if (hold != null) { p.sendMessage(P + ChatColor.RED + hold); return true; }
         if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后烙印"); return true; }
-        EmberItemData t = "blade".equals(sd.slot) ? lo.blade : lo.charm;
+        EmberItemData t = imprintWornTarget(lo, sd);
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
         int cur = t == null ? 0 : sigOf(d, t);
         int needM = EmberImprintMarkSoft.need(d, false); // D9985 peek
@@ -1410,7 +1459,7 @@ public final class EmberGrowthService implements Listener {
         EmberLoadout lo = runs == null || runs.loadouts() == null ? null : runs.loadouts().refresh(p);
         if (lo == null) return false;
         EmberItemData t = prefer;
-        if (t == null) t = "blade".equals(sd.slot) ? lo.blade : lo.charm;
+        if (t == null) t = imprintWornTarget(lo, sd);
         int cur = t == null ? 0 : sigOf(d, t);
         if (cur != 0) return false; // overwrite stays manual
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
@@ -1722,13 +1771,13 @@ public final class EmberGrowthService implements Listener {
         return runs.loadouts().trust(p, r.data) == null ? r.data : null;
     }
 
-    /** the imprint page target: the worn piece of the signature's slot, or the held piece */
+    /** the imprint page target: worn defense-side / blade, or held piece that fitsDefense */
     private EmberItemData pickTarget(Player p, EmberLoadout lo, EmberSignature.Def sd, String which) {
         if ("held".equals(which)) {
             EmberItemData h = heldPiece(p);
-            return h != null && sd.slot.equals(h.slot) ? h : null;
+            return h != null && EmberSignature.fitsDefense(sd, h.slot, h.family) ? h : null;
         }
-        return "blade".equals(sd.slot) ? lo.blade : lo.charm;
+        return imprintWornTarget(lo, sd);
     }
 
     private boolean sigUiConfirm(Player p, PlayerData d, EmberLoadout lo, boolean overwrite) {
@@ -1886,8 +1935,8 @@ public final class EmberGrowthService implements Listener {
 
     private String sigStatus(PlayerData d, EmberLoadout lo, EmberSignature.Def sd, boolean cleared) {
         String ex = !sd.excl.isEmpty() && picks(d).values().contains(sd.excl) ? " §c· 与已选天赋同类，不生效" : "";
-        for (String slot : new String[]{"blade", "charm"}) {
-            EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+        for (String slot : new String[]{"blade", "charm", "head", "chest", "legs", "boots"}) {
+            EmberItemData it = pieceOf(lo, slot);
             if (it != null && sigOf(d, it) == sd.code) {
                 String why = sigWhy(d, lo, slot);
                 return why == null ? "§a▶ 穿着 · 生效中" : "§e▶ 穿着 · 不生效：" + why;
@@ -1912,13 +1961,15 @@ public final class EmberGrowthService implements Listener {
             case "good": return "§a得：§f" + sd.good;
             case "bad": return "§c代价：§7" + sd.bad;
             case "worn": {
-                EmberItemData w = "blade".equals(sd.slot) ? lo.blade : lo.charm;
-                String lab = w == null ? "§8没有正在用的" + EmberItemData.slotName(sd.slot) : "§f" + w.shortLabel() + sigNow(d, w);
+                EmberItemData w = imprintWornTarget(lo, sd);
+                String miss = "blade".equals(sd.slot) ? EmberItemData.slotName("blade") : "护符或防具";
+                String lab = w == null ? "§8没有正在用的" + miss : "§f" + w.shortLabel() + sigNow(d, w);
                 return ("worn".equals(which) ? "§a▶ 已选 · " : "§7") + lab;
             }
             case "held": {
                 EmberItemData h = heldPiece(p);
-                String lab = h == null ? "§8手里没有自己的 P1 件" : !sd.slot.equals(h.slot) ? "§8手里是" + EmberItemData.slotName(h.slot) + "，这条只能烙在" + EmberItemData.slotName(sd.slot) + "上"
+                String lab = h == null ? "§8手里没有自己的 P1 件"
+                        : !EmberSignature.fitsDefense(sd, h.slot, h.family) ? "§8手里是" + EmberItemData.slotName(h.slot) + "，这条只能烙在" + sd.kindText() + "上"
                         : "§f" + h.shortLabel() + sigNow(d, h);
                 return ("held".equals(which) ? "§a▶ 已选 · " : "§7") + lab;
             }

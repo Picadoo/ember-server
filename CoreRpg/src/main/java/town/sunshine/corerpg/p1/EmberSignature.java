@@ -16,9 +16,10 @@ import java.util.Map;
  * ({@link #C_SIG} + uid = code, like the D143 affix). The numbers mirror {@code tools/p1sim/mainline.py SIGS}
  * (checked there: 42 cells alone / in every legal pair / on top of a full talent build).
  * <ul>
- *   <li>at most 2 active: the active blade's + the active charm's; before {@link #DUAL_UNLOCK} first clear OR first-enter only 1</li>
+ *   <li>at most 2 active: the active blade's + one defense-side (charm|head|chest|legs|boots, prio charm&gt;head&gt;chest&gt;legs&gt;boots); before {@link #DUAL_UNLOCK} first clear OR first-enter only 1</li>
  *   <li>same tag → only the blade's; same tag as a picked talent node ({@link Def#excl}) → off</li>
  *   <li>family-bound ones only while that set is active (their keys are set events anyway)</li>
+ *   <li>D12587: stamp/drop keeps strict slot-equal ({@link #fitsStamp}); imprint/combat uses {@link #fitsDefense} (charm-def → five defense slots). Armor stampable stays empty.</li>
  * </ul>
  * Sources: a repeat NORMAL clear of the map → 1 {@link #C_MARK} insignia + {@link #STAMP_RATE} that the base item is a
  * signature (if its slot / family fit one); the map's first clear → {@link #FC_MARKS} insignia once ({@link #C_FC});
@@ -56,8 +57,8 @@ public final class EmberSignature {
             this.mods = Collections.unmodifiableMap(mods);
         }
         public boolean anyFamily() { return "any".equals(family); }
-        /** "焚烬刃" / "通用护符" */
-        public String kindText() { return (anyFamily() ? "通用" : EmberItemData.familyName(family)) + ("blade".equals(slot) ? "刃" : "护符"); }
+        /** "焚烬刃" / "通用防具" (defense-side: charm or armor; D12588) */
+        public String kindText() { return (anyFamily() ? "通用" : EmberItemData.familyName(family)) + ("blade".equals(slot) ? "刃" : "防具"); }
     }
 
     private static Map<String, Double> m(Object... kv) {
@@ -200,15 +201,51 @@ public final class EmberSignature {
         return l;
     }
 
-    /** can {@code d} sit on a piece of this slot / family? (family-bound ones only on their own family) */
-    public static boolean fits(Def d, String slot, String family) {
-        return d != null && d.slot.equals(slot) && (d.anyFamily() || d.family.equals(family));
+    /** Defense-side slot priority for 5-pick-1 (stage0 §2.6 / D12589). */
+    private static final String[] DEFENSE_PRIO = {"charm", "head", "chest", "legs", "boots"};
+
+    static int defenseRank(String slot) {
+        if (slot == null) return 99;
+        for (int i = 0; i < DEFENSE_PRIO.length; i++) if (DEFENSE_PRIO[i].equals(slot)) return i;
+        return 99;
     }
 
-    /** the signatures a base item of (slot, family) dropped on {@code map} can carry */
+    public static boolean isDefenseSlot(String slot) {
+        return "charm".equals(slot) || EmberItemData.isArmorSlot(slot);
+    }
+
+    /**
+     * Stamp / drop path: strict {@code d.slot.equals(slot)} + family.
+     * Armor stampable must stay empty — never call {@link #fitsDefense} from stampable/rollStamp/pickStamp.
+     */
+    public static boolean fitsStamp(Def d, String slot, String family) {
+        return d != null && slot != null && d.slot.equals(slot) && (d.anyFamily() || d.family.equals(family));
+    }
+
+    /**
+     * Imprint / combat path (D12587): blade-def → blade only; charm-def (defense-side) → charm|head|chest|legs|boots.
+     * Family rules unchanged ({@code any} or same family). Must NOT be used by stampable.
+     */
+    public static boolean fitsDefense(Def d, String slot, String family) {
+        if (d == null || slot == null) return false;
+        if (!d.anyFamily() && (family == null || !d.family.equals(family))) return false;
+        if ("blade".equals(d.slot)) return "blade".equals(slot);
+        if ("charm".equals(d.slot)) return isDefenseSlot(slot);
+        return false;
+    }
+
+    /**
+     * Stamp-strict alias (drop / stampable / admin stamp tests).
+     * Imprint and combat must use {@link #fitsDefense}.
+     */
+    public static boolean fits(Def d, String slot, String family) {
+        return fitsStamp(d, slot, family);
+    }
+
+    /** the signatures a base item of (slot, family) dropped on {@code map} can carry (strict slot — armor stays empty) */
     public static List<Def> stampable(String map, String slot, String family) {
         List<Def> l = new ArrayList<Def>();
-        for (Def d : forMap(map)) if (fits(d, slot, family)) l.add(d);
+        for (Def d : forMap(map)) if (fitsStamp(d, slot, family)) l.add(d);
         return l;
     }
 
@@ -239,25 +276,83 @@ public final class EmberSignature {
         public Worn(Def def, String slot, String family) { this.def = def; this.slot = slot; this.family = family; }
     }
 
-    /** why a worn signature is off (null = on); same order as {@link #active} */
-    public static String offReason(Worn w, Worn other, String activeSet, Collection<String> talentPicks, boolean dual) {
+    /** blade-only off checks (fitsDefense + family + talent excl). */
+    private static String offReasonBlade(Worn w, String activeSet, Collection<String> talentPicks) {
         if (w == null || w.def == null) return "无";
         Def d = w.def;
-        if (!fits(d, w.slot, w.family)) return "部位 / 族不对";
+        if (!fitsDefense(d, w.slot, w.family)) return "部位 / 族不对";
         if (!d.anyFamily() && !d.family.equals(activeSet)) return "需要" + EmberItemData.familyName(d.family) + "成套";
         if (!d.excl.isEmpty() && talentPicks != null && talentPicks.contains(d.excl)) return "与已选天赋同类，不叠加";
-        if ("charm".equals(w.slot) && other != null && other.def != null && offReason(other, null, activeSet, talentPicks, true) == null) {
-            if (!dual) return "首进或首通 " + DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后才能同时生效 2 条";
-            if (other.def.tag.equals(d.tag)) return "与刃上的签名同类，不叠加";
-        }
         return null;
     }
 
-    /** the active signatures (≤ 2): blade first, then the charm unless dual is locked or the tag repeats */
+    /**
+     * Pick the one defense-side Worn that may be active (stage0 §2.6): dual gate, talent excl, same-tag vs blade,
+     * then prio charm &gt; head &gt; chest &gt; legs &gt; boots. Null = none.
+     */
+    public static Worn pickDefense(Worn blade, List<Worn> defenseSide, String activeSet, Collection<String> talentPicks, boolean dual) {
+        if (defenseSide == null || defenseSide.isEmpty()) return null;
+        boolean bladeOn = blade != null && blade.def != null && offReasonBlade(blade, activeSet, talentPicks) == null;
+        if (bladeOn && !dual) return null;
+        Worn best = null;
+        int bestRank = 99;
+        for (Worn w : defenseSide) {
+            if (w == null || w.def == null) continue;
+            Def d = w.def;
+            if (!fitsDefense(d, w.slot, w.family)) continue;
+            if (!d.anyFamily() && !d.family.equals(activeSet)) continue;
+            if (!d.excl.isEmpty() && talentPicks != null && talentPicks.contains(d.excl)) continue;
+            if (bladeOn && blade.def.tag.equals(d.tag)) continue;
+            int rank = defenseRank(w.slot);
+            if (rank < bestRank) { bestRank = rank; best = w; }
+        }
+        return best;
+    }
+
+    /**
+     * why a worn signature is off (null = on).
+     * Legacy 2-Worn form: {@code other} is the blade when {@code w} is defense-side; defense candidates = {@code w} alone.
+     */
+    public static String offReason(Worn w, Worn other, String activeSet, Collection<String> talentPicks, boolean dual) {
+        if (w == null || w.def == null) return "无";
+        if ("blade".equals(w.slot)) return offReasonBlade(w, activeSet, talentPicks);
+        List<Worn> side = new ArrayList<Worn>(1);
+        side.add(w);
+        return offReason(w, other, side, activeSet, talentPicks, dual);
+    }
+
+    /** Defense-side offReason with full candidate list (D12589 / stage0 §2.6). */
+    public static String offReason(Worn w, Worn blade, List<Worn> defenseSide, String activeSet, Collection<String> talentPicks, boolean dual) {
+        if (w == null || w.def == null) return "无";
+        if ("blade".equals(w.slot)) return offReasonBlade(w, activeSet, talentPicks);
+        Def d = w.def;
+        if (!fitsDefense(d, w.slot, w.family)) return "部位 / 族不对";
+        if (!d.anyFamily() && !d.family.equals(activeSet)) return "需要" + EmberItemData.familyName(d.family) + "成套";
+        if (!d.excl.isEmpty() && talentPicks != null && talentPicks.contains(d.excl)) return "与已选天赋同类，不叠加";
+        boolean bladeOn = blade != null && blade.def != null && offReasonBlade(blade, activeSet, talentPicks) == null;
+        if (bladeOn) {
+            if (!dual) return "首进或首通 " + DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后才能同时生效 2 条";
+            if (blade.def.tag.equals(d.tag)) return "与刃上的签名同类，不叠加";
+        }
+        Worn winner = pickDefense(blade, defenseSide, activeSet, talentPicks, dual);
+        if (winner != null && winner.def != null && winner.slot.equals(w.slot) && winner.def.code == d.code) return null;
+        if (winner != null && winner.def != null) return "防具侧已有生效签名：" + winner.def.name;
+        return "防具侧已有生效签名";
+    }
+
+    /** the active signatures (≤ 2): blade first, then one charm (legacy). */
     public static List<Def> active(Worn blade, Worn charm, String activeSet, Collection<String> talentPicks, boolean dual) {
+        List<Worn> side = new ArrayList<Worn>(1);
+        if (charm != null) side.add(charm);
+        return active(blade, side, activeSet, talentPicks, dual);
+    }
+
+    /** blade 1 + defense-side 5-pick-1 (D12589). */
+    public static List<Def> active(Worn blade, List<Worn> defenseSide, String activeSet, Collection<String> talentPicks, boolean dual) {
         List<Def> out = new ArrayList<Def>(2);
-        if (blade != null && blade.def != null && offReason(blade, null, activeSet, talentPicks, dual) == null) out.add(blade.def);
-        if (charm != null && charm.def != null && offReason(charm, blade, activeSet, talentPicks, dual) == null) out.add(charm.def);
+        if (blade != null && blade.def != null && offReasonBlade(blade, activeSet, talentPicks) == null) out.add(blade.def);
+        Worn win = pickDefense(blade, defenseSide, activeSet, talentPicks, dual);
+        if (win != null && win.def != null) out.add(win.def);
         return out;
     }
 
@@ -273,9 +368,9 @@ public final class EmberSignature {
         if (d == null) return "没有这条签名";
         if (!imprintUnlocked) return "首进或首通 " + IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放烬炉烙印";
         if (!mapCleared) return "先首通 " + d.map.toUpperCase(Locale.ROOT) + " 才能烙印它的签名";
-        if (target == null) return "没有正在用的" + ("blade".equals(d.slot) ? "刃" : "护符");
+        if (target == null) return "没有正在用的" + ("blade".equals(d.slot) ? "刃" : "护符或防具");
         if (target.tier < 1) return "T0 起步件不能烙印";
-        if (!fits(d, target.slot, target.family)) return d.name + " 只能烙在" + d.kindText() + "上";
+        if (!fitsDefense(d, target.slot, target.family)) return d.name + " 只能烙在" + d.kindText() + "上";
         if (current == d.code) return "这件已经是 " + d.name;
         int nm = needMarks > 0 ? needMarks : imprintMarks();
         int nc = needCoin > 0 ? needCoin : imprintCoin(target.tier);
