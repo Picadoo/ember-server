@@ -1,6 +1,6 @@
 # tip · TIP-BB 生活首钓/烹饪日首加验预告诚实对齐（可施工薄 · 可感 UX）· D12936–D12951
 
-> **状态：** **OPEN** · 待批 A·M · 2026-10-12 22:41 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 22:43 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-fish-cook-xp-boost-cue-align-2026-10-12.md`](../design/RESEARCH-ember-fish-cook-xp-boost-cue-align-2026-10-12.md) · DESIGN [`DESIGN-ember-fish-cook-xp-boost-cue-align-2026-10-12.md`](../design/DESIGN-ember-fish-cook-xp-boost-cue-align-2026-10-12.md) · TIP-BA CLOSED live `1.65.792-d12935` · feat `366b0a645` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **离开 soft-latch/假耗链** — **可感 UX / 变强途径**；brew/fish **non-soft** 加验预告（FishXpBoost+CookXpBoost 已 live、show 静默）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `LifeService.show` Fish/Cook XP boost ready 尾 · 可选 Boost 旁 CUE 常量 · 单测；零改 MULT/fish_xp/xp_each）  
@@ -86,8 +86,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12940–D12943；D12945 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] show 不吞加验；成钓/成烤才 consume；L13 施工仍 HOLD  
@@ -96,8 +96,8 @@
 
 ## 6. 批注（荐）
 
-- [ ] 总控批 **A · 方案 M** · 荐批  
+- [x] 总控批 **A · 方案 M** · 已批 · 已派插件  
 - 选题：TIP-BA 后 · **离开 soft-latch/假耗** — 生活首钓/烹饪日首加验预告诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 soft 假耗再叠**）  
 - **批注：** FishXpBoost/CookXpBoost 已 live，show 不预告 → 变强途径静默；ready 尾「今日…加验×2待用」；零改 MULT/fish_xp/xp_each；零新 PAPI；批后派 **余烬-插件**；**L13 施工 HOLD**；GemHole 门槛旁债；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / soft-latch·CostSoft·pity·soft-glance·firstsoft·cook·life-buy soft 再叠 / Anvil densify / topUpTo 扩 soft 仍冻  
 
-## STATUS: OPEN · tip D12936–D12951 · 2026-10-12 22:41 Asia/Shanghai · 待批 A·M
+## STATUS: APPROVED · tip D12936–D12951 · 2026-10-12 22:43 Asia/Shanghai · 已派余烬-插件

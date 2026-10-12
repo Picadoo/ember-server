@@ -1,6 +1,6 @@
 # DESIGN · 生活首钓/烹饪日首加验预告诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-BB · 待批 A·M · 2026-10-12  
+> **状态：** APPROVED · TIP-BB 批 A·M · 已派插件 · 2026-10-12 22:43 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-fish-cook-xp-boost-cue-align-2026-10-12.md`](RESEARCH-ember-fish-cook-xp-boost-cue-align-2026-10-12.md)  
 > **对接 live：** TIP-BA CLOSED live `1.65.792-d12935` · feat `366b0a645` · FishXpBoost D8865 · CookXpBoost D8961 · `LifeService.show` · `life.yml` `fish_xp: 2` · cook.xp_each  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
@@ -93,4 +93,4 @@ LifeService.show (伪码):
 3. 主线解锁 DESIGN / stampable 空 / L13 HOLD 观察  
 4. topUpTo 是否接 soft（须另批 · 现禁 densify）
 
-## STATUS: OPEN · TIP-BB · 待批 A·M · 2026-10-12
+## STATUS: APPROVED · TIP-BB · 2026-10-12 22:43 Asia/Shanghai · 已派余烬-插件
