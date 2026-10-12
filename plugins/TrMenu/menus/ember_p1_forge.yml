@@ -246,7 +246,8 @@ Icons:
       name: '§b强化轨道互换 · 预览'
       lore:
         - '§e%corerpg_p1_held_swap_cost%'
-        - '§7主手与副手同部位装备互换 强化等级+失败计数'
+        - '§a免费确定 §8· §f预览直办'
+        - '§e➥ §f点预览'
     actions:
       all:
         - 'command: corerpg p1 swap'
@@ -282,7 +283,8 @@ Icons:
       name: '§b强化轨道互换 · 确认'
       lore:
         - '§e%corerpg_p1_held_swap_cost%'
-        - '§7主手与副手的同部位装备交换「强化等级 + 失败计数」'
+        - '§a免费确定 §8· §f预览直办'
+        - '§e➥ §f点确认'
     actions:
       all:
         - 'command: corerpg p1 swap confirm'
