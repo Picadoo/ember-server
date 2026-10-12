@@ -224,6 +224,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 
 - **TIP-BG CLOSED live `1.65.796-d13031` · feat `0bdcfa1ea`** · SF4 U1_sl10 显式开工接线 · Slow I 20t lim3 · 形状门套装推荐/none→LINE · 零 skill_mult
 
+- **TIP-BH CLOSED live `1.65.797-d13047` · feat `ce5a4b66b`** · 签名效果持件 lore 诚实 · applyLore/armorLore/GearLib · 零改 mods
+
 - **TIP-BH APPROVED** · 签名效果持件 lore 诚实 · 批 A·M · 已派余烬-插件 · applyLore/armorLore/GearLib · 零改 mods · docs `0b6e58c9`
 
 - **TIP-BH OPEN** · `TIP-ember-sig-effect-lore-honesty-thin-d13032-d13047-2026-10-12.md` · RESEARCH `RESEARCH-ember-sig-effect-lore-honesty-2026-10-12.md` · DESIGN `DESIGN-ember-sig-effect-lore-honesty-2026-10-12.md` · 签名传奇效果持件 lore 诚实（可施工薄 · 可感变强途径 · **离开 SF4 接线链** · **非 densify · 非伤乘 · 非 skill_mult · 非 Anvil densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 soft/开孔再叠 · 非 SF4 U2U3 · 非灰印/聚火** · 零改 DEFS.mods/ALTS/STAMP · 零新 PAPI · applyLore/armorLore/GearLib 写 good+原版 bad · 调律 live bad 仍签名页）· **批后派余烬-插件** · **不派物品** · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-BG CLOSED live · soft-latch/CostSoft/pity/soft-glance/firstsoft/cook/life-buy soft 再叠 / xp-boost cue 再叠 / GemHole Open 再叠 / enhance+5 开孔再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 densify / 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify / SF4 U2U3 / 灰印·聚火 仍冻 · 策划 docs-only

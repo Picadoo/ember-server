@@ -1,6 +1,6 @@
 # DESIGN · 签名传奇效果持件 lore 诚实（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-BH · 已派余烬-插件 · 2026-10-12 23:26 Asia/Shanghai  
+> **状态：** CLOSED live `1.65.797-d13047` · TIP-BH · feat `ce5a4b66b` · 2026-10-12 23:30 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-sig-effect-lore-honesty-2026-10-12.md`](RESEARCH-ember-sig-effect-lore-honesty-2026-10-12.md)  
 > **对接 live：** TIP-BG CLOSED live `1.65.796-d13031` · TIP-AE 烙印扩甲 · TIP-AJ 签名页摘要 · `EmberItems.applyLore` · `EmberSixSlot.armorLore` · `EmberGearLib` · `EmberSignature.DEFS`  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 **仍冻**  
@@ -107,4 +107,4 @@ EmberGearLib 签名行:
 | 4 | L13 施工 | **HOLD** |
 | 5 | 调律 live bad 进持件（须 PD） | 另 tip · 非本窗 |
 
-## STATUS: APPROVED · TIP-BH · 已派余烬-插件 · 2026-10-12 23:26 Asia/Shanghai
+## STATUS: CLOSED live `1.65.797-d13047` · TIP-BH · feat `ce5a4b66b` · 2026-10-12 23:30 Asia/Shanghai
