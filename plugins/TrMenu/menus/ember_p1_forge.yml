@@ -52,7 +52,7 @@ Icons:
       name: '§c强化 · 预览'
       lore:
         - '§e花费：§f%corerpg_p1_held_enhance_cost%'
-        - '§e保底：§f%corerpg_p1_held_enhance_pity%'
+        - '§e成功率：§f%corerpg_p1_held_enhance_rate% §8· %corerpg_p1_held_enhance_pity%'
         - '§e➥ §f点预览'
     actions:
       all:
@@ -77,7 +77,7 @@ Icons:
       name: '§c强化 · 确认一次'
       lore:
         - '§e花费：§f%corerpg_p1_held_enhance_cost%'
-        - '§e保底：§f%corerpg_p1_held_enhance_pity%'
+        - '§e成功率：§f%corerpg_p1_held_enhance_rate% §8· %corerpg_p1_held_enhance_pity%'
         - '§e➥ §f点确认'
     actions:
       all:
