@@ -10,6 +10,8 @@ public final class EmberFishXpBoost {
 
     public static final String C_USED = "p1_fish_xp_boost";
     public static final int MULT = 2;
+    /** TIP-BB D12942: show ready tail · never consume. */
+    public static final String CUE = "今日首钓加验×2待用";
 
     private EmberFishXpBoost() {}
 

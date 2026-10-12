@@ -381,8 +381,11 @@ public final class LifeService implements Listener {
         int next = lv < levelXp.length ? levelXp[lv] : -1;
         int xp = lifeXp(d);
         int leftXp = next > 0 ? Math.max(0, next - xp) : 0;
-        p.sendMessage(ChatColor.GOLD + "—— 枢纽补给 · 生活 ——" + ChatColor.GRAY + "  生活 Lv." + lv + "（经验 " + xp
-                + (next > 0 ? "/" + next + (leftXp > 0 ? " · 还差 " + leftXp : "") : "") + "）  余烬币 " + ChatColor.GOLD + d.getCoin());
+        String head = ChatColor.GOLD + "—— 枢纽补给 · 生活 ——" + ChatColor.GRAY + "  生活 Lv." + lv + "（经验 " + xp
+                + (next > 0 ? "/" + next + (leftXp > 0 ? " · 还差 " + leftXp : "") : "") + "）  余烬币 " + ChatColor.GOLD + d.getCoin();
+        String fishCue = fishXpBoostShowTail(d); // TIP-BB D12940 · ready only · never consume
+        if (!fishCue.isEmpty()) head = head + ChatColor.DARK_GRAY + fishCue;
+        p.sendMessage(head);
         try { // D1557
             if (next > 0)
                 p.sendActionBar("§6生活 · Lv." + lv + " §f" + xp + "/" + next
@@ -395,6 +398,8 @@ public final class LifeService implements Listener {
             if (town.sunshine.corerpg.p1.EmberCookCoinSoft.ready(d))
                 cookLine = cookLine + ChatColor.DARK_GRAY + " · 今日减负待用（×0.5）";
         } catch (Throwable ignored) { }
+        String cookXpCue = cookXpBoostShowTail(d); // TIP-BB D12941 · may coexist with coin soft tail · never consume
+        if (!cookXpCue.isEmpty()) cookLine = cookLine + ChatColor.DARK_GRAY + cookXpCue;
         p.sendMessage(cookLine);
         for (Offer o : offers.values()) {
             StringBuilder sb = new StringBuilder();
@@ -621,6 +626,24 @@ public final class LifeService implements Listener {
         if (town.sunshine.corerpg.p1.EmberPetHatchSoft.isPetOffer(id))
             return town.sunshine.corerpg.p1.EmberPetHatchSoft.consumeCoin(d, coin);
         return coin;
+    }
+
+    /** TIP-BB D12940: fish XP boost show suffix when ready; empty when used. Never consumes. */
+    public static String fishXpBoostShowTail(PlayerData d) {
+        try {
+            if (town.sunshine.corerpg.p1.EmberFishXpBoost.ready(d))
+                return " · " + town.sunshine.corerpg.p1.EmberFishXpBoost.CUE;
+        } catch (Throwable ignored) { }
+        return "";
+    }
+
+    /** TIP-BB D12941: cook XP boost show suffix when ready; empty when used. Never consumes. */
+    public static String cookXpBoostShowTail(PlayerData d) {
+        try {
+            if (town.sunshine.corerpg.p1.EmberCookXpBoost.ready(d))
+                return " · " + town.sunshine.corerpg.p1.EmberCookXpBoost.CUE;
+        } catch (Throwable ignored) { }
+        return "";
     }
 
     public static boolean buySoftReady(String id, PlayerData d) {

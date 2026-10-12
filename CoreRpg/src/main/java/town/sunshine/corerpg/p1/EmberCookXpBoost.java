@@ -10,6 +10,8 @@ public final class EmberCookXpBoost {
 
     public static final String C_USED = "p1_cook_xp_boost";
     public static final int MULT = 2;
+    /** TIP-BB D12942: show ready tail · never consume. */
+    public static final String CUE = "今日烹饪加验×2待用";
 
     private EmberCookXpBoost() {}
 
