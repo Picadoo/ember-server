@@ -23,7 +23,7 @@
 | AnvilRepair Soft 假耗 | **否** | 硬禁 densify |
 | topUpTo 接 soft | **否** | 扩 soft densify |
 | LifeCap / LevelGate 容错预告 | **否** | Cap/firstsoft densify |
-| GemHole soft 门槛展示 | **旁债** | soft 展示邻域；本窗优先 fish/cook |
+| GemHole soft 门槛展示 | **旁债→TIP-BC OPEN** | soft 展示邻域；本窗优先 fish/cook |
 | CostSoft / pity / soft-glance / firstsoft / cook soft / life-buy soft / 甲闸再扫 | **否** | 链已齐 / 硬禁 |
 | mapid 扩甲 / HopeMeter densify / TrMenu lore | **否** | 硬禁 |
 | L13 施工 tip | **否** | TIP-AI FAIL；PASS≠开工；**HOLD** |

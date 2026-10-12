@@ -88,7 +88,7 @@ LifeService.show (伪码):
 
 ## 4. 旁债（下一 prefer · 非本窗）
 
-1. GemHole soft 门槛展示诚实（孔 glance「锁」vs 日首门槛−1）  
+1. GemHole soft 门槛展示诚实（孔 glance「锁」vs 日首门槛−1）→ **TIP-BC OPEN**  
 2. AnvilRepair Soft 假耗（硬禁 densify 未解冻前不开）  
 3. 主线解锁 DESIGN / stampable 空 / L13 HOLD 观察  
 4. topUpTo 是否接 soft（须另批 · 现禁 densify）
