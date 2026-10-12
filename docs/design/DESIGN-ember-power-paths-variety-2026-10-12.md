@@ -197,6 +197,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 
 ## 进度戳
 
+- **TIP-BO APPROVED** · 升阶预览「确定·保留」菜单诚实 · 批 A·M · 已派物品 · 不派插件 · 零新 PAPI · 非抬 upgradeCost · docs `1ca95759`
+
 - **TIP-BO OPEN** · `TIP-ember-upgrade-preview-keep-honesty-thin-d13144-d13159-2026-10-13.md` · RESEARCH `RESEARCH-ember-upgrade-preview-keep-honesty-2026-10-13.md` · DESIGN `DESIGN-ember-upgrade-preview-keep-honesty-2026-10-13.md` · 升阶预览「确定·保留」菜单诚实（工坊 TrMenu · 可施工薄 · 可感变强途径 · **离开强化预览成功率链** · **非 densify · 非抬 upgradeCost/C04/RATE · 非 soft·开孔再叠 · 非 Anvil densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 SF4 U2U3 · 非灰印/聚火 · 非签名 lore 再叠 · 非调律 live bad · 非套装 blurb 再叠 · 非宝石短效果再叠 · 非天赋悬停再叠 · 非烙纹档幅度再叠 · 非副手微量再叠 · 非强化率再叠 · 非效果长墙 · 非 lore>3 · 非并轨方案 B** · 零新 PAPI · Plan.note 保留口径 → forge U/u · 对位 BN 旁债 #9 / WS2）· **批后派余烬-物品** · **不派插件** · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-BN CLOSED live · soft-latch/CostSoft/pity/soft-glance/firstsoft/cook/life-buy soft 再叠 / xp-boost cue 再叠 / GemHole Open 再叠 / enhance+5 开孔再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 densify / 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify / SF4 U2U3 / 灰印·聚火 / 调律 live bad 进持件 / 签名 lore 再叠 / 套装 blurb 再叠 / 宝石短效果再叠 / 天赋悬停再叠 / 烙纹档幅度再叠 / 副手微量再叠 / 强化率再叠 / Affix densify / 抬 upgradeCost 仍冻 · 策划 docs-only
 
 - **TIP-BN CLOSED live `1.65.800-d13143` · feat `059891b38` · items `284e5dc7c`** · 强化预览成功率菜单诚实 · `held_enhance_rate` · TrMenu reload 77 · 零抬 RATE · **（进度：已 CLOSED → TIP-BO）**
