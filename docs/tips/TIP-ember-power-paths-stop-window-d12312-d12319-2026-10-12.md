@@ -1,6 +1,6 @@
 # tip · TIP-J 变强途径停窗汇总（§3 一眼轴 CLOSED · 下阶段建议）· D12312–D12319
 
-> **状态：** 待批 A（策划 tip · 2026-10-12 16:17 Asia/Shanghai）· 方案 **M（停窗）**  
+> **状态：** CLOSED · 批 **A · 方案 M（停窗）**（总控 2026-10-12 16:17 Asia/Shanghai）· 无码  
 > **上游：** [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md) §3–§5 · TIP-A～I CLOSED live  
 > **裁定：** 对照 §3 扫剩：HD2/HD3/MG2/WS2 **无值得再开的薄施工**（再动易滑向 AB/lore densify）。本 tip = **停窗汇总**，不交插件改码。  
 > **硬禁（不变）：** 零 Affix Pack · 零伤乘 · 零抬 RATE / skill_mult / gem flat · 不发明新主循环
@@ -75,5 +75,10 @@
 
 ## 5. 批注
 
-- [ ] 总控批 **A · 方案 M（停窗）**
-- 变强途径一眼轴：**收束**；下阶段见 §3 表，不接 Affix / 抬表
+- [x] 总控批 **A · 方案 M（停窗）** · 2026-10-12 16:17 CST
+- 变强途径一眼轴：**收束**；不派插件；下阶段见 §3 表，不接 Affix / 抬表
+- **批注：** HD2/HD3/MG2 停；下窗默认不新开 power-glance；P0 试玩观察挤度；P1 可另开「烬斩手感包」（业主曾批太素），禁 skill_mult
+
+## STATUS: CLOSED · 停窗 · 2026-10-12 16:17 CST
+- docs-only；无插件施工
+- Batch1–3 + TIP-A～I = CLOSED；glance densify 冻结
