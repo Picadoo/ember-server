@@ -97,6 +97,7 @@
 | 6 | 签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度再叠 | **仍冻** |
 | 7 | soft·开孔·GemHole 再叠 | **仍冻** |
 | 8 | pin 预览气泡补档区间（pctList） | **另 tip · 可选**（烙纹链 · prefer 再离） |
+| 8b | 强化预览成功率菜单诚实（WS2） | **TIP-BN OPEN** |
 | 9 | Affix densify / 抬 values | **仍冻** |
 | 10 | 副手并轨方案 B | **仍冻（D309）** |
 
