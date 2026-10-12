@@ -1,6 +1,6 @@
 # tip · TIP-C 图装「这图掉什么」（Q01–Q07 一眼身份）· D12248–D12255
 
-> **状态：** 待批 A（策划 tip · 2026-10-12 11:37 Asia/Shanghai）· 方案 **M**  
+> **状态：** 批 **A · 方案 M**（总控 2026-10-12 11:38 Asia/Shanghai）· 交插件岗  
 > **上游：** [`DESIGN-ember-growth-variety-thin-2026-10-12.md`](../design/DESIGN-ember-growth-variety-thin-2026-10-12.md) §2C · [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md) Batch2 MG1/MG2 · D610/D1816 已有资产  
 > **前置：** TIP-A 希望一眼 **CLOSED**（1.65.758-d12247）  
 > **施工岗：** 插件岗（TrMenu + 纯展示 Java）  
@@ -83,6 +83,6 @@
 
 ## 5. 批注
 
-- [ ] 总控批 **A · 方案 M** · ____  
-- 本地 tip commit · **勿 push** · 总控推 · 交插件岗  
+- [x] 总控批 **A · 方案 M** · 2026-10-12 11:38 CST  
+- tip 已推 · 交插件岗  
 - 下窗：TIP-B 工坊选择感（薄窗序 A→**C**→B）
