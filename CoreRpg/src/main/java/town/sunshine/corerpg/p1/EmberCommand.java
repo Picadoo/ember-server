@@ -6996,8 +6996,12 @@ public final class EmberCommand {
         if (chase != null && d != null) {
             marks = d.periodCount(EmberSignature.C_MARK + chase.map, "all");
         }
+        EmberLoadout hopeLo = null;
+        try {
+            if (loadouts != null) hopeLo = loadouts.get(p);
+        } catch (Throwable ignored) { }
         java.util.List<EmberHopeMeter.Track> tracks = EmberHopeMeter.priorityTracks(
-                held, d, mats, rerollPity, rerollNeed, chase, marks);
+                held, d, mats, rerollPity, rerollNeed, chase, marks, hopeLo);
         String mode = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
         if ("cycle".equals(mode) || "next".equals(mode) || "切换".equals(mode)) { // D12243
             int idx = EmberHopeMeter.cycle(d, tracks.size());

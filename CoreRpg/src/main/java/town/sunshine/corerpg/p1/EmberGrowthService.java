@@ -1073,14 +1073,14 @@ public final class EmberGrowthService implements Listener {
         return out;
     }
 
-    /** D12289/D12290: hub/gear %corerpg_p1_sig_feel% — thin resolve → EmberSigFeel.menuLine. */
+    /** D12289/D12290 / D12735: hub/gear %corerpg_p1_sig_feel% — thin resolve → EmberSigFeel.menuLine (+lo). */
     public String sigFeelLine(PlayerData d, EmberLoadout lo) {
         List<EmberSignature.Def> active = signatures(d, lo);
         List<EmberSignature.Def> off = wornInactive(d, lo, active);
         EmberSignature.Def chase = EmberSigChase.get(d);
         int marks = (d == null || chase == null) ? 0
                 : d.periodCount(EmberSignature.C_MARK + chase.map, "all");
-        return EmberSigFeel.menuLine(active, off, chase, marks);
+        return EmberSigFeel.menuLine(active, off, chase, marks, lo);
     }
 
     private String mapLabel(String key) {

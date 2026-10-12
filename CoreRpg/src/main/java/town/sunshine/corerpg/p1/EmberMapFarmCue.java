@@ -334,8 +334,17 @@ public final class EmberMapFarmCue {
             String[] b;
             if (chase != null) {
                 int marks = pd.periodCount(EmberSignature.C_MARK + chase.map, "all");
+                EmberLoadout cueLo = null;
+                try {
+                    Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
+                    if (pl instanceof CoreRpgPlugin) {
+                        EmberRunService runs = ((CoreRpgPlugin) pl).getEmberRuns();
+                        if (runs != null && runs.loadouts() != null)
+                            cueLo = runs.loadouts().get(p);
+                    }
+                } catch (Throwable ignored) { }
                 a = new String[]{"[追烙]", "/corerpg p1 sig chase",
-                        EmberSigChase.remainLine(chase, marks), "GOLD"};
+                        EmberSigChase.remainLine(chase, marks, cueLo), "GOLD"};
                 if (marks >= EmberSignature.imprintMarks()) {
                     b = new String[]{"[去烙印]", "/corerpg p1 sig pick " + chase.id,
                             "徽记够可烙到件上", "YELLOW"};

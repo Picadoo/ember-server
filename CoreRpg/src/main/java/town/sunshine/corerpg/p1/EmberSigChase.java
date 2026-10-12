@@ -18,6 +18,7 @@ import town.sunshine.corerpg.PlayerData;
  * D472: imprint-complete feel + chase-close offer (acquisition loop close).
  * D604: hope-meter style via EmberHopeMeter.sigChase.
  * D12712–D12727 TIP-AN: chase-ready defense align (fitsDefense + imprintWornTarget).
+ * D12728–D12743 TIP-AO: remain/progress/readyTail align with readyCueSlotWord target.
  * Zero STAMP_RATE / imprint price / ALTS / clear-gate change.
  */
 public final class EmberSigChase {
@@ -96,17 +97,40 @@ public final class EmberSigChase {
 
     /** Progress / ready line — D604 hope-meter style (still imprint-ready when full). */
     public static String progressLine(EmberSignature.Def def, int marks) {
-        return EmberHopeMeter.sigChase(def, marks);
+        return progressLine(def, marks, null);
+    }
+
+    /** D12733: progress with loadout for full-tier readyTail. */
+    public static String progressLine(EmberSignature.Def def, int marks, EmberLoadout lo) {
+        return EmberHopeMeter.sigChase(def, marks, lo);
     }
 
     /** D1355: non-hope remain toward imprint（聊天可并行 hope glance）. */
     public static String remainLine(EmberSignature.Def def, int marks) {
+        return remainLine(def, marks, null);
+    }
+
+    /**
+     * D12732 / TIP-AO: full-tier remain uses {@link #readyTail}; under-mark unchanged.
+     * Old binary overload delegates {@code lo=null}.
+     */
+    public static String remainLine(EmberSignature.Def def, int marks, EmberLoadout lo) {
         if (def == null) return "未选追烙目标 · /corerpg p1 sig chase";
         int need = EmberSignature.imprintMarks();
         int m = Math.max(0, marks);
         int gap = Math.max(0, need - m);
-        if (gap == 0) return "追烙 " + def.id + " · 徽记够 · 可烙";
+        if (gap == 0) return "追烙 " + def.id + " · 徽记够 · " + readyTail(lo, def);
         return "追烙 " + def.id + " · 徽记 " + m + "/" + need + " · 还差" + gap;
+    }
+
+    /**
+     * D12731 / TIP-AO: shared full-tier ready tail — missing worn → 缺可烙穿着件;
+     * else 可烙 + {@link #readyCueSlotWord} (lo==null falls back to def.slot name).
+     */
+    public static String readyTail(EmberLoadout lo, EmberSignature.Def def) {
+        if (def == null) return "可烙";
+        if (lo != null && imprintWornTarget(lo, def) == null) return "缺可烙穿着件";
+        return "可烙" + readyCueSlotWord(lo, def);
     }
 
     /** D1997: status/settle/enter glance — empty when no chase (caller skips). */
@@ -364,15 +388,16 @@ public final class EmberSigChase {
         d.addPeriodCount(C_READY, "all", delta);
         flush(p);
         String P = EmberRunService.P;
-        String line = progressLine(def, marks);
-        p.sendMessage(P + line);
-        String rem = remainLine(def, marks);
-        p.sendMessage(P + "§7" + rem);
-        try { p.sendActionBar("§e" + rem); } catch (Throwable ignored) { }
-        // D4641: empty-sig auto imprint (no ConfirmTokens); overwrite keeps button
+        // D12735: refresh lo before progress/remain so readyTail matches ready cue slot word
         CoreRpgPlugin pl = plugin();
         EmberRunService runs = pl == null ? null : pl.getEmberRuns();
         EmberLoadout lo = runs == null || runs.loadouts() == null ? null : runs.loadouts().refresh(p);
+        String line = progressLine(def, marks, lo);
+        p.sendMessage(P + line);
+        String rem = remainLine(def, marks, lo);
+        p.sendMessage(P + "§7" + rem);
+        try { p.sendActionBar("§e" + rem); } catch (Throwable ignored) { }
+        // D4641: empty-sig auto imprint (no ConfirmTokens); overwrite keeps button
         if (EmberImprintBreak.maybeAuto(p, d, lo, runs)) return true;
         ConfirmTokens.sendButton(p, P + "§7下一步：", // D753 one-click when no overwrite needed
                 "[一键烙印·" + def.id + "]", "/corerpg p1 sig imprint " + def.id + " go",

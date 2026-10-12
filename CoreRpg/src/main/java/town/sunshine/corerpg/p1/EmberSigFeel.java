@@ -77,11 +77,20 @@ public final class EmberSigFeel {
      * Only Def.name (+ optional 改打法·不加伤 half); no mods / stamp / new codes.
      */
     public static String menuLine(List<EmberSignature.Def> active, EmberSignature.Def chaseDef, int chaseMarks) {
-        return menuLine(active, null, chaseDef, chaseMarks);
+        return menuLine(active, null, chaseDef, chaseMarks, null);
     }
 
     public static String menuLine(List<EmberSignature.Def> active, List<EmberSignature.Def> wornOff,
                                   EmberSignature.Def chaseDef, int chaseMarks) {
+        return menuLine(active, wornOff, chaseDef, chaseMarks, null);
+    }
+
+    /**
+     * D12734 / TIP-AO: full-tier chase branch uses {@link EmberSigChase#readyTail};
+     * active / wornOff / under-mark chase unchanged.
+     */
+    public static String menuLine(List<EmberSignature.Def> active, List<EmberSignature.Def> wornOff,
+                                  EmberSignature.Def chaseDef, int chaseMarks, EmberLoadout lo) {
         if (active != null && !active.isEmpty()) {
             StringBuilder sb = new StringBuilder("§d签名 ");
             int n = 0;
@@ -108,6 +117,9 @@ public final class EmberSigFeel {
             int need = EmberSignature.imprintMarks();
             int m = Math.max(0, chaseMarks);
             String nm = chaseDef.name == null ? chaseDef.id : chaseDef.name;
+            if (m >= need) {
+                return "§e追烙就绪 §f" + chaseDef.id + " " + nm + " §7· " + EmberSigChase.readyTail(lo, chaseDef);
+            }
             return "§e追烙 §f" + chaseDef.id + " " + nm + " §7· 徽记 " + m + "/" + need;
         }
         return "§8无签名 · 点左开页 · 右选追烙";

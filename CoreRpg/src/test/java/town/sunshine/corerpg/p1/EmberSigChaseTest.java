@@ -11,7 +11,8 @@ public class EmberSigChaseTest {
         assertTrue(mid.contains("不锁通关"));
         String ready = EmberSigChase.progressLine(EmberSignature.byId("L01"), 5);
         assertTrue(ready.contains("5/5"));
-        assertTrue(ready.contains("满可烙印"));
+        assertTrue(ready.contains("可烙刃")); // TIP-AO lo==null fallback
+        assertFalse(ready.contains("满可烙印"));
         assertTrue(ready.contains("不锁通关"));
         assertEquals("L01 残门焚斧", EmberSigChase.label(EmberSignature.byId("L01")));
     }

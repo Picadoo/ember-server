@@ -83,12 +83,43 @@ public class EmberHopeMeterTest {
         String mid = EmberHopeMeter.sigChase(d, 2);
         assertTrue(mid.contains("2/5"));
         assertTrue(mid.contains("不锁通关"));
+        assertTrue(mid.contains("满可烙印")); // under-mark keeps vague phrase
         assertFalse(mid.contains("5/5"));
         String ready = EmberHopeMeter.sigChase(d, 5);
         assertTrue(ready.contains("5/5"));
-        assertTrue(ready.contains("满可烙印"));
+        assertTrue(ready.contains("可烙刃")); // lo==null → def.slot fallback (TIP-AO)
+        assertFalse(ready.contains("满可烙印"));
         assertTrue(ready.contains("不锁通关"));
         assertTrue(EmberHopeMeter.sigChase(null, 0).contains("未选"));
+    }
+
+    /** DESIGN §2.3 TIP-AO: L02 + head worn · full → 头盔; empty → 缺可烙穿着件; under-mark unchanged. */
+    @Test public void sigChase_D12737_readyTail_defense() {
+        EmberTables tables = EmberTables.defaults();
+        EmberSignature.Def l02 = EmberSignature.byId("L02");
+        int need = EmberSignature.imprintMarks();
+        EmberItemData head = EmberItemData.create("scorch", "head", 2, 1, 0, 0, true, "drop");
+        EmberLoadout loHead = EmberLoadout.compute(tables, null, null, 10, 0, 0,
+                new EmberItemData[]{head, null, null, null});
+        String withHead = EmberHopeMeter.sigChase(l02, need, loHead);
+        assertTrue(withHead, withHead.contains("头盔") || withHead.contains("头"));
+        assertFalse(withHead, withHead.contains("满可烙印"));
+        assertFalse("must not force 护符 when armor wins", withHead.contains("可烙护符"));
+
+        EmberLoadout empty = EmberLoadout.compute(tables, null, null, 10);
+        String miss = EmberHopeMeter.sigChase(l02, need, empty);
+        assertTrue(miss, miss.contains("缺可烙穿着件"));
+
+        EmberSignature.Def l01 = EmberSignature.byId("L01");
+        EmberItemData blade = EmberItemData.create("scorch", "blade", 1, 1, 0, 0, true, "drop");
+        EmberLoadout blo = EmberLoadout.compute(tables, blade, null, 10);
+        String bladeReady = EmberHopeMeter.sigChase(l01, need, blo);
+        assertTrue(bladeReady, bladeReady.contains("可烙刃"));
+
+        String under = EmberHopeMeter.sigChase(l02, need - 1, loHead);
+        assertTrue(under, under.contains("满可烙印"));
+        assertFalse(under, under.contains("缺可烙穿着件"));
+        assertFalse(under, under.contains("可烙头"));
     }
     @Test
     public void mapGearIdentity_nullMap() {

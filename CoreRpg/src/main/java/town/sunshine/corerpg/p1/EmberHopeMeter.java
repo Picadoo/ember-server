@@ -103,13 +103,22 @@ public final class EmberHopeMeter {
      * Never gates dungeon clears.
      */
     public static String sigChase(EmberSignature.Def def, int marks) {
+        return sigChase(def, marks, null);
+    }
+
+    /**
+     * D12733 / TIP-AO: full-tier swaps vague「满可烙印」for {@link EmberSigChase#readyTail}.
+     * Under-mark string unchanged. {@code lo==null} → readyTail falls back to def.slot name.
+     */
+    public static String sigChase(EmberSignature.Def def, int marks, EmberLoadout lo) {
         if (def == null) return "§8追烙未选 · /corerpg p1 sig chase";
         int need = EmberSignature.imprintMarks();
         int m = Math.max(0, marks);
         String who = def.id + " " + def.name;
         String map = def.map == null ? "?" : def.map.toUpperCase(Locale.ROOT);
         if (m >= need) {
-            return String.format(Locale.ROOT, "§a追烙就绪 %d/%d · %s · %s 满可烙印（不锁通关）", need, need, who, map);
+            return String.format(Locale.ROOT, "§a追烙就绪 %d/%d · %s · %s · %s（不锁通关）",
+                    need, need, who, map, EmberSigChase.readyTail(lo, def));
         }
         return String.format(Locale.ROOT, "§e追烙 %d/%d · %s · %s 徽记 · 满可烙印（不锁通关）", m, need, who, map);
     }
@@ -393,6 +402,15 @@ public final class EmberHopeMeter {
                                             EmberForgeHeldNext.Mats mats,
                                             int rerollPity, int rerollNeed,
                                             EmberSignature.Def chaseDef, int chaseMarks) {
+        return priorityTracks(held, pd, mats, rerollPity, rerollNeed, chaseDef, chaseMarks, null);
+    }
+
+    /** D12736: optional lo feeds sigChase readyTail when caller has loadout. */
+    public static List<Track> priorityTracks(EmberItemData held, PlayerData pd,
+                                            EmberForgeHeldNext.Mats mats,
+                                            int rerollPity, int rerollNeed,
+                                            EmberSignature.Def chaseDef, int chaseMarks,
+                                            EmberLoadout lo) {
         List<Track> out = new ArrayList<Track>(8);
         if (held == null) {
             out.add(FALLBACK);
@@ -446,7 +464,7 @@ public final class EmberHopeMeter {
                 EmberForgeGoal.GEM));
         if (chaseDef != null) {
             out.add(new Track("sig", "签名追烙",
-                    sigChase(chaseDef, chaseMarks),
+                    sigChase(chaseDef, chaseMarks, lo),
                     "材料够",
                     "去追烙",
                     EmberForgeGoal.NONE));
