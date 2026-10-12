@@ -196,9 +196,9 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-AH APPROVED** · attune 预览六槽对齐 · 已派插件 · L13 stage1 HOLD
+- **TIP-AH CLOSED live** `1.65.774-d12631.local` · feat `5e1b43c96` · chore `57efb60b8` · attune 预览六槽对齐 · L13 stage1 HOLD 下一 tip
 
-- **TIP-AH OPEN** · `TIP-ember-attune-preview-sixslot-align-thin-d12616-d12631-2026-10-12.md` · RESEARCH `RESEARCH-ember-attune-preview-sixslot-align-2026-10-12.md` · DESIGN `DESIGN-ember-attune-preview-sixslot-align-2026-10-12.md` · attune 预览六槽对齐（可施工薄 · 正交刃轨 · 零功率表）· 批后派插件 · **L13 stage1 HOLD 下一 tip** · 深化 densify 仍冻 · 策划 docs-only
+- **TIP-AH OPEN** · `TIP-ember-attune-preview-sixslot-align-thin-d12616-d12631-2026-10-12.md` · RESEARCH `RESEARCH-ember-attune-preview-sixslot-align-2026-10-12.md` · DESIGN `DESIGN-ember-attune-preview-sixslot-align-2026-10-12.md` · attune 预览六槽对齐（可施工薄 · 正交刃轨 · 零功率表）· 批后派插件 · **L13 stage1 HOLD 下一 tip** · 深化 densify 仍冻 · 策划 docs-only · **（历史 OPEN 行；已 CLOSED live）**
 
 - **TIP-AG CLOSED** `7d61761e4` · L13 蓄力身份 DESIGN stage0 APPROVED · HOLD 施工 · R1–R5 · **L13 stage1 未开**（下一 tip after TIP-AH）
 

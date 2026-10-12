@@ -1,6 +1,6 @@
 # tip · TIP-AH attune 预览六槽对齐（可施工薄 · 正交刃轨）· D12616–D12631
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件**（总控 2026-10-12 19:44 Asia/Shanghai）· 待 live 后 CLOSED  
+> **状态：** **CLOSED live** `1.65.774-d12631.local` · 批 **A · 方案 M** · feat `5e1b43c96` · chore `57efb60b8` · 2026-10-12 19:50 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-attune-preview-sixslot-align-2026-10-12.md`](../design/RESEARCH-ember-attune-preview-sixslot-align-2026-10-12.md) · DESIGN [`DESIGN-ember-attune-preview-sixslot-align-2026-10-12.md`](../design/DESIGN-ember-attune-preview-sixslot-align-2026-10-12.md) · TIP-AE CLOSED live `1.65.773-d12599`（defense-side 5 取 1）· TIP-AG CLOSED `7d61761e4`（L13 DESIGN stage0 APPROVED · **HOLD 施工**）  
 > **选题：** 总控 **(2) attune 预览六槽对齐** — 可感 UX；**非** densify；L13 stage1 **下一 tip HOLD**  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberGrowthService` runPreview* 主责）；**余烬-物品** 仅可选 TrMenu **注释**勘误（**禁**加 lore 行）  
@@ -83,17 +83,17 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12620–D12622；D12624 `git show` 干净  
-- [ ] 可选物品：D12623 注释 only · lore≤3  
-- [ ] 策划本窗 commit **docs-only**；**无**业务 jar  
-- [ ] L13 stage1 仍 HOLD 下一 tip  
+- [x] 批后插件：D12620–D12622；D12624 `git show` 干净（feat `5e1b43c96` 仅 3 Java）  
+- [ ] 可选物品：D12623 注释 only · lore≤3（本窗未做 · tip 可选）  
+- [x] 插件 jar live `1.65.774-d12631.local`；策划 docs close 本窗  
+- [x] L13 stage1 仍 HOLD 下一 tip  
 
 ---
 
 ## 6. 批注（荐）
 
-- [ ] 总控批 **A · 方案 M** · 荐批  
+- [x] 总控批 **A · 方案 M** · 荐批  
 - 选题：TIP-AG 后 · **(2) attune 预览六槽对齐**（可施工薄 · 非 densify）  
 - **批注：** AE 后预览硬编码刃+护符 vs 战斗 5 取 1；修 `runPreview*` 收集；槽标签真名；零功率表；runconfirm lore≤3 不加成行；批后派 **余烬-插件**；**L13 stage1 HOLD 下一 tip**；深化 densify / Affix / 抬表 / glance / sx20 / skill_mult / STAMP / L11·L13 mods 仍冻  
 
-## STATUS: OPEN · 待批 A·M · 2026-10-12 19:41 CST · docs-only（施工归插件）
+## STATUS: CLOSED live · 1.65.774-d12631.local · feat 5e1b43c96 · chore 57efb60b8 · 2026-10-12 19:50 CST

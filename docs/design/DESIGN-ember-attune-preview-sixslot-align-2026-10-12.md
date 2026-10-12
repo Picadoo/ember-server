@@ -1,6 +1,6 @@
 # DESIGN · attune 预览六槽对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-AH 批 A·M · 已派 **余烬-插件** · 2026-10-12 19:44 Asia/Shanghai  
+> **状态：** **CLOSED live** `1.65.774-d12631.local` · TIP-AH 批 A·M · feat `5e1b43c96` · 2026-10-12 19:50 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-attune-preview-sixslot-align-2026-10-12.md`](RESEARCH-ember-attune-preview-sixslot-align-2026-10-12.md)  
 > **对接 live：** TIP-AE defense-side fits / 5 取 1 · D297 `EmberSigAttunePreview` / `%corerpg_p1_sig_run%`  
 > **HOLD 旁注：** L13 stage1 **下一 tip**；TIP-AD exclude 刃 L11/L13 **保留**  
@@ -70,11 +70,11 @@
 
 ## 3. 验收
 
-- [ ] 预览槽集合 ≡ 战斗 `signatures()` 对应佩戴槽（刃 + ≤1 防具侧）  
-- [ ] 甲胜出时标签为头盔/胸甲/护腿/靴子之一，非误标护符  
-- [ ] runconfirm 仍 lore≤3；无新 PAPI key（沿用 `run` / `run_cost`）  
-- [ ] `git show` 无 STAMP/C12/loot/L11/L13/Affix/skill_mult 改动  
-- [ ] 单测最小包 PASS  
+- [x] 预览槽集合 ≡ 战斗 `signatures()` 对应佩戴槽（刃 + ≤1 防具侧）  
+- [x] 甲胜出时标签为头盔/胸甲/护腿/靴子之一，非误标护符  
+- [x] runconfirm 仍 lore≤3；无新 PAPI key（沿用 `run` / `run_cost`）  
+- [x] `git show` 无 STAMP/C12/loot/L11/L13/Affix/skill_mult 改动  
+- [x] 单测最小包 PASS（8+20）  
 
 ---
 
