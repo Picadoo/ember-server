@@ -417,6 +417,10 @@ public final class LifeService implements Listener {
             }
             if (o.lifeLevel > lv) sb.append(ChatColor.RED).append(" · 需生活 Lv.").append(o.lifeLevel)
                     .append(" · 还差").append(o.lifeLevel - lv).append("级");
+            try { // TIP-AZ D12910: ready → 今日减负待用
+                if (o.coin > 0 && buySoftReady(o.id, d))
+                    sb.append(ChatColor.DARK_GRAY).append(" · ").append(town.sunshine.corerpg.p1.EmberGearNextHint.SOFT_TAIL);
+            } catch (Throwable ignored) { }
             p.sendMessage(sb.toString());
         }
         p.sendMessage(ChatColor.GRAY + " /corerpg life buy <项目> [次数] · /corerpg life cook · 钓竿在补给处购买，水边抛竿钓鱼升生活等级");
@@ -490,81 +494,34 @@ public final class LifeService implements Listener {
                 return false;
             }
         }
-        int payCoin = o.coin;
-        if (BREW_OFFER_ID.equals(o.id) && payCoin > 0) {
+        int payFull = o.coin;
+        int payShow = payFull;
+        try { // TIP-AZ D12909: coin gate uses peek — reject without latch
+            payShow = peekBuyCoin(o.id, d, payFull);
+        } catch (Throwable ignored) { }
+        if (d.getCoin() < payShow) {
+            int gapC = payShow - d.getCoin();
+            String refuse = ChatColor.RED + "[生活] 余烬币不足：需要 " + payShow + "，拥有 " + d.getCoin()
+                    + " §8· 还差 " + gapC;
             try {
-                int soft = town.sunshine.corerpg.p1.EmberBrewCoinSoft.consumeCoin(d, payCoin); // D8769
-                if (soft < payCoin) {
-                    p.sendMessage(ChatColor.GREEN + "[生活] 熬药减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
-                    payCoin = soft;
-                }
+                if (payFull > 0 && buySoftReady(o.id, d))
+                    refuse = refuse + ChatColor.GRAY + " · " + town.sunshine.corerpg.p1.EmberGearNextHint.SOFT_TAIL;
             } catch (Throwable ignored) { }
-        } else if (ROD_OFFER_ID.equals(o.id) && payCoin > 0) {
-            try {
-                int soft = town.sunshine.corerpg.p1.EmberRodBuySoft.consumeCoin(d, payCoin); // D8897
-                if (soft < payCoin) {
-                    p.sendMessage(ChatColor.GREEN + "[生活] 钓竿减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
-                    payCoin = soft;
-                }
-            } catch (Throwable ignored) { }
-        } else if (BREAD_OFFER_ID.equals(o.id) && payCoin > 0) {
-            try {
-                int soft = town.sunshine.corerpg.p1.EmberBreadBuySoft.consumeCoin(d, payCoin); // D8977
-                if (soft < payCoin) {
-                    p.sendMessage(ChatColor.GREEN + "[生活] 面包减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
-                    payCoin = soft;
-                }
-            } catch (Throwable ignored) { }
-        } else if (town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.isSoulDustOffer(o.id) && payCoin > 0) {
-            try {
-                int soft = town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.consumeCoin(d, payCoin); // D9089
-                if (soft < payCoin) {
-                    p.sendMessage(ChatColor.GREEN + "[生活] 魂尘减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
-                    payCoin = soft;
-                }
-            } catch (Throwable ignored) { }
-        } else if (town.sunshine.corerpg.p1.EmberReforgeStoneSoft.OFFER_ID.equals(o.id) && payCoin > 0) {
-            try {
-                int soft = town.sunshine.corerpg.p1.EmberReforgeStoneSoft.consumeCoin(d, payCoin); // D9281
-                if (soft < payCoin) {
-                    p.sendMessage(ChatColor.GREEN + "[生活] 重铸石减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
-                    payCoin = soft;
-                }
-            } catch (Throwable ignored) { }
-        } else if (town.sunshine.corerpg.p1.EmberOffhandBuySoft.isOffhandOffer(o.id) && payCoin > 0) {
-            try {
-                int soft = town.sunshine.corerpg.p1.EmberOffhandBuySoft.consumeCoin(d, payCoin); // D9361
-                if (soft < payCoin) {
-                    p.sendMessage(ChatColor.GREEN + "[生活] 副手减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
-                    payCoin = soft;
-                }
-            } catch (Throwable ignored) { }
-        } else if (town.sunshine.corerpg.p1.EmberStableCharmSoft.OFFER_ID.equals(o.id) && payCoin > 0) {
-            try {
-                int soft = town.sunshine.corerpg.p1.EmberStableCharmSoft.consumeCoin(d, payCoin); // D9425
-                if (soft < payCoin) {
-                    p.sendMessage(ChatColor.GREEN + "[生活] 稳固符减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
-                    payCoin = soft;
-                }
-            } catch (Throwable ignored) { }
-        } else if (town.sunshine.corerpg.p1.EmberPetHatchSoft.isPetOffer(o.id) && payCoin > 0) {
-            try {
-                int soft = town.sunshine.corerpg.p1.EmberPetHatchSoft.consumeCoin(d, payCoin); // D9441
-                if (soft < payCoin) {
-                    p.sendMessage(ChatColor.GREEN + "[生活] 孵宠减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
-                    payCoin = soft;
-                }
-            } catch (Throwable ignored) { }
-        }
-        if (d.getCoin() < payCoin) {
-            int gapC = payCoin - d.getCoin();
-            p.sendMessage(ChatColor.RED + "[生活] 余烬币不足：需要 " + payCoin + "，拥有 " + d.getCoin()
-                    + " §8· 还差 " + gapC);
+            p.sendMessage(refuse);
             try { // D1545
                 p.sendActionBar("§e生活 · 还差币 §f" + gapC);
             } catch (Throwable ignored) { }
             return false;
         }
+        int payCoin = payFull;
+        try { // TIP-AZ: consume only before spendCoin
+            int soft = consumeBuyCoin(o.id, d, payFull);
+            if (soft < payFull) {
+                String tag = buySoftTag(o.id);
+                p.sendMessage(ChatColor.GREEN + "[生活] " + tag + "减负 · 币 ×0.5（今日一次 · " + payFull + "→" + soft + "）");
+                payCoin = soft;
+            }
+        } catch (Throwable ignored) { }
         if (payCoin > 0 && !town.sunshine.corerpg.p1.EmberEconomy.spendCoin(d, "C17", payCoin)) {
             p.sendMessage(ChatColor.RED + "[生活] 扣币失败"); return false;
         } // D1020: coin before mats
@@ -627,6 +584,75 @@ public final class LifeService implements Listener {
         return true;
     }
 
+
+    /** TIP-AZ: peek coin for soft-offer families (never consumes). */
+    public static int peekBuyCoin(String id, PlayerData d, int coin) {
+        if (coin <= 0 || id == null) return coin;
+        if (BREW_OFFER_ID.equals(id)) return town.sunshine.corerpg.p1.EmberBrewCoinSoft.peekCoin(d, coin);
+        if (ROD_OFFER_ID.equals(id)) return town.sunshine.corerpg.p1.EmberRodBuySoft.peekCoin(d, coin);
+        if (BREAD_OFFER_ID.equals(id)) return town.sunshine.corerpg.p1.EmberBreadBuySoft.peekCoin(d, coin);
+        if (town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.isSoulDustOffer(id))
+            return town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.peekCoin(d, coin);
+        if (town.sunshine.corerpg.p1.EmberReforgeStoneSoft.OFFER_ID.equals(id))
+            return town.sunshine.corerpg.p1.EmberReforgeStoneSoft.peekCoin(d, coin);
+        if (town.sunshine.corerpg.p1.EmberOffhandBuySoft.isOffhandOffer(id))
+            return town.sunshine.corerpg.p1.EmberOffhandBuySoft.peekCoin(d, coin);
+        if (town.sunshine.corerpg.p1.EmberStableCharmSoft.OFFER_ID.equals(id))
+            return town.sunshine.corerpg.p1.EmberStableCharmSoft.peekCoin(d, coin);
+        if (town.sunshine.corerpg.p1.EmberPetHatchSoft.isPetOffer(id))
+            return town.sunshine.corerpg.p1.EmberPetHatchSoft.peekCoin(d, coin);
+        return coin;
+    }
+
+    /** TIP-AZ: consume soft only before spendCoin. */
+    public static int consumeBuyCoin(String id, PlayerData d, int coin) {
+        if (coin <= 0 || id == null) return coin;
+        if (BREW_OFFER_ID.equals(id)) return town.sunshine.corerpg.p1.EmberBrewCoinSoft.consumeCoin(d, coin);
+        if (ROD_OFFER_ID.equals(id)) return town.sunshine.corerpg.p1.EmberRodBuySoft.consumeCoin(d, coin);
+        if (BREAD_OFFER_ID.equals(id)) return town.sunshine.corerpg.p1.EmberBreadBuySoft.consumeCoin(d, coin);
+        if (town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.isSoulDustOffer(id))
+            return town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.consumeCoin(d, coin);
+        if (town.sunshine.corerpg.p1.EmberReforgeStoneSoft.OFFER_ID.equals(id))
+            return town.sunshine.corerpg.p1.EmberReforgeStoneSoft.consumeCoin(d, coin);
+        if (town.sunshine.corerpg.p1.EmberOffhandBuySoft.isOffhandOffer(id))
+            return town.sunshine.corerpg.p1.EmberOffhandBuySoft.consumeCoin(d, coin);
+        if (town.sunshine.corerpg.p1.EmberStableCharmSoft.OFFER_ID.equals(id))
+            return town.sunshine.corerpg.p1.EmberStableCharmSoft.consumeCoin(d, coin);
+        if (town.sunshine.corerpg.p1.EmberPetHatchSoft.isPetOffer(id))
+            return town.sunshine.corerpg.p1.EmberPetHatchSoft.consumeCoin(d, coin);
+        return coin;
+    }
+
+    public static boolean buySoftReady(String id, PlayerData d) {
+        if (id == null || d == null) return false;
+        if (BREW_OFFER_ID.equals(id)) return town.sunshine.corerpg.p1.EmberBrewCoinSoft.ready(d);
+        if (ROD_OFFER_ID.equals(id)) return town.sunshine.corerpg.p1.EmberRodBuySoft.ready(d);
+        if (BREAD_OFFER_ID.equals(id)) return town.sunshine.corerpg.p1.EmberBreadBuySoft.ready(d);
+        if (town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.isSoulDustOffer(id))
+            return town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.ready(d);
+        if (town.sunshine.corerpg.p1.EmberReforgeStoneSoft.OFFER_ID.equals(id))
+            return town.sunshine.corerpg.p1.EmberReforgeStoneSoft.ready(d);
+        if (town.sunshine.corerpg.p1.EmberOffhandBuySoft.isOffhandOffer(id))
+            return town.sunshine.corerpg.p1.EmberOffhandBuySoft.ready(d);
+        if (town.sunshine.corerpg.p1.EmberStableCharmSoft.OFFER_ID.equals(id))
+            return town.sunshine.corerpg.p1.EmberStableCharmSoft.ready(d);
+        if (town.sunshine.corerpg.p1.EmberPetHatchSoft.isPetOffer(id))
+            return town.sunshine.corerpg.p1.EmberPetHatchSoft.ready(d);
+        return false;
+    }
+
+    public static String buySoftTag(String id) {
+        if (BREW_OFFER_ID.equals(id)) return "熬药";
+        if (ROD_OFFER_ID.equals(id)) return "钓竿";
+        if (BREAD_OFFER_ID.equals(id)) return "面包";
+        if (town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.isSoulDustOffer(id)) return "魂尘";
+        if (town.sunshine.corerpg.p1.EmberReforgeStoneSoft.OFFER_ID.equals(id)) return "重铸石";
+        if (town.sunshine.corerpg.p1.EmberOffhandBuySoft.isOffhandOffer(id)) return "副手";
+        if (town.sunshine.corerpg.p1.EmberStableCharmSoft.OFFER_ID.equals(id)) return "稳固符";
+        if (town.sunshine.corerpg.p1.EmberPetHatchSoft.isPetOffer(id)) return "孵宠";
+        return "购币";
+    }
+
     public static final String BREAD_OFFER_ID = "bread";
     public static final String BREAD_NI_ID = "food_ember_bread";
 
@@ -640,8 +666,7 @@ public final class LifeService implements Listener {
         PlayerData d = dataStore.get(p.getUniqueId());
         if (d == null) return false;
         int needC = o.coin;
-        if (needC > 0 && town.sunshine.corerpg.p1.EmberBreadBuySoft.ready(d))
-            needC = Math.max(1, (int) Math.floor(needC * town.sunshine.corerpg.p1.EmberBreadBuySoft.MULT));
+        try { needC = town.sunshine.corerpg.p1.EmberBreadBuySoft.peekCoin(d, needC); } catch (Throwable ignored) { }
         if (d.getCoin() < needC) return false;
         if (countPathFood(p) > 0) return false;
         if (ni.countInInventoryOnly(p, BREAD_NI_ID) > 0) return false;
@@ -672,9 +697,7 @@ public final class LifeService implements Listener {
         if (d == null) return false;
         if (lifeLevel(d) < o.lifeLevel) return false;
         int needCoin = o.coin;
-        if (BREW_OFFER_ID.equals(o.id) && needCoin > 0
-                && town.sunshine.corerpg.p1.EmberBrewCoinSoft.ready(d))
-            needCoin = Math.max(1, (int) Math.floor(needCoin * town.sunshine.corerpg.p1.EmberBrewCoinSoft.MULT));
+        try { needCoin = town.sunshine.corerpg.p1.EmberBrewCoinSoft.peekCoin(d, needCoin); } catch (Throwable ignored) { }
         if (d.getCoin() < needCoin) return false;
         town.sunshine.corerpg.p1.EmberSupplyService supply = plugin.getEmberSupplies();
         int pots = supply == null ? 0 : supply.countHealPotions(p);
