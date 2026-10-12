@@ -196,9 +196,11 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-AN APPROVED** · SigChase 追烙防具侧就绪 · 已派插件 · L13 HOLD
+- **TIP-AN CLOSED live** `1.65.779-d12727.local` · feat `1ff4769e2` · SigChase 追烙防具侧就绪 · **L13 施工仍 HOLD**
 
-- **TIP-AN OPEN** · `TIP-ember-sigchase-defense-ready-align-thin-d12712-d12727-2026-10-12.md` · RESEARCH `RESEARCH-ember-sigchase-defense-ready-align-2026-10-12.md` · DESIGN `DESIGN-ember-sigchase-defense-ready-align-2026-10-12.md` · SigChase 追烙就绪防具侧对齐（可施工薄 · 可感 UX · **换轴非 densify · 非再扫甲闸** · 零功率表 · 接 TIP-AM 甲闸链闭合）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AM CLOSED live · 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 仍冻 · 策划 docs-only
+- **TIP-AN APPROVED** · SigChase 追烙防具侧就绪 · 已派插件 · L13 HOLD · **（历史 APPROVED 行；已 CLOSED live）**
+
+- **TIP-AN OPEN** · `TIP-ember-sigchase-defense-ready-align-thin-d12712-d12727-2026-10-12.md` · RESEARCH `RESEARCH-ember-sigchase-defense-ready-align-2026-10-12.md` · DESIGN `DESIGN-ember-sigchase-defense-ready-align-2026-10-12.md` · SigChase 追烙就绪防具侧对齐（可施工薄 · 可感 UX · **换轴非 densify · 非再扫甲闸** · 零功率表 · 接 TIP-AM 甲闸链闭合）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AM CLOSED live · 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 仍冻 · 策划 docs-only · **（历史 OPEN 行；已 CLOSED live）**
 
 - **TIP-AM CLOSED live** `1.65.778-d12711.local` · feat `ab9f9a98f` · chore `0ce13b755` · SinkGlance 甲诚实 · **L13 施工仍 HOLD**
 

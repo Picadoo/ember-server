@@ -1,6 +1,6 @@
 # tip · TIP-AN SigChase 追烙就绪防具侧对齐（可施工薄 · 可感 UX）· D12712–D12727
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 20:37 Asia/Shanghai  
+> **状态：** **CLOSED live** `1.65.779-d12727.local` · 批 **A · 方案 M** · feat `1ff4769e2` · 2026-10-12 20:41 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-sigchase-defense-ready-align-2026-10-12.md`](../design/RESEARCH-ember-sigchase-defense-ready-align-2026-10-12.md) · DESIGN [`DESIGN-ember-sigchase-defense-ready-align-2026-10-12.md`](../design/DESIGN-ember-sigchase-defense-ready-align-2026-10-12.md) · TIP-AM CLOSED live `1.65.778-d12711` · TIP-AJ CLOSED live `1.65.775-d12663` · TIP-AE CLOSED live `1.65.773-d12599` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **换轴 · 可感 UX / 变强途径（非 densify · 非再扫甲闸）** — SigChase 追烙就绪防具侧对齐；正交甲闸链已闭合  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberSigChase.sameSlotPiece` / held-ready / ready cue 槽名 + 单测）  
