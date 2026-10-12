@@ -198,7 +198,9 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 ## 进度戳
 - **TIP-AR CLOSED** live `1.65.783-d12791` · feat `489271b08` · DropCraft/Q 加码 remain 诚实 · L13 HOLD
 
-- **TIP-AR OPEN** · `TIP-ember-drop-craft-q-pity-nudge-remain-align-thin-d12776-d12791-2026-10-12.md` · RESEARCH `RESEARCH-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md` · DESIGN `DESIGN-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md` · DropCraft/Q 日首加码 remain 诚实对齐（可施工薄 · 可感 UX · **续 AP/AQ 同构** · **非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify** · 零改 NEED/FLOOR/BONUS/权重 · 零新 PAPI · 零新开精工 Hope 轨）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AQ CLOSED live · 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify 仍冻 · 策划 docs-only
+- **TIP-AS OPEN** · `TIP-ember-forge-costsoft-glance-align-thin-d12792-d12807-2026-10-12.md` · RESEARCH `RESEARCH-ember-forge-costsoft-glance-align-2026-10-12.md` · DESIGN `DESIGN-ember-forge-costsoft-glance-align-2026-10-12.md` · 工坊日首 CostSoft 预览/glance 诚实对齐（可施工薄 · 可感 UX · **离开 pity-remain** · **非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify** · 零改 MULT/经济表 · 零新 PAPI · 甲早退不动）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AR CLOSED live · Brand/Gem soft 旁债 · 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify / pity-remain 再叠 仍冻 · 策划 docs-only
+
+- **TIP-AR OPEN** · `TIP-ember-drop-craft-q-pity-nudge-remain-align-thin-d12776-d12791-2026-10-12.md` · RESEARCH `RESEARCH-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md` · DESIGN `DESIGN-ember-drop-craft-q-pity-nudge-remain-align-2026-10-12.md` · DropCraft/Q 日首加码 remain 诚实对齐（可施工薄 · 可感 UX · **续 AP/AQ 同构** · **非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify** · 零改 NEED/FLOOR/BONUS/权重 · 零新 PAPI · 零新开精工 Hope 轨）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AQ CLOSED live · 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify 仍冻 · 策划 docs-only · **（历史 OPEN 行；已 CLOSED live）**
 
 - **TIP-AQ CLOSED** live `1.65.782-d12775` · feat `58e9ac299` · 洗练加码 remain 诚实 · L13 HOLD
 
