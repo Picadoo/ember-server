@@ -2566,3 +2566,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 门禁 | `tools/p1sim/affixpack34.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack34-d12238-2026-10-12.md` |
 
+### 13.147 Affix Pack 35 撕斩/湾洼（CoreRpg 1.65.757，D12239，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12239 |
+| jar | CoreRpg **1.65.757-d12239.local** |
+| balance_version | 121 → **122** |
+| 行为 | 词缀池 70→72：+`rend` 撕斩 / `gulf` 湾洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack35-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack35.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack35-d12239-2026-10-12.md` |
+
