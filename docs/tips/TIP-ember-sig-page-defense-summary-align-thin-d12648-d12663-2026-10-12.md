@@ -1,6 +1,6 @@
 # tip · TIP-AJ 签名页防具侧生效摘要对齐（可施工薄 · 可感 UX）· D12648–D12663
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件**（+物品 C 名）· 2026-10-12 20:00 Asia/Shanghai  
+> **状态：** **CLOSED live** `1.65.775-d12663.local` · 批 **A · 方案 M** · feat `82d6a03fa` · chore `e5de8a922` · items `a167862a8` · 2026-10-12 20:05 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-sig-page-defense-summary-align-2026-10-12.md`](../design/RESEARCH-ember-sig-page-defense-summary-align-2026-10-12.md) · DESIGN [`DESIGN-ember-sig-page-defense-summary-align-2026-10-12.md`](../design/DESIGN-ember-sig-page-defense-summary-align-2026-10-12.md) · TIP-AH CLOSED live `1.65.774-d12631`（run 预览已齐）· TIP-AE CLOSED live `1.65.773-d12599` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径（非 densify）** — AH E9「签名页摘要另债」；正交刃 L13 HOLD  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberGrowthService` sigPapi/toggle/imprint_hope/图鉴 a_）；**余烬-物品** TrMenu `ember_p1_sig.yml` C 名（**禁**加 lore 行）  
@@ -84,17 +84,17 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12652–D12655；D12657 `git show` 干净  
-- [ ] 物品：D12656 C 名 only · lore≤3  
-- [ ] 插件 jar live 后策划 docs close  
-- [ ] **L13 施工仍 HOLD**  
+- [x] 批后插件：D12652–D12655；D12657 `git show` 干净（feat `82d6a03fa` 仅 2 Java）  
+- [x] 物品：D12656 C 名 only · lore≤3（`a167862a8`）  
+- [x] 插件 jar live `1.65.775-d12663.local`；策划 docs close 本窗  
+- [x] **L13 施工仍 HOLD**  
 
 ---
 
 ## 6. 批注（荐）
 
-- [ ] 总控批 **A · 方案 M** · 荐批  
+- [x] 总控批 **A · 方案 M** · 荐批  
 - 选题：TIP-AI 后 · **可感 UX** — 签名页防具侧生效摘要对齐（AH E9 另债 · 非 densify）  
 - **批注：** AE+AH 后战斗/预览已 5 取 1，签名页 C 仍 charm 字面说谎；扩 `charm*` PAPI 语义 + toggle 胜出槽 + C 名「防具侧生效」+ 图鉴/imprint_hope 诚实；零功率表；仍两格；批后派 **余烬-插件**（+物品 C 名）；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance / sx20 / skill_mult / STAMP / L11·L13 mods / stampable 扩 仍冻  
 
-## STATUS: OPEN · 荐 A·M · 2026-10-12
+## STATUS: CLOSED live · 1.65.775-d12663.local · feat 82d6a03fa · chore e5de8a922 · items a167862a8 · 2026-10-12 20:05 CST
