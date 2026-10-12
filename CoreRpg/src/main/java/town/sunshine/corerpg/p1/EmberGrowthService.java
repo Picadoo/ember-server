@@ -2255,8 +2255,8 @@ public final class EmberGrowthService implements Listener {
             p.sendMessage(P + "§6词条洗练 · " + t.shortLabel());
             // D12259: choice feel — lock vs random (pool stays out of menu lore)
             p.sendMessage(P + EmberForgeChoice.rerollChoice(lock));
-            // D1249: pity remain honesty（非 hope PAPI twin）
-            String rem = EmberRerollPity.remainLine(pity, reroll.pity);
+            // D1249/D12765: pity remain honesty + day-first nudge（非 hope PAPI twin）
+            String rem = EmberRerollPity.remainLine(pity, reroll.pity, EmberRerollPityNudge.ready(d));
             p.sendMessage(P + "现在：" + affixText(affixOf(d, t), t.quality) + " §7· 成色" + EmberItemData.qualityName(t.quality)
                     + "最高 §f" + cap + " §7档 · §f" + rem
                     + (pity >= reroll.pity ? " §a（这次必出 " + cap + " 档）" : ""));
@@ -2676,9 +2676,9 @@ public final class EmberGrowthService implements Listener {
         if ("cur".equals(k)) return "§7词条：" + affixText(affixOf(d, t), t.quality);
         if ("cap".equals(k)) {
             int pity = afPityOf(d, t);
-            // D1249: remainLine on existing cap placeholder（非新 hope PAPI）
+            // D1249/D12765: remainLine on existing cap placeholder + day-first nudge（非新 hope PAPI）
             return "§7成色" + EmberItemData.qualityName(t.quality) + " · 最高 §f" + reroll.cap(t.quality)
-                    + " §7档 · §f" + EmberRerollPity.remainLine(pity, reroll.pity);
+                    + " §7档 · §f" + EmberRerollPity.remainLine(pity, reroll.pity, EmberRerollPityNudge.ready(d));
         }
         if ("dup".equals(k)) {
             if (findDup(p, d, t) >= 0) return "§a背包里有重复件 §7+ " + rerollCoin(p, t) + " 币";

@@ -446,7 +446,7 @@ public final class EmberHopeMeter {
         // Reroll: blade/charm with pity progress (caller prefers held, else loadout)
         if (rerollPity > 0 && rerollNeed > 0) {
             out.add(new Track("reroll", "洗练保底",
-                    EmberRerollPity.glance(rerollPity, rerollNeed),
+                    EmberRerollPity.remainLine(rerollPity, rerollNeed, EmberRerollPityNudge.ready(pd)),
                     "材料够",
                     "去洗练",
                     EmberForgeGoal.LOCK));

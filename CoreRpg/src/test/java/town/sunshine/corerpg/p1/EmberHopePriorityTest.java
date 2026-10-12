@@ -151,7 +151,9 @@ public class EmberHopePriorityTest {
         EmberHopeMeter.Track gem = null;
         for (EmberHopeMeter.Track t : tracks) if ("gem".equals(t.id)) gem = t;
         assertNotNull(gem);
-        assertEquals(EmberGemAcquire.remainLine(2), gem.progressLine);
-        assertTrue(gem.progressLine.contains("再通关3次得石"));
+        // TIP-AP: gem track eats remainLine(pd) (nudge-aware); unary remainLine(2) is no-nudge
+        assertEquals(EmberGemAcquire.remainLine(pd), gem.progressLine);
+        assertTrue(gem.progressLine.contains("再通关2次得石"));
+        assertTrue(gem.progressLine.contains("今日加码待用"));
     }
 }
