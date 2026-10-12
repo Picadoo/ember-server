@@ -1,6 +1,6 @@
 # tip · TIP-B 工坊选择感 · 非加伤（稳/赌/烙/洗可区分）· D12256–D12263
 
-> **状态：** 批 **A · 方案 M**（总控 2026-10-12 11:44 Asia/Shanghai）· 交插件岗  
+> **状态：** CLOSED · live 1.65.760-d12263（2026-10-12 11:49 Asia/Shanghai）  
 > **上游：** [`DESIGN-ember-growth-variety-thin-2026-10-12.md`](../design/DESIGN-ember-growth-variety-thin-2026-10-12.md) §2B · [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md) Batch3 WS1–WS3 · forge-choice Stage0（K1/K2 已 SHIP）  
 > **前置：** TIP-A CLOSED（d12247）· TIP-C CLOSED（1.65.759-d12255）  
 > **施工岗：** 插件岗（TrMenu 文案 + 纯展示/commit 接线；**零改价**）  
@@ -81,3 +81,5 @@
 - [x] 总控批 **A · 方案 M** · 2026-10-12 11:44 CST  
 - tip 已推 · 交插件岗  
 - 薄窗 A→C→**B** 本批收束；收尾后不再开同构 forge twin
+
+## STATUS: CLOSED · live 1.65.760-d12263 · 2026-10-12 11:49 CST
