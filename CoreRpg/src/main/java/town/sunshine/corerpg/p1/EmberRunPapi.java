@@ -149,6 +149,7 @@ public final class EmberRunPapi {
                 || "held_refine_hope".equals(key)
                 // D608 gem clear-pity hope
                 || "gem_pity_hope".equals(key)
+                || "hope_now".equals(key) // D12306 hub hope glance
                 || "drop_q_hope".equals(key)
                 || "event_soft_hope".equals(key) // D728
                 || "gearlib_hope".equals(key);
@@ -592,6 +593,16 @@ public final class EmberRunPapi {
         if ("mapid_board".equals(key)) { // D616 readable bias board
             return EmberHopeMeter.mapGearBoard(maps);
         }
+        if ("mapid_focus".equals(key)) { // D12307: setfocus → suggestMap menuLine (or no-focus tip)
+            int fid = EmberSetFocus.get(d);
+            String fam = EmberSetFocus.familyKey(fid);
+            if (fam == null || fam.isEmpty()) return "§8未选套装焦点 · 右键套装格";
+            String mk = EmberMapIdentity.suggestMapForFamily(maps, fam);
+            if (mk == null || mk.isEmpty()) return "§8未选套装焦点 · 右键套装格";
+            EmberRunMaps.MapDef lm = maps.byKey(mk);
+            if (lm == null) lm = maps.raids.get(mk);
+            return EmberMapIdentity.menuLine(lm, d);
+        }
         if (key.startsWith("mapid_")) { // D12250: per-map menuLine (board stays above)
             EmberRunMaps.MapDef lm = maps.byKey(key.substring(6));
             if (lm == null) lm = maps.raids.get(key.substring(6));
@@ -784,6 +795,9 @@ public final class EmberRunPapi {
                 if (hr == null) return EmberHopeMeter.emptySlot("手持");
                 return EmberHopeMeter.refine(hr);
             }
+            case "hope_now": { // D12306 hub hope L1 — menuNow of current priority track
+                return hopeNowLine(p);
+            }
             case "gem_pity_hope": { // D608 / D12273: display remainLine (n/N·再通关得石); hopeLine kept for other callers
                 PlayerData gd = runs.plugin().getDataStore().get(p.getUniqueId());
                 return EmberGemAcquire.remainLine(gd);
@@ -822,6 +836,54 @@ public final class EmberRunPapi {
         if (d == null) return "§8手持刃或护符看近档";
         if (d.isArmor()) return EmberSixPapi.heldArmorLine(d, "next"); // D318 K0
         return quality ? EmberGearNextHint.qualityLine(d) : EmberGearNextHint.craftLine(d);
+    }
+
+    /**
+     * D12306: resolve live held/pd/mats/reroll/chase → {@link EmberHopeMeter#menuNow}.
+     * Mirrors hope glance command inputs; display only.
+     */
+    private String hopeNowLine(Player p) {
+        if (p == null) return EmberHopeMeter.menuNow(EmberHopeMeter.FALLBACK);
+        PlayerData d = runs.plugin().getDataStore().get(p.getUniqueId());
+        EmberItemData held = heldTrusted(p);
+        EmberForgeHeldNext.Mats mats = new EmberForgeHeldNext.Mats(0, 0, 0, d == null ? 0 : Math.max(0, d.getCoin()));
+        try {
+            if (runs.plugin().getNiBridge() != null) {
+                town.sunshine.corerpg.NiBridge ni = runs.plugin().getNiBridge();
+                long shard = ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD);
+                long blank = ni.countInInventory(p, EmberUpgradeRules.MAT_BLANK);
+                long bone = ni.countInInventory(p, EmberUpgradeRules.MAT_BONE);
+                long coin = d == null ? 0L : Math.max(0L, d.getCoin());
+                mats = new EmberForgeHeldNext.Mats(shard, blank, bone, coin);
+            }
+        } catch (Throwable ignored) { }
+        int rerollPity = 0, rerollNeed = 5;
+        try {
+            EmberGrowthService gs = EmberGrowthService.get();
+            if (gs != null && gs.reroll() != null) rerollNeed = Math.max(1, gs.reroll().pity);
+            if (gs != null && d != null) {
+                if (held != null && (held.isBlade() || held.isCharm())) {
+                    rerollPity = Math.max(0, gs.afPityOf(d, held));
+                }
+                if (rerollPity <= 0) {
+                    EmberLoadoutService ls = runs.plugin().getEmberLoadouts();
+                    EmberLoadout lo = ls == null ? null : ls.get(p);
+                    if (lo != null) {
+                        for (EmberItemData it : new EmberItemData[] { lo.blade, lo.charm }) {
+                            if (it == null) continue;
+                            int pity = Math.max(0, gs.afPityOf(d, it));
+                            if (pity > rerollPity) rerollPity = pity;
+                        }
+                    }
+                }
+            }
+        } catch (Throwable ignored) { }
+        EmberSignature.Def chase = EmberSigChase.get(d);
+        int marks = 0;
+        if (chase != null && d != null) {
+            marks = d.periodCount(EmberSignature.C_MARK + chase.map, "all");
+        }
+        return EmberHopeMeter.menuNow(held, d, mats, rerollPity, rerollNeed, chase, marks);
     }
 
     /** D307：主手可信 P1 件；空手/非 P1/非本人 → null。 */

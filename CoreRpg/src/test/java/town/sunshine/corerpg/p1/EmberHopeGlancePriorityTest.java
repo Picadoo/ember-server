@@ -76,4 +76,27 @@ public class EmberHopeGlancePriorityTest {
                 EmberHopeMeter.openTellLine(EmberHopeMeter.FALLBACK));
         assertTrue(EmberHopeMeter.openTellLine(EmberHopeMeter.FALLBACK).contains("今天可稳养"));
     }
+
+    @Test public void menuNow_form() {
+        String line = EmberHopeMeter.menuNow(EmberHopeMeter.FALLBACK);
+        assertTrue(line.startsWith("§e"));
+        assertTrue(line.contains("稳养"));
+        assertTrue(line.contains("§f"));
+        assertTrue(line.contains("今天可稳养"));
+        // overload resolves current (empty hand → fallback)
+        PlayerData pd = new PlayerData();
+        String live = EmberHopeMeter.menuNow(null, pd, new EmberForgeHeldNext.Mats(0, 0, 0, 0), 0, 5, null, 0);
+        assertEquals(line, live);
+    }
+
+    @Test public void menuNow_usesCurrentTitleAndProgress() {
+        PlayerData pd = new PlayerData();
+        EmberItemData mid = bladeEnh(3, 0);
+        EmberHopeMeter.Track t = EmberHopeMeter.current(mid, pd,
+                new EmberForgeHeldNext.Mats(0, 0, 0, 0), 0, 5, null, 0, null);
+        String line = EmberHopeMeter.menuNow(t);
+        assertTrue(line.contains(t.title));
+        assertTrue(line.contains(t.progressLine.replace("§7", "").substring(0, 4)) || line.contains(t.progressLine));
+        assertEquals("§e" + t.title + " §f" + t.progressLine, line);
+    }
 }

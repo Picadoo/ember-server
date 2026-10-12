@@ -494,6 +494,23 @@ public final class EmberHopeMeter {
         return next;
     }
 
+    /**
+     * D12305: hub hope L1 — current priority track as one glance line.
+     * Form {@code §e{title} §f{progressLine}}. Display only; no new pity math.
+     */
+    public static String menuNow(Track t) {
+        if (t == null) t = FALLBACK;
+        return "§e" + t.title + " §f" + t.progressLine;
+    }
+
+    /** Resolve current track then {@link #menuNow(Track)}. */
+    public static String menuNow(EmberItemData held, PlayerData pd,
+                                 EmberForgeHeldNext.Mats mats,
+                                 int rerollPity, int rerollNeed,
+                                 EmberSignature.Def chaseDef, int chaseMarks) {
+        return menuNow(current(held, pd, mats, rerollPity, rerollNeed, chaseDef, chaseMarks, null));
+    }
+
     /** Hub Open / peek one-liner (D12244): current progressLine only. */
     public static String openTellLine(Track t) {
         if (t == null) t = FALLBACK;

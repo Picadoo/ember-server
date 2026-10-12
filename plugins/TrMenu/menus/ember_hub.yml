@@ -88,15 +88,15 @@ Icons:
         - 'menu: ember_p1_short'
 
 
-  # D12245–D12247 希望一眼（单轨优先 · 左汇报开工坊 · 右切轨 · 零新 PAPI）
+  # D12245–D12247 / D12308 希望一眼（L1 hope_now · L2 mapid_focus · 左汇报开工坊 · 右切轨）
   w:
     update: 20
     display:
       material: ender pearl
       name: '§e希望'
       lore:
-        - '§7当前优先轨（点左看进度）'
-        - '§8右键切换 · 不改数值'
+        - '§f%corerpg_p1_hope_now%'
+        - '§6图：§f%corerpg_p1_mapid_focus%'
         - '§e➥ §f左：汇报并开工坊 · 右：下一条'
     actions:
       left:

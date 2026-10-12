@@ -36,8 +36,9 @@ public final class EmberMapIdentity {
     }
 
     /**
-     * D12249: short menu line for Q lore L2 — no long tail.
-     * Shape: {@code 焚烬 · 图鉴 1/2 · 还差1} / {@code 焚烬 · 图鉴齐}.
+     * D12249 / D12309: short menu line for Q lore L2 — one line.
+     * Incomplete appends compressed nextMissing (strip 「下一缺 · 」+ spaces, drop family already in label).
+     * Shape: {@code 焚烬 · 图鉴 1/2 · 还差1 · 下一缺T1刃} / {@code 焚烬 · 图鉴齐}.
      */
     public static String menuLine(EmberRunMaps.MapDef lm, PlayerData pd) {
         if (lm == null) return "本图身份未登记";
@@ -49,7 +50,34 @@ public final class EmberMapIdentity {
         int gap = Math.max(0, need - have);
         if (gap == 0)
             return label + " · 图鉴齐";
-        return label + " · 图鉴 " + have + "/" + need + " · 还差" + gap;
+        String base = label + " · 图鉴 " + have + "/" + need + " · 还差" + gap;
+        String tail = compressNextMissing(lm, pd);
+        if (tail.isEmpty()) return base;
+        return base + " · " + tail;
+    }
+
+    /**
+     * D12309: compress {@link #nextMissing} for menuLine tail.
+     * {@code 下一缺 · T1 焚烬刃} → {@code 下一缺T1刃} (drop family; already in label).
+     */
+    static String compressNextMissing(EmberRunMaps.MapDef lm, PlayerData pd) {
+        String nm = nextMissing(lm, pd);
+        if (nm == null || nm.isEmpty() || nm.contains("已齐")) return "";
+        String rest = nm;
+        if (rest.startsWith("下一缺 · ")) rest = rest.substring("下一缺 · ".length());
+        else if (rest.startsWith("下一缺·")) rest = rest.substring("下一缺·".length());
+        else if (rest.startsWith("下一缺")) {
+            rest = rest.substring("下一缺".length()).trim();
+            if (rest.startsWith("·")) rest = rest.substring(1).trim();
+        } else {
+            return nm.replace(" ", "");
+        }
+        if (lm != null && lm.lootFamily != null) {
+            String fam = EmberItemData.familyName(lm.lootFamily);
+            if (fam != null && !fam.isEmpty()) rest = rest.replace(fam, "");
+        }
+        rest = rest.replace(" ", "");
+        return "下一缺" + rest;
     }
 
     /** Plain remain: {@code 图身份 焚烬·T1 · 图鉴 1/2 · 还差1件 · 进过即计 · 通关不锁掉落}. */
