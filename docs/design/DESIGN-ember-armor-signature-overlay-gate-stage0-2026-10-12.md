@@ -1,6 +1,6 @@
 # DESIGN · 防具签名规格 + 叠合门禁（stage0 · HOLD 施工）· 2026-10-12
 
-> **状态：** APPROVED stage0 · TIP-AB 批 A·M · **HOLD 施工** · 2026-10-12 17:41 Asia/Shanghai  
+> **状态：** APPROVED stage0 · TIP-AB 批 A·M · 门禁 PASS(patched) · **施工开 TIP-AE**（仍禁扩掉落/抬表/动 L11·L13）· 2026-10-12 19:23 Asia/Shanghai  
 > **TIP-AD 补丁：** S3 评测集排除刃 L11/L13 · [`DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md) · 2026-10-12 19:19 Asia/Shanghai  
 > **对接 tip：** [`TIP-ember-armor-signature-gate-design-stage0-thin-d12552-d12559-2026-10-12.md`](../tips/TIP-ember-armor-signature-gate-design-stage0-thin-d12552-d12559-2026-10-12.md)  
 > **上游：** TIP-AA CLOSED docs-only `79247dab2` · [`RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md`](RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md) · D174 [`DESIGN-ember-mainline-unlocks-2026-10-04.md`](DESIGN-ember-mainline-unlocks-2026-10-04.md) §2.1 / §5 · COORD-legendary-effects（行为型 · ≤2 生效 · 禁伤乘）  

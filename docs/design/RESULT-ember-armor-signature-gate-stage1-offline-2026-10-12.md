@@ -1,10 +1,10 @@
 # RESULT · 防具签名门禁 stage1 离线（S3 / S4）· 2026-10-12
 
 > **状态：** STAGE1_OFFLINE = **PASS（TIP-AD patched）** · TIP-AC 全表 FAIL 历史保留 `469cc1a46` · 跑数 18:34–19:18 · judge-s3 19:22  
-> **TIP-AD：** CLOSED 批 A·M `abc3875d0` · 见 §6 · 总控显式开工令已发（等施工 tip）  
+> **TIP-AD：** CLOSED 批 A·M `abc3875d0` · 见 §6 · 总控显式开工令已发 → **TIP-AE** 施工 tip OPEN  
 > **上游 DESIGN：** [`DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md)  
 > **stage0：** TIP-AB CLOSED `a5b264fce`  
-> **硬句：** FAIL → 停、禁抬表凑线；PASS ≠ 自动开工；**总控已显式开工**（防具签名最小切片 · 见 STATUS-AD）
+> **硬句：** FAIL → 停、禁抬表凑线；PASS ≠ 自动开工；**总控已显式开工**（防具签名最小切片 · 见 STATUS-AD）→ tip [`TIP-ember-armor-signature-min-slice-build-thin-d12584-d12599-2026-10-12.md`](../tips/TIP-ember-armor-signature-min-slice-build-thin-d12584-d12599-2026-10-12.md)
 
 ---
 
