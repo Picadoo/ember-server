@@ -1,6 +1,6 @@
 # DESIGN · 宝石通关保底加码 remain/希望串诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-AP · docs-only 待批 · 2026-10-12  
+> **状态：** APPROVED · TIP-AP 批 A·M · 已派插件 · 2026-10-12 21:00 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-gem-pity-nudge-remain-align-2026-10-12.md`](RESEARCH-ember-gem-pity-nudge-remain-align-2026-10-12.md)  
 > **对接 live：** TIP-AO CLOSED live `1.65.780-d12743` · TIP-E gem glance · `EmberGemPityNudge` D10673 · `EmberGemAcquire` D608/D1258  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
