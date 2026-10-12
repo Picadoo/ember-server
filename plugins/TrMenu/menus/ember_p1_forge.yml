@@ -150,7 +150,7 @@ Icons:
       name: '§6精工 · 预览'
       lore:
         - '§e花费：§f%corerpg_p1_held_next_c%'
-        - '§e进度：§f%corerpg_p1_held_refine_hope%'
+        - '§a确定成功 §8· §e进度：§f%corerpg_p1_held_refine_hope%'
         - '§e➥ §f点预览'
     actions:
       all:
@@ -174,7 +174,7 @@ Icons:
       name: '§6精工 · 确认'
       lore:
         - '§e花费：§f%corerpg_p1_held_next_c%'
-        - '§e进度：§f%corerpg_p1_held_refine_hope%'
+        - '§a确定成功 §8· §e进度：§f%corerpg_p1_held_refine_hope%'
         - '§e➥ §f点确认'
     actions:
       all:
@@ -198,7 +198,7 @@ Icons:
       name: '§e成色 · 预览'
       lore:
         - '§e花费：§f%corerpg_p1_held_next_q%'
-        - '§e进度：§f%corerpg_p1_held_quality_hope%'
+        - '§a确定成功 §8· §e进度：§f%corerpg_p1_held_quality_hope%'
         - '§e➥ §f点预览'
     actions:
       all:
@@ -222,7 +222,7 @@ Icons:
       name: '§e成色 · 确认'
       lore:
         - '§e花费：§f%corerpg_p1_held_next_q%'
-        - '§e进度：§f%corerpg_p1_held_quality_hope%'
+        - '§a确定成功 §8· §e进度：§f%corerpg_p1_held_quality_hope%'
         - '§e➥ §f点确认'
     actions:
       all:
