@@ -126,4 +126,32 @@ public class EmberHopePriorityTest {
         for (EmberHopeMeter.Track t : yes) if ("reroll".equals(t.id)) found = true;
         assertTrue(found);
     }
+
+    @Test
+    public void chatLines_gemOpensGemPage() {
+        EmberHopeMeter.Track gem = new EmberHopeMeter.Track(
+                "gem", "宝石通关保底",
+                EmberGemAcquire.remainLine(2),
+                "材料够", "通关攒石", EmberForgeGoal.GEM);
+        List<String> lines = EmberHopeMeter.chatLines(gem);
+        assertEquals(3, lines.size());
+        assertTrue(lines.get(0).contains("宝石通关保底"));
+        assertTrue(lines.get(1).contains("通关保底"));
+        assertTrue(lines.get(2).contains("打开宝石页"));
+        assertFalse(lines.get(2).contains("打开工坊"));
+    }
+
+    @Test
+    public void gemTrack_progressUsesRemainLine() {
+        PlayerData pd = new PlayerData();
+        pd.addPeriodCount(EmberGemAcquire.C_PITY, "all", 2);
+        EmberItemData d = blade(3, 0, 0, 0);
+        List<EmberHopeMeter.Track> tracks = EmberHopeMeter.priorityTracks(
+                d, pd, matsOk(), 0, 5, null, 0);
+        EmberHopeMeter.Track gem = null;
+        for (EmberHopeMeter.Track t : tracks) if ("gem".equals(t.id)) gem = t;
+        assertNotNull(gem);
+        assertEquals(EmberGemAcquire.remainLine(2), gem.progressLine);
+        assertTrue(gem.progressLine.contains("再通关3次得石"));
+    }
 }

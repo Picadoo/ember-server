@@ -6997,9 +6997,14 @@ public final class EmberCommand {
             p.sendMessage(P + EmberHopeMeter.openTellLine(cur));
             return true;
         }
-        // D12242: three chat lines + open forge
+        // D12242: three chat lines + open forge (D12277: gem track → ember_p1_gem)
         for (String line : EmberHopeMeter.chatLines(cur)) {
             p.sendMessage(P + line);
+        }
+        if ("gem".equals(cur.id)) {
+            org.bukkit.Bukkit.dispatchCommand(org.bukkit.Bukkit.getConsoleSender(),
+                    "trmenu open ember_p1_gem " + p.getName());
+            return true;
         }
         if (d != null && cur.forgeGoal != EmberForgeGoal.NONE) {
             try {

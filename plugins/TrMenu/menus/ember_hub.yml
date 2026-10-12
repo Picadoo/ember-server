@@ -16,7 +16,7 @@ Options:
   Min-Click-Delay: 200
 Layout:
   - 'LnHowpvFS'
-  - 'TBmX k i '
+  - 'TBmXg k i'
   - 'ZR c Y d '
   - 'Q A G U j'
 Events:
@@ -105,6 +105,21 @@ Icons:
       right:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - 'command: corerpg p1 hope cycle'
+
+  # D12274–D12276 宝石通关保底一眼（邻希望 · remainLine · 点进宝石页 · 零抬 PITY）
+  g:
+    update: 20
+    display:
+      material: emerald
+      name: '§5宝石'
+      lore:
+        - '§f%corerpg_p1_gem_pity_hope%'
+        - '§7Q01–Q07 通关累计 · 满则下次通关得石'
+        - '§e➥ §f打开宝石页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_gem'
 
   # D12267–D12269 套装一眼（焦点 have/need · 左成套追 · 右选焦点 · 零数值）
   v:

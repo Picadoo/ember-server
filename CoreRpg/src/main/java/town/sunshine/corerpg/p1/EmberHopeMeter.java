@@ -440,7 +440,7 @@ public final class EmberHopeMeter {
                 "看掉落成色",
                 EmberForgeGoal.NONE));
         out.add(new Track("gem", "宝石通关保底",
-                EmberGemAcquire.hopeLine(pd),
+                EmberGemAcquire.remainLine(pd), // D12273 display remainLine
                 "材料够",
                 "通关攒石",
                 EmberForgeGoal.GEM));
@@ -500,13 +500,17 @@ public final class EmberHopeMeter {
         return t.progressLine;
     }
 
-    /** Chat three lines skeleton (D12242). */
+    /** Chat three lines skeleton (D12242 / D12277 gem → 打开宝石页). */
     public static List<String> chatLines(Track t) {
         if (t == null) t = FALLBACK;
         List<String> lines = new ArrayList<String>(3);
         lines.add("§e希望 · " + t.title);
         lines.add("§7" + t.progressLine + " §8· " + t.matHalf);
-        lines.add("§e➥ §f打开工坊 · " + t.forgeHint);
+        if ("gem".equals(t.id)) {
+            lines.add("§e➥ §f打开宝石页");
+        } else {
+            lines.add("§e➥ §f打开工坊 · " + t.forgeHint);
+        }
         return lines;
     }
 

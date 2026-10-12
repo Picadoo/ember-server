@@ -784,9 +784,9 @@ public final class EmberRunPapi {
                 if (hr == null) return EmberHopeMeter.emptySlot("手持");
                 return EmberHopeMeter.refine(hr);
             }
-            case "gem_pity_hope": { // D608
+            case "gem_pity_hope": { // D608 / D12273: display remainLine (n/N·再通关得石); hopeLine kept for other callers
                 PlayerData gd = runs.plugin().getDataStore().get(p.getUniqueId());
-                return EmberGemAcquire.hopeLine(gd);
+                return EmberGemAcquire.remainLine(gd);
             }
             case "drop_q_hope": { // D611
                 PlayerData dq = runs.plugin().getDataStore().get(p.getUniqueId());
