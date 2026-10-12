@@ -1,6 +1,6 @@
 # DESIGN · 分解日首得胚+1（YieldBoost）菜单/预览诚实（工坊 TrMenu · 薄窗 · 可施工）· 2026-10-13
 
-> **状态：** OPEN · TIP-BX · 荐批 A·M · 2026-10-13 01:14 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BX · 批 A·M · 已派余烬-插件 + 余烬-物品 · 2026-10-13 01:15 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-dismantle-yield-boost-menu-honesty-2026-10-13.md`](RESEARCH-ember-dismantle-yield-boost-menu-honesty-2026-10-13.md)  
 > **对接 live：** TIP-BW CLOSED live `1.65.802-d13287` · `EmberDismantleYieldBoost` · `EmberForgeService.dismantle` · `EmberGearNextHint.dismantleYieldLine` · `EmberRunPapi.held_dismantle_yield` · `ember_p1_forge.yml` D/d  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad / 签名盖章 pity n/N 再叠 / 签名效果 lore / 套装 blurb / 宝石 / 天赋 / 烙纹档幅度 / 副手 / 强化率 / 升阶保留 / 形缓 / 转化 / access_* / 成色·精工确定成功 / 互换 / 洗练直留 / 烙纹直办 / soft·开孔再叠 / UndoWindow densify / **抬 BONUS · 改 dismantleYield 表** **仍冻**  

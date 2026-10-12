@@ -1,6 +1,6 @@
 # tip · TIP-BX 分解日首得胚+1（YieldBoost）菜单/预览诚实（工坊 TrMenu · 可施工薄 · 可感变强途径）· D13288–D13303
 
-> **状态：** **OPEN** · 荐批 A·M · 2026-10-13 01:14 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** + **余烬-物品** · 2026-10-13 01:15 Asia/Shanghai  
 > **上游门禁：** TIP-BW CLOSED live `1.65.802-d13287` · feat `2bdb153ff` · items `4118a3ab6` · docs `5fa1aea22` · TrMenu reload 77 · RESEARCH [`RESEARCH-ember-dismantle-yield-boost-menu-honesty-2026-10-13.md`](../design/RESEARCH-ember-dismantle-yield-boost-menu-honesty-2026-10-13.md) · DESIGN [`DESIGN-ember-dismantle-yield-boost-menu-honesty-2026-10-13.md`](../design/DESIGN-ember-dismantle-yield-boost-menu-honesty-2026-10-13.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 离开签名盖章软保底「连空 n/N」菜单诚实链 → **分解日首得胚+1（YieldBoost）菜单/预览诚实**（**非 densify · 非抬 BONUS · 非改 dismantleYield 表 · 非 sure/keep/直办半行再叠 · 非签名盖章 pity / 效果 lore 再叠 · 非 Affix densify · 非伤乘 · 非抬表 · 非 soft/开孔再叠 · 非 SF4 · 非 Anvil · 非效果长墙 · 非 lore>3 · 非并轨 B**）  
 > **施工岗（批后派单）：** **余烬-插件**（`dismantleYieldLine` + `heldForgeLine` 吃 YieldBoost peek · 单测；零改 BONUS）+ **余烬-物品**（`ember_p1_forge` Icon `D`/`d` lore · 可选 Open 半行）  
@@ -97,19 +97,19 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点（本 commit）  
 - [x] 文首 HOLD / 选题否决表可核  
-- [ ] 批后才派 **余烬-插件** + **余烬-物品**；策划本窗 **无**业务 jar  
+- [x] 批后才派 **余烬-插件** + **余烬-物品**；策划本窗 **无**业务 jar  
 - [x] `git show` docs-only（本 commit）；L13 施工仍 HOLD  
 
 ---
 
 ## 6. 批注（荐）
 
-- **批：** **A · 方案 M**（荐）  
+- **批：** **A · 方案 M** · 已批 · 已派余烬-插件+物品  
 - **选题：** TIP-BW 后 · **离开签名盖章 pity** · **分解日首得胚+1（YieldBoost）菜单/预览诚实**（可感变强途径 · **非抬 BONUS · 非改表 · 非 sure/直办半行再叠 · 非盖章 pity 再叠** · 对位 SUR 表面化 / Forge 预览 peek SoT）  
 - **批后派岗：** 余烬-插件 + 余烬-物品  
 - **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；调律 live bad 进持件；签名盖章 pity n/N 再叠；签名效果 lore 再叠；套装 blurb 再叠；宝石短效果再叠；天赋悬停再叠；烙纹档幅度再叠；副手微量再叠；强化率再叠；升阶保留再叠；形缓 Icon A 再叠；转化保留再叠；access_* 再叠；成色·精工确定成功再叠；互换免费确定再叠；洗练直留再叠；烙纹直办再叠；甲闸再扫；扩 stampable；SetChase 六槽 densify；效果长墙；**Affix densify**；**ConvertCap densify**；**forgeroll 权重 densify**；**UndoWindow densify**；**抬 BONUS**；**改 dismantleYield 表**  
 
-## STATUS: OPEN · TIP-BX · 荐批 A·M · 2026-10-13 01:14 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-插件 + 余烬-物品 · 2026-10-13 01:15 Asia/Shanghai

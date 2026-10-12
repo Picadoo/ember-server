@@ -1,6 +1,6 @@
 # RESEARCH · 分解日首得胚+1（YieldBoost）菜单/预览诚实（离开签名盖章 pity · SUR 表面化）· 2026-10-13
 
-> **状态：** OPEN · TIP-BX · 荐批 A·M · 2026-10-13 01:14 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BX · 批 A·M · 已派余烬-插件 + 余烬-物品 · 2026-10-13 01:15 Asia/Shanghai  
 > **起因：** TIP-BW CLOSED live 后总控「离开签名盖章软保底「连空 n/N」菜单诚实链 · 开下一可感变强途径」。硬禁含 sig stamp pity n/N 再叠 · sure/keep/直办半行族再叠 · Affix densify · STAMP densify。扫 AH…BW / power-paths / BW 旁债：**`EmberDismantleYieldBoost` 已 live（非甲日首拆 +1 胚 · Forge 预览聊天已吃 boost）**，菜单 `%held_dismantle_yield%` / `GearNextHint.dismantleYieldLine` **只报表额得胚、不报日首+1**——打开工坊看错「今天拆能拿多少」。  
 > **上游：** TIP-BW CLOSED live `1.65.802-d13287` · feat `2bdb153ff` · items `4118a3ab6` · docs `5fa1aea22` · TrMenu 77 · `EmberDismantleYieldBoost` · `EmberForgeService.dismantle` · `EmberGearNextHint.dismantleYieldLine` · `ember_p1_forge.yml` D/d · power-paths（变强途径表面化 · 非 densify）· TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零改 BONUS/C_USED · 零改 dismantleYield 表 · 零 Affix densify · 零伤乘 · 零抬表 · 零抬 STAMP_RATE · 零扩 stampable · 零 SigStamp densify · 零签名效果 lore / 盖章 pity n/N 再叠 · 零烙纹直办/forge/洗练 sure·keep·直办半行再叠 · 零 soft·开孔再叠 · 零 Anvil densify · 零 SF4 U2U3 · 零灰印·聚火 · 零 UndoWindow densify · 零 DeathRefund densify · 零调律 live bad · 零并轨 B · 零效果长墙 · 零 lore>3 · 零 ConvertCap densify · 零 forgeroll 权重 densify · 零改解锁数学 · 零开 L13 施工 tip · 零新 hope celebration**
@@ -76,4 +76,4 @@
 - 签名盖章 pity n/N / 签名效果 lore / forge EQRUS·洗练·烙纹 sure 半行再叠 · access_* · 升阶印记指针 · forgeroll 权重  
 - 效果长墙 · lore>3 · 并轨 B · 发明第二套 dismantle hope PAPI（优先修既有 `held_dismantle_yield`）
 
-## STATUS: OPEN · TIP-BX · 荐批 A·M · 2026-10-13 01:14 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-插件 + 余烬-物品 · 2026-10-13 01:15 Asia/Shanghai
