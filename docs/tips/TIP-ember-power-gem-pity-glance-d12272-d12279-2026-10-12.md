@@ -1,6 +1,6 @@
 # tip · TIP-E 宝石通关保底一眼（枢纽邻希望 · n/N·下次必成 · 点进宝石页）· D12272–D12279
 
-> **状态：** 批 **A · 方案 M**（总控 2026-10-12 15:52 Asia/Shanghai）· 交插件岗  
+> **状态：** CLOSED · live 1.65.762-d12279（2026-10-12 15:55 Asia/Shanghai）  
 > **上游：** [`DESIGN-ember-growth-variety-thin-2026-10-12.md`](../design/DESIGN-ember-growth-variety-thin-2026-10-12.md) · [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md) HD1/HD2 宝石轨表面化  
 > **前置：** TIP-A～D CLOSED live（至 1.65.761-d12271）  
 > **施工岗：** 插件岗（TrMenu + 纯展示；**零改 gem flat / pity 阈值**）  
@@ -82,3 +82,5 @@
 - [x] 总控批 **A · 方案 M** · 2026-10-12 15:52 CST
 - tip 已推 · 交插件岗
 - 变强途径续：**TIP-E**；仍禁 Affix / 抬 flat / 伤乘
+
+## STATUS: CLOSED · live 1.65.762-d12279 · 2026-10-12 15:55 CST
