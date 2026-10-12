@@ -6,7 +6,8 @@ import town.sunshine.corerpg.PlayerData;
 
 /**
  * D690: signature stamp miss dry-streak visibility.
- * Zero STAMP_RATE / imprint price change — display only (not a PAPI twin).
+ * Zero STAMP_RATE / imprint price change — display only.
+ * TIP-BW: also exposed as PAPI {@code sig_stamp_hope} via {@code EmberGrowthService#sigPapi}.
  */
 public final class EmberSigStampDry {
 

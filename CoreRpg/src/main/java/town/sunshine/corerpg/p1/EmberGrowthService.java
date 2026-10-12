@@ -1892,6 +1892,7 @@ public final class EmberGrowthService implements Listener {
         if ("rules".equals(key)) return imp ? "§7烬炉烙印：§a已开放 §7（点一条签名开始）" : "§7烬炉烙印：§8首进或首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
         if ("acq".equals(key) || "acq_line".equals(key)) return EmberSigAcq.menuLine(); // D456
         if ("chase".equals(key) || "chase_line".equals(key) || "chase_hope".equals(key)) return EmberSigChase.glance(d); // D464/D604
+        if ("stamp_hope".equals(key) || "stamp_dry".equals(key) || "dry".equals(key)) return EmberSigStampDry.glance(d); // TIP-BW D13272–D13287
         if ("feel".equals(key) || "feel_line".equals(key)) return sigFeelLine(d, lo); // D12290 hub/gear feel glance
         if ("imprint_hope".equals(key)) { // D615 / D12654 / D12828: soft peek + softTail
             EmberSignature.Def cd = EmberSigChase.get(d);
