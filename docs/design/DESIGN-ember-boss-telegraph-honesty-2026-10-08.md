@@ -174,4 +174,4 @@
 
 ## 进度戳 · TIP-N（2026-10-12）
 
-- **TIP-N 批 A·M** · tip `TIP-ember-boss-telegraph-r-thin-d12360-d12375` · 交插件岗（R 演出子集）
+- **TIP-N CLOSED live** 1.65.768-d12375（warn_bar_hold + pre_half_cue）

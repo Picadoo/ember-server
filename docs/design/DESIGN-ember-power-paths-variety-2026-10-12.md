@@ -189,4 +189,4 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-K CLOSED live** 1.65.766-d12335（技能手感包 cue）
 - **TIP-L CLOSED live** 1.65.767-d12351（Q07 charm + 下一环追烙）
 - **TIP-M CLOSED 停窗观察** · hub 挤度纪要；确认挤后再开 F1；无码
-- **TIP-N 批 A·M** · tip `TIP-ember-boss-telegraph-r-thin-d12360-d12375` · 交插件岗（R 演出子集）
+- **TIP-N CLOSED live** 1.65.768-d12375（warn_bar_hold + pre_half_cue）
