@@ -126,7 +126,7 @@ Icons:
     display:
       material: diamond sword
       name: '§6孔0 · 镶锋利'
-      lore: ['', '§7手持刃/符 · 背包有锋利石', '§8孔0：刃即开 / 符需强化≥3', '', '§e➥ §f镶入孔0']
+      lore: ['', '§7手持刃/符 · 背包有锋利石', '§8孔0：刃即开 / 符表额≥3 · 日首−1≥2', '', '§e➥ §f镶入孔0']
     actions:
       all:
         - 'command: corerpg p1 gem insert 0 sharp'
@@ -181,7 +181,7 @@ Icons:
     display:
       material: diamond
       name: '§e孔1 · 镶锋利'
-      lore: ['', '§7仅刃 · 强化≥5 解锁', '', '§e➥ §f镶入孔1']
+      lore: ['', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
     actions:
       all:
         - 'command: corerpg p1 gem insert 1 sharp'
@@ -189,7 +189,7 @@ Icons:
     display:
       material: iron ingot
       name: '§e孔1 · 镶稳固'
-      lore: ['', '§7仅刃 · 强化≥5', '', '§e➥ §f镶入孔1']
+      lore: ['', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
     actions:
       all:
         - 'command: corerpg p1 gem insert 1 steady'
@@ -197,7 +197,7 @@ Icons:
     display:
       material: gold ingot
       name: '§e孔1 · 镶汲取'
-      lore: ['', '§7仅刃 · 强化≥5', '', '§e➥ §f镶入孔1']
+      lore: ['', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
     actions:
       all:
         - 'command: corerpg p1 gem insert 1 drain'
@@ -205,7 +205,7 @@ Icons:
     display:
       material: coal
       name: '§e孔1 · 镶疾风'
-      lore: ['', '§7仅刃 · 强化≥5', '', '§e➥ §f镶入孔1']
+      lore: ['', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
     actions:
       all:
         - 'command: corerpg p1 gem insert 1 gale'
