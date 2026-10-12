@@ -1,6 +1,6 @@
 # tip · TIP-AO SigFeel/Hope/remain 追烙就绪目标件对齐（可施工薄 · 可感 UX）· D12728–D12743
 
-> **状态：** OPEN · 荐批 **A · 方案 M** · 2026-10-12  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 20:48 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-sigfeel-chase-ready-target-align-2026-10-12.md`](../design/RESEARCH-ember-sigfeel-chase-ready-target-align-2026-10-12.md) · DESIGN [`DESIGN-ember-sigfeel-chase-ready-target-align-2026-10-12.md`](../design/DESIGN-ember-sigfeel-chase-ready-target-align-2026-10-12.md) · TIP-AN CLOSED live `1.65.779-d12727` · TIP-AJ CLOSED live `1.65.775-d12663` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径（非 densify · 非再扫甲闸 · 非扩 stampable）** — AN 后 SigFeel leftover + Hope/remain 就绪摘要对齐  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `HopeMeter.sigChase` / `SigFeel.menuLine` / `remainLine`+接线 + 单测）  
@@ -86,8 +86,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12732–D12737；D12739 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] 插件 jar live 后策划 docs close  
