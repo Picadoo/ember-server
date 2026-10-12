@@ -1,6 +1,6 @@
 # 余烬 · 图装身份 · 局内换装共鸣升沿薄窗
 
-STATUS=**待批 A · 荐方案 M** · 2026-10-12  
+STATUS=**批 A · 方案 M · 交施工** · 2026-10-12 16:59 CST  
 上游 RESEARCH [`RESEARCH-ember-map-res-wear-cue-thin-2026-10-12.md`](RESEARCH-ember-map-res-wear-cue-thin-2026-10-12.md) · tip `TIP-ember-map-res-wear-cue-thin-d12424-d12439-2026-10-12.md`  
 资产：`EmberMapResonance` · `EmberLoadoutService.refresh` · `EmberMapOriginWearBone`
 
@@ -31,3 +31,6 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-12
 |------|------|
 | R · 掉落 giveItem 每件喊出处墙 | **否**（结算已挤；粒子已有） |
 | W · 抬加宽当假变强 | **否决** |
+
+## 进度戳
+- **TIP-R 批 A·M**（2026-10-12）· tip D12424–D12439 · 交插件
