@@ -83,7 +83,7 @@ Icons:
       material: diamond sword
       name: '§6烬刃 · 燃锋'
       lore:
-        - '§7根节点 · 被动 · 消耗 2'
+        - '§7根 · 消耗 2 · 物攻 +1'
         - '§6➥ §f点击解锁'
     actions:
       all:
@@ -95,7 +95,7 @@ Icons:
       material: bow
       name: '§7灰行 · 灰踪'
       lore:
-        - '§7根节点 · 被动 · 消耗 2'
+        - '§7根 · 消耗 2 · 攻速 +0.02'
         - '§7➥ §f点击解锁'
     actions:
       all:
@@ -107,7 +107,7 @@ Icons:
       material: shield
       name: '§9守墓 · 守碑'
       lore:
-        - '§7根节点 · 被动 · 消耗 2'
+        - '§7根 · 消耗 2 · 物防 +1'
         - '§9➥ §f点击解锁'
     actions:
       all:
@@ -119,7 +119,7 @@ Icons:
       material: blaze powder
       name: '§6烬刃 · 烬斩'
       lore:
-        - '§7主动技 · 消耗 4'
+        - '§7主动 · 消耗 4 · 解锁烬斩'
         - '§8前置：燃眼 + 饮烬'
         - '§6➥ §f点击解锁'
     actions:
@@ -147,7 +147,7 @@ Icons:
       material: magma cream
       name: '§6烬刃 · 余烬脉'
       lore:
-        - '§7二层 · 被动 · 消耗 3'
+        - '§7二层 · 消耗 3 · 物攻 +1'
         - '§e先点满一层顶「燎原」'
         - '§6➥ §f点击解锁'
     actions:
@@ -160,7 +160,7 @@ Icons:
       material: fireball
       name: '§c烬刃 · 炽脉'
       lore:
-        - '§7二层 · 被动 · 消耗 3'
+        - '§7二层 · 消耗 3 · 暴伤 +0.03'
         - '§e先点满一层顶「燎原」'
         - '§c➥ §f点击解锁'
     actions:
@@ -173,7 +173,7 @@ Icons:
       material: nether brick
       name: '§6烬刃 · 再燃'
       lore:
-        - '§7二层 · 被动 · 消耗 4'
+        - '§7二层 · 消耗 4 · 暴击率 +0.005 · 物攻 +1'
         - '§e先点满一层顶「燎原」'
         - '§6➥ §f点击解锁'
     actions:
@@ -187,7 +187,7 @@ Icons:
       material: feather
       name: '§7灰行 · 灰纱'
       lore:
-        - '§7二层 · 被动 · 消耗 3'
+        - '§7二层 · 消耗 3 · 移速 +0.01'
         - '§e先点满一层顶「烟幕」'
         - '§7➥ §f点击解锁'
     actions:
@@ -200,7 +200,7 @@ Icons:
       material: sugar
       name: '§e灰行 · 细尘'
       lore:
-        - '§7二层 · 被动 · 消耗 3'
+        - '§7二层 · 消耗 3 · 攻速 +0.01'
         - '§e先点满一层顶「烟幕」'
         - '§e➥ §f点击解锁'
     actions:
@@ -213,7 +213,7 @@ Icons:
       material: web
       name: '§8灰行 · 掩息'
       lore:
-        - '§7二层 · 被动 · 消耗 4'
+        - '§7二层 · 消耗 4 · 击中减速 +0.03 · 攻速 +0.01'
         - '§e先点满一层顶「烟幕」'
         - '§8➥ §f点击解锁'
     actions:
@@ -227,7 +227,7 @@ Icons:
       material: brick
       name: '§9守墓 · 叠壁'
       lore:
-        - '§7二层 · 被动 · 消耗 3'
+        - '§7二层 · 消耗 3 · 受伤 -0.01'
         - '§e先点满一层顶「永护」'
         - '§9➥ §f点击解锁'
     actions:
@@ -240,7 +240,7 @@ Icons:
       material: golden apple
       name: '§9守墓 · 护冢'
       lore:
-        - '§7二层 · 被动 · 消耗 3'
+        - '§7二层 · 消耗 3 · 生命 +2'
         - '§e先点满一层顶「永护」'
         - '§9➥ §f点击解锁'
     actions:
@@ -253,7 +253,7 @@ Icons:
       material: obsidian
       name: '§1守墓 · 誓碑'
       lore:
-        - '§7二层 · 被动 · 消耗 4'
+        - '§7二层 · 消耗 4 · 物防 +1 · 受伤 -0.01'
         - '§e先点满一层顶「永护」'
         - '§1➥ §f点击解锁'
     actions:
