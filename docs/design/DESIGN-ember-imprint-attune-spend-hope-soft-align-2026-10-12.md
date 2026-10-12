@@ -1,6 +1,6 @@
 # DESIGN · 烙印/调律花费 Hope 诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-AU 批 A·M · 已派插件 · 2026-10-12 21:41 Asia/Shanghai  
+> **状态：** CLOSED · live `1.65.786-d12839` · feat `53a9fe3b8` · 2026-10-12 21:47 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-imprint-attune-spend-hope-soft-align-2026-10-12.md`](RESEARCH-ember-imprint-attune-spend-hope-soft-align-2026-10-12.md)  
 > **对接 live：** TIP-AT CLOSED live `1.65.785-d12823` · ImprintCoinSoft D9793 · ImprintMarkSoft D9985 · AttuneUnlockSoft D9825 · HopeMeter imprintSpend/attuneUnlock D615 · TIP-AO readyTail · GearNextHint SOFT_TAIL（TIP-AS）  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  

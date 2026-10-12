@@ -1,6 +1,6 @@
 # tip · TIP-AU 烙印/调律花费 Hope 诚实对齐（可施工薄 · 可感 UX）· D12824–D12839
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:41 Asia/Shanghai  
+> **状态：** **CLOSED** · live `1.65.786-d12839` · feat `53a9fe3b8` · 2026-10-12 21:47 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-imprint-attune-spend-hope-soft-align-2026-10-12.md`](../design/RESEARCH-ember-imprint-attune-spend-hope-soft-align-2026-10-12.md) · DESIGN [`DESIGN-ember-imprint-attune-spend-hope-soft-align-2026-10-12.md`](../design/DESIGN-ember-imprint-attune-spend-hope-soft-align-2026-10-12.md) · TIP-AT CLOSED live `1.65.785-d12823` · feat `5d29316a6` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径** — **离开 CostSoft / pity-remain 族**（AS+AT / AP–AR 已齐）；HopeMeter 烙印/调律花费 leftover  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `GrowthService` imprint_hope/attune_hope/impPapi cost + 签名页门槛文案 · `EmberSigChase` remain/readyCue soft need · `autoAttuneUnlock` soft 扣费 · 复用 Imprint*Soft/AttuneUnlockSoft/`GearNextHint.softTail` + 单测）  
@@ -91,9 +91,9 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12828–D12832；D12834 `git show` 干净  
-- [ ] 菜单默认不动；lore≤3  
-- [ ] soft 已用全额回归；L13 施工仍 HOLD  
+- [x] 批后插件：D12828–D12832；D12834 `git show` 干净  
+- [x] 菜单默认不动；lore≤3  
+- [x] soft 已用全额回归；live `1.65.786-d12839` · feat `53a9fe3b8`；L13 施工仍 HOLD  
 
 ---
 
@@ -103,4 +103,4 @@
 - 选题：TIP-AT 后 · **离开 CostSoft/pity** — 烙印/调律花费 Hope 诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify**）  
 - **批注：** AS+AT CostSoft glance 已齐；ImprintCoin/Mark/AttuneUnlock Soft 付费+check 已 live，但 imprint_hope/attune_hope/impPapi cost/签名页门槛/SigChase remain·readyCue/autoAttune 仍全额 → 「币差/徽记不够」假负、就绪晚；soft peek +「今日减负待用」+ readyCue/autoAttune 同 peek；零改 MULT/表价/STAMP；零新 PAPI；批后派 **余烬-插件**；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / CostSoft 再叠 / pity-remain 再叠 / LOCK soft 仍冻  
 
-## STATUS: OPEN · TIP-AU · D12824–D12839 · 2026-10-12 21:38 CST
+## STATUS: CLOSED · live 1.65.786-d12839 · 53a9fe3b8 · 2026-10-12 21:47 CST
