@@ -1,6 +1,6 @@
 # tip · TIP-BD 强化「+5开孔」硬文案诚实对齐（可施工薄 · 可感 UX）· D12968–D12983
 
-> **状态：** **OPEN** · 荐批 **A · 方案 M** · 2026-10-12 22:55 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** + **余烬-物品** · 2026-10-12 22:58 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-enhance-plus5-hole-copy-align-2026-10-12.md`](../design/RESEARCH-ember-enhance-plus5-hole-copy-align-2026-10-12.md) · DESIGN [`DESIGN-ember-enhance-plus5-hole-copy-align-2026-10-12.md`](../design/DESIGN-ember-enhance-plus5-hole-copy-align-2026-10-12.md) · TIP-BC CLOSED live `1.65.794-d12967` · feat `b13c47c69` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控显式旁债 **enhance「+5开孔」硬文案** — soft 门槛已 live、强化预览/Hope/菜单仍硬唯一（**诚实 ≠ densify**）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberForgeService.enhance` 预览 ready 开孔尾 · 可选 Hope enhance 同构 · GemSocket 锁孔→强化按钮副标 soft/硬 · 可选 legacy `EnhanceService` info 附注 · 单测；零改 DELTA/C_USED/sockUnlocked/unlock_at）；**余烬-物品**（TrMenu `ember_p1_gem.yml` / `ember_socket.yml` 门槛句双写替换 · **禁**加 lore 行）  
@@ -91,8 +91,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12972–D12976；物品 D12977；D12979 `git show` 干净  
 - [ ] TrMenu 仅替换门槛句；lore 行数不增  
 - [ ] 预览不吞 soft；仅 unlocked 过锁 consume；L13 施工仍 HOLD  
@@ -101,8 +101,8 @@
 
 ## 6. 批注（荐）
 
-- [ ] 总控批 **A · 方案 M** · 荐批  
+- [x] 总控批 **A · 方案 M** · 已批 · 已派插件+物品  
 - 选题：TIP-BC 后 · **enhance「+5开孔」硬文案诚实**（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 soft 假耗再叠 · 非再降 DELTA · 非 Open/拒线再叠**）  
 - **批注：** soft 已 live（刃≥4/护符≥2），强化预览静默、TrMenu/legacy 硬写 ≥5/≥3 → 变强途径撒谎；预览 ready∩锁孔 → CUE；菜单双写表额+日首−1；零改 DELTA/硬表/unlock_at；零新 PAPI；批后派 **余烬-插件** + **余烬-物品**；**L13 施工 HOLD**；Anvil soft densify 旁债仍冻；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / soft-latch·CostSoft·pity·soft-glance·firstsoft·cook·life-buy soft 再叠 / xp-boost cue 再叠 / GemHole Open 再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 仍冻  
 
-## STATUS: OPEN · tip D12968–D12983 · 2026-10-12 22:55 Asia/Shanghai · 荐批 A·M
+## STATUS: APPROVED · tip D12968–D12983 · 2026-10-12 22:58 Asia/Shanghai · 已派余烬-插件+余烬-物品
