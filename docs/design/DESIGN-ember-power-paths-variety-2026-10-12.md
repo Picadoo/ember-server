@@ -196,9 +196,11 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-AL APPROVED** · ForgeCommitNext 甲诚实 · 已派插件 · L13 HOLD
+- **TIP-AL CLOSED live** `1.65.777-d12695.local` · feat `9b4824398` · chore `6be39c642` · ForgeCommitNext 甲诚实 · **L13 施工仍 HOLD**
 
-- **TIP-AL OPEN** · `TIP-ember-forge-commit-armor-honesty-thin-d12680-d12695-2026-10-12.md` · RESEARCH `RESEARCH-ember-forge-commit-armor-honesty-2026-10-12.md` · DESIGN `DESIGN-ember-forge-commit-armor-honesty-2026-10-12.md` · ForgeCommitNext 护甲诚实对齐（可施工薄 · 可感 UX · 零功率表 · 接 TIP-AK HeldNext）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AK CLOSED live · 深化 densify / ForgeChoice densify 仍冻 · 策划 docs-only
+- **TIP-AL APPROVED** · ForgeCommitNext 甲诚实 · 已派插件 · L13 HOLD · **（历史 APPROVED 行；已 CLOSED live）**
+
+- **TIP-AL OPEN** · `TIP-ember-forge-commit-armor-honesty-thin-d12680-d12695-2026-10-12.md` · RESEARCH `RESEARCH-ember-forge-commit-armor-honesty-2026-10-12.md` · DESIGN `DESIGN-ember-forge-commit-armor-honesty-2026-10-12.md` · ForgeCommitNext 护甲诚实对齐（可施工薄 · 可感 UX · 零功率表 · 接 TIP-AK HeldNext）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AK CLOSED live · 深化 densify / ForgeChoice densify 仍冻 · 策划 docs-only · **（历史 OPEN 行；已 CLOSED live）**
 
 - **TIP-AK CLOSED live** `1.65.776-d12679.local` · feat `83d3c2b55` · chore `c9931197a` · ForgeHeldNext 甲诚实 · **L13 施工仍 HOLD**
 
