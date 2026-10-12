@@ -181,6 +181,17 @@ public final class EmberSignature {
 
     public static Def byCode(int code) { for (Def d : DEFS) if (d.code == code) return d; return null; }
 
+    /** TIP-BH D13037: held/armor/lib lore block · Def.good/bad only · zero mods. */
+    public static void appendHeldEffectLore(List<String> lore, int sigCode) {
+        if (lore == null || sigCode <= 0) return;
+        Def sg = byCode(sigCode);
+        if (sg == null) return;
+        lore.add("§6签名 · §f" + sg.name + " §7（" + sg.boss + "）");
+        lore.add("§a得 · §f" + sg.good);
+        if (sg.bad != null && !sg.bad.isEmpty() && !"无".equals(sg.bad))
+            lore.add("§c代价 · §7" + sg.bad);
+    }
+
     public static Def byId(String id) {
         if (id != null) for (Def d : DEFS) if (d.id.equalsIgnoreCase(id)) return d;
         return null;

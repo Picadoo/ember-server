@@ -1067,7 +1067,7 @@ public final class EmberGearLib implements Listener {
         for (String l : EmberCompare.card(EmberMode.tables(), e.d, lv)) lore.add("§7" + l);
         EmberGrowthService gs = EmberGrowthService.get();
         if (gs != null && e.d.tier > 0) try { lore.add("§7词条：" + gs.affixText(gs.affixOf(pd, e.d), e.d.quality)); } catch (RuntimeException ignored) {}
-        if (gs != null) try { EmberSignature.Def sg = EmberSignature.byCode(gs.sigOf(pd, e.d)); if (sg != null) lore.add("§6签名：" + sg.name + " §7（" + sg.boss + "）" + sg.good); } catch (RuntimeException ignored) {} // D174
+        if (gs != null) try { EmberSignature.appendHeldEffectLore(lore, gs.sigOf(pd, e.d)); } catch (RuntimeException ignored) {} // TIP-BH D13039
         lore.add("§8来源 " + EmberCompare.sourceName(e.d.source) + " · uid " + e.d.uid.substring(0, 8));
         lore.add("");
         lore.add("§e左键 §f取出到背包" + (gate(p) != null ? " §c(回城后)" : ""));

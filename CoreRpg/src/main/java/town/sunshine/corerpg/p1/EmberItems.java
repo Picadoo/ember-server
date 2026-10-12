@@ -169,6 +169,7 @@ public final class EmberItems {
         lore.add(ChatColor.DARK_GRAY + (d.bound ? "绑定" : "未绑定") + " · " + EmberCompare.sourceName(d.source)); // D99: uid only via admin inspect
         String mapLore = EmberLootMapFeel.loreLine(d); // D3785 G1 map identity · display only
         if (mapLore != null) lore.add(mapLore);
+        EmberSignature.appendHeldEffectLore(lore, d.sigCode); // TIP-BH D13037
         meta.setLore(lore);
         item.setItemMeta(meta);
     }

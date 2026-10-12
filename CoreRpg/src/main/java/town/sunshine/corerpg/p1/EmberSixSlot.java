@@ -150,6 +150,7 @@ public final class EmberSixSlot {
     public static java.util.List<String> armorLore(EmberItemData d) {
         java.util.List<String> l = new java.util.ArrayList<String>(5);
         l.add("§6" + d.shortLabel());
+        EmberSignature.appendHeldEffectLore(l, d.sigCode); // TIP-BH D13038
         l.add("§7共鸣：阶级和强化随已选护符");
         EmberTables t = EmberMode.tables();
         l.add("§7成色 §f" + EmberItemData.qualityName(d.quality) + "§7（+" + Math.round(t.quality(d.quality) * 100) + "%） · 精工 §f"
