@@ -137,7 +137,7 @@ Icons:
     display:
       material: iron nugget
       name: '§a余烬守腕'
-      lore: ['§780 余烬币', '§8每周 1 次', '§e➥ §f购买']
+      lore: ['§780 余烬币 · 每周 1 次', '§7副手 · 物防 +2 · 不进 P1 B/H', '§e➥ §f购买']
     actions:
       all:
         - 'command: corerpg life buy offhand_ward'
@@ -145,7 +145,7 @@ Icons:
     display:
       material: emerald
       name: '§a余烬生坠'
-      lore: ['§780 余烬币', '§8每周 1 次', '§e➥ §f购买']
+      lore: ['§780 余烬币 · 每周 1 次', '§7副手 · 生命 +8 · 不进 P1 B/H', '§e➥ §f购买']
     actions:
       all:
         - 'command: corerpg life buy offhand_vita'

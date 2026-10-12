@@ -24,9 +24,9 @@ Icons:
       material: flint
       name: '§a余烬灰箍'
       lore:
-        - '§e消耗'
-        - '§7  余烬碎片 ×12'
-        - '§7  余烬铁锭 ×2'
+        - '§7物防 +1 · 不进 P1 B/H'
+        - '§e消耗：碎×12 + 铁锭×2'
+        - '§8薄于守腕'
   C:
     display:
       material: anvil
@@ -46,7 +46,7 @@ Icons:
       lore:
         - '§7在烬砧用材料炼成副手部件'
         - '§7点「确认炼制」即可'
-        - '§7强化另用碎片；有铁锭先炼灰箍沉底'
+        - '§8物防 +1 · 不进主线战力'
   Z:
     display:
       material: arrow
