@@ -1,6 +1,6 @@
 # DESIGN · 洗练「更优档直留」菜单诚实（洗练 TrMenu · 薄窗 · 可施工）· 2026-10-13
 
-> **状态：** **OPEN** · TIP-BU · 荐批 A·M · 2026-10-13 00:53 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BU · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:55 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-reroll-keep-sure-menu-honesty-2026-10-13.md`](RESEARCH-ember-reroll-keep-sure-menu-honesty-2026-10-13.md)  
 > **对接 live：** TIP-BT CLOSED live items `683011255` · `EmberRerollKeepSure` · `EmberGrowthService`「更优档直留 · 自动保留新」· `ember_p1_reroll.yml` N/K/O · power-paths SUR1  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留 / 形缓 Icon A / 转化保留 / access_* / 成色·精工确定成功 / 互换免费确定再叠 / soft·开孔再叠 **仍冻**  
