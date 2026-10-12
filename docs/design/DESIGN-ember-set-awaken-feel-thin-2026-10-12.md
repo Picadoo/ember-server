@@ -1,6 +1,6 @@
 # 余烬 · 套装手感 · 觉醒升档白话薄窗
 
-STATUS=**待批 A · 荐方案 M** · 2026-10-12  
+STATUS=**批 A · 方案 M · 交施工** · 2026-10-12 16:48 CST  
 上游 RESEARCH [`RESEARCH-ember-set-awaken-feel-thin-2026-10-12.md`](RESEARCH-ember-set-awaken-feel-thin-2026-10-12.md) · tip `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md`  
 资产：`EmberSetRules` · `EmberAwakenBreak` · `EmberSetFeel`
 
@@ -32,3 +32,6 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-12
 |------|------|
 | R · 每击套装系数浮动 AB | **否**（刷屏 densify） |
 | W · 抬觉醒表当假变强 | **否决** |
+
+## 进度戳
+- **TIP-P 批 A·M**（2026-10-12）· tip D12392–D12407 · 交插件

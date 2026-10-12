@@ -1,6 +1,6 @@
 # tip · TIP-P 套装手感 · 觉醒升档白话（非改倍率）· D12392–D12407
 
-> **状态：** OPEN · 待批 A · 荐方案 M（2026-10-12 Asia/Shanghai）  
+> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:48 Asia/Shanghai）· 交插件岗  
 > **上游：** [`RESEARCH-ember-set-awaken-feel-thin-2026-10-12.md`](../design/RESEARCH-ember-set-awaken-feel-thin-2026-10-12.md) · [`DESIGN-ember-set-awaken-feel-thin-2026-10-12.md`](../design/DESIGN-ember-set-awaken-feel-thin-2026-10-12.md) · `EmberSetRules` / `EmberAwakenBreak` · TIP-J 停 glance  
 > **前置：** TIP-O CLOSED PASS live `b566bfe4`；power-glance densify **仍停**  
 > **施工岗：** 插件岗（AwakenBreak / SetFeel 文案；**零改 SetRules 数值数组**）  
@@ -58,7 +58,7 @@
 
 ## 4. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
+- [x] 总控批 **A · 方案 M**  
 - [ ] D12394–D12397 函数+挂点+热关  
 - [ ] SetRules `git show` 无抬  
 - [ ] 不跑 p1sim（文案级）
@@ -67,8 +67,8 @@
 
 ## 5. 批注
 
-- [ ] 总控批 **A · 方案 M** · （待）  
+- [x] 总控批 **A · 方案 M** · 2026-10-12 16:48 CST  
 - 选题：变强途径 · 套装手感深度（觉醒白话）· 非 glance  
-- **批注预填：** 读表不改表；挂 AwakenBreak；热关 awk_delta；硬禁 Affix/伤乘/抬表/glance twin
+- **批注：** 读表不改表；挂 AwakenBreak；热关 awk_delta；≤1 行禁 raw 系数墙；硬禁 Affix/伤乘/抬表/glance twin
 
-## STATUS: OPEN · 待批 A · 荐 M · D12392–D12407
+## STATUS: 批 A·M · 交施工 · 2026-10-12 16:48 CST
