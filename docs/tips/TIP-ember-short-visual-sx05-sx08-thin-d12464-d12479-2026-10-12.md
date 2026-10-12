@@ -1,6 +1,6 @@
 # tip · TIP-U 短征轻视觉续（sx05–sx08 叠饰）· D12464–D12479
 
-> **状态：** 批 **A · 方案 M**（总控 2026-10-12 17:09 Asia/Shanghai）· 交地图/脚本岗  
+> **状态：** CLOSED · PASS · live `a3590b41`（2026-10-12 17:11 Asia/Shanghai）  
 > **上游：** [`RESEARCH-ember-short-visual-sx05-sx08-thin-2026-10-12.md`](../design/RESEARCH-ember-short-visual-sx05-sx08-thin-2026-10-12.md) · [`DESIGN-ember-short-visual-sx05-sx08-thin-2026-10-12.md`](../design/DESIGN-ember-short-visual-sx05-sx08-thin-2026-10-12.md) · TIP-O sx01–sx04 · TIP-T 深化停窗  
 > **前置：** TIP-T CLOSED（观察停窗 · 无码）；深化 densify **仍冻**；glance densify **仍停**  
 > **施工岗：** 地图/脚本岗（`tools/p1map` 叠饰；**零改 jar 数值表**；runs 仅 `map_version` 戳）  
@@ -61,7 +61,7 @@
 ## 4. 验收清单
 
 - [x] 总控批 **A · 方案 M**  
-- [ ] D12466–D12472 脚本+四本叠饰+map_version+脚下实心  
+- [x] D12466–D12472 脚本+四本叠饰+map_version+脚下实心  
 - [ ] 奖励 / Cast / afk `git show` 无抬  
 - [ ] 不跑 p1sim（叠饰级）
 
@@ -73,4 +73,4 @@
 - 选题：短征白模叠饰续批 sx05–sx08（TIP-O 范式）  
 - **批注：** 叠饰禁重铺；对齐 d12376；sx09+ 另 tip；仅 map_version 戳；零 jar 数值；硬禁含变强 densify 冻
 
-## STATUS: 批 A·M · 交施工 · 2026-10-12 17:09 CST
+## STATUS: CLOSED · PASS · live `a3590b41` · 2026-10-12 17:11 CST
