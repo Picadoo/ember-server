@@ -1,6 +1,7 @@
 # DESIGN · 防具签名规格 + 叠合门禁（stage0 · HOLD 施工）· 2026-10-12
 
 > **状态：** APPROVED stage0 · TIP-AB 批 A·M · **HOLD 施工** · 2026-10-12 17:41 Asia/Shanghai  
+> **TIP-AD 补丁：** S3 评测集排除刃 L11/L13 · [`DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md) · 2026-10-12 19:19 Asia/Shanghai  
 > **对接 tip：** [`TIP-ember-armor-signature-gate-design-stage0-thin-d12552-d12559-2026-10-12.md`](../tips/TIP-ember-armor-signature-gate-design-stage0-thin-d12552-d12559-2026-10-12.md)  
 > **上游：** TIP-AA CLOSED docs-only `79247dab2` · [`RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md`](RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md) · D174 [`DESIGN-ember-mainline-unlocks-2026-10-04.md`](DESIGN-ember-mainline-unlocks-2026-10-04.md) §2.1 / §5 · COORD-legendary-effects（行为型 · ≤2 生效 · 禁伤乘）  
 > **硬禁：** 零 Affix densify · 零伤乘 · 零抬表 · 零 glance twin · 零深化 densify · 零 sx20 · 零 skill_mult · 零 ForgeChoice·wear·pity·awkDelta densify · **零 jar / 零插件派单 / 零 Economy-pom** 直至门禁过线 **且** 总控显式开工
@@ -98,7 +99,7 @@
 |----|------|----------|----------|-------------|
 | **S1** | **防具签名规则落地可核** | 书面规格冻结：5 防具取 1、刃规则不变、tag/excl、§2.6 优先级；单测用例表（0/1/多甲、excl、同 tag）可勾选 | 本 DESIGN §2 + 用例清单 | G-sig-1 + 规则债 |
 | **S2** | **烙印/掉落扩甲边界** | 默认候选锁定：**烙印扩甲 · 掉落不扩甲**；`STAMP_RATE` / 徽记周池 / imprint 价 **不变**；若改掉落须另开设计并重跑 S4 | 门禁纪要 +（施工前）stampable 预期表 | G-drop |
-| **S3** | **生效优先级 + 组合可达** | p1sim：防具侧 1 规则下，单条 + 合法刃×防具组合 + 天赋 excl；**不**与 ×0.97 叠出新乘区叙事；上偏精神对齐 D174（不超既有门槛） | `out-*-armor-sig-42.md`（命名施工期定） | G-sig-2 + G-42 |
+| **S3** | **生效优先级 + 组合可达** | p1sim：防具侧 1 规则下，单条 + 合法刃×防具组合 + 天赋 excl；**不**与 ×0.97 叠出新乘区叙事；上偏精神对齐 D174（不超既有门槛）。**TIP-AD 勘误：** 防具门禁 S3-T/P **评测集排除刃 L11/L13**（alone+含二者之对）；刃债另轨 HOLD；见 [`DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md) | `out-*-armor-sig-42.md`（命名施工期定） | G-sig-2 + G-42 |
 | **S4** | **W30 / 经济叠合** | 相对 **现行六槽 live + 现行签名经济** 基线，两件极品时间线 ±0.5 周（或 DESIGN 重钉并经总控签）；输入含 Stage1 F / Stage2 C，**不含**抬表 | `out-*-armor-sig-w30.md` | G-W30 |
 
 **开工令（额外硬门槛）：** S1–S4 PASS **之后**，仍须 **总控显式批「开工」** 才可另开施工 tip；本 tip / 本 DESIGN **不是**开工令。

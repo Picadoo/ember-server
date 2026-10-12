@@ -1,6 +1,7 @@
 # tip · TIP-AC 防具签名门禁 stage1 离线（S3 p1sim + S4 W30 · docs+tools）· D12560–D12575
 
-> **状态：** CLOSED · 批 **A · 方案 M** · docs+tools · HOLD 施工 · RESULT 数字后继（总控 2026-10-12 17:44 Asia/Shanghai）  
+> **状态：** CLOSED FAIL · 批 **A · 方案 M** · docs+tools · RESULT `STAGE1_OFFLINE=FAIL` commit **`469cc1a46`**（总控跑数；S3-T/P 刃 L11/L13；S1/S2/S3-R/E/X/S4 PASS）· 2026-10-12 19:18 Asia/Shanghai  
+> **后继：** TIP-AD S3 评测集补丁（砍 L11/L13）· HOLD 施工仍有效 · PASS≠开工  
 > **上游：** [`DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](../design/DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md) · TIP-AB CLOSED DESIGN stage0 APPROVED HOLD `a5b264fce` · stage0 [`DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md`](../design/DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md)  
 > **结果落点：** [`RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](../design/RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md)  
 > **前置：** S1/S2 书面继承 stage0；深化 densify **仍冻**；烬斩门闩 TIP-Y **仍有效**  
@@ -96,4 +97,4 @@ TIP-AB 后开 **stage1 离线门禁**：可执行 **S3（p1sim 单条/组合/exc
 - 选题：TIP-AB 后 · **防具签名门禁 stage1 离线（S3 p1sim + S4 W30）**  
 - **批注：** 复用 mainline.py；S3-R harness PASS；RESULT PENDING；不过线不停；PASS 仍 HOLD 至显式开工；零业务 jar；深化 densify / Affix / 抬表 / glance / sx20 / skill_mult 仍冻；无派插件  
 
-## STATUS: OPEN · 待批 A·M · 2026-10-12 17:41 CST · docs+tools · 零业务 jar
+## STATUS: CLOSED FAIL · `469cc1a46` · 2026-10-12 19:18 CST · docs+tools · 零业务 jar · 后继 TIP-AD

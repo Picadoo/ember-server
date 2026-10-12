@@ -1,6 +1,7 @@
 # RESULT · 防具签名门禁 stage1 离线（S3 / S4）· 2026-10-12
 
-> **状态：** FILLED · TIP-AC CLOSED `2578d812e` · 跑数 2026-10-12 18:34–19:18 Asia/Shanghai  
+> **状态：** FILLED · TIP-AC CLOSED FAIL `469cc1a46`（包 APPROVED `2578d812e`）· 跑数 2026-10-12 18:34–19:18 Asia/Shanghai  
+> **TIP-AD：** S3 评测集补丁 OPEN · 见 §6 · `judge-s3` 2026-10-12 19:19 Asia/Shanghai  
 > **上游 DESIGN：** [`DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md)  
 > **stage0：** TIP-AB CLOSED `a5b264fce`  
 > **硬句：** FAIL → 停、禁抬表凑线；**PASS ≠ 开工**（仍须总控显式批「开工」才开施工 tip）
@@ -126,3 +127,22 @@ STAGE1_OFFLINE = FAIL
 - L11 burst 可达硬线贴边：max\|Δ\|=3.025 → 判定 ❌（非 🟡）。  
 - 零业务 jar；未改 CoreRpg / TrMenu / Economy / loot / STAMP 表。  
 - pkl 缓存：`/tmp/ml-armor-sig/{tol,pairs,talent}.pkl`（未入库）。
+
+---
+
+## 6. TIP-AD · S3 评测集补丁重判（2026-10-12 19:19 CST）
+
+> 补丁 DESIGN：[`DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md)  
+> tip：[`TIP-ember-armor-signature-gate-s3-eval-patch-thin-d12576-d12583-2026-10-12.md`](../tips/TIP-ember-armor-signature-gate-s3-eval-patch-thin-d12576-d12583-2026-10-12.md)  
+> 命令：`python3 tools/p1sim/armor_sig_gate_s1.py judge-s3`（过滤既有 out；**未**改 SIGS / **未**抬表 / **零**业务 jar）
+
+| 包 | 口径 | 结果 |
+|----|------|------|
+| S3-T 可达 · excl L11/L13 | kept=23 dropped=6 | **PASS**（0 ❌ · soft 3） |
+| S3-P 可达 · excl L11/L13 | kept=40 dropped=25 | **PASS**（0 ❌ · soft 8） |
+| S3-R / E / X | 继承 TIP-AC | PASS |
+| S4 | 继承 TIP-AC | PASS |
+| 刃 L11/L13 | **HOLD 另轨** | 不进本门禁总判 |
+
+**说明：** TIP-AC 全表 `STAGE1_OFFLINE=FAIL` 戳 **保留**（历史事实）。补丁后 **防具门禁透镜** S3-T/P 净；合并候选绿须总控批 TIP-AD 后写入正式总判句。  
+**硬句仍有效：** FAIL→停禁抬表；**PASS ≠ 开工**（仍须总控显式「开工」才开施工 tip）。

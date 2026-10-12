@@ -1,9 +1,10 @@
 # DESIGN · 防具签名叠合门禁 stage1 离线（S3 p1sim + S4 W30）· 2026-10-12
 
-> **状态：** APPROVED · TIP-AC 批 A·M · docs+tools · **HOLD 施工 / 零业务 jar** · RESULT 数字后继 · 2026-10-12 17:44 Asia/Shanghai  
+> **状态：** APPROVED · TIP-AC 批 A·M · docs+tools · **HOLD 施工 / 零业务 jar** · RESULT 已填 FAIL `469cc1a46` · **TIP-AD S3 评测集补丁** · 2026-10-12 19:19 Asia/Shanghai  
 > **对接 tip：** [`TIP-ember-armor-signature-gate-stage1-offline-thin-d12560-d12575-2026-10-12.md`](../tips/TIP-ember-armor-signature-gate-stage1-offline-thin-d12560-d12575-2026-10-12.md)  
 > **上游：** TIP-AB CLOSED DESIGN stage0 APPROVED HOLD `a5b264fce` · [`DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md`](DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md) · RESEARCH [`RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md`](RESEARCH-ember-mainline-unlock-2c-sixslot-2026-10-12.md)  
-> **结果落点：** [`RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md)（跑完填；本窗可只建空壳）  
+> **结果落点：** [`RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md`](RESULT-ember-armor-signature-gate-stage1-offline-2026-10-12.md)（TIP-AC 已填 FAIL）  
+> **TIP-AD 补丁：** [`DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md) · S3-T/P 防具门禁集 **排除刃 L11/L13** · `armor_sig_gate_s1.py judge-s3`  
 > **硬禁：** 零 Affix densify · 零伤乘 · 零抬表 · 零 glance twin · 零深化 densify · 零 sx20 · 零 skill_mult · 零 ForgeChoice·wear·pity·awkDelta densify · **零业务 jar / 零插件 YAML 表** · 不过线不停 · **PASS ≠ 开工**（仍须总控显式开工才开施工 tip）
 
 ---
@@ -44,8 +45,8 @@ stage0 §2.1：**本 stage0 不新加签名 id / 不改修饰键数值**；防�
 | 包 | 内容 | 工具 | 过线 |
 |----|------|------|------|
 | **S3-R** 规则单测 | 0/1/多甲带签 → 生效恰好 ≤1；双签前；excl；与刃同 tag；§2.6 `charm>head>chest>legs>boots` | `python3 tools/p1sim/armor_sig_gate_s1.py rules` | 全部 assert PASS |
-| **S3-T** 单条 42 格 | 各签名 alone vs base；7 图 × r/c × dodge 0.3/0.5/0.7 | `mainline.py tol` | D174 精神：目标每格 ±2 pp；硬线 mean\|Δ\|≤1 pp 且无格超 ±3 pp |
-| **S3-P** 合法刃×防具侧组合 | 不同 tag 的 blade+charm（=防具侧）对 | `mainline.py pairs` | 同上 |
+| **S3-T** 单条 42 格 | 各签名 alone vs base；7 图 × r/c × dodge 0.3/0.5/0.7；**防具门禁判定排除刃 L11/L13 alone**（TIP-AD） | `mainline.py tol` + `armor_sig_gate_s1.py judge-s3` | D174 精神：目标每格 ±2 pp；硬线 mean\|Δ\|≤1 pp 且无格超 ±3 pp（**仅 armor-gate 成员**） |
+| **S3-P** 合法刃×防具侧组合 | 不同 tag 的 blade+charm（=防具侧）对；**排除含 L11/L13 的对**（TIP-AD） | `mainline.py pairs` + `judge-s3` | 同上（仅 armor-gate 成员） |
 | **S3-E** 天赋 excl | 最强对 + 满天赋；`EXCL` 关掉同 tag 签 | `mainline.py talent`（默认可 EXCL） | 同 tag 签被 excl 后 **不**叠出额外上偏；无新乘区 |
 | **S3-X** ×0.97 正交 | 书面：签名 **不**改四件套减伤、不新开伤乘/`skill_mult`、不把套装×0.97 写成「再乘一层」 | 清单勾选（见 §3.3） | 全勾 + 无新乘区键进入候选 |
 
@@ -95,6 +96,18 @@ python3 mainline.py report /tmp/ml-armor-sig/talent.pkl \
 |------|------|
 | **PASS** | 勾 RESULT §S3；进入 S4（可并行开工跑） |
 | **FAIL** | **停**；记失败格/规则断言；回 stage0 改优先级或砍对；**禁**抬表/伤乘/Affix |
+
+### 3.5 TIP-AD · S3-T/P 评测集（防具门禁）
+
+| 项 | 口径 |
+|----|------|
+| **排除** | 刃 **L11**、**L13** alone，以及 **含 L11/L13 的 pairs** |
+| **纳入** | 防具侧 alone（原 charm 升格）+ 其余合法刃×防具对 + 非 L11/L13 刃 alone（参考） |
+| **工具** | `python3 tools/p1sim/armor_sig_gate_s1.py judge-s3`（过滤既有 out；零改 SIGS） |
+| **HOLD** | 刃 L11/L13 另轨研究 tip；本窗不修刃 mods |
+| **硬句** | 排除 = 评测成员资格；**不是**抬表 / 删 SIGS / 开工令 |
+
+补丁 DESIGN：[`DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md)
 
 ---
 
@@ -161,7 +174,7 @@ python3 mainline.py econ '["L01","L02"]' --players 300 --weeks 12 --dodge 0.5 --
 
 | 路径 | 作用 |
 |------|------|
-| `tools/p1sim/armor_sig_gate_s1.py` | `rules`：§2.6 / 5 取 1 / excl / 同 tag 离线 assert；`cmds`：打印 §3–§4 命令包；`checklist`：打印 PASS/FAIL 口诀 |
+| `tools/p1sim/armor_sig_gate_s1.py` | `rules`：§2.6 / 5 取 1 / excl / 同 tag；`cmds`/`checklist`：命令包+口诀；**`judge-s3`**：TIP-AD 过滤 L11/L13 后判 S3-T/P（仅评测成员） |
 
 **不做：** 改 `SIGS` / 改 economy yml / 写插件表 / 连服 / 发明新平衡常数。
 
