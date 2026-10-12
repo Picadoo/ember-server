@@ -222,6 +222,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 
 - **TIP-BF CLOSED** · SF4 U1 T0 p1sim `STAGE0_SF4_U1_T0=PASS` · 批 A·M · HOLD 施工 · PASS≠开工 · 主荐 U1_sl10 · docs+tools `98b79745` · push `9ab79c257` · **不派插件** · **显式开工 → TIP-BG OPEN**
 
+- **TIP-BG APPROVED** · SF4 U1_sl10 显式开工接线 · 批 A·M · 已派余烬-插件 · 锁 MARK_TICKS=20 · SLOW_AMP=0 · HIT_LIM=3 · docs `bb16c49e`
+
 - **TIP-BG OPEN** · `TIP-ember-skill-sf4-u1-sl10-wire-thin-d13016-d13031-2026-10-12.md` · RESEARCH `RESEARCH-ember-skill-sf4-u1-sl10-wire-2026-10-12.md` · DESIGN `DESIGN-ember-skill-sf4-u1-sl10-wire-2026-10-12.md` · 烬斩 SF4 U1_sl10 **显式开工**接线（可施工薄 · CoreRpg · **接 TIP-BF PASS** · **本 tip=开工令 · BF PASS≠开工** · **非 densify · 非 skill_mult · 非 Anvil densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 soft/开孔再叠** · 零改 skill_mult/CD/几何盒 · 锁 U1_sl10 · MARK_TICKS=20 · Slow I · 形状门=套装推荐/none→LINE · 守招 D301 不抢 · 灰印/聚火旁债）· **批后派余烬-插件** · **L13 施工 HOLD**（TIP-AI FAIL）· TIP-BF CLOSED PASS · soft-latch/CostSoft/pity/soft-glance/firstsoft/cook/life-buy soft 再叠 / xp-boost cue 再叠 / GemHole Open 再叠 / enhance+5 开孔再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 densify / 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify 仍冻 · 策划 docs-only
 
 
