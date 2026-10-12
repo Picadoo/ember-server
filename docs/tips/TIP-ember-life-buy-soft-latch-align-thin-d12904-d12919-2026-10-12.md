@@ -1,6 +1,6 @@
 # tip · TIP-AZ 生活购币 Soft 假耗（扣空）诚实对齐（可施工薄 · 可感 UX）· D12904–D12919
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 22:27 Asia/Shanghai  
+> **状态：** **CLOSED live `1.65.791-d12919`** · feat `1984f551b` · 批 A·M · 2026-10-12 22:32 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-life-buy-soft-latch-align-2026-10-12.md`](../design/RESEARCH-ember-life-buy-soft-latch-align-2026-10-12.md) · DESIGN [`DESIGN-ember-life-buy-soft-latch-align-2026-10-12.md`](../design/DESIGN-ember-life-buy-soft-latch-align-2026-10-12.md) · TIP-AY CLOSED live `1.65.790-d12903` · feat `5fdccde66` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径** — **离开 CostSoft·pity·soft-glance·firstsoft·cook soft / ConvertCap / 甲闸 / 追烙**（AS→AV / AP–AR / AW / AX / AY / AK–AM / AN–AO 已齐）；生活购币 Soft 假耗 leftover（Cook peek 范本已立、buy 八族仍先 latch）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · 八族 Soft.`peekCoin` · `LifeService.buy` 币门禁 peek / spend 前 consume · 可选 show SOFT_TAIL + 单测）  
@@ -89,9 +89,9 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12908–D12911；D12913 `git show` 干净  
-- [ ] 菜单默认不动；lore≤3  
-- [ ] peek 不吞 soft；成交才 consume；L13 施工仍 HOLD  
+- [x] 批后插件：D12908–D12911；D12913 `git show` 干净  
+- [x] 菜单默认不动；lore≤3  
+- [x] peek 不吞 soft；成交才 consume；L13 施工仍 HOLD  
 
 ---
 
@@ -101,4 +101,4 @@
 - 选题：TIP-AY 后 · **离开 CostSoft/pity/ConvertCap/firstsoft/cook 批次/甲闸/追烙** — 生活购币 Soft 假耗诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 ConvertCap densify · 非 CostSoft·pity·soft-glance·firstsoft·cook soft 再叠**）  
 - **批注：** Cook 已 peek+扣币才 consume；`LifeService.buy` 八族仍先 latch 再比币 → 软价仍不够时白吞日首减负；peekCoin + 币门禁/成交 consume；零改 MULT/表价；零新 PAPI；批后派 **余烬-插件**；**L13 施工 HOLD**；SupplyShop/Anvil 假耗旁债；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / ConvertCap densify / CostSoft·pity·soft-glance·firstsoft·cook soft 再叠 仍冻  
 
-## STATUS: APPROVED · tip D12904–D12919 · 2026-10-12 22:27 Asia/Shanghai · 已派余烬-插件
+## STATUS: CLOSED live `1.65.791-d12919` · tip D12904–D12919 · 2026-10-12 22:32 Asia/Shanghai · feat `1984f551b`
