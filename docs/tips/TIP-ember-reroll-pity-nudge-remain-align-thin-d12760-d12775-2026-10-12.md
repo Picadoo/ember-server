@@ -1,6 +1,6 @@
 # tip · TIP-AQ 洗练保底日首加码 remain 诚实对齐（可施工薄 · 可感 UX）· D12760–D12775
 
-> **状态：** **OPEN** · 待总控批 A·M · 2026-10-12  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:07 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-reroll-pity-nudge-remain-align-2026-10-12.md`](../design/RESEARCH-ember-reroll-pity-nudge-remain-align-2026-10-12.md) · DESIGN [`DESIGN-ember-reroll-pity-nudge-remain-align-2026-10-12.md`](../design/DESIGN-ember-reroll-pity-nudge-remain-align-2026-10-12.md) · TIP-AP CLOSED live `1.65.781-d12759` · feat `c5c7ae391` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径（非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify）** — 续 AP 同构轴：洗练日首加码 vs remain/希望说谎  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberRerollPity` remain/attempts 三元 · GrowthService 预览喂 ready · HopeMeter 洗练轨改吃 remain · 单测）  
@@ -88,8 +88,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12764–D12767；D12769 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] 插件 jar live 后 CLOSED  

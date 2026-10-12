@@ -196,6 +196,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
+- **TIP-AQ APPROVED** · 洗练加码 remain 诚实 · 已派插件 · L13 HOLD
+
 - **TIP-AP CLOSED** live `1.65.781-d12759` · feat `c5c7ae391` · 宝石加码 remain 诚实 · L13 HOLD
 
 - **TIP-AQ OPEN** · `TIP-ember-reroll-pity-nudge-remain-align-thin-d12760-d12775-2026-10-12.md` · RESEARCH `RESEARCH-ember-reroll-pity-nudge-remain-align-2026-10-12.md` · DESIGN `DESIGN-ember-reroll-pity-nudge-remain-align-2026-10-12.md` · 洗练保底日首加码 remain 诚实对齐（可施工薄 · 可感 UX · **续 AP 同构** · **非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify** · 零改 reroll.pity/BONUS · 零新 PAPI）· 批后派插件 · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-AP CLOSED live · DropCraft/Q 加码 remain 另 tip · 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify 仍冻 · 策划 docs-only

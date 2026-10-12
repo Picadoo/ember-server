@@ -1,6 +1,6 @@
 # DESIGN · 洗练保底日首加码 remain/希望串诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-AQ · 2026-10-12  
+> **状态：** APPROVED · TIP-AQ 批 A·M · 已派插件 · 2026-10-12 21:07 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-reroll-pity-nudge-remain-align-2026-10-12.md`](RESEARCH-ember-reroll-pity-nudge-remain-align-2026-10-12.md)  
 > **对接 live：** TIP-AP CLOSED live `1.65.781-d12759` · D10977 `EmberRerollPityNudge` · D1248 `EmberRerollPity` · HopeMeter 洗练轨  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**；DropCraft/DropQuality 加码 remain **旁债另 tip**  
