@@ -1,6 +1,6 @@
 # DESIGN · 装备页套装效果行跟随成套族诚实（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** OPEN · TIP-BI · 待批 A·M · 2026-10-12 23:33 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BI · 已派余烬-插件+余烬-物品 · 2026-10-12 23:34 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-gear-set-blurb-follow-2026-10-12.md`](RESEARCH-ember-gear-set-blurb-follow-2026-10-12.md)  
 > **对接 live：** TIP-BH CLOSED live `1.65.797-d13047` · TIP-P 觉醒白话 · D325 四件套 · `ember_p1_gear.yml` · `EmberItemData.familyBlurb` · `EmberLoadout.setLabel` · `EmberRunPapi` loadout  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名 lore 再叠 **仍冻**  
@@ -95,4 +95,4 @@ familyBlurb("sustain") // 旧：生命 ×1.12，每 5 次普攻回…
 | 6 | 签名 lore 再叠 | **仍冻** |
 | 7 | 宝石镶嵌效果持件/菜单细述 | 另 tip · 非本窗 |
 
-## STATUS: OPEN · TIP-BI · 待批 A·M · 2026-10-12 23:33 Asia/Shanghai
+## STATUS: APPROVED · TIP-BI · 已派余烬-插件+余烬-物品 · 2026-10-12 23:34 Asia/Shanghai
