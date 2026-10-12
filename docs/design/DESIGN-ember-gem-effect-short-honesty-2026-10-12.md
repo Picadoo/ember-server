@@ -98,5 +98,6 @@ CODE_GALE   → "疾风 · 移速+" + pct(GALE_MS)    // 0.02 → 2%
 | 6 | 签名 lore / 套装 blurb 再叠 | **仍冻** |
 | 7 | soft·开孔·GemHole 再叠 | **仍冻** |
 | 8 | 持件孔位逐孔效果长墙 | **另 tip · 禁本窗扩** |
+| 9 | 天赋节点效果短诚实（D12200 误删） | **→ TIP-BK OPEN** |
 
 ## STATUS: CLOSED live `1.65.799-d13079` · TIP-BJ · feat `72cba2db4` · items `bc1e63407` · 2026-10-12 23:46 Asia/Shanghai
