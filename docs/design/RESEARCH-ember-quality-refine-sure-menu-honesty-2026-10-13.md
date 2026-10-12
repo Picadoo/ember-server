@@ -1,6 +1,6 @@
 # RESEARCH · 成色/精工「确定成功」菜单诚实（工坊 TrMenu · 离开 MG2 进过即开链）· 2026-10-13
 
-> **状态：** **OPEN** · TIP-BS · 荐批 A·M · 2026-10-13 00:43 Asia/Shanghai  
+> **状态：** APPROVED · TIP-BS · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:46 Asia/Shanghai  
 > **起因：** TIP-BR CLOSED live 后总控「离开 MG2 进过即开 / 转化 / 形缓 / 升阶保留链 · 开下一可感变强途径」。硬禁含 **access_* 再叠** → 不扫 hub/raid/abyss 解锁尾。扫 AH…BR / power-paths / BR 旁债 #8：**成色/精工聊天已写「确定成功，预览即结果」**，菜单 Q/q·R/r 仅花费+希望进度，**无确定成功半行**。  
 > **上游：** TIP-BR CLOSED live `1.65.801-d13207` · feat `a5e88aa98` · items `8c8edc1f1` · docs `b5f1113ce` · TrMenu reload 77 · `EmberForgeService.simple` 成色/精工预览 · `ember_p1_forge.yml` Q/q/R/r · power-paths WS2 · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify · 零伤乘 · 零抬表 · 零改解锁数学 · 零 ConvertCap densify · 零改 WEEKLY_CAP/MARK_TICKS · 零抬 RATE/upgradeCost · 零抬 talent/gem/副手 flat · 零抬成色/精工 cost · 零 Anvil densify / soft·开孔再叠 / topUpTo · 零 SF4 U2U3 · 零灰印·聚火 · 零签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留 / 形缓 Icon A / 转化保留 / access_* 再叠 · 零调律 live bad · 零并轨 B · 零 SetRules/Formula 抬 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 sx20 · 零 skill_mult · 零开 L13 施工 tip · 零效果长墙 · 零 lore>3**
