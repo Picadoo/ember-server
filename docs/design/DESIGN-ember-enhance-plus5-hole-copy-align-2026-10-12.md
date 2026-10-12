@@ -1,6 +1,6 @@
 # DESIGN · 强化「+5开孔」硬文案诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-BD 批 A·M · 已派插件+物品 · 2026-10-12 22:58 Asia/Shanghai  
+> **状态：** CLOSED live `1.65.795-d12983` · TIP-BD · feat `9a89f68a6` · items `35b6c7e3c` · 2026-10-12 23:01 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-enhance-plus5-hole-copy-align-2026-10-12.md`](RESEARCH-ember-enhance-plus5-hole-copy-align-2026-10-12.md)  
 > **对接 live：** TIP-BC CLOSED live `1.65.794-d12967` · feat `b13c47c69` · GemHoleUnlockSoft + CUE · `EmberGemSocket` Open/拒线已齐 · `EmberForgeService.enhance` 预览 · `EmberHopeMeter` · TrMenu `ember_p1_gem.yml` / `ember_socket.yml` · legacy `EnhanceService`  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
@@ -104,4 +104,4 @@ EnhanceService info (可选):
 3. 主线解锁 DESIGN / stampable 空 / L13 HOLD 观察  
 4. legacy EnhanceService 全页若仍玩家主感 · 可续扫（本窗可选已覆盖 info）
 
-## STATUS: APPROVED · TIP-BD · 2026-10-12 22:58 Asia/Shanghai · 已派余烬-插件+余烬-物品
+## STATUS: CLOSED live `1.65.795-d12983` · TIP-BD · 2026-10-12 23:01 Asia/Shanghai · feat `9a89f68a6` · items `35b6c7e3c`
