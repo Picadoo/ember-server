@@ -175,7 +175,9 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - Batch3：TIP-B 已开 `TIP-ember-power-forge-commit-d12256-d12263-2026-10-12.md`  
 - 本文件 **docs only**；本回合 **不改 jar**、不 push（除非 tip 管线另需）。
 
-## 进度戳 · 2026-10-12 15:44 CST
+## 进度
+- **TIP-O 批 A·M** · 交施工 sx01–sx04
+戳 · 2026-10-12 15:44 CST
 
 - Batch1 TIP-A / Batch2 TIP-C / Batch3 TIP-B：**CLOSED live**（至 1.65.760-d12263）
 - Affix Pack：**FROZEN**
