@@ -81,7 +81,7 @@ Icons:
       material: quartz
       name: '§c镶入 · 锋利石'
       lore:
-        - '§7微量攻击 · gem_ember_sharp'
+        - '§7锋利 · 攻击+0.1（刃 T2+ 才计）'
         - '§8背包需有该石'
         - '§c➥ §f点击镶入'
     actions:
@@ -96,7 +96,7 @@ Icons:
       material: iron ingot
       name: '§9镶入 · 稳固石'
       lore:
-        - '§7微量防御 · gem_ember_steady'
+        - '§7稳固 · 防御+0.1'
         - '§8背包需有该石'
         - '§9➥ §f点击镶入'
     actions:
@@ -111,7 +111,7 @@ Icons:
       material: ghast tear
       name: '§5镶入 · 汲取石'
       lore:
-        - '§7微量吸血 · gem_ember_drain'
+        - '§7汲取 · 吸血+1%'
         - '§8背包需有该石'
         - '§5➥ §f点击镶入'
     actions:
@@ -126,7 +126,7 @@ Icons:
       material: feather
       name: '§a镶入 · 疾风石'
       lore:
-        - '§7微量移速 · gem_ember_gale'
+        - '§7疾风 · 移速+2%'
         - '§8背包需有该石'
         - '§a➥ §f点击镶入'
     actions:

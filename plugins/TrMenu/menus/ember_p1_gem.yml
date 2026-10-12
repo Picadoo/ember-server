@@ -70,7 +70,7 @@ Icons:
     display:
       material: blaze powder
       name: '§c合成 · 锋利石'
-      lore: ['', '§7碎8+骨4+币40 → 锋利', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
+      lore: ['', '§7锋利 · 攻击+0.1（刃 T2+ 才计）', '§7碎8+骨4+币40 → 锋利', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
     actions:
       all:
         - 'sound: BLOCK_ANVIL_USE-0.5-1.2'
@@ -79,7 +79,7 @@ Icons:
     display:
       material: iron ingot
       name: '§b合成 · 稳固石'
-      lore: ['', '§7碎8+骨4+币40 → 稳固', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
+      lore: ['', '§7稳固 · 防御+0.1', '§7碎8+骨4+币40 → 稳固', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
     actions:
       all:
         - 'sound: BLOCK_ANVIL_USE-0.5-1.2'
@@ -88,7 +88,7 @@ Icons:
     display:
       material: ghast tear
       name: '§d合成 · 汲取石'
-      lore: ['', '§7碎8+骨4+币40 → 汲取', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
+      lore: ['', '§7汲取 · 吸血+1%', '§7碎8+骨4+币40 → 汲取', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
     actions:
       all:
         - 'sound: BLOCK_ANVIL_USE-0.5-1.2'
@@ -97,7 +97,7 @@ Icons:
     display:
       material: feather
       name: '§a合成 · 疾风石'
-      lore: ['', '§7碎8+骨4+币40 → 疾风', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
+      lore: ['', '§7疾风 · 移速+2%', '§7碎8+骨4+币40 → 疾风', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
     actions:
       all:
         - 'sound: BLOCK_ANVIL_USE-0.5-1.2'
@@ -126,7 +126,7 @@ Icons:
     display:
       material: diamond sword
       name: '§6孔0 · 镶锋利'
-      lore: ['', '§7手持刃/符 · 背包有锋利石', '§8孔0：刃即开 / 符表额≥3 · 日首−1≥2', '', '§e➥ §f镶入孔0']
+      lore: ['', '§7锋利 · 攻击+0.1（刃 T2+ 才计）', '§7手持刃/符 · 背包有锋利石', '§8孔0：刃即开 / 符表额≥3 · 日首−1≥2', '', '§e➥ §f镶入孔0']
     actions:
       all:
         - 'command: corerpg p1 gem insert 0 sharp'
@@ -134,7 +134,7 @@ Icons:
     display:
       material: iron sword
       name: '§6孔0 · 镶稳固'
-      lore: ['', '§7手持刃/符 · 背包有稳固石', '', '§e➥ §f镶入孔0']
+      lore: ['', '§7稳固 · 防御+0.1', '§7手持刃/符 · 背包有稳固石', '', '§e➥ §f镶入孔0']
     actions:
       all:
         - 'command: corerpg p1 gem insert 0 steady'
@@ -142,7 +142,7 @@ Icons:
     display:
       material: golden sword
       name: '§6孔0 · 镶汲取'
-      lore: ['', '§7手持刃/符 · 背包有汲取石', '', '§e➥ §f镶入孔0']
+      lore: ['', '§7汲取 · 吸血+1%', '§7手持刃/符 · 背包有汲取石', '', '§e➥ §f镶入孔0']
     actions:
       all:
         - 'command: corerpg p1 gem insert 0 drain'
@@ -150,7 +150,7 @@ Icons:
     display:
       material: wooden sword
       name: '§6孔0 · 镶疾风'
-      lore: ['', '§7手持刃/符 · 背包有疾风石', '', '§e➥ §f镶入孔0']
+      lore: ['', '§7疾风 · 移速+2%', '§7手持刃/符 · 背包有疾风石', '', '§e➥ §f镶入孔0']
     actions:
       all:
         - 'command: corerpg p1 gem insert 0 gale'
@@ -181,7 +181,7 @@ Icons:
     display:
       material: diamond
       name: '§e孔1 · 镶锋利'
-      lore: ['', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
+      lore: ['', '§7锋利 · 攻击+0.1（刃 T2+ 才计）', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
     actions:
       all:
         - 'command: corerpg p1 gem insert 1 sharp'
@@ -189,7 +189,7 @@ Icons:
     display:
       material: iron ingot
       name: '§e孔1 · 镶稳固'
-      lore: ['', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
+      lore: ['', '§7稳固 · 防御+0.1', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
     actions:
       all:
         - 'command: corerpg p1 gem insert 1 steady'
@@ -197,7 +197,7 @@ Icons:
     display:
       material: gold ingot
       name: '§e孔1 · 镶汲取'
-      lore: ['', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
+      lore: ['', '§7汲取 · 吸血+1%', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
     actions:
       all:
         - 'command: corerpg p1 gem insert 1 drain'
@@ -205,7 +205,7 @@ Icons:
     display:
       material: coal
       name: '§e孔1 · 镶疾风'
-      lore: ['', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
+      lore: ['', '§7疾风 · 移速+2%', '§7仅刃 · 表额≥5 · 日首−1≥4', '', '§e➥ §f镶入孔1']
     actions:
       all:
         - 'command: corerpg p1 gem insert 1 gale'
