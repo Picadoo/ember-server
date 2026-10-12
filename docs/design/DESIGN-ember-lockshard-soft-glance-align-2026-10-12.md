@@ -1,6 +1,6 @@
 # DESIGN · LOCK LockShard 日首 soft 预览/glance 诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-AV 批 A·M · 已派插件 · 2026-10-12 21:52 Asia/Shanghai  
+> **状态：** CLOSED · live `1.65.787-d12855` · feat `901632f09` · 2026-10-12 21:56 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-lockshard-soft-glance-align-2026-10-12.md`](RESEARCH-ember-lockshard-soft-glance-align-2026-10-12.md)  
 > **对接 live：** TIP-AU CLOSED live `1.65.786-d12839` · RerollLockShardSoft D9937 · RerollCoinSoft D9745 · GearNextHint SOFT_TAIL（TIP-AS）· ForgeHeldNext/SinkGlance soft peek 模式（TIP-AS/AT）  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  

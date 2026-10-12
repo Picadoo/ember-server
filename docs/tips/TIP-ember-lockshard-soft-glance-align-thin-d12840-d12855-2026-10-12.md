@@ -1,6 +1,6 @@
 # tip · TIP-AV LOCK LockShard soft 预览/glance 诚实对齐（可施工薄 · 可感 UX）· D12840–D12855
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:52 Asia/Shanghai  
+> **状态：** **CLOSED** · live `1.65.787-d12855` · feat `901632f09` · 2026-10-12 21:56 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-lockshard-soft-glance-align-2026-10-12.md`](../design/RESEARCH-ember-lockshard-soft-glance-align-2026-10-12.md) · DESIGN [`DESIGN-ember-lockshard-soft-glance-align-2026-10-12.md`](../design/DESIGN-ember-lockshard-soft-glance-align-2026-10-12.md) · TIP-AU CLOSED live `1.65.786-d12839` · feat `53a9fe3b8` · TIP-AT CLOSED live `1.65.785-d12823` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **显式旁债** — LOCK LockShard soft glance（AS/AT 曾误写「无 soft」；**RerollLockShardSoft 已 live**，对齐 peek）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberForgeHeldNext` lockRerollCost soft · LOCK canPay/softTail · `EmberSinkGlance` LOCK soft lack · GrowthService 菜单 lock/邀请 ls soft · 复用 `RerollLockShardSoft`/`RerollCoinSoft`/`SOFT_TAIL` + 单测）  
@@ -91,9 +91,9 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12844–D12848；D12850 `git show` 干净  
-- [ ] 菜单默认不动；lore≤3  
-- [ ] 甲早退回归；soft 已用全额回归；L13 施工仍 HOLD  
+- [x] 批后插件：D12844–D12848；D12850 `git show` 干净  
+- [x] 菜单默认不动；lore≤3  
+- [x] 甲早退回归；soft 已用全额回归；live `1.65.787-d12855` · feat `901632f09`；L13 施工仍 HOLD  
 
 ---
 
@@ -103,4 +103,4 @@
 - 选题：TIP-AU 后 · **总控显式旁债** — LOCK LockShard soft glance 诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify**）  
 - **批注：** AS/AT 曾写 LOCK 无 soft（误）；`RerollLockShardSoft` D9937 已 live，GrowthService 锁洗付费+预览已 soft，但 HeldNext/Sink/菜单 lock 邀请仍全额 → 「还差碎」假负、另加多报；soft peek +「今日减负待用」+ canPay 同 peek；零改 MULT/C11；零新 PAPI；**不发明 soft**；甲早退不动；批后派 **余烬-插件**；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / AS·AT densify 再叠 / pity-remain 再叠 仍冻  
 
-## STATUS: OPEN · TIP-AV · 待批 A·M · 2026-10-12
+## STATUS: CLOSED · live 1.65.787-d12855 · 901632f09 · 2026-10-12 21:56 CST
