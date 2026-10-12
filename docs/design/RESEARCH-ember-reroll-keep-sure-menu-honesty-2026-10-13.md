@@ -1,6 +1,6 @@
 # RESEARCH · 洗练「更优档直留」菜单诚实（离开互换免费确定链 · SUR1）· 2026-10-13
 
-> **状态：** APPROVED · TIP-BU · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:55 Asia/Shanghai  
+> **状态：** **CLOSED live** · TIP-BU · items `f59b9beae` · TrMenu reload 77 · jar 未改 `1.65.801-d13207` · 2026-10-13 00:56 Asia/Shanghai  
 > **起因：** TIP-BT CLOSED live 后总控「离开互换免费确定链 · 开下一可感变强途径」。硬禁含互换免费确定再叠 · 成色/精工确定成功 · access_* · 升阶保留 · 强化率 · 转化 · 形缓 · 签名/套装/宝石/天赋/烙纹/副手再叠 · Affix densify · forgeroll 权重 densify。扫 AH…BT / power-paths / BT 旁债：**RerollKeepSure 已 live（聊天「更优档直留 · 自动保留新」）**，洗练菜单说明/保留新格 **无直留字面**。  
 > **上游：** TIP-BT CLOSED live items `683011255` · docs `8964d23c3` · TrMenu reload 77 · jar 未改 `1.65.801-d13207` · `EmberRerollKeepSure` · `EmberGrowthService` 洗练结果聊天 · `ember_p1_reroll.yml` N/K/O · power-paths SUR1 · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **硬禁：** **零 Affix densify · 零伤乘 · 零抬表 · 零改解锁数学 · 零 ConvertCap densify · 零改 WEEKLY_CAP/MARK_TICKS · 零抬 RATE/upgradeCost · 零抬成色/精工 cost · 零抬 swap 收费 · 零抬 talent/gem/副手 flat · 零 Anvil densify / soft·开孔再叠 / topUpTo · 零 SF4 U2U3 · 零灰印·聚火 · 零签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留 / 形缓 Icon A / 转化保留 / access_* / 成色·精工确定成功 / 互换免费确定再叠 · 零调律 live bad · 零并轨 B · 零 SetRules/Formula 抬 · 零扩 stampable · 零再扫甲闸 · 零 SetChase 六槽 densify · 零 ForgeChoice densify · 零 forgeroll 权重 densify · 零 sx20 · 零 skill_mult · 零开 L13 施工 tip · 零效果长墙 · 零 lore>3 · 零改 pity/pool/shard cost**
