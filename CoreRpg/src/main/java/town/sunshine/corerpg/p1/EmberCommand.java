@@ -4063,11 +4063,25 @@ public final class EmberCommand {
             if (fd != null) { // D859
                 p.sendMessage(P + EmberForgeGoal.glance(EmberForgeGoal.get(fd), ""));
             }
-            // D853 held preview shortcuts
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7手持预览：",
-                    new String[]{"[强化预览]", "/corerpg p1 enhance", "看成功率/保底", "GREEN"},
-                    new String[]{"[成色预览]", "/corerpg p1 quality", "看成色", "GOLD"},
-                    new String[]{"[精工预览]", "/corerpg p1 refine", "看精工", "AQUA"});
+            // D853 held preview shortcuts · TIP-AM D12702: armor → honest pack (no enhance/quality/refine)
+            EmberItemData heldForge = null;
+            if (loadouts != null) {
+                org.bukkit.inventory.ItemStack mh = p.getInventory().getItemInMainHand();
+                if (mh != null) {
+                    EmberItems.Read hr = loadouts.items().read(mh);
+                    if (hr != null && hr.ok()) heldForge = hr.data;
+                }
+            }
+            if (heldForge != null && heldForge.isArmor()) {
+                String[][] pack = EmberForgeCommitNext.armorHonestPack();
+                town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7手持预览：",
+                        pack[0], pack[1], pack[2]);
+            } else {
+                town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7手持预览：",
+                        new String[]{"[强化预览]", "/corerpg p1 enhance", "看成功率/保底", "GREEN"},
+                        new String[]{"[成色预览]", "/corerpg p1 quality", "看成色", "GOLD"},
+                        new String[]{"[精工预览]", "/corerpg p1 refine", "看精工", "AQUA"});
+            }
             org.bukkit.Bukkit.dispatchCommand(org.bukkit.Bukkit.getConsoleSender(),
                     "trmenu open ember_p1_forge " + p.getName());
             return true;

@@ -70,8 +70,9 @@ public final class EmberBlankLoop {
         }
     }
 
+    /** TIP-AM D12703: no fake quality/refine/upgrade strings (align armorHonestPack vocabulary). */
     public static String followHint() {
-        return "[去成色]|[去精工]|[去升阶]";
+        return "[分解]|[成套追]|[工坊]";
     }
 
     public static String chatLine(int blanks) {
