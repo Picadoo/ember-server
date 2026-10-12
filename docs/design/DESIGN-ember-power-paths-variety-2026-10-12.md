@@ -196,6 +196,8 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
+- **TIP-Y CLOSED** docs-only `a838781ed` · 烬斩手感研究 · 门闩已立 · 无码
+- **TIP-Z OPEN** · `TIP-ember-mainline-content-observe-thin-d12536-d12543-2026-10-12.md` · RESEARCH `RESEARCH-ember-mainline-content-observe-2026-10-12.md` · 主线内容轴观察停窗（TIP-L 闭环后无新薄断环 · 解锁 2c 须 DESIGN）· 无码 · 深化 densify 仍冻
 - **TIP-X CLOSED** `77a768df1` · sx01–19 视觉线闭合
 - **TIP-Y CLOSED** · 烬斩手感研究 docs-only · 门闩已立 · 无码
 
