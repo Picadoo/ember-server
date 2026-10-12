@@ -1,6 +1,6 @@
 # DESIGN · 烬斩 SF4 战斗微效用（stage0 · HOLD 施工）· 2026-10-12
 
-> **状态：** OPEN stage0 · TIP-BE · **HOLD 施工** · 2026-10-12 23:04 Asia/Shanghai  
+> **状态：** APPROVED stage0 · TIP-BE CLOSED · **HOLD 施工** · 总控 2026-10-12 23:06 Asia/Shanghai  
 > **文首硬句：** 本文件 = **可批 stage0 规格**；**施工须** p1sim within 门禁过线 **且** 总控 **显式开工**。本 tip / 本 DESIGN **不是**开工令。**零改 skill_mult / CD / 几何盒 · 零 jar · 零插件派单** 直至显式开工。  
 > **对接 tip：** [`TIP-ember-skill-sf4-micro-utility-design-stage0-thin-d12984-d12999-2026-10-12.md`](../tips/TIP-ember-skill-sf4-micro-utility-design-stage0-thin-d12984-d12999-2026-10-12.md)  
 > **上游 RESEARCH：** [`RESEARCH-ember-skill-sf4-micro-utility-2026-10-12.md`](RESEARCH-ember-skill-sf4-micro-utility-2026-10-12.md) · TIP-Y · Stage2 micro DESIGN · TIP-K · D301 招架 LIVE  
@@ -114,4 +114,4 @@
 3. AnvilRepair Soft 假耗（硬禁 densify 未解冻前不开）  
 4. L13 施工 HOLD 观察  
 
-## STATUS: OPEN · TIP-BE stage0 · HOLD 施工 · 2026-10-12 23:04 Asia/Shanghai
+## STATUS: APPROVED · TIP-BE CLOSED stage0 · HOLD 施工 · 总控 2026-10-12 23:06 Asia/Shanghai · 不派插件 · 须 p1sim within + 显式开工

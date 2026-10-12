@@ -1,6 +1,6 @@
 # tip · TIP-BE 烬斩 SF4 战斗微效用 DESIGN stage0（docs-only · HOLD 施工）· D12984–D12999
 
-> **状态：** OPEN · 待批 **A · 方案 M** · docs-only · HOLD 施工 · 2026-10-12 23:04 Asia/Shanghai  
+> **状态：** CLOSED · 批 **A · 方案 M** · docs-only · HOLD 施工（总控 2026-10-12 23:06 Asia/Shanghai）  
 > **上游：** RESEARCH [`RESEARCH-ember-skill-sf4-micro-utility-2026-10-12.md`](../design/RESEARCH-ember-skill-sf4-micro-utility-2026-10-12.md) · DESIGN [`DESIGN-ember-skill-sf4-micro-utility-stage0-2026-10-12.md`](../design/DESIGN-ember-skill-sf4-micro-utility-stage0-2026-10-12.md) · TIP-BD CLOSED live `1.65.795-d12983` · feat `9a89f68a6` · items `35b6c7e3c` · TIP-Y CLOSED · TIP-K CLOSED · D301 招架 LIVE · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** soft/开孔文案链已齐 · Anvil densify 仍冻 → 换轴 **可感变强途径**：SF4 形状战斗微效用 stage0（**非 densify · 非 skill_mult · 非 Anvil**）  
 > **施工岗：** **无码**（策划 RESEARCH + DESIGN + tip；**不**派插件；勿借机改 skill_mult / CD / 几何 / Affix / 招架 / soft）  
@@ -87,18 +87,18 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 文首 HOLD / 门禁 / 选题否决表可核  
-- [ ] **无**插件施工派单；**无**业务 jar  
-- [ ] `git show` docs-only；L13 施工仍 HOLD  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 文首 HOLD / 门禁 / 选题否决表可核  
+- [x] **无**插件施工派单；**无**业务 jar  
+- [x] `git show` docs-only；L13 施工仍 HOLD  
 
 ---
 
 ## 6. 批注（荐）
 
-- [ ] 总控批 **A · 方案 M** · 荐批  
+- [x] 总控批 **A · 方案 M** · 已批  
 - 选题：TIP-BD 后 · **离开 soft/开孔链** · **SF4 战斗微效用 DESIGN stage0**（docs-only · HOLD 施工 · 须 p1sim within）  
 - **批注：** soft 展示族+开孔文案已齐；Anvil soft densify / topUpTo 仍冻；守招 D301 LIVE（TIP-Y 守招 HOLD 过时）；SF4 = 形状短窗微缓（U1 荐）非伤乘；零 skill_mult / CD / 几何；本窗无码无派插件；T0 p1sim 另窗；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / soft-latch·CostSoft·pity·soft-glance·firstsoft·cook·life-buy soft 再叠 / xp-boost / GemHole / enhance+5 再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 仍冻  
 
-## STATUS: OPEN · 待批 A·M · tip D12984–D12999 · 2026-10-12 23:04 Asia/Shanghai · 无码 · HOLD 施工
+## STATUS: CLOSED · 批 A·M · tip D12984–D12999 · 总控 2026-10-12 23:06 Asia/Shanghai · 无码 · HOLD 施工 · 不派插件
