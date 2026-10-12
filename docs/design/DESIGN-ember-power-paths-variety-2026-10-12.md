@@ -197,6 +197,7 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 
 ## 进度戳
 
+- **TIP-BR CLOSED live `1.65.801-d13207` · feat `a5e88aa98` · items `8c8edc1f1`** · MG2 进过即开 · TrMenu reload 77
 - **TIP-BR APPROVED** · 批 A·M · 已派余烬-插件+物品 · MG2 进过即开菜单诚实 · access_q01/q07 · 零改解锁数学 · docs APPROVED stamp · L13 HOLD
 - **TIP-BR OPEN** · `TIP-ember-map-enter-unlock-cue-honesty-thin-d13192-d13207-2026-10-13.md` · RESEARCH `RESEARCH-ember-map-enter-unlock-cue-honesty-2026-10-13.md` · DESIGN `DESIGN-ember-map-enter-unlock-cue-honesty-2026-10-13.md` · 主线/短征解锁「进过即开」菜单诚实（MG2 · 可施工薄 · 可感变强途径 · **离开转化保留/代价 · 形缓 · 升阶保留链** · **非 densify · 非改解锁数学 · 非 soft·开孔再叠 · 非 Anvil densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 SF4 U2U3 · 非灰印/聚火 · 非签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留 / 形缓 Icon A / 转化保留再叠 · 非调律 live bad · 非效果长墙 · 非 lore>3 · 非并轨方案 B** · PAPI `access_q01`/`access_q07` → short/adventure/challenge 灰锁条件+文案 · 对位 gemPath/endgame SoT / power-paths MG2）· **批后派余烬-插件 + 余烬-物品** · **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）· TIP-BQ CLOSED live · soft-latch/CostSoft/pity/soft-glance/firstsoft/cook/life-buy soft 再叠 / xp-boost cue 再叠 / GemHole Open 再叠 / enhance+5 开孔再叠 / Anvil densify / topUpTo 扩 soft / 再降开孔门槛 densify / 深化 densify / ForgeChoice densify / glance twin / 扩 stampable / 甲闸再扫 / SetChase 六槽 densify / SF4 U2U3 / 灰印·聚火 / 调律 live bad 进持件 / 签名 lore 再叠 / 套装 blurb 再叠 / 宝石短效果再叠 / 天赋悬停再叠 / 烙纹档幅度再叠 / 副手微量再叠 / 强化率再叠 / 升阶保留再叠 / 形缓 Icon A 再叠 / 转化保留再叠 / Affix densify / ConvertCap densify / skill_mult / **改解锁数学** 仍冻 · 策划 docs-only
 
