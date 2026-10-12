@@ -2529,3 +2529,16 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack31-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack31.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack31-d12235-2026-10-12.md` |
+
+### 13.144 Affix Pack 32 刻斩/坑洼（CoreRpg 1.65.754，D12236，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12236 |
+| jar | CoreRpg **1.65.754-d12236.local** |
+| balance_version | 118 → **119** |
+| 行为 | 词缀池 64→66：+`score` 刻斩 / `pit` 坑洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack32-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack32.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack32-d12236-2026-10-12.md` |
+
