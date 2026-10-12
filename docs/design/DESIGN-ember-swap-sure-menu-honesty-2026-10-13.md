@@ -1,6 +1,6 @@
 # DESIGN · 强化轨道互换「免费·确定」菜单诚实（工坊 TrMenu · 薄窗 · 可施工）· 2026-10-13
 
-> **状态：** APPROVED · TIP-BT · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:50 Asia/Shanghai  
+> **状态：** **CLOSED live** · TIP-BT · items `683011255` · TrMenu reload 77 · jar 未改 `1.65.801-d13207` · 2026-10-13 00:51 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-swap-sure-menu-honesty-2026-10-13.md`](RESEARCH-ember-swap-sure-menu-honesty-2026-10-13.md)  
 > **对接 live：** TIP-BS CLOSED live items `eba75771b` · `EmberForgeService.swapSlots`「免费，确定」+「预览直办」· `held_swap_cost` · `ember_p1_forge.yml` S/s · power-paths WS2  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名 lore / 套装 blurb / 宝石短效果 / 天赋悬停 / 烙纹档幅度 / 副手微量 / 强化率 / 升阶保留 / 形缓 Icon A / 转化保留 / access_* / 成色·精工确定成功再叠 / soft·开孔再叠 **仍冻**  
@@ -98,4 +98,4 @@
 | 11 | Affix densify / ConvertCap densify / 抬表 | **仍冻** |
 | 12 | 分解菜单「确定」字面再压 | **另 tip · 可选**（弱 · 已有 yield 预览） |
 
-## STATUS: APPROVED · TIP-BT · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:50 Asia/Shanghai
+## STATUS: CLOSED live · TIP-BT · items `683011255` · TrMenu reload 77 · jar 未改 · 2026-10-13 00:51 Asia/Shanghai
