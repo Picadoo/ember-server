@@ -1,6 +1,6 @@
 # DESIGN · SinkGlance 护甲诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-AM 批 A·M · 已派插件 · 2026-10-12 20:29 Asia/Shanghai  
+> **状态：** **CLOSED live** `1.65.778-d12711.local` · TIP-AM 批 A·M · feat `ab9f9a98f` · chore `0ce13b755` · 2026-10-12 20:32 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-sinkglance-armor-honesty-2026-10-12.md`](RESEARCH-ember-sinkglance-armor-honesty-2026-10-12.md)  
 > **对接 live：** TIP-AL CLOSED live `1.65.777-d12695`（CommitNext 甲诚实）· TIP-AK CLOSED live `1.65.776-d12679`（HeldNext 甲闸）· D318 K0 `ARMOR_REFUSE` · D680/D681 SinkGlance  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI `STAGE1_L13_OFFLINE=FAIL` · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  

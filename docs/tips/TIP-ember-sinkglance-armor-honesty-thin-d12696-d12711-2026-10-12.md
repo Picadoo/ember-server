@@ -1,6 +1,6 @@
 # tip · TIP-AM SinkGlance 护甲诚实对齐（可施工薄 · 可感 UX）· D12696–D12711
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 20:29 Asia/Shanghai  
+> **状态：** **CLOSED live** `1.65.778-d12711.local` · 批 **A · 方案 M** · feat `ab9f9a98f` · chore `0ce13b755` · 2026-10-12 20:32 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-sinkglance-armor-honesty-2026-10-12.md`](../design/RESEARCH-ember-sinkglance-armor-honesty-2026-10-12.md) · DESIGN [`DESIGN-ember-sinkglance-armor-honesty-2026-10-12.md`](../design/DESIGN-ember-sinkglance-armor-honesty-2026-10-12.md) · TIP-AL CLOSED live `1.65.777-d12695` · TIP-AK CLOSED live `1.65.776-d12679` · TIP-AJ CLOSED live `1.65.775-d12663` · TIP-AH CLOSED live `1.65.774-d12631` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径（非 densify）** — SinkGlance 甲闸诚实（**勿 densify**）；接 AL CommitNext；正交 L13 HOLD  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberSinkGlance.tellHeld` 甲早退 + forge 开入口预览三钮轻触 + 单测）  
@@ -87,17 +87,17 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12700–D12704；D12706 `git show` 干净  
-- [ ] 菜单默认不动；lore≤3  
-- [ ] 插件 jar live 后策划 docs close  
-- [ ] **L13 施工仍 HOLD**  
+- [x] 批后插件：D12700–D12704；D12706 `git show` 干净  
+- [x] 菜单默认不动；lore≤3  
+- [x] 插件 jar live 后策划 docs close  
+- [x] **L13 施工仍 HOLD**  
 
 ---
 
 ## 6. 批注（荐）
 
-- [ ] 总控批 **A · 方案 M** · 荐批  
+- [x] 总控批 **A · 方案 M** · 荐批  
 - 选题：TIP-AL 后 · **可感 UX** — SinkGlance 护甲诚实对齐（**非 densify**）  
 - **批注：** AL CommitNext / AK HeldNext 甲闸已齐，开工会话 `tellHeld` 仍对甲拼成色/精工/升阶费用；`tellHeld` 甲早退 ≡ `ARMOR_REFUSE` + forge 开入口预览三钮轻触；零功率表；批后派 **余烬-插件**；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / ForgeChoice densify / SinkGlance 功率 densify 仍冻  
 
-## STATUS: OPEN · 荐 A·M · 2026-10-12
+## STATUS: CLOSED live · `1.65.778-d12711.local` · 2026-10-12
