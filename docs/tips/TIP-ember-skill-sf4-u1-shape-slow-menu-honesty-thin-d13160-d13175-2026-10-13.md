@@ -1,6 +1,6 @@
 # tip · TIP-BP 烬斩 SF4 U1 技能页形缓展示诚实（技能 TrMenu · 可施工薄 · 可感变强途径）· D13160–D13175
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-物品** · **不派插件** · 2026-10-13 00:24 Asia/Shanghai  
+> **状态：** **CLOSED live** items `ae8ad1c70` · 批 A·M · TrMenu reload 77 · jar 未改 `1.65.800-d13143` · 2026-10-13 00:25 Asia/Shanghai  
 > **上游门禁：** TIP-BO CLOSED live items `64fe9f46e` · TrMenu reload 77 · docs `bab7f4a7c` · jar 未改 `1.65.800-d13143` · TIP-BG CLOSED live `1.65.796-d13031` · RESEARCH [`RESEARCH-ember-skill-sf4-u1-shape-slow-menu-honesty-2026-10-13.md`](../design/RESEARCH-ember-skill-sf4-u1-shape-slow-menu-honesty-2026-10-13.md) · DESIGN [`DESIGN-ember-skill-sf4-u1-shape-slow-menu-honesty-2026-10-13.md`](../design/DESIGN-ember-skill-sf4-u1-shape-slow-menu-honesty-2026-10-13.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 离开升阶保留链 → **烬斩 SF4 U1 技能页形缓展示诚实**（**非工坊 TrMenu 半行 · 非抬 skill_mult · 非改 MARK_TICKS · 非 U2U3 · 非 soft/开孔再叠 · 非 Anvil · 非签名/套装/宝石/天赋/烙纹/副手/强化率/升阶保留再叠 · 非效果长墙 · 非 lore>3 · 非并轨 B**）  
 > **施工岗（批后派单）：** **余烬-物品**（`ember_skill_kit` Icon `A` lore）；**不派插件**（零新 PAPI · 零 jar）  
@@ -107,4 +107,4 @@
 - **批后派岗：** 余烬-物品；不派插件  
 - **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；调律 live bad 进持件；签名 lore 再叠；套装 blurb 再叠；宝石短效果再叠；天赋悬停再叠；烙纹档幅度再叠；副手微量数字再叠；强化率再叠；升阶保留再叠；甲闸再扫；扩 stampable；SetChase 六槽 densify；效果长墙；**Affix densify**；**skill_mult / MARK_TICKS**  
 
-## STATUS: APPROVED · 批 A·M · 已派余烬-物品 · 不派插件 · 2026-10-13 00:24 Asia/Shanghai
+## STATUS: CLOSED live items `ae8ad1c70` · 批 A·M · TrMenu reload 77 · jar 未改 · 2026-10-13 00:25 Asia/Shanghai
