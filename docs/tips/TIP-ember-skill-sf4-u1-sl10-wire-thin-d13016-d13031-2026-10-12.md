@@ -1,6 +1,6 @@
 # tip · TIP-BG 烬斩 SF4 U1_sl10 显式开工接线（可施工薄 · CoreRpg）· D13016–D13031
 
-> **状态：** APPROVED · 批 **A · 方案 M** · **显式开工令** · 已派 **余烬-插件** · 2026-10-12 23:18 Asia/Shanghai  
+> **状态：** **CLOSED live `1.65.796-d13031`** · feat `0bdcfa1ea` · 批 A·M · 显式开工已落地 · 2026-10-12 23:22 Asia/Shanghai  
 > **上游门禁：** TIP-BF CLOSED · `STAGE0_SF4_U1_T0=PASS` · push `9ab79c257`（OPEN `98b797459`）· RESULT [`RESULT-ember-skill-sf4-u1-t0-p1sim-2026-10-12.md`](../design/RESULT-ember-skill-sf4-u1-t0-p1sim-2026-10-12.md) · TIP-BE CLOSED stage0 APPROVED HOLD push `02db68148` · DESIGN [`DESIGN-ember-skill-sf4-u1-sl10-wire-2026-10-12.md`](../design/DESIGN-ember-skill-sf4-u1-sl10-wire-2026-10-12.md) · RESEARCH [`RESEARCH-ember-skill-sf4-u1-sl10-wire-2026-10-12.md`](../design/RESEARCH-ember-skill-sf4-u1-sl10-wire-2026-10-12.md) · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **开工令引用：** 总控「下一可开『显式开工』施工 tip（U1_sl10 量级接线 · 禁 skill_mult / CD / 几何）」——**本 tip 即该令**；BF PASS **不是**开工令。  
 > **选题：** 门禁已齐 → **CoreRpg 接线 U1_sl10 形状短窗微缓**（**非 densify · 非 skill_mult · 非 Anvil · 非 L13**）  
@@ -94,7 +94,7 @@ BF PASS 后显式开工：烬斩在推荐形状（或无套装时直线）命中
 - [x] 总控批 **A · 方案 M**  
 - [x] DESIGN + tip + RESEARCH + STATUS + power-paths 戳可点  
 - [x] 文首显式开工令；BF PASS≠开工 可核  
-- [ ] 批后 **余烬-插件**：D13022–D13025；D13028 `git show` NON 核  
+- [x] 批后 **余烬-插件**：D13022–D13025；D13028 `git show` NON 核  
 - [x] 策划本窗 commit **docs-only**；**无**业务 jar  
 - [x] L13 / Anvil densify / soft·开孔再叠 / 灰印·聚火 仍 HOLD  
 
@@ -106,4 +106,4 @@ BF PASS 后显式开工：烬斩在推荐形状（或无套装时直线）命中
 - 选题：TIP-BF PASS 后 · **SF4 U1_sl10 显式开工接线**（CoreRpg · 禁 skill_mult/CD/几何）  
 - **批注：** 门禁 BE+BF 已清；参数锁 U1_sl10（20t · Slow I · lim3）；形状门=套装推荐/无套装 LINE；批后派 **余烬-插件**；不派物品；L13 施工 HOLD；Anvil densify / topUpTo / soft·开孔再叠 / 灰印·聚火 / Affix / 伤乘 / 抬表 / glance twin / sx20 / 粒子 densify / ForgeChoice densify / 甲闸再扫 / 扩 stampable / SetChase 六槽 densify 仍冻  
 
-## STATUS: APPROVED · 显式开工 · 批 A·M · 已派余烬-插件 · HOLD L13 · 总控 2026-10-12 23:18 Asia/Shanghai
+## STATUS: CLOSED live `1.65.796-d13031` · feat `0bdcfa1ea` · 批 A·M · Enabling+Done 5.2s · HOLD L13 · 2026-10-12 23:22 Asia/Shanghai

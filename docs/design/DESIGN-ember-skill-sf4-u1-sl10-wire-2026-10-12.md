@@ -1,6 +1,6 @@
 # DESIGN · 烬斩 SF4 U1_sl10 显式开工接线（T1 · CoreRpg）· 2026-10-12
 
-> **状态：** APPROVED · TIP-BG · **显式开工令** · 已派 **余烬-插件** · 总控 2026-10-12 23:18 Asia/Shanghai  
+> **状态：** CLOSED live `1.65.796-d13031` · TIP-BG · feat `0bdcfa1ea` · 2026-10-12 23:22 Asia/Shanghai  
 > **文首硬句：** 本文件 = **显式开工** 施工规格。门禁已清：TIP-BE stage0 APPROVED + TIP-BF `STAGE0_SF4_U1_T0=PASS`。本 tip **是**开工令（BF PASS 本身不是）。**锁参 U1_sl10**；**零改 skill_mult / CD / 几何盒 / 伤乘 / Affix**。  
 > **对接 tip：** [`TIP-ember-skill-sf4-u1-sl10-wire-thin-d13016-d13031-2026-10-12.md`](../tips/TIP-ember-skill-sf4-u1-sl10-wire-thin-d13016-d13031-2026-10-12.md)  
 > **上游 RESEARCH：** [`RESEARCH-ember-skill-sf4-u1-sl10-wire-2026-10-12.md`](RESEARCH-ember-skill-sf4-u1-sl10-wire-2026-10-12.md)  
@@ -22,7 +22,7 @@
 |----|------|------|
 | 0 · 规格 | TIP-BE DESIGN stage0 | ✅ CLOSED |
 | T0 · 离线门禁 | TIP-BF G-within PASS | ✅ CLOSED · PASS≠开工 |
-| **T1 · 施工** | **本窗 · 显式开工** · CoreRpg 接线 U1_sl10 | **OPEN** |
+| **T1 · 施工** | **本窗 · 显式开工** · CoreRpg 接线 U1_sl10 | **CLOSED live `1.65.796-d13031`** |
 | T2 · 测/冒烟 | 单测 + 轻冒烟 | 插件窗 |
 
 ---
@@ -130,4 +130,4 @@ addPotionEffect(SLOW, MARK_TICKS, SLOW_AMP, ambient=false, particles=true), true
 | 套装落点只读 | `applySlashSetIdentity` / D438 |
 | 旁轨 HOLD | L13 · Anvil soft densify · 灰印/聚火 · soft/开孔再叠 |
 
-## STATUS: APPROVED · TIP-BG 显式开工 · U1_sl10 · 已派余烬-插件 · HOLD L13 · 总控 2026-10-12 23:18 Asia/Shanghai
+## STATUS: CLOSED live `1.65.796-d13031` · TIP-BG · U1_sl10 · feat `0bdcfa1ea` · HOLD L13 · 2026-10-12 23:22 Asia/Shanghai
