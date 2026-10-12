@@ -23,7 +23,7 @@ public class EmberHopeGlancePriorityTest {
         PlayerData pd = new PlayerData();
         List<EmberHopeMeter.Track> tracks = EmberHopeMeter.priorityTracks(
                 null, pd, new EmberForgeHeldNext.Mats(0, 0, 0, 0), 0, 5, null, 0);
-        assertFalse(tracks.isEmpty());
+        assertEquals(1, tracks.size());
         assertEquals("fallback", tracks.get(0).id);
         assertTrue(tracks.get(0).progressLine.contains("今天可稳养"));
         EmberHopeMeter.Track cur = EmberHopeMeter.current(pd, tracks);
@@ -72,8 +72,8 @@ public class EmberHopeGlancePriorityTest {
     }
 
     @Test public void openTell_oneLine() {
-        String line = EmberHopeMeter.openTellLine(EmberHopeMeter.FALLBACK);
-        assertTrue(line.startsWith("§e希望："));
-        assertTrue(line.contains("今天可稳养"));
+        assertEquals(EmberHopeMeter.FALLBACK.progressLine,
+                EmberHopeMeter.openTellLine(EmberHopeMeter.FALLBACK));
+        assertTrue(EmberHopeMeter.openTellLine(EmberHopeMeter.FALLBACK).contains("今天可稳养"));
     }
 }
