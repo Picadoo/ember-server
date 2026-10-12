@@ -196,10 +196,11 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - **TIP-P CLOSED live** 1.65.769-d12407 · `TIP-ember-set-awaken-feel-thin-d12392-d12407-2026-10-12.md` · 套装觉醒升档白话
 
 ## 进度戳
-- **TIP-AB CLOSED** · 防具签名+叠合门禁 DESIGN stage0 APPROVED · HOLD 施工至 S1–S4+显式开工
+- **TIP-AB CLOSED** `a5b264fce` · 防具签名+叠合门禁 DESIGN stage0 APPROVED · HOLD 施工至 S1–S4+显式开工
+- **TIP-AC OPEN** · `TIP-ember-armor-signature-gate-stage1-offline-thin-d12560-d12575-2026-10-12.md` · DESIGN `DESIGN-ember-armor-signature-gate-stage1-offline-2026-10-12.md` · stage1 离线门禁 S3 p1sim + S4 W30（docs+tools · RESULT PENDING · 零业务 jar · PASS≠开工）· 深化 densify 仍冻
 
 - **TIP-AA CLOSED** docs-only `79247dab2` · 主线解锁 2c 研究 · 真债=防具签名+叠合 · HOLD 至独立 DESIGN stage0
-- **TIP-AB OPEN** · `TIP-ember-armor-signature-gate-design-stage0-thin-d12552-d12559-2026-10-12.md` · DESIGN `DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md` · 防具签名规格 + 叠合门禁 S1–S4 stage0（文首勘误 D174「2c」· HOLD 施工 · 零 jar 至门禁+显式开工）· 无码 · 深化 densify 仍冻
+- **TIP-AB CLOSED** `a5b264fce` · `TIP-ember-armor-signature-gate-design-stage0-thin-d12552-d12559-2026-10-12.md` · DESIGN stage0 APPROVED HOLD
 
 
 - **TIP-Z CLOSED** docs-only `923e031f1` · 主线内容轴观察停窗 · densify 仍冻 · P0 试玩 / P1 解锁研究 / P2 烬斩门闩
