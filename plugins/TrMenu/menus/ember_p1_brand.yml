@@ -25,7 +25,7 @@ Events:
     - 'tell: §e烙纹路径：§f%corerpg_p1_brand_path% §8· /corerpg p1 brandpath'
     - 'command: corerpg p1 brandpath nudge'
     - 'sound: BLOCK_ANVIL_LAND-0.4-1.4'
-    - 'tell: §8先合成烙纹，再点类型 → 聊天栏确认（扣次数 1）'
+    - 'tell: §8料齐则预览直办 · 路径已选则合成后自动定向（不改价）'
 
 Icons:
   '#':
@@ -38,9 +38,9 @@ Icons:
       material: book
       name: '§6烙纹定向 · 说明'
       lore:
-        - '§c仓差：§f碎差 %corerpg_p1_forge_gap_brand% §8（合成需×40）'
-        - '§c定向还差：§f%corerpg_p1_forge_gap_pin% §8（手持阶；空手T1）'
-        - '§7档位仍随机 · 成色上限截断 · 本窗不改表'
+        - '§c仓差碎 %corerpg_p1_forge_gap_brand% · 定向还差 %corerpg_p1_forge_gap_pin%'
+        - '§a料齐预览直办 · 路径齐合成后自动定向'
+        - '§7档位仍随机 · 成色上限截断'
 
   C:
     display:
@@ -48,7 +48,7 @@ Icons:
       name: '§e合成烙纹'
       lore:
         - '§740 余烬碎片 → 1 余烬烙纹'
-        - '§e➥ §f点击：聊天栏确认合成'
+        - '§a碎片齐 · 预览直办（不改合成比）'
         - '§c还差：§f碎差 %corerpg_p1_forge_gap_brand%（需×40）'
     actions:
       all:
@@ -63,6 +63,7 @@ Icons:
       name: '§6刃 · 猎缀纹'
       lore:
         - '§7对词缀精英 · 档 +4%～+16%（仅主线重打）'
+        - '§a料齐 · 预览直办（不改价/次数）'
         - '§e➥ §f点击预览定向'
     actions:
       all:
@@ -74,6 +75,7 @@ Icons:
       name: '§6刃 · 余烬纹'
       lore:
         - '§7套装事件伤害 · 档 +0.25%～+1%'
+        - '§a料齐 · 预览直办（不改价/次数）'
         - '§e➥ §f点击预览定向'
     actions:
       all:
@@ -86,6 +88,7 @@ Icons:
       name: '§6护符 · 定身纹'
       lore:
         - '§7受预警招伤害 · 档 −0.5%～−2%'
+        - '§a料齐 · 预览直办（不改价/次数）'
         - '§e➥ §f点击预览定向'
     actions:
       all:
@@ -97,6 +100,7 @@ Icons:
       name: '§6护符 · 分核纹'
       lore:
         - '§7烬核自己份 · 档 −1%～−4%'
+        - '§a料齐 · 预览直办（不改价/次数）'
         - '§e➥ §f点击预览定向'
     actions:
       all:
@@ -108,6 +112,7 @@ Icons:
       name: '§6护符 · 抗缀纹'
       lore:
         - '§7受词缀精英伤害 · 档 −4%～−16%（仅主线重打）'
+        - '§a料齐 · 预览直办（不改价/次数）'
         - '§e➥ §f点击预览定向'
     actions:
       all:
