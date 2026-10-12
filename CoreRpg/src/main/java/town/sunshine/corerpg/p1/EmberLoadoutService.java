@@ -233,6 +233,21 @@ public final class EmberLoadoutService implements Listener {
                         new String[]{"[符文路径]", "/corerpg p1 shapepath", "换几何", "AQUA"});
             }
         }
+        // D12428 TIP-R: mid-run map resonance wear rising-edge cue (zero widen)
+        if (EmberMode.isP1(p)) {
+            try {
+                EmberRunService runsWear = plugin.getEmberRuns();
+                if (runsWear != null) {
+                    String mkWear = runsWear.activeMapKey(p);
+                    if (mkWear != null && !mkWear.isEmpty()) {
+                        PlayerData pdWear = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
+                        EmberMapResonance.maybeWearCue(p, pdWear, mkWear, l);
+                    } else {
+                        EmberMapResonance.clearWearState(p.getUniqueId());
+                    }
+                }
+            } catch (Throwable ignored) { }
+        }
         return l;
     }
 

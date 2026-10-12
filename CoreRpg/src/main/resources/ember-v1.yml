@@ -262,3 +262,7 @@ set_feel:
 # D12413 TIP-Q drop craft pity settle remain (镜像成色 else；缺省 true；不抬 NEED/FLOOR)
 drop_craft_pity:
   settle_remain: true
+
+# D12430 TIP-R map resonance mid-run wear cue (升沿白话；缺省 true；零改加宽)
+map_res:
+  wear_cue: true

@@ -2668,6 +2668,7 @@ public boolean pathForceOpenDoor(Player p) {
                 checkWipe(d.s);
             }
             if (p.getGameMode() == GameMode.SPECTATOR) p.setGameMode(GameMode.SURVIVAL);
+            try { EmberMapResonance.clearWearState(p.getUniqueId()); } catch (Throwable ignored) { } // D12427 TIP-R leave
         }
         if (m == null) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
