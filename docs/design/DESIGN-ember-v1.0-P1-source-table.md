@@ -2554,3 +2554,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 门禁 | `tools/p1sim/affixpack33.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack33-d12237-2026-10-12.md` |
 
+### 13.146 Affix Pack 34 断斩/壑洼（CoreRpg 1.65.756，D12238，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12238 |
+| jar | CoreRpg **1.65.756-d12238.local** |
+| balance_version | 120 → **121** |
+| 行为 | 词缀池 68→70：+`sever` 断斩 / `chasm` 壑洼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack34-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack34.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack34-d12238-2026-10-12.md` |
+
