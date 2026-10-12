@@ -1,6 +1,6 @@
 # DESIGN · 进本日首减负（体力+层费）门禁/Hope 诚实对齐（薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-AX 批 A·M · 已派插件 · 2026-10-12 22:09 Asia/Shanghai  
+> **状态：** CLOSED · live `1.65.789-d12887` · feat `95ea4e614` · 2026-10-12 22:13 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-stamina-abyss-firstsoft-hope-gate-align-2026-10-12.md`](RESEARCH-ember-stamina-abyss-firstsoft-hope-gate-align-2026-10-12.md)  
 > **对接 live：** TIP-AW CLOSED live `1.65.788-d12871` · feat `07923c868` · StaminaFirstSoft D8481 · AbyssFeeSoft D8529 · EntryService.admit · AbyssService.entryProblems · HopeMeter staminaHope/abyssHope · CorePapiStamina  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；TIP-AD exclude 刃 L11/L13 **保留**  
@@ -114,4 +114,4 @@ stamina_blocked_*:
 - 菜单默认不动；lore≤3  
 - L13 施工仍 HOLD；ConvertCap densify / CostSoft·pity·soft-glance 再叠 / 甲闸 / SetChase 六槽仍冻  
 
-## STATUS: OPEN · TIP-AX · 2026-10-12
+## STATUS: CLOSED · live 1.65.789-d12887 · 95ea4e614 · 2026-10-12 22:13 CST

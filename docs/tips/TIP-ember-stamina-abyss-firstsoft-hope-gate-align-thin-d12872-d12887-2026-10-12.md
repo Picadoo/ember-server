@@ -1,6 +1,6 @@
 # tip · TIP-AX 进本日首减负（体力+层费）门禁/Hope 诚实对齐（可施工薄 · 可感 UX）· D12872–D12887
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 22:09 Asia/Shanghai  
+> **状态：** **CLOSED** · live `1.65.789-d12887` · feat `95ea4e614` · 2026-10-12 22:13 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-stamina-abyss-firstsoft-hope-gate-align-2026-10-12.md`](../design/RESEARCH-ember-stamina-abyss-firstsoft-hope-gate-align-2026-10-12.md) · DESIGN [`DESIGN-ember-stamina-abyss-firstsoft-hope-gate-align-2026-10-12.md`](../design/DESIGN-ember-stamina-abyss-firstsoft-hope-gate-align-2026-10-12.md) · TIP-AW CLOSED live `1.65.788-d12871` · feat `07923c868` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **可感 UX / 变强途径** — **离开 soft-glance / pity-remain / ConvertCapSoft / 甲闸 / 追烙摘要族**（AS→AV / AP–AR / AW / AK–AM / AN–AO / AU 已齐）；进本日首减负门禁/Hope leftover  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `StaminaFirstSoft.peekCost` / `AbyssFeeSoft.peekFee` · `EntryService.admit` 体力门禁 · `AbyssService.entryProblems` 层费门禁 · `CorePapiStamina` hope/blocked · `RunPapi` abyss_hope · 可选 SOFT_TAIL + 单测）  
@@ -90,9 +90,9 @@
 
 - [x] 总控批 **A · 方案 M**  
 - [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
-- [ ] 批后插件：D12876–D12880；D12882 `git show` 干净  
-- [ ] 菜单默认不动；lore≤3  
-- [ ] peek 不吞 soft；进本预留才 consume；L13 施工仍 HOLD  
+- [x] 批后插件：D12876–D12880；D12882 `git show` 干净  
+- [x] 菜单默认不动；lore≤3  
+- [x] peek 不吞 soft；进本预留才 consume；live `1.65.789-d12887` · feat `95ea4e614`；L13 施工仍 HOLD  
 
 ---
 
@@ -102,4 +102,4 @@
 - 选题：TIP-AW 后 · **离开 soft-glance/pity/ConvertCap/甲闸/追烙** — 进本日首减负门禁/Hope 诚实（**非 densify · 非再扫甲闸 · 非扩 stampable · 非 SetChase 六槽 densify · 非 ConvertCap densify · 非 CostSoft·pity·soft-glance 再叠**）  
 - **批注：** AS→AV / AP–AR / AW CapSoft 已齐；StaminaFirstSoft/AbyssFeeSoft 预留已 live，但 admit/entryProblems/stamina_hope/abyss_hope/stamina_blocked_* 仍全额 → 「体力不足/币不够/费用不足」假负；peekCost/peekFee + 门禁/hope/blocked 对齐；零改 LESS/MULT；零新 PAPI；批后派 **余烬-插件**；**L13 施工 HOLD**；深化 densify / Affix / 抬表 / glance twin / sx20 / skill_mult / STAMP / L11·L13 mods / 扩 stampable / 甲闸再扫 / SetChase 六槽 / ConvertCap densify / CostSoft·pity·soft-glance 再叠 仍冻  
 
-## STATUS: OPEN · TIP-AX · D12872–D12887 · 2026-10-12 22:07 CST
+## STATUS: CLOSED · live 1.65.789-d12887 · 95ea4e614 · 2026-10-12 22:13 CST
