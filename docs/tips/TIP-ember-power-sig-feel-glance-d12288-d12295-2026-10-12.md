@@ -1,6 +1,6 @@
 # tip · TIP-G 签名手感一眼（枢纽/装备 · 手感名 · 点进签名/追烙）· D12288–D12295
 
-> **状态：** 待批 A（策划 tip · 2026-10-12 16:01 Asia/Shanghai）· 方案 **M**  
+> **状态：** 批 **A · 方案 M**（总控 2026-10-12 16:01 Asia/Shanghai）· 交插件岗  
 > **上游：** [`DESIGN-ember-growth-variety-thin-2026-10-12.md`](../design/DESIGN-ember-growth-variety-thin-2026-10-12.md) · [`DESIGN-ember-power-paths-variety-2026-10-12.md`](../design/DESIGN-ember-power-paths-variety-2026-10-12.md) · D174 / D455 / D464 / D604  
 > **前置：** TIP-A～F CLOSED live（至 1.65.763-d12287）  
 > **施工岗：** 插件岗（TrMenu + 纯展示短串；**零改签名 mods / stamp / 烙印价**）  
@@ -93,6 +93,6 @@
 
 ## 5. 批注
 
-- [ ] 总控批 **A · 方案 M**
-- tip 待推 · 交插件岗
+- [x] 总控批 **A · 方案 M** · 2026-10-12 16:01 CST
+- tip 已推 · 交插件岗
 - 变强途径续：**TIP-G**；复用 D174/D455/D464，不发明新主循环
