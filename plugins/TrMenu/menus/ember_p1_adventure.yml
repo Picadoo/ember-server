@@ -2,7 +2,7 @@
 # D616: Open/目标族区挂 mapid_board 图身份一览
 # D12251: 每图 L2 mapid_q0N → menuLine 短串（这图掉 / 图鉴进度）
 # D456: 签名获取半行 %corerpg_p1_sig_acq% · 未出仍拿徽记 · 零改掉率
-# 余烬 v1 (P1) 冒险页 — 书 §19.1：主线本 Q01–Q07 的解锁状态 / 消耗 / 掉落阶 / 用途 + 掉落目标族 + 印记 / 首通自选 / 补领 + 挑战版入口（§18.1，本人首通 Q07 后开放）。
+# 余烬 v1 (P1) 冒险页 — 书 §19.1：主线本 Q01–Q07 的解锁状态 / 消耗 / 掉落阶 / 用途 + 掉落目标族 + 印记 / 首通自选 / 补领 + 挑战版入口（§18.1，本人进过或首通 Q07 后开放）。
 # 只转发到 CoreRpg 命令；解锁、体力、队伍校验全在服务端（锁定的本点了只会提示原因）。
 # 不写通关时长承诺。P1 未启用（ember-v1.yml enabled=false）时进本命令会直接拒绝。
 # 入口：主菜单 ember_hub 的「冒险 · 主线本」图标，或 /ember_p1_adventure。
@@ -56,14 +56,14 @@ Icons:
   # D422：解锁态挂 day_left_sum + fc_left/pending_line；灰锁禁个人数字；Open 半行
   H:
     icons:
-      - condition: 'check papi %corerpg_p1_q01done% < 1'
+      - condition: 'check papi %corerpg_p1_access_q01% < 1'
         priority: 1
         display:
           material: gray dye
           name: '§7短征'
           lore:
-            - '§c先通主线 Q01'
-            - '§7解锁后：十三条短本 · 各体力30 · 日有奖帽分开'
+            - '§c未解锁：进过或首通主线 Q01'
+            - '§7进过即开 · 清过也开'
     update: 20
     display:
       material: shield
@@ -93,7 +93,7 @@ Icons:
 
   R:
     icons:
-      - condition: 'check papi %corerpg_p1_q07done% < 1'
+      - condition: 'check papi %corerpg_p1_access_q07% < 1'
         priority: 1
         display:
           material: stained glass pane
@@ -116,7 +116,7 @@ Icons:
         - close
   Z:
     icons:
-      - condition: 'check papi %corerpg_p1_q07done% < 1'
+      - condition: 'check papi %corerpg_p1_access_q07% < 1'
         priority: 1
         display:
           material: stained glass pane
@@ -140,7 +140,7 @@ Icons:
         - close
   Y:
     icons:
-      - condition: 'check papi %corerpg_p1_q07done% < 1'
+      - condition: 'check papi %corerpg_p1_access_q07% < 1'
         priority: 1
         display:
           material: stained glass pane
@@ -323,14 +323,14 @@ Icons:
   X:
     icons:
       # D99: before the player's own Q07 first clear the post-Q07 content is one locked icon (the others are blank)
-      - condition: 'check papi %corerpg_p1_q07done% < 1'
+      - condition: 'check papi %corerpg_p1_access_q07% < 1'
         priority: 1
         display:
           material: gray dye
           name: '§7Q07 之后：挑战 / 深渊 / 团本'
           lore:
             - '§a现在：§f%corerpg_p1_next%'
-            - '§7首通 Q07 锈轨矿道后开放：'
+            - '§7进过或首通 Q07 后开放：'
         actions:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-0.6'
@@ -349,7 +349,7 @@ Icons:
 
   A:
     icons:
-      - condition: 'check papi %corerpg_p1_q07done% < 1'
+      - condition: 'check papi %corerpg_p1_access_q07% < 1'
         priority: 1
         display:
           material: stained glass pane
@@ -369,7 +369,7 @@ Icons:
 
   G:
     icons:
-      - condition: 'check papi %corerpg_p1_q07done% < 1'
+      - condition: 'check papi %corerpg_p1_access_q07% < 1'
         priority: 1
         display:
           material: stained glass pane
