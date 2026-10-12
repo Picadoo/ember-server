@@ -1,6 +1,6 @@
 # DESIGN · 天赋节点效果短诚实（TrMenu 悬停 · 薄窗 · 可施工）· 2026-10-12
 
-> **状态：** APPROVED · TIP-BK · 已派余烬-物品 · 不派插件 · 2026-10-12 23:51 Asia/Shanghai  
+> **状态：** CLOSED live items `4c2c38485` · TIP-BK · TrMenu reload 77 · jar 未改 · 2026-10-12 23:52 Asia/Shanghai  
 > **上游 RESEARCH：** [`RESEARCH-ember-talent-node-effect-short-honesty-2026-10-12.md`](RESEARCH-ember-talent-node-effect-short-honesty-2026-10-12.md)  
 > **对接 live：** TIP-BJ CLOSED live `1.65.799-d13079` · `talent.yml` · `ember_talent.yml` · B2.15 attr-copy · D12200 lore compress  
 > **HOLD 旁注：** **L13 施工 HOLD**（TIP-AI FAIL · PASS≠开工）；Anvil soft densify / topUpTo / 灰印·聚火 / SF4 U2U3 / 调律 live bad 进持件 / 签名 lore 再叠 / 套装 blurb 再叠 / 宝石短效果再叠 / soft·开孔再叠 **仍冻**  
@@ -107,4 +107,4 @@
 | 8 | 烙纹定向幅度菜单诚实 | **另 tip · Affix 旁近慎开** |
 | 9 | 一层中段节点进 TrMenu | **另 tip · 非本窗 densify** |
 
-## STATUS: APPROVED · TIP-BK · 已派余烬-物品 · 不派插件 · 2026-10-12 23:51 Asia/Shanghai
+## STATUS: CLOSED live items `4c2c38485` · TIP-BK · TrMenu reload 77 · jar 未改 · 2026-10-12 23:52 Asia/Shanghai
