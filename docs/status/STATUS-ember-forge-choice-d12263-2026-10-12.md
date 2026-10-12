@@ -1,8 +1,9 @@
 # STATUS · 工坊选择感 D12256–D12263 live
 
-- **何时**：2026-10-12 11:49 CST
+- **何时**：2026-10-12 11:51 CST
 - **版本**：CoreRpg `1.65.760-d12263.local`
-- **commits**：功能 `f19448b0` · 版本/STATUS 另附 · tip CLOSED
-- **落地**：烙纹「将得到·不加伤」；转化周余+下缺口；洗练随机/锁定半行；F 格点明下限排；成功路径统一 `send3`；零伤乘/Affix/改价/K3
-- **验收**：启动 SEVERE=0；`version`=d12263；trmenu 77；Picado OP
-- **薄窗**：A→C→B **收束**；勿再开同构 forge twin / Affix Pack
+- **落地**：烙纹确认前「将得到·手感·不加伤」· 转化成功周余+下缺口 · 洗练「选的是」半行 · 工坊 F 格下限骨架 · 稳线预览/确认 lore≤3 · enhance/quality/refine/convert/forgeroll 成功走 `send3`（零 K3 跳页）
+- **禁区**：零伤乘 / 零 RATE / 零 Affix Pack / 零周帽与价表 / 零 Economy
+- **验收**：EmberForgeChoiceTest 4/0 · EmberForgeCommitNextTest 7/0 · 相关 loop 单测绿；TrMenu forge/forgeroll/brand/convert/reroll lore overs=0；`version CoreRpg`=d12263；TrMenu reload 77 菜单
+- **穿透**：playit 不变；待进服点工坊四入口实测（记「待恢复服后实测」若无人在线）
+- **下一批**：pity surface（若需）· 不再开同构 forge twin
