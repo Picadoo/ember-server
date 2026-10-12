@@ -3671,6 +3671,15 @@ public boolean pathForceOpenDoor(Player p) {
             p.sendMessage(P + "§7库存：§f" + rem);
             p.sendMessage(P + (floor ? EmberForgeRollRules.oddsLineFloor() : EmberForgeRollRules.oddsLine()));
             p.sendMessage(P + "§7产物：指定族部位 · " + (floor ? "成色≥精良" : "成色随机") + " · 精工随机 · +0 · 词条空 · 出不了极品");
+            // D12446–D12447 TIP-S: 旁路「选的是」+ 可选本周目标冲突半行（仅预览 · 非 confirm）
+            try {
+                if (EmberForgeChoice.stableGambleEnabled()) {
+                    p.sendMessage(P + EmberForgeChoice.gambleChoice(floor));
+                    String bypass = EmberForgeChoice.goalBypassHint(EmberForgeGoal.get(d));
+                    if (bypass != null && !bypass.isEmpty())
+                        p.sendMessage(P + bypass);
+                }
+            } catch (Throwable ignored) { }
             try { // D1267 / D1844 have-need AB（非 K3）
                 p.sendActionBar((floor ? "§6下限锻 · §f" : "§d随机锻 · §f") + rem);
             } catch (Throwable ignored) { }

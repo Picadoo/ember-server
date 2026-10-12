@@ -162,6 +162,7 @@ public final class EmberMode {
         try { EmberSetFeel.loadAwkDelta(y); } catch (Throwable ignored) { } // D12397 TIP-P
         try { EmberDropCraftPity.loadSettleRemain(y); } catch (Throwable ignored) { } // D12413 TIP-Q
         try { EmberMapResonance.loadWearCue(y); } catch (Throwable ignored) { } // D12430 TIP-R
+        try { EmberForgeChoice.loadStableGamble(y); } catch (Throwable ignored) { } // D12448 TIP-S
         checkConflicts();
         checkEconomyYmlMirror();
         plugin.getLogger().info("[" + MODE_ID + "] config enabled=" + configEnabled + " worlds=" + cfgWorlds

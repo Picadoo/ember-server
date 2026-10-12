@@ -266,3 +266,7 @@ drop_craft_pity:
 # D12430 TIP-R map resonance mid-run wear cue (升沿白话；缺省 true；零改加宽)
 map_res:
   wear_cue: true
+
+# D12448 TIP-S forge stable/gamble choice preview (稳/旁路「选的是」；缺省 true；零改价率极品权)
+forge_choice:
+  stable_gamble: true

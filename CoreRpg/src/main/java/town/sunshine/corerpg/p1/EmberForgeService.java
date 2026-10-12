@@ -402,6 +402,11 @@ public final class EmberForgeService implements Listener {
         int target = d.enhance + 1;
         int max = EmberUpgradeRules.maxTries(target);
         if (!go) {
+            // D12445 TIP-S: 稳线「选的是」— early so sure→直办 still spoke once
+            try {
+                if (EmberForgeChoice.stableGambleEnabled())
+                    p.sendMessage(P + EmberForgeChoice.stableChoice("强化"));
+            } catch (Throwable ignored) { }
             boolean sure = EmberUpgradeRules.guaranteed(d);
             int ratePct = (int) Math.round(EmberUpgradeRules.rate(target) * 100);
             int attempt = EmberUpgradeRules.attemptNo(d);
@@ -490,6 +495,13 @@ public final class EmberForgeService implements Listener {
         } catch (Throwable ignored) { }
         final Cost pay = payCost;
         if (!go) {
+            // D12444 TIP-S: 成色/精工稳线「选的是」— before 直办 recursion so silent path still spoke
+            try {
+                if (("quality".equals(kind) || "refine".equals(kind)) && EmberForgeChoice.stableGambleEnabled()) {
+                    String kn = "quality".equals(kind) ? "成色" : "精工";
+                    p.sendMessage(P + EmberForgeChoice.stableChoice(kn));
+                }
+            } catch (Throwable ignored) { }
             p.sendMessage(P + plan.note);
             p.sendMessage(P + "当前: " + preview(it.data));
             p.sendMessage(P + "之后: " + preview(plan.after) + "（确定成功，预览即结果）");
