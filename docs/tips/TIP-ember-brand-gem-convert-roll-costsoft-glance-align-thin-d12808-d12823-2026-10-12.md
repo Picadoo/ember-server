@@ -1,6 +1,6 @@
 # tip · TIP-AT Brand/Gem/Convert/Roll 日首 CostSoft 预览/glance 诚实对齐（可施工薄 · 可感 UX）· D12808–D12823
 
-> **状态：** **OPEN** · 荐批 A·M · 2026-10-12  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件** · 2026-10-12 21:31 Asia/Shanghai  
 > **上游：** RESEARCH [`RESEARCH-ember-brand-gem-convert-roll-costsoft-glance-align-2026-10-12.md`](../design/RESEARCH-ember-brand-gem-convert-roll-costsoft-glance-align-2026-10-12.md) · DESIGN [`DESIGN-ember-brand-gem-convert-roll-costsoft-glance-align-2026-10-12.md`](../design/DESIGN-ember-brand-gem-convert-roll-costsoft-glance-align-2026-10-12.md) · TIP-AS CLOSED live `1.65.784-d12807` · feat `468a08943` · TIP-AI CLOSED `STAGE1_L13_OFFLINE=FAIL`（**L13 施工 HOLD**）  
 > **选题：** 总控 **显式旁债** — Brand/Gem/Convert/Roll soft glance（同构 AS CostSoft peek 诚实）  
 > **施工岗（批后派单）：** **余烬-插件**（CoreRpg · `EmberGearNextHint` softCost 扩 brand/gem/convert/roll(+pin) · `EmberForgeHeldNext` 四轨 soft canPay · `EmberSinkGlance` BRAND/CONVERT/ROLL soft lack · `EmberRunPapi` forge_gap_*/recipe_gap_gem soft + 单测）  
@@ -88,8 +88,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + RESEARCH + DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + RESEARCH + DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12812–D12815；D12817 `git show` 干净  
 - [ ] 菜单默认不动；lore≤3  
 - [ ] 甲早退回归；LOCK 全额；L13 施工仍 HOLD  
