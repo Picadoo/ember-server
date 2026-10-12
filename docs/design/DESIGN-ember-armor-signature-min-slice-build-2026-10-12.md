@@ -1,6 +1,6 @@
 # DESIGN · 防具签名最小切片施工（stage2 · 烙印扩甲 / defense-side fits）· 2026-10-12
 
-> **状态：** OPEN · TIP-AE 待批 A·M · 总控显式开工令已发 · 2026-10-12 19:23 Asia/Shanghai  
+> **状态：** APPROVED · TIP-AE 批 A·M · 已派插件 · 2026-10-12 19:25 Asia/Shanghai  
 > **对接 tip：** [`TIP-ember-armor-signature-min-slice-build-thin-d12584-d12599-2026-10-12.md`](../tips/TIP-ember-armor-signature-min-slice-build-thin-d12584-d12599-2026-10-12.md)  
 > **权威规格：** stage0 [`DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md`](DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md) §2 · TIP-AD 评测补丁 [`DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md`](DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md) · RESULT STAGE1_OFFLINE=PASS(patched)  
 > **上游开工令：** TIP-AD CLOSED `abc3875d0` / RESULT head `b4c43551e` · STATUS-AD 显式「开工 · 防具签名最小切片」  

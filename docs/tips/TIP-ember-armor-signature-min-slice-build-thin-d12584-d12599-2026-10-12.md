@@ -1,6 +1,6 @@
 # tip · TIP-AE 防具签名最小切片施工（烙印扩甲 / defense-side fits）· D12584–D12599
 
-> **状态：** OPEN · 待批 **A · 方案 M** · 施工 tip（总控显式开工令已发）· 2026-10-12 19:23 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件**（总控 2026-10-12 19:25 Asia/Shanghai）· 待 live 后 CLOSED  
 > **上游：** stage0 [`DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md`](../design/DESIGN-ember-armor-signature-overlay-gate-stage0-2026-10-12.md) · TIP-AD CLOSED `abc3875d0` / RESULT head `b4c43551e` · STAGE1_OFFLINE=**PASS（patched · excl L11/L13）** · 补丁 [`DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md`](../design/DESIGN-ember-armor-signature-gate-stage0-s3-eval-patch-2026-10-12.md) · 本窗 build DESIGN [`DESIGN-ember-armor-signature-min-slice-build-2026-10-12.md`](../design/DESIGN-ember-armor-signature-min-slice-build-2026-10-12.md)  
 > **开工令引用：** STATUS-AD「**开工 · 防具签名最小切片**（烙印扩甲 / defense-side fits · 不扩掉落 · 不改 L11/L13 · 不抬 STAMP）」  
 > **前置：** S1–S4 门禁过线（patched）；深化 densify **仍冻**；烬斩门闩 TIP-Y **仍有效**；刃 L11/L13 **HOLD 另轨**  
@@ -86,8 +86,8 @@
 
 ## 5. 验收清单
 
-- [ ] 总控批 **A · 方案 M**  
-- [ ] tip + build DESIGN + power-paths 戳可点  
+- [x] 总控批 **A · 方案 M**  
+- [x] tip + build DESIGN + power-paths 戳可点  
 - [ ] 批后插件：D12587–D12592 落地；D12593 `git show` 无抬无改 L11/L13  
 - [ ] 策划本窗 commit **docs-only**；**无**业务 jar  
 - [ ] 刃 L11/L13 仍 HOLD 另轨  
