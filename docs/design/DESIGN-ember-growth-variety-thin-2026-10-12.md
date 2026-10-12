@@ -1,6 +1,6 @@
 # DESIGN · 变强途径薄窗（希望一眼 / 工坊选择 / 图装身份）· 2026-10-12
 
-> **状态：** 待批 A（策划 · 2026-10-12 11:27 Asia/Shanghai）  
+> **状态：** 已批 A · 方案 M（总控 · 2026-10-12）· TIP-A 见 `docs/tips/TIP-ember-power-hope-glance-d12240-d12247-2026-10-12.md`  
 > **定调：** 服主 2026-10-12——**多弄变强途径与花样成长，不要增加难度**；**停扩词缀池与同构难度 Pack**。  
 > **上游：** [`DESIGN-ember-growth-hope-loop-2026-10-11.md`](DESIGN-ember-growth-hope-loop-2026-10-11.md) · [`DESIGN-ember-forge-choice-depth-stage0-2026-10-11.md`](DESIGN-ember-forge-choice-depth-stage0-2026-10-11.md) · [`DESIGN-ember-map-gear-identity-hope-2026-10-11.md`](DESIGN-ember-map-gear-identity-hope-2026-10-11.md) · [`DESIGN-ember-mainline-unlocks-2026-10-04.md`](DESIGN-ember-mainline-unlocks-2026-10-04.md)  
 > **UI 约束：** TrMenu lore **每格非空 ≤3 行**（hub+p1 已压，`d6c084db` 已上线）；希望信息**禁止**再塞回枢纽成长格长墙。  
@@ -117,3 +117,8 @@
 ## 6. 荐总控
 
 批 **A · 方案 M**：按 §3 序 1→2→3 开工；affix/难度 Pack 队列冻结，容量转给希望一眼与图装身份。
+
+## 总控批注（2026-10-12）
+
+- [x] 批 **A · 方案 M** · 施工序 A→C→B · 停词缀 Pack 续扩。
+- TIP-A（希望一眼）已开：`TIP-ember-power-hope-glance-d12240-d12247-2026-10-12.md`。

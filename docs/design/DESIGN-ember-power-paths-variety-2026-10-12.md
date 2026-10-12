@@ -1,6 +1,6 @@
 # Stage0 · 变强途径花样（非难度 densify）· 2026-10-12
 
-> **状态：** Stage0 DRAFT · 待总控批 A · 方案待选  
+> **状态：** 已批 A · 方案 M（总控 · 2026-10-12）· Batch1 tip 已开  
 > **触发：** Karen t147u（2026-10-12）—「多弄变强的方式、变强的途径，变着花样来，而不是增加难度」；t146u 明确词缀池滚到七十对玩家几乎无用。  
 > **硬停：** **STOP Affix Pack / 词缀池扩容 / 难度 densify**（Pack4–36 及后续一律冻结，除非另批「显眼/教学/图感」且 **零扩池**）。  
 > **硬禁（不变）：** 无永久伤乘 · 无 skill_mult 抬 · 无 gem flat · 无 AFK 表抬 · 无 K3 · 无 sx20 · 无 clear-gate / drop-rate hack · 无 hope celebration / PAPI / sig-dry twin · 无 sticky combat-path twin · 无 ConfirmTokens densify · 不重开 legacy socket · 不发明新主循环。
@@ -162,12 +162,13 @@ ChargeMiss / DropCraft / DashStep / LockNear / ParryMiss / ChargeRest / MarkNear
 - [x] 四轴可施工、禁区明确  
 - [x] 参考 Diablo / PoE / 1.12 RPG 短对位  
 - [x] 三薄批 tip→批 可直接派工  
-- [ ] 总控批 A · 方案 M（待）  
-- [ ] Batch1 tip 开工（待批后）
+- [x] 总控批 A · 方案 M  
+- [x] Batch1 tip 开工：`TIP-ember-power-hope-glance-d12240-d12247-2026-10-12.md`
 
 ---
 
 ## 9. 批注
 
-- [ ] 总控批 **A · 方案 M** · ____  
+- [x] 总控批 **A · 方案 M** · 2026-10-12  
+- Batch1：TIP-A 希望一眼（优先单轨，非三轨并行墙）  
 - 本文件 **docs only**；本回合 **不改 jar**、不 push（除非 tip 管线另需）。
