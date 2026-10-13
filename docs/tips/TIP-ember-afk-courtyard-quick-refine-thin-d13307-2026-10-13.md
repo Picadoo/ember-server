@@ -20,6 +20,6 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M
 - [x] 物品交 menu tip + push `fc94b0561`
-- [x] TrMenu reload 77；测岗联验中
+- [x] TrMenu reload 77；测岗 PASS
 
 ## STATUS: CLOSED live menu `fc94b0561` · tip `5eb12dbff` · **勾毕** · 测岗联验中 · 2026-10-13 21:50 Asia/Shanghai
