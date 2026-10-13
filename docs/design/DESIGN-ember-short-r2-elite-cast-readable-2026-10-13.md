@@ -1,6 +1,6 @@
 # 余烬 · 短征 R2 精英可读 Cast（短本玩法花样 · ≠sx20 · ≠抬表）
 
-STATUS=**已批 A · 方案 M · D13305** · 总控 2026-10-13 21:34 Asia/Shanghai · 2026-10-13 21:31 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-short-r2-elite-cast-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-short-r2-elite-cast-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-r2-elite-cast-readable-2026-10-13.md`](RESEARCH-ember-short-r2-elite-cast-readable-2026-10-13.md) · backlog `B-short-r2-elite-cast-readable` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 Elite/Boss 基础伤表 ≠新地图 ≠复开 D423 ≠教裸指令**
+STATUS=**已批 A · 方案 M（全线 sx01–19）· D13305** · 总控 tip `d688ed5af` · live MM `d39c32bb6` · 2026-10-13 21:34 Asia/Shanghai · 2026-10-13 21:31 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-short-r2-elite-cast-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-short-r2-elite-cast-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-r2-elite-cast-readable-2026-10-13.md`](RESEARCH-ember-short-r2-elite-cast-readable-2026-10-13.md) · backlog `B-short-r2-elite-cast-readable` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 Elite/Boss 基础伤表 ≠新地图 ≠复开 D423 ≠教裸指令**
 
 > **一句话玩家价值：** 短征第二房精英也会「蓄力→可躲」——主题演出提前一房；**不**开 sx20、**不**抬日表。
 
@@ -155,5 +155,6 @@ STATUS=**已批 A · 方案 M · D13305** · 总控 2026-10-13 21:34 Asia/Shangh
 | 日 | 事 |
 |----|-----|
 | 2026-10-13 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-BY 后连开 · 选题短征 R2 Elite 可读 Cast · 拟 D13305 · ≠sx20 ≠抬日表 |
+| 2026-10-13 | 总控批 A·M · 全线 sx01–19 · tip `d688ed5af` · 怪物 live MM `d39c32bb6` · CLOSED · 勾销旁注 |
 
-*拟 D13305 · 短征 R2 精英可读 Cast · 待批 A·方案 M · ≠关观察 ≠抬日表 ≠sx20。*
+*D13305 · 短征 R2 精英可读 Cast · **已批 A·方案 M（全线 sx01–19）** · CLOSED live MM `d39c32bb6` · 怪物施工 · ≠关观察 ≠抬日表 ≠sx20。*
