@@ -1,6 +1,6 @@
 # 余烬 · 短征 R2 Elite 半血轻添头（短本玩法花样续 · ≠BossAid终厅复读 · ≠Cast粒子打磨 · ≠半行 · ≠sx20 · ≠抬表）
 
-STATUS=**待批 A** · 荐 **方案 M** · 拟 D13319 · TIP-CN · 2026-10-14 01:35 Asia/Shanghai
+STATUS=**已批 A · 方案 M · 全线非 L · D13319** · 总控 2026-10-14 01:37 Asia/Shanghai · TIP-CN · 已派怪物 · **勿勾 CLOSED** · fallback `~onTimer:120` 须进 STATUS/验收 · docs→施工
 > tip [`STATUS-ember-next-hard-debt-short-r2-elite-aid-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-short-r2-elite-aid-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-r2-elite-aid-readable-2026-10-14.md`](RESEARCH-ember-short-r2-elite-aid-readable-2026-10-14.md) · backlog `B-short-r2-elite-aid-readable` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠BossAid终厅复读当主交付 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠灾厄重开 ≠Pack6**
 
 > **一句话玩家价值：** 短征中房 Elite 半血会喊「精英添头」并多出 1 只本本近战——中段也有换挡；**不**开 sx20、**不**抬日表、**不**再叠 Cast 粒子、**不**复做终厅 BossAid。
@@ -55,10 +55,10 @@ STATUS=**待批 A** · 荐 **方案 M** · 拟 D13319 · TIP-CN · 2026-10-14 01
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a EliteAid Skills 必做；W1b Elite 挂接必做；W1c 全线 sx01–19 同批；见 §3）
+- [x] **方案 M**（W1a EliteAid Skills 必做；W1b Elite 挂接必做；W1c 全线 sx01–19 同批；见 §3）
 - [ ] 或勾 **方案 L**（仅 sx01–06；其余后置）· **本窗默认不批 L**
-- [ ] 否决 A（只半行）/ W（抬表/sx20/打磨主交付/BossAid再拧）
-- [ ] 批注：________________________________
+- [x] 否决 A（只半行）/ W（抬表/sx20/打磨主交付/BossAid再拧）
+- [x] 批注：总控批 A·M · D13319 · TIP-CN · MM EliteAid×19 · health{h=<60} · summon 1×R1 · 零改 Cast/HP/掉落/BossAid · 半行/粒子打磨/BossAid再拧否决 · 荐 ~onDamaged；fallback timer120 须记 STATUS · 全线非 L
 
 ---
 
@@ -148,6 +148,7 @@ STATUS=**待批 A** · 荐 **方案 M** · 拟 D13319 · TIP-CN · 2026-10-14 01
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 01:37 Asia/Shanghai | 总控批 A·M · 全线非 L · 派怪物 · 勿勾 CLOSED · fallback `~onTimer:120` 须进 STATUS/验收 |
 | 2026-10-14 01:35 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CM CLOSED 后连开 · 选题短征 R2 Elite 半血轻添头 · 拟 D13319 · TIP-CN · ≠半行 ≠Cast粒子主交付 ≠BossAid终厅复读 ≠庭内再叠 · **改题有证据**（D13318§6②；Elite 无半血；见 RESEARCH） |
 
-*拟 D13319 · 短征 R2 Elite 半血轻添头 · TIP-CN · STATUS=**待批 A** · 荐方案 M（可附 L）· ≠半行 ≠Cast粒子主交付 ≠sx20。*
+*D13319 **已批 A·M** · 短征 R2 Elite 半血轻添头 · TIP-CN · 已派怪物 · 勿勾 CLOSED · 2026-10-14 01:37 Asia/Shanghai · ≠半行 ≠Cast粒子主交付 ≠sx20。*
