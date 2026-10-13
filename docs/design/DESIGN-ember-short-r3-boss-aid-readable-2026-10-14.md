@@ -57,7 +57,7 @@ STATUS=**CLOSED live** · tip `ee36f5af9` · PASS `84448394a` · D13318 · TIP-C
 - [x] **方案 M**（W1a BossAid Skills 必做；W1b Warden 挂接必做；W1c 全线 sx01–19 同批；见 §3）
 - [ ] 或勾 **方案 L**（仅 sx01–06；其余后置）· **本窗默认不批 L**
 - [x] 否决 A（只半行）/ W（抬表/sx20/打磨主交付）
-- [x] 批注：总控批 A·M · 全线非 L · D13318 · TIP-CM · 批 sha `661e73acf` · MM BossAid×19 半血 summon 1×R1 · 零改 Cast/HP/掉落 · 半行/粒子打磨否决 · 荐 ~onDamaged；**fallback `~onTimer:160` 须进 STATUS/验收** · **勿勾 CLOSED**
+- [x] 批注：总控批 A·M · 全线非 L · D13318 · TIP-CM · 批 sha `661e73acf` · MM BossAid×19 半血 summon 1×R1 · 零改 Cast/HP/掉落 · 半行/粒子打磨否决 · 实挂 ~onDamaged/`health{h=<120}` · **未用** fallback · **勾毕 CLOSED live** `ee36f5af9`/`84448394a`/`3edadfb12`
 
 ---
 

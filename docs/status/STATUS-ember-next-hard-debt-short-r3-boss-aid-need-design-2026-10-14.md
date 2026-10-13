@@ -5,7 +5,7 @@
 > **上游结案：** **TIP-CL CLOSED** `95a0d5fe4`（D13317 庭内顺手互换齐 · PASS `86a105307` · menu `4671d3ea4`）。总控连开：优先短征日更花样（真可点/房内可感）；挂机庭环已齐勿再叠；半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）  
-**本窗性质：** tip **已批 A · 方案 M · 全线非 L** · 批 sha `661e73acf` · 已派怪物 · 拟 D13318 · **勿勾 CLOSED**（等 live CLOSED）· fallback `~onTimer:160` 须进 STATUS/验收  
+**本窗性质：** tip **已批 A · 方案 M · 全线非 L · 勾毕 CLOSED live** · tip `ee36f5af9` · PASS `84448394a` · 收口 `3edadfb12` · 批 sha `661e73acf` · D13318 · TIP-CM · 实挂 `~onDamaged`/`health{h=<120}` · **未用** fallback `~onTimer:160`  
 **硬规格：** [`DESIGN-ember-short-r3-boss-aid-readable-2026-10-14.md`](../design/DESIGN-ember-short-r3-boss-aid-readable-2026-10-14.md) · backlog `B-short-r3-boss-aid-readable`  
 **打开理由：** Cast 波齐后 R3 终厅仍无半血换挡；团本 SummonAid 范式可薄复用；真召唤≠半行≠粒子打磨。
 
@@ -79,4 +79,4 @@
 
 ---
 
-*选题短征 R3 半血轻添头 · tip **已批 A · 方案 M · 全线非 L** · 批 sha `661e73acf` · 已派怪物 · **勿勾 CLOSED** · fallback `~onTimer:160` 须进 STATUS/验收 · 拟 D13318 · TIP-CM · ≠关观察 ≠抬日表 ≠sx20 ≠半行空转 ≠Cast粒子主交付。*
+*选题短征 R3 半血轻添头 · tip **已批 A · 方案 M · 全线非 L · 勾毕 CLOSED live** · `ee36f5af9` · PASS `84448394a` · 收口 `3edadfb12` · D13318 · TIP-CM · ≠关观察 ≠抬日表 ≠sx20 ≠半行空转 ≠Cast粒子主交付。*
