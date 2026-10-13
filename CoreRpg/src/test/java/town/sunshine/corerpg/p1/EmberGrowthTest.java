@@ -310,4 +310,12 @@ public class EmberGrowthTest {
         assertEquals("ember_hub", EmberGrowthService.REROLL_FROM.get("hub"));
     }
 
+    @Test
+    public void rerollFromAfk_mapsToAfkMenu_D13322() {
+        assertEquals("ember_p1_afk", EmberGrowthService.REROLL_FROM.get("afk"));
+        assertEquals("ember_p1_forge", EmberGrowthService.REROLL_FROM.get("forge"));
+        assertEquals("ember_p1_gear", EmberGrowthService.REROLL_FROM.get("gear"));
+        assertEquals("ember_hub", EmberGrowthService.REROLL_FROM.get("hub"));
+    }
+
 }
