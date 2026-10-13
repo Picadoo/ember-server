@@ -1,6 +1,6 @@
 # 余烬 · 挂机庭「顺手推荐花」聚合（四花智路由 · ≠第五件花料 · ≠抬日表）
 
-STATUS=**待批 A · 荐方案 M · 拟 D13315** · tip [`STATUS-ember-next-hard-debt-afk-courtyard-recommend-flower-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-recommend-flower-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-recommend-flower-2026-10-14.md`](RESEARCH-ember-afk-courtyard-recommend-flower-2026-10-14.md) · backlog `B-afk-courtyard-recommend-flower` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠改 UpgradeRules/afk.tiers ≠第五件花料 ≠复开 D423 ≠教裸指令 ≠撤分格**
+STATUS=**已批 A · 方案 M · D13315** · 总控 2026-10-14 00:28 Asia/Shanghai · TIP-CJ · docs→施工
 
 > **一句话玩家价值：** 打开挂机庭一眼看见「现在该顺手花哪条」——一点进仓够的强化/升阶/精工/成色预览；**不**新开第五花料、**不**抬日产。
 
@@ -52,10 +52,10 @@ STATUS=**待批 A · 荐方案 M · 拟 D13315** · tip [`STATUS-ember-next-hard
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a jar 必做；W1b TrMenu P 必做；W1c Open/去哪花半行同批；见 §3）
-- [ ] 或勾 **方案 L**（纯 TrMenu；仅 enhance 优先可靠）· **本窗不荐 L**
-- [ ] 否决 A（只口号）/ W（第五件/静默扣/撤分格/sx20/抬表/空转）
-- [ ] 批注：总控批 A·M · D13315 · TIP-CJ · …
+- [x] **方案 M**（W1a jar 必做；W1b TrMenu P 必做；W1c Open/去哪花半行同批；见 §3）
+- [ ] 或勾 **方案 L**（纯 TrMenu；仅 enhance 优先可靠）· **本窗不批 L**
+- [x] 否决 A（只口号）/ W（第五件/静默扣/撤分格/sx20/抬表/空转）
+- [x] 批注：总控批 A·M · D13315 · TIP-CJ · 先插件 W1a afk_rec_flower*/afk-rec-flower（_ok 单键；预览非 confirm；优先 enhance→upgrade→refine→quality）再物品 P · 零第五花料/零抬产 · 不撤 E/U/R/Q
 
 ---
 
@@ -141,6 +141,7 @@ STATUS=**待批 A · 荐方案 M · 拟 D13315** · tip [`STATUS-ember-next-hard
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 00:28 | 总控批 A·M · 派插件 W1a |
 | 2026-10-14 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CI 后连开 · 选题挂机庭顺手推荐花聚合 · 拟 D13315 · TIP-CJ · ≠sx20 ≠抬表 ≠第五件花料 ≠复开 D423 · **未改题**（采纳 D13314§6② · 证据表见 RESEARCH） |
 
-*D13315 · 挂机庭顺手推荐花 · **待批 A·方案 M** · ≠关观察 ≠抬日表 ≠sx20 ≠第五件花料。*
+*D13315 已批 A·M · 挂机庭顺手推荐花 · 施工中 · ≠关观察 ≠抬日表 ≠sx20 ≠第五件花料。*
