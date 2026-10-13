@@ -1,6 +1,9 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13316 · 短征选页「三房可读可躲」半行 · docs-only · ≠sx20 · ≠抬日表 · ≠菜单诚实空转）
 
-> **旁注（打开 · 待批 A · 荐 M · 拟 D13316）：** tip 交总控批 · DESIGN [`DESIGN-ember-short-select-dodge-half-line-2026-10-14.md`](../design/DESIGN-ember-short-select-dodge-half-line-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-select-dodge-half-line-2026-10-14.md`](../design/RESEARCH-ember-short-select-dodge-half-line-2026-10-14.md) · backlog `B-short-select-dodge-half-line` · **TIP-CK** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠抬伤表 ≠新地图 ≠重开 calamity ≠Pack6 ≠第五件花料 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
+> **旁注（总控 REJECT · 2026-10-14 00:47 Asia/Shanghai · `d00ed84bc`）：** **否决** · 纯 TrMenu lore/Open 半行、无新动作 = **菜单诚实空转硬禁**（sure/pity/observe 同族）。D380 同形不构成开绿灯。**不施工 · 勿当 CLOSED 勾毕**。号段 TIP-CK / D13316 **本选题作废**；另开真债见 `STATUS-ember-next-hard-debt-afk-courtyard-quick-dismantle-need-design-2026-10-14.md`。
+
+
+> **旁注（~~打开 · 待批 A~~ · **REJECTED**）：** tip 交总控批 · DESIGN [`DESIGN-ember-short-select-dodge-half-line-2026-10-14.md`](../design/DESIGN-ember-short-select-dodge-half-line-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-select-dodge-half-line-2026-10-14.md`](../design/RESEARCH-ember-short-select-dodge-half-line-2026-10-14.md) · backlog `B-short-select-dodge-half-line` · **TIP-CK** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠抬伤表 ≠新地图 ≠重开 calamity ≠Pack6 ≠第五件花料 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
 
 > **上游结案：** **TIP-CJ CLOSED** live `fe0d3890d` · PASS `843dfee65` · jar `1.65.811-d13315.local`（D13315 挂机庭顺手推荐花）。总控连开：优先可感；D13315§6 后置可参考须证据——可改题。挂机庭四花+推荐花 / 今日推 / 冲一下 / 周短征 / 三冲 / Guard+Elite+Archer+Boss Cast 已齐。
 
@@ -85,4 +88,6 @@
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 00:47 | 总控 REJECT `d00ed84bc` · 半行空转 · 不施工 · 勿勾 CLOSED |
+| 2026-10-14 00:50 | 策划旁注 REJECT 齐 · 另开真债=挂机庭顺手分解 |
 | 2026-10-14 | 策划 · tip 打开 · TIP-CJ 后连开 · 选题短征选页三房可读可躲（债清·可感·**改题**·升 W1d · §6 均不可主交）· DESIGN/RESEARCH 待批 A·荐 M · 拟 D13316 · TIP-CK |

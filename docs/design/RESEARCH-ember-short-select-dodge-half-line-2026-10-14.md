@@ -1,6 +1,6 @@
 # RESEARCH · 短征选页「三房可读可躲」半行统一（Cast 波已齐 · 入口诚实宣传 · ≠改 MM · ≠抬表）· 2026-10-14
 
-> **状态：** **打开 · 待批 A · 荐 M · 拟 D13316 · TIP-CK** · docs-only · 2026-10-14 Asia/Shanghai  
+> **状态：** **REJECTED · 总控否决 `d00ed84bc`** · 诚实半行空转 · **不施工** · 2026-10-14 00:47 Asia/Shanghai · 另开真债=挂机庭顺手分解（同 TIP-CK/D13316 重开）  
 > **起因：** 总控【连开·下一档内容真债】TIP-CJ CLOSED live `fe0d3890d` · PASS `843dfee65` · jar `1.65.811-d13315.local`。请出下一窗 tip+DESIGN（拟 D13316 · TIP-CK），STATUS=待批 A · 荐 M · docs-only。优先可感：挂机庭资源环 / 短征日更 / 乐趣系统；D13315§6 后置可参考但须证据表——可改题。  
 > **上游：** TIP-CJ CLOSED · D13315 顺手推荐花 live · 挂机庭四花+推荐花齐 · 今日推/冲一下/周短征/三冲齐 · GuardCast/EliteCast/ArcherCast/BossCast 齐  
 > **硬禁：** **零** sx20 · **零** L13 · **零** K3 · **零** Pack6/天赋灰印/R · **零抬** AFK 日表/`daily_kills`/`afk.tiers`/`short:5`/伤乘/`skill_mult` · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实/observe 空转 · **零** 假开 `gate_daily` · **零** 重开 calamity · **零** 新地图硬开 · **零** 挂机庭第五件花料 · **零** P 格兼确认 · **零** 复开 D423 · **零** 教裸指令 · **零** 撤分格
@@ -60,4 +60,4 @@
 - P 格兼确认 · 第五件花料 · 再叠推荐花/导航聚合复读  
 - sx20 · Pack6/天赋/灰印/R/L13/K3 · 诚实/observe 空转 · 重开 calamity · 复开 D423 · 教裸指令  
 
-## STATUS: 打开 · 待批 A · 荐 M · 拟 D13316 · TIP-CK · 2026-10-14 Asia/Shanghai
+## STATUS: REJECTED · 诚实半行空转 · `d00ed84bc` · 不施工 · 2026-10-14 Asia/Shanghai

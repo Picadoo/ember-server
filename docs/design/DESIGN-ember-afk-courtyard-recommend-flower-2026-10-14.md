@@ -144,6 +144,7 @@ STATUS=**已批 A · 方案 M · CLOSED live · D13315** · PASS `843dfee65` · 
 | 2026-10-14 00:28 | 总控批 A·M · 派插件 W1a |
 | 2026-10-14 00:43 | 总控 · CLOSED live · PASS `843dfee65` · menu `f85daf617` |
 | 2026-10-14 00:45 | 策划旁注勾毕 · tip/STATUS/RESEARCH/backlog 补关 · **已批 A · 方案 M · CLOSED** · 短征选页三房可读可躲→TIP-CK / 拟 D13316 |
+| 2026-10-14 00:50 | 总控 REJECT 半行题 `d00ed84bc` · TIP-CK/D13316 重开=挂机庭顺手分解 |
 | 2026-10-14 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CI 后连开 · 选题挂机庭顺手推荐花聚合 · 拟 D13315 · TIP-CJ · ≠sx20 ≠抬表 ≠第五件花料 ≠复开 D423 · **未改题**（采纳 D13314§6② · 证据表见 RESEARCH） |
 
 *D13315 CLOSED live · 挂机庭顺手推荐花 · PASS `843dfee65` · ≠关观察 ≠抬日表 ≠sx20 ≠第五件花料。*
