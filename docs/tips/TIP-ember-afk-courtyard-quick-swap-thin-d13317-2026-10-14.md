@@ -1,6 +1,6 @@
 # tip · TIP-CL 挂机庭「顺手互换」（真 swap · ≠第五件花料 · ≠半行空转 · ≠抬表）· 拟 D13317
 
-> **状态：** **CLOSED live** · menu tip `4671d3ea4` · PASS `86a105307` · 证据 `/workspace/tmp/tip-cl-afk-swap/` · 2026-10-14 01:12 Asia/Shanghai
+> **状态：** **已批 A · 方案 M · CLOSED live** · menu tip `4671d3ea4` · PASS `86a105307` · 收口 `95a0d5fe4` · 证据 `/workspace/tmp/tip-cl-afk-swap/` · 2026-10-14 01:12 Asia/Shanghai · 策划勾毕 2026-10-14 01:15 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-swap-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-swap-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-swap`  
 > **施工岗（批后）：** 余烬-物品 · TrMenu-only · **不派插件/怪物/地图**（默认）  
 > **硬禁：** 零第五件花料 · 零推荐花复读 · 零半行独批 · 零 P 兼确认 · 零抬日表/改价 · 零静默换 · 零 sx20/L13/K3 · 零 Cast 粒子主交付
@@ -30,4 +30,4 @@
 - [x] 物品交 W/w 格 + Open 辅半行；抽测预览/确认/甲灰诚实 · menu `4671d3ea4` · PASS `86a105307`
 - [x] E/U/R/Q/P/D/S 仍在；零价表 diff；零 sx20 · 2026-10-14 01:12 Asia/Shanghai
 
-## STATUS: **CLOSED live** · `4671d3ea4` · PASS `86a105307` · D13317 · TIP-CL · 2026-10-14 01:12 Asia/Shanghai
+## STATUS: **已批 A · 方案 M · CLOSED live** · `4671d3ea4` · PASS `86a105307` · 收口 `95a0d5fe4` · D13317 · TIP-CL · 策划勾毕 2026-10-14 01:15 Asia/Shanghai

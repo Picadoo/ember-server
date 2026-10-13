@@ -1,6 +1,6 @@
 # RESEARCH · 挂机庭「顺手互换」（产→换轨可点 · ≠第五件花料 · ≠半行空转 · ≠抬表）· 2026-10-14
 
-> **状态：** **已批 A · 方案 M** · 批 sha `ac5ba6436` · 拟 D13317 · TIP-CL · 布局建议 `#P1W2w3D#` · 已派物品 · **勿勾 CLOSED** · 2026-10-14 01:05 Asia/Shanghai  
+> **状态：** **已批 A · 方案 M · CLOSED live** · menu `4671d3ea4` · PASS `86a105307` · 收口 `95a0d5fe4` · D13317 · TIP-CL · 布局 `#P1W2w3D#` · 策划勾毕 2026-10-14 01:15 Asia/Shanghai  
 > **起因：** 总控【TIP-CK CLOSED · 开下一 tip】收口 `b8eaf7696` · live menu `b9e86a017` · PASS `8a3a398a8` · D13316 庭内顺手分解齐。请交下一档待批 A · 荐 M · docs-only（拟 D13317 / TIP-CL）。优先短征日更花样 / 挂机庭资源环新乐趣 / 乐趣系统；必须真可点/可进/房内可感；禁半行独批。  
 > **上游：** TIP-CK CLOSED live `b8eaf7696` · D13316 顺手分解 live；四花+推荐花+分解齐；今日推/冲一下/周短征/三冲/R1近战·远程 Cast/R2 EliteCast 齐  
 > **硬禁：** **零** sx20 · **零** L13 · **零** K3 · **零** Pack6/天赋灰印/R · **零抬** AFK 日表/`daily_kills`/`afk.tiers`/`short:5`/伤乘 · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实/observe 空转 · **零** 假开 `gate_daily` · **零** 重开 calamity · **零** 新地图硬开 · **零** 挂机庭第五件花料 · **零** P 格兼确认 · **零** 复开 D423 · **零** 教裸指令 · **零** 撤分格 · **零** Cast 粒子纯打磨当主交付 · **零** 推荐花复读 · **零** 半行独批
@@ -61,4 +61,4 @@
 - 只 Open/lore 半行无 W 格 · 第五件花料 · P 兼确认 · 抬产/改价 · 静默换无确认 · 推荐花复读  
 - sx20 · Pack6/天赋/灰印/R/L13/K3 · 诚实/observe 空转 · 重开 calamity · 复开 D423 · Cast 粒子主交付 · 教裸指令  
 
-## STATUS: **已批 A · 方案 M** · 批 sha `ac5ba6436` · 拟 D13317 · TIP-CL · 布局 `#P1W2w3D#` · 已派物品 · **勿勾 CLOSED** · 2026-10-14 01:05 Asia/Shanghai
+## STATUS: **已批 A · 方案 M · CLOSED live** · menu `4671d3ea4` · PASS `86a105307` · 收口 `95a0d5fe4` · D13317 · TIP-CL · 布局 `#P1W2w3D#` · 策划勾毕 2026-10-14 01:15 Asia/Shanghai
