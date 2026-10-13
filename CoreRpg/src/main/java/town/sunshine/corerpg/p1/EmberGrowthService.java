@@ -890,6 +890,14 @@ public final class EmberGrowthService implements Listener {
         BRAND_FROM.put("afk", "ember_p1_afk"); // D13323 TIP-CR courtyard quick brand
         BRAND_FROM.put("forge", "ember_p1_forge"); // D13323 TIP-CR workshop return
     }
+    public static final String CONVERT_MENU = "ember_p1_convert";
+    private static final Map<UUID, String> CFROM = new ConcurrentHashMap<UUID, String>();
+    /** D13324 TIP-CS: convert return source (afk courtyard / forge workshop). */
+    static final Map<String, String> CONVERT_FROM = new LinkedHashMap<String, String>();
+    static {
+        CONVERT_FROM.put("afk", "ember_p1_afk"); // D13324 TIP-CS courtyard quick convert
+        CONVERT_FROM.put("forge", "ember_p1_forge"); // D13324 TIP-CS workshop return
+    }
 
     public EmberAffix.Rules reroll() { return reroll; }
 
@@ -3041,18 +3049,38 @@ public final class EmberGrowthService implements Listener {
 
     // ------------------------------------------------------------------ D431 weekly convert
 
-    /** /corerpg p1 convert <fam> [confirm] — held blade/charm → other family; weekly cap 1 */
+    /** /corerpg p1 convert [from afk|forge] | back | <fam> [confirm] | menu — held blade/charm → other family; weekly cap 1 */
     public boolean convertCommand(Player p, String[] args) {
         PlayerData d = data(p.getUniqueId());
         if (d == null) { p.sendMessage(P + "数据还没加载好，稍后再试"); return true; }
         String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
-        if (op.isEmpty() || "menu".equals(op)) { openMenu(p, "ember_p1_convert"); return true; }
+        if (op.isEmpty() || "menu".equals(op)) { openMenu(p, CONVERT_MENU); return true; }
+        if ("from".equals(op)) {
+            String from = args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
+            if (CONVERT_FROM.containsKey(from)) CFROM.put(p.getUniqueId(), from); else CFROM.remove(p.getUniqueId());
+            openMenu(p, CONVERT_MENU);
+            return true;
+        }
+        if ("back".equals(op)) {
+            String menu = CONVERT_FROM.get(CFROM.get(p.getUniqueId()));
+            if (menu != null) openMenu(p, menu);
+            return true;
+        }
         if ("scorch".equals(op) || "burst".equals(op) || "sustain".equals(op)) {
             boolean confirm = args.length >= 4 && "confirm".equalsIgnoreCase(args[args.length - 1]);
             return convertHeld(p, d, op, confirm);
         }
-        p.sendMessage(P + "用法：/corerpg p1 convert <scorch|burst|sustain> [confirm]（手持刃/护符）");
+        p.sendMessage(P + "用法：/corerpg p1 convert from|back|<scorch|burst|sustain> [confirm]（手持刃/护符）");
         return true;
+    }
+
+    /** key after "convert_" — D13324 TIP-CS return label */
+    public String convertPapi(Player p, PlayerData d, String key) {
+        if ("back".equals(key)) {
+            String f = CFROM.get(p.getUniqueId());
+            return "afk".equals(f) ? "§7返回挂机庭" : "forge".equals(f) ? "§7返回工坊" : "§7关闭";
+        }
+        return "";
     }
 
     private EmberItemData heldGear(Player p) {

@@ -1,6 +1,6 @@
 # tip · TIP-CS 挂机庭「顺手转化」（真 convert 入口 · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹再拧 · ≠半行 · ≠抬表 · ≠宝石无同构）· 拟 D13324
 
-> **状态：** **已批 A · 方案 M** · 拟 D13324 · TIP-CS · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石/随机锻仍后置 · 2026-10-14 03:20 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · W1a 已交插件 · 待物品 W1b/c/d · 拟 D13324 · TIP-CS · 全弧非 L · 勿勾 CLOSED · 宝石/随机锻仍后置 · 2026-10-14 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-convert`
 > **施工岗（批后）：** 余烬-插件（W1a 返回源）+ 余烬-物品（W1b/c/d TrMenu）· **不派怪物/地图**（默认）
 > **硬禁：** 零半行独批 · 零第五件花料 · 零推荐花复读 · 零洗练/烙纹再拧 · 零 P 兼确认 · 零抬日表/改转化价/周帽 · 零 Cast/Aid/todayRot/variety 再拧 · 零 W1e 独批 · 零 sx20/L13/K3 · 零庭内宝石/随机锻本窗主交
@@ -29,7 +29,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 03:20 Asia/Shanghai
-- [ ] 插件交 afk 返回源
+- [x] 插件交 afk 返回源 · 1.65.816-d13324.local · 2026-10-14
 - [ ] 物品交 C 格 + convert/forge 返回动态 + Open 辅半行
 - [ ] 抽测：庭内进转化→返回庭；价/周帽 零 diff；零 sx20；零半行独档
 
@@ -38,4 +38,4 @@
 - 短征 Cast/Aid/todayRot/variety 齐 → 不复读
 - 采纳：**面亮 `forge_gap_convert` + forge V live + afk 无格 + 无 CONVERT_FROM**
 
-## STATUS: **已批 A · 方案 M** · 拟 D13324 · TIP-CS · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 2026-10-14 03:20 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · W1a 已交插件 · 待物品 W1b/c/d · D13324 · TIP-CS · 全弧非 L · **勿勾 CLOSED** · 2026-10-14 Asia/Shanghai
