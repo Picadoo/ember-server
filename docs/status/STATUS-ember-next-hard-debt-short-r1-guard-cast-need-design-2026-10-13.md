@@ -1,33 +1,33 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13311 · 短征 R1 近战卫可读轻 Cast · docs-only · ≠sx20 · ≠抬日表 · ≠菜单诚实空转）
 
-> **STATUS:** OPEN · 待批 A · 荐方案 M · 2026-10-13 23:10 Asia/Shanghai
+> **STATUS:** **勾毕 · 已关** · 批 A·M · CLOSED live · tip `1c90911ef` · PASS `9322cf4bc`（sx01/07/13/19 · 0.32<0.52<0.85）· 总控 TIP-CF CLOSED · 2026-10-13 23:24 Asia/Shanghai
 
-> **旁注（打开 · 待批 A · 荐 M · 拟 D13311）：** tip 交总控批 · DESIGN [`DESIGN-ember-short-r1-guard-cast-readable-2026-10-13.md`](../design/DESIGN-ember-short-r1-guard-cast-readable-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-r1-guard-cast-readable-2026-10-13.md`](../design/RESEARCH-ember-short-r1-guard-cast-readable-2026-10-13.md) · backlog `B-short-r1-guard-cast-readable` · **TIP-CF** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠抬 Guard 基础伤表 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠stage 脏 runtime**。
+> **旁注（已关 · 批 A · 批 M · D13311 · CLOSED live tip `1c90911ef`）：** 总控【TIP-CF CLOSED】；怪物 MM GuardCast ×19 live；测岗 PASS `9322cf4bc`；薄 tip [`TIP-ember-short-r1-guard-cast-readable-thin-d13311-2026-10-13.md`](../tips/TIP-ember-short-r1-guard-cast-readable-thin-d13311-2026-10-13.md) · DESIGN [`DESIGN-ember-short-r1-guard-cast-readable-2026-10-13.md`](../design/DESIGN-ember-short-r1-guard-cast-readable-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-r1-guard-cast-readable-2026-10-13.md`](../design/RESEARCH-ember-short-r1-guard-cast-readable-2026-10-13.md) · backlog `B-short-r1-guard-cast-readable` · **TIP-CF** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠抬 Guard 基础伤表 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠stage 脏 runtime** · **不批 L 试点** · **下一窗→短征周目标选页可冲（拟 D13312）**。
 
-> **上游结案：** **TIP-CE CLOSED** live jar `1.65.807-d13310b` · menu `1b4a9d78e` · PASS `abc14a205`（D13310 房间事件冲一下 · 无chase灰绿）。总控连开：挂机庭/短征/冒险可感；硬禁延续 sx20·L13·K3·Pack6·抬日帽/AFK表·诚实空转·灾厄重开。挂机庭四件 / 今日推 / 冲一下已齐。
+> **上游结案：** **TIP-CF CLOSED** live tip `1c90911ef` · PASS `9322cf4bc`（D13311）。本窗选题短征 R1 GuardCast 已批落地；连开下一窗见 TIP-CG（拟 D13312）。
 
 **日期：** 2026-10-13（上海时间）  
-**本窗性质：** tip **打开 · 待批 A · 荐方案 M · 拟 D13311** · **docs-only** · **批准前禁改 YAML/Java**  
-**硬规格（待批 A · 荐 M · 拟 D13311）：** [`DESIGN-ember-short-r1-guard-cast-readable-2026-10-13.md`](../design/DESIGN-ember-short-r1-guard-cast-readable-2026-10-13.md) · backlog `B-short-r1-guard-cast-readable`  
-**打开理由：** 短征玩法花样续；R2/R3 Cast 已齐，R1 近战仍 SoftHit-only；MM-only 薄可施工；零抬经济。
+**本窗性质：** tip **已关 · 勾毕** · **已批 A·M·D13311** · CLOSED live tip `1c90911ef` · PASS `9322cf4bc` · **≠关观察** · **≠抬日表** · **≠sx20** · **≠ stage 脏 runtime**  
+**硬规格（已批 A · 方案 M · D13311）：** [`DESIGN-ember-short-r1-guard-cast-readable-2026-10-13.md`](../design/DESIGN-ember-short-r1-guard-cast-readable-2026-10-13.md) · backlog `B-short-r1-guard-cast-readable`  
+**关闭理由：** 总控【TIP-CF CLOSED】· tip `1c90911ef` · PASS `9322cf4bc`（sx01/07/13/19 · 0.32<0.52<0.85）；短征三房 Cast 齐；不批 L；周目标选页可冲后置→TIP-CG。
 
 ---
 
 ## 0. 局势一句话
 
-短征开场房近战卫只会平砍——补 R1 轻压可读 Cast，三房花样齐。
+短征第一房近战卫也会「蓄力→可躲」——三房主题 Cast 齐；本 tip 勾毕。
 
 ---
 
-## 1. 选题
+## 1. 选题（结案）
 
 | # | 候选 | 裁决 | 理由（证据） |
 |---|------|------|--------------|
-| **1** | **短征 R1 近战卫可读轻 Cast** | **采纳 · 需策划** | 玩法花样续；E1–E6；见 §1.1 |
-| 2 | 周目标选页冲 / 冒险聚合 | **后置** | 非房内；已有分入口 |
+| **1** | **短征 R1 近战卫可读轻 Cast** | **已批 A·M · live** | tip `1c90911ef` · PASS `9322cf4bc` |
+| 2 | 周目标选页冲 / 冒险聚合 | **后置→TIP-CG** | 本窗不做；下一波主荐 |
 | 3 | 挂机庭第五件 / 菜单诚实半行 | **否** | 四件齐；空转硬禁 |
 | 4 | sx20 / 抬日表·伤表 / 开 R·K3 / Pack6 / 灾厄重开 | **否** | 硬禁 |
-| 5 | 复开 D423 / exhausted 空声明 | **否** | 有真债 |
+| 5 | 复开 D423 / exhausted 空声明 | **否** | 有真债已结 |
 
 ### 1.1 证据核验（实扫 · 2026-10-13）
 
@@ -73,11 +73,11 @@
 | tip（本文件） | `docs/status/STATUS-ember-next-hard-debt-short-r1-guard-cast-need-design-2026-10-13.md` |
 | 薄 tip | `docs/tips/TIP-ember-short-r1-guard-cast-readable-thin-d13311-2026-10-13.md` |
 | backlog | `B-short-r1-guard-cast-readable` |
-| 号段 | **拟 D13311**（TIP-CE/D13310 后下一未用号）· 字母窗 **TIP-CF** |
+| 号段 | **D13311** · 字母窗 **TIP-CF** · CLOSED live |
 
 ---
 
-*选题短征 R1 近战卫轻 Cast（玩法花样续）· tip 打开 · 待批 A · 荐 M · 拟 D13311 · ≠关观察 ≠抬日表 ≠sx20 ≠复开 D423。*
+*选题短征 R1 近战卫轻 Cast（玩法花样续）· tip 勾毕 · 已批 A·M · D13311 · ≠关观察 ≠抬日表 ≠sx20 ≠复开 D423。*
 
 ---
 
@@ -86,3 +86,4 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-13 | 策划 · tip 打开 · TIP-CE 后连开 · 选题短征 R1 近战卫轻 Cast（玩法花样续·债清·可感）· DESIGN/RESEARCH 待批 A·荐 M · 拟 D13311 |
+| 2026-10-13 23:24 | 策划旁注勾毕 · 总控 TIP-CF CLOSED · tip `1c90911ef` · PASS `9322cf4bc` · 施工已抢先勾 DESIGN/薄 tip · 本文件+backlog 补关 · 不批 L · 下一窗→周目标选页可冲 |

@@ -1,6 +1,6 @@
 # RESEARCH · 短征 R1 近战卫可读轻 Cast（短本玩法花样续 · ≠sx20 · ≠抬表）· 2026-10-13
 
-> **状态：** 待批 A · 荐方案 M · TIP-CF / 拟 **D13311** · docs-only · 2026-10-13 23:10 Asia/Shanghai  
+> **状态：** **勾毕 · CLOSED live** · 批 A·M · D13311 · tip `1c90911ef` · PASS `9322cf4bc` · 2026-10-13 23:24 Asia/Shanghai  
 > **起因：** 总控【TIP-CE CLOSED】房间事件冲一下 live · jar `1.65.807-d13310b` · menu `1b4a9d78e` · PASS `abc14a205`（无chase灰绿）。下一波交薄 tip：挂机庭/短征/冒险可感乐趣；禁 sx20/抬表/诚实空转/L13/K3/Pack6/灾厄重开。  
 > **上游：** TIP-CE CLOSED · D13310 冲一下 · D13309 今日推 · D13305 R2 EliteCast · D13304–08 挂机庭四件齐 · fest/灾厄仍后置  
 > **硬禁：** **零** sx20 · **零** L13 施工 · **零** K3 · **零** Pack6/天赋灰印/R · **零抬** AFK 日表/`daily_kills`/`afk.tiers`/伤乘/`skill_mult` · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实/observe 空转 · **零** 假开 `gate_daily` · **零** 重开 calamity join · **零** 新地图硬开 · **零** 再叠挂机庭花料第五件
@@ -60,4 +60,4 @@
 - R1 **远程**同房再挂 Cast（刷屏）· 把 Elite/Boss Cast **原伤原 Timer** 贴到 Guard  
 - 再叠挂机庭花料第五件 · 重开 calamity · 新 fest · 复开 D423 · 教裸指令  
 
-## STATUS: 待批 A · 荐方案 M · 拟 D13311 · TIP-CF · 2026-10-13 23:10 Asia/Shanghai
+## STATUS: CLOSED live · 批 A·M · D13311 · tip `1c90911ef` · PASS `9322cf4bc` · TIP-CF · 2026-10-13 23:24 Asia/Shanghai
