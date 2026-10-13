@@ -21,4 +21,4 @@
 - [x] 物品交 menu tip + push `e214b0399`
 - [x] TrMenu reload 77（静态结构齐；测岗 gameplay 联验中）
 
-## STATUS: CLOSED live menu `e214b0399` · 测岗联验中 · 2026-10-13 21:29 Asia/Shanghai
+## STATUS: CLOSED live menu `e214b0399` · 测岗 PASS @`ddcf87a00` · 2026-10-13 21:29 Asia/Shanghai
