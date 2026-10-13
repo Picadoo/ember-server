@@ -1,6 +1,6 @@
 # 余烬 · 短征「今日推」本局内可感（短本日更花样续 · ≠Cast/Aid复读 · ≠半行 · ≠庭内镜像 · ≠sx20 · ≠抬表）
 
-STATUS=**待批 A** · 荐 **方案 M** · 拟 D13320 · TIP-CO · docs-only · 2026-10-14 01:58 Asia/Shanghai
+STATUS=**已批 A · 方案 M · 全弧非 L · D13320** · 总控 2026-10-14 02:01 Asia/Shanghai · TIP-CO · 已派插件 · **勿勾 CLOSED** · docs→施工
 > tip [`STATUS-ember-next-hard-debt-short-today-inrun-feel-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-short-today-inrun-feel-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-today-inrun-feel-readable-2026-10-14.md`](RESEARCH-ember-short-today-inrun-feel-readable-2026-10-14.md) · backlog `B-short-today-inrun-feel-readable` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠灾厄重开 ≠Pack6**
 
 > **一句话玩家价值：** 进「今日推」短征本时，开局/开房/结算会明确告诉你「这是今日推」——日更轮换从菜单走进房内；**不**开 sx20、**不**抬日表、**不**再叠 Cast/Aid、**不**叠庭内顺手。
@@ -56,10 +56,10 @@ STATUS=**待批 A** · 荐 **方案 M** · 拟 D13320 · TIP-CO · docs-only · 
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 进本 todayRot 必做；W1b 分房提示必做；W1c 结算完成必做；W1d 选页半行可选辅；见 §3）
+- [x] **方案 M**（W1a 进本 todayRot 必做；W1b 分房提示必做；W1c 结算完成必做；W1d 选页半行可选辅；见 §3）
 - [ ] 或勾 **方案 L**（仅进本 cue；分房/结算后置）· **本窗默认不批 L**
-- [ ] 否决 A（只半行）/ W（抬表/sx20/打磨主交付/Aid再拧/庭内）
-- [ ] 批注：…
+- [x] 否决 A（只半行）/ W（抬表/sx20/打磨主交付/Aid再拧/庭内）
+- [x] 批注：总控批 A·M · D13320 · TIP-CO · W1a todayRot进本cue + W1b分房AB节流 + W1c结算完成/再进 · 零改日帽/S表/Cast/Aid · W1d本窗不做 · 半行/Aid再拧/庭内否决 · 全弧非 L
 
 ---
 
@@ -151,6 +151,7 @@ STATUS=**待批 A** · 荐 **方案 M** · 拟 D13320 · TIP-CO · docs-only · 
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 02:01 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件 · 勿勾 CLOSED · W1d 选页半行本窗不做 |
 | 2026-10-14 01:58 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CN CLOSED 后连开 · 选题短征今日推本局内可感 · 拟 D13320 · TIP-CO · ≠半行 ≠Cast/Aid复读 ≠庭内再叠 · **改题有证据**（D13309 菜单齐、进本无 today 分支；D13319§6 不可主交；见 RESEARCH） |
 
-*D13320 **待批 A** · 荐方案 M · 短征今日推本局内可感 · TIP-CO。≠半行 ≠Cast/Aid复读 ≠sx20。*
+*D13320 **已批 A·M** · 短征今日推本局内可感 · TIP-CO · 已派插件 · 勿勾 CLOSED · 2026-10-14 02:01 Asia/Shanghai · ≠半行 ≠Cast/Aid复读 ≠sx20。*
