@@ -337,7 +337,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-  # D430: 随机锻造（印记+胚料+币 · 出不了极品）
+  # D430: 随机锻造（印记+胚料+币 · 出不了极品）· TIP-CT / D13325: from forge 保返回工坊
   F:
     display:
       material: anvil
@@ -349,7 +349,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_p1_forgeroll'
+        - 'command: corerpg p1 forgeroll from forge'
   # D431: 每周转化 · TIP-CS / D13324: from forge 保返回工坊
   V:
     display:

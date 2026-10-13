@@ -1,3 +1,4 @@
+# TIP-CT / D13325: 返回用 p1 forgeroll back（勿硬编码工坊）
 # D430 / D1164 K2b: 随机锻造 + 成色下限可发现
 Title: '§6余烬 · 随机锻造'
 
@@ -156,13 +157,17 @@ Icons:
     actions:
       all:
         - 'tell: §e下限：§f必精良+ · 再扣胚8+骨8+币800 · 仍出不了极品'
+  # TIP-CT / D13325: 动态返回（from afk→挂机庭 · from forge→工坊）；PAPI 未齐先静态「返回」
   R:
+    update: 20
     display:
       material: arrow
-      name: '§7返回工坊'
+      name: '§7返回'
     actions:
       all:
-        - 'menu: ember_p1_forge'
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 forgeroll back'
   B:
     display:
       material: barrier

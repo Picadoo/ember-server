@@ -1,3 +1,4 @@
+# TIP-CT / D13325: 庭内顺手随机锻（O · forge_gap_roll/floor · p1 forgeroll from afk · 零改价/权重/第五花）
 # TIP-CS / D13324: 庭内顺手转化（C · forge_gap_convert · p1 convert from afk · 零改价/周帽/第五花）
 # TIP-CR / D13323: 庭内顺手烙纹（G · forge_gap_brand/pin · p1 brand from afk · 零改价/产/第五花）
 # TIP-CQ / D13322: 庭内顺手洗练（L · reroll blade/charm cur · p1 reroll from afk · 零改价/产/第五花）
@@ -30,7 +31,7 @@ Options:
 Layout:
   - '#########'
   - '#PLWGwCD#'
-  - '#US4QVRE#'
+  - '#USOQVRE#'
   - '#ueIqFrH#'
   - '####B####'
 Events:
@@ -54,6 +55,7 @@ Events:
     - 'tell: §8本页也可顺手洗练（本页 L）'
     - 'tell: §8本页也可顺手烙纹（本页 G）'
     - 'tell: §8本页也可顺手转化（本页 C）'
+    - 'tell: §8本页也可顺手随机锻（本页 O）'
 Icons:
   '#':
     display:
@@ -310,6 +312,21 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg p1 convert from afk'
 
+  # TIP-CT / D13325: 顺手随机锻（第三行 O 替 digit 4 · 与 forge F 同页 · from afk · 不撤 E/e/U/u/R/r/Q/q/P/D/W/w/L/G/C/S/V/F）
+  O:
+    update: 20
+    display:
+      material: anvil
+      name: '§6顺手随机锻'
+      lore:
+        - '§7仓差：%corerpg_p1_forge_gap_roll%'
+        - '§7下限差：%corerpg_p1_forge_gap_roll_floor%'
+        - '§e➥ §f点进随机锻页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 forgeroll from afk'
+
   # D375: 产→花可见跳转（零抬日表）
 # D381: 去哪花 lore +半行「工坊内可回本庭」（反向互指；不重做主格）
 # D398: 去哪花 +半行「工坊有配方速览看 ×N」
@@ -328,6 +345,7 @@ Icons:
         - '§7本页也可顺手洗练（本页 L）'
         - '§7本页也可顺手烙纹（本页 G）'
         - '§7本页也可顺手转化（本页 C）'
+        - '§7本页也可顺手随机锻（本页 O）'
         - '§e➥ §f打开工坊'
     actions:
       all:
@@ -577,7 +595,8 @@ Icons:
         - close
         - 'command: corerpg afk 1'
   # TIP-CR: Layout 已用 G 替 digit 2；本 Icon 2（荒原层格）暂为死键，保留定义
-  # TIP-CS: Layout 已用 C 替 digit 3；本 Icon 3（焦土层格）暂为死键，保留定义；4 仍在 Layout
+  # TIP-CS: Layout 已用 C 替 digit 3；本 Icon 3（焦土层格）暂为死键，保留定义
+  # TIP-CT: Layout 已用 O 替 digit 4；本 Icon 4（烬原深处层格）暂为死键，保留定义
   '2':
     icons:
       - condition: 'check papi %corerpg_p1_afk_t2% < 1'
