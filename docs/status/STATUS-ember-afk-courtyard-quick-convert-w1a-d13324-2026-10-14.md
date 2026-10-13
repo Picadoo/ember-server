@@ -7,7 +7,8 @@
 - `/corerpg p1 convert from afk|forge` → 开既有 `ember_p1_convert`；`convert back` → 映射菜单
 - `%corerpg_p1_convert_back%`：from afk → `§7返回挂机庭`；from forge → `§7返回工坊`；否则 `§7关闭`
 - 单测：`EmberGrowthTest.convertFromAfkAndForge_mapsToMenus_D13324`
-- jar：`1.65.816-d13324.local` · ECONOMY_BV **123** 未动
+- jar：`1.65.816-d13324.local` · sha256 `18f4e64a0249…` · ECONOMY_BV **123** 未动
+- play：live `1.65.816-d13324.local` · storage=mysql · bv123 · MySQL connected
 - **零改** convert 周帽/价/族表 · afk.tiers · daily_kills · event_* · 伤表 · Cast/Aid/variety · 洗练/烙纹
 - **未做** 菜单 W1b/c/d（物品岗并行）· 庭内宝石/随机锻
 
