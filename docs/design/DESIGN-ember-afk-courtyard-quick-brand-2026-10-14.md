@@ -1,6 +1,6 @@
 # 余烬 · 挂机庭「顺手烙纹」（产→烙纹轨可点 · ≠第五件花料 · ≠推荐花复读 · ≠洗练再拧 · ≠半行 · ≠抬日表）
 
-STATUS=**待批 A** · 荐方案 **M** · 拟 D13323 · TIP-CR · 2026-10-14 02:57 Asia/Shanghai
+STATUS=**已批 A · 方案 M · 全弧非 L · D13323** · 总控 2026-10-14 03:00 Asia/Shanghai · TIP-CR · 已派插件+物品 · **勿勾 CLOSED** · docs→施工
 > tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-brand-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-brand-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-brand-2026-10-14.md`](RESEARCH-ember-afk-courtyard-quick-brand-2026-10-14.md) · backlog `B-afk-courtyard-quick-brand` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_rate/event_core/affix_shard ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠改brand价/craftShards**
 
 > **一句话玩家价值：** 挂机庭一点「顺手烙纹」进既有烙纹页——产碎直接喂烙纹合成/定向，返回仍回庭；**不**新开第五花料、**不**抬日产、**不**改烙纹价。
@@ -56,10 +56,10 @@ STATUS=**待批 A** · 荐方案 **M** · 拟 D13323 · TIP-CR · 2026-10-14 02:
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 插件 afk 返回源必做；W1b 庭内 G 格必做；W1c brand/forge 返回动态必做；W1d Open 辅半行同批；见 §3）
+- [x] **方案 M**（W1a 插件 afk 返回源必做；W1b 庭内 G 格必做；W1c brand/forge 返回动态必做；W1d Open 辅半行同批；见 §3）
 - [ ] 或勾 **方案 L**（仅 menu 开 brand；返回落工坊）· **本窗默认不批 L**
-- [ ] 否决 A（只半行）/ W（抬表/sx20/双开宝石主交/再拧/第五花）
-- [ ] 批注：
+- [x] 否决 A（只半行）/ W（抬表/sx20/双开宝石主交/再拧/第五花）
+- [x] 批注：总控批 A·M · D13323 · TIP-CR · W1a BRAND_FROM[afk]+brand from/back · W1b G→p1 brand from afk · W1c brand/forge 返回动态 · W1d Open辅半行 · 零改价/产 · 不撤四花+P+D+W/w+L · 宝石后置 · 半行仅辅 · 全弧非 L
 
 ---
 
@@ -159,6 +159,7 @@ STATUS=**待批 A** · 荐方案 **M** · 拟 D13323 · TIP-CR · 2026-10-14 02:
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 03:00 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石后置 |
 | 2026-10-14 02:57 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CQ CLOSED 后连开 · 选题挂机庭顺手烙纹 · 拟 D13323 · TIP-CR · ≠半行 ≠第五花 ≠推荐花复读 ≠洗练再拧 ≠Cast/Aid/variety再拧 · **改题有证据**（短征饱和；D13322§6②；afk 无入口；AfkForgePath 已喊 brand；面亮 gap_brand；见 RESEARCH） |
 
-*D13323 tip **待批 A** · 挂机庭顺手烙纹 · TIP-CR。**荐方案 M** · ≠半行 ≠第五花 ≠推荐花复读 ≠洗练再拧 ≠sx20。*
+*D13323 **已批 A·M** · 挂机庭顺手烙纹 · TIP-CR · 已派插件+物品 · 勿勾 CLOSED · 2026-10-14 03:00 Asia/Shanghai · ≠半行 ≠第五花 ≠洗练再拧 ≠宝石本窗 · ≠sx20。*

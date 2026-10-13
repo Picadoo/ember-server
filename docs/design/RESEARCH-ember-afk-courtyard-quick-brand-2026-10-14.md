@@ -1,6 +1,6 @@
 # RESEARCH · 挂机庭「顺手烙纹」（产→烙纹轨可点 · ≠第五件花料 · ≠推荐花复读 · ≠洗练再拧 · ≠半行 · ≠抬表）· 2026-10-14
 
-> **状态：** **待批 A** · 荐方案 **M** · 拟 D13323 · TIP-CR · 2026-10-14 02:57 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · 拟 D13323 · TIP-CR · 总控 2026-10-14 03:00 Asia/Shanghai · 已派插件+物品
 > **起因：** 总控【连开·TIP-CR / 拟 D13323】上游 TIP-CQ CLOSED live `e099c02b7`（feat `a342f34cf` · tip `6804ed53a` · jar `1.65.814-d13322.local` · PASS `16998530c` · 挂机庭顺手洗练齐）。请立刻交下一档硬债 docs-only 待批 A · 荐 M。**优先短征日更/乐趣**（真可点或房内可感）；或挂机庭资源环**新轨**真入口；D13322§6 后置「庭内顺手宝石/烙纹」须另证真债才可交。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内四花+推荐+拆+换+洗练 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。  
 > **上游：** TIP-CQ CLOSED live `e099c02b7` · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · 批 sha `33d94eb40` · D13322  
 > **硬禁：** **零** 半行独批 · **零** 第五花/推荐花复读 · **零** 洗练再拧 · **零** Cast粒子打磨 · **零** Aid再拧 · **零** todayRot/W1e独批 · **零** 抬 event_rate/event_core/affix_shard · **零** 新 variety kind · **零** 完整 variety 经济 · **零** sx20 · **零** 抬日表/伤表/S表 · **零** Pack6 · **零** 开R/K3 · **零** 关观察 · **零** 灾厄重开 · **零** 教裸指令 · **零** stage脏runtime
@@ -61,4 +61,4 @@
 - 只 Open/lore 半行无 G 格 · 第五件花料 · 推荐花复读 · 洗练再拧 · 庭内顺手宝石（§6 后置）· 抬产/改烙纹价  
 - Cast/Aid/todayRot/variety 再拧 · sx20 · Pack6/灰印/R/L13/K3 · 灾厄 · 教裸指令 · stage 脏 runtime
 
-## STATUS: **待批 A** · 荐 **M** · 拟 D13323 · TIP-CR · 2026-10-14 02:57 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · 拟 D13323 · TIP-CR · 2026-10-14 03:00 Asia/Shanghai
