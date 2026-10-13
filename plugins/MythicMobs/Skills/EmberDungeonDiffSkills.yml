@@ -1261,3 +1261,233 @@ EmberSx19ArcherCast:
   - damage{amount=0.25} @PlayersInRadius{r=4}
   - effect:particles{p=note;amount=10;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
   - effect:particles{p=crit;amount=10;hSpread=2.8;ySpread=0.25;speed=0.02} @Self
+
+# --- D13318 TIP-CM · 短征 R3 Boss 半血轻添头 BossAid ×19（一场一次 · summon 1×R1）---
+
+EmberSx01BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx01Zombie ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&6【烬门】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx01Zombie;amount=1;noise=3} @Self
+  - effect:particles{p=flame;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx02BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx02Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&e【锈灯】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx02Guard;amount=1;noise=3} @Self
+  - effect:particles{p=lava;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx03BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx03Patrol ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&b【霜雾】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx03Patrol;amount=1;noise=3} @Self
+  - effect:particles{p=cloud;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx04BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx04Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&c【烬井】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx04Guard;amount=1;noise=3} @Self
+  - effect:particles{p=lava;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx05BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx05Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&7【裂谷】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx05Guard;amount=1;noise=3} @Self
+  - effect:particles{p=cloud;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx06BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx06Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&8【环廊】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx06Guard;amount=1;noise=3} @Self
+  - effect:particles{p=smoke;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx07BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx07Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&6【烬塔】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx07Guard;amount=1;noise=3} @Self
+  - effect:particles{p=flame;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx08BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx08Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&e【错层】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx08Guard;amount=1;noise=3} @Self
+  - effect:particles{p=crit;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx09BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx09Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&3【烬渠】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx09Guard;amount=1;noise=3} @Self
+  - effect:particles{p=splash;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx10BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx10Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&8【密封闸】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx10Guard;amount=1;noise=3} @Self
+  - effect:particles{p=smoke;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx11BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx11Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&5【合镜】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx11Guard;amount=1;noise=3} @Self
+  - effect:particles{p=spell_witch;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx12BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx12Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&a【环枢】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx12Guard;amount=1;noise=3} @Self
+  - effect:particles{p=happyVillager;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx13BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx13Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&6【衡梁】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx13Guard;amount=1;noise=3} @Self
+  - effect:particles{p=crit;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx14BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx14Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&6【烬裂】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx14Guard;amount=1;noise=3} @Self
+  - effect:particles{p=flame;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx15BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx15Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&6【烬旋】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx15Guard;amount=1;noise=3} @Self
+  - effect:particles{p=crit;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx16BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx16Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&6【烬影】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx16Guard;amount=1;noise=3} @Self
+  - effect:particles{p=smoke;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx17BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx17Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&6【烬潮】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx17Guard;amount=1;noise=3} @Self
+  - effect:particles{p=splash;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx18BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx18Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&6【烬晶】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx18Guard;amount=1;noise=3} @Self
+  - effect:particles{p=fireworkSpark;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
+
+EmberSx19BossAid:
+  # D13318 BossAid · 半血添头(health<120≈50%of240) · summon EmberSx19Guard ×1 · CD9999 一场一次
+  Cooldown: 9999
+  Conditions:
+  - health{h=<120}
+  Skills:
+  - message{m="&6【烬弦】&f半血添头——&7先清！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberSx19Guard;amount=1;noise=3} @Self
+  - effect:particles{p=note;amount=18;hSpread=2.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=mob.zombie.metal;volume=0.55;pitch=0.75} @Self
