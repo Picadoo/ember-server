@@ -1,6 +1,6 @@
 # 余烬 · 短征选页「本周短征可冲」（周目标导航可感 · 零抬目标数/日帽 · ≠sx20）
 
-STATUS=**已批 A · 方案 M · D13312** · 总控 2026-10-13 23:27 Asia/Shanghai · 2026-10-13 23:24 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-short-week-goal-chase-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-short-week-goal-chase-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md`](RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md) · backlog `B-short-week-goal-chase-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 weekly_goals.targets/徽/短征日帽 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠教裸指令**
+STATUS=**CLOSED live · D13312/b** · PASS `20907456a` · jar `1.65.809-d13312b.local` · 总控 2026-10-13 23:52 Asia/Shanghai · 批 2026-10-13 23:27 · tip [`STATUS-ember-next-hard-debt-short-week-goal-chase-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-short-week-goal-chase-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md`](RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md) · backlog `B-short-week-goal-chase-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 weekly_goals.targets/徽/短征日帽 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠教裸指令**
 
 > **一句话玩家价值：** 打开短征选本就能看见本周短征周目标进度，一点进「还能计有奖」的本——周目标从赛季页挪到选本动作；**不**抬目标数、**不**抬日帽。
 
@@ -150,5 +150,6 @@ STATUS=**已批 A · 方案 M · D13312** · 总控 2026-10-13 23:27 Asia/Shangh
 | 日 | 事 |
 |----|-----|
 | 2026-10-13 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CF 后连开 · 选题短征选页本周短征可冲 · 拟 D13312 · ≠sx20 ≠抬目标数 ≠第五件花料 ≠复开 D423 |
+| 2026-10-13 23:52 | 总控 · CLOSED live · hotfix d13312b ShortPath · PASS `20907456a` · menu `0abdb2746` |
 
-*拟 D13312 · 短征选页本周短征可冲 · 待批 A·方案 M · ≠关观察 ≠抬日表 ≠sx20。*
+*D13312 CLOSED live · 短征选页本周短征可冲 · PASS `20907456a` · ≠关观察 ≠抬日表 ≠sx20。*

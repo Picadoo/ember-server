@@ -1,8 +1,8 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13312 · 短征选页「本周短征可冲」· docs-only · ≠抬目标数 · ≠sx20 · ≠菜单诚实空转）
 
-> **STATUS:** OPEN · 待批 A · 荐方案 M · 2026-10-13 23:24 Asia/Shanghai
+> **STATUS:** CLOSED · tip live PASS `20907456a` · jar `1.65.809-d13312b.local` · 2026-10-13 23:52 Asia/Shanghai
 
-> **旁注（打开 · 待批 A · 荐 M · 拟 D13312）：** tip 交总控批 · DESIGN [`DESIGN-ember-short-week-goal-chase-visible-2026-10-13.md`](../design/DESIGN-ember-short-week-goal-chase-visible-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md`](../design/RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md) · backlog `B-short-week-goal-chase-visible` · **TIP-CG** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠抬 weekly_goals.targets/徽/短征日帽 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠stage 脏 runtime**。
+> **旁注（CLOSED · TIP-CG live）：** tip 交总控批 · DESIGN [`DESIGN-ember-short-week-goal-chase-visible-2026-10-13.md`](../design/DESIGN-ember-short-week-goal-chase-visible-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md`](../design/RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md) · backlog `B-short-week-goal-chase-visible` · **TIP-CG** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠抬 weekly_goals.targets/徽/短征日帽 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠stage 脏 runtime**。
 
 > **上游结案：** **TIP-CF CLOSED** live tip `1c90911ef` · PASS `9322cf4bc`（D13311 短征 R1 GuardCast · sx01/07/13/19 · 0.32<0.52<0.85）。总控连开：挂机庭/短征/冒险可感；硬禁延续 sx20·L13·K3·Pack6·抬日帽/AFK表·诚实空转·灾厄重开·**第五件花料**。挂机庭四件 / 今日推 / 冲一下 / Cast 三房已齐。
 
