@@ -10,6 +10,8 @@
 - `/corerpg p1 enter short-div`（别名 `short-day-div` / `short_day_div` / `short_div`）→ 同 chase → tryEnter；无合格诚实拒
 - 单测：`EmberShortDayDivChaseTest`（chase/跳过已奖/today 优先/n/ok/done/Q01 ShortPath）；`EmberRunPapiTest` 路由八键
 - jar：`1.65.818-d13326.local` · sha256 `1c14b8d3d7a1…` · ECONOMY_BV **123** 未动
+- play：live `1.65.818-d13326.local` · storage=mysql · bv123 · MySQL connected
+- feat：`74a2b5a01` → origin/main
 - **零改** 日帽 / S40–S58 / weekly_goals.targets.short / Cast / Aid / variety / 庭内 / 今日推算法 / forgeroll·convert 价 / event_core
 - **未做** 菜单 W1b/c（物品岗）
 
