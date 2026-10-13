@@ -1,6 +1,6 @@
 # 余烬 · 挂机庭「顺手升阶」（庭内第二件可感 · 零抬产 · ≠sx20）
 
-STATUS=**待批 A** · 荐方案 **M** · 拟 **D13306** · 2026-10-13 21:39 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-upgrade-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-upgrade-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-upgrade-2026-10-13.md`](RESEARCH-ember-afk-courtyard-quick-upgrade-2026-10-13.md) · backlog `B-afk-courtyard-quick-upgrade` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠改 UpgradeRules/afk.tiers ≠复开 D423 ≠教裸指令**
+STATUS=**已批 A · 方案 M · D13306** · 总控 2026-10-13 21:41 Asia/Shanghai · 2026-10-13 21:39 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-upgrade-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-upgrade-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-upgrade-2026-10-13.md`](RESEARCH-ember-afk-courtyard-quick-upgrade-2026-10-13.md) · backlog `B-afk-courtyard-quick-upgrade` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠改 UpgradeRules/afk.tiers ≠复开 D423 ≠教裸指令**
 
 > **一句话玩家价值：** 挂机坐着料够了，在庭里点一下就能升阶手持——第二件产→花不断在「去工坊」；**不**抬日产量、**不**新开商店。
 
@@ -52,9 +52,9 @@ STATUS=**待批 A** · 荐方案 **M** · 拟 **D13306** · 2026-10-13 21:39 Asi
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 顺手升阶格必做；W1b Open/去哪花半行同批；W1c 确认路径对齐工坊；见 §3）
-- [ ] 否决 A（只口号）/ L（本窗精工双开·抬表）/ W（sx20/诚实空转/改价）
-- [ ] 批注：________________
+- [x] **方案 M**（W1a 顺手升阶格必做；W1b Open/去哪花半行同批；W1c 确认路径对齐工坊；见 §3）
+- [x] 否决 A（只口号）/ L（本窗精工双开·抬表）/ W（sx20/诚实空转/改价）
+- [x] 批注：总控批 A·M · D13306 · TIP-CA · 派余烬-物品 TrMenu-only · 不派插件 · 精工后置
 
 ---
 

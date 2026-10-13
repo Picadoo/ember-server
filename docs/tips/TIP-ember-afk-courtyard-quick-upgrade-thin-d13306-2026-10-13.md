@@ -1,23 +1,24 @@
-# tip · TIP-CA 挂机庭「顺手升阶」（庭内第二件 · 零抬产）· 拟 D13306
+# tip · TIP-CA 挂机庭「顺手升阶」（第二件可感 · 零抬产）· D13306
 
-> **状态：** OPEN · 待批 A · 荐方案 **M** · docs-only · 2026-10-13 21:39 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-物品** · 2026-10-13 21:41 Asia/Shanghai  
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-upgrade-2026-10-13.md`](../design/DESIGN-ember-afk-courtyard-quick-upgrade-2026-10-13.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-upgrade`  
-> **施工岗（批后）：** 余烬-物品 · TrMenu-only · **不派插件**  
-> **硬禁：** 零抬 AFK 日表/tiers · 零改 UpgradeRules · 零 sx20/L13/K3 · 零静默扣料 · 零诚实空转半行族 · 禁假用 `gap_upgrade_t2<=0`
+> **施工岗：** 余烬-物品 · TrMenu-only · **不派插件**  
+> **硬禁：** 零抬 AFK 日表/tiers · 零改 UpgradeRules · 零 sx20/L13/K3 · 零静默升阶 · **禁止** `recipe_gap_upgrade_t2 <= 0`（拼接串非数字）· 精工本窗不做
 
 ## 一句话
-挂机庭本页可点「顺手升阶」（预览→确认，对齐工坊）；护甲灰；缺料靠 lack+命令失败诚实；零抬产。
+挂机庭本页可预览/确认升阶手持；护甲灰；缺料靠 lack+命令失败诚实。
 
-## 布局钉死（批后施工）
-- 荐键 **U/u**（避开 F/H/I/S/E/e/层格/B）；示例把左玻璃改为 `US 4 V E#` / `ue I F H#`（施工可微调空槽）
-- Icon **U**：`command: corerpg p1 upgrade` · lore cost/lack/gap_upgrade_t2 · 护甲条件灰
-- Icon **u**：`command: corerpg p1 upgrade confirm`（对齐工坊 u）
-- W1b：Open +半行「升阶也可本页点」；S 去哪花 +半行「本页也可顺手升阶」
-- update: 20；lore≤4；**不**用 `recipe_gap_upgrade_t2 <= 0`（键为拼接串）
+## 布局钉死（在 TIP-BY 之上）
+- 第三行：`'#S 4 V E#'` → `'#US4 V E#'`（保留 S/4/V/E，加 U）
+- 第四行：`'#e I F H#'` → `'#ueI F H#'`（保留 e/I/F/H，加 u）
+- Icon **U**：`corerpg p1 upgrade`；lore：cost + lack + gap_upgrade_t2 半行（≤3 优先 cost/lack/点预览，gap 可并一行）；护甲 `held_is_armor==1` 灰
+- Icon **u**：`corerpg p1 upgrade confirm`；护甲同灰
+- W1b：Open +半行「升阶也可本页点」；S +半行「本页也可顺手升阶」（保留顺手强化半行）
+- update:20；对齐 forge U/u；不改 E/e
 
-## 验收（批后）
-- [ ] 总控批 A·M
+## 验收
+- [x] 总控批 A·M
 - [ ] 物品交 menu tip + push
-- [ ] TrMenu reload；E/e 顺手强化行为不变；无改产量/价
+- [ ] TrMenu reload；护甲灰；非甲可预览确认；产量未改
 
-## STATUS: 待批 A · 荐 M · 拟 D13306 · 2026-10-13 21:39 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-物品 · 2026-10-13 21:41 Asia/Shanghai
