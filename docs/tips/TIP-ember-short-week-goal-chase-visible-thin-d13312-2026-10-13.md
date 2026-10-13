@@ -1,6 +1,6 @@
 # tip · TIP-CG 短征选页「本周短征可冲」（≠抬目标数 · ≠sx20）· 拟 D13312
 
-> **状态：** 待批 A · 荐 **方案 M** · docs-only · 2026-10-13 23:24 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件**（W1a）· 2026-10-13 23:27 Asia/Shanghai  
 > **DESIGN** [`DESIGN-ember-short-week-goal-chase-visible-2026-10-13.md`](../design/DESIGN-ember-short-week-goal-chase-visible-2026-10-13.md) · RESEARCH 同日 · backlog `B-short-week-goal-chase-visible`  
 > **施工岗（批后）：** 余烬-插件（薄 chase PAPI + enter `short-goal`）+ 余烬-物品（TrMenu F 格）· **不派怪物/地图**  
 > **硬禁：** 零抬 `weekly_goals.targets.short`/徽/日帽 · 零 sx20/L13/K3 · 零第五件花料 · 零只半行无进本
@@ -15,9 +15,9 @@
 - 不改十九本 / 今日推 D / targets / 徽 / 日帽
 
 ## 验收（批后施工）
-- [ ] 总控批 A·M
+- [x] 总控批 A·M
 - [ ] 插件交 chase* + short-goal + 单测
 - [ ] 物品交 F 格 + TrMenu reload
 - [ ] 测岗：点进本成功 · 有奖计进度 · 零抬 short:5/日帽
 
-## STATUS: 待批 A · 荐方案 M · 拟 D13312 · TIP-CG · 2026-10-13 23:24 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-插件 W1a · 2026-10-13 23:27 Asia/Shanghai

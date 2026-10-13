@@ -1,6 +1,6 @@
 # 余烬 · 短征选页「本周短征可冲」（周目标导航可感 · 零抬目标数/日帽 · ≠sx20）
 
-STATUS=**待批 A · 荐方案 M · 拟 D13312** · 2026-10-13 23:24 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-short-week-goal-chase-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-short-week-goal-chase-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md`](RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md) · backlog `B-short-week-goal-chase-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 weekly_goals.targets/徽/短征日帽 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠教裸指令**
+STATUS=**已批 A · 方案 M · D13312** · 总控 2026-10-13 23:27 Asia/Shanghai · 2026-10-13 23:24 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-short-week-goal-chase-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-short-week-goal-chase-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md`](RESEARCH-ember-short-week-goal-chase-visible-2026-10-13.md) · backlog `B-short-week-goal-chase-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 weekly_goals.targets/徽/短征日帽 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠教裸指令**
 
 > **一句话玩家价值：** 打开短征选本就能看见本周短征周目标进度，一点进「还能计有奖」的本——周目标从赛季页挪到选本动作；**不**抬目标数、**不**抬日帽。
 
@@ -53,10 +53,10 @@ STATUS=**待批 A · 荐方案 M · 拟 D13312** · 2026-10-13 23:24 Asia/Shangh
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a chase 必做；W1b 选页 F 必做；W1c Open 半行同批；见 §3）
-- [ ] 或勾 **方案 L**（本窗改交冒险三冲；周目标可冲后置）· **本窗不荐 L**
-- [ ] 否决 A（只口号）/ W（假写/空转）
-- [ ] 批注：____________________
+- [x] **方案 M**（W1a chase 必做；W1b 选页 F 必做；W1c Open 半行同批；见 §3）
+- [ ] 或勾 **方案 L**（本窗改交冒险三冲；周目标可冲后置）· **本窗不批 L**
+- [x] 否决 A（只口号）/ W（假写/空转）
+- [x] 批注：总控批 A·M · D13312 · TIP-CG · 先插件 W1a chase/short-goal（含 chase_ok 单键供灰态）再物品 F · 零抬 short:5/徽/日帽 · 三冲后置
 
 ---
 
