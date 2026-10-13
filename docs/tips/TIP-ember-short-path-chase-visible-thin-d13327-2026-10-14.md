@@ -1,6 +1,6 @@
 # tip · TIP-CV 短征选页「路径追」可点（ShortPath 菜单化 + enter short-path · ≠日差同题 · ≠今日推/周目标复读 · ≠D406 首通同屏复读 · ≠半行 · ≠庭内旁路 · ≠抬表）· 拟 D13327
 
-> **状态：** **已批 A · 方案 M** · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 批 sha `75096cee3` · 拟 D13327 · TIP-CV · 零改日帽/S/resolve 算法 · 2026-10-14 04:22 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 批 sha `ac2889160` · 拟 D13327 · TIP-CV · 零改日帽/S/resolve 算法 · 2026-10-14 04:22 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-short-path-chase-visible-2026-10-14.md`](../design/DESIGN-ember-short-path-chase-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-path-chase-visible`  
 > **施工岗（批后）：** 余烬-插件（薄 short_path PAPI + enter `short-path`）+ 余烬-物品（TrMenu 选页 `0` + 薄页 `ember_p1_short_path`）· **不派怪物/地图**  
 > **硬禁：** 零半行独批 · 零日差同题 · 零今日推/周目标/三冲/D406 复读主交 · 零 Cast 粒子主交付 · 零拧 EliteAid/BossAid · 零 todayRot/W1e 独批 · 零 variety 再拧/完整经济 · 零 sx20 · 零抬日表/伤表/S表/targets.short · 零庭内旁路再拧 · 零 densify · 零教裸指令主 UI  
