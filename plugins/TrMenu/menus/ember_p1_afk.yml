@@ -2,6 +2,7 @@
 # TIP-BY / D13304: 庭内顺手强化+1（E/e · gap_enhance1 · 零改产量/价）
 # TIP-CA / D13306: 庭内顺手升阶（U/u · held_upgrade_cost/lack · 护甲灰 · 零改产量）
 # TIP-CB / D13307: 庭内顺手精工（R/r · held_next_c/refine_lack/hope · 护甲灰 · 零改产量）
+# TIP-CC / D13308: 庭内顺手成色（Q/q · held_next_q/quality_lack/hope · 护甲灰 · 零改产量）
 # D454: 装效澄清 gear_you / gear_eff(_tN) · 相对推荐装 · 零改产量
 # D383: 战况今日软目标 + 层差一览 + 层格相对多养 + 去哪花旁文案（零改产量）
 # D405: 战况软目标块 +还差/约满（remain_line live · tip 7123d944 · 零改产量）
@@ -23,8 +24,8 @@ Options:
 Layout:
   - '#########'
   - '# 1 2 3 #'
-  - '#US4 VRE#'
-  - '#ueI FrH#'
+  - '#US4QVRE#'
+  - '#ueIqFrH#'
   - '####B####'
 Events:
   Open:
@@ -40,6 +41,7 @@ Events:
     - 'tell: §8仓够时可在本页顺手花'
     - 'tell: §8升阶也可本页点'
     - 'tell: §8精工也可本页点'
+    - 'tell: §8成色也可本页点'
 Icons:
   '#':
     display:
@@ -163,7 +165,7 @@ Icons:
       name: '§6战利品去哪花'
       lore:
         - '§7挂机材料去工坊花'
-        - '§7本页也可顺手强化/升阶/精工'
+        - '§7本页也可顺手强化/升阶/精工/成色'
         - '§e➥ §f打开工坊'
     actions:
       all:
@@ -318,6 +320,55 @@ Icons:
         display:
           material: gray stained glass pane
           name: '§8顺手精工 · 不可用'
+          lore:
+            - '§8护甲随护符成长'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
+  # TIP-CC D13308: 顺手成色（护甲灰 · lack+hope · 禁 gap_quality）
+  Q:
+    update: 20
+    display:
+      material: gold nugget
+      name: '§e顺手成色'
+      lore:
+        - '§7花费：§f%corerpg_p1_held_next_q%'
+        - '§c%corerpg_p1_held_quality_lack% §7· §e进度：§f%corerpg_p1_held_quality_hope%'
+        - '§e➥ §f点预览 · 再确认'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg p1 refine quality'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8顺手成色 · 不可用'
+          lore:
+            - '§8护甲随护符成长'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
+  q:
+    update: 20
+    display:
+      material: gold nugget
+      name: '§e顺手成色 · 确认'
+      lore:
+        - '§7花费：§f%corerpg_p1_held_next_q%'
+        - '§c%corerpg_p1_held_quality_lack% §7· §e进度：§f%corerpg_p1_held_quality_hope%'
+        - '§e➥ §f点确认'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 refine quality confirm'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8顺手成色 · 不可用'
           lore:
             - '§8护甲随护符成长'
         actions:
