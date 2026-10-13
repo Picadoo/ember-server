@@ -112,6 +112,7 @@ public final class EmberRunPapi {
         if ("featured_key".equals(key)) return Section.ROTATION;
         if ("event_chase".equals(key) || "event_chase_name".equals(key) || "event_chase_ok".equals(key) || "event_soft_ready".equals(key)) return Section.ROTATION; // TIP-CE D13310
         if ("short_div".equals(key) || key.startsWith("short_div_")) return Section.SHORT; // TIP-CU D13326
+        if ("short_path".equals(key) || key.startsWith("short_path_")) return Section.SHORT; // TIP-CV D13327
         if ("today_triple".equals(key) || "today_triple_name".equals(key) || "today_triple_kind".equals(key) || "today_triple_ok".equals(key)) return Section.SHORT; // TIP-CH D13313
         if ("awaken_route".equals(key) || isLoadoutKey(key)) return Section.LOADOUT;
         if (key.startsWith("codex") || "codex_hope".equals(key)) return Section.CODEX;
@@ -416,6 +417,9 @@ public final class EmberRunPapi {
         if ("short_div".equals(key) || (key != null && key.startsWith("short_div_"))) { // TIP-CU D13326
             return shortDayDiv(d, key, maps, shortEx);
         }
+        if ("short_path".equals(key) || (key != null && key.startsWith("short_path_"))) { // TIP-CV D13327
+            return shortPathChase(d, key);
+        }
         if ("today_triple".equals(key) || "today_triple_name".equals(key)
                 || "today_triple_kind".equals(key) || "today_triple_ok".equals(key)) { // TIP-CH D13313
             return todayTriple(d, key, maps, shortEx);
@@ -532,6 +536,22 @@ public final class EmberRunPapi {
         }
         // short_div_chase_day_line
         return EmberShortRules.dayLine(rewardedFor(d, maps, shortEx, chase), capFor(maps, shortEx, chase));
+    }
+
+    /** TIP-CV D13327 %corerpg_p1_short_path*% — sticky ShortPath preference + resolve; zero algo change. */
+    private String shortPathChase(PlayerData d, String key) {
+        int path = EmberShortPath.get(d);
+        EmberRunMaps.MapDef next = EmberShortPath.resolve(runs, d, path);
+        String rk = EmberShortPathChase.resolveKey(next);
+        String rn = EmberShortPathChase.resolveName(next);
+        if ("short_path".equals(key)) return EmberShortPathChase.token(path);
+        if ("short_path_label".equals(key)) return EmberShortPath.label(path);
+        if ("short_path_tip".equals(key)) return EmberShortPath.tip(path);
+        if ("short_path_resolve".equals(key)) return rk;
+        if ("short_path_resolve_name".equals(key)) return rk.isEmpty() ? "" : rn;
+        if ("short_path_ok".equals(key)) return EmberShortPathChase.ok(path, rk);
+        if ("short_path_line".equals(key)) return EmberShortPathChase.line(path, rk, rn);
+        return "";
     }
 
     /**

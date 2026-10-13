@@ -28,7 +28,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 04:22 Asia/Shanghai
-- [ ] 插件交 short_path* + short-path + 单测
+- [x] 插件交 short_path* + short-path + 单测 · 2026-10-14 Asia/Shanghai · jar 1.65.819-d13327.local
 - [x] 物品交选页 `0` + 薄路径页 + TrMenu reload · `a206b9893` · TrMenu 78
 - [ ] 抽测：可切换三偏好；有 resolve 时可进；未选/无 resolve 灰诚实；零抬日帽/targets；零改 Cast/Aid；零日差同题；零 sx20；零半行独档
 

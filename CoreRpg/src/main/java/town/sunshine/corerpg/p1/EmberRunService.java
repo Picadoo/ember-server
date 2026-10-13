@@ -3229,7 +3229,7 @@ public boolean pathForceOpenDoor(Player p) {
                 return true;
             }
             case "enter":
-                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today|event-chase|short-goal|short-div|today-triple|afk-rec-flower> [challenge]"); return true; }
+                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today|event-chase|short-goal|short-div|short-path|today-triple|afk-rec-flower> [challenge]"); return true; }
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) entry.markForced(((Player) s).getUniqueId()); // D96 (D235 → EmberEntryService)
                 String mapArg = args[2].toLowerCase(Locale.ROOT);
                 if ("afk-rec-flower".equals(mapArg) || "afk_rec_flower".equals(mapArg) || "rec-flower".equals(mapArg)) { // TIP-CJ D13315
@@ -3367,6 +3367,22 @@ public boolean pathForceOpenDoor(Player p) {
                         s.sendMessage(P + "暂无可冲的日差本（今日未领日奖的已解锁短征已尽，或尚未解锁）。");
                         return true;
                     }
+                }
+                if ("short-path".equals(mapArg) || "short-chase-path".equals(mapArg) || "short_path".equals(mapArg)
+                        || "short_chase_path".equals(mapArg)) { // TIP-CV D13327
+                    Player pp = (Player) s;
+                    PlayerData pd = data(pp.getUniqueId());
+                    int path = EmberShortPath.get(pd);
+                    if (!EmberShortPath.valid(path)) {
+                        s.sendMessage(P + "请先选短征路径偏好（选页「路径追」切首通追/有奖追/后段追）。");
+                        return true;
+                    }
+                    EmberRunMaps.MapDef next = EmberShortPath.resolve(this, pd, path);
+                    if (next == null || next.key == null || next.key.isEmpty()) {
+                        s.sendMessage(P + EmberShortPath.resolveLine(null));
+                        return true;
+                    }
+                    mapArg = next.key;
                 }
                 return tryEnter((Player) s, mapArg, args.length >= 4 && isChallengeWord(args[3]));
             case "abyss": return cmdAbyss(s, args);
