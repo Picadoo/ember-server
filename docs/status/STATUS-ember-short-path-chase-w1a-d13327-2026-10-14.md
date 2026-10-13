@@ -14,7 +14,7 @@
 - 单测：`EmberShortPathChaseTest`（NONE/ok/resolve key/line/label/tip；resolve 复用零改）；`EmberRunPapiTest` 路由七键
 - jar：`1.65.819-d13327.local` · sha256 `197d6d3e7cbc…` · ECONOMY_BV **123** 未动
 - play：live `1.65.819-d13327.local` · storage=mysql · bv123 · MySQL connected
-- feat：`a61ebb18c` → origin/main
+- feat：`c31c780a9` → origin/main
 - **零改** resolve 排序/权重 / 日帽 / S40–S58 / weekly_goals.targets.short / Cast / Aid / variety / 日差 `short_div*` / 庭内 / forgeroll·convert 价 / 十九本格菜单 yml
 - **未做** 菜单 W1b/c（物品岗）
 
