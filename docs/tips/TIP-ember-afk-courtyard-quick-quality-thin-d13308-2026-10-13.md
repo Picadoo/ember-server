@@ -1,6 +1,6 @@
 # tip · TIP-CC 挂机庭「顺手成色」（第四件可感 · 零抬产）· 拟 D13308
 
-> **状态：** OPEN · 待批 A · 荐方案 M · 2026-10-13 21:50 Asia/Shanghai · docs-only  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-物品** · 2026-10-13 21:53 Asia/Shanghai  
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-quality-2026-10-13.md`](../design/DESIGN-ember-afk-courtyard-quick-quality-2026-10-13.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-quality`  
 > **施工岗（批后）：** 余烬-物品 · TrMenu-only · **不派插件**  
 > **硬禁：** 零抬 AFK 日表/tiers · 零改 UpgradeRules · 零 sx20/L13/K3 · 零静默成色 · **不发明** `recipe_gap_quality*` · 短征轮换/事件窗本窗不做
@@ -18,8 +18,8 @@
 - **不**挂假 gap_quality；**不**用假 `<=0` 条件
 
 ## 验收（批后施工）
-- [ ] 总控批 A·M
+- [x] 总控批 A·M
 - [ ] 物品交 menu tip + push
 - [ ] TrMenu reload；测岗联验
 
-## STATUS: OPEN · 待批 A · 荐 M · 拟 D13308 · 2026-10-13 21:50 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-物品 · 2026-10-13 21:53 Asia/Shanghai
