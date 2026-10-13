@@ -672,6 +672,14 @@ public final class EmberRunService implements Listener {
         log().info("[P1 run] " + s.runId + " " + r.id + " variant " + (b ? "B" : "A") + " " + comp.replaceAll("§.", ""));
         reviveFallen(s, RevivePoint.ROOM_OPEN); // D106
         EmberRoomPath.pulsePreferredRoom(s, r, this); // D2515
+        if (s.todayRot) { // TIP-CO D13320: todayRot room AB（同房节流 ≥15s）
+            EmberRunMaps.MapDef rm = maps.byKey(s.mapKey);
+            for (UUID u : s.committed) {
+                if (s.left.contains(u)) continue;
+                Player rp = Bukkit.getPlayer(u);
+                if (rp != null && rp.isOnline()) EmberTodayRotFeel.roomCue(s, rm, r, rp);
+            }
+        }
     }
 
     void onRoomCleared(EmberRunSession s, EmberRunMaps.Room r, boolean last) {

@@ -169,6 +169,7 @@ public final class EmberShortService {
                         EmberShortRules.spendChaseButtonLabel(),
                         EmberShortRules.spendChaseButtonCmd(),
                         EmberShortRules.spendChaseButtonHover());
+                EmberTodayRotFeel.settleCue(p, s.todayRot, true); // TIP-CO D13320 有奖
             } else if (r.fresh) {
                 p.sendMessage(P() + "§e短征通关（无奖）§7· " + EmberShortRules.dayLine(before, dailyCap(m))
                         + " · 0 点重置有奖次数");

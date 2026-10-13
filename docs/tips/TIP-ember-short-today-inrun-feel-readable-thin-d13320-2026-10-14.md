@@ -29,7 +29,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 02:01 Asia/Shanghai
-- [ ] 插件交 todayRot 进本/分房/结算
+- [x] 插件交 todayRot 进本/分房/结算 · jar `1.65.812-d13320.local` · 2026-10-14 02:05 Asia/Shanghai
 - [ ] 抽测：今日本有标记、非今日无；零抬表；零改 Cast/Aid；零 sx20
 
 ## STATUS: APPROVED · 批 A·M · 已派插件 · 拟 D13320 · TIP-CO · **勿勾 CLOSED** · 2026-10-14 02:01 Asia/Shanghai

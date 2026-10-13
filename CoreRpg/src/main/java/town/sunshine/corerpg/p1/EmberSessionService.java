@@ -201,6 +201,7 @@ public final class EmberSessionService {
         s.challenge = challenge;
         s.abyss = abyss;
         s.tier = challenge ? maps.challenge.tier : m.tier;
+        EmberTodayRotFeel.markIfToday(s, m, EmberShortRules.todayKey()); // TIP-CO D13320
         entry.applyWeeklyRule(s, leader, m, party, challenge, abyss); // P2-8 / D94 / D174 (D235 → EmberEntryService)
         s.seed = presetSeed != 0L ? presetSeed : runs.nextSeed();
         s.created = System.currentTimeMillis();
@@ -395,6 +396,7 @@ public final class EmberSessionService {
         for (UUID cu : s.committed) {
             Player cp = Bukkit.getPlayer(cu);
             if (cp != null && cp.isOnline()) EmberMapEnterFeel.flash(cp, enterFeelMap, s, runs.dataOf(cp.getUniqueId()));
+            if (cp != null && cp.isOnline() && s.todayRot) EmberTodayRotFeel.enterCue(cp); // TIP-CO D13320
             if (cp != null && cp.isOnline()) {
                 EmberMapCardCue.cue(cp, enterFeelMap, s); // D489 chat 名片+loot
                 EmberLoadout lo = runs.loadouts() == null ? null : runs.loadouts().get(cp);

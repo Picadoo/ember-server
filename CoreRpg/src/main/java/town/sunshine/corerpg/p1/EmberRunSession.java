@@ -68,6 +68,11 @@ public final class EmberRunSession {
     public boolean varietyRolled;
     /** D296 W1c: ActionBar short name already shown this run (transient) */
     public transient boolean eventHudShown;
+    /** TIP-CO D13320: this run is today's short rotation (sx_today); session-only feel, not reward ledger */
+    public boolean todayRot;
+    /** TIP-CO: last todayRot room AB throttle (transient) */
+    public transient String todayRotRoomCueId = "";
+    public transient long todayRotRoomCueAt;
     public final Set<UUID> acted = new LinkedHashSet<UUID>();
     public final Set<UUID> died = new LinkedHashSet<UUID>();
     /** D32: P1 heal potions each participant drank in this run (for the first-death-of-the-day refund) */
@@ -162,6 +167,7 @@ public final class EmberRunSession {
             m.put("event_room", eventRoom); m.put("event_done", eventDone);
             if (eventKind != null && !eventKind.isEmpty()) m.put("event_kind", eventKind);
         }
+        if (todayRot) m.put("today_rot", true);
         m.put("acted", ids(acted));
         m.put("died", ids(died));
         Map<String, Object> pu = new LinkedHashMap<String, Object>();
@@ -220,6 +226,7 @@ public final class EmberRunSession {
         s.eventDone = Boolean.TRUE.equals(m.get("event_done"));
         s.varietyRolled = Boolean.TRUE.equals(m.get("variety_rolled"))
                 || !s.affix.isEmpty() || !s.eventRoom.isEmpty(); // legacy saves: any variety stamp
+        s.todayRot = Boolean.TRUE.equals(m.get("today_rot"));
         readIds(m.get("acted"), s.acted);
         readIds(m.get("died"), s.died);
         if (m.get("potions") instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("potions")).entrySet()) {
