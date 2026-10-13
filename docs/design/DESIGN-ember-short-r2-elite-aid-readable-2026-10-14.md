@@ -148,6 +148,7 @@ STATUS=**CLOSED live** · tip `021d8e351` · PASS `17f05e0f1` · D13319 · TIP-C
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 01:58 Asia/Shanghai | 策划 · **勾毕旁注** CLOSED live · tip `021d8e351` · PASS `17f05e0f1` · live `931274777` · 半行 REJECT `d00ed84bc` **保持否决** · 连开 TIP-CO |
 | 2026-10-14 01:53 Asia/Shanghai | **CLOSED live** · tip `021d8e351` · PASS `17f05e0f1` · 证据 `/workspace/tmp/tip-cn-elite-aid/` · 挂钩 `~onDamaged` · `health{h=<60}` · 未用 fallback |
 | 2026-10-14 01:37 Asia/Shanghai | 总控批 A·M · 全线非 L · 派怪物 · 勿勾 CLOSED · fallback `~onTimer:120` 须进 STATUS/验收 |
 | 2026-10-14 01:35 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CM CLOSED 后连开 · 选题短征 R2 Elite 半血轻添头 · 拟 D13319 · TIP-CN · ≠半行 ≠Cast粒子主交付 ≠BossAid终厅复读 ≠庭内再叠 · **改题有证据**（D13318§6②；Elite 无半血；见 RESEARCH） |

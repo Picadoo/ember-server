@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13319 · 短征 R2 Elite 半血轻添头 · docs-only · ≠BossAid终厅复读 · ≠Cast粒子打磨 · ≠半行 · ≠sx20 · ≠抬日表）
 
-> **旁注（CLOSED live · tip `021d8e351` · PASS `17f05e0f1` · 2026-10-14 01:53 Asia/Shanghai）：** tip 待批 · DESIGN [`DESIGN-ember-short-r2-elite-aid-readable-2026-10-14.md`](../design/DESIGN-ember-short-r2-elite-aid-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-r2-elite-aid-readable-2026-10-14.md`](../design/RESEARCH-ember-short-r2-elite-aid-readable-2026-10-14.md) · backlog `B-short-r2-elite-aid-readable` · **TIP-CN** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠BossAid终厅复读 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
+> **旁注（勾毕 CLOSED live · tip `021d8e351` · PASS `17f05e0f1` · live `931274777` · 2026-10-14 01:53 Asia/Shanghai）：** tip **CLOSED** · DESIGN [`DESIGN-ember-short-r2-elite-aid-readable-2026-10-14.md`](../design/DESIGN-ember-short-r2-elite-aid-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-r2-elite-aid-readable-2026-10-14.md`](../design/RESEARCH-ember-short-r2-elite-aid-readable-2026-10-14.md) · backlog `B-short-r2-elite-aid-readable` · **TIP-CN** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠BossAid终厅复读 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
 
 > **上游结案：** **TIP-CM CLOSED** `3edadfb12`（D13318 短征 R3 半血轻添头齐 · tip `ee36f5af9` · PASS `84448394a`）。总控连开：优先短征日更花样（真可点/房内可感）；挂机庭环已齐勿再叠；Cast+BossAid 已齐勿打磨主交；半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）  
-**本窗性质：** tip **APPROVED · 批 A·M · 全线非 L** · 已派怪物 · docs-only→施工 · 拟 D13319 · TIP-CN · **勿勾 CLOSED** · fallback `~onTimer:120` 须进 STATUS/验收  
+**本窗性质：** tip **勾毕 CLOSED live** · 批 A·M · 全线非 L · tip `021d8e351` · PASS `17f05e0f1` · live `931274777` · 拟 D13319 · TIP-CN · fallback 未用（实挂 `~onDamaged`/`health{h=<60}`）  
 **硬规格：** [`DESIGN-ember-short-r2-elite-aid-readable-2026-10-14.md`](../design/DESIGN-ember-short-r2-elite-aid-readable-2026-10-14.md) · backlog `B-short-r2-elite-aid-readable`  
 **打开理由：** BossAid 齐后 R2 中房仍无半血换挡；D13318§6② 明文后置；真召唤≠半行≠粒子打磨≠终厅复读。
 
@@ -81,4 +81,4 @@ BossAid 已齐；短征中房补「精英半血轻添头」——三房弧中段
 
 ---
 
-*选题短征 R2 Elite 半血轻添头 · tip **APPROVED · 批 A·M** · 已派怪物 · 拟 D13319 · TIP-CN · 勿勾 CLOSED · ≠关观察 ≠抬日表 ≠sx20 ≠半行空转 ≠Cast粒子主交付 ≠BossAid终厅复读。*
+*选题短征 R2 Elite 半血轻添头 · tip **勾毕 CLOSED live** · `021d8e351` · PASS `17f05e0f1` · live `931274777` · 拟 D13319 · TIP-CN · ≠关观察 ≠抬日表 ≠sx20 ≠半行空转 ≠Cast粒子主交付 ≠BossAid终厅复读 · 半行 REJECT `d00ed84bc` **保持否决**。*
