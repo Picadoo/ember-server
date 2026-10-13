@@ -1,6 +1,6 @@
 # tip · TIP-CF 短征 R1 近战卫可读轻 Cast（≠sx20 · ≠抬表）· 拟 D13311
 
-> **状态：** 待批 A · 荐 **方案 M** · docs-only · 2026-10-13 23:10 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-怪物** · 2026-10-13 23:10 Asia/Shanghai  
 > **DESIGN** [`DESIGN-ember-short-r1-guard-cast-readable-2026-10-13.md`](../design/DESIGN-ember-short-r1-guard-cast-readable-2026-10-13.md) · RESEARCH 同日 · backlog `B-short-r1-guard-cast-readable`  
 > **施工岗（批后）：** 余烬-怪物 · MM-only · **不派插件/物品**（W1d 选页半行可选后置）  
 > **硬禁：** 零 sx20 · 零抬日表/Guard·Elite·Boss 基础伤 · 零改 HP/掉落/日帽/地图 · 禁 Elite/Boss Cast 原伤复读到 Guard · 禁 R1 远程同挂
@@ -15,8 +15,8 @@ sx01–19 第一房近战卫挂更轻更慢主题 Cast（timer140 · dmg≈0.30�
 - 不改 Elite/Boss Cast 数值；不改 Crossbow/Skeleton；不改 Type/Equipment/掉落
 
 ## 验收（批后施工）
-- [ ] 总控批 A·M
+- [x] 总控批 A·M
 - [ ] 怪物交 tip + GuardCast 19/19（或批 L 则 01–06）
 - [ ] 抽测：R1 有蓄力；同本 Guard < Elite < Boss；远程无 Cast；零抬表
 
-## STATUS: 待批 A · 荐方案 M · 拟 D13311 · TIP-CF · 2026-10-13 23:10 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-怪物 · 2026-10-13 23:10 Asia/Shanghai

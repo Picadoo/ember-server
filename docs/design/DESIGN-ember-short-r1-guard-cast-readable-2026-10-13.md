@@ -1,6 +1,6 @@
 # 余烬 · 短征 R1 近战卫可读轻 Cast（短本玩法花样续 · ≠sx20 · ≠抬表）
 
-STATUS=**待批 A · 荐方案 M · 拟 D13311** · 2026-10-13 23:10 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-short-r1-guard-cast-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-short-r1-guard-cast-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-r1-guard-cast-readable-2026-10-13.md`](RESEARCH-ember-short-r1-guard-cast-readable-2026-10-13.md) · backlog `B-short-r1-guard-cast-readable` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 Guard/Elite/Boss 基础伤表 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠教裸指令**
+STATUS=**已批 A · 方案 M · D13311** · 总控 2026-10-13 23:10 Asia/Shanghai · 2026-10-13 23:10 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-short-r1-guard-cast-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-short-r1-guard-cast-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-r1-guard-cast-readable-2026-10-13.md`](RESEARCH-ember-short-r1-guard-cast-readable-2026-10-13.md) · backlog `B-short-r1-guard-cast-readable` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 Guard/Elite/Boss 基础伤表 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠教裸指令**
 
 > **一句话玩家价值：** 短征第一房近战卫也会「蓄力→可躲」——三房主题演出齐；**不**开 sx20、**不**抬日表。
 
@@ -51,10 +51,11 @@ STATUS=**待批 A · 荐方案 M · 拟 D13311** · 2026-10-13 23:10 Asia/Shangh
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a Skills 轻压 Cast 必做；W1b 近战主怪挂接必做；W1c 全线 sx01–19 同批；见 §3）
-- [ ] 或勾 **方案 L**（仅 sx01–06；其余后置）
-- [ ] 否决 A（只口号）/ W（sx20/原伤复读/远程同挂/抬表/诚实空转）
-- [ ] 批注：
+- [x] **方案 M**（W1a Skills 轻压 Cast 必做；W1b 近战主怪挂接必做；W1c 全线 sx01–19 同批；见 §3）
+- [ ] 或勾 **方案 L**（仅 sx01–06；其余后置）· **本窗不批 L**
+- [x] 否决 A（只口号）/ W（sx20/原伤复读/远程同挂/抬表/诚实空转）
+- [x] 批注：总控批 A·M 全线 sx01–19 · D13311 · TIP-CF · 派余烬-怪物 MM-only · timer140 · dmg≈0.30–0.35 · 仅近战 · 禁远程/抬表/sx20
+
 
 ---
 
