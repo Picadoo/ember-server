@@ -1,6 +1,6 @@
 # tip · TIP-CM 短征 R3 Boss 半血轻添头（真 summon · ≠Cast粒子打磨 · ≠半行 · ≠抬表）· 拟 D13318
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-怪物**（MM）· 2026-10-14 01:17 Asia/Shanghai
+> **状态：** **已批 A · 方案 M · 全线非 L** · APPROVED · 批 sha `661e73acf` · 已派 **余烬-怪物**（MM）· 2026-10-14 01:17 Asia/Shanghai · **勿勾 CLOSED**（等 live CLOSED）· fallback `~onTimer:160` 须进 STATUS/验收
 > **DESIGN** [`DESIGN-ember-short-r3-boss-aid-readable-2026-10-14.md`](../design/DESIGN-ember-short-r3-boss-aid-readable-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-r3-boss-aid-readable`  
 > **施工岗（批后）：** 余烬-怪物 · MM-only · **不派插件/物品/地图**（默认）  
 > **硬禁：** 零半行独批 · 零 Cast 粒子主交付 · 零 sx20 · 零抬日表/伤表 · 零改既有 Cast/HP/掉落 · 零一次≥2 召唤 · 零庭内再叠顺手
@@ -22,6 +22,6 @@ sx01–19 终厅 Boss 半血喊「添头」并召唤 1 只本本 R1 近战（一
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 01:17 Asia/Shanghai
 - [ ] 怪物交 BossAid 19/19 + Warden 挂接
-- [ ] 抽测半血（或 fallback）喊话+1 近战；同场≤1；Cast 未拧；零 sx20
+- [ ] 抽测半血（或 fallback `~onTimer:160`）喊话+1 近战；同场≤1；Cast 未拧；零 sx20；**实际挂钩须记 STATUS**（禁静默双挂）
 
-## STATUS: APPROVED · 批 A·M · 已派怪物 · 拟 D13318 · TIP-CM · 2026-10-14 01:17 Asia/Shanghai
+## STATUS: **已批 A · 方案 M · 全线非 L** · APPROVED · 批 sha `661e73acf` · 已派怪物 · 拟 D13318 · TIP-CM · **勿勾 CLOSED** · fallback `~onTimer:160` 须进 STATUS/验收 · 2026-10-14 01:17 Asia/Shanghai

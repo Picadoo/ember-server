@@ -1,6 +1,6 @@
 # RESEARCH · 短征 R3 Boss 半血轻添头（短本玩法花样续 · ≠Cast粒子打磨 · ≠半行 · ≠sx20 · ≠抬表）· 2026-10-14
 
-> **状态：** **待批 A** · 荐 M · 拟 D13318 · TIP-CM · 2026-10-14 01:16 Asia/Shanghai  
+> **状态：** **已批 A · 方案 M · 全线非 L** · 批 sha `661e73acf` · 拟 D13318 · TIP-CM · 已派怪物 · **勿勾 CLOSED** · fallback `~onTimer:160` 须进 STATUS/验收 · 2026-10-14 01:17 Asia/Shanghai  
 > **起因：** 总控【TIP-CL CLOSED · 开下一 tip】收口 `95a0d5fe4` · live menu `4671d3ea4` · PASS `86a105307` · D13317 庭内顺手互换齐。请交待批 A · 荐 M · docs-only（拟 D13318 / TIP-CM）。**优先短征日更花样**（真可点/房内可感新机制 · ≠半行 · ≠Cast 粒子打磨主交付）；挂机庭资源环已齐——**勿再叠庭内镜像顺手**（无新硬债证据）。  
 > **上游：** TIP-CL CLOSED live `95a0d5fe4` · D13317；四花+推荐花+拆+换齐；今日推/冲一下/周短征/三冲齐；R1 近战/远程 Cast · R2 EliteCast · R3 BossCast 齐；半行 REJECT `d00ed84bc` **保持否决**  
 > **硬禁：** **零** 半行独批 · **零** sx20 · **零** L13 · **零** K3 live · **零** Pack6/灰印/R · **零抬** AFK 日表/`daily_kills`/`afk.tiers`/`short:5`/伤乘 · **零** Affix densify · **零** P 兼确认 · **零** 第五花料 · **零** 推荐花复读 · **零** Cast 粒子当主交付 · **零** 假开旧日常 · **零** 教裸指令 · **零** 庭内再叠同类顺手无新证据 · **零** 灾厄重开 · **零** 复开 D423
@@ -62,4 +62,4 @@
 - 庭内再叠顺手 · 第五花料 · P 兼确认 · 抬产/抬伤表 · sx20 · Pack6/灰印/R/L13/K3  
 - 重开 calamity · 复开 D423 · 教裸指令 · 假开旧日常 · 一次召唤≥2 / 抬小兵掉落当主交付  
 
-## STATUS: **待批 A** · 荐 M · 拟 D13318 · TIP-CM · 2026-10-14 01:16 Asia/Shanghai
+## STATUS: **已批 A · 方案 M · 全线非 L** · 批 sha `661e73acf` · 拟 D13318 · TIP-CM · 已派怪物 · **勿勾 CLOSED** · fallback `~onTimer:160` 须进 STATUS/验收 · 2026-10-14 01:17 Asia/Shanghai
