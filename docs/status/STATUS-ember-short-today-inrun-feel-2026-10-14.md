@@ -30,3 +30,7 @@
 ## 下步
 - 等测岗抽测：今日本有标记、非今日无；零抬表
 - W1d 选页半行另窗（不可独批）
+
+## 测岗抽测（TIP-CO spot）
+- **PASS** · 2026-10-14 Asia/Shanghai · 证据 `/workspace/tmp/tip-co-today-inrun/` · 详 `STATUS-ember-short-today-inrun-feel-tip-co-spot-2026-10-14.md`
+- live jar `1.65.812-d13320.local` · 今日 sx12 烬枢转厅 · enter/room/settle 三节绿 · W1d 仍不做
