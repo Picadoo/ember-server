@@ -223,9 +223,21 @@ public final class EmberShortRules {
         return spendChaseLine() + spendChaseDayFullHalf(rewardedAfter, dailyCap);
     }
 
-    /** D473: clickable forge chase after rewarded short settle. */
+    /**
+     * TIP-CW D13328: settle「下一环」菜单开法（TrMenu OpenCommand；W1b 薄页）。
+     * 禁教手打 /corerpg p1 shortpath|forge。
+     */
+    public static final String SETTLE_NEXT_LOOP_CMD = "/ember_p1_short_settle";
+    public static final String SETTLE_NEXT_LOOP_LABEL = "[下一环]";
+    public static final String SETTLE_PATH_CMD = "/ember_p1_short_path";
+    public static final String SETTLE_FORGE_CMD = "/ember_p1_forge";
+    public static final String SETTLE_ADVENTURE_CMD = "/ember_p1_adventure";
+    /** FC 清后诚实提示：点路径追，禁教手打 shortpath day。 */
+    public static final String FC_CLEARED_HINT = "§7短征首通已清 · 点路径追改有奖追";
+
+    /** D473 + TIP-CW D13328: clickable forge chase → 菜单开工坊（非 /corerpg p1 forge）. */
     public static String spendChaseButtonLabel() { return "[去工坊]"; }
-    public static String spendChaseButtonCmd() { return "/corerpg p1 forge"; }
+    public static String spendChaseButtonCmd() { return SETTLE_FORGE_CMD; }
     public static String spendChaseButtonHover() { return "强化 / 精工 / 成色 · 材料已在仓"; }
     public static String spendChaseActionBar(int rewardedAfter, int dailyCap) {
         String t = spendChaseTell(rewardedAfter, dailyCap);

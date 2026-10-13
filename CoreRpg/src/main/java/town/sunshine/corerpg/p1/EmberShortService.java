@@ -131,17 +131,20 @@ public final class EmberShortService {
                 try { EmberShortBlankBoost.maybeGrant(p, pd); } catch (Throwable ignored) { } // D7681
                 // D878 day-reward next (FC branch may add more)
                 int left = dailyCap(m) - r.rewardedAfter;
+                // TIP-CW D13328: 下一环开薄页；路径/工坊走菜单；禁 shortpath/forge 裸命令
                 if (left > 0) {
                     town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P() + "§7短征下一环：",
+                            new String[]{EmberShortRules.SETTLE_NEXT_LOOP_LABEL, EmberShortRules.SETTLE_NEXT_LOOP_CMD,
+                                    "再进/路径/工坊", "GREEN"},
                             new String[]{"[再进·" + m.key.toUpperCase() + "]", "/corerpg p1 enter " + m.key,
-                                    "本日还可领 " + left + " 次", "GREEN"},
-                            new String[]{"[工坊]", "/corerpg p1 forge", "花短征料", "GOLD"},
-                            new String[]{"[短征路径]", "/corerpg p1 shortpath", "改追首通/日奖", "AQUA"});
+                                    "本日还可领 " + left + " 次", "AQUA"},
+                            new String[]{"[路径追]", EmberShortRules.SETTLE_PATH_CMD, "改追首通/日奖", "GOLD"});
                 } else {
                     town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P() + "§7本日短征日奖已满：",
-                            new String[]{"[工坊]", "/corerpg p1 forge", "花材料", "GOLD"},
-                            new String[]{"[冒险页]", "/ember_p1_adventure", "换内容", "GREEN"},
-                            new String[]{"[短征路径]", "/corerpg p1 shortpath", "改追", "GRAY"});
+                            new String[]{EmberShortRules.SETTLE_NEXT_LOOP_LABEL, EmberShortRules.SETTLE_NEXT_LOOP_CMD,
+                                    "回选/路径/工坊", "GREEN"},
+                            new String[]{"[冒险页]", EmberShortRules.SETTLE_ADVENTURE_CMD, "换内容", "AQUA"},
+                            new String[]{"[路径追]", EmberShortRules.SETTLE_PATH_CMD, "改追", "GRAY"});
                 }
                 if (r.firstClearPaidNow) { // D697/D743 FC claim → next
                     p.sendMessage(P() + "§a生涯首通包已入账 §7· 材料进仓");
@@ -157,7 +160,7 @@ public final class EmberShortService {
                                 "/corerpg p1 enter " + next.key,
                                 "下一本未领首通 · " + n);
                     } else if (next == null) {
-                        p.sendMessage(P() + "§7短征首通已清 · 可改 /corerpg p1 shortpath day");
+                        p.sendMessage(P() + EmberShortRules.FC_CLEARED_HINT); // TIP-CW D13328 禁教手打
                     }
                     p.sendMessage(P() + EmberShortPath.unpaidFcLine(runs, pd)); // D715
                 }

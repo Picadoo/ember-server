@@ -28,7 +28,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 04:38 Asia/Shanghai
-- [ ] 插件交 settle 入口改菜单 + 清裸指令 + 单测
+- [x] 插件交 settle 入口改菜单 + 清裸指令 + 单测 · W1a `1.65.820-d13328.local` · 2026-10-14 Asia/Shanghai
 - [x] 物品交薄 settle 页 + TrMenu reload · `374a142fd` · TrMenu 79
 - [ ] 抽测：有奖通关可开下一环；再进/路径/工坊真开；无教手打 shortpath；零抬日帽/targets；零改 Cast/Aid；零路径追同题；零 sx20；零半行独档
 

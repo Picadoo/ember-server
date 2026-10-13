@@ -79,7 +79,7 @@ public final class EmberShortPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8短征路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8短征路径：未选 · /corerpg p1 shortpath";
+        if (!valid(id)) return "§8短征路径：未选 · 点路径追";
         return "§e短征路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -258,18 +258,18 @@ public final class EmberShortPath {
             } else p.sendActionBar("§7短征追 · 本路径暂无下一本");
         } catch (Throwable ignored) { }
         if (next == null && id == FC) { // D724
-            p.sendMessage(P + "§7首通已清 · 可改 /corerpg p1 shortpath day");
+            p.sendMessage(P + EmberShortRules.FC_CLEARED_HINT); // TIP-CW D13328 禁教手打
         }
         if (next != null) {
             String cmd = "/corerpg p1 enter " + next.key;
             ConfirmTokens.sendButtons(p, P + "§7下一步：",
                     new String[]{"[进 " + next.key.toUpperCase(Locale.ROOT) + "]", cmd, "按路径进下一本", "GREEN"},
                     new String[]{"[短征选页]", "/ember_p1_short", "自己挑", "AQUA"},
-                    new String[]{"[换一条]", "/corerpg p1 shortpath", "重选", "GRAY"});
+                    new String[]{"[换一条]", EmberShortRules.SETTLE_PATH_CMD, "重选 · 路径追页", "GRAY"});
         } else {
             ConfirmTokens.sendButtons(p, P + "§7下一步：",
                     new String[]{"[短征选页]", "/ember_p1_short", "自己挑", "AQUA"},
-                    new String[]{"[换一条]", "/corerpg p1 shortpath", "重选", "GRAY"});
+                    new String[]{"[换一条]", EmberShortRules.SETTLE_PATH_CMD, "重选 · 路径追页", "GRAY"});
         }
     }
 
