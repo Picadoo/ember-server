@@ -1,6 +1,6 @@
 # RESEARCH · 短征「今日推」轮换可见（日短本选本可感 · 零抬日帽）· 2026-10-13
 
-> **状态：** 待批 A · 荐方案 M · TIP-CD / 拟 **D13309** · docs-only · 2026-10-13 22:01 Asia/Shanghai  
+> **状态：** **CLOSED live** · 批 A·M · D13309 · menu `5611a4337` · PASS `8c4b8ce2d` · 2026-10-13 22:16 Asia/Shanghai  
 > **起因：** 总控【TIP-CC CLOSED】挂机庭强化/升阶/精工/成色四件齐 · tip `7f05e5cd1` · PASS `928545e6a`。下一波交薄 tip：荐短征轮换 或 事件窗（此前策划后置，现可开）；或其它挂机庭/日征乐趣可感。硬禁 sx20 / 抬 AFK 日表 / L13 / K3 live / 菜单诚实空转 / Pack6 / talent ash。  
 > **上游：** TIP-CC CLOSED · D13304–D13308 挂机庭四件齐 · D13305 短征 R2 EliteCast · 多窗 §6 明文后置「今日推短征轮换 / 日短本轮换可见」  
 > **硬禁：** **零抬** `daily_kills`/`afk.tiers` · **零** sx20 · **零** L13/K3/Pack6/天赋/灰印/R · **零** 伤乘/skill_mult · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实空转 / observe 空转 · **零** 假开 `gate_daily` · **零** 改短征日帽/S40–S58/体力
@@ -61,4 +61,4 @@
 - 假写固定「今日=sx01」不按历日轮换 · 改主线 featured 周规则  
 - Pack6 / 天赋 / 灰印 / R / L13 / K3 · 复开 D423 · 假开 `gate_daily` · stage 脏 runtime  
 
-## STATUS: 待批 A · 荐 M · 拟 D13309 · 2026-10-13 22:01 Asia/Shanghai
+## STATUS: CLOSED live · 批 A·M · D13309 · menu `5611a4337` · PASS `8c4b8ce2d` · 2026-10-13 22:16 Asia/Shanghai
