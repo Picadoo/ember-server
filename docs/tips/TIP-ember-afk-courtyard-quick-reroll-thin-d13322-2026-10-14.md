@@ -1,6 +1,6 @@
 # tip · TIP-CQ 挂机庭「顺手洗练」（真 reroll 入口 · ≠第五件花料 · ≠推荐花复读 · ≠半行 · ≠抬表）· 拟 D13322
 
-> **状态：** **CLOSED live** · feat `a342f34cf` · tip `6804ed53a` · jar `1.65.814-d13322.local` · PASS `16998530c` · 批 sha `33d94eb40` · 证据 `/workspace/tmp/tip-cq-afk-reroll/` · 2026-10-14 02:53 Asia/Shanghai
+> **状态：** **勾毕 CLOSED live** · live `e099c02b7` · feat `a342f34cf` · tip `6804ed53a` · jar `1.65.814-d13322.local` · PASS `16998530c` · 批 sha `33d94eb40` · 证据 `/workspace/tmp/tip-cq-afk-reroll/` · 2026-10-14 02:57 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-reroll-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-reroll-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-reroll`  
 > **施工岗（批后）：** 余烬-插件（W1a 返回源）+ 余烬-物品（W1b/c TrMenu）· **不派怪物/地图**（默认）  
 > **硬禁：** 零半行独批 · 零第五件花料 · 零推荐花复读 · 零 P 兼确认 · 零抬日表/改洗练价/pity · 零 Cast/Aid/todayRot/variety 再拧 · 零 W1e 独批 · 零 sx20/L13/K3  
@@ -32,4 +32,4 @@
 - [x] 物品交 L 格 + Open 辅半行 · `6804ed53a` · TrMenu 77
 - [x] 抽测：庭内进洗练→返回庭；价/pity 零 diff；零 sx20；零半行独档 · PASS `16998530c` · 证据 `/workspace/tmp/tip-cq-afk-reroll/`
 
-## STATUS: **CLOSED live** · `a342f34cf` / `6804ed53a` · PASS `16998530c` · D13322 · TIP-CQ · 2026-10-14 02:53 Asia/Shanghai
+## STATUS: **勾毕 CLOSED live** · live `e099c02b7` · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · jar `1.65.814-d13322.local` · 批 `33d94eb40` · D13322 · TIP-CQ · 2026-10-14 02:57 Asia/Shanghai

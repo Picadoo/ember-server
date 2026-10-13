@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13322 · 挂机庭「顺手洗练」· docs-only · ≠第五件花料 · ≠推荐花复读 · ≠半行 · ≠sx20 · ≠抬日表）
 
-> **旁注（CLOSED live · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · 2026-10-14 02:53 Asia/Shanghai）：** tip 待批 · DESIGN [`DESIGN-ember-afk-courtyard-quick-reroll-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-reroll-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-reroll-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-reroll-2026-10-14.md) · backlog `B-afk-courtyard-quick-reroll` · **TIP-CQ** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_core ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
+> **旁注（勾毕 CLOSED live · live `e099c02b7` · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · jar `1.65.814-d13322.local` · 批 sha `33d94eb40` · 2026-10-14 02:57 Asia/Shanghai）：** DESIGN [`DESIGN-ember-afk-courtyard-quick-reroll-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-reroll-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-reroll-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-reroll-2026-10-14.md) · backlog `B-afk-courtyard-quick-reroll` · **TIP-CQ** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_core ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
 
 > **上游结案：** **TIP-CP CLOSED** live `d87c3d89d`（D13321 短征轻量 variety 房内可感齐 · feat `64f08f47b` · jar `1.65.813-d13321.local` · PASS `1696ccd17` · 批 sha `e976fe6d8` · W1e 仍关）。总控连开：优先短征日更/乐趣；挂机庭资源环可扩（≠顺手镜像/第五花/推荐花复读）；Cast+Aid+todayRot+variety(W1a–d) **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）  
-**本窗性质：** tip **CLOSED live** · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · jar `1.65.814-d13322.local` · 拟 D13322 · TIP-CQ · 2026-10-14 02:53 Asia/Shanghai
+**本窗性质：** tip **勾毕 CLOSED live** · live `e099c02b7` · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · jar `1.65.814-d13322.local` · 批 sha `33d94eb40` · 拟 D13322 · TIP-CQ · 2026-10-14 02:57 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-afk-courtyard-quick-reroll-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-reroll-2026-10-14.md) · backlog `B-afk-courtyard-quick-reroll`  
 **打开理由：** 短征日更玩法层已饱和；D13317§6③ 明文后置庭内洗炼；庭内无洗练入口而工坊/AfkForgePath 已认定洗练为产料消耗点。
 
@@ -80,4 +80,4 @@
 
 ---
 
-*选题挂机庭顺手洗练 · tip **APPROVED · 批 A·M** · 已派插件+物品 · 拟 D13322 · TIP-CQ · 勿勾 CLOSED · ≠半行 ≠第五花 ≠推荐花复读。** · 荐 **方案 M** · 拟 D13322 · TIP-CQ · docs-only · 半行 REJECT `d00ed84bc` **保持否决** · ≠关观察 ≠抬日表 ≠sx20 ≠第五件花料 ≠推荐花复读 ≠半行空转。*
+*选题挂机庭顺手洗练 · tip **勾毕 CLOSED live** · live `e099c02b7` · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · jar `1.65.814-d13322.local` · 批 `33d94eb40` · 拟 D13322 · TIP-CQ · ≠半行 ≠第五花 ≠推荐花复读。** · 半行 REJECT `d00ed84bc` **保持否决** · ≠关观察 ≠抬日表 ≠sx20。*

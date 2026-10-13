@@ -1,6 +1,6 @@
 # 余烬 · 挂机庭「顺手洗练」（产→洗炼轨可点 · ≠第五件花料 · ≠推荐花复读 · ≠半行 · ≠抬日表）
 
-STATUS=**CLOSED live** · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · jar `1.65.814-d13322.local` · D13322 · TIP-CQ · 2026-10-14 02:53 Asia/Shanghai
+STATUS=**勾毕 CLOSED live** · live `e099c02b7` · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · jar `1.65.814-d13322.local` · 批 sha `33d94eb40` · D13322 · TIP-CQ · 2026-10-14 02:57 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-reroll-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-reroll-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-reroll-2026-10-14.md`](RESEARCH-ember-afk-courtyard-quick-reroll-2026-10-14.md) · backlog `B-afk-courtyard-quick-reroll` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_rate/event_core/affix_shard ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠改reroll价/pity ≠forgeroll densify**
 
 > **一句话玩家价值：** 挂机庭一点「顺手洗练」进既有词条洗练页——产碎直接喂洗炼轨，返回仍回庭；**不**新开第五花料、**不**抬日产、**不**改洗练价。
@@ -156,8 +156,9 @@ STATUS=**CLOSED live** · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 02:57 Asia/Shanghai | 策划 · **勾毕旁注 CLOSED** · live `e099c02b7` · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · jar `1.65.814-d13322.local` · 批 sha `33d94eb40` · 半行 REJECT `d00ed84bc` **保持否决** · 连开 TIP-CR |
 | 2026-10-14 02:53 Asia/Shanghai | **CLOSED live** · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · jar `1.65.814-d13322.local` · 证据 `/workspace/tmp/tip-cq-afk-reroll/` · W1a–c 齐 |
 | 2026-10-14 02:43 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件+物品 · 勿勾 CLOSED |
 | 2026-10-14 02:40 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CP CLOSED 后连开 · 选题挂机庭顺手洗练 · 拟 D13322 · TIP-CQ · ≠半行 ≠第五花 ≠推荐花复读 ≠Cast/Aid/variety再拧 · **改题有证据**（短征饱和；D13317§6③；afk 无入口；AfkForgePath 已喊 reroll；见 RESEARCH） |
 
-*D13322 **CLOSED live** · `a342f34cf` / `6804ed53a` · PASS `16998530c` · 挂机庭顺手洗练 · TIP-CQ。**已批 A · 方案 M · 全弧非 L** · ≠半行 ≠第五花 ≠推荐花复读 ≠sx20。*
+*D13322 **勾毕 CLOSED live** · live `e099c02b7` · feat `a342f34cf` · tip `6804ed53a` · PASS `16998530c` · jar `1.65.814-d13322.local` · 批 `33d94eb40` · 挂机庭顺手洗练 · TIP-CQ。**已批 A · 方案 M · 全弧非 L** · ≠半行 ≠第五花 ≠推荐花复读 ≠sx20。*
