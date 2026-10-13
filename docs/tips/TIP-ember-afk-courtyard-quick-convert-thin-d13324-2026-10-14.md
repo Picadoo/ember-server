@@ -1,6 +1,6 @@
 # tip · TIP-CS 挂机庭「顺手转化」（真 convert 入口 · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹再拧 · ≠半行 · ≠抬表 · ≠宝石无同构）· 拟 D13324
 
-> **状态：** **抽测 PASS** · W1a–d 齐 · jar `1.65.816-d13324.local` · D13324 · TIP-CS · 全弧非 L · **勿勾 CLOSED**（总控收口）· 2026-10-14 03:28 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `0eb85b785` · tip `b5aea9bc5` · jar `1.65.816-d13324.local` · PASS `372360684` · 批 sha `3ab6a4792` · PAPI `87f15944b` · 证据 `/workspace/tmp/tip-cs-afk-convert/` · 2026-10-14 03:30 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-convert`
 > **施工岗（批后）：** 余烬-插件（W1a 返回源）+ 余烬-物品（W1b/c/d TrMenu）· **不派怪物/地图**（默认）
 > **硬禁：** 零半行独批 · 零第五件花料 · 零推荐花复读 · 零洗练/烙纹再拧 · 零 P 兼确认 · 零抬日表/改转化价/周帽 · 零 Cast/Aid/todayRot/variety 再拧 · 零 W1e 独批 · 零 sx20/L13/K3 · 零庭内宝石/随机锻本窗主交
@@ -38,4 +38,4 @@
 - 短征 Cast/Aid/todayRot/variety 齐 → 不复读
 - 采纳：**面亮 `forge_gap_convert` + forge V live + afk 无格 + 无 CONVERT_FROM**
 
-## STATUS: **抽测 PASS** · feat `0eb85b785` · tip `b5aea9bc5` · jar `1.65.816-d13324.local` · D13324 · TIP-CS · 全弧非 L · **勿勾 CLOSED**（总控收口）· 2026-10-14 03:28 Asia/Shanghai
+## STATUS: **CLOSED live** · `0eb85b785` / `b5aea9bc5` · PASS `372360684` · D13324 · TIP-CS · 2026-10-14 03:30 Asia/Shanghai

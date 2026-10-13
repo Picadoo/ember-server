@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13324 · 挂机庭「顺手转化」· docs-only · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹再拧 · ≠半行 · ≠sx20 · ≠抬日表 · ≠宝石无同构）
 
-> **旁注（已批 A · 方案 M · 2026-10-14 03:20 Asia/Shanghai · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石/随机锻仍后置）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-convert-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-convert-2026-10-14.md) · backlog `B-afk-courtyard-quick-convert` · **TIP-CS** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_core ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠烙纹再拧 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令 ≠庭内宝石本窗（同构未过）**。
+> **旁注（CLOSED live · feat `0eb85b785` · tip `b5aea9bc5` · PASS `372360684` · 2026-10-14 03:30 Asia/Shanghai · 宝石/随机锻仍后置）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-convert-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-convert-2026-10-14.md) · backlog `B-afk-courtyard-quick-convert` · **TIP-CS** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_core ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠烙纹再拧 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令 ≠庭内宝石本窗（同构未过）**。
 
 > **上游结案：** **TIP-CR CLOSED** live `fed2cf6aa`（D13323 挂机庭顺手烙纹齐 · feat `cf35d9948` · tip `ce2f8c95f` · jar `1.65.815-d13323.local` · PASS `d9f70ed9a` · 批 sha `d1004caaf` · 宝石仍后置）。总控连开：优先短征日更/乐趣或庭**新轨**真入口；D13323§6② 宝石须 GEM 同构（庭面已亮 gap）否则改题；Cast+Aid+todayRot+variety+庭内四花+推荐+拆+换+洗练+烙纹 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · 拟 D13324 · TIP-CS · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石/随机锻仍后置 · 2026-10-14 03:20 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `0eb85b785` · tip `b5aea9bc5` · PASS `372360684` · jar `1.65.816-d13324.local` · 拟 D13324 · TIP-CS · 宝石/随机锻仍后置 · 2026-10-14 03:30 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md) · backlog `B-afk-courtyard-quick-convert`
 **打开理由：** 短征日更玩法层已饱和；GEM 同构缺庭面 gap → 改题；庭内无转化入口而战况已亮 convert 仓差、工坊有 live 转化页。
 

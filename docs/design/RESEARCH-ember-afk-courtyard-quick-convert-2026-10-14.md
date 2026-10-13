@@ -1,6 +1,6 @@
 # RESEARCH · 挂机庭「顺手转化」（产→每周转化轨可点 · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹再拧 · ≠半行 · ≠抬表 · ≠宝石无同构）· 2026-10-14
 
-> **状态：** **已批 A · 方案 M** · 拟 D13324 · TIP-CS · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 2026-10-14 03:20 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `0eb85b785` · tip `b5aea9bc5` · PASS `372360684` · jar `1.65.816-d13324.local` · TIP-CS · 2026-10-14 03:30 Asia/Shanghai
 > **起因：** 总控【连开·TIP-CS / 拟 D13324】上游 TIP-CR CLOSED live `fed2cf6aa`（feat `cf35d9948` · tip `ce2f8c95f` · jar `1.65.815-d13323.local` · PASS `d9f70ed9a` · 挂机庭顺手烙纹齐 · 宝石仍后置）。请立刻交下一档硬债 docs-only 待批 A · 荐 M。**优先短征日更/乐趣**（真可点或房内可感）；或挂机庭**新轨**真入口；D13323§6②「庭内顺手宝石」须另证 AfkForgePath GEM 同构（路径已喊、庭面已亮 gap、afk 无格、forge 有 live 菜单、缺 `*_FROM[afk]`）才可交；无同构则改题。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内四花+推荐+拆+换+洗练+烙纹 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-CR CLOSED live `fed2cf6aa` / feat `cf35d9948` / tip `ce2f8c95f` / PASS `d9f70ed9a` / jar `1.65.815-d13323.local` / 批 `d1004caaf` · D13323
 > **硬禁：** **零** 半行独批 · **零** 第五花/推荐花复读 · **零** 洗练/烙纹再拧 · **零** Cast粒子打磨 · **零** Aid再拧 · **零** todayRot/W1e独批 · **零** 抬 event_rate/event_core/affix_shard · **零** 新 variety kind · **零** 完整 variety 经济 · **零** sx20 · **零** 抬日表/伤表/S表 · **零** Pack6 · **零** 开R/K3 · **零** 关观察 · **零** 灾厄重开 · **零** 教裸指令 · **零** stage脏runtime · **零** 改 convert 周帽/价
@@ -64,4 +64,4 @@
 - 只 Open/lore 半行无 C 格 · 第五件花料 · 推荐花复读 · 洗练/烙纹再拧 · 庭内顺手宝石（同构未过）· 抬产/改转化价/周帽
 - Cast/Aid/todayRot/variety 再拧 · sx20 · Pack6/灰印/R/L13/K3 · 灾厄 · 教裸指令 · stage 脏 runtime
 
-## STATUS: **已批 A · 方案 M** · 拟 D13324 · TIP-CS · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 2026-10-14 03:20 Asia/Shanghai
+## STATUS: **CLOSED live** · `0eb85b785` / `b5aea9bc5` · PASS `372360684` · D13324 · TIP-CS · 2026-10-14 03:30 Asia/Shanghai

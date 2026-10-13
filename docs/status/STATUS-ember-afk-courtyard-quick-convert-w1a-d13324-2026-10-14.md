@@ -28,3 +28,8 @@
 
 ## 下步
 - 物品 W1b/c/d 并行 · 测岗抽测等 live
+
+## 测岗抽测（TIP-CS spot）
+- **PASS** · 2026-10-14 03:30 Asia/Shanghai · 证据 `/workspace/tmp/tip-cs-afk-convert/` · 详 `STATUS-ember-afk-courtyard-quick-convert-tip-cs-spot-d13324-2026-10-14.md`
+- live jar `1.65.816-d13324.local` · C→convert · 返回挂机庭/工坊双路径 · EeUuRrQqPDWwLlGgSsCV 仍在
+
