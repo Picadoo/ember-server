@@ -1,6 +1,6 @@
 # 余烬 · 房间事件「冲一下」可感（事件窗小乐趣 · 零抬率/Pack · ≠sx20）
 
-STATUS=**已批 A · 方案 M · D13310** · 总控 2026-10-13 22:20 Asia/Shanghai · TIP-CE · 2026-10-13 22:18 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-room-event-chase-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-room-event-chase-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-room-event-chase-visible-2026-10-13.md`](RESEARCH-ember-room-event-chase-visible-2026-10-13.md) · backlog `B-room-event-chase-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 event_rate/event_core/NEED ≠Pack6 ≠重开 calamity join ≠复开 D423 ≠教裸指令**
+STATUS=**CLOSED live · 批 A · 方案 M · D13310** · jar `1.65.807-d13310b.local` · menu `1b4a9d78e` · PASS `abc14a205` · 总控勾毕 2026-10-13 23:05 Asia/Shanghai · TIP-CE · 2026-10-13 22:18 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-room-event-chase-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-room-event-chase-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-room-event-chase-visible-2026-10-13.md`](RESEARCH-ember-room-event-chase-visible-2026-10-13.md) · backlog `B-room-event-chase-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 event_rate/event_core/NEED ≠Pack6 ≠重开 calamity join ≠复开 D423 ≠教裸指令**
 
 > **一句话玩家价值：** 打开冒险就能看见房间事件保底，一点进「该冲的已通本」——保底就绪时更有冲劲；**不**抬出率、**不**扩 Pack、**不**重开灾厄闸。
 
