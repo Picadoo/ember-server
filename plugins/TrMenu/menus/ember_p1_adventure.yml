@@ -1,4 +1,5 @@
 # Open 挂 event_soft_hope (D729) + drop_q_hope（零改掉率）
+# TIP-CH / D13313: 今日三冲 P · today_triple* · enter today-triple · 零抬日帽/short:5/event_rate
 # TIP-CE / D13310: 房间事件冲一下 E · event_chase*/soft_ready · enter event-chase · 零抬率
 # D616: Open/目标族区挂 mapid_board 图身份一览
 # D12251: 每图 L2 mapid_q0N → menuLine 短串（这图掉 / 图鉴进度）
@@ -27,7 +28,7 @@ Layout:
   - '#########'
   - '#TVXSAHK#'
   - '#1234567#'
-  - '#WsEb u n'
+  - '#WsEbPu n'
   - '#GMRFZCYD'
   - '####B####'
 
@@ -36,6 +37,7 @@ Events:
     - 'tell: §6这图掉什么：§f看各 Q 第二行 · 图鉴进度 · 不锁通关'
     - 'tell: §e图身份板：§f%corerpg_p1_mapid_board%'
     - 'tell: §e冲一下见本页 E：§f%corerpg_p1_event_soft_hope%'
+    - 'tell: §e今日三冲见本页 P：§f%corerpg_p1_today_triple_name%'
     - 'tell: §e掉落成色希望：§f%corerpg_p1_drop_q_hope%'
     - 'command: corerpg p1 setfocus nudge'
     - 'sound: BLOCK_CHEST_OPEN-1-0'
@@ -144,6 +146,47 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg p1 enter event-chase'
+        - close
+
+
+  # TIP-CH / D13313: 今日三冲（第三行空位 P · 保留 W/s/E/b/u/n · 不撤 H/E）
+  P:
+    icons:
+      - condition: 'check papi %corerpg_p1_today_triple_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7今日三冲 §8（暂无推荐）'
+          lore:
+            - '§c暂无可用冲口'
+            - '§7今日推：§f%corerpg_p1_sx_today_name% §7· %corerpg_p1_sx_today_day_line%'
+            - '§7冲一下：§f%corerpg_p1_event_chase_name%'
+            - '§7本周短征：§f%corerpg_p1_goal_short% §8· %corerpg_p1_goal_short_chase_name%'
+      - condition: 'check papi %corerpg_stamina% < 30'
+        priority: 2
+        display:
+          material: iron bars
+          name: '§7今日三冲 §8（体力不足）'
+          lore:
+            - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§7今日推：§f%corerpg_p1_sx_today_name% §7· %corerpg_p1_sx_today_day_line%'
+            - '§7冲一下：§f%corerpg_p1_event_chase_name%'
+            - '§7本周短征：§f%corerpg_p1_goal_short% §8· %corerpg_p1_goal_short_chase_name%'
+            - '§e推荐：§f%corerpg_p1_today_triple_name%'
+    update: 20
+    display:
+      material: compass
+      name: '§e今日三冲'
+      lore:
+        - '§7今日推：§f%corerpg_p1_sx_today_name% §7· %corerpg_p1_sx_today_day_line%'
+        - '§7冲一下：§f%corerpg_p1_event_chase_name%'
+        - '§7本周短征：§f%corerpg_p1_goal_short% §8· %corerpg_p1_goal_short_chase_name%'
+        - '§e推荐：§f%corerpg_p1_today_triple_name%'
+        - '§e➥ §f左键：冲推荐'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter today-triple'
         - close
 
   R:
