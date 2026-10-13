@@ -4,7 +4,7 @@
 > **DESIGN** [`DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md`](../design/DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-div-soft-reward-claim`  
 > **施工岗（批后）：** 余烬-插件（软目标 claim NI + PAPI）+ 余烬-物品（选页 L 可领态）· **不派怪物/地图**  
 > **硬禁：** 零半行独批 · 零日差本同题 · 零路径追同题 · 零 settle下一环同题 · 零今日推/周目标/三冲复读主交 · 零 Cast 粒子主交付 · 零拧 EliteAid/BossAid · 零 todayRot/W1e 独批 · 零 variety 再拧/完整经济 · 零 sx20 · 零抬日表/伤表/S表/targets.short · 零写入 weekly_goals · 零庭内旁路再拧 · 零 densify · 零教裸指令主 UI · 零改 ShortPath resolve / enter short-div 谓词  
-> **ancestor：** TIP-CW **已批 A·M + PASS** feat `8c2dc7d95` · tip `374a142fd` · PASS `72e8e6a4e` · jar `1.65.821-d13328b.local` · 批 sha `e73f5847e`（总控正在 CLOSED · origin 尚无 CLOSED live docs sha）
+> **ancestor：** TIP-CW CLOSED live `71db92dfb` · feat `8c2dc7d95` · tip `374a142fd` · PASS `72e8e6a4e` · jar `1.65.821-d13328b.local` · 批 sha `e73f5847e`
 
 ## 一句话
 今日有奖不同本满软目标 3 → 一日一次骨尘×2，选页 L 一点领；日帽与周目标不动。

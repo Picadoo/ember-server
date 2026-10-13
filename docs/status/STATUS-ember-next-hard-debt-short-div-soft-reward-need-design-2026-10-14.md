@@ -2,7 +2,7 @@
 
 > **旁注（待批 A · 荐方案 M · 2026-10-14 07:48 Asia/Shanghai · docs-only · 批准前禁改 YAML/Java · 勿施工 · 勿勾本窗 CLOSED）：** tip **待批 A · 荐方案 M** · DESIGN [`DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md`](../design/DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-div-soft-reward-claim-2026-10-14.md`](../design/RESEARCH-ember-short-div-soft-reward-claim-2026-10-14.md) · backlog `B-short-div-soft-reward-claim` · **TIP-CX** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠日差本同题 ≠路径追同题 ≠settle下一环同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬 targets.short ≠写入 weekly_goals**。
 
-> **上游结案：** **TIP-CW** 短征结算下一环 · **已批 A·M + 测岗 PASS**（feat `8c2dc7d95` · tip `374a142fd` · PASS `72e8e6a4e` · jar `1.65.821-d13328b.local` · 批 sha `e73f5847e` · **总控正在 CLOSED · origin 尚无 CLOSED live docs sha** · **结算下一环同题勿再交**）。总控派 TIP-CX：优先短征日循环；可选 **soft-target 日分流极薄有奖**（此前零经济）。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内全弧+今日推/冲一下/周短征/三冲+日差本可冲+路径追+settle下一环 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
+> **上游结案：** **TIP-CW CLOSED** live `71db92dfb`（D13328 短征结算下一环齐 · feat `8c2dc7d95` · tip `374a142fd` · jar `1.65.821-d13328b.local` · PASS `72e8e6a4e` · 批 sha `e73f5847e` · **结算下一环同题勿再交**）。总控派 TIP-CX：优先短征日循环；可选 **soft-target 日分流极薄有奖**（此前零经济）。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内全弧+今日推/冲一下/周短征/三冲+日差本可冲+路径追+settle下一环 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
 **本窗性质：** tip **待批 A · 荐方案 M** · 拟 D13329 · TIP-CX · docs-only · 批准前禁改 YAML/Java · 2026-10-14 07:48 Asia/Shanghai
@@ -75,7 +75,7 @@
 | RESEARCH | [`RESEARCH-ember-short-div-soft-reward-claim-2026-10-14.md`](../design/RESEARCH-ember-short-div-soft-reward-claim-2026-10-14.md) |
 | 薄 tip | [`TIP-ember-short-div-soft-reward-claim-thin-d13329-2026-10-14.md`](../tips/TIP-ember-short-div-soft-reward-claim-thin-d13329-2026-10-14.md) |
 | backlog | `B-short-div-soft-reward-claim` |
-| 上游 | TIP-CW 已批 A·M + PASS feat `8c2dc7d95` · tip `374a142fd` · PASS `72e8e6a4e` · jar `1.65.821-d13328b.local` · 批 sha `e73f5847e`（总控正在 CLOSED）；半行 REJECT `d00ed84bc` 保持否决 |
+| 上游 | TIP-CW CLOSED live `71db92dfb` · feat `8c2dc7d95` · tip `374a142fd` · PASS `72e8e6a4e` · jar `1.65.821-d13328b.local` · 批 sha `e73f5847e` · D13328；半行 REJECT `d00ed84bc` 保持否决 |
 
 ---
 
