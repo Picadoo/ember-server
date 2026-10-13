@@ -709,30 +709,20 @@ public final class EmberAfkService implements Listener {
 
     /**
      * Legacy AFK monsters (MM spawners / natural) are removed while P1 auto-combat is on; own mobs stay.
-     * Watchdog: never full-world {@code getLivingEntities()} — one active Fight player nearby (r=48, cap≤32)
-     * per call, round-robin via {@link #purgeCursor}.
+     * Watchdog fix: never call {@code w.getLivingEntities()} (full-world scan). Instead limit to one online
+     * player's nearby radius per tick-call (round-robin via {@link #purgeCursor}).
      */
     private void purgeLegacy(World w) {
-        if (fights.isEmpty()) return;
-        List<Player> fighters = new ArrayList<Player>();
-        for (Fight f : fights.values()) {
-            Player p = Bukkit.getPlayer(f.u);
-            if (p != null && p.isOnline() && p.getWorld() == w) fighters.add(p);
-        }
-        if (fighters.isEmpty()) return;
-        final double r = 48.0;
-        final int cap = 32;
-        int removed = 0;
-        Player p = fighters.get(Math.floorMod(purgeCursor++, fighters.size()));
+        List<Player> players = w.getPlayers();
+        if (players.isEmpty()) return;
+        double r = Math.max(24.0, leash + spawnRadius + 8.0);
+        int i = Math.floorMod(purgeCursor++, players.size());
+        Player p = players.get(i);
         for (Entity e : p.getNearbyEntities(r, r, r)) {
-            if (removed >= cap) break;
             if (!(e instanceof LivingEntity)) continue;
             LivingEntity le = (LivingEntity) e;
             if (mobs.containsKey(le.getUniqueId())) continue;
-            if (le instanceof Monster || le instanceof Slime) {
-                le.remove();
-                removed++;
-            }
+            if (le instanceof Monster || le instanceof Slime) le.remove();
         }
     }
 
