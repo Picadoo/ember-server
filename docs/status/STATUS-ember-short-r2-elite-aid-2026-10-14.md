@@ -79,6 +79,22 @@
 | V4 无抬表/无 sx20/无半行 | **PASS** |
 | V5 SoftHit/掉落保留 | **PASS** |
 
+## 测岗联验（TIP-CN spot · 2026-10-14 CST）
+
+| ID | 结果 | 证据 |
+|----|------|------|
+| V0 Stage2 三开 · daily_kills=2400 · ×0.97 | **PASS** | `00-switches-pre.json` |
+| V1 EliteAid×19 · health{h=<60} · CD9999 · summon1 · Elite ~onDamaged · SoftHit+EliteCast 保留 | **PASS** | `10-static.json` |
+| V1 BossAid/Warden 未拧 · Cast 数值未拧 · 零 sx20 | **PASS** | `10-static.json` · tip diff 仅 Skills 追加 + Elite +1 行 |
+| V1 mm reload 189/143 | **PASS** | `05-mm-reload.json` · 01:39/复测 pin |
+| V2 sx01 喊「精英添头」+场上+1 R1 · secondAid=0 · EliteCast 仍放 | **PASS** | `72-sx01-blade.json` · 喊话「【烬门】精英添头——先清！」· newTypes=[zombie] |
+| V2 sx07 同口径 | **PASS** | `72-sx07-blade.json` · 「【烬塔】精英添头——先清！」· +1 zombie · CD0 · 督卫塔冠轻坠 |
+| V8 gate_daily=no | **PASS** | `08-gate.json` |
+
+**裁决：** PASS · 证据目录 `/workspace/tmp/tip-cn-elite-aid/` · RESULT.txt=PASS  
+**旁注：** 握刃测须 `corerpg p1 give` 发 ember_v1 刃（`ni give gear_ember_blade` 无 P1 属性·钻石剑不吃伤）；条件口径 `health{h=<60}`（Elite HP120）对齐 BossAid `h=<120`。
+
+
 ## tip sha
 
-
+`021d8e351`
