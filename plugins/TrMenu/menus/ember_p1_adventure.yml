@@ -1,4 +1,5 @@
 # Open 挂 event_soft_hope (D729) + drop_q_hope（零改掉率）
+# TIP-CE / D13310: 房间事件冲一下 E · event_chase*/soft_ready · enter event-chase · 零抬率
 # D616: Open/目标族区挂 mapid_board 图身份一览
 # D12251: 每图 L2 mapid_q0N → menuLine 短串（这图掉 / 图鉴进度）
 # D456: 签名获取半行 %corerpg_p1_sig_acq% · 未出仍拿徽记 · 零改掉率
@@ -26,7 +27,7 @@ Layout:
   - '#########'
   - '#TVXSAHK#'
   - '#1234567#'
-  - '#Ws b u n'
+  - '#WsEb u n'
   - '#GMRFZCYD'
   - '####B####'
 
@@ -34,7 +35,7 @@ Events:
   Open:
     - 'tell: §6这图掉什么：§f看各 Q 第二行 · 图鉴进度 · 不锁通关'
     - 'tell: §e图身份板：§f%corerpg_p1_mapid_board%'
-    - 'tell: §e房间事件保底：§f%corerpg_p1_event_soft_hope%'
+    - 'tell: §e冲一下见本页 E：§f%corerpg_p1_event_soft_hope%'
     - 'tell: §e掉落成色希望：§f%corerpg_p1_drop_q_hope%'
     - 'command: corerpg p1 setfocus nudge'
     - 'sound: BLOCK_CHEST_OPEN-1-0'
@@ -90,6 +91,60 @@ Icons:
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
+
+
+  # TIP-CE / D13310: 房间事件 · 冲一下（第三行空位 E · 保留 W/s/b/u/n）
+  E:
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1 and check papi %corerpg_p1_q02done% < 1 and check papi %corerpg_p1_q03done% < 1 and check papi %corerpg_p1_q04done% < 1 and check papi %corerpg_p1_q05done% < 1 and check papi %corerpg_p1_q06done% < 1 and check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7房间事件 · 冲一下 §8（无已通普通）'
+          lore:
+            - '§c未解锁：先通任意主线普通本'
+            - '§7仅已通普通重打出事件 · 全未通无冲口'
+            - '§e%corerpg_p1_event_soft_hope%'
+      - condition: 'check papi %corerpg_stamina% < 30'
+        priority: 2
+        display:
+          material: iron bars
+          name: '§7房间事件 · 冲一下 §8（体力不足）'
+          lore:
+            - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§7冲图：§f%corerpg_p1_event_chase_name%'
+            - '§e%corerpg_p1_event_soft_hope%'
+            - '§8仅已通普通重打出事件'
+      - condition: 'check papi %corerpg_p1_event_soft_ready% >= 1'
+        priority: 3
+        display:
+          material: fire charge
+          shiny: true
+          name: '§e房间事件 · 冲一下'
+          lore:
+            - '§e%corerpg_p1_event_soft_hope%'
+            - '§7冲图：§f%corerpg_p1_event_chase_name%'
+            - '§8仅已通普通重打出事件'
+            - '§e➥ §f点击进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 enter event-chase'
+            - close
+    update: 20
+    display:
+      material: fire charge
+      name: '§e房间事件 · 冲一下'
+      lore:
+        - '§e%corerpg_p1_event_soft_hope%'
+        - '§7冲图：§f%corerpg_p1_event_chase_name%'
+        - '§8仅已通普通重打出事件'
+        - '§e➥ §f点击进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter event-chase'
+        - close
 
   R:
     icons:
