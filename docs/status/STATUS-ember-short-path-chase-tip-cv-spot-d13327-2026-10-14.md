@@ -1,7 +1,7 @@
 # 状态 · TIP-CV 短征选页「路径追」（Icon 0 + 薄页）抽测
 
 **裁决：** **PASS** · feat `c31c780a9` · tip `a206b9893` · 批 `ac2889160` · jar `1.65.819-d13327.local` · 证据 `/workspace/tmp/tip-cv-short-path/`  
-**范围：** `ember_p1_short` Layout `#I0H B Z#` · Icon `0`「路径追」→ 薄页 `ember_p1_short_path` · 三偏好 fc/day/late + clear · `enter short-path` · PAPI `short_path*` · 灰态未选/无 resolve/体力不足 · Open 辅半行 · **未撤** D今日推 / F本周短征 / L日差 / 十九本 · **零改** 日帽/targets.short/Cast/Aid/variety/short_div*/sx20 · Stage2 未拧 · bv123 · gate_daily=no · ≠关观察 · **tip 勿勾 CLOSED**（总控收口）
+**范围：** `ember_p1_short` Layout `#I0H B Z#` · Icon `0`「路径追」→ 薄页 `ember_p1_short_path` · 三偏好 fc/day/late + clear · `enter short-path` · PAPI `short_path*` · 灰态未选/无 resolve/体力不足 · Open 辅半行 · **未撤** D今日推 / F本周短征 / L日差 / 十九本 · **零改** 日帽/targets.short/Cast/Aid/variety/short_div*/sx20 · Stage2 未拧 · bv123 · gate_daily=no · ≠关观察 · **勾毕 CLOSED live**（总控收口 · live `f3defd0bb` · 2026-10-14 04:33）
 
 ## 必验
 
@@ -18,7 +18,7 @@
 
 - TrMenu reload **78** 已落地；菜单 live=repo short md5 `e08cb138…` · path md5 `244b047c…`
 - jar sha256 `197d6d3e7cbc…` 与 plugins/ + server-runtime/ 一致 · HEAD 测前 `a167a1523`
-- 32/32 PASS · tip **未勾 CLOSED**（总控收口）
+- 32/32 PASS · tip **勾毕 CLOSED live**（总控收口 · `f3defd0bb`）
 - V4 初跑 harness 误报 `short_div_touched`（feat 注释/路由表旁注 short_div* 键名）；已用 `00-feat-zero-raise-cleared.json` 澄清：无 DayDiv/yml/Cast/Aid 文件改动
 - 对照 TIP-CU L日差 / TIP-CD D今日推 / TIP-CG F周冲：本票 = 路径偏好追（ShortPath resolve 复用）
 
