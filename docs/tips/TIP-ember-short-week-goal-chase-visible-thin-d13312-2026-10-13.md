@@ -1,6 +1,6 @@
 # tip · TIP-CG 短征选页「本周短征可冲」（≠抬目标数 · ≠sx20）· 拟 D13312
 
-> **状态：** CLOSED live · 批 **A · 方案 M** · jar `1.65.809-d13312b.local` · 插件 hotfix `e0be3251f` · 物品 `0abdb2746` · TrMenu reload 77 · PASS `20907456a` · 2026-10-13 23:52 Asia/Shanghai · **勾毕**  
+> **状态：** CLOSED live · 批 **A · 方案 M** · jar `1.65.809-d13312b.local` · 插件 hotfix `e0be3251f` · 物品 `0abdb2746` · TrMenu reload 77 · PASS `20907456a` · 2026-10-13 23:52 Asia/Shanghai · **勾毕** · 策划旁注 23:54  
 > **DESIGN** [`DESIGN-ember-short-week-goal-chase-visible-2026-10-13.md`](../design/DESIGN-ember-short-week-goal-chase-visible-2026-10-13.md) · RESEARCH 同日 · backlog `B-short-week-goal-chase-visible`  
 > **施工岗（批后）：** 余烬-插件（薄 chase PAPI + enter `short-goal`）+ 余烬-物品（TrMenu F 格）· **不派怪物/地图**  
 > **硬禁：** 零抬 `weekly_goals.targets.short`/徽/日帽 · 零 sx20/L13/K3 · 零第五件花料 · 零只半行无进本
