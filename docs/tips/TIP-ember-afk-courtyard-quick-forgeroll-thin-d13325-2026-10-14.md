@@ -1,6 +1,6 @@
 # tip · TIP-CT 挂机庭「顺手随机锻」（真 forgeroll 入口 · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹/转化再拧 · ≠半行 · ≠抬表 · ≠宝石无同构 · ≠densify）· 拟 D13325
 
-> **状态：** **待批 A** · 荐方案 **M** · 拟 D13325 · TIP-CT · 2026-10-14 03:32 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · 拟 D13325 · TIP-CT · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石仍后置 · 零 densify · 2026-10-14 03:35 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-forgeroll`
 > **施工岗（批后）：** 余烬-插件（W1a 返回源）+ 余烬-物品（W1b/c/d TrMenu）· **不派怪物/地图**（默认）
 > **硬禁：** 零半行独批 · 零第五件花料 · 零推荐花复读 · 零洗练/烙纹/转化再拧 · 零 P 兼确认 · 零抬日表/改 forgeroll 价权重 · 零 Cast/Aid/todayRot/variety 再拧 · 零 W1e 独批 · 零 sx20/L13/K3 · 零庭内宝石本窗主交 · 零 densify
@@ -28,7 +28,7 @@
 - **L** = 仅 TrMenu `menu: ember_p1_forgeroll`（返回落工坊）· **默认不批 L**
 
 ## 验收（批后施工）
-- [ ] 总控批 A·M
+- [x] 总控批 A·M · 2026-10-14 03:35 Asia/Shanghai
 - [ ] 插件交 afk 返回源
 - [ ] 物品交 O 格 + forgeroll/forge 返回动态 + Open 辅半行
 - [ ] 抽测：庭内进随机锻→返回庭；价/权重 零 diff；零 sx20；零半行独档
@@ -38,4 +38,4 @@
 - 短征 Cast/Aid/todayRot/variety 齐 → 不复读
 - 采纳：**D13324§6③ 同构四项齐**（面亮 `forge_gap_roll` + afk 无格 + forge F live + 无 FORGEROLL_FROM）
 
-## STATUS: **待批 A** · 荐 **方案 M** · 拟 D13325 · TIP-CT · 2026-10-14 03:32 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · 拟 D13325 · TIP-CT · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 2026-10-14 03:35 Asia/Shanghai

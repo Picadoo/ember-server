@@ -1,6 +1,7 @@
 # 余烬 · 挂机庭「顺手随机锻」（产→旁路随机锻轨可点 · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹/转化再拧 · ≠半行 · ≠抬日表 · ≠宝石无同构 · ≠forgeroll densify）
+| 2026-10-14 03:35 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石仍后置 · 零 densify |
 
-STATUS=**待批 A** · 荐方案 **M** · 拟 D13325 · TIP-CT · 2026-10-14 03:32 Asia/Shanghai
+STATUS=**已批 A · 方案 M** · 拟 D13325 · TIP-CT · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石仍后置 · 零 densify · 2026-10-14 03:35 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-forgeroll-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-forgeroll-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-forgeroll-2026-10-14.md`](RESEARCH-ember-afk-courtyard-quick-forgeroll-2026-10-14.md) · backlog `B-afk-courtyard-quick-forgeroll` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_rate/event_core/affix_shard ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠烙纹再拧 ≠转化再拧 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠改convert周帽/价 ≠forgeroll densify/抬C22 ≠庭内宝石本窗（同构未过）**
 
 > **一句话玩家价值：** 挂机庭一点「顺手随机锻」进既有旁路随机锻页——产印记/胚/币直接喂随机锻（含下限），返回仍回庭；**不**新开第五花料、**不**抬日产、**不**改 forgeroll 价/权重。
@@ -56,9 +57,10 @@ STATUS=**待批 A** · 荐方案 **M** · 拟 D13325 · TIP-CT · 2026-10-14 03:
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 插件 afk 返回源必做；W1b 庭内 O 格必做；W1c forgeroll/forge 返回动态必做；W1d Open 辅半行同批；见 §3）
+- [x] **方案 M**（W1a 插件 afk 返回源必做；W1b 庭内 O 格必做；W1c forgeroll/forge 返回动态必做；W1d Open 辅半行同批；见 §3）
 - [ ] 或勾 **方案 L**（仅 menu 开 forgeroll；返回落工坊）· **本窗默认不批 L**
-- [ ] 否决 A（只半行）/ W（抬表/sx20/宝石主交/再拧/第五花/densify）
+- [x] 否决 A（只半行）/ W（抬表/sx20/宝石主交/再拧/第五花/densify）
+- [x] 批注：总控批 A·M · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石仍后置 · 零 densify · 2026-10-14 03:35 Asia/Shanghai
 
 ---
 
@@ -162,4 +164,4 @@ STATUS=**待批 A** · 荐方案 **M** · 拟 D13325 · TIP-CT · 2026-10-14 03:
 |----|-----|
 | 2026-10-14 03:32 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CS CLOSED 后连开 · 选题挂机庭顺手随机锻 · 拟 D13325 · TIP-CT · ≠半行 ≠第五花 ≠洗练/烙纹/转化再拧 ≠Cast/Aid/variety再拧 · **改题有证据**（短征饱和；GEM 仍缺庭面 gap；随机锻同构四项齐；见 RESEARCH） |
 
-*D13325 **待批 A** · 荐 **方案 M** · 挂机庭顺手随机锻 · TIP-CT。**批 A ≠ 施工** · ≠半行 ≠第五花 ≠洗练/烙纹/转化再拧 ≠宝石本窗 · ≠sx20 · ≠densify。*
+*D13325 **已批 A · 方案 M** · 挂机庭顺手随机锻 · TIP-CT。**全弧非 L** · ≠半行 ≠第五花 ≠洗练/烙纹/转化再拧 ≠宝石本窗 · ≠sx20 · ≠densify · 2026-10-14 03:35 Asia/Shanghai*

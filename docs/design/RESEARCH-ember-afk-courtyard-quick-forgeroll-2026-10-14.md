@@ -1,6 +1,6 @@
 # RESEARCH · 挂机庭「顺手随机锻」（产→旁路随机锻轨可点 · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹/转化再拧 · ≠半行 · ≠抬表 · ≠宝石无同构 · ≠forgeroll densify）· 2026-10-14
 
-> **状态：** **待批 A** · 荐方案 **M** · 拟 D13325 · TIP-CT · 2026-10-14 03:32 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · 拟 D13325 · TIP-CT · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 2026-10-14 03:35 Asia/Shanghai
 > **起因：** 总控【连开·TIP-CT / 拟 D13325】上游 TIP-CS CLOSED live `00fae3f34`（feat `0eb85b785` · tip `b5aea9bc5` · jar `1.65.816-d13324.local` · PASS `372360684` · 挂机庭顺手转化齐 · 宝石/随机锻仍后置）。请立刻交下一档硬债 docs-only 待批 A · 荐 M。**优先短征日更/乐趣**（真可点或房内可感）；或挂机庭**新轨**真入口；D13324§6③「庭内顺手随机锻」须另证（面亮 `forge_gap_roll`、afk 无格、forge 有 live、缺 FROM）才可交；宝石仍须庭面先亮 gem gap。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内四花+推荐+拆+换+洗练+烙纹+转化 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-CS CLOSED live `00fae3f34` / feat `0eb85b785` / tip `b5aea9bc5` / PASS `372360684` / jar `1.65.816-d13324.local` / 批 `3ab6a4792` · D13324
 > **硬禁：** **零** 半行独批 · **零** 第五花/推荐花复读 · **零** 洗练/烙纹/转化再拧 · **零** Cast粒子打磨 · **零** Aid再拧 · **零** todayRot/W1e独批 · **零** 抬 event_rate/event_core/affix_shard · **零** 新 variety kind · **零** 完整 variety 经济 · **零** sx20 · **零** 抬日表/伤表/S表 · **零** Pack6 · **零** 开R/K3 · **零** 关观察 · **零** 灾厄重开 · **零** 教裸指令 · **零** stage脏runtime · **零** 改 convert 周帽/价 · **零** forgeroll densify/抬 C22 表
@@ -63,4 +63,4 @@
 - 只 Open/lore 半行无 O 格 · 第五件花料 · 推荐花复读 · 洗练/烙纹/转化再拧 · 庭内顺手宝石（同构未过）· 抬产/改 forgeroll 价权重
 - Cast/Aid/todayRot/variety 再拧 · sx20 · Pack6/灰印/R/L13/K3 · 灾厄 · 教裸指令 · stage 脏 runtime
 
-## STATUS: **待批 A** · 荐 **方案 M** · 拟 D13325 · TIP-CT · 2026-10-14 03:32 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · 拟 D13325 · TIP-CT · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 2026-10-14 03:35 Asia/Shanghai
