@@ -1,6 +1,6 @@
 # RESEARCH · 挂机庭「顺手成色」（庭内第四件可感 · 零抬产）· 2026-10-13
 
-> **状态：** 待批 A · 荐方案 M · TIP-CC / 拟 **D13308** · docs-only · 2026-10-13 21:50 Asia/Shanghai  
+> **状态：** **勾毕 · CLOSED live** · 批 A·M · D13308 · tip `7f05e5cd1` · PASS `928545e6a` · 2026-10-13 21:57 Asia/Shanghai  
 > **起因：** 总控【连开】TIP-CB live `fc94b0561`。挂机庭强化/升阶/精工三件齐。下一薄 tip：荐顺手成色 或 其它乐趣系统（日短本轮换可见/事件窗小乐趣）；禁 sx20/抬表/诚实空转/L13/K3。  
 > **上游：** TIP-CB CLOSED live menu `fc94b0561`（D13307 顺手精工）· TIP-CA `68544f966`（升阶）· TIP-BY `e214b0399`（强化）· D13304/D13306/D13307§6#1 明文后置「庭内顺手成色」  
 > **硬禁：** **零抬** `daily_kills`/`afk.tiers` · **零** sx20 · **零** L13/K3/Pack6/天赋/灰印/R · **零** 伤乘/skill_mult · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实空转 / observe 空转 · **零** 假开 `gate_daily` · **零** 改 UpgradeRules 价表 · **禁止**用拼接 gap 串做数值条件
@@ -67,4 +67,4 @@
 - 复开 D423 · 假开 `gate_daily` · 教手打指令 · stage 脏 runtime  
 - 发明 `recipe_gap_quality` 或用拼接串做数值条件  
 
-## STATUS: 待批 A · 荐 M · 拟 D13308 · 2026-10-13 21:50 Asia/Shanghai
+## STATUS: **勾毕 · CLOSED live** · 批 A·M · D13308 · tip `7f05e5cd1` · PASS `928545e6a` · 2026-10-13 21:57 Asia/Shanghai
