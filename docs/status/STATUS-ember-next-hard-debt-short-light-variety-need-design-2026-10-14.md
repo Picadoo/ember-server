@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13321 · 短征轻量 variety 房内可感 · docs-only · ≠Cast/Aid打磨 · ≠todayRot再拧 · ≠半行 · ≠庭内镜像 · ≠sx20 · ≠抬表）
 
-> **旁注（APPROVED · 批 A·M · 全弧非 L · 已派插件 · 拟 D13321 · TIP-CP · 2026-10-14 02:21 Asia/Shanghai · 勿勾 CLOSED · W1e关）：** tip 待批 · DESIGN [`DESIGN-ember-short-light-variety-readable-2026-10-14.md`](../design/DESIGN-ember-short-light-variety-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-light-variety-readable-2026-10-14.md`](../design/RESEARCH-ember-short-light-variety-readable-2026-10-14.md) · backlog `B-short-light-variety-readable` · **TIP-CP** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot半行/再拧 ≠抬 event_rate/event_core/affix_shard ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
+> **旁注（CLOSED live · feat `64f08f47b` · PASS `1696ccd17` · 2026-10-14 02:36 Asia/Shanghai · W1e关）：** tip 待批 · DESIGN [`DESIGN-ember-short-light-variety-readable-2026-10-14.md`](../design/DESIGN-ember-short-light-variety-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-light-variety-readable-2026-10-14.md`](../design/RESEARCH-ember-short-light-variety-readable-2026-10-14.md) · backlog `B-short-light-variety-readable` · **TIP-CP** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot半行/再拧 ≠抬 event_rate/event_core/affix_shard ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
 
 > **上游结案：** **TIP-CO CLOSED** live `d4ce8d3ed`（D13320 今日推本局内可感齐 · feat `1a3e1a3de` · jar `1.65.812-d13320` · PASS `bd7a68ce8` · 批 sha `31f06f562`）。总控连开：优先短征日更花样（真可点/房内可感）；Cast+BossAid+EliteAid+todayRot **已齐** · 勿 Cast/Aid 打磨、todayRot 半行/再拧、庭内顺手镜像当主交付；挂机庭环已齐勿回资源环；半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）  
-**本窗性质：** tip **APPROVED · 批 A·M · 全弧非 L** · 已派插件 · docs-only→施工 · 拟 D13321 · TIP-CP · **勿勾 CLOSED** · W1e关  
+**本窗性质：** tip **CLOSED live** · feat `64f08f47b` · PASS `1696ccd17` · jar `1.65.813-d13321.local` · 拟 D13321 · TIP-CP · W1e关 · 2026-10-14 02:36 Asia/Shanghai  
 **硬规格：** [`DESIGN-ember-short-light-variety-readable-2026-10-14.md`](../design/DESIGN-ember-short-light-variety-readable-2026-10-14.md) · backlog `B-short-light-variety-readable`  
 **打开理由：** D13320§6② 明文后置「短征轻量 variety 接入（零抬 event_core）」；yml/口径钉死 D138 仅 NORMAL Q01–Q07；短征 settle 走独立路径不兑现花样房感；Cast/Aid/todayRot cue 已齐后房内日更仍缺真事件/词缀。
 

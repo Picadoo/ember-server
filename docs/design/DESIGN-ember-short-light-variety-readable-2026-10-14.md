@@ -1,6 +1,6 @@
 # 余烬 · 短征轻量 variety 房内可感（短本日更花样续 · ≠Cast/Aid打磨 · ≠todayRot再拧 · ≠半行 · ≠庭内镜像 · ≠sx20 · ≠抬表）
 
-STATUS=**已批 A · 方案 M · 全弧非 L · D13321** · 总控 2026-10-14 02:21 Asia/Shanghai · TIP-CP · 已派插件 · **勿勾 CLOSED** · docs→施工
+STATUS=**CLOSED live** · feat `64f08f47b` · PASS `1696ccd17` · jar `1.65.813-d13321.local` · D13321 · TIP-CP · 2026-10-14 02:36 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-short-light-variety-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-short-light-variety-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-light-variety-readable-2026-10-14.md`](RESEARCH-ember-short-light-variety-readable-2026-10-14.md) · backlog `B-short-light-variety-readable` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot半行/再拧 ≠抬 event_rate/event_core/affix_shard ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠灾厄重开 ≠Pack6**
 
 > **一句话玩家价值：** 短征首通后再进本时，某房可能出现可感词缀精英或房间事件——日更从「今日推标记」走进真战斗花样；**不**开 sx20、**不**抬 event_core/日表、**不**再叠 Cast/Aid、**不**再拧 todayRot cue、**不**叠庭内顺手。
@@ -153,7 +153,8 @@ STATUS=**已批 A · 方案 M · 全弧非 L · D13321** · 总控 2026-10-14 02
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 02:36 Asia/Shanghai | **CLOSED live** · feat `64f08f47b` · PASS `1696ccd17` · jar `1.65.813-d13321.local` · 证据 `/workspace/tmp/tip-cp-short-variety/` · W1a–d 齐 · W1e 仍不做 |
 | 2026-10-14 02:21 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件 · 勿勾 CLOSED · W1e todayRot偏置本窗不做 |
 | 2026-10-14 02:18 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CO CLOSED 后连开 · 选题短征轻量 variety 房内可感 · 拟 D13321 · TIP-CP · ≠半行 ≠Cast/Aid打磨 ≠todayRot再拧 ≠庭内再叠 · **改题有证据**（D13320§6②；yml 仅 Q01–Q07；短征 settle 无花样；见 RESEARCH） |
 
-*D13321 **已批 A·M** · 短征轻量 variety 房内可感 · TIP-CP · 已派插件 · 勿勾 CLOSED · 2026-10-14 02:21 Asia/Shanghai · ≠半行 ≠Cast/Aid打磨 ≠todayRot再拧 ≠sx20。*
+*D13321 **CLOSED live** · `64f08f47b` · PASS `1696ccd17` · 短征轻量 variety 房内可感 · TIP-CP。**已批 A · 方案 M · 全弧非 L** · ≠半行 ≠Cast/Aid打磨 ≠todayRot再拧 ≠sx20。*

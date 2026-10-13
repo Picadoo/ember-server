@@ -29,5 +29,9 @@
 - balance_version 123 · 无新 variety kind · 无 W1e 偏置
 
 ## 下步
-- 测岗抽测（首通无花样、重打可感、settle 零核心/碎片）
+- 测岗已 PASS（见 tip-cp-spot / 总控收口）
 - W1e todayRot 偏置另窗（不可独批）
+
+## 测岗抽测（TIP-CP spot）
+- **PASS** · 2026-10-14 02:36 Asia/Shanghai · 证据 `/workspace/tmp/tip-cp-short-variety/` · 详 `STATUS-ember-tip-cp-short-variety-spot-2026-10-14.md`
+- live jar `1.65.813-d13321.local` · 首通无花样 · 重打 HUD 绿 · settle 零核心/碎片 · W1e 仍不做

@@ -1,6 +1,6 @@
 # tip · TIP-CP 短征轻量 variety 房内可感（真 roll · ≠Cast/Aid打磨 · ≠todayRot再拧 · ≠半行 · ≠庭内镜像 · ≠抬表）· 拟 D13321
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件**（CoreRpg）· 2026-10-14 02:21 Asia/Shanghai · **勿勾 CLOSED**（等 live CLOSED）· W1e todayRot偏置本窗不做（可选辅默认关）  
+> **状态：** **CLOSED live** · feat `64f08f47b` · jar `1.65.813-d13321.local` · PASS `1696ccd17` · 批 sha `e976fe6d8` · live `1696ccd17` · 证据 `/workspace/tmp/tip-cp-short-variety/` · 2026-10-14 02:36 Asia/Shanghai  
 > **DESIGN** [`DESIGN-ember-short-light-variety-readable-2026-10-14.md`](../design/DESIGN-ember-short-light-variety-readable-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-light-variety-readable`  
 > **施工岗（批后）：** 余烬-插件 · **不派怪物/地图/物品**（默认）  
 > **硬禁：** 零半行独批 · 零 Cast 粒子主交付 · 零拧 EliteAid/BossAid · 零 todayRot cue 再拧主交 · 零 sx20 · 零抬日表/伤表/S 表 · 零抬 event_rate/event_core/affix_shard · 零新 variety kind · 零庭内再叠顺手  
@@ -30,7 +30,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 02:21 Asia/Shanghai
-- [x] 插件交短征轻量 variety · 房内可感 · settle 零发核心/碎片 · jar `1.65.813-d13321.local`（等 tip+push）
-- [ ] 抽测：首通无花样、重打可感；零抬表；零改 Cast/Aid/todayRot cue；零 sx20
+- [x] 插件交 short varietyEligible + HUD + Director + settle零发 · jar `1.65.813-d13321.local` · feat `64f08f47b` · 2026-10-14 02:30 Asia/Shanghai
+- [x] 抽测：首通无花样、重打可感、settle零核心碎片；零抬表；零改 Cast/Aid；零 sx20 · W1e 仍不做 · PASS `1696ccd17` · 证据 `/workspace/tmp/tip-cp-short-variety/`
 
-## STATUS: APPROVED · 批 A·M · 已派插件 · 拟 D13321 · TIP-CP · **勿勾 CLOSED** · 2026-10-14 02:21 Asia/Shanghai
+## STATUS: **CLOSED live** · `64f08f47b` · PASS `1696ccd17` · D13321 · TIP-CP · 2026-10-14 02:36 Asia/Shanghai
