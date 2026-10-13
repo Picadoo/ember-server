@@ -1,6 +1,6 @@
 # tip · TIP-CB 挂机庭「顺手精工」（第三件可感 · 零抬产）· 拟 D13307
 
-> **状态：** OPEN · 待批 A · 荐方案 M · docs-only · 2026-10-13 21:45 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-物品** · 2026-10-13 21:46 Asia/Shanghai  
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-refine-2026-10-13.md`](../design/DESIGN-ember-afk-courtyard-quick-refine-2026-10-13.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-refine`  
 > **施工岗（批后）：** 余烬-物品 · TrMenu-only · **不派插件**  
 > **硬禁：** 零抬 AFK 日表/tiers · 零改 UpgradeRules · 零 sx20/L13/K3 · 零静默精工 · **禁止** `recipe_gap_refine1 <= 0`（拼接串非数字 · D13306 教训）· 成色本窗不做
@@ -18,8 +18,8 @@
 - **禁**用 `recipe_gap_refine1 <= 0` 做亮/灰（非数字）
 
 ## 验收（批后施工）
-- [ ] 总控批 A·M
+- [x] 总控批 A·M
 - [ ] 物品交 menu tip + push
 - [ ] TrMenu reload；测岗联验
 
-## STATUS: OPEN · 待批 A · 荐 M · 拟 D13307 · 2026-10-13 21:45 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派余烬-物品 · 2026-10-13 21:46 Asia/Shanghai
