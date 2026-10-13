@@ -106,6 +106,7 @@ public final class EmberRunPapi {
         if ("recruits".equals(key) || "failrefund".equals(key)) return Section.ENTRY;
         if ("featured_key".equals(key)) return Section.ROTATION;
         if ("event_chase".equals(key) || "event_chase_name".equals(key) || "event_chase_ok".equals(key) || "event_soft_ready".equals(key)) return Section.ROTATION; // TIP-CE D13310
+        if ("today_triple".equals(key) || "today_triple_name".equals(key) || "today_triple_kind".equals(key) || "today_triple_ok".equals(key)) return Section.SHORT; // TIP-CH D13313
         if ("awaken_route".equals(key) || isLoadoutKey(key)) return Section.LOADOUT;
         if (key.startsWith("codex") || "codex_hope".equals(key)) return Section.CODEX;
         if (key.startsWith("armor_")) return Section.ARMOR; // D318 (no earlier prefix matches "armor")
@@ -402,6 +403,10 @@ public final class EmberRunPapi {
      */
     private String shortDay(PlayerData d, String key, EmberRunMaps maps) {
         EmberShortService shortEx = runs.shortExpedition();
+        if ("today_triple".equals(key) || "today_triple_name".equals(key)
+                || "today_triple_kind".equals(key) || "today_triple_ok".equals(key)) { // TIP-CH D13313
+            return todayTriple(d, key, maps, shortEx);
+        }
         if ("sx_today".equals(key) || "sx_today_name".equals(key) || "sx_today_day_line".equals(key)) { // TIP-CD D13309
             String today = EmberShortRules.todayKey();
             if ("sx_today".equals(key)) return today;
@@ -455,6 +460,38 @@ public final class EmberRunPapi {
         EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(mapKey);
         if (shortEx != null && m != null) return shortEx.dailyCap(m);
         return EmberShortRules.DAILY_CAP;
+    }
+
+    /** TIP-CH D13313 %corerpg_p1_today_triple*% — read-only aggregate; zero economy. */
+    private String todayTriple(PlayerData d, String key, EmberRunMaps maps, EmberShortService shortEx) {
+        String today = EmberShortRules.todayKey();
+        EmberRunMaps.MapDef todayMap = maps == null ? null : maps.byKey(today);
+        boolean todayUnlocked = EmberShortPath.unlocked(runs, d, todayMap);
+        int todayLeft = EmberShortRules.dayLeft(rewardedFor(d, maps, shortEx, today), capFor(maps, shortEx, today));
+
+        EmberSeason season = runs.season();
+        boolean weekDone = false;
+        if (season != null) {
+            weekDone = "1".equals(EmberGoalShortChase.done(season.progress(d, "short"), season.target(d, "short")));
+        }
+        String weekChase = EmberGoalShortChase.chaseKey(today,
+                k -> {
+                    EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(k);
+                    return EmberShortPath.unlocked(runs, d, m);
+                },
+                k -> EmberShortRules.dayLeft(rewardedFor(d, maps, shortEx, k), capFor(maps, shortEx, k)));
+
+        String feat = runs.featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()));
+        String eventChase = EmberEventChase.chaseKey(feat, k -> runs.progressFlag(d, k));
+
+        EmberTodayTriple.Pick pick = EmberTodayTriple.pick(today, todayUnlocked, todayLeft, weekDone, weekChase, eventChase);
+        if ("today_triple_kind".equals(key)) return pick.kind;
+        if ("today_triple_ok".equals(key)) return EmberTodayTriple.ok(pick);
+        if ("today_triple".equals(key)) return pick.mapKey;
+        // today_triple_name
+        if (!pick.present()) return "";
+        EmberRunMaps.MapDef cm = maps == null ? null : maps.byKey(pick.mapKey);
+        return cm != null && cm.name != null && !cm.name.isEmpty() ? cm.name : pick.mapKey;
     }
 
     /**

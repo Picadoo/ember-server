@@ -3221,9 +3221,52 @@ public boolean pathForceOpenDoor(Player p) {
                 return true;
             }
             case "enter":
-                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today|event-chase|short-goal> [challenge]"); return true; }
+                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today|event-chase|short-goal|today-triple> [challenge]"); return true; }
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) entry.markForced(((Player) s).getUniqueId()); // D96 (D235 → EmberEntryService)
                 String mapArg = args[2].toLowerCase(Locale.ROOT);
+                if ("today-triple".equals(mapArg) || "today_triple".equals(mapArg) || "triple-chase".equals(mapArg)) { // TIP-CH D13313
+                    Player tp = (Player) s;
+                    PlayerData td = data(tp.getUniqueId());
+                    EmberRunMaps tm = maps();
+                    EmberShortService tex = shortExpedition;
+                    String today = EmberShortRules.todayKey();
+                    EmberRunMaps.MapDef todayMap = tm == null ? null : tm.byKey(today);
+                    boolean todayUnlocked = EmberShortPath.unlocked(this, td, todayMap);
+                    int todayLeft;
+                    {
+                        int n = (tex != null && todayMap != null) ? tex.rewardedToday(td, todayMap)
+                                : Math.max(0, td.periodCount(EmberShortRules.claimKey(today),
+                                        town.sunshine.corerpg.DailyService.today()));
+                        int cap = (tex != null && todayMap != null) ? tex.dailyCap(todayMap) : EmberShortRules.DAILY_CAP;
+                        todayLeft = EmberShortRules.dayLeft(n, cap);
+                    }
+                    EmberSeason tSeason = season;
+                    boolean weekDone = false;
+                    if (tSeason != null) {
+                        weekDone = "1".equals(EmberGoalShortChase.done(tSeason.progress(td, "short"), tSeason.target(td, "short")));
+                    }
+                    String weekChase = EmberGoalShortChase.chaseKey(today,
+                            k -> {
+                                EmberRunMaps.MapDef m = tm == null ? null : tm.byKey(k);
+                                return EmberShortPath.unlocked(this, td, m);
+                            },
+                            k -> {
+                                EmberRunMaps.MapDef m = tm == null ? null : tm.byKey(k);
+                                int n = (tex != null && m != null) ? tex.rewardedToday(td, m)
+                                        : Math.max(0, td.periodCount(EmberShortRules.claimKey(k),
+                                                town.sunshine.corerpg.DailyService.today()));
+                                int cap = (tex != null && m != null) ? tex.dailyCap(m) : EmberShortRules.DAILY_CAP;
+                                return EmberShortRules.dayLeft(n, cap);
+                            });
+                    String feat = featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()));
+                    String eventChase = EmberEventChase.chaseKey(feat, k -> progressFlag(td, k));
+                    EmberTodayTriple.Pick pick = EmberTodayTriple.pick(today, todayUnlocked, todayLeft, weekDone, weekChase, eventChase);
+                    if (!pick.present()) {
+                        s.sendMessage(P + "暂无推荐可冲（今日推有奖 / 本周短征 / 房间事件皆不可用）。");
+                        return true;
+                    }
+                    mapArg = pick.alias; // fall through to short-today / short-goal / event-chase
+                }
                 if ("short-today".equals(mapArg) || "sx_today".equals(mapArg))
                     mapArg = EmberShortRules.todayKey(); // TIP-CD D13309
                 if ("event-chase".equals(mapArg) || "event_chase".equals(mapArg)) { // TIP-CE D13310
