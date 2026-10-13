@@ -1,6 +1,6 @@
 # 余烬 · 冒险「今日三冲」聚合（今日推+冲一下+本周短征 · 零抬日帽/目标数/事件率 · ≠sx20）
 
-STATUS=**待批 A** · 荐方案 **M** · 拟 **D13313** · TIP-CH · docs-only · 2026-10-13 23:54 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-adventure-today-triple-chase-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-adventure-today-triple-chase-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-adventure-today-triple-chase-visible-2026-10-13.md`](RESEARCH-ember-adventure-today-triple-chase-visible-2026-10-13.md) · backlog `B-adventure-today-triple-chase-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 weekly_goals.targets/徽/短征日帽/event_rate/NEED ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠教裸指令**
+STATUS=**已批 A · 方案 M · D13313** · 总控 2026-10-13 23:56 Asia/Shanghai · TIP-CH · docs→施工 · tip [`STATUS-ember-next-hard-debt-adventure-today-triple-chase-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-adventure-today-triple-chase-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-adventure-today-triple-chase-visible-2026-10-13.md`](RESEARCH-ember-adventure-today-triple-chase-visible-2026-10-13.md) · backlog `B-adventure-today-triple-chase-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 weekly_goals.targets/徽/短征日帽/event_rate/NEED ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠教裸指令**
 
 > **一句话玩家价值：** 打开冒险就能一眼看见今日推 / 冲一下 / 本周短征，一点进当前最该冲的那条——三冲从分格变成首页决策；**不**抬日帽、**不**抬周目标数、**不**抬事件率。
 
@@ -52,10 +52,10 @@ STATUS=**待批 A** · 荐方案 **M** · 拟 **D13313** · TIP-CH · docs-only 
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a today_triple 必做；W1b 冒险 P 格必做；W1c Open 半行同批；见 §3）
-- [ ] 或勾 **方案 L**（本窗改题）· **本窗不荐 L**
-- [ ] 否决 A（只口号）/ W（假写/空转/撤分格）
-- [ ] 批注：
+- [x] **方案 M**（W1a today_triple 必做；W1b 冒险 P 格必做；W1c Open 半行同批；见 §3）
+- [ ] 或勾 **方案 L**（本窗改题）· **本窗不批 L**
+- [x] 否决 A（只口号）/ W（假写/空转/撤分格）
+- [x] 批注：总控批 A·M · D13313 · TIP-CH · 先插件 W1a today_triple/today-triple（含 _ok 单键供灰态；内部复用 short-today→short-goal→event-chase）再物品 P · 零抬日帽/short:5/event_rate · 不撤 H/E/F
 
 ---
 
@@ -149,5 +149,6 @@ STATUS=**待批 A** · 荐方案 **M** · 拟 **D13313** · TIP-CH · docs-only 
 | 日 | 事 |
 |----|-----|
 | 2026-10-13 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CG 后连开 · 选题冒险今日三冲聚合 · 拟 D13313 · ≠sx20 ≠抬表 ≠第五件花料 ≠复开 D423 · **未改题**（证据表见 RESEARCH） |
+| 2026-10-13 23:56 | 总控批 A·M · 派插件 W1a |
 
-*拟 D13313 · 冒险今日三冲聚合 · 待批 A · 荐方案 M · ≠关观察 ≠抬日表 ≠sx20。*
+*D13313 已批 A·M · 冒险今日三冲聚合 · 施工中 · ≠关观察 ≠抬日表 ≠sx20。*
