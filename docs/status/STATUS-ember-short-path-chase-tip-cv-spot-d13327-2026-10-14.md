@@ -26,4 +26,4 @@
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · short target=5 · daycap=3 · ×0.97 未改 · bv123 · 零 Cast/Aid/variety/short_div*/sx20 · ≠关观察 · 未改 YAML/jar · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `c31c780a9` · tip `a206b9893` · STATUS（本文件 push 后填 sha）· **勿勾 CLOSED**（总控收口）· 2026-10-14 04:32 Asia/Shanghai
+> **测岗抽测：** PASS live · feat `c31c780a9` · tip `a206b9893` · STATUS `f9e4ca402`· **勿勾 CLOSED**（总控收口）· 2026-10-14 04:32 Asia/Shanghai
