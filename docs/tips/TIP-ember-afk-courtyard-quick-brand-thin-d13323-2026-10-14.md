@@ -1,6 +1,6 @@
 # tip · TIP-CR 挂机庭「顺手烙纹」（真 brand 入口 · ≠第五件花料 · ≠推荐花复读 · ≠洗练再拧 · ≠半行 · ≠抬表）· 拟 D13323
 
-> **状态：** APPROVED · 批 **A · 方案 M** · W1a 已交插件 · 待物品 W1b/c/d · 2026-10-14 03:03 Asia/Shanghai · **勿勾 CLOSED**（等 live CLOSED）
+> **状态：** **CLOSED live** · feat `cf35d9948` · tip `ce2f8c95f` · jar `1.65.815-d13323.local` · PASS `d9f70ed9a` · 批 sha `d1004caaf` · 证据 `/workspace/tmp/tip-cr-afk-brand/` · 2026-10-14 03:11 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-brand-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-brand-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-brand`  
 > **施工岗（批后）：** 余烬-插件（W1a 返回源）+ 余烬-物品（W1b/c/d TrMenu）· **不派怪物/地图**（默认）  
 > **硬禁：** 零半行独批 · 零第五件花料 · 零推荐花复读 · 零洗练再拧 · 零 P 兼确认 · 零抬日表/改烙纹价 · 零 Cast/Aid/todayRot/variety 再拧 · 零 W1e 独批 · 零 sx20/L13/K3 · 零庭内宝石本窗主交  
@@ -29,8 +29,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 03:00 Asia/Shanghai
-- [x] 插件交 afk 返回源 · 1.65.815-d13323.local · 2026-10-14 03:03
-- [ ] 物品交 G 格 + brand/forge 返回动态 + Open 辅半行
-- [ ] 抽测：庭内进烙纹→返回庭；价/次数 零 diff；零 sx20；零半行独档
+- [x] 插件交 afk 返回源 · `1.65.815-d13323.local` · feat `cf35d9948` · 2026-10-14 03:03
+- [x] 物品交 G 格 + brand/forge 返回动态 + Open 辅半行 · `ce2f8c95f` · TrMenu 77
+- [x] 抽测：庭内进烙纹→返回庭；价/次数 零 diff；零 sx20；零半行独档 · PASS `d9f70ed9a` · 证据 `/workspace/tmp/tip-cr-afk-brand/`
 
-## STATUS: APPROVED · 批 A·M · W1a 已交插件 · 待物品 W1b/c/d · D13323 · TIP-CR · **勿勾 CLOSED** · 2026-10-14 03:03 Asia/Shanghai
+## STATUS: **CLOSED live** · `cf35d9948` / `ce2f8c95f` · PASS `d9f70ed9a` · D13323 · TIP-CR · 2026-10-14 03:11 Asia/Shanghai

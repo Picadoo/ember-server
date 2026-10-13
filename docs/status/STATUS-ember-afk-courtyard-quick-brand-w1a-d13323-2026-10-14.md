@@ -27,6 +27,9 @@
 - TrMenu（W1b/c/d 另派）
 
 ## 下步
-- 物品 W1b G 格 · W1c brand/forge 返回动态 · W1d Open 辅半行
-- 测岗抽测等物品交后
+- 物品 W1b/c/d 已交 `ce2f8c95f` · 测岗已 PASS（见 tip-cr-spot / 总控收口）
+
+## 测岗抽测（TIP-CR spot）
+- **PASS** · 2026-10-14 03:11 Asia/Shanghai · 证据 `/workspace/tmp/tip-cr-afk-brand/` · 详 `STATUS-ember-afk-courtyard-quick-brand-tip-cr-spot-d13323-2026-10-14.md`
+- live jar `1.65.815-d13323.local` · G→brand · 返回挂机庭/工坊双路径 · 四花+P+D+W/w/L/S 仍在
 

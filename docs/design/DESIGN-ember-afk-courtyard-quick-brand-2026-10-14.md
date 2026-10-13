@@ -1,6 +1,6 @@
 # 余烬 · 挂机庭「顺手烙纹」（产→烙纹轨可点 · ≠第五件花料 · ≠推荐花复读 · ≠洗练再拧 · ≠半行 · ≠抬日表）
 
-STATUS=**已批 A · 方案 M · 全弧非 L · D13323** · 总控 2026-10-14 03:00 Asia/Shanghai · TIP-CR · 已派插件+物品 · **勿勾 CLOSED** · docs→施工
+STATUS=**CLOSED live** · feat `cf35d9948` · tip `ce2f8c95f` · PASS `d9f70ed9a` · jar `1.65.815-d13323.local` · D13323 · TIP-CR · 2026-10-14 03:11 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-brand-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-brand-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-brand-2026-10-14.md`](RESEARCH-ember-afk-courtyard-quick-brand-2026-10-14.md) · backlog `B-afk-courtyard-quick-brand` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_rate/event_core/affix_shard ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠改brand价/craftShards**
 
 > **一句话玩家价值：** 挂机庭一点「顺手烙纹」进既有烙纹页——产碎直接喂烙纹合成/定向，返回仍回庭；**不**新开第五花料、**不**抬日产、**不**改烙纹价。
@@ -159,7 +159,8 @@ STATUS=**已批 A · 方案 M · 全弧非 L · D13323** · 总控 2026-10-14 03
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 03:11 Asia/Shanghai | **CLOSED live** · feat `cf35d9948` · tip `ce2f8c95f` · PASS `d9f70ed9a` · jar `1.65.815-d13323.local` · 证据 `/workspace/tmp/tip-cr-afk-brand/` · W1a–d 齐 · 宝石仍后置 |
 | 2026-10-14 03:00 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石后置 |
 | 2026-10-14 02:57 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CQ CLOSED 后连开 · 选题挂机庭顺手烙纹 · 拟 D13323 · TIP-CR · ≠半行 ≠第五花 ≠推荐花复读 ≠洗练再拧 ≠Cast/Aid/variety再拧 · **改题有证据**（短征饱和；D13322§6②；afk 无入口；AfkForgePath 已喊 brand；面亮 gap_brand；见 RESEARCH） |
 
-*D13323 **已批 A·M** · 挂机庭顺手烙纹 · TIP-CR · 已派插件+物品 · 勿勾 CLOSED · 2026-10-14 03:00 Asia/Shanghai · ≠半行 ≠第五花 ≠洗练再拧 ≠宝石本窗 · ≠sx20。*
+*D13323 **CLOSED live** · `cf35d9948` / `ce2f8c95f` · PASS `d9f70ed9a` · 挂机庭顺手烙纹 · TIP-CR。**已批 A · 方案 M · 全弧非 L** · ≠半行 ≠第五花 ≠洗练再拧 ≠宝石本窗 · ≠sx20。*
