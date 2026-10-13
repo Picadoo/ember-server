@@ -1,6 +1,6 @@
 # RESEARCH · 短征选页「路径追」可点（ShortPath 菜单化 + enter short-path · ≠日差同题 · ≠今日推/周目标复读 · ≠D406 首通同屏复读 · ≠半行 · ≠庭内旁路 · ≠抬表）· 2026-10-14
 
-> **状态：** **已批 A · 方案 M** · 拟 D13327 · TIP-CV · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 2026-10-14 04:22 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `c31c780a9` · tip `a206b9893` · PASS `f9e4ca402` · jar `1.65.819-d13327.local` · 批 sha `ac2889160` · TIP-CV · 2026-10-14 04:33 Asia/Shanghai · 路径追同题勿再交
 > **起因：** 总控【连开·TIP-CV / 拟 D13327】上游 TIP-CU CLOSED live `3e3b14fd1`（feat `74a2b5a01` · tip `b7e9a5317` · jar `1.65.818-d13326.local` · PASS `c206b7b6f` · 批 sha `52b4ed097` · 短征日差本可冲齐 · 软目标3零发奖 · **日差本同题勿再交**）。请立刻交下一档硬债 docs-only 待批 A · 荐 M。**优先强烈偏向：短征日更/乐趣系统**（真可点或房内可感）。庭内工坊旁路已近饱和——**默认勿再交庭内旁路**。宝石仍须庭面先亮 gem gap。日差软目标发奖 / weekly_goals 写入须总控另批——**本窗默认不做**。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内全弧+今日推/冲一下/周短征/三冲+日差本可冲 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-CU CLOSED live `3e3b14fd1` / feat `74a2b5a01` / tip `b7e9a5317` / PASS `c206b7b6f` / jar `1.65.818-d13326.local` / 批 `52b4ed097` · D13326
 > **硬禁：** **零** 半行独批 · **零** Cast粒子主交付 · **零** Aid/variety再拧 · **零** todayRot/W1e独批 · **零** 庭内旁路再拧 · **零** 日差同题 · **零** sx20 · **零** 抬日帽/S/targets · **零** Pack6 · **零** 开R/K3 · **零** 关观察 · **零** 灾厄/fest重开（须另批）· **零** 教裸指令 · **零** densify · **零** stage脏runtime
@@ -68,6 +68,6 @@
 
 ---
 
-*RESEARCH · 短征路径追可点 · **已批 A · 方案 M** · TIP-CV / 拟 D13327 · 半行 REJECT `d00ed84bc` 保持。*
+*RESEARCH · 短征路径追可点 · **CLOSED live** · `c31c780a9` / `a206b9893` · PASS `f9e4ca402` · TIP-CV / D13327 · 半行 REJECT `d00ed84bc` 保持。*
 
-## STATUS: **已批 A · 方案 M** · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · D13327 · TIP-CV · 2026-10-14 04:22 Asia/Shanghai
+## STATUS: **CLOSED live** · `c31c780a9` / `a206b9893` · PASS `f9e4ca402` · D13327 · TIP-CV · 2026-10-14 04:33 Asia/Shanghai

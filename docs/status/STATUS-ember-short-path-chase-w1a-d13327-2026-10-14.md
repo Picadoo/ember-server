@@ -1,6 +1,6 @@
 # STATUS · TIP-CV W1a 短征选页「路径追」可点 · short_path* PAPI + enter · D13327
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · W1a 已交 · **勿勾 tip CLOSED** · 批 A·M `ac2889160`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `f9e4ca402` · tip `a206b9893` · 总控收口 2026-10-14 04:33 Asia/Shanghai
 
 ## 交付
 - `%corerpg_p1_short_path%`（path token `0|1|2|3`）/ `_label` / `_tip`（复用 `EmberShortPath.label/tip`；未选诚实「未选」）
@@ -44,3 +44,7 @@
 
 ## 下步
 - 物品 W1b/c（选页 `0` + 薄路径页 + Open 辅半行）等键
+
+## 测岗抽测（TIP-CV spot）
+- **PASS** · 2026-10-14 04:33 Asia/Shanghai · 证据 `/workspace/tmp/tip-cv-short-path/` · 详 `STATUS-ember-short-path-chase-tip-cv-spot-d13327-2026-10-14.md`
+- live jar `1.65.819-d13327.local` · 三偏好可切 · enter short-path · 未选拒进

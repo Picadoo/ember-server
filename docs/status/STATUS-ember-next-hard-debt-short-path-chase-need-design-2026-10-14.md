@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13327 · 短征选页「路径追」可点 · docs-only · ≠日差同题 · ≠今日推/周目标复读 · ≠D406 首通同屏复读 · ≠半行 · ≠sx20 · ≠抬日表 · ≠庭内旁路 · ≠Cast/Aid/variety再拧）
 
-> **旁注（已批 A · 方案 M · 2026-10-14 04:22 Asia/Shanghai · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 零改日帽/S/resolve）：** tip **已批 A · 荐方案 M** · DESIGN [`DESIGN-ember-short-path-chase-visible-2026-10-14.md`](../design/DESIGN-ember-short-path-chase-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-path-chase-visible-2026-10-14.md`](../design/RESEARCH-ember-short-path-chase-visible-2026-10-14.md) · backlog `B-short-path-chase-visible` · **TIP-CV** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠日差同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠改 resolve 算法**。
+> **旁注（勾毕 · CLOSED live · feat `c31c780a9` · tip `a206b9893` · PASS `f9e4ca402` · jar `1.65.819-d13327.local` · 批 sha `ac2889160` · 2026-10-14 04:33 Asia/Shanghai · 路径追同题勿再交）：** tip **CLOSED live** · DESIGN [`DESIGN-ember-short-path-chase-visible-2026-10-14.md`](../design/DESIGN-ember-short-path-chase-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-path-chase-visible-2026-10-14.md`](../design/RESEARCH-ember-short-path-chase-visible-2026-10-14.md) · backlog `B-short-path-chase-visible` · **TIP-CV** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠日差同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠改 resolve 算法**。
 
 > **上游结案：** **TIP-CU CLOSED** live `3e3b14fd1`（D13326 短征日差本可冲齐 · feat `74a2b5a01` · tip `b7e9a5317` · jar `1.65.818-d13326.local` · PASS `c206b7b6f` · 批 sha `52b4ed097` · 软目标3零发奖 · **日差本同题勿再交**）。总控连开：优先**强烈偏向短征日更/乐趣**（真可点或房内可感）；庭内旁路已近饱和（默认勿再交）；宝石须庭面 gap；日差软目标发奖须另批。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内全弧+今日推/冲一下/周短征/三冲+日差本可冲 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · 拟 D13327 · TIP-CV · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 零改日帽/S/resolve · 2026-10-14 04:22 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `c31c780a9` · tip `a206b9893` · PASS `f9e4ca402` · jar `1.65.819-d13327.local` · D13327 · TIP-CV · 2026-10-14 04:33 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-short-path-chase-visible-2026-10-14.md`](../design/DESIGN-ember-short-path-chase-visible-2026-10-14.md) · backlog `B-short-path-chase-visible`
 **打开理由：** 日差/今日推/周目标冲口已齐后，D503 ShortPath 粘性追猎仍 **chat-only**——选页无入口、无 PAPI、无 `enter short-path`，glance 教裸指令；日更「追哪本」乐趣断在可点动作。
 
@@ -78,4 +78,4 @@
 
 ---
 
-*选题短征路径追可点 · tip **已批 A · 方案 M** · 拟 D13327 · TIP-CV · 全弧非 L · 半行 REJECT `d00ed84bc` **保持否决** · 日差同题勿再交。*
+*选题短征路径追可点 · tip **CLOSED live** · `c31c780a9` / `a206b9893` · PASS `f9e4ca402` · D13327 · TIP-CV · 半行 REJECT `d00ed84bc` **保持否决** · 路径追同题勿再交。*

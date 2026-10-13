@@ -1,8 +1,9 @@
 # 余烬 · 短征选页「路径追」可点（ShortPath 菜单化 + enter short-path · ≠日差同题 · ≠今日推/周目标复读 · ≠D406 首通同屏复读 · ≠半行 · ≠庭内旁路 · ≠sx20 · ≠抬表）
+| 2026-10-14 04:33 Asia/Shanghai | **CLOSED live** · feat `c31c780a9` · tip `a206b9893` · PASS `f9e4ca402` · jar `1.65.819-d13327.local` · 证据 `/workspace/tmp/tip-cv-short-path/` · W1a–c 齐 · 路径追同题勿再交 |
 | 2026-10-14 04:22 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 零改日帽/S/resolve 算法 |
 | 2026-10-14 04:18 Asia/Shanghai | 初稿 STATUS=**待批 A** · 荐 M · TIP-CU CLOSED 后连开 · 拟 D13327 · TIP-CV |
 
-STATUS=**已批 A · 方案 M** · 拟 D13327 · TIP-CV · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 零改日帽/S/resolve · 2026-10-14 04:22 Asia/Shanghai
+STATUS=**CLOSED live** · feat `c31c780a9` · tip `a206b9893` · PASS `f9e4ca402` · jar `1.65.819-d13327.local` · D13327 · TIP-CV · 2026-10-14 04:33 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-short-path-chase-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-short-path-chase-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-path-chase-visible-2026-10-14.md`](RESEARCH-ember-short-path-chase-visible-2026-10-14.md) · backlog `B-short-path-chase-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬 event_core ≠新 variety kind ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠本周短征可冲复读 ≠日差同题 ≠D406 首通同屏复读 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠改 ShortPath 算法权重/日帽**
 
 > **一句话玩家价值：** 打开短征选本就能点「路径追」——用点击切换首通追/有奖追/后段追，并一键进当前偏好 resolve 的下一本；**不**抬日帽、**不**改奖励、**不**再交日差同题。
@@ -157,7 +158,8 @@ STATUS=**已批 A · 方案 M** · 拟 D13327 · TIP-CV · 全弧非 L · 派插
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 04:33 Asia/Shanghai | 总控 · **勾毕 CLOSED live** · feat `c31c780a9` · tip `a206b9893` · PASS `f9e4ca402` · jar `1.65.819-d13327.local` · 批 sha `ac2889160` · 半行 REJECT `d00ed84bc` **保持否决** · 路径追同题勿再交 · 连开 TIP-CW |
 | 2026-10-14 04:22 Asia/Shanghai | 总控 · **批 A·M** · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 半行 REJECT `d00ed84bc` 保持 · 日差同题勿再交 |
 | 2026-10-14 04:18 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CU CLOSED 后连开 · 选题短征路径追可点 · 拟 D13327 · TIP-CV · ≠半行 ≠日差同题 ≠今日推/周目标/D406复读 ≠Cast/Aid/variety再拧 ≠庭内旁路 · **改题有证据**（ShortPath chat-only；无 enter；Layout 空位；见 RESEARCH） |
 
-*D13327 **已批 A · 方案 M** · 短征路径追可点 · TIP-CV。**全弧非 L** · ≠半行 ≠日差同题 ≠今日推/周目标/D406复读 ≠Cast/Aid/variety再拧 ≠庭内旁路 · ≠sx20 · ≠改 resolve 算法 · 2026-10-14 04:22 Asia/Shanghai*
+*D13327 **CLOSED live** · `c31c780a9` / `a206b9893` · PASS `f9e4ca402` · 短征路径追可点 · TIP-CV。**已批 A · 方案 M · 全弧非 L** · ≠半行 ≠日差同题 ≠今日推/周目标/D406复读 ≠Cast/Aid/variety再拧 ≠庭内旁路 · ≠sx20 · ≠改 resolve 算法。*
