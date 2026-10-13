@@ -113,6 +113,9 @@ public final class EmberShortService {
         // TIP-CP D13321 W1d: short settle path never calls varietyGrants — zero event_core/affix_shard even if variety hit
         SettleResult r = applyGrants(m, l, s.runId, pd, before, fcPaid, DailyService.today(), System.currentTimeMillis());
         runs.store().saveLedger(u, r.changed);
+        if (r.fresh && m != null && m.key != null) {
+            try { EmberShortSettle.remember(pd, m.key); } catch (Throwable ignored) { } // TIP-CW D13328 PAPI
+        }
         runs.plugin().getDataStore().flushMutation(u);
         // D401: optional weekly goal short — Q07 gate inside addGoal; 4+/fail (pays=false) skipped
         if (countsTowardShortGoal(r) && runs.season() != null) {

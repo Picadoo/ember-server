@@ -30,3 +30,10 @@
 ## 下步
 - 物品 W1b 薄 settle 页 `ember_p1_short_settle`（再进/回选/路径/工坊）
 - 测岗抽测后总控收口（本号勿 CLOSED）
+
+
+## 续 · short_settle_* PAPI（2026-10-14 07:32 Asia/Shanghai · 总控代补）
+- 新增 `EmberShortSettle`：settle 后 remember 本图；PAPI `short_settle`/`_map`/`_name`/`_day_left`/`_day_line`
+- 回落：remember → ShortPath resolve → todayKey；零改日帽/S/resolve/Cast/Aid/variety
+- jar：`1.65.821-d13328b.local` · 单测 EmberShortSettleTest PASS
+- 下步：测岗抽测 V1–V4 后总控 CLOSED（本号勿 CLOSED）
