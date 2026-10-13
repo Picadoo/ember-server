@@ -83,3 +83,26 @@
 | V6 无裸指令 | **PASS** — 玩家面仅喊话 |
 
 *D13314 · 短征 R1 ArcherCast · sx01–19 全线 · tip 见 commit。*
+
+## TIP-CI 抽测（测岗 · tip `8a5cd67d5`）
+
+**时间：** 2026-10-14 00:22 CST  
+**证据：** `/workspace/tmp/tip-ci-archer-cast/`  
+**裁决：** **PASS**
+
+| ID | 结果 | 摘要 |
+|----|------|------|
+| V1 静态 19 Cast | **PASS** | dmg0.25 / delay35 / r4 / CD15 / timer180 · 粒子+喊话齐 |
+| V1 梯队 | **PASS** | 0.25&lt;0.32&lt;0.52&lt;0.85 · timer180≠140 |
+| V1 仅远程 | **PASS** | 19 远程挂 ArcherCast；近战 Guard/Zombie 无挂；Guard/Elite/Boss 未改 |
+| V1 SoftHit/掉落 | **PASS** | SoftHit 保留；掉落 mat_ember_* 未拧；HP 未改 |
+| V2 sx01 R1 | **PASS** | 原生喊话「哨弓轻矢——侧移！」· fallback=false |
+| V2 sx07 中段 | **PASS** | 「塔弩轻坠矢——侧移！」· fallback=false |
+| V2 sx13 中高 | **PASS** | 「衡弩轻斩矢——侧移！」· fallback=false（旁注加抽） |
+| V2 sx19 | **PASS** | 地图 `ember_short_sx19` 缺失（WE/壳 PARTIAL 旁注不挡绿）；sx01 实例内 spawn `EmberSx19Crossbow` 实见「弦弩轻斩矢」 |
+| V2 可躲窗 | **PASS** | delay35+粒子 YAML；粒子 bot 不可视旁注 |
+| V4 零抬 | **PASS** | 无 sx20 / 日帽 / Stage2 / afk / ×0.97 改动 |
+| V8 gate_daily | **PASS** | console `no`（复测）· Stage2 三开 true · daily_kills=2400 |
+
+旁注：粒子包 mineflayer 不可视；以喊话+delay35+粒子 YAML 判可读可躲。sx19 地图壳 PARTIAL 同 CF。未改玩法码。
+
