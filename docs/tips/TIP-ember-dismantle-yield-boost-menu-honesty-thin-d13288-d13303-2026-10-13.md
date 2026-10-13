@@ -112,11 +112,11 @@
 - **批后派岗：** 余烬-插件 + 余烬-物品  
 - **HOLD：** L13 施工；Anvil densify；topUpTo；soft·开孔再叠；灰印·聚火；SF4 U2U3；调律 live bad 进持件；签名盖章 pity n/N 再叠；签名效果 lore 再叠；套装 blurb 再叠；宝石短效果再叠；天赋悬停再叠；烙纹档幅度再叠；副手微量再叠；强化率再叠；升阶保留再叠；形缓 Icon A 再叠；转化保留再叠；access_* 再叠；成色·精工确定成功再叠；互换免费确定再叠；洗练直留再叠；烙纹直办再叠；甲闸再扫；扩 stampable；SetChase 六槽 densify；效果长墙；**Affix densify**；**ConvertCap densify**；**forgeroll 权重 densify**；**UndoWindow densify**；**抬 BONUS**；**改 dismantleYield 表**  
 
-## STATUS: APPROVED · 批 A·M · 已派余烬-插件 + 余烬-物品 · 2026-10-13 01:15 Asia/Shanghai
+## STATUS: CLOSED live `1.65.804-d13303` · 批 A·M · items `e09a60082` · Enabling CoreRpg v1.65.804-d13303.local · Done ~5.0s · 2026-10-13 21:17 Asia/Shanghai
 
-## STATUS CLOSED · 插件施工注（2026-10-13）
-
-- 插件：`dismantleYieldLine(d,pd)` + `heldForgeLine` softPd；单测 PASS
-- jar：`1.65.804-d13303.local`；bv=123 未动
+### 施工注
+- 插件：`dismantleYieldLine(d,pd)` + `heldForgeLine` softPd；单测 EmberGearNextHintTest 10/10
+- jar：`1.65.804-d13303.local`；bv=123（economy/runs 与 jar 对齐；Stage2 三开关未动）
 - 物品岗 forge lore：已交 `e09a60082`
+- 同批：purgeLegacy Fight-only r=48 cap≤32（Watchdog）
 - 禁项：BONUS/表/Stage2/×0.97/afk.tiers 未动
