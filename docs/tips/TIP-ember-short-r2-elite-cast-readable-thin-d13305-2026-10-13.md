@@ -1,6 +1,6 @@
 # tip · TIP-BZ 短征 R2 精英可读 Cast（≠sx20 · ≠抬表）· D13305
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-怪物** · 2026-10-13 21:34 Asia/Shanghai  
+> **状态：** CLOSED live MM · 批 **A · 方案 M** · 怪物 `d39c32bb6` · mm reload 21:34 · 2026-10-13 21:35 Asia/Shanghai  
 > **DESIGN** [`DESIGN-ember-short-r2-elite-cast-readable-2026-10-13.md`](../design/DESIGN-ember-short-r2-elite-cast-readable-2026-10-13.md) · RESEARCH 同日 · backlog `B-short-r2-elite-cast-readable`  
 > **施工岗：** 余烬-怪物 · MM-only · **不派插件/物品**（W1d 选页半行可选后置）  
 > **硬禁：** 零 sx20 · 零抬日表/Elite·Boss 基础伤 · 零改 HP/掉落/日帽/地图 · 禁 Boss Cast 原伤复读到 Elite
@@ -16,7 +16,7 @@ sx01–19 第二房精英挂轻压主题 Cast（timer100 · dmg≈0.50–0.55 ·
 
 ## 验收
 - [x] 总控批 A·M
-- [ ] 怪物交 tip + push
-- [ ] MM reload 后 R2 精英可见蓄力喊话+粒子；伤害明显低于本本 Boss Cast
+- [x] 怪物交 tip + push `d39c32bb6` · 19/19 EliteCast
+- [x] MM reload 189 mob / 67 skills（+19）；测岗 gameplay 联验中
 
-## STATUS: APPROVED · 批 A·M · 已派余烬-怪物 · 2026-10-13 21:34 Asia/Shanghai
+## STATUS: CLOSED live MM `d39c32bb6` · 测岗联验中 · 2026-10-13 21:35 Asia/Shanghai
