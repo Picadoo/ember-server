@@ -1,6 +1,6 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13313 · 冒险「今日三冲」聚合 · docs-only · ≠抬表 · ≠sx20 · ≠菜单诚实空转）
 
-> **STATUS:** APPROVED · 批 A·M · 已派插件 W1a · 2026-10-13 23:56 Asia/Shanghai
+> **STATUS:** CLOSED · tip live PASS `ce9cd56bb` · jar `1.65.810-d13313.local` · 2026-10-14 00:10 Asia/Shanghai
 
 > **旁注（打开 · 待批 A · 荐 M · 拟 D13313）：** tip 交总控批 · DESIGN [`DESIGN-ember-adventure-today-triple-chase-visible-2026-10-13.md`](../design/DESIGN-ember-adventure-today-triple-chase-visible-2026-10-13.md) · RESEARCH [`RESEARCH-ember-adventure-today-triple-chase-visible-2026-10-13.md`](../design/RESEARCH-ember-adventure-today-triple-chase-visible-2026-10-13.md) · backlog `B-adventure-today-triple-chase-visible` · **TIP-CH** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠抬 weekly_goals.targets/徽/短征日帽/event_rate ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠stage 脏 runtime**。
 

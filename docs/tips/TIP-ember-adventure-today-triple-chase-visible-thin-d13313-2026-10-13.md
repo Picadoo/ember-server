@@ -1,6 +1,6 @@
 # tip · TIP-CH 冒险「今日三冲」聚合（今日推+冲一下+本周短征 · ≠抬表 · ≠sx20）· 拟 D13313
 
-> **状态：** W1a LIVE · 批 **A · 方案 M** · jar `1.65.810-d13313.local` · 物品 W1b 可派 · 2026-10-14 00:01 Asia/Shanghai  
+> **状态：** CLOSED live · 批 **A · 方案 M** · jar `1.65.810-d13313.local` · 插件 `ef967a409` · 物品 `76f0a6c5a` · TrMenu reload 77 · PASS STATUS `ce9cd56bb` · 2026-10-14 00:10 Asia/Shanghai · **勾毕**
 > **DESIGN** [`DESIGN-ember-adventure-today-triple-chase-visible-2026-10-13.md`](../design/DESIGN-ember-adventure-today-triple-chase-visible-2026-10-13.md) · RESEARCH 同日 · backlog `B-adventure-today-triple-chase-visible`  
 > **施工岗（批后）：** 余烬-插件（薄 `today_triple*` + enter `today-triple`）+ 余烬-物品（TrMenu P 格）· **不派怪物/地图**  
 > **硬禁：** 零抬日帽/`short:5`/徽/`event_rate`/NEED · 零 sx20/L13/K3 · 零第五件花料 · 零只半行无进本 · 零撤 H/E/F
@@ -24,7 +24,7 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-13 23:56 Asia/Shanghai
 - [x] 插件交 today_triple* + today-triple + 单测 · `1.65.810-d13313.local`
-- [ ] 物品交 P 格 + TrMenu reload
-- [ ] 测岗：智路由序正确 · H/E/F 未撤 · 零抬日帽/short:5/event_rate
+- [x] 物品交 P 格 + TrMenu reload · `76f0a6c5a` · reload 77
+- [x] 测岗 PASS STATUS `ce9cd56bb` · kind=today→sx12 · H·E·D·F · 零抬
 
-## STATUS: W1a LIVE · jar 1.65.810-d13313.local · 物品 W1b 可派 · 拟 D13313 · TIP-CH · 2026-10-14 00:01 Asia/Shanghai
+## STATUS: CLOSED live · jar `1.65.810-d13313.local` · menu `76f0a6c5a` · PASS `ce9cd56bb` · 2026-10-14 00:10 Asia/Shanghai
