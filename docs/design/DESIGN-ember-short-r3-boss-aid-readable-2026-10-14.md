@@ -1,6 +1,6 @@
 # 余烬 · 短征 R3 Boss 半血轻添头（短本玩法花样续 · ≠Cast粒子打磨 · ≠半行 · ≠sx20 · ≠抬表）
 
-STATUS=**已批 A · 方案 M · 全线非 L · D13318** · 批 sha `661e73acf` · 总控 2026-10-14 01:17 Asia/Shanghai · TIP-CM · 已派怪物 · **勿勾 CLOSED**（等 live CLOSED）· fallback `~onTimer:160` 须进 STATUS/验收 · docs→施工
+STATUS=**CLOSED live** · tip `ee36f5af9` · PASS `84448394a` · D13318 · TIP-CM · 2026-10-14 01:33 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-short-r3-boss-aid-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-short-r3-boss-aid-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-r3-boss-aid-readable-2026-10-14.md`](RESEARCH-ember-short-r3-boss-aid-readable-2026-10-14.md) · backlog `B-short-r3-boss-aid-readable` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠灾厄重开 ≠Pack6**
 
 > **一句话玩家价值：** 短征终厅 Boss 半血会喊「添头」并多出 1 只本本近战——先清再打首领；**不**开 sx20、**不**抬日表、**不**再叠 Cast 粒子。
@@ -146,8 +146,9 @@ STATUS=**已批 A · 方案 M · 全线非 L · D13318** · 批 sha `661e73acf` 
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 01:33 Asia/Shanghai | **CLOSED live** · tip `ee36f5af9` · PASS `84448394a` · 证据 `/workspace/tmp/tip-cm-boss-aid/` · 挂钩 `~onDamaged` · `health{h=<120}` · 未用 fallback |
 | 2026-10-14 01:17 Asia/Shanghai | 总控批 A·M · 全线非 L · 派怪物 · 批 sha `661e73acf` · fallback `~onTimer:160` 须进 STATUS/验收 |
 | 2026-10-14 01:17 Asia/Shanghai | 策划补记 · STATUS/RESEARCH/tip/backlog 标**已批 A·方案 M·全线非 L** · 旁注批 sha `661e73acf` · **勿勾 CLOSED** · fallback 须进 STATUS/验收 |
 | 2026-10-14 01:16 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CL CLOSED 后连开 · 选题短征 R3 Boss 半血轻添头 · 拟 D13318 · TIP-CM · ≠半行 ≠Cast粒子主交付 ≠庭内再叠 · **改题有证据**（Cast 齐后终厅无换挡；Raid SummonAid 范式；见 RESEARCH） |
 
-*D13318 **已批 A · 方案 M · 全线非 L** · 批 sha `661e73acf` · TIP-CM · 短征 R3 半血轻添头 · 已派怪物 · **勿勾 CLOSED** · fallback `~onTimer:160` 须进 STATUS/验收 · 2026-10-14 01:17 Asia/Shanghai · ≠半行 ≠Cast粒子主交付 ≠sx20。*
+*D13318 **CLOSED live** · `ee36f5af9` · PASS `84448394a` · 短征 R3 半血轻添头 · TIP-CM。**已批 A · 方案 M · 全线非 L** · 批 sha `661e73acf` · ≠半行 ≠Cast粒子主交付 ≠sx20。*

@@ -41,3 +41,5 @@
 零改 YAML/jar（测岗只验）。Stage2 / daily_kills / gate_daily / Cast 伤表 / afk.tiers 未拧。
 
 *TIP-CM · D13318 · BossAid 抽测 PASS · tip ee36f5af9。*
+
+> **总控收口：** CLOSED live · tip `ee36f5af9` · PASS `84448394a` · 2026-10-14 01:33 Asia/Shanghai

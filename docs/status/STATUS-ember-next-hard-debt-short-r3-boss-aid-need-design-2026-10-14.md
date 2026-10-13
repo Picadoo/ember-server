@@ -1,6 +1,6 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13318 · 短征 R3 Boss 半血轻添头 · docs-only · ≠Cast粒子打磨 · ≠半行 · ≠sx20 · ≠抬日表）
 
-> **旁注（已批 A · 方案 M · 全线非 L · APPROVED · 批 sha `661e73acf` · 已派怪物 · 拟 D13318 · TIP-CM · 2026-10-14 01:17 Asia/Shanghai · 勿勾 CLOSED · fallback `~onTimer:160` 须进 STATUS/验收）：** tip 已批 · DESIGN [`DESIGN-ember-short-r3-boss-aid-readable-2026-10-14.md`](../design/DESIGN-ember-short-r3-boss-aid-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-r3-boss-aid-readable-2026-10-14.md`](../design/RESEARCH-ember-short-r3-boss-aid-readable-2026-10-14.md) · backlog `B-short-r3-boss-aid-readable` · **TIP-CM** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
+> **旁注（CLOSED live · tip `ee36f5af9` · PASS `84448394a` · 2026-10-14 01:33 Asia/Shanghai）：** tip 已批 · DESIGN [`DESIGN-ember-short-r3-boss-aid-readable-2026-10-14.md`](../design/DESIGN-ember-short-r3-boss-aid-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-r3-boss-aid-readable-2026-10-14.md`](../design/RESEARCH-ember-short-r3-boss-aid-readable-2026-10-14.md) · backlog `B-short-r3-boss-aid-readable` · **TIP-CM** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
 
 > **上游结案：** **TIP-CL CLOSED** `95a0d5fe4`（D13317 庭内顺手互换齐 · PASS `86a105307` · menu `4671d3ea4`）。总控连开：优先短征日更花样（真可点/房内可感）；挂机庭环已齐勿再叠；半行 REJECT `d00ed84bc` **保持否决**。
 
