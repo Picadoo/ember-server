@@ -1,3 +1,4 @@
+# TIP-CK / D13316: 庭内顺手分解（D · held_dismantle_yield · p1 dismantle · 零抬拆表/第五花料）
 # TIP-CJ / D13315: 庭内顺手推荐花（P · afk_rec_flower* · enter afk-rec-flower · 零抬产/第五花料）
 # D612: 战况/Open 挂「挂机在养手持」希望表盘（held_*_hope · 零改产量）
 # TIP-BY / D13304: 庭内顺手强化+1（E/e · gap_enhance1 · 零改产量/价）
@@ -24,7 +25,7 @@ Options:
   Min-Click-Delay: 200
 Layout:
   - '#########'
-  - '#P1 2 3 #'
+  - '#P1 2 3D#'
   - '#US4QVRE#'
   - '#ueIqFrH#'
   - '####B####'
@@ -44,6 +45,7 @@ Events:
     - 'tell: §8精工也可本页点'
     - 'tell: §8成色也可本页点'
     - 'tell: §a仓够推荐见本页 P：§f%corerpg_p1_afk_rec_flower%'
+    - 'tell: §8本页也可顺手拆（本页 D）'
 Icons:
   '#':
     display:
@@ -186,6 +188,22 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'command: corerpg p1 enter afk-rec-flower'
 
+
+  # TIP-CK / D13316: 顺手分解（第二行空槽 D · 与 forge D 同链路 · 布局挤无 d · 不撤 E/e/U/u/R/r/Q/q/P）
+  D:
+    update: 20
+    display:
+      material: flint
+      name: '§7顺手分解'
+      lore:
+        - '§e预览：§f%corerpg_p1_held_dismantle_yield%'
+        - '§7只限普通掉落件；甲→白板胚零头'
+        - '§e➥ §f点预览·聊天确认'
+    actions:
+      all:
+        - 'command: corerpg p1 dismantle'
+        - close
+
   # D375: 产→花可见跳转（零抬日表）
 # D381: 去哪花 lore +半行「工坊内可回本庭」（反向互指；不重做主格）
 # D398: 去哪花 +半行「工坊有配方速览看 ×N」
@@ -199,6 +217,7 @@ Icons:
         - '§7挂机材料去工坊花'
         - '§7本页也可顺手强化/升阶/精工/成色'
         - '§a也可看推荐花（本页 P）'
+        - '§7本页也可顺手拆（本页 D）'
         - '§e➥ §f打开工坊'
     actions:
       all:
