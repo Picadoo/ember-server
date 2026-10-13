@@ -1,6 +1,6 @@
 # tip · TIP-CX 短征日差软目标极薄有奖（真可点领 NI · ≠日差本同题 · ≠路径追同题 · ≠settle下一环同题 · ≠今日推/周目标复读 · ≠半行 · ≠庭内旁路 · ≠抬表 · ≠写 weekly_goals）· 拟 D13329
 
-> **状态：** **待批 A · 荐方案 M** · 拟 D13329 · TIP-CX · docs-only · 批准前禁改 YAML/Java · 勿施工 · 勿勾本窗 CLOSED · 2026-10-14 07:48 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13329 · TIP-CX · 全弧非 L · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · 零抬日帽/S/targets · 零写 weekly_goals · 2026-10-14 07:53 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md`](../design/DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-div-soft-reward-claim`  
 > **施工岗（批后）：** 余烬-插件（软目标 claim NI + PAPI）+ 余烬-物品（选页 L 可领态）· **不派怪物/地图**  
 > **硬禁：** 零半行独批 · 零日差本同题 · 零路径追同题 · 零 settle下一环同题 · 零今日推/周目标/三冲复读主交 · 零 Cast 粒子主交付 · 零拧 EliteAid/BossAid · 零 todayRot/W1e 独批 · 零 variety 再拧/完整经济 · 零 sx20 · 零抬日表/伤表/S表/targets.short · 零写入 weekly_goals · 零庭内旁路再拧 · 零 densify · 零教裸指令主 UI · 零改 ShortPath resolve / enter short-div 谓词  
@@ -25,12 +25,12 @@
 
 ## 方案
 - **M（荐）** = W1a+W1b+W1c 全弧  
-- **L** = 仅 lore「满 3 有奖」无真发 · **默认不批 L**
+- **L** = 仅 lore「满 3 有奖」无真发 · **本窗不批 L**
 
 ## 验收（批后施工）
-- [ ] 总控批 A·M
+- [x] 总控批 A·M · 2026-10-14 07:53 Asia/Shanghai
 - [ ] 插件交 claim NI + PAPI + 单测
 - [ ] 物品交 L 可领态 + TrMenu reload
 - [ ] 抽测：满 3 可领骨尘×2；日一次；未满可进 chase；零抬日帽/targets；零写 weekly_goals；零改 Cast/Aid；零日差进本同题；零 sx20；零半行独档
 
-## STATUS: **待批 A · 荐方案 M** · docs-only · D13329 · TIP-CX · 2026-10-14 07:48 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · D13329 · TIP-CX · 2026-10-14 07:53 Asia/Shanghai

@@ -2,9 +2,10 @@
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 07:53 Asia/Shanghai | 总控批 A·M · 全弧非 L · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · 零抬日帽/S/targets · 零写 weekly_goals · L 不批 |
 | 2026-10-14 07:51 Asia/Shanghai | 策划 · ancestor 对齐 TIP-CW CLOSED live `71db92dfb` |
 
-STATUS=**待批 A** · 荐方案 **M** · 拟 D13329 · TIP-CX · docs-only · 批准前禁改 YAML/Java · 2026-10-14 07:48 Asia/Shanghai
+STATUS=**已批 A · 方案 M** · APPROVED A·M · D13329 · TIP-CX · 全弧非 L · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · 零抬日帽/S/targets · 零写 weekly_goals · 2026-10-14 07:53 Asia/Shanghai
 
 > tip [`STATUS-ember-next-hard-debt-short-div-soft-reward-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-short-div-soft-reward-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-div-soft-reward-claim-2026-10-14.md`](RESEARCH-ember-short-div-soft-reward-claim-2026-10-14.md) · backlog `B-short-div-soft-reward-claim` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬 event_core ≠新 variety kind ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠本周短征可冲复读 ≠日差本同题 ≠路径追同题 ≠settle下一环同题 ≠抬 targets.short ≠写入 weekly_goals ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠灾厄重开 ≠Pack6 ≠densify**
 
@@ -54,9 +55,9 @@ STATUS=**待批 A** · 荐方案 **M** · 拟 D13329 · TIP-CX · docs-only · �
 
 ### 批注勾选（总控）
 
-- [ ] 勾 **方案 M**（全弧）· STATUS→已批 A  
-- [ ] 或勾 **方案 L**（仅 lore；claim 后置）· **本窗默认不批 L**  
-- [ ] 批注：……
+- [x] 勾 **方案 M**（全弧）· STATUS→已批 A  
+- [ ] 或勾 **方案 L**（仅 lore；claim 后置）· **本窗不批 L**  
+- [x] 批注：总控批 A·M · D13329 · TIP-CX · 全弧非 L · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · 零抬日帽/S/targets · 零写 weekly_goals · 2026-10-14 07:53 Asia/Shanghai
 
 ---
 
@@ -125,6 +126,7 @@ STATUS=**待批 A** · 荐方案 **M** · 拟 D13329 · TIP-CX · docs-only · �
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 07:53 Asia/Shanghai | 总控 · **批 A·M** · 全弧非 L · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L 不批 · 半行 REJECT `d00ed84bc` 保持 · 零抬日帽/S/targets · 零写 weekly_goals |
 | 2026-10-14 07:48 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CW PASS 后连开 · 选题短征日差软目标极薄有奖 · 拟 D13329 · TIP-CX · ≠半行 ≠日差本同题 ≠路径追/settle同题 ≠Cast/Aid/variety再拧 ≠庭内旁路 · **改题有证据**（§6①；SOFT_TARGET 零经济；L 无领态；见 RESEARCH） |
 
-*D13329 **待批 A · 荐方案 M** · 短征日差软目标极薄有奖 · TIP-CX。**≠半行 ≠日差本同题 ≠路径追/settle同题 ≠Cast/Aid/variety再拧 ≠庭内旁路 · ≠sx20 · ≠写 weekly_goals · ≠抬 targets。*
+*D13329 **已批 A · 方案 M** · APPROVED A·M · 短征日差软目标极薄有奖 · TIP-CX。**全弧非 L** · 可施工 W1a插件+W1b物品 · ≠半行 ≠日差本同题 ≠路径追/settle同题 ≠Cast/Aid/variety再拧 ≠庭内旁路 · ≠sx20 · ≠写 weekly_goals · ≠抬 targets · 2026-10-14 07:53 Asia/Shanghai*
