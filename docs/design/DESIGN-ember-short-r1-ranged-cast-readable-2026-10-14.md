@@ -1,6 +1,6 @@
 # 余烬 · 短征 R1 远程卫可读轻 Cast（短本玩法花样续 · ≠sx20 · ≠抬表）
 
-STATUS=**CLOSED live · D13314** · PASS `7125ddcd6` · tip `8a5cd67d5` · 总控 2026-10-14 00:22 Asia/Shanghai
+STATUS=**已批 A · 方案 M · CLOSED live · D13314** · PASS `7125ddcd6` · tip `8a5cd67d5` · 总控 TIP-CI CLOSED live `af54fa6ee` · 策划勾毕 2026-10-14 00:25 Asia/Shanghai
 
 > **一句话玩家价值：** 短征第一房远程卫也会「蓄力→可躲」——R1 近战+远程双侧可读；**不**开 sx20、**不**抬日表。
 
@@ -160,6 +160,7 @@ STATUS=**CLOSED live · D13314** · PASS `7125ddcd6` · tip `8a5cd67d5` · 总�
 |----|-----|
 | 2026-10-14 00:15 | 总控批 A·M · 派怪物全线 |
 | 2026-10-14 00:22 | 总控 · CLOSED live · PASS `7125ddcd6` · tip `8a5cd67d5` |
+| 2026-10-14 00:25 | 策划旁注勾毕 · STATUS=**已批 A · 方案 M · CLOSED** · tip/STATUS+backlog 补关 · 顺手推荐花后置→TIP-CJ / 拟 D13315 |
 | 2026-10-14 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CH 后连开 · 选题短征 R1 远程卫轻 Cast（玩法花样续）· 拟 D13314 · TIP-CI · ≠sx20 ≠抬表 ≠第五件花料 ≠复开 D423 · **未改题**（采纳 D13313§6① · 证据表见 RESEARCH） |
 
-*D13314 · 短征 R1 远程卫轻 Cast · **待批 A·方案 M** · ≠关观察 ≠抬日表 ≠sx20。*
+*D13314 CLOSED live · 短征 R1 远程卫轻 Cast · PASS `7125ddcd6` · ≠关观察 ≠抬日表 ≠sx20。*

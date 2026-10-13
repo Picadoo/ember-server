@@ -2,6 +2,8 @@
 
 > **STATUS:** CLOSED · tip live PASS `7125ddcd6` · tip `8a5cd67d5` · 2026-10-14 00:22 Asia/Shanghai
 
+> **旁注（策划勾毕 · 2026-10-14 00:25 Asia/Shanghai）：** 施工已 CLOSED live `af54fa6ee`；策划补关 DESIGN/RESEARCH/薄 tip/backlog · **已批 A · 方案 M · CLOSED** · 顺手推荐花后置→TIP-CJ / 拟 D13315。
+
 > **旁注（打开 · 待批 A · 荐 M · 拟 D13314）：** tip 交总控批 · DESIGN [`DESIGN-ember-short-r1-ranged-cast-readable-2026-10-14.md`](../design/DESIGN-ember-short-r1-ranged-cast-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-r1-ranged-cast-readable-2026-10-14.md`](../design/RESEARCH-ember-short-r1-ranged-cast-readable-2026-10-14.md) · backlog `B-short-r1-ranged-cast-readable` · **TIP-CI** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠抬伤表 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠stage 脏 runtime ≠撤分格**。
 
 > **上游结案：** **TIP-CH CLOSED** live `69cc1580c` · PASS `ce9cd56bb` · jar `1.65.810-d13313.local`（D13313 冒险今日三冲）。总控连开：优先可感；D13313§6 后置可参考。挂机庭四件 / 今日推 / 冲一下 / 周短征 / 三冲 / 近战 Guard+Elite+Boss Cast 已齐。
@@ -87,3 +89,5 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-14 | 策划 · tip 打开 · TIP-CH 后连开 · 选题短征 R1 远程卫轻 Cast（债清·可感·未改题·采纳 D13313§6①）· DESIGN/RESEARCH 待批 A·荐 M · 拟 D13314 · TIP-CI |
+| 2026-10-14 00:22 | 总控 · CLOSED live · PASS `7125ddcd6` · tip `8a5cd67d5` |
+| 2026-10-14 00:25 | 策划旁注勾毕 · tip/STATUS/DESIGN/RESEARCH/backlog 补关 · 后置顺手推荐花→TIP-CJ |

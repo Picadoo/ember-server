@@ -1,6 +1,6 @@
 # RESEARCH · 短征 R1 远程卫可读轻 Cast（短本玩法花样续 · ≠sx20 · ≠抬表）· 2026-10-14
 
-> **状态：** **打开 · 待批 A · 荐 M · 拟 D13314 · TIP-CI** · docs-only · 2026-10-14 Asia/Shanghai  
+> **状态：** **CLOSED live · 已批 A · 方案 M · D13314 · TIP-CI** · PASS `7125ddcd6` · tip `8a5cd67d5` · 总控 CLOSED `af54fa6ee` · 策划勾毕 2026-10-14 00:25 Asia/Shanghai  
 > **起因：** 总控【连开·下一档内容真债】TIP-CH CLOSED live `69cc1580c` · PASS `ce9cd56bb` · jar `1.65.810-d13313.local`。请出下一窗 tip+DESIGN（拟 D13314 · TIP-CI），STATUS=待批 A · 荐 M · docs-only。优先可感：挂机庭资源环新乐趣（≠第五件花料）/ 短征日更花样 / 乐趣系统；D13313§6 后置可参考须证据表。  
 > **上游：** TIP-CH CLOSED · D13313 冒险今日三冲 · D13311 R1 近战 GuardCast · D13305 R2 EliteCast · R3 BossCast · 挂机庭四件齐 · 今日推/冲一下/周短征/三冲齐  
 > **硬禁：** **零** sx20 · **零** L13 · **零** K3 · **零** Pack6/天赋灰印/R · **零抬** AFK 日表/`daily_kills`/`afk.tiers`/伤乘/`skill_mult`/`short:5` · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实/observe 空转 · **零** 假开 `gate_daily` · **零** 重开 calamity · **零** 新地图硬开 · **零** 挂机庭第五件花料 · **零** 复开 D423 · **零** 教裸指令 · **零** 撤分格
@@ -61,4 +61,4 @@
 - 只做粒子打磨不挂远程 · 远程与近战同 Timer 同伤双压 · 再叠挂机庭第五件花料  
 - 重开 calamity · 新 fest · 复开 D423 · 教裸指令 · 撤分格  
 
-## STATUS: 打开 · 待批 A · 荐 M · 拟 D13314 · TIP-CI · 2026-10-14 Asia/Shanghai
+## STATUS: CLOSED live · 已批 A · 方案 M · D13314 · TIP-CI · PASS `7125ddcd6` · 勾毕 2026-10-14 00:25 Asia/Shanghai

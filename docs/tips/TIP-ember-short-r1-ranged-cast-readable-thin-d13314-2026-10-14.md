@@ -1,6 +1,6 @@
 # tip · TIP-CI 短征 R1 远程卫可读轻 Cast（≠sx20 · ≠抬表）· 拟 D13314
 
-> **状态：** CLOSED live · 批 **A · 方案 M** · tip `8a5cd67d5` · PASS STATUS `7125ddcd6` · mm reload · 2026-10-14 00:22 Asia/Shanghai · **勾毕**
+> **状态：** CLOSED live · 批 **A · 方案 M** · tip `8a5cd67d5` · PASS STATUS `7125ddcd6` · mm reload · 总控 CLOSED `af54fa6ee` · 2026-10-14 00:22 Asia/Shanghai · **勾毕** · 策划旁注 00:25
 > **DESIGN** [`DESIGN-ember-short-r1-ranged-cast-readable-2026-10-14.md`](../design/DESIGN-ember-short-r1-ranged-cast-readable-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-r1-ranged-cast-readable`  
 > **施工岗（批后）：** 余烬-怪物 · MM-only · **不派插件/物品**（W1d 选页半行可选后置）  
 > **硬禁：** 零 sx20 · 零抬日表/伤表 · 零改 HP/掉落/日帽/地图 · 禁 Guard/Elite/Boss 原伤复读到 Archer · 禁与近战同 Timer 双压 · 禁第五件花料
