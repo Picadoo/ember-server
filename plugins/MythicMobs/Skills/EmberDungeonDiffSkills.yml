@@ -1010,3 +1010,254 @@ EmberSx19GuardCast:
   - damage{amount=0.32} @PlayersInRadius{r=4}
   - effect:particles{p=note;amount=14;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
   - effect:particles{p=crit;amount=12;hSpread=3;ySpread=0.3;speed=0.02} @Self
+
+# --- D13314 · 短征 R1 远程卫可读轻 Cast（轻压 · 弱于 GuardCast · MM-only）---
+# 统一：dmg 0.25 · delay 35 · r4 · CD 15 · Archer ~onTimer:180；禁 ≥Guard 伤；禁挂近战；禁改 Guard/Elite/Boss
+EmberSx01ArcherCast:
+  # D13314 ArcherCast · 主题「哨弓轻矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&6【烬门】&f哨弓轻矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=flame;amount=18;hSpread=3.2;ySpread=0.45;speed=0.02} @Self
+  - effect:particles{p=crit;amount=14;hSpread=3;ySpread=0.35;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=10;hSpread=2.8;ySpread=0.35;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.9} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=flame;amount=14;hSpread=3.2;ySpread=0.35;speed=0.02} @Self
+
+EmberSx02ArcherCast:
+  # D13314 ArcherCast · 主题「栈弩轻矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&e【锈灯】&f栈弩轻矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=flame;amount=16;hSpread=1.1;ySpread=0.25;speed=0} @Self
+  - effect:particles{p=lava;amount=10;hSpread=2.2;ySpread=0.25;speed=0} @Self
+  - effect:particles{p=crit;amount=16;hSpread=3.2;ySpread=0.35;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=1.0} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=flame;amount=12;hSpread=3.2;ySpread=0.35;speed=0.02} @Self
+  - effect:particles{p=lava;amount=8;hSpread=2.8;ySpread=0.25;speed=0} @Self
+
+EmberSx03ArcherCast:
+  # D13314 ArcherCast · 主题「闸弩轻楔矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&b【霜雾】&f闸弩轻楔矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=cloud;amount=18;hSpread=3.2;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=crit;amount=14;hSpread=3;ySpread=0.35;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.85} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=cloud;amount=12;hSpread=3.2;ySpread=0.45;speed=0} @Self
+  - effect:particles{p=crit;amount=10;hSpread=2.8;ySpread=0.25;speed=0.02} @Self
+
+EmberSx04ArcherCast:
+  # D13314 ArcherCast · 主题「井弩轻焰矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&c【烬井】&f井弩轻焰矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=lava;amount=14;hSpread=1.1;ySpread=1.0;speed=0} @Self
+  - effect:particles{p=flame;amount=18;hSpread=1.6;ySpread=1.2;speed=0.02} @Self
+  - effect:particles{p=crit;amount=12;hSpread=3;ySpread=0.35;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.65} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=lava;amount=10;hSpread=3.2;ySpread=0.5;speed=0} @Self
+  - effect:particles{p=flame;amount=12;hSpread=3.2;ySpread=0.4;speed=0.02} @Self
+
+EmberSx05ArcherCast:
+  # D13314 ArcherCast · 主题「崖弩轻剪矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&7【裂谷】&f崖弩轻剪矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=cloud;amount=18;hSpread=3.6;ySpread=0.25;speed=0.03} @Self
+  - effect:particles{p=crit;amount=16;hSpread=3;ySpread=0.35;speed=0.03} @Self
+  - effect:particles{p=explode;amount=6;hSpread=2.2;ySpread=0.15;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=1.05} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=cloud;amount=12;hSpread=3.2;ySpread=0.25;speed=0.02} @Self
+
+EmberSx06ArcherCast:
+  # D13314 ArcherCast · 主题「环弩轻弧矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&8【环廊】&f环弩轻弧矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=18;hSpread=3.6;ySpread=0.25;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=14;hSpread=3;ySpread=0.4;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.8} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=12;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
+
+EmberSx07ArcherCast:
+  # D13314 ArcherCast · 主题「塔弩轻坠矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&6【烬塔】&f塔弩轻坠矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=lava;amount=14;hSpread=1.6;ySpread=1.0;speed=0} @Self
+  - effect:particles{p=flame;amount=18;hSpread=2.2;ySpread=1.2;speed=0.02} @Self
+  - effect:particles{p=crit;amount=12;hSpread=3;ySpread=0.35;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.7} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=lava;amount=10;hSpread=3.2;ySpread=0.5;speed=0} @Self
+
+EmberSx08ArcherCast:
+  # D13314 ArcherCast · 主题「层弩轻砸矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&e【错层】&f层弩轻砸矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=18;hSpread=3.2;ySpread=0.6;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=14;hSpread=3;ySpread=0.4;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.75} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=12;hSpread=3.2;ySpread=0.4;speed=0.02} @Self
+
+EmberSx09ArcherCast:
+  # D13314 ArcherCast · 主题「渠弩轻溅矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&3【烬渠】&f渠弩轻溅矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=waterdrop;amount=18;hSpread=3.6;ySpread=0.35;speed=0.03} @Self
+  - effect:particles{p=splash;amount=12;hSpread=3;ySpread=0.35;speed=0.02} @Self
+  - effect:particles{p=crit;amount=10;hSpread=2.8;ySpread=0.25;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.9} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=waterdrop;amount=12;hSpread=3.2;ySpread=0.25;speed=0.02} @Self
+
+EmberSx10ArcherCast:
+  # D13314 ArcherCast · 主题「闸弩轻压矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&8【密封闸】&f闸弩轻压矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=18;hSpread=3.2;ySpread=0.35;speed=0.03} @Self
+  - effect:particles{p=smoke;amount=14;hSpread=3;ySpread=0.4;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.75} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=12;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
+
+EmberSx11ArcherCast:
+  # D13314 ArcherCast · 主题「镜弩轻扫矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&5【合镜】&f镜弩轻扫矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=18;hSpread=3.6;ySpread=0.25;speed=0.03} @Self
+  - effect:particles{p=spell_witch;amount=12;hSpread=3;ySpread=0.35;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.95} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=12;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
+
+EmberSx12ArcherCast:
+  # D13314 ArcherCast · 主题「枢弩轻斩矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&a【环枢】&f枢弩轻斩矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=18;hSpread=3.2;ySpread=0.35;speed=0.03} @Self
+  - effect:particles{p=happyVillager;amount=12;hSpread=3;ySpread=0.4;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.85} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=12;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
+
+EmberSx13ArcherCast:
+  # D13314 ArcherCast · 主题「衡弩轻斩矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&6【衡梁】&f衡弩轻斩矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=18;hSpread=3.6;ySpread=0.25;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=14;hSpread=3;ySpread=0.35;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.7} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=12;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
+
+EmberSx14ArcherCast:
+  # D13314 ArcherCast · 主题「裂弩轻斩矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&6【烬裂】&f裂弩轻斩矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=18;hSpread=3.6;ySpread=0.25;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=14;hSpread=3;ySpread=0.4;speed=0} @Self
+  - effect:particles{p=lava;amount=8;hSpread=1.6;ySpread=0.6;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.55} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=12;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=10;hSpread=2.8;ySpread=0.35;speed=0} @Self
+
+EmberSx15ArcherCast:
+  # D13314 ArcherCast · 主题「旋弩轻斩矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&6【烬旋】&f旋弩轻斩矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=18;hSpread=3.6;ySpread=0.35;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=14;hSpread=3;ySpread=0.5;speed=0} @Self
+  - effect:particles{p=lava;amount=8;hSpread=1.6;ySpread=0.6;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.5} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=12;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=10;hSpread=2.8;ySpread=0.35;speed=0} @Self
+
+EmberSx16ArcherCast:
+  # D13314 ArcherCast · 主题「影弩轻斩矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&6【烬影】&f影弩轻斩矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=18;hSpread=3.6;ySpread=0.25;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=14;hSpread=3;ySpread=0.4;speed=0} @Self
+  - effect:particles{p=smoke;amount=10;hSpread=3;ySpread=0.35;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.6} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=12;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=10;hSpread=2.8;ySpread=0.35;speed=0} @Self
+
+EmberSx17ArcherCast:
+  # D13314 ArcherCast · 主题「潮弩轻斩矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&6【烬潮】&f潮弩轻斩矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=waterdrop;amount=18;hSpread=3.6;ySpread=0.25;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=14;hSpread=3;ySpread=0.4;speed=0} @Self
+  - effect:particles{p=splash;amount=10;hSpread=3;ySpread=0.35;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.58} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=waterdrop;amount=12;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=10;hSpread=2.8;ySpread=0.35;speed=0} @Self
+
+EmberSx18ArcherCast:
+  # D13314 ArcherCast · 主题「晶弩轻斩矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&6【烬晶】&f晶弩轻斩矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=18;hSpread=3.6;ySpread=0.25;speed=0.03} @Self
+  - effect:particles{p=fireworkSpark;amount=12;hSpread=3;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=10;hSpread=3;ySpread=0.35;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.55;pitch=0.75} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=12;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
+  - effect:particles{p=fireworkSpark;amount=8;hSpread=2.8;ySpread=0.25;speed=0.02} @Self
+
+EmberSx19ArcherCast:
+  # D13314 ArcherCast · 主题「弦弩轻斩矢」· 对齐本本 GuardCast 再降一档
+  Cooldown: 15
+  Skills:
+  - message{m="&6【烬弦】&f弦弩轻斩矢——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=note;amount=16;hSpread=3.6;ySpread=0.25;speed=0.03} @Self
+  - effect:particles{p=crit;amount=14;hSpread=3;ySpread=0.35;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=10;hSpread=3;ySpread=0.35;speed=0} @Self
+  - effect:sound{s=note.harp;volume=0.55;pitch=0.85} @Self
+  - delay 35
+  - damage{amount=0.25} @PlayersInRadius{r=4}
+  - effect:particles{p=note;amount=10;hSpread=3.2;ySpread=0.2;speed=0.02} @Self
+  - effect:particles{p=crit;amount=10;hSpread=2.8;ySpread=0.25;speed=0.02} @Self
