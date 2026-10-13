@@ -1,6 +1,6 @@
 # RESEARCH · 挂机庭「顺手花料」（庭内多一事 · 产→花可点）· 2026-10-13
 
-> **状态：** 待批 A · 荐方案 M · TIP-BY / 拟 **D13304** · docs-only · 2026-10-13 21:26 Asia/Shanghai  
+> **状态：** **已批 A · 方案 M · D13304** · TIP-BY CLOSED live menu `e214b0399` · 2026-10-13 21:31 Asia/Shanghai  
 > **起因：** 总控开窗 · TIP-BX CLOSED live `1.65.804-d13303` tip `be7a461ec` — 下一选题必须「可感内容/挂时长」；**禁止**再开菜单诚实/observe 空转；硬禁 sx20·L13·K3·Pack6/天赋灰印/R·抬 AFK 日表/伤乘/skill_mult·Affix densify·sure/pity/soft 诚实半行族再叠。优先：**挂机庭多一事可做 / 资源去向可见** 或短本玩法花样（**非 sx20**）。  
 > **上游：** TIP-BX CLOSED · D375 去哪花→工坊 · D381 材料哪来→挂机 · D404/D415 仓差 · D405/D413 remain · D408 满额短征追 · D409 有奖花材追 · D411/D420 next_farm · D612 挂机在养手持 · handoff `7fc55366`（**本单不复开 D423**）  
 > **硬禁：** **零抬** `daily_kills`/`afk.tiers` · **零** sx20 · **零** L13/K3/Pack6/天赋/灰印/R · **零** 伤乘/skill_mult · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实空转 / observe 空转 · **零** 假开 `gate_daily` · **零** 改 UpgradeRules 价表
@@ -63,4 +63,4 @@
 - Pack6 / 天赋 / 灰印 / R / L13 / K3 / 伤乘 / skill_mult / Affix densify  
 - 复开 D423 · 假开 `gate_daily` · 教手打指令  
 
-## STATUS: 待批 A · 荐 M · 拟 D13304 · 2026-10-13 21:26 Asia/Shanghai
+## STATUS: **已批 A · 方案 M · D13304** · CLOSED live menu `e214b0399` · 2026-10-13 21:31 Asia/Shanghai
