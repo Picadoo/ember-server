@@ -1,6 +1,6 @@
 # RESEARCH · 房间事件「冲一下」可感（事件窗小乐趣 · 零抬 event_rate/Pack）· 2026-10-13
 
-> **状态：** 待批 A · 荐方案 M · TIP-CE / 拟 **D13310** · docs-only · 2026-10-13 22:18 Asia/Shanghai  
+> **状态：** **勾毕 · CLOSED live** · 批 A·M · D13310 · jar `1.65.807-d13310b` · menu `1b4a9d78e` · PASS `abc14a205` · 2026-10-13 23:08 Asia/Shanghai  
 > **起因：** 总控【TIP-CD CLOSED】短征今日推 live · menu `5611a4337` · jar `1.65.805-d13309` · PASS `8c4b8ce2d`（今日 sx11）。下一波交薄 tip：荐 **事件窗小乐趣**（此前两后置）；或其它日征/挂机庭可感。硬禁 sx20 / 抬日帽·AFK表 / L13 / K3 live / 诚实空转 / Pack6。  
 > **上游：** TIP-CD CLOSED · D13309 今日推 · D13304–08 挂机庭四件齐 · D13305 R2 EliteCast · 多窗 §6 明文后置「事件窗小乐趣」  
 > **硬禁：** **零抬** `daily_kills`/`afk.tiers` · **零** sx20 · **零** L13/K3/Pack6/天赋/灰印/R · **零** 伤乘/skill_mult · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实空转 / observe 空转 · **零** 假开 `gate_daily` · **零** 抬 `event_rate`/`event_core`/软保底 NEED · **零** 重开 P1 已关 `calamity join`

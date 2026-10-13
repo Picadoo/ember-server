@@ -132,5 +132,6 @@ STATUS=**CLOSED live · 批 A · 方案 M · D13310** · jar `1.65.807-d13310b.l
 | 日 | 事 |
 |----|-----|
 | 2026-10-13 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CD 后连开 · 选题房间事件冲一下（事件窗小乐趣）· 拟 D13310 · ≠sx20 ≠抬率 ≠Pack6 ≠重开 calamity ≠复开 D423 |
+| 2026-10-13 | 总控【TIP-CE CLOSED】· jar `1.65.807-d13310b` · menu `1b4a9d78e` · PASS `abc14a205` · STATUS=**已批 A · 方案 M · CLOSED** · tip/STATUS/backlog 勾毕旁注 · fest/灾厄后置 |
 
-*拟 D13310 · 房间事件冲一下 · 待批 A·方案 M · ≠关观察 ≠抬日表 ≠sx20。*
+*D13310 · 房间事件冲一下 · **已批 A·方案 M** · CLOSED live menu `1b4a9d78e` · PASS `abc14a205` · ≠关观察 ≠抬日表 ≠sx20。*
