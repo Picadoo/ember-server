@@ -1,6 +1,6 @@
 # 余烬 · 挂机庭「顺手分解」（产→拆可点 · ≠第五件花料 · ≠半行空转 · ≠抬日表）
 
-STATUS=**已批 A · 方案 M · D13316** · 总控 2026-10-14 00:53 Asia/Shanghai · TIP-CK 重开 · docs→施工
+STATUS=**已批 A · 方案 M · D13316** · 批 sha `80dc1c28e` · 总控 2026-10-14 00:53 Asia/Shanghai · TIP-CK 重开 · 已派物品 · **勿勾 CLOSED**（等 live CLOSED）· docs→施工
 > **头注（号段）：** 本窗 **取代** 被否的半行题「短征选页三房可读可躲」`d00ed84bc`（TIP-CK / D13316 同号重开 · **勿**把半行题当 CLOSED）。  
 > tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-dismantle-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-dismantle-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-dismantle-2026-10-14.md`](RESEARCH-ember-afk-courtyard-quick-dismantle-2026-10-14.md) · backlog `B-afk-courtyard-quick-dismantle` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠第五件花料 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠Cast粒子主交付**
 
@@ -157,7 +157,8 @@ STATUS=**已批 A · 方案 M · D13316** · 总控 2026-10-14 00:53 Asia/Shangh
 
 | 日 | 事 |
 |----|-----|
-| 2026-10-14 00:53 | 总控批 A·M · 派物品 |
+| 2026-10-14 00:53 | 总控批 A·M · 派物品 · 批 sha `80dc1c28e` |
+| 2026-10-14 00:54 | 策划补记 · STATUS/RESEARCH/tip/backlog 标**已批 A·方案 M** · 旁注批 sha `80dc1c28e` · **勿勾 CLOSED** · 半行 REJECT `d00ed84bc` 保持否决 |
 | 2026-10-14 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CK REJECT 后重开 · 选题挂机庭顺手分解 · 拟 D13316 · TIP-CK · **取代**半行否决题 `d00ed84bc` · ≠sx20 ≠抬表 ≠第五件花料 ≠P兼确认 ≠复开 D423 · **改题有证据**（真 command · 见 §3.5） |
 
-*D13316 待批 A · 挂机庭顺手分解 · 荐 M · TIP-CK 重开 · 取代半行否决题 · ≠关观察 ≠抬日表 ≠sx20 ≠第五件花料。*
+*D13316 **已批 A · 方案 M** · 批 sha `80dc1c28e` · 挂机庭顺手分解 · 已派物品 · **勿勾 CLOSED** · TIP-CK 重开 · 取代半行否决题 · ≠关观察 ≠抬日表 ≠sx20 ≠第五件花料。*

@@ -1,6 +1,6 @@
 # tip · TIP-CK 挂机庭「顺手分解」（真 dismantle · ≠第五件花料 · ≠半行空转 · ≠抬表）· 拟 D13316（重开）
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-物品**（TrMenu）· 2026-10-14 00:53 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · APPROVED · 批 sha `80dc1c28e` · 已派 **余烬-物品**（TrMenu）· 2026-10-14 00:53 Asia/Shanghai · **勿勾 CLOSED**（等 live CLOSED）
 > **头注：** **取代**被否半行题「选页三房可读可躲」`d00ed84bc`（同 TIP-CK / D13316 · 半行档 **REJECTED · 勿勾 CLOSED**）  
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-dismantle-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-dismantle-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-dismantle`  
 > **施工岗（批后）：** 余烬-物品 · TrMenu-only · **不派插件/怪物/地图**（默认）  
@@ -30,4 +30,4 @@
 - [ ] 物品交 D 格 + Open 辅半行；抽测预览/确认/不可拆诚实
 - [ ] E/U/R/Q/P 仍在；零拆表 diff；零 sx20
 
-## STATUS: APPROVED · 批 A·M · 已派物品 · 拟 D13316 · TIP-CK 重开 · 2026-10-14 00:53 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED · 批 sha `80dc1c28e` · 已派物品 · 拟 D13316 · TIP-CK 重开 · **勿勾 CLOSED** · 2026-10-14 00:53 Asia/Shanghai

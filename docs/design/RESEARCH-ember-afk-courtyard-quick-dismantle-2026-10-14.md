@@ -1,6 +1,6 @@
 # RESEARCH · 挂机庭「顺手分解」（产→拆可点 · ≠第五件花料 · ≠半行空转 · ≠抬表）· 2026-10-14
 
-> **状态：** **打开 · 待批 A · 荐 M · 拟 D13316 · TIP-CK（重开）** · docs-only · 2026-10-14 Asia/Shanghai  
+> **状态：** **已批 A · 方案 M** · 批 sha `80dc1c28e` · 拟 D13316 · TIP-CK（重开）· 已派物品 · **勿勾 CLOSED** · 2026-10-14 00:53 Asia/Shanghai  
 > **起因：** 总控【TIP-CK REJECT · 重开真债】`d00ed84bc`：D13316「选页三房可躲半行」**否决**——纯 TrMenu lore/Open 半行、无新动作 = **菜单诚实空转硬禁**。请另开 tip+DESIGN（仍可用 TIP-CK / 拟 D13316），STATUS=待批 A · 荐 M · docs-only。必须有**玩家可点/可进/房内可感**的新动作或机制。  
 > **取代：** 被否的半行题 `DESIGN/TIP-ember-short-select-dodge-half-line` · **勿勾 CLOSED**  
 > **上游：** TIP-CJ CLOSED live `fe0d3890d` · D13315 推荐花 live；挂机庭四花+推荐花齐；今日推/冲一下/周短征/三冲/Cast 齐  
@@ -61,4 +61,4 @@
 - 只 Open/lore 半行无 D 格 · 第五件花料 · P 兼确认 · 抬产/改拆表 · 静默拆无聊天确认  
 - sx20 · Pack6/天赋/灰印/R/L13/K3 · 诚实/observe 空转 · 重开 calamity · 复开 D423 · Cast 粒子主交付 · 教裸指令  
 
-## STATUS: 打开 · 待批 A · 荐 M · 拟 D13316 · TIP-CK（重开·取代半行否决题）· 2026-10-14 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · 批 sha `80dc1c28e` · 拟 D13316 · TIP-CK（重开·取代半行否决题）· 已派物品 · **勿勾 CLOSED** · 2026-10-14 00:53 Asia/Shanghai
