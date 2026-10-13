@@ -69,7 +69,7 @@ Icons:
       material: shield
       name: '§6短征'
       lore:
-        - '§d今日剩余有奖：§f%corerpg_p1_sx_day_left_sum%'
+        - '§e今日推：§f%corerpg_p1_sx_today_name% §7· 有奖剩 §f%corerpg_p1_sx_day_left_sum%'
         - '§7生涯首通未领：§f%corerpg_p1_sx_fc_left% §7本'
         - '§e➥ §f短征选本页'
     actions:

@@ -15,6 +15,7 @@
 # 挂点：A/C/E/G/K/M/O/Q/T/V/X/Y/W/U/N/P/R/S/J 主 lore + 灰态 · I 说明 + Open；update:20。
 # D401：Open/I 半行「本周可选周目标·短征」；进度键 %corerpg_p1_goal_short%。
 # 金额：有奖 80/4/3 · 首通由 fc 真键显示（sx07=120/6/1 · sx08=110/6/1 · sx09=100/6/1 · sx10=90/6/1 · sx11=80/6/1 · sx12=70/6/1 · sx13=60/6/1 · sx14=50/6/1 · sx15=40/6/1 · sx16=30/6/1 · sx17=25/6/1 · sx18=20/6/1 · sx19=18/6/1）· 体力 30 · 日帽 3 分开。
+# TIP-CD / D13309: 今日推 D · sx_today* · enter short-today · 零抬日帽
 
 Title: '§6短征 · 选本'
 
@@ -35,7 +36,7 @@ Layout:
   - '#A C E G#'
   - '#K M O Q#'
   - '#TVXYWUN#'
-  - '#PRSJ   #'
+  - '#PRSJD  #'
 
 Events:
   Open:
@@ -54,6 +55,7 @@ Events:
     - 'tell: §8本周可选周目标·短征：赛季页可看 · 有奖通关计入 · 只发外观徽 · 不算全部完成'
     # D416 W1b：Open 半行 · 选本说明可看仓内还差（满态/未满共用 · 不盖 D409 去工坊花）
     - 'tell: §8选本说明可看仓内还差'
+    - 'tell: §8今日推：§f%corerpg_p1_sx_today_name%'
 
 Icons:
   '#':
@@ -754,6 +756,41 @@ Icons:
         - 'command: corerpg p1 enter sx19'
         - close
 
+
+
+  D:
+    icons:
+      - condition: 'check papi %corerpg_p1_access_q01% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7今日推 §8（需本人进过或首通 Q01）'
+          lore:
+            - '§c未解锁：进过或首通主线 Q01'
+            - '§7进过即开 · 清过也开'
+            - '§e%corerpg_p1_sx_today_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
+        priority: 2
+        display:
+          material: iron bars
+          name: '§7今日推 §8（体力不足）'
+          lore:
+            - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§e%corerpg_p1_sx_today_day_line%'
+            - '§7挂机/补给后再来 · 勿假开'
+    update: 20
+    display:
+      material: beacon
+      name: '§e今日推 · %corerpg_p1_sx_today_name%'
+      lore:
+        - '§e%corerpg_p1_sx_today_day_line% §7· 30体力'
+        - '§70 点换下一本 · 规则与各本相同'
+        - '§e➥ §f左键：进本'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter short-today'
+        - close
 
   B:
     update: 20
