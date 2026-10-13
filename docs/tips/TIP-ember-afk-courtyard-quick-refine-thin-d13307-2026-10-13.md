@@ -1,6 +1,6 @@
 # tip · TIP-CB 挂机庭「顺手精工」（第三件可感 · 零抬产）· 拟 D13307
 
-> **状态：** CLOSED live menu · 批 **A · 方案 M** · 物品 `fc94b0561` · TrMenu reload 77 · 2026-10-13 21:48 Asia/Shanghai  
+> **状态：** CLOSED live menu · 批 **A · 方案 M** · tip APPROVED `5eb12dbff` · 物品 `fc94b0561` · TrMenu reload 77 · 2026-10-13 21:50 Asia/Shanghai · **勾毕**  
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-refine-2026-10-13.md`](../design/DESIGN-ember-afk-courtyard-quick-refine-2026-10-13.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-refine`  
 > **施工岗（批后）：** 余烬-物品 · TrMenu-only · **不派插件**  
 > **硬禁：** 零抬 AFK 日表/tiers · 零改 UpgradeRules · 零 sx20/L13/K3 · 零静默精工 · **禁止** `recipe_gap_refine1 <= 0`（拼接串非数字 · D13306 教训）· 成色本窗不做
@@ -22,4 +22,4 @@
 - [x] 物品交 menu tip + push `fc94b0561`
 - [x] TrMenu reload 77；测岗联验中
 
-## STATUS: CLOSED live menu `fc94b0561` · 测岗联验中 · 2026-10-13 21:48 Asia/Shanghai
+## STATUS: CLOSED live menu `fc94b0561` · tip `5eb12dbff` · **勾毕** · 测岗联验中 · 2026-10-13 21:50 Asia/Shanghai

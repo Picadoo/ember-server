@@ -1,6 +1,6 @@
 # RESEARCH · 挂机庭「顺手精工」（庭内第三件可感 · 零抬产）· 2026-10-13
 
-> **状态：** 待批 A · 荐方案 M · TIP-CB / 拟 **D13307** · docs-only · 2026-10-13 21:45 Asia/Shanghai  
+> **状态：** **已批 A · 方案 M · D13307** · TIP-CB CLOSED live menu `fc94b0561` · tip `5eb12dbff` · 2026-10-13 21:50 Asia/Shanghai  
 > **起因：** 总控【连开】TIP-CA live `68544f966`。再交一薄 tip：顺手精工（挂机庭第三件）或其它乐趣系统；禁 sx20/抬表/诚实空转/L13/K3。  
 > **上游：** TIP-CA CLOSED live menu `68544f966`（D13306 顺手升阶）· TIP-BY live `e214b0399`（D13304 顺手强化+1）· D13304§6#1 / D13306§6#1 后置「庭内顺手精工」  
 > **硬禁：** **零抬** `daily_kills`/`afk.tiers` · **零** sx20 · **零** L13/K3/Pack6/天赋/灰印/R · **零** 伤乘/skill_mult · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实空转 / observe 空转 · **零** 假开 `gate_daily` · **零** 改 UpgradeRules 价表 · **禁止**用拼接 gap 串做 `<=0` 条件（D13306 教训）
@@ -65,4 +65,4 @@
 - 复开 D423 · 假开 `gate_daily` · 教手打指令 · stage 脏 runtime  
 - 用拼接 gap 串做数值条件（D13306 教训）
 
-## STATUS: 待批 A · 荐 M · 拟 D13307 · 2026-10-13 21:45 Asia/Shanghai
+## STATUS: **已批 A · 方案 M · D13307** · CLOSED live menu `fc94b0561` · tip `5eb12dbff` · **勾毕** · 2026-10-13 21:50 Asia/Shanghai

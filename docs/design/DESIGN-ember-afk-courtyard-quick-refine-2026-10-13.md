@@ -1,6 +1,6 @@
 # 余烬 · 挂机庭「顺手精工」（庭内第三件可感 · 零抬产 · ≠sx20）
 
-STATUS=**待批 A · 荐方案 M · 拟 D13307** · 2026-10-13 21:45 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-refine-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-refine-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-refine-2026-10-13.md`](RESEARCH-ember-afk-courtyard-quick-refine-2026-10-13.md) · backlog `B-afk-courtyard-quick-refine` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠改 UpgradeRules/afk.tiers ≠复开 D423 ≠教裸指令**
+STATUS=**已批 A · 方案 M · D13307** · 总控 2026-10-13 21:46 Asia/Shanghai · tip APPROVED `5eb12dbff` · 物品 live `fc94b0561` · 2026-10-13 21:50 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-refine-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-refine-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-refine-2026-10-13.md`](RESEARCH-ember-afk-courtyard-quick-refine-2026-10-13.md) · backlog `B-afk-courtyard-quick-refine` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠改 UpgradeRules/afk.tiers ≠复开 D423 ≠教裸指令**
 
 > **一句话玩家价值：** 挂机坐着料够了，在庭里点一下就能精工手持——第三件产→花不断在「去工坊」；**不**抬日产量、**不**新开商店。
 
@@ -162,6 +162,7 @@ STATUS=**待批 A · 荐方案 M · 拟 D13307** · 2026-10-13 21:45 Asia/Shangh
 
 | 日 | 事 |
 |----|-----|
-| 2026-10-13 | 策划 · 初稿 STATUS=**已批 A · 方案 M · D13307** · 总控 2026-10-13 21:46 Asia/Shanghai · was待批 · 荐 M · TIP-CA 后连开 · 选题挂机庭顺手精工 · 拟 D13307 · ≠sx20 ≠抬日表 ≠复开 D423 · 禁 gap<=0 |
+| 2026-10-13 | 策划 · 初稿 STATUS=待批 A · 荐 M · TIP-CA 后连开 · 选题挂机庭顺手精工 · 拟 D13307 · ≠sx20 ≠抬日表 ≠复开 D423 · 禁 gap<=0 |
+| 2026-10-13 | 总控批 A·M · tip `5eb12dbff` · 物品 live `fc94b0561` · STATUS=**已批 A · 方案 M** · **勾毕** · 成色后置 |
 
-*拟 D13307 · 挂机庭顺手精工 · 待批 A·方案 M · ≠关观察 ≠抬日表 ≠sx20。*
+*D13307 · 挂机庭顺手精工 · **已批 A·方案 M** · CLOSED live menu `fc94b0561` · tip `5eb12dbff` · 物品施工 · ≠关观察 ≠抬日表 ≠sx20。*
