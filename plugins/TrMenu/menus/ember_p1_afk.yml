@@ -1,3 +1,4 @@
+# TIP-CR / D13323: 庭内顺手烙纹（G · forge_gap_brand/pin · p1 brand from afk · 零改价/产/第五花）
 # TIP-CQ / D13322: 庭内顺手洗练（L · reroll blade/charm cur · p1 reroll from afk · 零改价/产/第五花）
 # TIP-CL / D13317: 庭内顺手互换（W/w · held_swap_cost · p1 swap/confirm · 甲灰 · 零改价/第五花料）
 # TIP-CK / D13316: 庭内顺手分解（D · held_dismantle_yield · p1 dismantle · 零抬拆表/第五花料）
@@ -27,7 +28,7 @@ Options:
   Min-Click-Delay: 200
 Layout:
   - '#########'
-  - '#PLW2w3D#'
+  - '#PLWGw3D#'
   - '#US4QVRE#'
   - '#ueIqFrH#'
   - '####B####'
@@ -50,6 +51,7 @@ Events:
     - 'tell: §8本页也可顺手拆（本页 D）'
     - 'tell: §8本页也可顺手换轨（本页 W）'
     - 'tell: §8本页也可顺手洗练（本页 L）'
+    - 'tell: §8本页也可顺手烙纹（本页 G）'
 Icons:
   '#':
     display:
@@ -276,6 +278,21 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg p1 reroll from afk'
 
+  # TIP-CR / D13323: 顺手烙纹（第二行 G 替 digit 2 · 与 forge G 同页 · from afk · 不撤 E/e/U/u/R/r/Q/q/P/D/W/w/L/S）
+  G:
+    update: 20
+    display:
+      material: blaze powder
+      name: '§6顺手烙纹'
+      lore:
+        - '§7碎差：%corerpg_p1_forge_gap_brand%'
+        - '§7定向：%corerpg_p1_forge_gap_pin%'
+        - '§e➥ §f点进烙纹页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 brand from afk'
+
   # D375: 产→花可见跳转（零抬日表）
 # D381: 去哪花 lore +半行「工坊内可回本庭」（反向互指；不重做主格）
 # D398: 去哪花 +半行「工坊有配方速览看 ×N」
@@ -292,6 +309,7 @@ Icons:
         - '§7本页也可顺手拆（本页 D）'
         - '§7本页也可顺手换轨（本页 W）'
         - '§7本页也可顺手洗练（本页 L）'
+        - '§7本页也可顺手烙纹（本页 G）'
         - '§e➥ §f打开工坊'
     actions:
       all:
@@ -512,7 +530,7 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_storage'
-  # TIP-CQ: Layout 已用 L 替 digit 1；本 Icon 1（灰坡层格）暂为死键，保留定义；2/3/4 仍在 Layout
+  # TIP-CQ: Layout 已用 L 替 digit 1；本 Icon 1（灰坡层格）暂为死键，保留定义
   '1':
     icons:
       - condition: 'check papi %corerpg_p1_afk_t1% < 1'
@@ -540,6 +558,7 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - close
         - 'command: corerpg afk 1'
+  # TIP-CR: Layout 已用 G 替 digit 2；本 Icon 2（荒原层格）暂为死键，保留定义；3/4 仍在 Layout
   '2':
     icons:
       - condition: 'check papi %corerpg_p1_afk_t2% < 1'

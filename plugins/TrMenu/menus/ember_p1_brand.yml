@@ -1,5 +1,6 @@
 # D429 烙纹定向：合成烙纹 + 选件选类型确认（命令二次确认）
-# 入口：工坊 G · /ember_p1_brand · /corerpg p1 brand menu
+# 入口：工坊 G（p1 brand from forge）· 挂机庭 G（p1 brand from afk）· /ember_p1_brand · /corerpg p1 brand menu
+# TIP-CR / D13323: 返回用 p1 brand back（勿硬编码工坊）
 
 Title: '§6余烬 · 烙纹定向'
 
@@ -119,13 +120,17 @@ Icons:
         - close
         - 'command: corerpg p1 brand pin charm c_affix'
 
+  # TIP-CR / D13323: 动态返回（from afk→挂机庭 · from forge→工坊）
   b:
+    update: 20
     display:
       material: arrow
-      name: '§7返回工坊'
+      name: '%corerpg_p1_brand_back%'
     actions:
       all:
-        - 'menu: ember_p1_forge'
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 brand back'
   B:
     display:
       material: barrier
