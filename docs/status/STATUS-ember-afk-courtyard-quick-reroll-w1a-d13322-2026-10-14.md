@@ -26,5 +26,8 @@
 - TrMenu（W1b/c 另派）
 
 ## 下步
-- 物品 W1b/c（庭内 L 格 + Open 辅半行）并行
-- 测岗抽测：庭内进洗练→返回庭；价/pity 零 diff
+- 物品 W1b/c 已交 `6804ed53a` · 测岗已 PASS（见 tip-cq-spot / 总控收口）
+
+## 测岗抽测（TIP-CQ spot）
+- **PASS** · 2026-10-14 02:53 Asia/Shanghai · 证据 `/workspace/tmp/tip-cq-afk-reroll/` · 详 `STATUS-ember-afk-courtyard-quick-reroll-tip-cq-spot-d13322-2026-10-14.md`
+- live jar `1.65.814-d13322.local` · L→reroll · 返回挂机庭 · 四花+P+D+W/w/S 仍在
