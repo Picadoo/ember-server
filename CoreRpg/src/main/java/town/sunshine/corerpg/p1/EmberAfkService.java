@@ -133,6 +133,8 @@ public final class EmberAfkService implements Listener {
     private volatile List<Tier> tiers = Collections.emptyList();
     private int taskId = -1;
     private long ticks;
+    /** Round-robin cursor for purgeLegacy: one online player nearby-scan per call (no full-world getLivingEntities). */
+    private int purgeCursor;
     private final Map<UUID, Fight> fights = new HashMap<UUID, Fight>();
     private final Map<UUID, Mob> mobs = new HashMap<UUID, Mob>();
     private final Set<UUID> autoOff = new HashSet<UUID>(); // players who switched auto-combat off (this session)
@@ -705,9 +707,20 @@ public final class EmberAfkService implements Listener {
         f.mobs.clear();
     }
 
-    /** Legacy AFK monsters (MM spawners / natural) are removed while P1 auto-combat is on; own mobs stay. */
+    /**
+     * Legacy AFK monsters (MM spawners / natural) are removed while P1 auto-combat is on; own mobs stay.
+     * Watchdog fix: never call {@code w.getLivingEntities()} (full-world scan). Instead limit to one online
+     * player's nearby radius per tick-call (round-robin via {@link #purgeCursor}).
+     */
     private void purgeLegacy(World w) {
-        for (LivingEntity le : w.getLivingEntities()) {
+        List<Player> players = w.getPlayers();
+        if (players.isEmpty()) return;
+        double r = Math.max(24.0, leash + spawnRadius + 8.0);
+        int i = Math.floorMod(purgeCursor++, players.size());
+        Player p = players.get(i);
+        for (Entity e : p.getNearbyEntities(r, r, r)) {
+            if (!(e instanceof LivingEntity)) continue;
+            LivingEntity le = (LivingEntity) e;
             if (mobs.containsKey(le.getUniqueId())) continue;
             if (le instanceof Monster || le instanceof Slime) le.remove();
         }
