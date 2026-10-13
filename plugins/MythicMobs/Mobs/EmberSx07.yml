@@ -62,6 +62,7 @@ EmberSx07Elite:
   Skills:
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - skill{s=EmberSx07EliteCast} @self ~onTimer:100
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.6
 
 EmberSx07Warden:

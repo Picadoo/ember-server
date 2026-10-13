@@ -509,3 +509,254 @@ EmberSx19StringCast:
   - effect:particles{p=note;amount=40;hSpread=6;ySpread=0.4;speed=0.02} @Self
   - effect:particles{p=crit;amount=36;hSpread=5.5;ySpread=0.5;speed=0.02} @Self
 
+# --- D13305 · 短征 R2 精英可读 Cast（轻压 · 弱于本本 Boss Cast · MM-only）---
+# 统一：dmg 0.52 · delay 35 · r4 · CD 10 · Elite ~onTimer:100；禁复读 Boss 同伤同 Timer；禁 SLOW（sx03 Boss 有 SLOW，Elite 不加）
+EmberSx01EliteCast:
+  # D13305 EliteCast · 主题「哨岗轻扫」· 对齐 Boss SentryCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&6【烬门】&f伍长哨岗轻扫——拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=flame;amount=40;hSpread=4.5;ySpread=0.7;speed=0.02} @Self
+  - effect:particles{p=crit;amount=28;hSpread=4;ySpread=0.5;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=20;hSpread=4;ySpread=0.5;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.75} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=flame;amount=28;hSpread=4.5;ySpread=0.5;speed=0.02} @Self
+
+EmberSx02EliteCast:
+  # D13305 EliteCast · 主题「锈灯轻落点」· 对齐 Boss BeaconCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&e【锈灯】&f督卫锈灯轻落点——侧移拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=flame;amount=32;hSpread=1.5;ySpread=0.4;speed=0} @Self
+  - effect:particles{p=lava;amount=24;hSpread=3;ySpread=0.4;speed=0} @Self
+  - effect:particles{p=crit;amount=32;hSpread=4.5;ySpread=0.5;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.85} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=flame;amount=28;hSpread=4.5;ySpread=0.5;speed=0.02} @Self
+  - effect:particles{p=lava;amount=16;hSpread=4;ySpread=0.4;speed=0} @Self
+
+EmberSx03EliteCast:
+  # D13305 EliteCast · 主题「霜雾轻楔」· 对齐 Boss FrostCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&b【霜雾】&f督卫霜雾轻楔——侧移拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=cloud;amount=40;hSpread=4.5;ySpread=0.9;speed=0} @Self
+  - effect:particles{p=crit;amount=28;hSpread=4;ySpread=0.5;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.7} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=cloud;amount=28;hSpread=4.5;ySpread=0.7;speed=0} @Self
+  - effect:particles{p=crit;amount=20;hSpread=4;ySpread=0.4;speed=0.02} @Self
+
+EmberSx04EliteCast:
+  # D13305 EliteCast · 主题「井心轻喷」· 对齐 Boss FurnaceCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&c【烬井】&f督卫井心轻喷——踏上井沿或拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=lava;amount=32;hSpread=1.5;ySpread=1.8;speed=0} @Self
+  - effect:particles{p=flame;amount=40;hSpread=2.2;ySpread=2.0;speed=0.02} @Self
+  - effect:particles{p=crit;amount=28;hSpread=4;ySpread=0.5;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.5} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=lava;amount=24;hSpread=4.5;ySpread=0.9;speed=0} @Self
+  - effect:particles{p=flame;amount=28;hSpread=4.5;ySpread=0.7;speed=0.02} @Self
+
+EmberSx05EliteCast:
+  # D13305 EliteCast · 主题「风剪轻条」· 对齐 Boss WindCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&7【裂谷】&f督卫风剪轻条——退进侧龛或离开条带！"} @PlayersInRadius{r=24}
+  - effect:particles{p=cloud;amount=40;hSpread=5;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=crit;amount=32;hSpread=4;ySpread=0.5;speed=0.03} @Self
+  - effect:particles{p=explode;amount=14;hSpread=3;ySpread=0.3;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.9} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=cloud;amount=28;hSpread=4.5;ySpread=0.4;speed=0.02} @Self
+
+EmberSx06EliteCast:
+  # D13305 EliteCast · 主题「环扫轻弧」· 对齐 Boss RingCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&8【环廊】&f督卫环扫轻弧——退进外环龛或离开弧带！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=5;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=32;hSpread=4;ySpread=0.6;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.65} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=28;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
+
+EmberSx07EliteCast:
+  # D13305 EliteCast · 主题「塔冠轻坠」· 对齐 Boss TowerCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&6【烬塔】&f督卫塔冠轻坠——退进侧窗廊龛或下撤半层！"} @PlayersInRadius{r=24}
+  - effect:particles{p=lava;amount=32;hSpread=2.2;ySpread=1.6;speed=0} @Self
+  - effect:particles{p=flame;amount=40;hSpread=3;ySpread=1.8;speed=0.02} @Self
+  - effect:particles{p=crit;amount=28;hSpread=4;ySpread=0.5;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.55} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=lava;amount=24;hSpread=4.5;ySpread=0.8;speed=0} @Self
+
+EmberSx08EliteCast:
+  # D13305 EliteCast · 主题「层间轻砸」· 对齐 Boss LayerCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&e【错层】&f督卫层间轻砸——退进下层栏或侧龛！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=4.5;ySpread=0.9;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=32;hSpread=4;ySpread=0.7;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.6} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=28;hSpread=4.5;ySpread=0.6;speed=0.02} @Self
+
+EmberSx09EliteCast:
+  # D13305 EliteCast · 主题「渠心轻溅」· 对齐 Boss CanalCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&3【烬渠】&f督卫渠心轻溅——退进岸侧龛或回撤跳石！"} @PlayersInRadius{r=24}
+  - effect:particles{p=waterdrop;amount=40;hSpread=5;ySpread=0.5;speed=0.03} @Self
+  - effect:particles{p=splash;amount=28;hSpread=4;ySpread=0.5;speed=0.02} @Self
+  - effect:particles{p=crit;amount=24;hSpread=4;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.75} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=waterdrop;amount=28;hSpread=4.5;ySpread=0.4;speed=0.02} @Self
+
+EmberSx10EliteCast:
+  # D13305 EliteCast · 主题「闸心轻压」· 对齐 Boss GateCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&8【密封闸】&f督卫闸心轻压——退进室侧龛或回撤闸后！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=4.5;ySpread=0.5;speed=0.03} @Self
+  - effect:particles{p=smoke;amount=32;hSpread=4;ySpread=0.6;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.6} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=28;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
+
+EmberSx11EliteCast:
+  # D13305 EliteCast · 主题「镜面轻扫」· 对齐 Boss MirrorCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&5【合镜】&f督卫镜面轻扫——退进合镜侧龛或回撤侧廊！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=5;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=spell_witch;amount=28;hSpread=4;ySpread=0.5;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.8} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=28;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
+
+EmberSx12EliteCast:
+  # D13305 EliteCast · 主题「枢扫轻斩」· 对齐 Boss PivotCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&a【环枢】&f督卫枢扫轻斩——退进侧厢龛或枢冠侧台！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=4.5;ySpread=0.5;speed=0.03} @Self
+  - effect:particles{p=happyVillager;amount=28;hSpread=4;ySpread=0.6;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.7} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=28;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
+
+EmberSx13EliteCast:
+  # D13305 EliteCast · 主题「衡扫轻斩」· 对齐 Boss BalanceCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&6【衡梁】&f督卫衡扫轻斩——退进衡冠侧龛或已过衡梁侧台！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=5;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=32;hSpread=4;ySpread=0.5;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.55} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=28;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
+
+EmberSx14EliteCast:
+  # D13305 EliteCast · 主题「裂扫轻斩」· 对齐 Boss RiftCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&6【烬裂】&f督卫裂扫轻斩——退进裂冠侧龛或已过折角侧台！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=5;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=32;hSpread=4;ySpread=0.7;speed=0} @Self
+  - effect:particles{p=lava;amount=16;hSpread=2.2;ySpread=1.0;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.42} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=28;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=20;hSpread=4;ySpread=0.5;speed=0} @Self
+
+EmberSx15EliteCast:
+  # D13305 EliteCast · 主题「旋扫轻斩」· 对齐 Boss SpiralCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&6【烬旋】&f督卫旋扫轻斩——退进旋冠侧龛或已过坡段内侧台！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=5;ySpread=0.5;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=32;hSpread=4;ySpread=0.8;speed=0} @Self
+  - effect:particles{p=lava;amount=16;hSpread=2.2;ySpread=1.0;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.4} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=28;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=20;hSpread=4;ySpread=0.5;speed=0} @Self
+
+EmberSx16EliteCast:
+  # D13305 EliteCast · 主题「影扫轻斩」· 对齐 Boss ShadowCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&6【烬影】&f督卫影扫轻斩——退进影冠侧龛或已过影墙侧台！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=5;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=32;hSpread=4;ySpread=0.7;speed=0} @Self
+  - effect:particles{p=smoke;amount=24;hSpread=4;ySpread=0.5;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.5} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=28;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=20;hSpread=4;ySpread=0.5;speed=0} @Self
+
+EmberSx17EliteCast:
+  # D13305 EliteCast · 主题「潮扫轻斩」· 对齐 Boss TideCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&6【烬潮】&f督卫潮扫轻斩——退进潮冠侧龛或落潮侧台！"} @PlayersInRadius{r=24}
+  - effect:particles{p=waterdrop;amount=40;hSpread=5;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=32;hSpread=4;ySpread=0.7;speed=0} @Self
+  - effect:particles{p=splash;amount=24;hSpread=4;ySpread=0.5;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.48} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=waterdrop;amount=28;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=20;hSpread=4;ySpread=0.5;speed=0} @Self
+
+EmberSx18EliteCast:
+  # D13305 EliteCast · 主题「晶扫轻斩」· 对齐 Boss PrismCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&6【烬晶】&f督卫晶扫轻斩——退进晶冠侧龛或已过折棱侧台！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=5;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=fireworkSpark;amount=28;hSpread=4;ySpread=0.6;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=24;hSpread=4;ySpread=0.5;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.75;pitch=0.6} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=28;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
+  - effect:particles{p=fireworkSpark;amount=16;hSpread=4;ySpread=0.4;speed=0.02} @Self
+
+EmberSx19EliteCast:
+  # D13305 EliteCast · 主题「弦扫轻斩」· 对齐 Boss StringCast 降一档
+  Cooldown: 10
+  Skills:
+  - message{m="&6【烬弦】&f督卫弦扫轻斩——退进弦冠侧龛或已共鸣节点侧台！"} @PlayersInRadius{r=24}
+  - effect:particles{p=note;amount=36;hSpread=5;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=crit;amount=32;hSpread=4;ySpread=0.5;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=24;hSpread=4;ySpread=0.5;speed=0} @Self
+  - effect:sound{s=note.harp;volume=0.75;pitch=0.7} @Self
+  - delay 35
+  - damage{amount=0.52} @PlayersInRadius{r=4}
+  - effect:particles{p=note;amount=24;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
+  - effect:particles{p=crit;amount=20;hSpread=4;ySpread=0.4;speed=0.02} @Self
+
