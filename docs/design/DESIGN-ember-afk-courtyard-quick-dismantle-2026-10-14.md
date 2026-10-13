@@ -1,6 +1,6 @@
 # 余烬 · 挂机庭「顺手分解」（产→拆可点 · ≠第五件花料 · ≠半行空转 · ≠抬日表）
 
-STATUS=**待批 A · 荐方案 M · 拟 D13316 · TIP-CK（重开）** · docs-only · 2026-10-14 Asia/Shanghai  
+STATUS=**已批 A · 方案 M · D13316** · 总控 2026-10-14 00:53 Asia/Shanghai · TIP-CK 重开 · docs→施工
 > **头注（号段）：** 本窗 **取代** 被否的半行题「短征选页三房可读可躲」`d00ed84bc`（TIP-CK / D13316 同号重开 · **勿**把半行题当 CLOSED）。  
 > tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-dismantle-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-dismantle-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-dismantle-2026-10-14.md`](RESEARCH-ember-afk-courtyard-quick-dismantle-2026-10-14.md) · backlog `B-afk-courtyard-quick-dismantle` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠第五件花料 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠Cast粒子主交付**
 
@@ -55,10 +55,10 @@ STATUS=**待批 A · 荐方案 M · 拟 D13316 · TIP-CK（重开）** · docs-o
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a D 格必做；W1b Open/去哪花半行同批辅；W1c 确认对齐工坊聊天确认；见 §3）
-- [ ] 或勾 **方案 L**（改交粒子/推荐花复读）· **本窗不荐 L**
-- [ ] 否决 A（只半行）/ W（静默拆/抬表/sx20）
-- [ ] 批注：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+- [x] **方案 M**（W1a D 格必做；W1b Open/去哪花半行同批辅；W1c 确认对齐工坊聊天确认；见 §3）
+- [ ] 或勾 **方案 L**（改交粒子/推荐花复读）· **本窗不批 L**
+- [x] 否决 A（只半行）/ W（静默拆/抬表/sx20）
+- [x] 批注：总控批 A·M · D13316 · TIP-CK 重开 · TrMenu D→p1 dismantle（预览·聊天确认）· 零改拆表/产 · 不撤四花+P · 半行仅辅
 
 ---
 
@@ -157,6 +157,7 @@ STATUS=**待批 A · 荐方案 M · 拟 D13316 · TIP-CK（重开）** · docs-o
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 00:53 | 总控批 A·M · 派物品 |
 | 2026-10-14 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CK REJECT 后重开 · 选题挂机庭顺手分解 · 拟 D13316 · TIP-CK · **取代**半行否决题 `d00ed84bc` · ≠sx20 ≠抬表 ≠第五件花料 ≠P兼确认 ≠复开 D423 · **改题有证据**（真 command · 见 §3.5） |
 
 *D13316 待批 A · 挂机庭顺手分解 · 荐 M · TIP-CK 重开 · 取代半行否决题 · ≠关观察 ≠抬日表 ≠sx20 ≠第五件花料。*
