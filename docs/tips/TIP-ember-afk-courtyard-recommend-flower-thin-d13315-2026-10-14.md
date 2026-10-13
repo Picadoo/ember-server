@@ -24,8 +24,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 00:28 Asia/Shanghai
-- [ ] 插件交 afk_rec_flower* + enter + 单测
+- [x] 插件交 afk_rec_flower* + enter + 单测 · 1.65.811-d13315.local · 2026-10-14 00:35
 - [ ] 物品交 P 格 + TrMenu reload
 - [ ] 测岗：四态 kind + 灰态工坊 + 分格仍在 + 零抬
 
-## STATUS: APPROVED · 批 A·M · 已派插件 W1a · 拟 D13315 · TIP-CJ · 2026-10-14 00:28 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · W1a 已交插件 · 待物品 W1b/c · D13315 · TIP-CJ · 2026-10-14 00:35 Asia/Shanghai

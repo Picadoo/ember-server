@@ -78,6 +78,8 @@ public final class EmberRunPapi {
         if (key.startsWith("pledge_")) return Section.RUSH;
         if (key.startsWith("rush_")) return Section.RUSH;
         if (key.startsWith("passd_")) return Section.ENTRY;
+        if ("afk_rec_flower".equals(key) || "afk_rec_flower_name".equals(key)
+                || "afk_rec_flower_kind".equals(key) || "afk_rec_flower_ok".equals(key)) return Section.LOADOUT; // TIP-CJ D13315 before afk_→GROWTH
         if (key.startsWith("sign_") || key.startsWith("online_") || key.startsWith("afk_") || key.startsWith("sig_")
                 || key.startsWith("reroll_") || key.startsWith("honor_") || key.startsWith("spec_")) return Section.GROWTH;
         if ("forge_t2".equals(key) || "forge_t3".equals(key) || "challenge".equals(key) || "q07done".equals(key)
@@ -157,7 +159,10 @@ public final class EmberRunPapi {
                 || "hope_now".equals(key) // D12306 hub hope glance
                 || "drop_q_hope".equals(key)
                 || "event_soft_hope".equals(key) // D728
-                || "gearlib_hope".equals(key);
+                || "gearlib_hope".equals(key)
+                // TIP-CJ D13315 AFK courtyard recommend flower
+                || "afk_rec_flower".equals(key) || "afk_rec_flower_name".equals(key)
+                || "afk_rec_flower_kind".equals(key) || "afk_rec_flower_ok".equals(key);
     }
 
     /** D395 day-cap + D406 fc aggregate (not per-map fields; sx0N_fc stays MAP). */
@@ -832,6 +837,10 @@ public final class EmberRunPapi {
     }
 
     private String loadout(Player p, String key) {
+        if ("afk_rec_flower".equals(key) || "afk_rec_flower_name".equals(key)
+                || "afk_rec_flower_kind".equals(key) || "afk_rec_flower_ok".equals(key)) { // TIP-CJ D13315
+            return afkRecFlower(p, key);
+        }
         if ("awaken_route".equals(key)) { // D120: cheapest real route (first line)
             List<String> r;
             if (Bukkit.isPrimaryThread()) r = runs.breakthroughRoutes(p, null);
@@ -1060,6 +1069,58 @@ public final class EmberRunPapi {
             marks = d.periodCount(EmberSignature.C_MARK + chase.map, "all");
         }
         return EmberHopeMeter.menuNow(held, d, mats, rerollPity, rerollNeed, chase, marks);
+    }
+
+    /** TIP-CJ D13315 %corerpg_p1_afk_rec_flower*% — read-only; preview only; zero economy. */
+    private String afkRecFlower(Player p, String key) {
+        EmberAfkRecFlower.Pick pick = resolveAfkRecFlower(p);
+        if ("afk_rec_flower_kind".equals(key)) return pick.kind;
+        if ("afk_rec_flower_ok".equals(key)) return EmberAfkRecFlower.ok(pick);
+        if ("afk_rec_flower_name".equals(key)) return EmberAfkRecFlower.name(pick);
+        return EmberAfkRecFlower.line(pick); // afk_rec_flower
+    }
+
+    /** Shared readiness for PAPI + enter afk-rec-flower (preview-only). */
+    EmberAfkRecFlower.Pick resolveAfkRecFlower(Player p) {
+        if (p == null) return EmberAfkRecFlower.pick(false, false, false, false, false);
+        EmberItemData d = heldTrusted(p);
+        boolean armor = d != null && d.isArmor();
+        PlayerData softPd = runs.plugin().getDataStore().get(p.getUniqueId());
+        EmberForgeService forge = runs.plugin().getEmberForge();
+
+        boolean enhanceReady = false;
+        if (d != null) {
+            EmberUpgradeRules.Plan enh = EmberUpgradeRules.enhanceCheck(d);
+            if (enh.ok() && enh.cost != null) {
+                long shard = vaultCount(p, EmberUpgradeRules.MAT_SHARD);
+                enhanceReady = "0".equals(recipeGapEnhance1(shard));
+            }
+        }
+
+        boolean upgradeReady = false, refineReady = false, qualityReady = false;
+        if (d != null && !armor && forge != null) {
+            String flag = EmberUpgradeRules.upgradeFlag(d.tier);
+            boolean gate = flag != null && softPd != null && runs.progressFlag(softPd, flag);
+            EmberUpgradeRules.Plan up = EmberUpgradeRules.upgrade(d, gate);
+            if (up.ok() && up.cost != null) {
+                EmberUpgradeRules.Cost cost = EmberGearNextHint.softCost("upgrade", softPd, up.cost);
+                java.util.List<String> lack = cost == null ? null : forge.lackingFor(p, cost);
+                upgradeReady = lack == null || lack.isEmpty();
+            }
+            EmberUpgradeRules.Plan ref = EmberUpgradeRules.refine(d);
+            if (ref.ok() && ref.cost != null) {
+                EmberUpgradeRules.Cost cost = EmberGearNextHint.softCost("refine", softPd, ref.cost);
+                java.util.List<String> lack = cost == null ? null : forge.lackingFor(p, cost);
+                refineReady = lack == null || lack.isEmpty();
+            }
+            EmberUpgradeRules.Plan q = EmberUpgradeRules.quality(d);
+            if (q.ok() && q.cost != null) {
+                EmberUpgradeRules.Cost cost = EmberGearNextHint.softCost("quality", softPd, q.cost);
+                java.util.List<String> lack = cost == null ? null : forge.lackingFor(p, cost);
+                qualityReady = lack == null || lack.isEmpty();
+            }
+        }
+        return EmberAfkRecFlower.pick(armor, enhanceReady, upgradeReady, refineReady, qualityReady);
     }
 
     /** D307：主手可信 P1 件；空手/非 P1/非本人 → null。 */

@@ -43,7 +43,8 @@ public final class EmberRunPapiTest {
         r(FESTIVAL, "fest_name", "fest_charm_price", "fest_nosuch");
         r(ABYSS, "abyss_best", "abyss_state", "abyss_t1", "abyss_t10", "abyss_tx");
         r(RAID, "raid_r01", "raid_r03");
-        r(LOADOUT, "awaken_route", "awaken", "awaken_next", "set_progress", "set_blurb", "stats", "ehp", "blade", "charm", "blade_next_q", "blade_next_c", "charm_next_q", "charm_next_c", "held_next_q", "held_next_c", "held_enhance_cost", "held_enhance_lack", "held_upgrade_cost", "held_upgrade_lack", "held_refine_lack", "held_quality_lack", "held_swap_cost", "held_dismantle_yield", "held_is_armor", "enhance_blade_pity", "enhance_charm_pity", "held_enhance_pity", "held_enhance_rate", "quality_blade_hope", "quality_charm_hope", "held_quality_hope", "refine_blade_hope", "refine_charm_hope", "held_refine_hope");
+        r(LOADOUT, "awaken_route", "awaken", "awaken_next", "set_progress", "set_blurb", "stats", "ehp", "blade", "charm", "blade_next_q", "blade_next_c", "charm_next_q", "charm_next_c", "held_next_q", "held_next_c", "held_enhance_cost", "held_enhance_lack", "held_upgrade_cost", "held_upgrade_lack", "held_refine_lack", "held_quality_lack", "held_swap_cost", "held_dismantle_yield", "held_is_armor", "enhance_blade_pity", "enhance_charm_pity", "held_enhance_pity", "held_enhance_rate", "quality_blade_hope", "quality_charm_hope", "held_quality_hope", "refine_blade_hope", "refine_charm_hope", "held_refine_hope",
+                "afk_rec_flower", "afk_rec_flower_name", "afk_rec_flower_kind", "afk_rec_flower_ok"); // TIP-CJ D13315
         r(CODEX, "codex_count", "codex_stage_0", "codex_burst_blade_t1", "codexx");
         r(ARMOR, "armor_on", "armor_head", "armor_chest_cand", "armor_legs_delta", "armor_boots_fam", "armor_set", "armor_set_active", "armor_set_busy", "armor_sa", "armor_sb", "armor_all", "armor_stash_line"); // D318 + D335 sa/sb
         r(SHORT, "sx01_day", "sx02_day", "sx03_day", "sx04_day", "sx05_day", "sx06_day", "sx07_day", "sx08_day", "sx09_day", "sx10_day", "sx11_day", "sx12_day", "sx13_day", "sx14_day", "sx15_day", "sx16_day", "sx17_day", "sx18_day", "sx19_day", "sx01_day_line", "sx02_day_line", "sx03_day_line", "sx04_day_line", "sx05_day_line", "sx06_day_line", "sx07_day_line", "sx08_day_line", "sx09_day_line", "sx10_day_line", "sx11_day_line", "sx12_day_line", "sx13_day_line", "sx14_day_line", "sx15_day_line", "sx16_day_line", "sx17_day_line", "sx18_day_line", "sx19_day_line",
@@ -61,6 +62,11 @@ public final class EmberRunPapiTest {
         assertEquals(ENTRY, EmberRunPapi.route("passd_x"));     // "passd_" is not "pass_"
         assertEquals(GROWTH, EmberRunPapi.route("sign_x"));     // sign_ ≠ sig_
         assertEquals(GROWTH, EmberRunPapi.route("sig_x"));
+        assertEquals(GROWTH, EmberRunPapi.route("afk_today"));   // afk_* farm still GROWTH
+        assertEquals(LOADOUT, EmberRunPapi.route("afk_rec_flower")); // TIP-CJ before afk_→GROWTH
+        assertEquals(LOADOUT, EmberRunPapi.route("afk_rec_flower_name"));
+        assertEquals(LOADOUT, EmberRunPapi.route("afk_rec_flower_kind"));
+        assertEquals(LOADOUT, EmberRunPapi.route("afk_rec_flower_ok"));
         assertEquals(ROTATION, EmberRunPapi.route("featured")); // featured exact (P2-1) vs featured_key later
         assertEquals(ROTATION, EmberRunPapi.route("featured_key"));
         assertEquals(ROTATION, EmberRunPapi.route("event_chase")); // TIP-CE D13310

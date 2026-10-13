@@ -3221,9 +3221,35 @@ public boolean pathForceOpenDoor(Player p) {
                 return true;
             }
             case "enter":
-                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today|event-chase|short-goal|today-triple> [challenge]"); return true; }
+                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today|event-chase|short-goal|today-triple|afk-rec-flower> [challenge]"); return true; }
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) entry.markForced(((Player) s).getUniqueId()); // D96 (D235 → EmberEntryService)
                 String mapArg = args[2].toLowerCase(Locale.ROOT);
+                if ("afk-rec-flower".equals(mapArg) || "afk_rec_flower".equals(mapArg) || "rec-flower".equals(mapArg)) { // TIP-CJ D13315
+                    Player fp = (Player) s;
+                    EmberAfkRecFlower.Pick pick = papi.resolveAfkRecFlower(fp);
+                    if (!pick.present()) {
+                        s.sendMessage(P + "暂无仓够可推荐的养成（强化/升阶/精工/成色皆不够或手持不可花）。");
+                        return true;
+                    }
+                    EmberForgeService forge = plugin.getEmberForge();
+                    if (forge == null) {
+                        s.sendMessage(P + "工坊未就绪。");
+                        return true;
+                    }
+                    // Preview only — never confirm / silent pay
+                    String op = pick.previewOp;
+                    String[] fargs;
+                    if (EmberAfkRecFlower.KIND_REFINE.equals(pick.kind)) {
+                        fargs = new String[]{"corerpg", "p1", "refine", "craft"};
+                        op = "refine";
+                    } else if (EmberAfkRecFlower.KIND_QUALITY.equals(pick.kind)) {
+                        fargs = new String[]{"corerpg", "p1", "refine", "quality"};
+                        op = "refine"; // forge.cmd maps refine+quality → quality
+                    } else {
+                        fargs = new String[]{"corerpg", "p1", op};
+                    }
+                    return forge.cmd(s, op, fargs);
+                }
                 if ("today-triple".equals(mapArg) || "today_triple".equals(mapArg) || "triple-chase".equals(mapArg)) { // TIP-CH D13313
                     Player tp = (Player) s;
                     PlayerData td = data(tp.getUniqueId());
