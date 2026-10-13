@@ -153,6 +153,7 @@ STATUS=**CLOSED live** · feat `64f08f47b` · PASS `1696ccd17` · jar `1.65.813-
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 02:40 Asia/Shanghai | 策划 · **勾毕旁注** CLOSED live · feat `64f08f47b` · PASS `1696ccd17` · jar `1.65.813-d13321.local` · 批 sha `e976fe6d8` · live `d87c3d89d` · 半行 REJECT `d00ed84bc` **保持否决** · 连开 TIP-CQ |
 | 2026-10-14 02:36 Asia/Shanghai | **CLOSED live** · feat `64f08f47b` · PASS `1696ccd17` · jar `1.65.813-d13321.local` · 证据 `/workspace/tmp/tip-cp-short-variety/` · W1a–d 齐 · W1e 仍不做 |
 | 2026-10-14 02:21 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件 · 勿勾 CLOSED · W1e todayRot偏置本窗不做 |
 | 2026-10-14 02:18 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CO CLOSED 后连开 · 选题短征轻量 variety 房内可感 · 拟 D13321 · TIP-CP · ≠半行 ≠Cast/Aid打磨 ≠todayRot再拧 ≠庭内再叠 · **改题有证据**（D13320§6②；yml 仅 Q01–Q07；短征 settle 无花样；见 RESEARCH） |

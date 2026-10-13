@@ -1,6 +1,6 @@
 # RESEARCH · 短征轻量 variety 房内可感（日更花样续 · ≠Cast/Aid打磨 · ≠todayRot再拧 · ≠半行 · ≠庭内镜像 · ≠sx20 · ≠抬表）· 2026-10-14
 
-> **状态：** **待批 A** · 荐 **方案 M** · 拟 D13321 · TIP-CP · docs-only · 2026-10-14 02:18 Asia/Shanghai  
+> **状态：** **勾毕 · CLOSED live** · feat `64f08f47b` · PASS `1696ccd17` · jar `1.65.813-d13321.local` · 批 sha `e976fe6d8` · live `d87c3d89d` · D13321 · TIP-CP · 策划勾毕 2026-10-14 02:40 Asia/Shanghai · 半行 REJECT `d00ed84bc` **保持否决**  
 > **起因：** 总控【连开·TIP-CP / 拟 D13321】上游 TIP-CO CLOSED live `d4ce8d3ed`（feat `1a3e1a3de` · jar `1.65.812-d13320` · PASS `bd7a68ce8` · todayRot 进本/分房/结算齐）。请立刻交下一档硬债 docs-only 待批 A。**优先短征日更花样 / 乐趣系统**（真可点或房内可感）；Cast+BossAid+EliteAid+todayRot **已齐** · 勿以 Cast/Aid 打磨、todayRot 半行/再拧、庭内顺手镜像当主交付；挂机庭环已齐勿回资源环；半行 REJECT `d00ed84bc` **保持否决**。  
 > **上游：** TIP-CO CLOSED live `d4ce8d3ed` · D13320；Cast 全波 + BossAid + EliteAid + todayRot cue 齐；今日推/冲一下/周短征/三冲齐；四花+推荐花+拆+换齐；半行 REJECT `d00ed84bc` **保持否决**  
 > **硬禁：** **零** 半行独批 · **零** sx20 · **零** L13 · **零** K3 live · **零** Pack6/灰印/R · **零抬** AFK 日表/`daily_kills`/`afk.tiers`/`short:5`/伤乘/S40–S58 · **零抬** `event_rate`/`event_core`/`affix_shard` · **零** 新 variety kind · **零** Affix densify · **零** Cast 粒子当主交付 · **零** EliteAid/BossAid 再拧 · **零** todayRot cue 半行/再拧主交 · **零** 假开旧日常 · **零** 教裸指令 · **零** 庭内再叠同类顺手无新证据 · **零** 灾厄重开 · **零** 复开 D423 · **零** stage 脏 runtime
@@ -64,4 +64,4 @@
 - 庭内再叠顺手 · 第五花料 · P 兼确认 · 抬产/抬伤表 · **抬** event_rate/event_core/affix_shard · 新 variety kind · sx20 · Pack6/灰印/R/L13/K3  
 - 重开 calamity · 复开 D423 · 教裸指令 · 假开旧日常 · 完整 variety 经济扩到短征
 
-## STATUS: **待批 A** · 荐 **方案 M** · 拟 D13321 · TIP-CP · docs-only · 2026-10-14 02:18 Asia/Shanghai
+## STATUS: **勾毕 · CLOSED live** · feat `64f08f47b` · PASS `1696ccd17` · jar `1.65.813-d13321.local` · 批 sha `e976fe6d8` · live `d87c3d89d` · D13321 · TIP-CP · 策划勾毕 2026-10-14 02:40 Asia/Shanghai · W1e 仍关 · 半行 REJECT `d00ed84bc` **保持否决**
