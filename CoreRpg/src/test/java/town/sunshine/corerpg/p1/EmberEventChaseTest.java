@@ -72,6 +72,17 @@ public class EmberEventChaseTest {
     }
 
     @Test
+    public void chaseOkEmptyAndPresent() {
+        assertEquals("0", EmberEventChase.chaseOk(""));
+        assertEquals("0", EmberEventChase.chaseOk(null));
+        assertEquals("1", EmberEventChase.chaseOk("q01"));
+        assertEquals("1", EmberEventChase.chaseOk("q07"));
+        // same as live resolve: empty chaseKey → 0
+        assertEquals("0", EmberEventChase.chaseOk(EmberEventChase.chaseKey("q03", clearedOf())));
+        assertEquals("1", EmberEventChase.chaseOk(EmberEventChase.chaseKey("q03", clearedOf("q01", "q03"))));
+    }
+
+    @Test
     public void mainKeysAreQ01ThroughQ07() {
         assertEquals(7, EmberEventChase.MAIN_KEYS.length);
         assertEquals("q01", EmberEventChase.MAIN_KEYS[0]);

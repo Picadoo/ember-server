@@ -15,6 +15,7 @@
 | `event_chase` | featured 已首通→featured；否则已通最高 q01…q07；皆无→空 |
 | `event_chase_name` | 冲图显示名（无 chase→空） |
 | `event_soft_ready` | SoftPity.get≥NEED → 1 否则 0（只读） |
+| `event_chase_ok` | chase 非空→1 否则 0（TIP-CE FAIL 修 · 见 STATUS-…-fail-chase-ok-d13310b） |
 | enter `event-chase` | 解析为 chase 后同 enter &lt;map&gt; |
 
 ## 落点
@@ -29,3 +30,6 @@
 
 ## 下步
 - 物品 W1b/c（TrMenu E 格 + Open 半行）等键
+
+## 旁注
+- TIP-CE FAIL 修：`1.65.807-d13310b.local` 增 `event_chase_ok`（测岗 `87941360f`）

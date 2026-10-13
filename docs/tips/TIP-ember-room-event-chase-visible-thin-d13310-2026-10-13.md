@@ -1,6 +1,6 @@
 # tip · TIP-CE 房间事件「冲一下」可感（事件窗小乐趣 · 零抬率）· 拟 D13310
 
-> **状态：** APPROVED · 批 **A · 方案 M** · **W1a 插件交** · jar `1.65.806-d13310.local` · 待物品 W1b/c · 2026-10-13 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · **W1a+FAIL修 chase_ok** · jar `1.65.807-d13310b.local` · 待物品灰单条件 · 2026-10-13 Asia/Shanghai  
 > **DESIGN** [`DESIGN-ember-room-event-chase-visible-2026-10-13.md`](../design/DESIGN-ember-room-event-chase-visible-2026-10-13.md) · RESEARCH 同日 · backlog `B-room-event-chase-visible`  
 > **施工岗（批后）：** 余烬-插件（薄 chase/ready PAPI + 可选 enter 别名）+ 余烬-物品（TrMenu）· **不派怪物/地图** · **不**动 calamity legacy  
 > **硬禁：** 零抬 event_rate/event_core/NEED · 零 Pack6 · 零抬 AFK/日帽 · 零 sx20/L13/K3 · 零重开 calamity join · 零只半行无进本
@@ -18,6 +18,7 @@
 ## jar 钉死（W1a）
 - `%corerpg_p1_event_chase%` = featured（若已首通）否则已通最高 q01–q07，否则空
 - `%corerpg_p1_event_chase_name%` · `%corerpg_p1_event_soft_ready%`（0/1←SoftPity dry≥NEED）
+- `%corerpg_p1_event_chase_ok%` = chase 非空→1 否则 0（TIP-CE FAIL 修 · TrMenu 单条件灰）
 - **零改** SoftPity.onSettle / event_rate / weights / event_core
 
 ## 验收（批后施工）
@@ -26,4 +27,4 @@
 - [ ] 物品交 menu tip + TrMenu reload
 - [ ] 测岗：点 E 门禁同该本；全未通灰；`git show` 无抬率/Pack/NEED
 
-## STATUS: APPROVED · 批 A·M · W1a 插件交 · jar `1.65.806-d13310.local` · 待物品 W1b/c · 2026-10-13 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · W1a+FAIL修 chase_ok · jar `1.65.807-d13310b.local` · 待物品灰单条件 · 2026-10-13 Asia/Shanghai

@@ -6,6 +6,7 @@ import java.util.function.Predicate;
  * TIP-CE D13310 · 房间事件「冲一下」冲图钉死（只读 · 零经济）。
  * featured 已首通 → featured；否则已通最高 q01…q07；皆无 → 空。
  * soft_ready 只读 {@link EmberEventSoftPity#get}≥{@link EmberEventSoftPity#NEED}。
+ * chase_ok：chase 非空→{@code 1} 否则 {@code 0}（TrMenu 单条件灰，TIP-CE FAIL 修）。
  * 纯逻辑，无 Bukkit；禁改 SoftPity.onSettle / NEED / event_rate / Pack。
  */
 public final class EmberEventChase {
@@ -29,6 +30,11 @@ public final class EmberEventChase {
             if (k != null && cleared.test(k)) best = k;
         }
         return best;
+    }
+
+    /** Chase non-empty → {@code "1"}, else {@code "0"} (TrMenu single check; TIP-CE FAIL 修). */
+    public static String chaseOk(String chase) {
+        return chase != null && !chase.isEmpty() ? "1" : "0";
     }
 
     /** SoftPity dry ≥ NEED → {@code "1"}, else {@code "0"} (read-only; does not touch NEED). */

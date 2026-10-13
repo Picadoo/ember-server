@@ -36,7 +36,7 @@ public final class EmberRunPapiTest {
         r(GROWTH, "sign_state", "online_d1", "online_min", "afk_today", "afk_t1", "afk_remain", "afk_eta_min", "afk_remain_line", "afk_next_farm", "sig_q01", "reroll_blade_cap",
                 "honor_name_1", "spec_x");
         r(GATE, "forge_t2", "forge_t3", "challenge", "access_q01", "access_q07", "q07done", "q04done", "q05done", "q06done", "q09done");
-        r(ROTATION, "featured", "featured_key", "modifier", "rule_q01", "bounty", "loot_q01", "loot_r01", "event_chase", "event_chase_name", "event_soft_ready"); // TIP-CE D13310
+        r(ROTATION, "featured", "featured_key", "modifier", "rule_q01", "bounty", "loot_q01", "loot_r01", "event_chase", "event_chase_name", "event_chase_ok", "event_soft_ready"); // TIP-CE D13310
         r(BOARD, "top_abyss_1", "top_abyss_10", "top_featured_3", "top_abyss_x");
         r(SEASON, "goals", "goal_core", "goal_short", "goalnosuch", "season", "season_week", "sboard_1", "srank_abyss", "badges"); // D401 goal_short
         r(COSMETIC, "shop", "shopprice_x", "shopsel_name", "shop_x", "title", "honors");
@@ -64,6 +64,7 @@ public final class EmberRunPapiTest {
         assertEquals(ROTATION, EmberRunPapi.route("featured_key"));
         assertEquals(ROTATION, EmberRunPapi.route("event_chase")); // TIP-CE D13310
         assertEquals(ROTATION, EmberRunPapi.route("event_chase_name"));
+        assertEquals(ROTATION, EmberRunPapi.route("event_chase_ok"));
         assertEquals(ROTATION, EmberRunPapi.route("event_soft_ready"));
         assertEquals(BOARD, EmberRunPapi.route("top_featured_1"));
         assertEquals(ABYSS, EmberRunPapi.route("abyss_best"));  // before abyss_t*
