@@ -1,6 +1,6 @@
 # 余烬 · 挂机庭「顺手转化」（产→每周转化轨可点 · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹再拧 · ≠半行 · ≠抬日表 · ≠宝石无同构）
 
-STATUS=**CLOSED live** · feat `0eb85b785` · tip `b5aea9bc5` · PASS `372360684` · jar `1.65.816-d13324.local` · D13324 · TIP-CS · 2026-10-14 03:30 Asia/Shanghai
+STATUS=**勾毕 · CLOSED live** · live `00fae3f34` · feat `0eb85b785` · tip `b5aea9bc5` · PASS `372360684` · jar `1.65.816-d13324.local` · 批 sha `3ab6a4792` · D13324 · TIP-CS · 2026-10-14 03:32 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-convert-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-convert-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-convert-2026-10-14.md`](RESEARCH-ember-afk-courtyard-quick-convert-2026-10-14.md) · backlog `B-afk-courtyard-quick-convert` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_rate/event_core/affix_shard ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠烙纹再拧 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠改convert周帽/价 ≠庭内宝石本窗（同构未过）≠顺手随机锻本窗主交**
 
 > **一句话玩家价值：** 挂机庭一点「顺手转化」进既有每周转化页——产胚/币直接喂改族，返回仍回庭；**不**新开第五花料、**不**抬日产、**不**改转化价/周帽。
@@ -60,7 +60,7 @@ STATUS=**CLOSED live** · feat `0eb85b785` · tip `b5aea9bc5` · PASS `372360684
 - [x] **方案 M**（W1a 插件 afk 返回源必做；W1b 庭内 C 格必做；W1c convert/forge 返回动态必做；W1d Open 辅半行同批；见 §3）
 - [ ] 或勾 **方案 L**（仅 menu 开 convert；返回落工坊）· **本窗默认不批 L**
 - [x] 否决 A（只半行）/ W（抬表/sx20/宝石·随机锻主交/再拧/第五花）
-- [x] 批注：总控批 A·M · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石/随机锻仍后置 · 2026-10-14 03:20 Asia/Shanghai
+- [x] 批注：总控批 A·M · 全弧非 L · 派插件+物品 · **勾毕 CLOSED** live `00fae3f34` · 批 sha `3ab6a4792` · 宝石/随机锻仍后置 · 半行 REJECT `d00ed84bc` 保持 · 2026-10-14 03:32 Asia/Shanghai
 
 ---
 
@@ -162,8 +162,9 @@ STATUS=**CLOSED live** · feat `0eb85b785` · tip `b5aea9bc5` · PASS `372360684
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 03:32 Asia/Shanghai | **勾毕 · CLOSED live** · live `00fae3f34` · feat `0eb85b785` · tip `b5aea9bc5` · PASS `372360684` · jar `1.65.816-d13324.local` · 批 sha `3ab6a4792` · 宝石/随机锻仍后置 · 半行 REJECT `d00ed84bc` 保持 |
 | 2026-10-14 03:30 Asia/Shanghai | **CLOSED live** · feat `0eb85b785` · tip `b5aea9bc5` · PASS `372360684` · jar `1.65.816-d13324.local` · 证据 `/workspace/tmp/tip-cs-afk-convert/` · W1a–d 齐 · 宝石/随机锻仍后置 |
 | 2026-10-14 03:20 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石/随机锻仍后置 |
 | 2026-10-14 03:17 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CR CLOSED 后连开 · 选题挂机庭顺手转化 · 拟 D13324 · TIP-CS · ≠半行 ≠第五花 ≠洗练/烙纹再拧 ≠Cast/Aid/variety再拧 · **改题有证据**（短征饱和；GEM 同构缺庭面 gap；面亮 forge_gap_convert；afk 无入口；forge V live；见 RESEARCH） |
 
-*D13324 **CLOSED live** · `0eb85b785` / `b5aea9bc5` · PASS `372360684` · 挂机庭顺手转化 · TIP-CS。**已批 A · 方案 M · 全弧非 L** · ≠半行 ≠第五花 ≠洗练/烙纹再拧 ≠宝石本窗 · ≠sx20。*
+*D13324 **勾毕 · CLOSED live** · live `00fae3f34` / feat `0eb85b785` / tip `b5aea9bc5` / PASS `372360684` / jar `1.65.816-d13324.local` / 批 `3ab6a4792` · 挂机庭顺手转化 · TIP-CS。**已批 A · 方案 M · 全弧非 L** · 宝石/随机锻仍后置 · 半行 REJECT `d00ed84bc` 保持 · ≠sx20。*

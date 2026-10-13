@@ -1,6 +1,6 @@
 # tip · TIP-CS 挂机庭「顺手转化」（真 convert 入口 · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹再拧 · ≠半行 · ≠抬表 · ≠宝石无同构）· 拟 D13324
 
-> **状态：** **CLOSED live** · feat `0eb85b785` · tip `b5aea9bc5` · jar `1.65.816-d13324.local` · PASS `372360684` · 批 sha `3ab6a4792` · PAPI `87f15944b` · 证据 `/workspace/tmp/tip-cs-afk-convert/` · 2026-10-14 03:30 Asia/Shanghai
+> **状态：** **勾毕 · CLOSED live** · live `00fae3f34` · feat `0eb85b785` · tip `b5aea9bc5` · jar `1.65.816-d13324.local` · PASS `372360684` · 批 sha `3ab6a4792` · PAPI `87f15944b` · 证据 `/workspace/tmp/tip-cs-afk-convert/` · 宝石/随机锻仍后置 · 2026-10-14 03:32 Asia/Shanghai · 半行 REJECT `d00ed84bc` **保持否决**
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-convert-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-convert`
 > **施工岗（批后）：** 余烬-插件（W1a 返回源）+ 余烬-物品（W1b/c/d TrMenu）· **不派怪物/地图**（默认）
 > **硬禁：** 零半行独批 · 零第五件花料 · 零推荐花复读 · 零洗练/烙纹再拧 · 零 P 兼确认 · 零抬日表/改转化价/周帽 · 零 Cast/Aid/todayRot/variety 再拧 · 零 W1e 独批 · 零 sx20/L13/K3 · 零庭内宝石/随机锻本窗主交
@@ -31,11 +31,12 @@
 - [x] 总控批 A·M · 2026-10-14 03:20 Asia/Shanghai
 - [x] 插件交 afk 返回源 · 1.65.816-d13324.local · 2026-10-14
 - [x] 物品交 C 格 + convert/forge 返回动态 + Open 辅半行 · `b5aea9bc5` · convert_back PAPI · TrMenu 77
-- [x] 抽测 PASS · feat `0eb85b785` · tip `b5aea9bc5` · STATUS spot · jar `1.65.816-d13324.local` · 庭内 C→convert from afk·返回挂机庭；工坊 from forge·返回工坊 · **勿勾 CLOSED** · 2026-10-14 03:28 Asia/Shanghai
+- [x] 抽测 PASS · feat `0eb85b785` · tip `b5aea9bc5` · STATUS spot · jar `1.65.816-d13324.local` · 庭内 C→convert from afk·返回挂机庭；工坊 from forge·返回工坊 · PASS `372360684` · 2026-10-14 03:28 Asia/Shanghai
+- [x] **勾毕 CLOSED** · live `00fae3f34` · 批 sha `3ab6a4792` · 宝石/随机锻仍后置 · 半行 REJECT `d00ed84bc` 保持 · 2026-10-14 03:32 Asia/Shanghai
 
 ## 改题摘要（给总控）
 - GEM 同构：**庭面未亮 gem gap**（afk I/Open 无 `recipe_gap_gem`）→ 不交宝石
 - 短征 Cast/Aid/todayRot/variety 齐 → 不复读
 - 采纳：**面亮 `forge_gap_convert` + forge V live + afk 无格 + 无 CONVERT_FROM**
 
-## STATUS: **CLOSED live** · `0eb85b785` / `b5aea9bc5` · PASS `372360684` · D13324 · TIP-CS · 2026-10-14 03:30 Asia/Shanghai
+## STATUS: **勾毕 · CLOSED live** · live `00fae3f34` · feat `0eb85b785` · tip `b5aea9bc5` · PASS `372360684` · jar `1.65.816-d13324.local` · 批 `3ab6a4792` · D13324 · TIP-CS · 宝石/随机锻仍后置 · 2026-10-14 03:32 Asia/Shanghai
