@@ -1,6 +1,6 @@
 # tip · TIP-CJ 挂机庭「顺手推荐花」聚合（四花智路由 · ≠第五件花料 · ≠抬表）· 拟 D13315
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件**（W1a）· 2026-10-14 00:28 Asia/Shanghai
+> **状态：** CLOSED live · 批 **A · 方案 M** · jar `1.65.811-d13315.local` · 插件 `09fd8d29e` · 物品 `f85daf617` · TrMenu reload 77 · PASS STATUS `843dfee65` · 2026-10-14 00:43 Asia/Shanghai · **勾毕**
 > **DESIGN** [`DESIGN-ember-afk-courtyard-recommend-flower-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-recommend-flower-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-recommend-flower`  
 > **施工岗（批后）：** 余烬-插件（薄 `afk_rec_flower*` + enter `afk-rec-flower`）+ 余烬-物品（TrMenu P 格）· **不派怪物/地图**  
 > **硬禁：** 零第五件花料命令 · 零抬日表/价 · 零撤 E/U/R/Q · 零一键静默 confirm · 零 sx20/L13/K3 · 零诚实空转
@@ -25,7 +25,7 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 00:28 Asia/Shanghai
 - [x] 插件交 afk_rec_flower* + enter + 单测 · 1.65.811-d13315.local · 2026-10-14 00:35
-- [ ] 物品交 P 格 + TrMenu reload
-- [ ] 测岗：四态 kind + 灰态工坊 + 分格仍在 + 零抬
+- [x] 物品交 P 格 + TrMenu reload · `f85daf617` · reload 77
+- [x] 测岗 PASS `843dfee65` · enhance优先 · 灰跳工坊 · EeUuRrQq · 零抬产
 
-## STATUS: APPROVED · 批 A·M · W1a 已交插件 · 待物品 W1b/c · D13315 · TIP-CJ · 2026-10-14 00:35 Asia/Shanghai
+## STATUS: CLOSED live · jar `1.65.811-d13315.local` · menu `f85daf617` · PASS `843dfee65` · 2026-10-14 00:43 Asia/Shanghai
