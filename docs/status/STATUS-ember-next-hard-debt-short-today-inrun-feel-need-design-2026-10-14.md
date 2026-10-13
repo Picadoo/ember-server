@@ -1,6 +1,6 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13320 · 短征「今日推」本局内可感 · docs-only · ≠Cast/Aid复读 · ≠半行 · ≠sx20 · ≠抬日表）
 
-> **旁注（APPROVED · 批 A·M · 全弧非 L · 已派插件 · 拟 D13320 · TIP-CO · 2026-10-14 02:01 Asia/Shanghai · 勿勾 CLOSED）：** tip 待批 · DESIGN [`DESIGN-ember-short-today-inrun-feel-readable-2026-10-14.md`](../design/DESIGN-ember-short-today-inrun-feel-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-today-inrun-feel-readable-2026-10-14.md`](../design/RESEARCH-ember-short-today-inrun-feel-readable-2026-10-14.md) · backlog `B-short-today-inrun-feel-readable` · **TIP-CO** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
+> **旁注（CLOSED live · feat `1a3e1a3de` · PASS `bd7a68ce8` · 2026-10-14 02:14 Asia/Shanghai）：** tip 待批 · DESIGN [`DESIGN-ember-short-today-inrun-feel-readable-2026-10-14.md`](../design/DESIGN-ember-short-today-inrun-feel-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-today-inrun-feel-readable-2026-10-14.md`](../design/RESEARCH-ember-short-today-inrun-feel-readable-2026-10-14.md) · backlog `B-short-today-inrun-feel-readable` · **TIP-CO** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
 
 > **上游结案：** **TIP-CN CLOSED** `931274777`（D13319 短征 R2 Elite 半血轻添头齐 · tip `021d8e351` · PASS `17f05e0f1`）。总控连开：优先短征日更花样（真可点/房内可感）；挂机庭环已齐勿再叠；Cast+BossAid+EliteAid 已齐勿打磨/再拧主交；半行 REJECT `d00ed84bc` **保持否决**。
 

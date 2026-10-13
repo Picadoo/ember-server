@@ -29,3 +29,5 @@
 `00-switches-pre.json` · `00-tip-files.json` · `05-live-jar.json` · `12-unit-feel.json` · `13-epoch-expect.json` · `30-papi.json` · `50-today-cues.json` · `51-nontoday-cues.json` · `52-nontoday-room2.json` · `60-today-room2.json` · `61-room-throttle.json` · `70-settle.json` · `71-reenter.json` · `80-gate-daily.json` · `90-endstate.json` · `99-summary.json` · `tip-co-spot.js` · `run.log`
 
 ## STATUS: PASS · TIP-CO D13320 · 2026-10-14 Asia/Shanghai
+
+> **总控收口：** CLOSED live · feat `1a3e1a3de` · PASS `bd7a68ce8` · jar `1.65.812-d13320.local` · 2026-10-14 02:14 Asia/Shanghai
