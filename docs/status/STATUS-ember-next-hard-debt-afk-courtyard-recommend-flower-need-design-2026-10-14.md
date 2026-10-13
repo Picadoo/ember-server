@@ -1,5 +1,9 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13315 · 挂机庭「顺手推荐花」聚合 · docs-only · ≠第五件花料 · ≠sx20 · ≠抬日表 · ≠菜单诚实空转）
 
+> **STATUS:** CLOSED · tip live PASS `843dfee65` · jar `1.65.811-d13315.local` · menu `f85daf617` · 2026-10-14 00:43 Asia/Shanghai
+
+> **旁注（策划勾毕 · 2026-10-14 00:45 Asia/Shanghai）：** 施工已 CLOSED live `fe0d3890d`；策划补关 tip/STATUS/DESIGN/RESEARCH/backlog · **已批 A · 方案 M · CLOSED** · 短征选页三房可读可躲后置→TIP-CK / 拟 D13316。
+
 > **旁注（打开 · 待批 A · 荐 M · 拟 D13315）：** tip 交总控批 · DESIGN [`DESIGN-ember-afk-courtyard-recommend-flower-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-recommend-flower-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-recommend-flower-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-recommend-flower-2026-10-14.md) · backlog `B-afk-courtyard-recommend-flower` · **TIP-CJ** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠抬伤表 ≠新地图 ≠重开 calamity ≠Pack6 ≠第五件花料 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
 
 > **上游结案：** **TIP-CI CLOSED** live `af54fa6ee` · PASS `7125ddcd6` · tip `8a5cd67d5`（D13314 短征 R1 ArcherCast）。总控连开：优先挂机庭资源环新乐趣；D13314§6② 合法接力可参考。挂机庭四件 / 今日推 / 冲一下 / 周短征 / 三冲 / Cast 近战+远程已齐。
@@ -85,3 +89,6 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-14 | 策划 · tip 打开 · TIP-CI 后连开 · 选题挂机庭顺手推荐花聚合（债清·可感·未改题·采纳 D13314§6②）· DESIGN/RESEARCH 待批 A·荐 M · 拟 D13315 · TIP-CJ |
+| 2026-10-14 00:28 | 总控批 A·M · 派插件 W1a |
+| 2026-10-14 00:43 | 总控 · CLOSED live · PASS `843dfee65` · jar `1.65.811-d13315.local` · menu `f85daf617` |
+| 2026-10-14 00:45 | 策划旁注勾毕 · tip/STATUS/DESIGN/RESEARCH/backlog 补关 · 后置短征选页三房可读可躲→TIP-CK |

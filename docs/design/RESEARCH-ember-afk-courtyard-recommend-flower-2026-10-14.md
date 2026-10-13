@@ -1,6 +1,6 @@
 # RESEARCH · 挂机庭「顺手推荐花」聚合（四花智路由 · ≠第五件花料 · ≠抬表）· 2026-10-14
 
-> **状态：** **打开 · 待批 A · 荐 M · 拟 D13315 · TIP-CJ** · docs-only · 2026-10-14 Asia/Shanghai  
+> **状态：** **CLOSED live · 已批 A · 方案 M · D13315 · TIP-CJ** · PASS `843dfee65` · jar `1.65.811-d13315.local` · 2026-10-14 00:43 Asia/Shanghai · 策划勾毕 00:45  
 > **起因：** 总控【连开·下一档内容真债】TIP-CI CLOSED live `af54fa6ee` · PASS `7125ddcd6` · ArcherCast live。请出下一窗 tip+DESIGN（拟 D13315 · TIP-CJ），STATUS=待批 A · 荐 M · docs-only。优先可感：挂机庭资源环新乐趣——合法接力可看 D13314§6②「顺手推荐花」聚合（四花智路由；≠第五件花料）/ 短征日更 / 乐趣系统；须证据表，可改题。  
 > **上游：** TIP-CI CLOSED · D13314 ArcherCast · 挂机庭四件齐（D13304/06/07/08）· 今日推/冲一下/周短征/三冲齐 · Cast 近战+远程齐  
 > **硬禁：** **零** sx20 · **零** L13 · **零** K3 · **零** Pack6/天赋灰印/R · **零抬** AFK 日表/`daily_kills`/`afk.tiers`/`short:5`/伤乘/`skill_mult` · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实/observe 空转 · **零** 假开 `gate_daily` · **零** 重开 calamity · **零** 新地图硬开 · **零** 挂机庭第五件花料 · **零** 复开 D423 · **零** 教裸指令 · **零** 撤分格
@@ -59,4 +59,4 @@
 - 撤 E/U/R/Q 分格 · 一键静默 confirm · 只半行口号无进预览  
 - sx20 · Pack6/天赋/灰印/R/L13/K3 · 诚实/observe 空转 · 重开 calamity · 复开 D423 · 教裸指令  
 
-## STATUS: 打开 · 待批 A · 荐 M · 拟 D13315 · TIP-CJ · 2026-10-14 Asia/Shanghai
+## STATUS: CLOSED live · 已批 A · 方案 M · D13315 · TIP-CJ · PASS `843dfee65` · 2026-10-14 00:43 Asia/Shanghai

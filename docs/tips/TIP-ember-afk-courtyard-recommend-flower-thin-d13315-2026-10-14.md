@@ -1,6 +1,6 @@
 # tip · TIP-CJ 挂机庭「顺手推荐花」聚合（四花智路由 · ≠第五件花料 · ≠抬表）· 拟 D13315
 
-> **状态：** CLOSED live · 批 **A · 方案 M** · jar `1.65.811-d13315.local` · 插件 `09fd8d29e` · 物品 `f85daf617` · TrMenu reload 77 · PASS STATUS `843dfee65` · 2026-10-14 00:43 Asia/Shanghai · **勾毕**
+> **状态：** CLOSED live · 批 **A · 方案 M** · jar `1.65.811-d13315.local` · 插件 `09fd8d29e` · 物品 `f85daf617` · TrMenu reload 77 · PASS STATUS `843dfee65` · 2026-10-14 00:43 Asia/Shanghai · **勾毕** · 策划旁注 00:45
 > **DESIGN** [`DESIGN-ember-afk-courtyard-recommend-flower-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-recommend-flower-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-recommend-flower`  
 > **施工岗（批后）：** 余烬-插件（薄 `afk_rec_flower*` + enter `afk-rec-flower`）+ 余烬-物品（TrMenu P 格）· **不派怪物/地图**  
 > **硬禁：** 零第五件花料命令 · 零抬日表/价 · 零撤 E/U/R/Q · 零一键静默 confirm · 零 sx20/L13/K3 · 零诚实空转
