@@ -1,6 +1,6 @@
 # tip · TIP-BY 挂机庭「顺手花料」（庭内强化+1 · 零抬产）· D13304
 
-> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-物品** · 2026-10-13 21:28 Asia/Shanghai  
+> **状态：** CLOSED live menu · 批 **A · 方案 M** · 物品 `e214b0399` · TrMenu reload 77 · 2026-10-13 21:29 Asia/Shanghai  
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-spend-2026-10-13.md`](../design/DESIGN-ember-afk-courtyard-quick-spend-2026-10-13.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-spend`  
 > **施工岗：** 余烬-物品 · TrMenu-only · **不派插件**  
 > **硬禁：** 零抬 AFK 日表/tiers · 零改 UpgradeRules · 零 sx20/L13/K3 · 零静默扣料 · 零诚实空转半行族
@@ -18,7 +18,7 @@
 
 ## 验收
 - [x] 总控批 A·M
-- [ ] 物品交 menu tip + push
-- [ ] TrMenu reload 后：gap<=0 亮可预览确认；gap>0 进工坊；产量/tiers 未改
+- [x] 物品交 menu tip + push `e214b0399`
+- [x] TrMenu reload 77（静态结构齐；测岗 gameplay 联验中）
 
-## STATUS: APPROVED · 批 A·M · 已派余烬-物品 · 2026-10-13 21:28 Asia/Shanghai
+## STATUS: CLOSED live menu `e214b0399` · 测岗联验中 · 2026-10-13 21:29 Asia/Shanghai
