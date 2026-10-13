@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13320 · 短征「今日推」本局内可感 · docs-only · ≠Cast/Aid复读 · ≠半行 · ≠sx20 · ≠抬日表）
 
-> **旁注（CLOSED live · feat `1a3e1a3de` · PASS `bd7a68ce8` · 2026-10-14 02:14 Asia/Shanghai）：** tip 待批 · DESIGN [`DESIGN-ember-short-today-inrun-feel-readable-2026-10-14.md`](../design/DESIGN-ember-short-today-inrun-feel-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-today-inrun-feel-readable-2026-10-14.md`](../design/RESEARCH-ember-short-today-inrun-feel-readable-2026-10-14.md) · backlog `B-short-today-inrun-feel-readable` · **TIP-CO** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
+> **旁注（勾毕 CLOSED live · feat `1a3e1a3de` · PASS `bd7a68ce8` · jar `1.65.812-d13320` · 批 sha `31f06f562` · live `d4ce8d3ed` · 2026-10-14 02:18 Asia/Shanghai）：** tip **勾毕 CLOSED** · DESIGN [`DESIGN-ember-short-today-inrun-feel-readable-2026-10-14.md`](../design/DESIGN-ember-short-today-inrun-feel-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-today-inrun-feel-readable-2026-10-14.md`](../design/RESEARCH-ember-short-today-inrun-feel-readable-2026-10-14.md) · backlog `B-short-today-inrun-feel-readable` · **TIP-CO** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠庭内再叠顺手 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
 
 > **上游结案：** **TIP-CN CLOSED** `931274777`（D13319 短征 R2 Elite 半血轻添头齐 · tip `021d8e351` · PASS `17f05e0f1`）。总控连开：优先短征日更花样（真可点/房内可感）；挂机庭环已齐勿再叠；Cast+BossAid+EliteAid 已齐勿打磨/再拧主交；半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）  
-**本窗性质：** tip **APPROVED · 批 A·M · 全弧非 L** · 已派插件 · docs-only→施工 · 拟 D13320 · TIP-CO · **勿勾 CLOSED**  
+**本窗性质：** tip **勾毕 · CLOSED live** · 批 A·M · 全弧非 L · feat `1a3e1a3de` · PASS `bd7a68ce8` · jar `1.65.812-d13320` · 批 sha `31f06f562` · live `d4ce8d3ed` · 拟 D13320 · TIP-CO · W1d 仍不做  
 **硬规格：** [`DESIGN-ember-short-today-inrun-feel-readable-2026-10-14.md`](../design/DESIGN-ember-short-today-inrun-feel-readable-2026-10-14.md) · backlog `B-short-today-inrun-feel-readable`  
 **打开理由：** 今日推菜单齐后进本仍无今日差异；D13319§6 后置均不可主交；真 session 可感≠半行≠Aid/Cast复读≠庭内镜像。
 
@@ -81,4 +81,4 @@ EliteAid 已齐；短征日更补「今日推本局内可感」——轮换从�
 
 ---
 
-*选题短征今日推本局内可感 · tip **APPROVED · 批 A·M** · 已派插件 · 拟 D13320 · TIP-CO · 勿勾 CLOSED · ≠关观察 ≠抬日表 ≠sx20 ≠半行空转 ≠Cast/Aid复读 ≠庭内再叠。*
+*选题短征今日推本局内可感 · tip **勾毕 CLOSED live** · feat `1a3e1a3de` · PASS `bd7a68ce8` · jar `1.65.812-d13320` · 批 sha `31f06f562` · live `d4ce8d3ed` · 拟 D13320 · TIP-CO · 半行 REJECT `d00ed84bc` **保持否决** · ≠关观察 ≠抬日表 ≠sx20 ≠半行空转 ≠Cast/Aid复读 ≠庭内再叠。*

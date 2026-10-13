@@ -151,6 +151,7 @@ STATUS=**CLOSED live** · feat `1a3e1a3de` · PASS `bd7a68ce8` · jar `1.65.812-
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 02:18 Asia/Shanghai | 策划 · **勾毕旁注** CLOSED live · feat `1a3e1a3de` · PASS `bd7a68ce8` · jar `1.65.812-d13320` · 批 sha `31f06f562` · live `d4ce8d3ed` · 半行 REJECT `d00ed84bc` **保持否决** · 连开 TIP-CP |
 | 2026-10-14 02:14 Asia/Shanghai | **CLOSED live** · feat `1a3e1a3de` · PASS `bd7a68ce8` · jar `1.65.812-d13320.local` · 证据 `/workspace/tmp/tip-co-today-inrun/` · todayRot enter/room/settle · W1d 仍不做 |
 | 2026-10-14 02:01 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件 · 勿勾 CLOSED · W1d 选页半行本窗不做 |
 | 2026-10-14 01:58 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CN CLOSED 后连开 · 选题短征今日推本局内可感 · 拟 D13320 · TIP-CO · ≠半行 ≠Cast/Aid复读 ≠庭内再叠 · **改题有证据**（D13309 菜单齐、进本无 today 分支；D13319§6 不可主交；见 RESEARCH） |
