@@ -37,3 +37,8 @@
 - 回落：remember → ShortPath resolve → todayKey；零改日帽/S/resolve/Cast/Aid/variety
 - jar：`1.65.821-d13328b.local` · 单测 EmberShortSettleTest PASS
 - 下步：测岗抽测 V1–V4 后总控 CLOSED（本号勿 CLOSED）
+
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `8c2dc7d95` · 证据 `/workspace/tmp/tip-cw-short-settle/` · 29/29
+- **勿勾 CLOSED**（总控收口）
