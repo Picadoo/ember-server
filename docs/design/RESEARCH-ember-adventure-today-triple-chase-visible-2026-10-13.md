@@ -1,6 +1,6 @@
 # RESEARCH · 冒险「今日三冲」聚合（今日推+冲一下+本周短征 · 零抬日帽/目标数/事件率）· 2026-10-13
 
-> **状态：** 待批 A · 荐方案 M · TIP-CH / 拟 **D13313** · docs-only · 2026-10-13 23:54 Asia/Shanghai  
+> **状态：** **勾毕 · CLOSED live** · 批 A·M · D13313 · PASS `ce9cd56bb` · jar `1.65.810-d13313.local` · TIP-CH CLOSED live `69cc1580c` · 策划勾毕 2026-10-14 00:12 Asia/Shanghai  
 > **起因：** 总控【连开·下一档内容真债】TIP-CG CLOSED live `eb0dbeeae` · PASS `20907456a` · jar `1.65.809-d13312b.local`。请出下一窗 tip+DESIGN（拟 D13313 · TIP-CH），STATUS=待批 A · 荐 M · docs-only。优先可感：挂机庭资源环 / 短征日更 / 乐趣系统；合法接力可看 D13312§6①「冒险今日三冲聚合」。硬禁：sx20·抬日帽/AFK表/short:5·L13·K3·Pack6·天赋灰印·诚实/observe空转·灾厄重开·挂机庭第五件花料·复开D423·教裸指令。  
 > **上游：** TIP-CG CLOSED · D13312 本周短征可冲 live · D13309 今日推 · D13310 冲一下 · D13304–08 挂机庭四件齐 · Cast 三房齐 · fest/灾厄仍后置  
 > **硬禁：** **零** sx20 · **零** L13 施工 · **零** K3 · **零** Pack6/天赋灰印/R · **零抬** AFK 日表/`daily_kills`/`afk.tiers`/伤乘/`skill_mult` · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实/observe 空转 · **零** 假开 `gate_daily` · **零** 重开 calamity join · **零** 新地图硬开 · **零** 再叠挂机庭花料第五件 · **零抬** `weekly_goals.targets.short` / 徽 / `event_rate` / NEED · **零** 复开 D423 · **零** 教裸指令
@@ -70,4 +70,4 @@
 - 挂机庭花料第五件 · Pack6 / 天赋 / 灰印 / R / L13 / K3 · 重开 calamity · 新 fest · 复开 D423 · 教裸指令 · stage 脏 runtime  
 - 撤换现有 H/E/短征 F 为独一家（聚合=加枢纽，不删分格）· 再叠 Cast / 粒子刷屏  
 
-## STATUS: 待批 A · 荐方案 M · 拟 D13313 · TIP-CH · 2026-10-13 23:54 Asia/Shanghai
+## STATUS: CLOSED live · 批 A·M · D13313 · PASS `ce9cd56bb` · TIP-CH · 2026-10-14 00:12 Asia/Shanghai

@@ -1,6 +1,6 @@
 # 余烬 · 冒险「今日三冲」聚合（今日推+冲一下+本周短征 · 零抬日帽/目标数/事件率 · ≠sx20）
 
-STATUS=**CLOSED live · D13313** · PASS `ce9cd56bb` · jar `1.65.810-d13313.local` · 总控 2026-10-14 00:10 Asia/Shanghai
+STATUS=**已批 A · 方案 M · CLOSED live · D13313** · PASS `ce9cd56bb` · jar `1.65.810-d13313.local` · menu `76f0a6c5a` · 总控 TIP-CH CLOSED live `69cc1580c` · 策划勾毕 2026-10-14 00:12 Asia/Shanghai
 
 > **一句话玩家价值：** 打开冒险就能一眼看见今日推 / 冲一下 / 本周短征，一点进当前最该冲的那条——三冲从分格变成首页决策；**不**抬日帽、**不**抬周目标数、**不**抬事件率。
 
@@ -151,5 +151,6 @@ STATUS=**CLOSED live · D13313** · PASS `ce9cd56bb` · jar `1.65.810-d13313.loc
 | 2026-10-13 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CG 后连开 · 选题冒险今日三冲聚合 · 拟 D13313 · ≠sx20 ≠抬表 ≠第五件花料 ≠复开 D423 · **未改题**（证据表见 RESEARCH） |
 | 2026-10-13 23:56 | 总控批 A·M · 派插件 W1a |
 | 2026-10-14 00:10 | 总控 · CLOSED live · PASS `ce9cd56bb` · menu `76f0a6c5a` |
+| 2026-10-14 00:12 | 策划旁注勾毕 · STATUS=**已批 A · 方案 M · CLOSED** · tip/STATUS+backlog 补关 · R1 远程轻 Cast 后置→TIP-CI / 拟 D13314 |
 
 *D13313 CLOSED live · 冒险今日三冲聚合 · PASS `ce9cd56bb` · ≠关观察 ≠抬日表 ≠sx20。*
