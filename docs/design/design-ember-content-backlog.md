@@ -5,6 +5,7 @@
 ## Progress snapshot — 2026-10-01 13:37 Asia/Shanghai (总控 · B2.111 PASS · 勾销 · 流水线暂停，等用户/GPT 策划意见；下一默认窗 B2.113)
 
 ### 指针 · 下一阶段玩法/体验加固（2026-10-07）
+- **B-afk-courtyard-quick-spend（待批 A · 荐方案 M · 拟 D13304 · docs-only · TIP-BY · 挂机庭「顺手花料」· 庭内多一事·产→花可点 · ≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠改 UpgradeRules/afk.tiers ≠复开 D423）：** [`DESIGN-ember-afk-courtyard-quick-spend-2026-10-13.md`](DESIGN-ember-afk-courtyard-quick-spend-2026-10-13.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-spend-2026-10-13.md`](RESEARCH-ember-afk-courtyard-quick-spend-2026-10-13.md) · tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-spend-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-spend-need-design-2026-10-13.md) · 选题 **挂机庭多一事** · **方案 M**：`ember_p1_afk` 新格「顺手强化+1」· `recipe_gap_enhance1<=0` 亮态走 `corerpg p1 enhance`→confirm（与工坊同命令）· 不够灰态→工坊 · Open/去哪花半行 · **零改**产量/价 · TrMenu-only 优先 · **否决 A**=只口号 · **否决 L**=抬表/静默花 · **否决 W**=sx20/诚实空转/复开D423 · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠交 sx20** · 上游 TIP-BX CLOSED live `1.65.804-d13303` · tip `be7a461ec` · **≠复述 D375–D420 展示债**
 - **B-short-dungeon-sx16（已批 A · 方案 M · D425 · **已落地 PASS**）
 - B-short-dungeon-sx17（已批 A · 方案 M · D426 · **已落地 PASS**）
 - B-short-dungeon-sx18（已批 A · 方案 M · D427 · **已落地 PASS**）
