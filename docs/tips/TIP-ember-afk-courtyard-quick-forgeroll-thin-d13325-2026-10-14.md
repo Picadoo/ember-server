@@ -1,6 +1,6 @@
 # tip · TIP-CT 挂机庭「顺手随机锻」（真 forgeroll 入口 · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹/转化再拧 · ≠半行 · ≠抬表 · ≠宝石无同构 · ≠densify）· 拟 D13325
 
-> **状态：** **CLOSED live** · feat `2705550cd` · tip `07738f8bb` · jar `1.65.817-d13325.local` · PASS `2b24a1647` · 批 sha `08e77d55d` · PAPI `788f7f788` · 证据 `/workspace/tmp/tip-ct-afk-forgeroll/` · 2026-10-14 03:46 Asia/Shanghai
+> **状态：** **勾毕 · CLOSED live** · live `ea265a3ed` · feat `2705550cd` · tip `07738f8bb` · jar `1.65.817-d13325.local` · PASS `2b24a1647` · 批 sha `08e77d55d` · PAPI `788f7f788` · 证据 `/workspace/tmp/tip-ct-afk-forgeroll/` · 2026-10-14 03:49 Asia/Shanghai · 随机锻同题勿再交
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-forgeroll`
 > **施工岗（批后）：** 余烬-插件（W1a 返回源）+ 余烬-物品（W1b/c/d TrMenu）· **不派怪物/地图**（默认）
 > **硬禁：** 零半行独批 · 零第五件花料 · 零推荐花复读 · 零洗练/烙纹/转化再拧 · 零 P 兼确认 · 零抬日表/改 forgeroll 价权重 · 零 Cast/Aid/todayRot/variety 再拧 · 零 W1e 独批 · 零 sx20/L13/K3 · 零庭内宝石本窗主交 · 零 densify
