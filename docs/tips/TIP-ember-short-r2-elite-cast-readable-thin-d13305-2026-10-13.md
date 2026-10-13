@@ -19,4 +19,4 @@ sx01–19 第二房精英挂轻压主题 Cast（timer100 · dmg≈0.50–0.55 ·
 - [x] 怪物交 tip + push `d39c32bb6` · 19/19 EliteCast
 - [x] MM reload 189 mob / 67 skills（+19）；测岗 gameplay 联验中
 
-## STATUS: CLOSED live MM `d39c32bb6` · 测岗联验中 · 2026-10-13 21:35 Asia/Shanghai
+## STATUS: CLOSED live MM `d39c32bb6` · 测岗 PASS spot `4c902219f` · 2026-10-13 21:35 Asia/Shanghai
