@@ -1,6 +1,6 @@
 # 余烬 · 短征 R1 远程卫可读轻 Cast（短本玩法花样续 · ≠sx20 · ≠抬表）
 
-STATUS=**待批 A · 荐方案 M · 拟 D13314 · TIP-CI** · 2026-10-14 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-short-r1-ranged-cast-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-short-r1-ranged-cast-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-r1-ranged-cast-readable-2026-10-14.md`](RESEARCH-ember-short-r1-ranged-cast-readable-2026-10-14.md) · backlog `B-short-r1-ranged-cast-readable` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬 Guard/Elite/Boss/Archer 基础伤表 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠教裸指令 ≠撤分格**
+STATUS=**已批 A · 方案 M · D13314** · 总控 2026-10-14 00:15 Asia/Shanghai · TIP-CI · docs→施工
 
 > **一句话玩家价值：** 短征第一房远程卫也会「蓄力→可躲」——R1 近战+远程双侧可读；**不**开 sx20、**不**抬日表。
 
@@ -53,10 +53,10 @@ STATUS=**待批 A · 荐方案 M · 拟 D13314 · TIP-CI** · 2026-10-14 Asia/Sh
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a Skills 轻压 Cast 必做；W1b 远程主怪挂接必做；W1c 全线 sx01–19 同批；见 §3）
-- [ ] 或勾 **方案 L**（仅 sx01–06；其余后置）
-- [ ] 否决 A（只口号）/ W（sx20/原伤复读/同 Timer 双压/抬表/诚实空转/第五件）
-- [ ] 批注：____________
+- [x] **方案 M**（W1a Skills 轻压 Cast 必做；W1b 远程主怪挂接必做；W1c 全线 sx01–19 同批；见 §3）
+- [ ] 或勾 **方案 L**（仅 sx01–06；其余后置）· **本窗不批 L**
+- [x] 否决 A（只口号）/ W（sx20/原伤复读/同 Timer 双压/抬表/诚实空转/第五件）
+- [x] 批注：总控批 A·M · D13314 · TIP-CI · 全线 sx01–19 ArcherCast · timer180 · dmg≈0.22–0.28 · 仅远程挂接 · 零改 Guard/Elite/Boss/HP/掉落 · 不派插件/物品主交付
 
 ---
 
@@ -158,6 +158,7 @@ STATUS=**待批 A · 荐方案 M · 拟 D13314 · TIP-CI** · 2026-10-14 Asia/Sh
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 00:15 | 总控批 A·M · 派怪物全线 |
 | 2026-10-14 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CH 后连开 · 选题短征 R1 远程卫轻 Cast（玩法花样续）· 拟 D13314 · TIP-CI · ≠sx20 ≠抬表 ≠第五件花料 ≠复开 D423 · **未改题**（采纳 D13313§6① · 证据表见 RESEARCH） |
 
 *D13314 · 短征 R1 远程卫轻 Cast · **待批 A·方案 M** · ≠关观察 ≠抬日表 ≠sx20。*
