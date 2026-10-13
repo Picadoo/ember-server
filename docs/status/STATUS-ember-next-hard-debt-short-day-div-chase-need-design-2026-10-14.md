@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13326 · 短征选页「日差本可冲」· docs-only · ≠今日推复读 · ≠本周短征可冲复读 · ≠半行 · ≠sx20 · ≠抬日表 · ≠庭内旁路 · ≠Cast/Aid/variety再拧）
 
-> **旁注（待批 A · 荐方案 M · 2026-10-14 03:49 Asia/Shanghai）：** tip **待批 A · 荐方案 M** · DESIGN [`DESIGN-ember-short-day-div-chase-visible-2026-10-14.md`](../design/DESIGN-ember-short-day-div-chase-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-day-div-chase-visible-2026-10-14.md`](../design/RESEARCH-ember-short-day-div-chase-visible-2026-10-14.md) · backlog `B-short-day-div-chase-visible` · **TIP-CU** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_core ≠新 variety kind ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠本周短征可冲复读 ≠FC路径复读 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
+> **旁注（已批 A · 方案 M · 2026-10-14 03:52 Asia/Shanghai · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 零抬日帽/targets）：** tip **待批 A · 荐方案 M** · DESIGN [`DESIGN-ember-short-day-div-chase-visible-2026-10-14.md`](../design/DESIGN-ember-short-day-div-chase-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-day-div-chase-visible-2026-10-14.md`](../design/RESEARCH-ember-short-day-div-chase-visible-2026-10-14.md) · backlog `B-short-day-div-chase-visible` · **TIP-CU** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_core ≠新 variety kind ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠本周短征可冲复读 ≠FC路径复读 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
 
 > **上游结案：** **TIP-CT CLOSED** live `ea265a3ed`（D13325 挂机庭顺手随机锻齐 · feat `2705550cd` · tip `07738f8bb` · jar `1.65.817-d13325.local` · PASS `2b24a1647` · 批 sha `08e77d55d` · 宝石仍后置）。总控连开：优先**强烈偏向短征日更/乐趣**（真可点或房内可感）；庭内旁路已近饱和（默认勿再交）；宝石须庭面 gap。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内四花+推荐+拆+换+洗练+烙纹+转化+随机锻+今日推/冲一下/周短征/三冲 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **待批 A** · 荐方案 **M** · 拟 D13326 · TIP-CU · docs-only · 2026-10-14 03:49 Asia/Shanghai
+**本窗性质：** tip **已批 A · 方案 M** · 拟 D13326 · TIP-CU · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 零抬日帽/targets · 2026-10-14 03:52 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-short-day-div-chase-visible-2026-10-14.md`](../design/DESIGN-ember-short-day-div-chase-visible-2026-10-14.md) · backlog `B-short-day-div-chase-visible`
 **打开理由：** 庭内旁路近饱和 → 回短征日更；战斗/花样层（Cast/Aid/todayRot/variety）已齐勿复读；导航层有今日推（单本）+ 周目标（计数）+ FC（首通），**缺**「今日已有奖通关不同本」换本冲口——日更差异化断在选页动作。
 
