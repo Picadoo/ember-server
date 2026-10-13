@@ -67,12 +67,12 @@ Icons:
         - '§e➥ §f点选 · 聊天预览'
     actions:
       all: [close, 'command: corerpg p1 convert sustain']
-  # TIP-CS / D13324: 动态返回（from afk→挂机庭 · from forge→工坊）；PAPI 未齐先静态「返回」
+  # TIP-CS / D13324: 动态返回（from afk→挂机庭 · from forge→工坊）
   R:
     update: 20
     display:
       material: arrow
-      name: '§7返回'
+      name: '%corerpg_p1_convert_back%'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'

@@ -30,7 +30,7 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 03:20 Asia/Shanghai
 - [x] 插件交 afk 返回源 · 1.65.816-d13324.local · 2026-10-14
-- [ ] 物品交 C 格 + convert/forge 返回动态 + Open 辅半行
+- [x] 物品交 C 格 + convert/forge 返回动态 + Open 辅半行 · `b5aea9bc5` · convert_back PAPI · TrMenu 77
 - [ ] 抽测：庭内进转化→返回庭；价/周帽 零 diff；零 sx20；零半行独档
 
 ## 改题摘要（给总控）
@@ -38,4 +38,4 @@
 - 短征 Cast/Aid/todayRot/variety 齐 → 不复读
 - 采纳：**面亮 `forge_gap_convert` + forge V live + afk 无格 + 无 CONVERT_FROM**
 
-## STATUS: **已批 A · 方案 M** · W1a 已交插件 · 待物品 W1b/c/d · D13324 · TIP-CS · 全弧非 L · **勿勾 CLOSED** · 2026-10-14 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · W1a–d 齐 · 待测岗抽测 · D13324 · TIP-CS · 全弧非 L · **勿勾 CLOSED** · 2026-10-14 03:24 Asia/Shanghai
