@@ -1,6 +1,6 @@
 # 余烬 · 挂机庭「顺手互换」（产→换轨可点 · ≠第五件花料 · ≠半行空转 · ≠抬日表）
 
-STATUS=**已批 A · 方案 M · D13317** · 批 sha `ac5ba6436` · 总控 2026-10-14 01:05 Asia/Shanghai · TIP-CL · 布局建议 `#P1W2w3D#` · 已派物品 · **勿勾 CLOSED**（等 live CLOSED）· docs→施工
+STATUS=**CLOSED live** · menu tip `4671d3ea4` · PASS `86a105307` · D13317 · TIP-CL · 2026-10-14 01:12 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-swap-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-swap-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-swap-2026-10-14.md`](RESEARCH-ember-afk-courtyard-quick-swap-2026-10-14.md) · backlog `B-afk-courtyard-quick-swap` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠Cast粒子主交付 ≠半行独批**
 
 > **一句话玩家价值：** 挂机庭里手持刃，一点就能预览/确认强化轨道互换——产→换轨不断跳工坊；**不**新开第五花料、**不**抬日产。
@@ -160,4 +160,4 @@ STATUS=**已批 A · 方案 M · D13317** · 批 sha `ac5ba6436` · 总控 2026-
 | 2026-10-14 01:06 Asia/Shanghai | 策划补记 · STATUS/RESEARCH/tip/backlog 标**已批 A·方案 M** · 旁注批 sha `ac5ba6436` · 布局 `#P1W2w3D#` · **勿勾 CLOSED** |
 | 2026-10-14 01:02 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CK CLOSED 后连开 · 选题挂机庭顺手互换 · 拟 D13317 · TIP-CL · ≠sx20 ≠抬表 ≠第五件花料 ≠半行空转 ≠推荐花复读 · **改题有证据**（真 command · 见 §3.5；短征 Cast 已齐故不主交粒子） |
 
-*D13317 **已批 A · 方案 M** · 批 sha `ac5ba6436` · 布局 `#P1W2w3D#` · 挂机庭顺手互换 · 已派物品 · **勿勾 CLOSED** · TIP-CL · ≠半行空转 ≠第五花料 ≠推荐花复读。*
+*D13317 **CLOSED live** · `4671d3ea4` · PASS `86a105307` · 挂机庭顺手互换 · TIP-CL。**已批 A · 方案 M** · 批 sha `ac5ba6436` · 布局 `#P1W2w3D#` · 挂机庭顺手互换 · 已派物品 · **勿勾 CLOSED** · TIP-CL · ≠半行空转 ≠第五花料 ≠推荐花复读。*

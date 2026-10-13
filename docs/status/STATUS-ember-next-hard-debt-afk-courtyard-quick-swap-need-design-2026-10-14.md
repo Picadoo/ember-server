@@ -1,6 +1,6 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13317 · 挂机庭「顺手互换」· docs-only · ≠第五件花料 · ≠半行空转 · ≠sx20 · ≠抬日表）
 
-> **旁注（已批 A · 方案 M · APPROVED · 批 sha `ac5ba6436` · 布局 `#P1W2w3D#` · 已派物品 · 拟 D13317 · TIP-CL · 2026-10-14 01:05 Asia/Shanghai · 勿勾 CLOSED）：** tip 已批 · DESIGN [`DESIGN-ember-afk-courtyard-quick-swap-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-swap-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-swap-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-swap-2026-10-14.md) · backlog `B-afk-courtyard-quick-swap` · **TIP-CL** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令 ≠Cast粒子主交付 ≠半行独批**。
+> **旁注（CLOSED live · menu `4671d3ea4` · PASS `86a105307` · 2026-10-14 01:12 Asia/Shanghai）：** tip 已批 · DESIGN [`DESIGN-ember-afk-courtyard-quick-swap-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-swap-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-swap-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-swap-2026-10-14.md) · backlog `B-afk-courtyard-quick-swap` · **TIP-CL** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令 ≠Cast粒子主交付 ≠半行独批**。
 
 > **上游结案：** **TIP-CK CLOSED** `b8eaf7696`（D13316 庭内顺手分解齐 · PASS `8a3a398a8`）。总控连开：须真可点/可进机制；优先短征日更花样 / 挂机庭资源环新乐趣 / 乐趣系统。半行 REJECT `d00ed84bc` **保持否决**。
 
