@@ -318,4 +318,11 @@ public class EmberGrowthTest {
         assertEquals("ember_hub", EmberGrowthService.REROLL_FROM.get("hub"));
     }
 
+    @Test
+    public void brandFromAfkAndForge_mapsToMenus_D13323() {
+        assertEquals("ember_p1_afk", EmberGrowthService.BRAND_FROM.get("afk"));
+        assertEquals("ember_p1_forge", EmberGrowthService.BRAND_FROM.get("forge"));
+        assertEquals("ember_p1_brand", EmberGrowthService.BRAND_MENU);
+    }
+
 }

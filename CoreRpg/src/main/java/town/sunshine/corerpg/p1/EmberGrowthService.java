@@ -882,6 +882,14 @@ public final class EmberGrowthService implements Listener {
         REROLL_FROM.put("forge", "ember_p1_forge"); // D451 workshop pillar
         REROLL_FROM.put("afk", "ember_p1_afk"); // D13322 TIP-CQ courtyard quick reroll
     }
+    public static final String BRAND_MENU = "ember_p1_brand";
+    private static final Map<UUID, String> BFROM = new ConcurrentHashMap<UUID, String>();
+    /** D13323 TIP-CR: brand return source (afk courtyard / forge workshop). */
+    static final Map<String, String> BRAND_FROM = new LinkedHashMap<String, String>();
+    static {
+        BRAND_FROM.put("afk", "ember_p1_afk"); // D13323 TIP-CR courtyard quick brand
+        BRAND_FROM.put("forge", "ember_p1_forge"); // D13323 TIP-CR workshop return
+    }
 
     public EmberAffix.Rules reroll() { return reroll; }
 
@@ -2788,13 +2796,24 @@ public final class EmberGrowthService implements Listener {
         return true;
     }
 
-    /** /corerpg p1 brand | craft [confirm] | pin <blade|charm> <affixId> [confirm] | menu */
+    /** /corerpg p1 brand [from afk|forge] | back | craft [confirm] | pin <blade|charm> <affixId> [confirm] | menu */
     public boolean brandCommand(Player p, String[] args) {
         if (reroll == null) { p.sendMessage(P + "词条表未加载，烙纹不可用"); return true; }
         PlayerData d = data(p.getUniqueId());
         if (d == null) { p.sendMessage(P + "数据还没加载好，稍后再试"); return true; }
         String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
-        if (op.isEmpty() || "menu".equals(op)) { openMenu(p, "ember_p1_brand"); return true; }
+        if (op.isEmpty() || "menu".equals(op)) { openMenu(p, BRAND_MENU); return true; }
+        if ("from".equals(op)) {
+            String from = args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
+            if (BRAND_FROM.containsKey(from)) BFROM.put(p.getUniqueId(), from); else BFROM.remove(p.getUniqueId());
+            openMenu(p, BRAND_MENU);
+            return true;
+        }
+        if ("back".equals(op)) {
+            String menu = BRAND_FROM.get(BFROM.get(p.getUniqueId()));
+            if (menu != null) openMenu(p, menu);
+            return true;
+        }
         if ("craft".equals(op) || "合成".equals(op)) return brandCraft(p, d, args.length >= 4 && "confirm".equalsIgnoreCase(args[args.length - 1]));
         if ("pin".equals(op) || "定向".equals(op)) {
             if (args.length < 5) {
@@ -2804,8 +2823,17 @@ public final class EmberGrowthService implements Listener {
             boolean confirm = "confirm".equalsIgnoreCase(args[args.length - 1]);
             return brandPin(p, d, args[3].toLowerCase(Locale.ROOT), args[4], confirm);
         }
-        p.sendMessage(P + "用法：/corerpg p1 brand craft|pin|menu");
+        p.sendMessage(P + "用法：/corerpg p1 brand from|back|craft|pin|menu");
         return true;
+    }
+
+    /** key after "brand_" — D13323 TIP-CR return label */
+    public String brandPapi(Player p, PlayerData d, String key) {
+        if ("back".equals(key)) {
+            String f = BFROM.get(p.getUniqueId());
+            return "afk".equals(f) ? "§7返回挂机庭" : "forge".equals(f) ? "§7返回工坊" : "§7关闭";
+        }
+        return "";
     }
 
     private boolean brandCraft(Player p, PlayerData d, boolean confirm) {
@@ -2999,7 +3027,7 @@ public final class EmberGrowthService implements Listener {
                             int pinLeft = EmberBrandRules.chargesLeft(afcUsed(nd, after));
                             int bpath = EmberBrandPath.get(nd);
                             EmberBrandLoop.afterPin(q, want.name, after, pinLeft, bpath); // D2182 re-pin
-                            openMenu(q, "ember_p1_brand");
+                            openMenu(q, BRAND_MENU);
                         }
                     });
         }, err -> {

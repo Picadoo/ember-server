@@ -80,6 +80,7 @@ public final class EmberRunPapi {
         if (key.startsWith("passd_")) return Section.ENTRY;
         if ("afk_rec_flower".equals(key) || "afk_rec_flower_name".equals(key)
                 || "afk_rec_flower_kind".equals(key) || "afk_rec_flower_ok".equals(key)) return Section.LOADOUT; // TIP-CJ D13315 before afk_→GROWTH
+        if ("brand_back".equals(key)) return Section.GROWTH; // D13323 TIP-CR before brand_path→LOADOUT
         if (key.startsWith("sign_") || key.startsWith("online_") || key.startsWith("afk_") || key.startsWith("sig_")
                 || key.startsWith("reroll_") || key.startsWith("honor_") || key.startsWith("spec_")) return Section.GROWTH;
         if ("forge_t2".equals(key) || "forge_t3".equals(key) || "challenge".equals(key) || "q07done".equals(key)
@@ -662,6 +663,7 @@ public final class EmberRunPapi {
         EmberGrowthService g = EmberGrowthService.get();
         if (key.startsWith("sig_")) return g == null ? "" : g.sigPapi(p, d, key.substring(4)); // D174 stage 1.5
         if (key.startsWith("reroll_")) return g == null ? "" : g.rerollPapi(p, d, key.substring(7)); // D143
+        if (key.startsWith("brand_")) return g == null ? "" : g.brandPapi(p, d, key.substring(6)); // D13323 TIP-CR
         if (key.startsWith("honor_")) return g == null ? "" : g.honorPapi(p, d, key.substring(6)); // D142
         return g == null ? "" : g.papi(p, d, key.substring(5)); // spec_ · D141
     }
