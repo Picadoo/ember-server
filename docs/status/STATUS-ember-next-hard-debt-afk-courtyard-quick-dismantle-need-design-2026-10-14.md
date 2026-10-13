@@ -1,6 +1,6 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13316 · 挂机庭「顺手分解」· docs-only · ≠第五件花料 · ≠半行空转 · ≠sx20 · ≠抬日表）
 
-> **旁注（打开 · 待批 A · 荐 M · 拟 D13316 · TIP-CK 重开）：** tip 交总控批 · DESIGN [`DESIGN-ember-afk-courtyard-quick-dismantle-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-dismantle-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-dismantle-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-dismantle-2026-10-14.md) · backlog `B-afk-courtyard-quick-dismantle` · **取代**半行否决题 `d00ed84bc` · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠第五件花料 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令 ≠Cast粒子主交付**。
+> **旁注（APPROVED · 批 A·M · 已派物品 · 拟 D13316 · TIP-CK 重开 · 2026-10-14 00:53 Asia/Shanghai）：** tip 已批 · DESIGN [`DESIGN-ember-afk-courtyard-quick-dismantle-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-dismantle-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-dismantle-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-dismantle-2026-10-14.md) · backlog `B-afk-courtyard-quick-dismantle` · **取代**半行否决题 `d00ed84bc` · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠第五件花料 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令 ≠Cast粒子主交付**。
 
 > **上游结案：** **TIP-CK REJECT** `d00ed84bc`（D13316 选页可躲半行 · 诚实空转 · **勿勾 CLOSED**）。总控连开：须真可点/可进机制；优先挂机庭资源环新乐趣（≠第五件/≠推荐花复读）· 短征日更花样 · 乐趣系统。
 
