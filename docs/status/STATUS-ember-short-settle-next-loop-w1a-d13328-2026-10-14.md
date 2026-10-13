@@ -12,7 +12,7 @@
 - 单测：`EmberShortSettleNextLoopTest`（常量 / settle 源 / ShortPath 源 / todayRot）
 - jar：`1.65.820-d13328.local` · sha256 `a4eccd4b1413…` · ECONOMY_BV **123** 未动
 - play：live `1.65.820-d13328.local` · storage=mysql · bv123 · MySQL connected
-- feat：`dc23f7104` → origin/main
+- feat：`d13eabcba` → origin/main
 - **零改** resolve 算法 / 日帽 / S40–S58 / targets.short / Cast / Aid / variety / short_div* / 路径追 PAPI·enter / TrMenu yml
 - **未做** 菜单 W1b（物品岗 `ember_p1_short_settle`）
 
