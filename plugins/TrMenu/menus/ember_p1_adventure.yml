@@ -96,7 +96,7 @@ Icons:
   # TIP-CE / D13310: 房间事件 · 冲一下（第三行空位 E · 保留 W/s/b/u/n）
   E:
     icons:
-      - condition: 'check papi %corerpg_p1_q01done% < 1 and check papi %corerpg_p1_q02done% < 1 and check papi %corerpg_p1_q03done% < 1 and check papi %corerpg_p1_q04done% < 1 and check papi %corerpg_p1_q05done% < 1 and check papi %corerpg_p1_q06done% < 1 and check papi %corerpg_p1_q07done% < 1'
+      - condition: 'check papi %corerpg_p1_event_chase_ok% < 1'
         priority: 1
         display:
           material: gray dye
