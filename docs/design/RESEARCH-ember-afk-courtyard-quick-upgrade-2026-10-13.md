@@ -1,6 +1,6 @@
 # RESEARCH · 挂机庭「顺手升阶」（庭内第二件可感 · 零抬产）· 2026-10-13
 
-> **状态：** 待批 A · 荐方案 M · TIP-CA / 拟 **D13306** · docs-only · 2026-10-13 21:39 Asia/Shanghai  
+> **状态：** **已批 A · 方案 M · D13306** · TIP-CA CLOSED live menu `68544f966` · tip `328d0db1e` · 2026-10-13 21:45 Asia/Shanghai  
 > **起因：** 总控【连开】TIP-BZ live `d39c32bb6`。再交一薄 tip：挂机庭第二件可感（荐顺手升阶/精工其一，仍零抬产）或其它乐趣系统；禁 sx20/诚实空转/抬表/L13/K3。  
 > **上游：** TIP-BZ CLOSED live MM `d39c32bb6`（D13305 R2 EliteCast）· TIP-BY live menu `e214b0399`（D13304 顺手强化+1）· D13304§6#1 / D13305§6#1 后置「庭内顺手升阶/精工」  
 > **硬禁：** **零抬** `daily_kills`/`afk.tiers` · **零** sx20 · **零** L13/K3/Pack6/天赋/灰印/R · **零** 伤乘/skill_mult · **零** Affix densify · **零** sure/pity/soft 诚实半行再叠 · **零** 菜单诚实空转 / observe 空转 · **零** 假开 `gate_daily` · **零** 改 UpgradeRules 价表
@@ -63,4 +63,4 @@
 - Pack6 / 天赋 / 灰印 / R / L13 / K3 / 伤乘 / skill_mult / Affix densify  
 - 复开 D423 · 假开 `gate_daily` · 教手打指令 · stage 脏 runtime  
 
-## STATUS: 待批 A · 荐 M · 拟 D13306 · 2026-10-13 21:39 Asia/Shanghai
+## STATUS: **已批 A · 方案 M · D13306** · CLOSED live menu `68544f966` · tip `328d0db1e` · 2026-10-13 21:45 Asia/Shanghai
