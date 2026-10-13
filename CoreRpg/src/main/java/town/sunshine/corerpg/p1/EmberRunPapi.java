@@ -738,7 +738,7 @@ public final class EmberRunPapi {
         String chase = EmberGoalShortChase.chaseKey(today,
                 k -> {
                     EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(k);
-                    return m != null && runs.unlocked(d, m);
+                    return EmberShortPath.unlocked(runs, d, m); // TIP-CG hotfix: progressFlag(req/q01), not C_UNLOCK
                 },
                 k -> EmberShortRules.dayLeft(rewardedFor(d, maps, shortEx, k), capFor(maps, shortEx, k)));
         if ("goal_short_chase".equals(key)) return chase;

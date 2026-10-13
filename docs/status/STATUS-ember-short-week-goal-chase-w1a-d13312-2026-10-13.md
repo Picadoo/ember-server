@@ -34,3 +34,6 @@
 
 ## 下步
 - 物品 W1b/c（TrMenu F 格 + Open 半行）等键
+
+## 旁注
+- TIP-CG hotfix D13312b：`1.65.809-d13312b.local` 谓词改 ShortPath.unlocked（测岗 `71d4f3356`）

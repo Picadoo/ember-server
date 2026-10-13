@@ -8,6 +8,10 @@
 ## 一句话
 短征选页一眼本周短征周目标进度，一点进还能计有奖的本；short:5 与日帽不动。
 
+## Hotfix D13312b
+- chase 谓词：`EmberShortPath.unlocked`（progressFlag/q01），**非** `runs.unlocked`（C_UNLOCK）
+- 测岗 FAIL `71d4f3356`
+
 ## 键清单（W1a）
 - `goal_short_chase` / `_name` / `_day_line` / `goal_short_done` / `goal_short_chase_ok`
 - enter `short-goal`（`goal-short-chase` / `goal_short_chase`）
@@ -25,4 +29,4 @@
 - [ ] 物品交 F 格 + TrMenu reload
 - [ ] 测岗：点进本成功 · 有奖计进度 · 零抬 short:5/日帽
 
-## STATUS: W1a DONE · jar `1.65.808-d13312.local` · 物品 W1b/c 等键 · 2026-10-13 Asia/Shanghai
+## STATUS: W1a hotfix D13312b · jar `1.65.809-d13312b.local` · unlock=ShortPath · 2026-10-13 Asia/Shanghai

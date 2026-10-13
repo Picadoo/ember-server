@@ -3245,7 +3245,7 @@ public boolean pathForceOpenDoor(Player p) {
                     mapArg = EmberGoalShortChase.chaseKey(today,
                             k -> {
                                 EmberRunMaps.MapDef m = sm == null ? null : sm.byKey(k);
-                                return m != null && unlocked(sd, m);
+                                return EmberShortPath.unlocked(this, sd, m); // TIP-CG hotfix: progressFlag(req/q01)
                             },
                             k -> {
                                 EmberRunMaps.MapDef m = sm == null ? null : sm.byKey(k);
@@ -3256,7 +3256,7 @@ public boolean pathForceOpenDoor(Player p) {
                                 return EmberShortRules.dayLeft(n, cap);
                             });
                     if (mapArg == null || mapArg.isEmpty()) {
-                        s.sendMessage(P + "暂无可冲的已解锁短征（先解锁任意 sx01–sx19）。");
+                        s.sendMessage(P + "暂无可冲的已解锁短征（先首通 Q01）。");
                         return true;
                     }
                 }
