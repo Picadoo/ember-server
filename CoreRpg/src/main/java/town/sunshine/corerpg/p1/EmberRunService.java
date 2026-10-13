@@ -3432,7 +3432,7 @@ public boolean pathForceOpenDoor(Player p) {
         s.sendMessage(P + "/corerpg enter q01..q07 challenge — 挑战版（本人首通 Q07 后开放；T3 掉落与印记，敌人更强）");
         s.sendMessage(P + "/corerpg p1 target <scorch|burst|sustain|none> — 掉落目标族（入场时快照）");
         s.sendMessage(P + "/corerpg p1 marks [exchange <族> <blade|charm> [阶]] — 8 枚同阶印记换标准件");
-        s.sendMessage(P + "/corerpg p1 forgeroll <族> <blade|charm> <阶> [floor] — 随机锻造（出不了极品；floor=成色下限加料）");
+        s.sendMessage(P + "/corerpg p1 forgeroll from|back|menu|<族> <blade|charm> <阶> [floor] — 随机锻造（出不了极品；floor=成色下限加料）");
         s.sendMessage(P + "/corerpg p1 firstclear <族> — 领取首通自选 · /corerpg p1 claim — 补领暂存奖励");
         s.sendMessage(P + "/corerpg p1 shop [buy [n]] — 补给商：回复药 " + EmberSupplyService.price() + " 余烬币/瓶（绑定，城内购买）");
         if (s.hasPermission("corerpg.admin")) s.sendMessage(P + "/corerpg p1 audit [玩家] · audit restore <玩家> <uid前缀> — 物品与 DB 对账 / 补发");
@@ -3710,14 +3710,36 @@ public boolean pathForceOpenDoor(Player p) {
 
     /** D430 / D1142: forgeroll [floor] — base or 成色下限（加扣 C06 q0） */
     private final java.util.Set<UUID> forgeRollBusy = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>());
+    public static final String FORGEROLL_MENU = "ember_p1_forgeroll";
+    private static final Map<UUID, String> FFROM = new java.util.concurrent.ConcurrentHashMap<UUID, String>();
+    /** D13325 TIP-CT: forgeroll return source (afk courtyard / forge workshop). */
+    static final Map<String, String> FORGEROLL_FROM = new LinkedHashMap<String, String>();
+    static {
+        FORGEROLL_FROM.put("afk", "ember_p1_afk"); // D13325 TIP-CT courtyard quick forgeroll
+        FORGEROLL_FROM.put("forge", "ember_p1_forge"); // D13325 TIP-CT workshop return
+    }
 
+    /** /corerpg p1 forgeroll [from afk|forge] | back | menu | <族> <blade|charm> <阶> [floor] [confirm] */
     private boolean cmdForgeRoll(CommandSender s, String[] args) {
         if (!(s instanceof Player)) { s.sendMessage(P + "玩家专用"); return true; }
         Player p = (Player) s;
         PlayerData d = data(p.getUniqueId());
         if (d == null) { p.sendMessage(P + "数据还没加载好"); return true; }
+        String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+        if (op.isEmpty() || "menu".equals(op)) { openMenuFor(p, FORGEROLL_MENU); return true; }
+        if ("from".equals(op)) {
+            String from = args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
+            if (FORGEROLL_FROM.containsKey(from)) FFROM.put(p.getUniqueId(), from); else FFROM.remove(p.getUniqueId());
+            openMenuFor(p, FORGEROLL_MENU);
+            return true;
+        }
+        if ("back".equals(op)) {
+            String menu = FORGEROLL_FROM.get(FFROM.get(p.getUniqueId()));
+            if (menu != null) openMenuFor(p, menu);
+            return true;
+        }
         if (args.length < 5) {
-            p.sendMessage(P + "用法：/corerpg p1 forgeroll <族> <blade|charm> <1-3> [floor] [confirm]");
+            p.sendMessage(P + "用法：/corerpg p1 forgeroll from|back|menu|<族> <blade|charm> <1-3> [floor] [confirm]");
             p.sendMessage(P + "花费：" + EmberForgeRollRules.marks() + " 枚印记 + " + EmberForgeRollRules.blanks() + " 胚料 + " + EmberForgeRollRules.coins() + " 币");
             p.sendMessage(P + EmberForgeRollRules.oddsLine());
             p.sendMessage(P + "§6下限 floor：§7再加胚" + EmberForgeRollRules.floorBlank() + "+骨" + EmberForgeRollRules.floorBone()
@@ -3809,6 +3831,15 @@ public boolean pathForceOpenDoor(Player p) {
         final EmberPay pay = EmberPay.get();
         if (pay == null) { p.sendMessage(P + "§c支付服务未就绪"); return true; }
         return forgeRollDurable(p, pay, fam, slot, tier, floor);
+    }
+
+    /** key after "forgeroll_" — D13325 TIP-CT return label */
+    String forgerollPapi(Player p, String key) {
+        if ("back".equals(key)) {
+            String f = FFROM.get(p.getUniqueId());
+            return "afk".equals(f) ? "§7返回挂机庭" : "forge".equals(f) ? "§7返回工坊" : "§7关闭";
+        }
+        return "";
     }
 
     private boolean forgeRollDurable(final Player p, final EmberPay pay, final String fam, final String slot, final int tier) {

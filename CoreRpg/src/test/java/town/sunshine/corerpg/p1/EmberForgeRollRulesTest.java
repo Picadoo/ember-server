@@ -44,4 +44,10 @@ public class EmberForgeRollRulesTest {
         String floor = EmberForgeRollRules.remainLine(8, 0, 0, 0, true);
         assertTrue(floor.contains("还差") || floor.contains("料够"));
     }
+
+    @Test public void forgerollFromAfkAndForge_mapsToMenus_D13325() {
+        assertEquals("ember_p1_afk", EmberRunService.FORGEROLL_FROM.get("afk"));
+        assertEquals("ember_p1_forge", EmberRunService.FORGEROLL_FROM.get("forge"));
+        assertEquals("ember_p1_forgeroll", EmberRunService.FORGEROLL_MENU);
+    }
 }

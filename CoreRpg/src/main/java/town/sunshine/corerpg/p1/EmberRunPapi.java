@@ -82,6 +82,7 @@ public final class EmberRunPapi {
                 || "afk_rec_flower_kind".equals(key) || "afk_rec_flower_ok".equals(key)) return Section.LOADOUT; // TIP-CJ D13315 before afk_→GROWTH
         if ("brand_back".equals(key)) return Section.GROWTH; // D13323 TIP-CR before brand_path→LOADOUT
         if ("convert_back".equals(key)) return Section.GROWTH; // D13324 TIP-CS before convert_path→LOADOUT
+        if ("forgeroll_back".equals(key)) return Section.LOADOUT; // D13325 TIP-CT forgeroll return label
         if (key.startsWith("sign_") || key.startsWith("online_") || key.startsWith("afk_") || key.startsWith("sig_")
                 || key.startsWith("reroll_") || key.startsWith("honor_") || key.startsWith("spec_")) return Section.GROWTH;
         if ("forge_t2".equals(key) || "forge_t3".equals(key) || "challenge".equals(key) || "q07done".equals(key)
@@ -164,7 +165,8 @@ public final class EmberRunPapi {
                 || "gearlib_hope".equals(key)
                 // TIP-CJ D13315 AFK courtyard recommend flower
                 || "afk_rec_flower".equals(key) || "afk_rec_flower_name".equals(key)
-                || "afk_rec_flower_kind".equals(key) || "afk_rec_flower_ok".equals(key);
+                || "afk_rec_flower_kind".equals(key) || "afk_rec_flower_ok".equals(key)
+                || "forgeroll_back".equals(key); // D13325 TIP-CT
     }
 
     /** D395 day-cap + D406 fc aggregate (not per-map fields; sx0N_fc stays MAP). */
@@ -841,6 +843,7 @@ public final class EmberRunPapi {
     }
 
     private String loadout(Player p, String key) {
+        if ("forgeroll_back".equals(key)) return runs.forgerollPapi(p, "back"); // D13325 TIP-CT
         if ("afk_rec_flower".equals(key) || "afk_rec_flower_name".equals(key)
                 || "afk_rec_flower_kind".equals(key) || "afk_rec_flower_ok".equals(key)) { // TIP-CJ D13315
             return afkRecFlower(p, key);

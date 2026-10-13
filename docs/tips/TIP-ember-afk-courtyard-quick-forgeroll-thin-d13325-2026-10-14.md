@@ -29,7 +29,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 03:35 Asia/Shanghai
-- [ ] 插件交 afk 返回源
+- [x] 插件交 afk 返回源 · jar 1.65.817-d13325.local
 - [x] 物品交 O 格 + forgeroll/forge 返回动态 + Open 辅半行 · `07738f8bb` · TrMenu 待 reload · 等插件 PAPI
 - [ ] 抽测：庭内进随机锻→返回庭；价/权重 零 diff；零 sx20；零半行独档
 
