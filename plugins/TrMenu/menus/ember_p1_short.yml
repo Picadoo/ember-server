@@ -18,6 +18,7 @@
 # TIP-CD / D13309: 今日推 D · sx_today* · enter short-today · 零抬日帽
 # TIP-CG / D13312: 本周短征可冲 F · goal_short_chase* · enter short-goal · 零抬 short:5
 # TIP-CU / D13326: 日差本可冲 L · short_div* · enter short-div · 零抬日帽/targets
+# TIP-CV / D13327: 路径追 0 · short_path* · 薄页 ember_p1_short_path · 零抬日帽/targets
 
 Title: '§6短征 · 选本'
 
@@ -34,7 +35,7 @@ Options:
 Layout:
   # D463 · 压到 6 行（箱体上限）· 体力键 S→H 避与 sx18 烬晶 S 撞键
   - '#########'
-  - '#I H B Z#'
+  - '#I0H B Z#'
   - '#A C E G#'
   - '#K M O Q#'
   - '#TVXYWUN#'
@@ -56,6 +57,7 @@ Events:
     - 'tell: §8生涯首通：各本悬停可见未领/已领取 · %corerpg_p1_sx_fc_pending_line%'
     - 'tell: §8本周短征可冲见本页 F · %corerpg_p1_goal_short% · 有奖通关计入 · 可选 · 不算全部完成'
     - 'tell: §8日差本可冲见本页 L · %corerpg_p1_short_div_line% · 今日未领日奖的另一本'
+    - 'tell: §8路径追见本页 0 · %corerpg_p1_short_path_line%'
     # D416 W1b：Open 半行 · 选本说明可看仓内还差（满态/未满共用 · 不盖 D409 去工坊花）
     - 'tell: §8选本说明可看仓内还差'
     - 'tell: §8今日推：§f%corerpg_p1_sx_today_name%'
@@ -106,6 +108,21 @@ Icons:
         - '§7短征每次 §e30 §7体力（与主线同池）'
         - '§7不足时灰显 · 开本失败退还'
         - '§7每天 0 点回满（Asia/Shanghai）'
+
+  # TIP-CV / D13327 · 路径追 0 · short_path* · 开薄页 · 零抬日帽/targets
+  '0':
+    update: 20
+    display:
+      material: map
+      name: '§e路径追'
+      lore:
+        - '§f当前：§e%corerpg_p1_short_path_label%'
+        - '§7下一本：§f%corerpg_p1_short_path_resolve_name%'
+        - '§8点开 · 切换偏好 / 一键进本'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_short_path'
 
   A:
     icons:

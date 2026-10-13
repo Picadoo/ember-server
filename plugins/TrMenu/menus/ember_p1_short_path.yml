@@ -1,0 +1,214 @@
+# TIP-CV / D13327 · 短征路径追薄页 · short_path* · enter short-path · 零抬日帽/targets
+# 入口：短征选页 Icon 0 · /ember_p1_short_path
+# 切偏好：corerpg p1 shortpath fc|day|late|clear · 进本：corerpg p1 enter short-path
+# 禁：教裸指令主 UI · 抬日帽/价/targets · 改 D/F/L/十九本
+
+Title: '§6短征 · 路径追'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_short_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '##F#D#L##'
+  - '##C#E###'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §e路径追 §7· %corerpg_p1_short_path_line%'
+    - 'tell: §8点选偏好 · 再点「进下一本」真进本'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§e路径追 · 说明'
+      lore:
+        - '§f当前：§e%corerpg_p1_short_path_label%'
+        - '§7下一本：§f%corerpg_p1_short_path_resolve_name%'
+        - '§8%corerpg_p1_short_path_tip% · %corerpg_p1_short_path_line%'
+
+  # FC=1 · 首通追
+  F:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_short_path% == 1'
+        priority: 1
+        display:
+          material: gold nugget
+          name: '§a首通追 §8· §f已选'
+          lore:
+            - '§7优先未领生涯首通的短本'
+            - '§a当前偏好'
+            - '§8再点可重选同偏好'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 shortpath fc'
+            - 'menu: ember_p1_short_path'
+    display:
+      material: iron nugget
+      name: '§e首通追'
+      lore:
+        - '§7优先未领生涯首通的短本'
+        - '§8点选切换偏好'
+        - '§e➥ §f设为首通追'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 shortpath fc'
+        - 'menu: ember_p1_short_path'
+
+  # DAY=2 · 有奖追
+  D:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_short_path% == 2'
+        priority: 1
+        display:
+          material: gold ingot
+          name: '§a有奖追 §8· §f已选'
+          lore:
+            - '§7优先今日仍有日奖次数的短本'
+            - '§a当前偏好'
+            - '§8再点可重选同偏好'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 shortpath day'
+            - 'menu: ember_p1_short_path'
+    display:
+      material: iron ingot
+      name: '§e有奖追'
+      lore:
+        - '§7优先今日仍有日奖次数的短本'
+        - '§8点选切换偏好'
+        - '§e➥ §f设为有奖追'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 shortpath day'
+        - 'menu: ember_p1_short_path'
+
+  # LATE=3 · 后段追
+  L:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_short_path% == 3'
+        priority: 1
+        display:
+          material: ender eye
+          name: '§a后段追 §8· §f已选'
+          lore:
+            - '§7优先后段短本推进'
+            - '§a当前偏好'
+            - '§8再点可重选同偏好'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 shortpath late'
+            - 'menu: ember_p1_short_path'
+    display:
+      material: ender pearl
+      name: '§e后段追'
+      lore:
+        - '§7优先后段短本推进'
+        - '§8点选切换偏好'
+        - '§e➥ §f设为后段追'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 shortpath late'
+        - 'menu: ember_p1_short_path'
+
+  # clear · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_short_path% == 0'
+        priority: 1
+        display:
+          material: barrier
+          name: '§7已清空 §8· §f无偏好'
+          lore:
+            - '§7当前未选路径偏好'
+            - '§8先点首通追/有奖追/后段追'
+            - '§8进下一本需先选偏好'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 shortpath clear'
+            - 'menu: ember_p1_short_path'
+    display:
+      material: gray dye
+      name: '§7清空偏好'
+      lore:
+        - '§7清除当前路径偏好'
+        - '§8清空后进本灰 · 须先再选'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 shortpath clear'
+        - 'menu: ember_p1_short_path'
+
+  # 进下一本 · 真 enter short-path
+  E:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_short_path_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7进下一本 §8（未选/无 resolve）'
+          lore:
+            - '§c请先选偏好 · 或当前路径无可进本'
+            - '§f%corerpg_p1_short_path_label% §7· §f%corerpg_p1_short_path_resolve_name%'
+            - '§8%corerpg_p1_short_path_tip%'
+      - condition: 'check papi %corerpg_stamina% < 30'
+        priority: 2
+        display:
+          material: iron bars
+          name: '§7进下一本 §8（体力不足）'
+          lore:
+            - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§7下一本：§f%corerpg_p1_short_path_resolve_name%'
+            - '§8%corerpg_p1_short_path_line%'
+    display:
+      material: emerald
+      name: '§a进下一本'
+      lore:
+        - '§7按当前路径 resolve'
+        - '§7下一本：§f%corerpg_p1_short_path_resolve_name% §7· 30体力'
+        - '§8点进 · 真进本 · §e➥进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter short-path'
+        - close
+
+  Z:
+    display:
+      material: arrow
+      name: '§e返回短征选本'
+      lore:
+        - '§7回短征十九本选页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_short'
