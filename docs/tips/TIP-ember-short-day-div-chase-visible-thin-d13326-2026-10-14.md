@@ -1,6 +1,6 @@
 # tip · TIP-CU 短征选页「日差本可冲」（日更换本真进本 · ≠今日推复读 · ≠本周短征可冲复读 · ≠半行 · ≠庭内旁路 · ≠抬表）· 拟 D13326
 
-> **状态：** **抽测 PASS** · feat `74a2b5a01` · tip `b7e9a5317` · jar `1.65.818-d13326.local` · PASS `c206b7b6f` · 证据 `/workspace/tmp/tip-cu-short-day-div/` · 拟 D13326 · TIP-CU · 全弧非 L · **勿勾 CLOSED**（总控收口）· 2026-10-14 04:13 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `74a2b5a01` · tip `b7e9a5317` · jar `1.65.818-d13326.local` · PASS `c206b7b6f` · 批 sha `52b4ed097` · 证据 `/workspace/tmp/tip-cu-short-day-div/` · 2026-10-14 04:15 Asia/Shanghai · 日差本同题勿再交
 > **DESIGN** [`DESIGN-ember-short-day-div-chase-visible-2026-10-14.md`](../design/DESIGN-ember-short-day-div-chase-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-day-div-chase-visible`  
 > **施工岗（批后）：** 余烬-插件（薄 short_div PAPI + enter `short-div`）+ 余烬-物品（TrMenu L 格）· **不派怪物/地图**  
 > **硬禁：** 零半行独批 · 零今日推/周目标/三冲/FC 复读主交 · 零 Cast 粒子主交付 · 零拧 EliteAid/BossAid · 零 todayRot/W1e 独批 · 零 variety 再拧/完整经济 · 零 sx20 · 零抬日表/伤表/S表/targets.short · 零庭内旁路再拧 · 零洗练/烙纹/转化/随机锻再拧 · 零 densify  
@@ -30,6 +30,6 @@
 - [x] 总控批 A·M · 2026-10-14 03:52 Asia/Shanghai
 - [x] 插件交 short_div* + short-div + 单测 · W1a jar `1.65.818-d13326.local`
 - [x] 物品交 L 格 + TrMenu reload · `b7e9a5317` · TrMenu 77
-- [x] 抽测：有未领日奖另一本时可进；进度随有奖不同本变；零抬日帽/targets；零改 Cast/Aid；零 sx20；零半行独档 · PASS `c206b7b6f` · 证据 `/workspace/tmp/tip-cu-short-day-div/` · **勿 CLOSED**
+- [x] 抽测：有未领日奖另一本时可进；进度随有奖不同本变；零抬日帽/targets；零改 Cast/Aid；零 sx20；零半行独档 · PASS `c206b7b6f` · 证据 `/workspace/tmp/tip-cu-short-day-div/`
 
-## STATUS: **抽测 PASS** · feat `74a2b5a01` · tip `b7e9a5317` · PASS `c206b7b6f` · D13326 · TIP-CU · 全弧非 L · **勿勾 CLOSED**（总控收口）· 2026-10-14 04:13 Asia/Shanghai
+## STATUS: **CLOSED live** · `74a2b5a01` / `b7e9a5317` · PASS `c206b7b6f` · D13326 · TIP-CU · 2026-10-14 04:15 Asia/Shanghai

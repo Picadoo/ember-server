@@ -5,7 +5,7 @@
 > **上游结案：** **TIP-CT CLOSED** live `ea265a3ed`（D13325 挂机庭顺手随机锻齐 · feat `2705550cd` · tip `07738f8bb` · jar `1.65.817-d13325.local` · PASS `2b24a1647` · 批 sha `08e77d55d` · 宝石仍后置）。总控连开：优先**强烈偏向短征日更/乐趣**（真可点或房内可感）；庭内旁路已近饱和（默认勿再交）；宝石须庭面 gap。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内四花+推荐+拆+换+洗练+烙纹+转化+随机锻+今日推/冲一下/周短征/三冲 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · 拟 D13326 · TIP-CU · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 零抬日帽/targets · 2026-10-14 03:52 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `74a2b5a01` · tip `b7e9a5317` · PASS `c206b7b6f` · jar `1.65.818-d13326.local` · D13326 · TIP-CU · 2026-10-14 04:15 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-short-day-div-chase-visible-2026-10-14.md`](../design/DESIGN-ember-short-day-div-chase-visible-2026-10-14.md) · backlog `B-short-day-div-chase-visible`
 **打开理由：** 庭内旁路近饱和 → 回短征日更；战斗/花样层（Cast/Aid/todayRot/variety）已齐勿复读；导航层有今日推（单本）+ 周目标（计数）+ FC（首通），**缺**「今日已有奖通关不同本」换本冲口——日更差异化断在选页动作。
 
@@ -78,4 +78,4 @@
 
 ---
 
-*选题短征日差本可冲 · tip **待批 A** · 荐 **方案 M** · 拟 D13326 · TIP-CU · docs-only · 半行 REJECT `d00ed84bc` **保持否决** · ≠关观察 ≠抬日表 ≠sx20 ≠今日推复读 ≠本周短征可冲复读 ≠半行空转 ≠庭内旁路。*
+*选题短征日差本可冲 · tip **CLOSED live** · `74a2b5a01` / `b7e9a5317` · PASS `c206b7b6f` · D13326 · TIP-CU · 半行 REJECT `d00ed84bc` **保持否决** · 日差本同题勿再交。*

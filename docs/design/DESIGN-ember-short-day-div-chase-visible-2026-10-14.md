@@ -1,7 +1,8 @@
 # 余烬 · 短征选页「日差本可冲」（日更换本真进本 · ≠今日推复读 · ≠本周短征可冲复读 · ≠半行 · ≠庭内旁路 · ≠sx20 · ≠抬表）
+| 2026-10-14 04:15 Asia/Shanghai | **CLOSED live** · feat `74a2b5a01` · tip `b7e9a5317` · PASS `c206b7b6f` · jar `1.65.818-d13326.local` · 证据 `/workspace/tmp/tip-cu-short-day-div/` · W1a–c 齐 · 软目标3零发奖 · 日差本同题勿再交 |
 | 2026-10-14 03:52 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 零抬日帽/targets |
 
-STATUS=**已批 A · 方案 M** · 拟 D13326 · TIP-CU · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 零抬日帽/targets · 2026-10-14 03:52 Asia/Shanghai
+STATUS=**CLOSED live** · feat `74a2b5a01` · tip `b7e9a5317` · PASS `c206b7b6f` · jar `1.65.818-d13326.local` · D13326 · TIP-CU · 2026-10-14 04:15 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-short-day-div-chase-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-short-day-div-chase-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-day-div-chase-visible-2026-10-14.md`](RESEARCH-ember-short-day-div-chase-visible-2026-10-14.md) · backlog `B-short-day-div-chase-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬 event_core ≠新 variety kind ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠本周短征可冲复读 ≠FC路径复读 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠灾厄重开 ≠Pack6 ≠改 forgeroll价/权重 ≠改 convert周帽/价**
 
 > **一句话玩家价值：** 打开短征选本就能看见「今日已有奖通关几本不同图」，一点进「今天还没领过日奖」的另一本——日更换本可感；**不**抬日帽、**不**抬 S 表、**不**改周目标数。
@@ -154,6 +155,7 @@ STATUS=**已批 A · 方案 M** · 拟 D13326 · TIP-CU · 全弧非 L · 派插
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 04:15 Asia/Shanghai | 总控 · **勾毕 CLOSED live** · feat `74a2b5a01` · tip `b7e9a5317` · PASS `c206b7b6f` · jar `1.65.818-d13326.local` · 批 sha `52b4ed097` · 半行 REJECT `d00ed84bc` **保持否决** · 日差本同题勿再交 · 连开 TIP-CV |
 | 2026-10-14 03:49 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CT CLOSED 后连开 · 选题短征日差本可冲 · 拟 D13326 · TIP-CU · ≠半行 ≠今日推/周目标复读 ≠Cast/Aid/variety再拧 ≠庭内旁路 · **改题有证据**（庭内近饱和；短征导航缺日差换本；见 RESEARCH） |
 
-*D13326 **已批 A · 方案 M** · 短征日差本可冲 · TIP-CU。**全弧非 L** · ≠半行 ≠今日推/周目标复读 ≠Cast/Aid/variety再拧 ≠庭内旁路 · ≠sx20 · 2026-10-14 03:52 Asia/Shanghai*
+*D13326 **CLOSED live** · `74a2b5a01` / `b7e9a5317` · PASS `c206b7b6f` · 短征日差本可冲 · TIP-CU。**已批 A · 方案 M · 全弧非 L** · ≠半行 ≠今日推/周目标复读 ≠Cast/Aid/variety再拧 ≠庭内旁路 · ≠sx20 · 软目标3零发奖。*

@@ -1,6 +1,6 @@
 # STATUS · TIP-CU W1a 短征选页「日差本可冲」chase PAPI · D13326
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **勿勾 CLOSED**（等 live + 物品 W1b/c）
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `c206b7b6f` · tip `b7e9a5317` · 总控收口 2026-10-14 04:15 Asia/Shanghai
 
 ## 交付
 - `%corerpg_p1_short_div%`（进度 `n/3`）/ `_n` / `_line`（今日有奖不同本 n/3）
@@ -41,3 +41,7 @@
 
 ## 下步
 - 物品 W1b/c（选页 L + Open 辅半行）等键
+
+## 测岗抽测（TIP-CU spot）
+- **PASS** · 2026-10-14 04:15 Asia/Shanghai · 证据 `/workspace/tmp/tip-cu-short-day-div/` · 详 `STATUS-ember-short-day-div-chase-tip-cu-spot-d13326-2026-10-14.md`
+- live jar `1.65.818-d13326.local` · L→enter short-div · 软目标3零发奖 · 灰态诚实
