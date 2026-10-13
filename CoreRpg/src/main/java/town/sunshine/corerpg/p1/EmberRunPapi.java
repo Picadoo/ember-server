@@ -111,6 +111,7 @@ public final class EmberRunPapi {
         if ("recruits".equals(key) || "failrefund".equals(key)) return Section.ENTRY;
         if ("featured_key".equals(key)) return Section.ROTATION;
         if ("event_chase".equals(key) || "event_chase_name".equals(key) || "event_chase_ok".equals(key) || "event_soft_ready".equals(key)) return Section.ROTATION; // TIP-CE D13310
+        if ("short_div".equals(key) || key.startsWith("short_div_")) return Section.SHORT; // TIP-CU D13326
         if ("today_triple".equals(key) || "today_triple_name".equals(key) || "today_triple_kind".equals(key) || "today_triple_ok".equals(key)) return Section.SHORT; // TIP-CH D13313
         if ("awaken_route".equals(key) || isLoadoutKey(key)) return Section.LOADOUT;
         if (key.startsWith("codex") || "codex_hope".equals(key)) return Section.CODEX;
@@ -412,6 +413,9 @@ public final class EmberRunPapi {
      */
     private String shortDay(PlayerData d, String key, EmberRunMaps maps) {
         EmberShortService shortEx = runs.shortExpedition();
+        if ("short_div".equals(key) || (key != null && key.startsWith("short_div_"))) { // TIP-CU D13326
+            return shortDayDiv(d, key, maps, shortEx);
+        }
         if ("today_triple".equals(key) || "today_triple_name".equals(key)
                 || "today_triple_kind".equals(key) || "today_triple_ok".equals(key)) { // TIP-CH D13313
             return todayTriple(d, key, maps, shortEx);
@@ -501,6 +505,33 @@ public final class EmberRunPapi {
         if (!pick.present()) return "";
         EmberRunMaps.MapDef cm = maps == null ? null : maps.byKey(pick.mapKey);
         return cm != null && cm.name != null && !cm.name.isEmpty() ? cm.name : pick.mapKey;
+    }
+
+    /** TIP-CU D13326 %corerpg_p1_short_div*% — day-diversity chase; soft target 3 display-only; zero economy. */
+    private String shortDayDiv(PlayerData d, String key, EmberRunMaps maps, EmberShortService shortEx) {
+        java.util.function.Predicate<String> unlocked = k -> {
+            EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(k);
+            return EmberShortPath.unlocked(runs, d, m); // TIP-CG hotfix: progressFlag(req/q01), not C_UNLOCK
+        };
+        java.util.function.ToIntFunction<String> rewarded = k -> rewardedFor(d, maps, shortEx, k);
+        java.util.function.ToIntFunction<String> dayLeft = k -> EmberShortRules.dayLeft(
+                rewardedFor(d, maps, shortEx, k), capFor(maps, shortEx, k));
+        String today = EmberShortRules.todayKey();
+        int n = EmberShortDayDivChase.distinctRewarded(unlocked, rewarded);
+        String chase = EmberShortDayDivChase.chaseKey(today, unlocked, dayLeft, rewarded);
+        if ("short_div".equals(key)) return EmberShortDayDivChase.progress(n);
+        if ("short_div_n".equals(key)) return String.valueOf(n);
+        if ("short_div_line".equals(key)) return EmberShortDayDivChase.line(n);
+        if ("short_div_chase".equals(key)) return chase;
+        if ("short_div_chase_ok".equals(key)) return EmberShortDayDivChase.chaseOk(chase);
+        if ("short_div_done".equals(key)) return EmberShortDayDivChase.done(n, chase);
+        if (chase.isEmpty()) return "";
+        if ("short_div_chase_name".equals(key)) {
+            EmberRunMaps.MapDef cm = maps == null ? null : maps.byKey(chase);
+            return cm != null && cm.name != null && !cm.name.isEmpty() ? cm.name : chase;
+        }
+        // short_div_chase_day_line
+        return EmberShortRules.dayLine(rewardedFor(d, maps, shortEx, chase), capFor(maps, shortEx, chase));
     }
 
     /**

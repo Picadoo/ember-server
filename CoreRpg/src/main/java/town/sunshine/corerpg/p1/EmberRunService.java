@@ -3229,7 +3229,7 @@ public boolean pathForceOpenDoor(Player p) {
                 return true;
             }
             case "enter":
-                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today|event-chase|short-goal|today-triple|afk-rec-flower> [challenge]"); return true; }
+                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today|event-chase|short-goal|short-div|today-triple|afk-rec-flower> [challenge]"); return true; }
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) entry.markForced(((Player) s).getUniqueId()); // D96 (D235 → EmberEntryService)
                 String mapArg = args[2].toLowerCase(Locale.ROOT);
                 if ("afk-rec-flower".equals(mapArg) || "afk_rec_flower".equals(mapArg) || "rec-flower".equals(mapArg)) { // TIP-CJ D13315
@@ -3334,6 +3334,37 @@ public boolean pathForceOpenDoor(Player p) {
                             });
                     if (mapArg == null || mapArg.isEmpty()) {
                         s.sendMessage(P + "暂无可冲的已解锁短征（先首通 Q01）。");
+                        return true;
+                    }
+                }
+                if ("short-div".equals(mapArg) || "short-day-div".equals(mapArg) || "short_day_div".equals(mapArg)
+                        || "short_div".equals(mapArg)) { // TIP-CU D13326
+                    Player dp = (Player) s;
+                    PlayerData dd = data(dp.getUniqueId());
+                    EmberRunMaps dm = maps();
+                    EmberShortService dex = shortExpedition;
+                    String today = EmberShortRules.todayKey();
+                    mapArg = EmberShortDayDivChase.chaseKey(today,
+                            k -> {
+                                EmberRunMaps.MapDef m = dm == null ? null : dm.byKey(k);
+                                return EmberShortPath.unlocked(this, dd, m); // progressFlag(req/q01)
+                            },
+                            k -> {
+                                EmberRunMaps.MapDef m = dm == null ? null : dm.byKey(k);
+                                int n = (dex != null && m != null) ? dex.rewardedToday(dd, m)
+                                        : Math.max(0, dd.periodCount(EmberShortRules.claimKey(k),
+                                                town.sunshine.corerpg.DailyService.today()));
+                                int cap = (dex != null && m != null) ? dex.dailyCap(m) : EmberShortRules.DAILY_CAP;
+                                return EmberShortRules.dayLeft(n, cap);
+                            },
+                            k -> {
+                                EmberRunMaps.MapDef m = dm == null ? null : dm.byKey(k);
+                                return (dex != null && m != null) ? dex.rewardedToday(dd, m)
+                                        : Math.max(0, dd.periodCount(EmberShortRules.claimKey(k),
+                                                town.sunshine.corerpg.DailyService.today()));
+                            });
+                    if (mapArg == null || mapArg.isEmpty()) {
+                        s.sendMessage(P + "暂无可冲的日差本（今日未领日奖的已解锁短征已尽，或尚未解锁）。");
                         return true;
                     }
                 }

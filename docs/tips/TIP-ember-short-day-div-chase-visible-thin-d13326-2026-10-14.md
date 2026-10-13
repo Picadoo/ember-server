@@ -28,7 +28,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 03:52 Asia/Shanghai
-- [ ] 插件交 short_div* + short-div + 单测
+- [x] 插件交 short_div* + short-div + 单测 · W1a jar `1.65.818-d13326.local`
 - [x] 物品交 L 格 + TrMenu reload · `b7e9a5317` · 等插件 short_div*
 - [ ] 抽测：有未领日奖另一本时可进；进度随有奖不同本变；零抬日帽/targets；零改 Cast/Aid；零 sx20；零半行独档
 
