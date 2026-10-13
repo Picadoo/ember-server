@@ -1,6 +1,6 @@
 # tip · TIP-CK 短征选页「三房可读可躲」半行统一（≠sx20 · ≠改 MM · ≠抬表）· 拟 D13316
 
-> **状态：** 打开 · 待批 **A · 方案 M** · docs-only · 2026-10-14 Asia/Shanghai  
+> **状态：** **REJECTED** · 总控否决 · 诚实半行空转硬禁 · 2026-10-14 00:47 Asia/Shanghai · **不施工**
 > **DESIGN** [`DESIGN-ember-short-select-dodge-half-line-2026-10-14.md`](../design/DESIGN-ember-short-select-dodge-half-line-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-select-dodge-half-line`  
 > **施工岗（批后）：** 余烬-物品 · TrMenu-only · **不派插件/怪物/地图**  
 > **硬禁：** 零 sx20 · 零改 Cast 数值/Timer · 零抬日表/伤表 · 零 P 兼确认 · 零第五件花料 · 零诚实空转
@@ -20,9 +20,14 @@
 - 不改今日推 D / 本周 F / 进本 command
 - 对位 D380；升 D13305/11/14 W1d
 
-## 验收（批后施工）
+## 否决（总控）
+- 本 tip = TrMenu-only 十九本/Open 统一半行，**无新动作/无房内变化** → 命中「菜单诚实/半行空转」硬禁。
+- D380 同形不构成开绿灯；Cast 已 live 不等于再叠选页口号主交付。
+- **不派**物品/插件/怪物。号段 D13316 / TIP-CK **作废本选题**；另开真债。
+
+## 验收（批后施工 · 本窗不适用）
 - [ ] 总控批 A·M
 - [ ] 物品交十九本+灰态+Open/I 半行
 - [ ] 抽测 sx01/07/13/19 亮/灰均含「可躲」；零 MM diff；进本链路不变
 
-## STATUS: 打开 · 待批 A · 荐 M · 拟 D13316 · TIP-CK · 2026-10-14 Asia/Shanghai
+## STATUS: REJECTED · 诚实半行空转 · 不施工 · 2026-10-14 00:47 Asia/Shanghai

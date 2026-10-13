@@ -1,6 +1,6 @@
 # 余烬 · 短征选页「三房可读可躲」半行统一（Cast 波已齐 · 入口诚实 · ≠改 MM · ≠抬表）
 
-STATUS=**待批 A** · 荐方案 **M** · 拟 **D13316** · **TIP-CK** · docs-only · 2026-10-14 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-short-select-dodge-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-short-select-dodge-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-select-dodge-half-line-2026-10-14.md`](RESEARCH-ember-short-select-dodge-half-line-2026-10-14.md) · backlog `B-short-select-dodge-half-line` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠改 Cast/伤表 ≠新地图 ≠重开 calamity ≠Pack6 ≠第五件花料 ≠P格兼确认 ≠复开 D423 ≠教裸指令**
+STATUS=**REJECTED · 否决半行空转** · 总控 2026-10-14 00:47 Asia/Shanghai · TIP-CK 本选题作废 · ≠施工
 
 > **一句话玩家价值：** 打开短征选页悬停任一本，就能看见「三房读条可躲」——进门前知道卫/弩/精英/终厅都能躲；**不**再改 Cast，**不**抬日帽。
 
@@ -52,10 +52,10 @@ STATUS=**待批 A** · 荐方案 **M** · 拟 **D13316** · **TIP-CK** · docs-o
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 十九本主 lore 必做；W1b 灰态同批；W1c Open/I 半行同批；见 §3）
+- [ ] **方案 M** · **总控否决**（半行空转硬禁）
 - [ ] 或勾 **方案 L**（改交粒子/工坊推荐花）· **本窗不荐 L**
 - [ ] 否决 A（只 Open）/ W（改 Cast/抬表/假写）
-- [ ] 批注：________________
+- [x] 批注：总控 **REJECT** · 无新动作纯 lore = 诚实空转 · 不施工 · 另开 TIP-CK 真债
 
 ---
 
@@ -130,6 +130,7 @@ STATUS=**待批 A** · 荐方案 **M** · 拟 **D13316** · **TIP-CK** · docs-o
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 00:47 | 总控 REJECT · 半行空转硬禁 · 不施工 |
 | 2026-10-14 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CJ 后连开 · 选题短征选页三房可读可躲 · 拟 D13316 · TIP-CK · ≠sx20 ≠抬表 ≠P兼确认 ≠第五件花料 ≠复开 D423 · **改题**（D13315§6 均不可本窗主交；证据表见 RESEARCH · 升 D13305/11/14 W1d） |
 
 *D13316 待批 A · 短征选页三房可读可躲 · 荐 M · ≠关观察 ≠抬日表 ≠sx20。*
