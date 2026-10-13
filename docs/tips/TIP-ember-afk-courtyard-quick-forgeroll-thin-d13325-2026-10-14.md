@@ -1,6 +1,6 @@
 # tip · TIP-CT 挂机庭「顺手随机锻」（真 forgeroll 入口 · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹/转化再拧 · ≠半行 · ≠抬表 · ≠宝石无同构 · ≠densify）· 拟 D13325
 
-> **状态：** **已批 A · 方案 M** · 物品 `07738f8bb` 已交 · 待插件 W1a · 拟 D13325 · TIP-CT · 全弧非 L · 勿勾 CLOSED · 2026-10-14 03:36 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · W1a–d 齐 · feat `2705550cd` · tip `07738f8bb` · jar `1.65.817-d13325.local` · 待测岗 · 拟 D13325 · TIP-CT · 全弧非 L · 勿勾 CLOSED · 2026-10-14 03:39 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-forgeroll`
 > **施工岗（批后）：** 余烬-插件（W1a 返回源）+ 余烬-物品（W1b/c/d TrMenu）· **不派怪物/地图**（默认）
 > **硬禁：** 零半行独批 · 零第五件花料 · 零推荐花复读 · 零洗练/烙纹/转化再拧 · 零 P 兼确认 · 零抬日表/改 forgeroll 价权重 · 零 Cast/Aid/todayRot/variety 再拧 · 零 W1e 独批 · 零 sx20/L13/K3 · 零庭内宝石本窗主交 · 零 densify
@@ -30,7 +30,7 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 03:35 Asia/Shanghai
 - [x] 插件交 afk 返回源 · jar 1.65.817-d13325.local
-- [x] 物品交 O 格 + forgeroll/forge 返回动态 + Open 辅半行 · `07738f8bb` · TrMenu 待 reload · 等插件 PAPI
+- [x] 物品交 O 格 + forgeroll/forge 返回动态 + Open 辅半行 · `07738f8bb` · forgeroll_back PAPI · TrMenu 77
 - [ ] 抽测：庭内进随机锻→返回庭；价/权重 零 diff；零 sx20；零半行独档
 
 ## 改题摘要（给总控）
@@ -38,4 +38,4 @@
 - 短征 Cast/Aid/todayRot/variety 齐 → 不复读
 - 采纳：**D13324§6③ 同构四项齐**（面亮 `forge_gap_roll` + afk 无格 + forge F live + 无 FORGEROLL_FROM）
 
-## STATUS: **已批 A · 方案 M** · 物品 W1b/c/d 已交 · 待插件 W1a · D13325 · TIP-CT · 全弧非 L · **勿勾 CLOSED** · 2026-10-14 03:36 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · W1a–d 齐 · 待测岗抽测 · D13325 · TIP-CT · 全弧非 L · **勿勾 CLOSED** · 2026-10-14 03:39 Asia/Shanghai

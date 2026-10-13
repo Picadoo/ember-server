@@ -157,12 +157,12 @@ Icons:
     actions:
       all:
         - 'tell: §e下限：§f必精良+ · 再扣胚8+骨8+币800 · 仍出不了极品'
-  # TIP-CT / D13325: 动态返回（from afk→挂机庭 · from forge→工坊）；PAPI 未齐先静态「返回」
+  # TIP-CT / D13325: 动态返回（from afk→挂机庭 · from forge→工坊）
   R:
     update: 20
     display:
       material: arrow
-      name: '§7返回'
+      name: '%corerpg_p1_forgeroll_back%'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
