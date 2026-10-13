@@ -1,4 +1,5 @@
 # D612: 战况/Open 挂「挂机在养手持」希望表盘（held_*_hope · 零改产量）
+# TIP-BY / D13304: 庭内顺手强化+1（E/e · gap_enhance1 · 零改产量/价）
 # D454: 装效澄清 gear_you / gear_eff(_tN) · 相对推荐装 · 零改产量
 # D383: 战况今日软目标 + 层差一览 + 层格相对多养 + 去哪花旁文案（零改产量）
 # D405: 战况软目标块 +还差/约满（remain_line live · tip 7123d944 · 零改产量）
@@ -20,8 +21,8 @@ Options:
 Layout:
   - '#########'
   - '# 1 2 3 #'
-  - '# S 4 V #'
-  - '# I F H #'
+  - '#S 4 V E#'
+  - '#e I F H#'
   - '####B####'
 Events:
   Open:
@@ -34,6 +35,7 @@ Events:
     - 'tell: §8战况可看仓内还差'
     - 'tell: §8工坊目标 %corerpg_p1_forge_goal_line% · /corerpg p1 forgegoal'
     - 'tell: §e挂机在养手持：§f%corerpg_p1_held_enhance_pity% §7· §f%corerpg_p1_held_quality_hope% §7· §f%corerpg_p1_held_refine_hope%'
+    - 'tell: §8仓够时可在本页顺手花'
 Icons:
   '#':
     display:
@@ -157,12 +159,68 @@ Icons:
       name: '§6战利品去哪花'
       lore:
         - '§7挂机材料去工坊花'
-        - '§7旁格可查仓库'
+        - '§7本页也可顺手强化'
         - '§e➥ §f打开工坊'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_forge'
+  # TIP-BY D13304: 顺手强化+1（够料亮 / 不够灰进工坊）
+  E:
+    update: 20
+    display:
+      material: anvil
+      name: '§a顺手强化+1'
+      lore:
+        - '§7花费：§f%corerpg_p1_held_enhance_cost%'
+        - '§7仓够代表档 · 成交扣仓库（与工坊同）'
+        - '§e➥ §f点预览 · 再确认'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg p1 enhance'
+    icons:
+      - condition: 'check papi %corerpg_p1_recipe_gap_enhance1% >= 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§7顺手花料 · 还差'
+          lore:
+            - '§c强化+1 碎差 §f%corerpg_p1_recipe_gap_enhance1%'
+            - '§7去工坊看配方 / 回挂机再坐'
+            - '§e➥ §f工坊'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_BASS-1-0'
+            - 'menu: ember_p1_forge'
+  e:
+    update: 20
+    display:
+      material: redstone
+      name: '§a顺手强化 · 确认'
+      lore:
+        - '§7花费：§f%corerpg_p1_held_enhance_cost%'
+        - '§7与工坊确认同口径'
+        - '§e➥ §f点确认'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enhance confirm'
+    icons:
+      - condition: 'check papi %corerpg_p1_recipe_gap_enhance1% >= 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§7顺手确认 · 还差'
+          lore:
+            - '§c强化+1 碎差 §f%corerpg_p1_recipe_gap_enhance1%'
+            - '§7仓不够 · 先去工坊或回挂'
+            - '§e➥ §f工坊'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_BASS-1-0'
+            - 'tell: §7仓还差碎料 · 先挂机或去工坊'
+            - 'menu: ember_p1_forge'
   V:
     display:
       material: ender chest
