@@ -1,6 +1,6 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13314 · 短征 R1 远程卫可读轻 Cast · docs-only · ≠sx20 · ≠抬日表 · ≠菜单诚实空转）
 
-> **STATUS:** APPROVED · 批 A·M · 已派怪物 · 2026-10-14 00:15 Asia/Shanghai
+> **STATUS:** CLOSED · tip live PASS `7125ddcd6` · tip `8a5cd67d5` · 2026-10-14 00:22 Asia/Shanghai
 
 > **旁注（打开 · 待批 A · 荐 M · 拟 D13314）：** tip 交总控批 · DESIGN [`DESIGN-ember-short-r1-ranged-cast-readable-2026-10-14.md`](../design/DESIGN-ember-short-r1-ranged-cast-readable-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-r1-ranged-cast-readable-2026-10-14.md`](../design/RESEARCH-ember-short-r1-ranged-cast-readable-2026-10-14.md) · backlog `B-short-r1-ranged-cast-readable` · **TIP-CI** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠抬伤表 ≠新地图 ≠重开 calamity ≠Pack6 ≠再叠挂机庭花料 ≠复开 D423 ≠stage 脏 runtime ≠撤分格**。
 
