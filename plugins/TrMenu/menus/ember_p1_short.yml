@@ -17,6 +17,7 @@
 # 金额：有奖 80/4/3 · 首通由 fc 真键显示（sx07=120/6/1 · sx08=110/6/1 · sx09=100/6/1 · sx10=90/6/1 · sx11=80/6/1 · sx12=70/6/1 · sx13=60/6/1 · sx14=50/6/1 · sx15=40/6/1 · sx16=30/6/1 · sx17=25/6/1 · sx18=20/6/1 · sx19=18/6/1）· 体力 30 · 日帽 3 分开。
 # TIP-CD / D13309: 今日推 D · sx_today* · enter short-today · 零抬日帽
 # TIP-CG / D13312: 本周短征可冲 F · goal_short_chase* · enter short-goal · 零抬 short:5
+# TIP-CU / D13326: 日差本可冲 L · short_div* · enter short-div · 零抬日帽/targets
 
 Title: '§6短征 · 选本'
 
@@ -37,7 +38,7 @@ Layout:
   - '#A C E G#'
   - '#K M O Q#'
   - '#TVXYWUN#'
-  - '#PRSJDF #'
+  - '#PRSJDFL#'
 
 Events:
   Open:
@@ -54,6 +55,7 @@ Events:
         - 'tell: §8独立短本 · 不是旧日常窟 · 奖励以结算为准 · 材料进仓去工坊 · 今日有奖见各本悬停'
     - 'tell: §8生涯首通：各本悬停可见未领/已领取 · %corerpg_p1_sx_fc_pending_line%'
     - 'tell: §8本周短征可冲见本页 F · %corerpg_p1_goal_short% · 有奖通关计入 · 可选 · 不算全部完成'
+    - 'tell: §8日差本可冲见本页 L · %corerpg_p1_short_div_line% · 今日未领日奖的另一本'
     # D416 W1b：Open 半行 · 选本说明可看仓内还差（满态/未满共用 · 不盖 D409 去工坊花）
     - 'tell: §8选本说明可看仓内还差'
     - 'tell: §8今日推：§f%corerpg_p1_sx_today_name%'
@@ -802,6 +804,51 @@ Icons:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg p1 enter short-goal'
+        - close
+
+
+  # TIP-CU / D13326 · 日差本可冲 L · short_div* · enter short-div · 零抬日帽/targets
+  L:
+    icons:
+      - condition: 'check papi %corerpg_p1_short_div_chase_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7日差本可冲 §8（无冲口）'
+          lore:
+            - '§c暂无今日未领日奖的另一本'
+            - '§f%corerpg_p1_short_div_line%'
+            - '§8今日未领日奖的另一本 · 点进'
+      - condition: 'check papi %corerpg_p1_short_div_done% >= 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7日差本可冲 §8（今日可选已满）'
+          lore:
+            - '§a今日有奖不同本已满 §7· %corerpg_p1_short_div_line%'
+            - '§7仍可点下方十九本 / 今日推 / 本周短征'
+            - '§8今日未领日奖的另一本 · 点进'
+      - condition: 'check papi %corerpg_stamina% < 30'
+        priority: 3
+        display:
+          material: iron bars
+          name: '§7日差本可冲 §8（体力不足）'
+          lore:
+            - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§f%corerpg_p1_short_div_line%'
+            - '§7冲图：§f%corerpg_p1_short_div_chase_name% §7· %corerpg_p1_short_div_chase_day_line%'
+    update: 20
+    display:
+      material: compass
+      name: '§e日差本可冲'
+      lore:
+        - '§f%corerpg_p1_short_div_line%'
+        - '§7冲图：§f%corerpg_p1_short_div_chase_name% §7· %corerpg_p1_short_div_chase_day_line%'
+        - '§8今日未领日奖的另一本 · 点进 · §e➥进本'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter short-div'
         - close
 
 
