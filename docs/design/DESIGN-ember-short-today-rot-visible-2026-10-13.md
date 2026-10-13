@@ -1,6 +1,6 @@
 # 余烬 · 短征「今日推」轮换可见（日短本选本可感 · 零抬日帽 · ≠sx20）
 
-STATUS=**待批 A · 荐方案 M · 拟 D13309** · 2026-10-13 22:01 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-short-today-rot-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-short-today-rot-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-today-rot-visible-2026-10-13.md`](RESEARCH-ember-short-today-rot-visible-2026-10-13.md) · backlog `B-short-today-rot-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬短征日帽/S表/体力 ≠交事件窗本窗主交付 ≠复开 D423 ≠教裸指令**
+STATUS=**已批 A · 方案 M · D13309** · 总控 2026-10-13 22:03 Asia/Shanghai · 2026-10-13 22:01 Asia/Shanghai · tip [`STATUS-ember-next-hard-debt-short-today-rot-need-design-2026-10-13.md`](../status/STATUS-ember-next-hard-debt-short-today-rot-need-design-2026-10-13.md) · RESEARCH [`RESEARCH-ember-short-today-rot-visible-2026-10-13.md`](RESEARCH-ember-short-today-rot-visible-2026-10-13.md) · backlog `B-short-today-rot-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠抬短征日帽/S表/体力 ≠交事件窗本窗主交付 ≠复开 D423 ≠教裸指令**
 
 > **一句话玩家价值：** 打开短征选本就能看见「今日推哪本」，一点进本——每天换一本动机；**不**抬日帽、**不**开 sx20。
 
@@ -51,9 +51,9 @@ STATUS=**待批 A · 荐方案 M · 拟 D13309** · 2026-10-13 22:01 Asia/Shangh
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 轮换键必做；W1b 今日推格必做；W1c Open/冒险半行同批；见 §3）
-- [ ] 否决 A（只口号）/ L（本窗换题事件窗·抬表·sx20）/ W（假写/空转）
-- [ ] 批注：________________
+- [x] **方案 M**（W1a 轮换键必做；W1b 今日推格必做；W1c Open/冒险半行同批；见 §3）
+- [x] 否决 A（只口号）/ L（本窗换题事件窗·抬表·sx20）/ W（假写/空转）
+- [x] 批注：总控批 A·M · D13309 · TIP-CD · 先插件 W1a sx_today* 再物品 W1b/c · 事件窗后置 · 零抬日帽
 
 ---
 
