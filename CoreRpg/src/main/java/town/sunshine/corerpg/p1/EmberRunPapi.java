@@ -105,6 +105,7 @@ public final class EmberRunPapi {
         if ("abyss_state".equals(key) || key.startsWith("abyss_t")) return Section.ABYSS;
         if ("recruits".equals(key) || "failrefund".equals(key)) return Section.ENTRY;
         if ("featured_key".equals(key)) return Section.ROTATION;
+        if ("event_chase".equals(key) || "event_chase_name".equals(key) || "event_soft_ready".equals(key)) return Section.ROTATION; // TIP-CE D13310
         if ("awaken_route".equals(key) || isLoadoutKey(key)) return Section.LOADOUT;
         if (key.startsWith("codex") || "codex_hope".equals(key)) return Section.CODEX;
         if (key.startsWith("armor_")) return Section.ARMOR; // D318 (no earlier prefix matches "armor")
@@ -681,6 +682,16 @@ public final class EmberRunPapi {
             int left = runs.featuredLeft(d);
             int cap = runs.maps() == null ? 0 : runs.maps().rotationWeeklyCap;
             return EmberHopeMeter.featuredHope(left, cap);
+        }
+        if ("event_chase".equals(key) || "event_chase_name".equals(key) || "event_soft_ready".equals(key)) { // TIP-CE D13310
+            if ("event_soft_ready".equals(key))
+                return EmberEventChase.softReady(EmberEventSoftPity.get(d));
+            String feat = runs.featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()));
+            String chase = EmberEventChase.chaseKey(feat, k -> runs.progressFlag(d, k));
+            if ("event_chase".equals(key)) return chase;
+            if (chase.isEmpty()) return "";
+            EmberRunMaps.MapDef cm = maps.byKey(chase);
+            return cm != null && cm.name != null && !cm.name.isEmpty() ? cm.name : chase;
         }
         return String.valueOf(runs.featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()))); // featured_key
     }

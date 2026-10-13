@@ -3221,11 +3221,21 @@ public boolean pathForceOpenDoor(Player p) {
                 return true;
             }
             case "enter":
-                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today> [challenge]"); return true; }
+                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today|event-chase> [challenge]"); return true; }
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) entry.markForced(((Player) s).getUniqueId()); // D96 (D235 → EmberEntryService)
                 String mapArg = args[2].toLowerCase(Locale.ROOT);
                 if ("short-today".equals(mapArg) || "sx_today".equals(mapArg))
                     mapArg = EmberShortRules.todayKey(); // TIP-CD D13309
+                if ("event-chase".equals(mapArg) || "event_chase".equals(mapArg)) { // TIP-CE D13310
+                    Player ep = (Player) s;
+                    PlayerData ed = data(ep.getUniqueId());
+                    String feat = featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()));
+                    mapArg = EmberEventChase.chaseKey(feat, k -> progressFlag(ed, k));
+                    if (mapArg == null || mapArg.isEmpty()) {
+                        s.sendMessage(P + "暂无可冲的已通普通本（先通任意 Q01–Q07）。");
+                        return true;
+                    }
+                }
                 return tryEnter((Player) s, mapArg, args.length >= 4 && isChallengeWord(args[3]));
             case "abyss": return cmdAbyss(s, args);
             case "recruit": return recruit.cmd(s, args); // D104 / D234 → EmberRecruitService
