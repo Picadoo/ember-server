@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13323 · 挂机庭「顺手烙纹」· docs-only · ≠第五件花料 · ≠推荐花复读 · ≠洗练再拧 · ≠半行 · ≠sx20 · ≠抬日表）
 
-> **旁注（CLOSED live · feat `cf35d9948` · tip `ce2f8c95f` · PASS `d9f70ed9a` · 2026-10-14 03:11 Asia/Shanghai · 宝石仍后置）：** tip 待批 · DESIGN [`DESIGN-ember-afk-courtyard-quick-brand-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-brand-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-brand-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-brand-2026-10-14.md) · backlog `B-afk-courtyard-quick-brand` · **TIP-CR** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_core ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
+> **旁注（勾毕 · CLOSED live · live `fed2cf6aa` · feat `cf35d9948` · tip `ce2f8c95f` · PASS `d9f70ed9a` · jar `1.65.815-d13323.local` · 批 sha `d1004caaf` · 2026-10-14 03:17 Asia/Shanghai · 宝石仍后置 · 半行 REJECT `d00ed84bc` **保持否决**）：** tip **勾毕 CLOSED** · DESIGN [`DESIGN-ember-afk-courtyard-quick-brand-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-brand-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-brand-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-brand-2026-10-14.md) · backlog `B-afk-courtyard-quick-brand` · **TIP-CR** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_core ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令**。
 
 > **上游结案：** **TIP-CQ CLOSED** live `e099c02b7`（D13322 挂机庭顺手洗练齐 · feat `a342f34cf` · tip `6804ed53a` · jar `1.65.814-d13322.local` · PASS `16998530c` · 批 sha `33d94eb40`）。总控连开：优先短征日更/乐趣或庭**新轨**真入口；D13322§6 宝石/烙纹须另证真债；Cast+Aid+todayRot+variety+庭内四花+推荐+拆+换+洗练 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）  
-**本窗性质：** tip **CLOSED live** · feat `cf35d9948` · tip `ce2f8c95f` · PASS `d9f70ed9a` · jar `1.65.815-d13323.local` · 拟 D13323 · TIP-CR · 宝石仍后置 · 2026-10-14 03:11 Asia/Shanghai
+**本窗性质：** tip **勾毕 · CLOSED live** · live `fed2cf6aa` · feat `cf35d9948` · tip `ce2f8c95f` · PASS `d9f70ed9a` · jar `1.65.815-d13323.local` · 批 sha `d1004caaf` · 拟 D13323 · TIP-CR · 宝石仍后置 · 2026-10-14 03:17 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-afk-courtyard-quick-brand-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-brand-2026-10-14.md) · backlog `B-afk-courtyard-quick-brand`  
 **打开理由：** 短征日更玩法层已饱和；D13322§6② 明文后置庭内烙纹且另证真债成立；庭内无烙纹入口而 AfkForgePath/面差已认定烙纹为产料消耗点。
 
@@ -81,4 +81,4 @@
 
 ---
 
-*选题挂机庭顺手烙纹 · tip **待批 A** · 荐 **方案 M** · 拟 D13323 · TIP-CR · docs-only · 半行 REJECT `d00ed84bc` **保持否决** · ≠关观察 ≠抬日表 ≠sx20 ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠半行空转。*
+*选题挂机庭顺手烙纹 · tip **勾毕 CLOSED live** `fed2cf6aa` · feat `cf35d9948` · tip `ce2f8c95f` · PASS `d9f70ed9a` · jar `1.65.815-d13323.local` · 批 `d1004caaf` · 拟 D13323 · TIP-CR · 宝石仍后置 · 半行 REJECT `d00ed84bc` **保持否决** · ≠关观察 ≠抬日表 ≠sx20 ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠半行空转。*
