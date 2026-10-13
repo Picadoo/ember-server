@@ -2,6 +2,8 @@ package town.sunshine.corerpg.p1;
 
 import org.junit.Test;
 
+import town.sunshine.corerpg.PlayerData;
+
 import static org.junit.Assert.*;
 
 /** D299 近档 + D307 工坊费用行 / 缺料半行（零改价）。 */
@@ -73,6 +75,12 @@ public class EmberGearNextHintTest {
         assertEquals("免费 · 交换强化等级+失败计数", EmberGearNextHint.swapLine());
         EmberItemData drop = EmberItemData.create("burst", "blade", 2, 0, 0, 0, false, "drop");
         assertEquals("得胚×2", EmberGearNextHint.dismantleYieldLine(drop));
+        assertEquals("得胚×2", EmberGearNextHint.dismantleYieldLine(drop, null));
+        PlayerData pd = new PlayerData();
+        assertEquals("得胚×3 · 今日首拆+1待用", EmberGearNextHint.dismantleYieldLine(drop, pd));
+        assertTrue(EmberDismantleYieldBoost.ready(pd)); // peek must not latch C_USED
+        EmberDismantleYieldBoost.apply(pd, 2, true);
+        assertEquals("得胚×2", EmberGearNextHint.dismantleYieldLine(drop, pd));
         EmberItemData quest = EmberItemData.create("burst", "blade", 1, 0, 0, 0, false, "quest");
         String why = EmberGearNextHint.dismantleYieldLine(quest);
         assertNotNull(why);
@@ -86,4 +94,31 @@ public class EmberGearNextHintTest {
         assertEquals("碎片4 币40", EmberGearNextHint.costShort(EmberUpgradeRules.enhanceCost(0)));
         assertEquals("碎片60 核心12 胚6 币1500", EmberGearNextHint.costShort(EmberUpgradeRules.upgradeCost(1)));
     }
+
+    /** TIP-BX D13293: YieldBoost peek honesty on dismantleYieldLine(d, pd). */
+    @Test public void dismantleYieldLine_boostPeekReadyAndUsed() {
+        EmberItemData drop = EmberItemData.create("burst", "blade", 2, 0, 0, 0, false, "drop");
+        int base = EmberUpgradeRules.dismantleYield(drop);
+        assertEquals(2, base);
+
+        PlayerData ready = new PlayerData();
+        String line = EmberGearNextHint.dismantleYieldLine(drop, ready);
+        assertTrue(line.contains("首拆") || line.contains("+1"));
+        assertTrue(line.contains("得胚×" + (base + EmberDismantleYieldBoost.BONUS)));
+        assertEquals(base + EmberDismantleYieldBoost.BONUS, EmberDismantleYieldBoost.apply(ready, base, false));
+        assertFalse(EmberDismantleYieldBoost.usedToday(ready)); // peek must not consume
+
+        PlayerData used = new PlayerData();
+        used.addPeriodCount(EmberDismantleYieldBoost.C_USED, "day", 1);
+        String usedLine = EmberGearNextHint.dismantleYieldLine(drop, used);
+        assertEquals("得胚×" + base, usedLine);
+        assertFalse(usedLine.contains("待用"));
+
+        EmberItemData quest = EmberItemData.create("burst", "blade", 1, 0, 0, 0, false, "quest");
+        String why = EmberGearNextHint.dismantleYieldLine(quest, ready);
+        assertFalse(why.startsWith("得胚"));
+
+        assertEquals("得胚×2", EmberGearNextHint.dismantleYieldLine(drop)); // legacy no-pd
+    }
+
 }

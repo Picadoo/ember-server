@@ -188,10 +188,23 @@ public final class EmberGearNextHint {
      * D307 W1a · 分解只读得胚预览。不可分解时返回检查短句；可分解 {@code 得胚×T}。
      */
     public static String dismantleYieldLine(EmberItemData d) {
+        return dismantleYieldLine(d, null);
+    }
+
+    /**
+     * TIP-BX D13293: YieldBoost peek — when day-first ready show {@code 得胚×(base+BONUS) · 今日首拆+1待用};
+     * peek never consume. Zero BONUS / dismantleYield table change.
+     */
+    public static String dismantleYieldLine(EmberItemData d, PlayerData pd) {
         if (d == null) return "";
         String why = EmberUpgradeRules.dismantleCheck(d);
         if (why != null) return why;
-        return "得胚×" + EmberUpgradeRules.dismantleYield(d);
+        int base = EmberUpgradeRules.dismantleYield(d);
+        int peeked = EmberDismantleYieldBoost.apply(pd, base, false); // peek, never consume
+        if (EmberDismantleYieldBoost.ready(pd) && peeked > base) {
+            return "得胚×" + peeked + " · 今日首拆+1待用";
+        }
+        return "得胚×" + peeked;
     }
 
     /** D307 W1b · 缺料半行；空列表 → 空串（材料够不刷红）。口径对齐 ForgeService lacking 人话。 */

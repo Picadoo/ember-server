@@ -991,7 +991,7 @@ public final class EmberRunPapi {
             boolean gate = flag != null && runs.progressFlag(softPd, flag);
             return EmberGearNextHint.upgradeLine(d, gate, softPd);
         }
-        if ("dismantle".equals(kind)) return EmberGearNextHint.dismantleYieldLine(d);
+        if ("dismantle".equals(kind)) return EmberGearNextHint.dismantleYieldLine(d, softPd);
         return "";
     }
 
