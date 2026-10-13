@@ -760,3 +760,253 @@ EmberSx19EliteCast:
   - effect:particles{p=note;amount=24;hSpread=4.5;ySpread=0.3;speed=0.02} @Self
   - effect:particles{p=crit;amount=20;hSpread=4;ySpread=0.4;speed=0.02} @Self
 
+# --- D13311 · 短征 R1 近战卫可读轻 Cast（轻压 · 弱于 EliteCast · MM-only）---
+# 统一：dmg 0.32 · delay 35 · r4 · CD 12 · Guard ~onTimer:140；禁 ≥Elite 伤；禁挂远程；禁改 Elite/Boss
+EmberSx01GuardCast:
+  # D13311 GuardCast · 主题「哨卒轻扫」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&6【烬门】&f哨卒轻扫——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=flame;amount=24;hSpread=3.5;ySpread=0.5;speed=0.02} @Self
+  - effect:particles{p=crit;amount=18;hSpread=3.2;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=12;hSpread=3;ySpread=0.4;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.8} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=flame;amount=18;hSpread=3.5;ySpread=0.4;speed=0.02} @Self
+
+EmberSx02GuardCast:
+  # D13311 GuardCast · 主题「栈卫轻落点」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&e【锈灯】&f栈卫轻落点——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=flame;amount=20;hSpread=1.2;ySpread=0.3;speed=0} @Self
+  - effect:particles{p=lava;amount=14;hSpread=2.5;ySpread=0.3;speed=0} @Self
+  - effect:particles{p=crit;amount=20;hSpread=3.5;ySpread=0.4;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.9} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=flame;amount=16;hSpread=3.5;ySpread=0.4;speed=0.02} @Self
+  - effect:particles{p=lava;amount=10;hSpread=3;ySpread=0.3;speed=0} @Self
+
+EmberSx03GuardCast:
+  # D13311 GuardCast · 主题「闸卫轻楔」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&b【霜雾】&f闸卫轻楔——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=cloud;amount=24;hSpread=3.5;ySpread=0.7;speed=0} @Self
+  - effect:particles{p=crit;amount=18;hSpread=3.2;ySpread=0.4;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.75} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=cloud;amount=16;hSpread=3.5;ySpread=0.5;speed=0} @Self
+  - effect:particles{p=crit;amount=12;hSpread=3;ySpread=0.3;speed=0.02} @Self
+
+EmberSx04GuardCast:
+  # D13311 GuardCast · 主题「井卫轻焰」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&c【烬井】&f井卫轻焰——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=lava;amount=18;hSpread=1.2;ySpread=1.2;speed=0} @Self
+  - effect:particles{p=flame;amount=24;hSpread=1.8;ySpread=1.4;speed=0.02} @Self
+  - effect:particles{p=crit;amount=16;hSpread=3.2;ySpread=0.4;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.55} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=lava;amount=14;hSpread=3.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=flame;amount=16;hSpread=3.5;ySpread=0.5;speed=0.02} @Self
+
+EmberSx05GuardCast:
+  # D13311 GuardCast · 主题「崖卫轻剪」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&7【裂谷】&f崖卫轻剪——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=cloud;amount=24;hSpread=4;ySpread=0.3;speed=0.03} @Self
+  - effect:particles{p=crit;amount=20;hSpread=3.2;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=explode;amount=8;hSpread=2.5;ySpread=0.2;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.95} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=cloud;amount=16;hSpread=3.5;ySpread=0.3;speed=0.02} @Self
+
+EmberSx06GuardCast:
+  # D13311 GuardCast · 主题「环卫轻弧」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&8【环廊】&f环卫轻弧——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=24;hSpread=4;ySpread=0.3;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=18;hSpread=3.2;ySpread=0.5;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.7} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=16;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
+
+EmberSx07GuardCast:
+  # D13311 GuardCast · 主题「塔卫轻坠」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&6【烬塔】&f塔卫轻坠——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=lava;amount=18;hSpread=1.8;ySpread=1.2;speed=0} @Self
+  - effect:particles{p=flame;amount=24;hSpread=2.5;ySpread=1.4;speed=0.02} @Self
+  - effect:particles{p=crit;amount=16;hSpread=3.2;ySpread=0.4;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.6} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=lava;amount=14;hSpread=3.5;ySpread=0.6;speed=0} @Self
+
+EmberSx08GuardCast:
+  # D13311 GuardCast · 主题「层卫轻砸」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&e【错层】&f层卫轻砸——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=24;hSpread=3.5;ySpread=0.7;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=18;hSpread=3.2;ySpread=0.5;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.65} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=16;hSpread=3.5;ySpread=0.45;speed=0.02} @Self
+
+EmberSx09GuardCast:
+  # D13311 GuardCast · 主题「渠卫轻溅」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&3【烬渠】&f渠卫轻溅——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=waterdrop;amount=24;hSpread=4;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=splash;amount=16;hSpread=3.2;ySpread=0.4;speed=0.02} @Self
+  - effect:particles{p=crit;amount=14;hSpread=3;ySpread=0.3;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.8} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=waterdrop;amount=16;hSpread=3.5;ySpread=0.3;speed=0.02} @Self
+
+EmberSx10GuardCast:
+  # D13311 GuardCast · 主题「闸卒轻压」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&8【密封闸】&f闸卒轻压——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=24;hSpread=3.5;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=smoke;amount=18;hSpread=3.2;ySpread=0.5;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.65} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=16;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
+
+EmberSx11GuardCast:
+  # D13311 GuardCast · 主题「镜卫轻扫」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&5【合镜】&f镜卫轻扫——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=24;hSpread=4;ySpread=0.3;speed=0.03} @Self
+  - effect:particles{p=spell_witch;amount=16;hSpread=3.2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.85} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=16;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
+
+EmberSx12GuardCast:
+  # D13311 GuardCast · 主题「枢卫轻斩」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&a【环枢】&f枢卫轻斩——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=24;hSpread=3.5;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=happyVillager;amount=16;hSpread=3.2;ySpread=0.5;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.75} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=16;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
+
+EmberSx13GuardCast:
+  # D13311 GuardCast · 主题「衡卫轻斩」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&6【衡梁】&f衡卫轻斩——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=24;hSpread=4;ySpread=0.3;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=18;hSpread=3.2;ySpread=0.4;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.6} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=16;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
+
+EmberSx14GuardCast:
+  # D13311 GuardCast · 主题「裂卫轻斩」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&6【烬裂】&f裂卫轻斩——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=24;hSpread=4;ySpread=0.3;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=18;hSpread=3.2;ySpread=0.5;speed=0} @Self
+  - effect:particles{p=lava;amount=10;hSpread=1.8;ySpread=0.7;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.48} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=16;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=12;hSpread=3;ySpread=0.4;speed=0} @Self
+
+EmberSx15GuardCast:
+  # D13311 GuardCast · 主题「旋卫轻斩」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&6【烬旋】&f旋卫轻斩——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=24;hSpread=4;ySpread=0.4;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=18;hSpread=3.2;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=lava;amount=10;hSpread=1.8;ySpread=0.7;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.45} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=16;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=12;hSpread=3;ySpread=0.4;speed=0} @Self
+
+EmberSx16GuardCast:
+  # D13311 GuardCast · 主题「影卫轻斩」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&6【烬影】&f影卫轻斩——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=24;hSpread=4;ySpread=0.3;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=18;hSpread=3.2;ySpread=0.5;speed=0} @Self
+  - effect:particles{p=smoke;amount=14;hSpread=3.2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.55} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=16;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=12;hSpread=3;ySpread=0.4;speed=0} @Self
+
+EmberSx17GuardCast:
+  # D13311 GuardCast · 主题「潮卫轻斩」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&6【烬潮】&f潮卫轻斩——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=waterdrop;amount=24;hSpread=4;ySpread=0.3;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=18;hSpread=3.2;ySpread=0.5;speed=0} @Self
+  - effect:particles{p=splash;amount=14;hSpread=3.2;ySpread=0.4;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.52} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=waterdrop;amount=16;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=12;hSpread=3;ySpread=0.4;speed=0} @Self
+
+EmberSx18GuardCast:
+  # D13311 GuardCast · 主题「晶卫轻斩」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&6【烬晶】&f晶卫轻斩——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=24;hSpread=4;ySpread=0.3;speed=0.03} @Self
+  - effect:particles{p=fireworkSpark;amount=16;hSpread=3.2;ySpread=0.45;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=14;hSpread=3.2;ySpread=0.4;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.65} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=crit;amount=16;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
+  - effect:particles{p=fireworkSpark;amount=10;hSpread=3;ySpread=0.3;speed=0.02} @Self
+
+EmberSx19GuardCast:
+  # D13311 GuardCast · 主题「弦卫轻斩」· 对齐本本 EliteCast 再降两档
+  Cooldown: 12
+  Skills:
+  - message{m="&6【烬弦】&f弦卫轻斩——侧移！"} @PlayersInRadius{r=24}
+  - effect:particles{p=note;amount=22;hSpread=4;ySpread=0.3;speed=0.03} @Self
+  - effect:particles{p=crit;amount=18;hSpread=3.2;ySpread=0.4;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=14;hSpread=3.2;ySpread=0.4;speed=0} @Self
+  - effect:sound{s=note.harp;volume=0.65;pitch=0.75} @Self
+  - delay 35
+  - damage{amount=0.32} @PlayersInRadius{r=4}
+  - effect:particles{p=note;amount=14;hSpread=3.5;ySpread=0.25;speed=0.02} @Self
+  - effect:particles{p=crit;amount=12;hSpread=3;ySpread=0.3;speed=0.02} @Self
