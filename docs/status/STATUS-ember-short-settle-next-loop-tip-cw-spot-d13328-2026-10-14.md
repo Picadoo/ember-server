@@ -1,7 +1,7 @@
 # 状态 · TIP-CW 短征结算「下一环」菜单化抽测
 
 **裁决：** **PASS** · feat `8c2dc7d95` · 入口 `d13eabcba` · 菜单 tip `374a142fd` · jar `1.65.821-d13328b.local` · 证据 `/workspace/tmp/tip-cw-short-settle/`  
-**范围：** 有奖 settle → `[下一环]` 开 `ember_p1_short_settle` · PAPI `short_settle_map|name|day_left|day_line` · 再进真 enter 本图 · 路径/工坊真开菜单 · `spendChaseButtonCmd`→`/ember_p1_forge` · 无教手打 shortpath · todayRot settleCue 保持 `enter short-today` · 灰态日奖满/体力不足 · **零改** resolve/日帽/targets/Cast/Aid/variety/short_div*/sx20 · Stage2 未拧 · bv123 · gate_daily=no · **tip 勿勾 CLOSED**（总控收口）
+**范围：** 有奖 settle → `[下一环]` 开 `ember_p1_short_settle` · PAPI `short_settle_map|name|day_left|day_line` · 再进真 enter 本图 · 路径/工坊真开菜单 · `spendChaseButtonCmd`→`/ember_p1_forge` · 无教手打 shortpath · todayRot settleCue 保持 `enter short-today` · 灰态日奖满/体力不足 · **零改** resolve/日帽/targets/Cast/Aid/variety/short_div*/sx20 · Stage2 未拧 · bv123 · gate_daily=no · **勾毕 CLOSED live**（总控收口 · 2026-10-14 07:47 Asia/Shanghai）
 
 ## 必验
 
@@ -19,11 +19,11 @@
 
 - TrMenu **79** 已载 settle 薄页；md5 `a2b9a178…` live=repo
 - jar sha256 `0305c99077da…` 与 plugins/ + server-runtime/ 一致 · HEAD `8c2dc7d95`
-- 29/29 PASS · tip **未勾 CLOSED**（总控收口）
+- 29/29 PASS · tip **勾毕 CLOSED live**（总控收口）
 - 对照 TIP-CO todayRot settleCue / TIP-CV 路径追 / TIP-CU 日差：本票 = 结算后下一环菜单化
 
 ## 纪律确认
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · short target=5 · daycap=3 · ×0.97 未改 · bv123 · 零 Cast/Aid/variety/short_div*/sx20 · ≠关观察 · 未改 YAML/jar · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `8c2dc7d95` · 入口 `d13eabcba` · **勿勾 CLOSED** · 2026-10-14 Asia/Shanghai
+> **测岗抽测：** PASS live · feat `8c2dc7d95` · tip `374a142fd` · STATUS `72e8e6a4e` · **CLOSED live**（总控收口）· 2026-10-14 07:47 Asia/Shanghai

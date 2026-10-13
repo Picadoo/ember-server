@@ -1,6 +1,6 @@
 # tip · TIP-CW 短征结算「下一环」菜单化（settle 聊天钮去指令化 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠庭内旁路 · ≠抬表）· 拟 D13328
 
-> **状态：** **已批 A · 方案 M** · W1a/b + PAPI 齐 · **测岗抽测 PASS** · **勿勾 CLOSED**（总控收口）· jar `1.65.821-d13328b.local` · feat `8c2dc7d95` · 批 sha `e73f5847e` · 拟 D13328 · TIP-CW · 2026-10-14 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `8c2dc7d95` · tip `374a142fd` · jar `1.65.821-d13328b.local` · PASS `72e8e6a4e` · 批 sha `e73f5847e` · 证据 `/workspace/tmp/tip-cw-short-settle/` · 2026-10-14 07:47 Asia/Shanghai · 结算下一环同题勿再交
 > **DESIGN** [`DESIGN-ember-short-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-short-settle-next-loop-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-settle-next-loop-visible`  
 > **施工岗（批后）：** 余烬-插件（settle 下一环改开菜单）+ 余烬-物品（薄页 `ember_p1_short_settle`）· **不派怪物/地图**  
 > **硬禁：** 零半行独批 · 零路径追同题 · 零日差同题 · 零今日推/周目标/三冲/D406 复读主交 · 零 Cast 粒子主交付 · 零拧 EliteAid/BossAid · 零 todayRot/W1e 独批 · 零 variety 再拧/完整经济 · 零 sx20 · 零抬日表/伤表/S表/targets.short · 零庭内旁路再拧 · 零 densify · 零教裸指令主 UI · 零改 ShortPath resolve 算法  
@@ -31,6 +31,6 @@
 - [x] 插件交 settle 入口改菜单 + 清裸指令 + 单测 · W1a jar `1.65.820-d13328.local` · feat `d13eabcba`
 - [x] 插件补 short_settle_map/name/day_left/day_line + settle remember · jar `1.65.821-d13328b.local` · 单测 EmberShortSettleTest
 - [x] 物品交薄 settle 页 + TrMenu reload · `374a142fd` · TrMenu 79
-- [x] 抽测：有奖通关可开下一环；再进/路径/工坊真开；无教手打 shortpath；零抬日帽/targets；零改 Cast/Aid；零路径追同题；零 sx20；零半行独档 · PASS live feat `8c2dc7d95` · **勿勾 CLOSED**
+- [x] 抽测：有奖通关可开下一环；再进/路径/工坊真开；无教手打 shortpath；零抬日帽/targets；零改 Cast/Aid；零路径追同题；零 sx20；零半行独档 · PASS `72e8e6a4e` · 证据 `/workspace/tmp/tip-cw-short-settle/`
 
-## STATUS: **已批 A · 方案 M** · 测岗抽测 PASS · **勿勾 CLOSED**（总控收口）· feat `8c2dc7d95` · D13328 · TIP-CW · 2026-10-14 Asia/Shanghai
+## STATUS: **CLOSED live** · `8c2dc7d95` / `374a142fd` · PASS `72e8e6a4e` · D13328 · TIP-CW · 2026-10-14 07:47 Asia/Shanghai

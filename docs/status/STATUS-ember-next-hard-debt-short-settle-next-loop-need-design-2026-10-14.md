@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13328 · 短征结算「下一环」菜单化 · settle 聊天钮去指令化 · docs-only · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬日表 · ≠庭内旁路 · ≠Cast/Aid/variety再拧）
 
-> **旁注（已批 A · 方案 M · 2026-10-14 04:38 Asia/Shanghai · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 零改日帽/S/resolve · 路径追同题勿再交）：** tip **已批 A · 荐方案 M** · DESIGN [`DESIGN-ember-short-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-short-settle-next-loop-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-settle-next-loop-visible-2026-10-14.md`](../design/RESEARCH-ember-short-settle-next-loop-visible-2026-10-14.md) · backlog `B-short-settle-next-loop-visible` · **TIP-CW** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠路径追同题 ≠日差同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠改 resolve 算法**。
+> **旁注（勾毕 · CLOSED live · feat `8c2dc7d95` · tip `374a142fd` · PASS `72e8e6a4e` · jar `1.65.821-d13328b.local` · 批 sha `e73f5847e` · 2026-10-14 07:47 Asia/Shanghai · 结算下一环同题勿再交）：** tip **CLOSED live** · DESIGN [`DESIGN-ember-short-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-short-settle-next-loop-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-settle-next-loop-visible-2026-10-14.md`](../design/RESEARCH-ember-short-settle-next-loop-visible-2026-10-14.md) · backlog `B-short-settle-next-loop-visible` · **TIP-CW** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠路径追同题 ≠日差同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠改 resolve 算法**。
 
 > **上游结案：** **TIP-CV CLOSED** live `f3defd0bb`（D13327 短征选页「路径追」齐 · feat `c31c780a9` · tip `a206b9893` · jar `1.65.819-d13327.local` · PASS `f9e4ca402` · 批 sha `ac2889160` · **路径追同题勿再交**）。总控连开：优先**强烈偏向短征日更/乐趣**（真可点或房内可感）；庭内工坊旁路已近饱和（默认勿再交）；宝石须庭面 gap；日差软目标发奖须另批。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内全弧+今日推/冲一下/周短征/三冲+日差本可冲+路径追 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · 拟 D13328 · TIP-CW · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 零改日帽/S/resolve · 2026-10-14 04:38 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `8c2dc7d95` · tip `374a142fd` · PASS `72e8e6a4e` · jar `1.65.821-d13328b.local` · D13328 · TIP-CW · 2026-10-14 07:47 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-short-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-short-settle-next-loop-visible-2026-10-14.md) · backlog `B-short-settle-next-loop-visible`
 **打开理由：** 路径追已菜单化后，短征有奖 settle 仍用 ConfirmTokens 教 `/corerpg p1 shortpath` / `/corerpg p1 forge`，并有裸指令文案；日更「通关→下一环」乐趣断在聊天钮去指令化。
 
@@ -79,4 +79,4 @@
 
 ---
 
-*选题短征结算下一环菜单化 · tip **已批 A · 方案 M** · 拟 D13328 · TIP-CW · 全弧非 L · 半行 REJECT `d00ed84bc` **保持否决** · 路径追同题勿再交。*
+*选题短征结算下一环菜单化 · tip **CLOSED live** · `8c2dc7d95` / `374a142fd` · PASS `72e8e6a4e` · D13328 · TIP-CW · 半行 REJECT `d00ed84bc` **保持否决** · 结算下一环同题勿再交。*

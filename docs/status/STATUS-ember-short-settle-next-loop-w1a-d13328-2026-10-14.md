@@ -1,6 +1,6 @@
 # STATUS · TIP-CW W1a 短征结算「下一环」菜单化 · D13328
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交 · 勿勾 CLOSED** · 等物品 W1b 薄页 + 测岗
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `72e8e6a4e` · tip `374a142fd` · 总控收口 2026-10-14 07:47 Asia/Shanghai
 
 ## 交付
 - 有奖 settle 下一环主钮 → `/ember_p1_short_settle`（`SETTLE_NEXT_LOOP_*`）
@@ -28,17 +28,20 @@
 - balance_version 123 · sx20
 
 ## 下步
-- 物品 W1b 薄 settle 页 `ember_p1_short_settle`（再进/回选/路径/工坊）
-- 测岗抽测后总控收口（本号勿 CLOSED）
+- 物品 W1b / PAPI / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-CW spot）
+- **PASS** · 2026-10-14 07:47 Asia/Shanghai · 证据 `/workspace/tmp/tip-cw-short-settle/` · 详 `STATUS-ember-short-settle-next-loop-tip-cw-spot-d13328-2026-10-14.md`
+- live jar `1.65.821-d13328b.local` · feat `8c2dc7d95` · 入口 `d13eabcba` · 有奖 settle→下一环菜单 · 再进 sx12
 
 
 ## 续 · short_settle_* PAPI（2026-10-14 07:32 Asia/Shanghai · 总控代补）
 - 新增 `EmberShortSettle`：settle 后 remember 本图；PAPI `short_settle`/`_map`/`_name`/`_day_left`/`_day_line`
 - 回落：remember → ShortPath resolve → todayKey；零改日帽/S/resolve/Cast/Aid/variety
 - jar：`1.65.821-d13328b.local` · 单测 EmberShortSettleTest PASS
-- 下步：测岗抽测 V1–V4 后总控 CLOSED（本号勿 CLOSED）
+- 测岗已 PASS · 总控已 CLOSED
 
 
 ## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
 - PASS live · feat `8c2dc7d95` · 证据 `/workspace/tmp/tip-cw-short-settle/` · 29/29
-- **勿勾 CLOSED**（总控收口）
+- **CLOSED live**（总控收口）· PASS `72e8e6a4e` · tip `374a142fd` · jar `1.65.821-d13328b.local`
