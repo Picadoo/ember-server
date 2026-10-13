@@ -1,6 +1,6 @@
 # 余烬 · 挂机庭「顺手洗练」（产→洗炼轨可点 · ≠第五件花料 · ≠推荐花复读 · ≠半行 · ≠抬日表）
 
-STATUS=**待批 A** · 荐 **方案 M** · 拟 D13322 · TIP-CQ · docs-only · 2026-10-14 02:40 Asia/Shanghai
+STATUS=**已批 A · 方案 M · 全弧非 L · D13322** · 总控 2026-10-14 02:43 Asia/Shanghai · TIP-CQ · 已派插件+物品 · **勿勾 CLOSED** · docs→施工
 > tip [`STATUS-ember-next-hard-debt-afk-courtyard-quick-reroll-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-afk-courtyard-quick-reroll-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-reroll-2026-10-14.md`](RESEARCH-ember-afk-courtyard-quick-reroll-2026-10-14.md) · backlog `B-afk-courtyard-quick-reroll` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_rate/event_core/affix_shard ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠撤分格 ≠改reroll价/pity ≠forgeroll densify**
 
 > **一句话玩家价值：** 挂机庭一点「顺手洗练」进既有词条洗练页——产碎直接喂洗炼轨，返回仍回庭；**不**新开第五花料、**不**抬日产、**不**改洗练价。
@@ -55,10 +55,10 @@ STATUS=**待批 A** · 荐 **方案 M** · 拟 D13322 · TIP-CQ · docs-only · 
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 插件 afk 返回源必做；W1b 庭内 L 格必做；W1c Open/去哪花半行同批辅；见 §3）
+- [x] **方案 M**（W1a 插件 afk 返回源必做；W1b 庭内 L 格必做；W1c Open/去哪花半行同批辅；见 §3）
 - [ ] 或勾 **方案 L**（仅 from forge；返回落工坊）· **本窗默认不批 L**
-- [ ] 否决 A（只半行）/ W（抬表/sx20/densify/再拧/第五花）
-- [ ] 批注：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+- [x] 否决 A（只半行）/ W（抬表/sx20/densify/再拧/第五花）
+- [x] 批注：总控批 A·M · D13322 · TIP-CQ · W1a REROLL_FROM[afk] + W1b L→p1 reroll from afk + W1c Open辅半行 · 零改价/pity/产 · 不撤四花+P+D+W/w · 半行仅辅 · 全弧非 L
 
 ---
 
@@ -156,6 +156,7 @@ STATUS=**待批 A** · 荐 **方案 M** · 拟 D13322 · TIP-CQ · docs-only · 
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 02:43 Asia/Shanghai | 总控批 A·M · 全弧非 L · 派插件+物品 · 勿勾 CLOSED |
 | 2026-10-14 02:40 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CP CLOSED 后连开 · 选题挂机庭顺手洗练 · 拟 D13322 · TIP-CQ · ≠半行 ≠第五花 ≠推荐花复读 ≠Cast/Aid/variety再拧 · **改题有证据**（短征饱和；D13317§6③；afk 无入口；AfkForgePath 已喊 reroll；见 RESEARCH） |
 
-*D13322 **待批 A** · 荐 **方案 M** · 挂机庭顺手洗练 · TIP-CQ。≠半行 ≠第五花 ≠推荐花复读 ≠sx20。*
+*D13322 **已批 A·M** · 挂机庭顺手洗练 · TIP-CQ · 已派插件+物品 · 勿勾 CLOSED · 2026-10-14 02:43 Asia/Shanghai · ≠半行 ≠第五花 ≠推荐花复读 ≠sx20。*

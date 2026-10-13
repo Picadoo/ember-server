@@ -1,6 +1,6 @@
 # tip · TIP-CQ 挂机庭「顺手洗练」（真 reroll 入口 · ≠第五件花料 · ≠推荐花复读 · ≠半行 · ≠抬表）· 拟 D13322
 
-> **状态：** **待批 A** · 荐 **方案 M** · docs-only · 2026-10-14 02:40 Asia/Shanghai  
+> **状态：** APPROVED · 批 **A · 方案 M** · 已派 **余烬-插件**（W1a）+ **余烬-物品**（W1b/c）· 2026-10-14 02:43 Asia/Shanghai · **勿勾 CLOSED**（等 live CLOSED）  
 > **DESIGN** [`DESIGN-ember-afk-courtyard-quick-reroll-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-reroll-2026-10-14.md) · RESEARCH 同日 · backlog `B-afk-courtyard-quick-reroll`  
 > **施工岗（批后）：** 余烬-插件（W1a 返回源）+ 余烬-物品（W1b/c TrMenu）· **不派怪物/地图**（默认）  
 > **硬禁：** 零半行独批 · 零第五件花料 · 零推荐花复读 · 零 P 兼确认 · 零抬日表/改洗练价/pity · 零 Cast/Aid/todayRot/variety 再拧 · 零 W1e 独批 · 零 sx20/L13/K3  
@@ -27,8 +27,8 @@
 - **L** = 仅 TrMenu `from forge`（返回落工坊）· **默认不批 L**
 
 ## 验收（批后施工）
-- [ ] 总控批 A·M
+- [x] 总控批 A·M · 2026-10-14 02:43 Asia/Shanghai
 - [ ] 插件交 afk 返回源；物品交 L 格 + Open 辅半行
 - [ ] 抽测：庭内进洗练→返回庭；价/pity 零 diff；零 sx20；零半行独档
 
-## STATUS: **待批 A** · 荐 **方案 M** · 拟 D13322 · TIP-CQ · docs-only · 2026-10-14 02:40 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · 已派插件+物品 · 拟 D13322 · TIP-CQ · **勿勾 CLOSED** · 2026-10-14 02:43 Asia/Shanghai

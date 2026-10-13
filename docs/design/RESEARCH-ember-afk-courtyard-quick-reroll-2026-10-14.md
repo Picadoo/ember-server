@@ -1,6 +1,6 @@
 # RESEARCH · 挂机庭「顺手洗练」（产→洗炼轨可点 · ≠第五件花料 · ≠推荐花复读 · ≠半行 · ≠抬表）· 2026-10-14
 
-> **状态：** **待批 A** · 荐 **方案 M** · 拟 D13322 · TIP-CQ · docs-only · 2026-10-14 02:40 Asia/Shanghai  
+> **状态：** **已批 A · 方案 M** · 拟 D13322 · TIP-CQ · 总控 2026-10-14 02:43 Asia/Shanghai · 已派插件+物品  
 > **起因：** 总控【连开·TIP-CQ / 拟 D13322】上游 TIP-CP CLOSED live `d87c3d89d`（feat `64f08f47b` · jar `1.65.813-d13321.local` · PASS `1696ccd17` · 短征轻量 variety 房内可感齐 · W1e 仍关）。请立刻交下一档硬债 docs-only 待批 A · 荐 M。**优先短征日更 / 乐趣系统**（真可点或房内可感）；挂机庭资源环可扩（≠顺手镜像/第五花/推荐花复读）。Cast+BossAid+EliteAid+todayRot+轻量 variety(W1a–d) **已齐** · 勿复读。半行 REJECT `d00ed84bc` **保持否决**。  
 > **上游：** TIP-CP CLOSED live `d87c3d89d` · feat `64f08f47b` · PASS `1696ccd17` · 批 sha `e976fe6d8` · D13321；Cast 全波 + BossAid + EliteAid + todayRot cue + 短征轻量 variety(W1a–d) 齐；庭内四花+推荐+拆+换齐；今日推/冲一下/周短征/三冲齐  
 > **硬禁：** **零** 半行独批 · **零** W1e todayRot偏置独批 · **零** Cast粒子打磨 · **零** Aid再拧 · **零** todayRot cue再拧 · **零** 抬 event_rate/event_core/affix_shard · **零** 新 variety kind · **零** 完整 variety 经济发核心 · **零** sx20 · **零** 抬日表/伤表/S表 · **零** Pack6 · **零** 开R/K3 · **零** 关观察 · **零** 灾厄重开 · **零** 教裸指令 · **零** stage脏runtime · **零** 第五件花料 · **零** 推荐花复读 · **零** P格兼确认
@@ -61,4 +61,4 @@
 - 只 Open/lore 半行无 L 格 · 第五件花料 · 推荐花复读 · P兼确认 · 抬产/改洗练价 · densify forgeroll 权重  
 - Cast/Aid/todayRot/variety 再拧 · W1e 独批 · sx20 · Pack6/灰印/R/L13/K3 · 灾厄 · 教裸指令 · stage 脏 runtime
 
-## STATUS: **待批 A** · 荐 **方案 M** · 拟 D13322 · TIP-CQ · docs-only · 2026-10-14 02:40 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · 拟 D13322 · TIP-CQ · 2026-10-14 02:43 Asia/Shanghai
