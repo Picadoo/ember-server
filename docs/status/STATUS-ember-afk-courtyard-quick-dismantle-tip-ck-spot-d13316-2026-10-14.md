@@ -24,3 +24,5 @@
 ## 纪律确认
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · afk.tiers 未拧 · ×0.97 未改 · ≠关观察 · 未改 YAML/jar · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
+
+> **总控收口：** CLOSED live · menu `b9e86a017` · PASS `8a3a398a8` · 2026-10-14 01:00 Asia/Shanghai
