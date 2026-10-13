@@ -1,0 +1,148 @@
+# TIP-CW / D13328 · 短征结算「下一环」薄页 · short_settle*
+# 入口：有奖 settle → /ember_p1_short_settle（插件并行改开菜单）
+# 再进：corerpg p1 enter %corerpg_p1_short_settle_map% · 回选页/路径追/工坊真开菜单
+# 禁：教裸指令主 UI · 抬日帽/价/targets · 改选页 Layout / 路径薄页内部 / D/F/L/十九本 / 庭内
+# PAPI（插件可能后到·静态接线）：settle_map/name/day_left/day_line · short_path_label · stamina
+
+Title: '§e短征 · 下一环'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_short_settle'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '##E#S#P##'
+  - '####F####'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §e短征下一环 §7· %corerpg_p1_short_settle_day_line%'
+    - 'tell: §7路径：§e%corerpg_p1_short_path_label% §8· 点选再进 / 改追 / 花料'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: paper
+      name: '§e短征下一环'
+      lore:
+        - '§7本日本图/日奖：§f%corerpg_p1_short_settle_day_line%'
+        - '§7路径：§e%corerpg_p1_short_path_label% §8· 合计剩 §f%corerpg_p1_sx_day_left_sum%'
+        - '§8点选 · 再进 / 改追 / 花料'
+
+  # 再进本图 · 真 enter 当前本（PAPI 展开 settle_map）
+  E:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_short_settle_day_left% <= 0'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7再进本图 §8（日奖满）'
+          lore:
+            - '§a本日有奖已满 §7· 再进灰'
+            - '§7本图：§f%corerpg_p1_short_settle_name%'
+            - '§8仍可回选页 / 路径追 / 工坊'
+      - condition: 'check papi %corerpg_stamina% < 30'
+        priority: 2
+        display:
+          material: iron bars
+          name: '§7再进本图 §8（体力不足）'
+          lore:
+            - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§7本图：§f%corerpg_p1_short_settle_name% §7· %corerpg_p1_short_settle_day_line%'
+            - '§8挂机/补给后再来 · 勿假开'
+    display:
+      material: emerald
+      name: '§a再进本图'
+      lore:
+        - '§7本日有奖剩余 §a%corerpg_p1_short_settle_day_left%'
+        - '§7本图：§f%corerpg_p1_short_settle_name% §7· 30体力'
+        - '§8点进 · 真进本 · §e➥进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter %corerpg_p1_short_settle_map%'
+        - close
+
+  # 回选页
+  S:
+    display:
+      material: chest
+      name: '§e回短征选本'
+      lore:
+        - '§7回十九本选页'
+        - '§8可改今日推 / 日差 / 路径追'
+        - '§e➥ §f开选页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_short'
+
+  # 路径追 · 未选亦引导开路径页（勿刷 chat shortpath）
+  P:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_short_path% == 0'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7路径追 §8（先选偏好）'
+          lore:
+            - '§c尚未选路径偏好'
+            - '§7当前：§e%corerpg_p1_short_path_label%'
+            - '§8点开路径页 · 先选偏好再进'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'menu: ember_p1_short_path'
+    display:
+      material: map
+      name: '§e路径追'
+      lore:
+        - '§f当前：§e%corerpg_p1_short_path_label%'
+        - '§7开路径页 · 切偏好 / 进下一本'
+        - '§e➥ §f改追'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_short_path'
+
+  # 工坊
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊花料'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: barrier
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
