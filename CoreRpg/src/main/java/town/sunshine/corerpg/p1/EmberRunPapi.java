@@ -163,6 +163,7 @@ public final class EmberRunPapi {
         if (key == null) return false;
         if ("sx_day_left_sum".equals(key)) return true;
         if ("sx_fc_left".equals(key) || "sx_fc_pending_line".equals(key) || "sx_fc_hope".equals(key)) return true; // D406/D634
+        if ("sx_today".equals(key) || "sx_today_name".equals(key) || "sx_today_day_line".equals(key)) return true; // TIP-CD D13309
         // sxNN_day | sxNN_day_line | sxNN_day_left  (map key length 4: sx01..sx19..)
         if (key.length() < 8 || !key.startsWith("sx")) return false;
         int us = key.indexOf('_');
@@ -400,6 +401,17 @@ public final class EmberRunPapi {
      */
     private String shortDay(PlayerData d, String key, EmberRunMaps maps) {
         EmberShortService shortEx = runs.shortExpedition();
+        if ("sx_today".equals(key) || "sx_today_name".equals(key) || "sx_today_day_line".equals(key)) { // TIP-CD D13309
+            String today = EmberShortRules.todayKey();
+            if ("sx_today".equals(key)) return today;
+            if ("sx_today_name".equals(key)) {
+                EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(today);
+                return m != null && m.name != null && !m.name.isEmpty() ? m.name : today;
+            }
+            int n = rewardedFor(d, maps, shortEx, today);
+            int cap = capFor(maps, shortEx, today);
+            return EmberShortRules.dayLine(n, cap);
+        }
         if ("sx_fc_left".equals(key) || "sx_fc_pending_line".equals(key) || "sx_fc_hope".equals(key)) { // D406/D634
             int unpaid = 0;
             for (String mk : EmberShortRules.SHORT_KEYS) {

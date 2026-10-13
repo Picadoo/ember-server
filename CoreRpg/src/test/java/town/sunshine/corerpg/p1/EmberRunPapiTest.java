@@ -48,7 +48,8 @@ public final class EmberRunPapiTest {
         r(ARMOR, "armor_on", "armor_head", "armor_chest_cand", "armor_legs_delta", "armor_boots_fam", "armor_set", "armor_set_active", "armor_set_busy", "armor_sa", "armor_sb", "armor_all", "armor_stash_line"); // D318 + D335 sa/sb
         r(SHORT, "sx01_day", "sx02_day", "sx03_day", "sx04_day", "sx05_day", "sx06_day", "sx07_day", "sx08_day", "sx09_day", "sx10_day", "sx11_day", "sx12_day", "sx13_day", "sx14_day", "sx15_day", "sx16_day", "sx17_day", "sx18_day", "sx19_day", "sx01_day_line", "sx02_day_line", "sx03_day_line", "sx04_day_line", "sx05_day_line", "sx06_day_line", "sx07_day_line", "sx08_day_line", "sx09_day_line", "sx10_day_line", "sx11_day_line", "sx12_day_line", "sx13_day_line", "sx14_day_line", "sx15_day_line", "sx16_day_line", "sx17_day_line", "sx18_day_line", "sx19_day_line",
                 "sx01_day_left", "sx02_day_left", "sx03_day_left", "sx04_day_left", "sx05_day_left", "sx06_day_left", "sx07_day_left", "sx08_day_left", "sx09_day_left", "sx10_day_left", "sx11_day_left", "sx12_day_left", "sx13_day_left", "sx14_day_left", "sx15_day_left", "sx16_day_left", "sx17_day_left", "sx18_day_left", "sx19_day_left", "sx_day_left_sum",
-                "sx_fc_left", "sx_fc_pending_line"); // D395+…+D412+D414
+                "sx_fc_left", "sx_fc_pending_line",
+                "sx_today", "sx_today_name", "sx_today_day_line"); // D395+…+D412+D414 + TIP-CD D13309
         r(VAULT, "vault_shard", "vault_bone", "vault_core", "vault_blank", "recipe_gap_enhance1", "recipe_gap_upgrade_t2", "recipe_gap_refine1"); // D404
         r(MAP, "q01_state", "q07_fc", "r01_name", "q01_nosuch", "nosuch", "", null, "sx01_state", "sx02_open", "sx01_fc", "sx02_fc", "sx03_fc", "sx04_fc", "sx05_fc", "sx06_fc", "sx07_fc", "sx08_fc", "sx09_fc", "sx10_fc", "sx11_fc", "sx12_fc", "sx13_fc", "sx14_fc", "sx15_fc", "sx16_fc", "sx17_fc", "sx18_fc", "sx19_fc"); // D406…D428 nineteen _fc → MAP
     }
@@ -112,8 +113,14 @@ public final class EmberRunPapiTest {
         assertTrue(EmberRunPapi.isShortDayKey("sx_day_left_sum"));
         assertTrue(EmberRunPapi.isShortDayKey("sx_fc_left")); // D406
         assertTrue(EmberRunPapi.isShortDayKey("sx_fc_pending_line"));
+        assertTrue(EmberRunPapi.isShortDayKey("sx_today")); // TIP-CD D13309
+        assertTrue(EmberRunPapi.isShortDayKey("sx_today_name"));
+        assertTrue(EmberRunPapi.isShortDayKey("sx_today_day_line"));
         assertEquals(SHORT, EmberRunPapi.route("sx_fc_left"));
         assertEquals(SHORT, EmberRunPapi.route("sx_fc_pending_line"));
+        assertEquals(SHORT, EmberRunPapi.route("sx_today"));
+        assertEquals(SHORT, EmberRunPapi.route("sx_today_name"));
+        assertEquals(SHORT, EmberRunPapi.route("sx_today_day_line"));
         assertEquals(MAP, EmberRunPapi.route("sx01_fc")); // per-map fc stays MAP
         assertFalse(EmberRunPapi.isShortDayKey("sx01_state"));
         assertFalse(EmberRunPapi.isShortDayKey("sx01_day_extra"));

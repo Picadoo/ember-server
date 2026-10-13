@@ -3221,9 +3221,12 @@ public boolean pathForceOpenDoor(Player p) {
                 return true;
             }
             case "enter":
-                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19> [challenge]"); return true; }
+                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today> [challenge]"); return true; }
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) entry.markForced(((Player) s).getUniqueId()); // D96 (D235 → EmberEntryService)
-                return tryEnter((Player) s, args[2].toLowerCase(Locale.ROOT), args.length >= 4 && isChallengeWord(args[3]));
+                String mapArg = args[2].toLowerCase(Locale.ROOT);
+                if ("short-today".equals(mapArg) || "sx_today".equals(mapArg))
+                    mapArg = EmberShortRules.todayKey(); // TIP-CD D13309
+                return tryEnter((Player) s, mapArg, args.length >= 4 && isChallengeWord(args[3]));
             case "abyss": return cmdAbyss(s, args);
             case "recruit": return recruit.cmd(s, args); // D104 / D234 → EmberRecruitService
             case "watch": return cmdWatch(s); // D106

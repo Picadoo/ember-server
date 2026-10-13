@@ -22,8 +22,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M
-- [ ] 插件交 sx_today* + 单测
+- [x] 插件交 sx_today* + 单测
 - [ ] 物品交 menu tip + TrMenu reload
 - [ ] 测岗：同日稳定 / 跨日切换 / 进本门禁同该本
 
-## STATUS: APPROVED · 批 A·M · 已派余烬-插件 W1a · 2026-10-13 22:03 Asia/Shanghai
+## STATUS: APPROVED · 批 A·M · W1a 插件已交 sx_today* + 单测 · jar 1.65.805-d13309.local · 2026-10-13 Asia/Shanghai

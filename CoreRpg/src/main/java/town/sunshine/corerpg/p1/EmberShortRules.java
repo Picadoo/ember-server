@@ -176,6 +176,16 @@ public final class EmberShortRules {
     /** Canonical short expedition keys (sx01–sx19). D406…D428 fc aggregate scan order. */
     public static final String[] SHORT_KEYS = {"sx01", "sx02", "sx03", "sx04", "sx05", "sx06", "sx07", "sx08", "sx09", "sx10", "sx11", "sx12", "sx13", "sx14", "sx15", "sx16", "sx17", "sx18", "sx19"};
 
+    /** TIP-CD D13309: day-rotating short key; idx0=sx01. Asia/Shanghai via DailyService.zone(). */
+    public static String todayKey(long epochDay) {
+        return SHORT_KEYS[(int) Math.floorMod(epochDay, (long) SHORT_KEYS.length)];
+    }
+
+    /** TIP-CD D13309: today's short key (Shanghai calendar day). */
+    public static String todayKey() {
+        return todayKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()).toEpochDay());
+    }
+
     /** D406/D421 %corerpg_p1_sx_fc_left%: unpaid first-clear count clamped to 0..19. */
     public static int fcLeft(int unpaidCount) {
         int n = Math.max(0, unpaidCount);
