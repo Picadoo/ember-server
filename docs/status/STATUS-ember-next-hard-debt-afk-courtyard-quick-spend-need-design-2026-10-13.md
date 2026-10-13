@@ -1,6 +1,8 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13304 · 挂机庭「顺手花料」· docs-only · ≠抬日表 · ≠sx20 · ≠菜单诚实空转）
 
-> **旁注（打开 · 待批 A · 2026-10-13）：** tip 交总控批 · DESIGN [`DESIGN-ember-afk-courtyard-quick-spend-2026-10-13.md`](../design/DESIGN-ember-afk-courtyard-quick-spend-2026-10-13.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-spend-2026-10-13.md`](../design/RESEARCH-ember-afk-courtyard-quick-spend-2026-10-13.md) · backlog `B-afk-courtyard-quick-spend` · **TIP-BY** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠复开 D423 ≠stage 脏 runtime**。
+> **STATUS:** APPROVED · 批 A·M · 派余烬-物品 · 2026-10-13 21:28 Asia/Shanghai
+
+> **旁注（打开 · 已批 A·M A · 2026-10-13）：** tip 交总控批 · DESIGN [`DESIGN-ember-afk-courtyard-quick-spend-2026-10-13.md`](../design/DESIGN-ember-afk-courtyard-quick-spend-2026-10-13.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-spend-2026-10-13.md`](../design/RESEARCH-ember-afk-courtyard-quick-spend-2026-10-13.md) · backlog `B-afk-courtyard-quick-spend` · **TIP-BY** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠复开 D423 ≠stage 脏 runtime**。
 
 > **上游结案：** 总控开窗 · **TIP-BX CLOSED** live `1.65.804-d13303` · tip `be7a461ec`（purgeLegacy Fight-only + YieldBoost 菜单诚实收口）。下一选题必须「可感内容/挂时长」——挂机庭资源环、日短本乐趣、或新乐趣系统；**禁止**再开菜单诚实/observe 空转。硬禁：sx20 · L13 施工 · K3 · Pack6/天赋灰印/R · 抬 AFK 日表/伤乘/skill_mult · Affix densify · 再叠 sure/pity/soft 诚实半行族。handoff `7fc55366`：**本单不勾/复开 D423**。
 
