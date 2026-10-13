@@ -3221,7 +3221,7 @@ public boolean pathForceOpenDoor(Player p) {
                 return true;
             }
             case "enter":
-                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today|event-chase> [challenge]"); return true; }
+                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19|short-today|event-chase|short-goal> [challenge]"); return true; }
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) entry.markForced(((Player) s).getUniqueId()); // D96 (D235 → EmberEntryService)
                 String mapArg = args[2].toLowerCase(Locale.ROOT);
                 if ("short-today".equals(mapArg) || "sx_today".equals(mapArg))
@@ -3233,6 +3233,30 @@ public boolean pathForceOpenDoor(Player p) {
                     mapArg = EmberEventChase.chaseKey(feat, k -> progressFlag(ed, k));
                     if (mapArg == null || mapArg.isEmpty()) {
                         s.sendMessage(P + "暂无可冲的已通普通本（先通任意 Q01–Q07）。");
+                        return true;
+                    }
+                }
+                if ("short-goal".equals(mapArg) || "goal-short-chase".equals(mapArg) || "goal_short_chase".equals(mapArg)) { // TIP-CG D13312
+                    Player sp = (Player) s;
+                    PlayerData sd = data(sp.getUniqueId());
+                    EmberRunMaps sm = maps();
+                    EmberShortService sex = shortExpedition;
+                    String today = EmberShortRules.todayKey();
+                    mapArg = EmberGoalShortChase.chaseKey(today,
+                            k -> {
+                                EmberRunMaps.MapDef m = sm == null ? null : sm.byKey(k);
+                                return m != null && unlocked(sd, m);
+                            },
+                            k -> {
+                                EmberRunMaps.MapDef m = sm == null ? null : sm.byKey(k);
+                                int n = (sex != null && m != null) ? sex.rewardedToday(sd, m)
+                                        : Math.max(0, sd.periodCount(EmberShortRules.claimKey(k),
+                                                town.sunshine.corerpg.DailyService.today()));
+                                int cap = (sex != null && m != null) ? sex.dailyCap(m) : EmberShortRules.DAILY_CAP;
+                                return EmberShortRules.dayLeft(n, cap);
+                            });
+                    if (mapArg == null || mapArg.isEmpty()) {
+                        s.sendMessage(P + "暂无可冲的已解锁短征（先解锁任意 sx01–sx19）。");
                         return true;
                     }
                 }

@@ -715,8 +715,41 @@ public final class EmberRunPapi {
     }
 
     private String season(Player p, PlayerData d, String key) { // D116 / D117
+        // TIP-CG D13312: goal_short_chase* / goal_short_done (route via goal* → SEASON)
+        if ("goal_short_chase".equals(key) || "goal_short_chase_name".equals(key)
+                || "goal_short_chase_day_line".equals(key) || "goal_short_chase_ok".equals(key)
+                || "goal_short_done".equals(key)) {
+            return goalShortChase(p, d, key);
+        }
         EmberSeason season = runs.season();
         return season == null ? null : season.papi(p.getUniqueId(), d, key);
+    }
+
+    /** TIP-CG D13312 %corerpg_p1_goal_short_chase*% / goal_short_done — read-only; zero economy. */
+    private String goalShortChase(Player p, PlayerData d, String key) {
+        EmberSeason season = runs.season();
+        if ("goal_short_done".equals(key)) {
+            if (season == null) return "0";
+            return EmberGoalShortChase.done(season.progress(d, "short"), season.target(d, "short"));
+        }
+        EmberRunMaps maps = runs.maps();
+        EmberShortService shortEx = runs.shortExpedition();
+        String today = EmberShortRules.todayKey();
+        String chase = EmberGoalShortChase.chaseKey(today,
+                k -> {
+                    EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(k);
+                    return m != null && runs.unlocked(d, m);
+                },
+                k -> EmberShortRules.dayLeft(rewardedFor(d, maps, shortEx, k), capFor(maps, shortEx, k)));
+        if ("goal_short_chase".equals(key)) return chase;
+        if ("goal_short_chase_ok".equals(key)) return EmberGoalShortChase.chaseOk(chase);
+        if (chase.isEmpty()) return "";
+        if ("goal_short_chase_name".equals(key)) {
+            EmberRunMaps.MapDef cm = maps == null ? null : maps.byKey(chase);
+            return cm != null && cm.name != null && !cm.name.isEmpty() ? cm.name : chase;
+        }
+        // goal_short_chase_day_line
+        return EmberShortRules.dayLine(rewardedFor(d, maps, shortEx, chase), capFor(maps, shortEx, chase));
     }
 
     private String cosmetic(Player p, PlayerData d, String key) {

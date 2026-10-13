@@ -38,7 +38,7 @@ public final class EmberRunPapiTest {
         r(GATE, "forge_t2", "forge_t3", "challenge", "access_q01", "access_q07", "q07done", "q04done", "q05done", "q06done", "q09done");
         r(ROTATION, "featured", "featured_key", "modifier", "rule_q01", "bounty", "loot_q01", "loot_r01", "event_chase", "event_chase_name", "event_chase_ok", "event_soft_ready"); // TIP-CE D13310
         r(BOARD, "top_abyss_1", "top_abyss_10", "top_featured_3", "top_abyss_x");
-        r(SEASON, "goals", "goal_core", "goal_short", "goalnosuch", "season", "season_week", "sboard_1", "srank_abyss", "badges"); // D401 goal_short
+        r(SEASON, "goals", "goal_core", "goal_short", "goal_short_chase", "goal_short_chase_name", "goal_short_chase_day_line", "goal_short_chase_ok", "goal_short_done", "goalnosuch", "season", "season_week", "sboard_1", "srank_abyss", "badges"); // D401 + TIP-CG D13312
         r(COSMETIC, "shop", "shopprice_x", "shopsel_name", "shop_x", "title", "honors");
         r(FESTIVAL, "fest_name", "fest_charm_price", "fest_nosuch");
         r(ABYSS, "abyss_best", "abyss_state", "abyss_t1", "abyss_t10", "abyss_tx");
@@ -66,6 +66,11 @@ public final class EmberRunPapiTest {
         assertEquals(ROTATION, EmberRunPapi.route("event_chase_name"));
         assertEquals(ROTATION, EmberRunPapi.route("event_chase_ok"));
         assertEquals(ROTATION, EmberRunPapi.route("event_soft_ready"));
+        assertEquals(SEASON, EmberRunPapi.route("goal_short_chase")); // TIP-CG D13312
+        assertEquals(SEASON, EmberRunPapi.route("goal_short_chase_name"));
+        assertEquals(SEASON, EmberRunPapi.route("goal_short_chase_day_line"));
+        assertEquals(SEASON, EmberRunPapi.route("goal_short_chase_ok"));
+        assertEquals(SEASON, EmberRunPapi.route("goal_short_done"));
         assertEquals(BOARD, EmberRunPapi.route("top_featured_1"));
         assertEquals(ABYSS, EmberRunPapi.route("abyss_best"));  // before abyss_t*
         assertEquals(ABYSS, EmberRunPapi.route("abyss_tier"));  // abyss_t* (parse fails → "")

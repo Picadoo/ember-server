@@ -8,6 +8,11 @@
 ## 一句话
 短征选页一眼本周短征周目标进度，一点进还能计有奖的本；short:5 与日帽不动。
 
+## 键清单（W1a）
+- `goal_short_chase` / `_name` / `_day_line` / `goal_short_done` / `goal_short_chase_ok`
+- enter `short-goal`（`goal-short-chase` / `goal_short_chase`）
+- **零改** addGoal / weekly_goals.targets / 徽 / 日帽 / SoftPity / bv123
+
 ## 施工钉死
 - W1a：`goal_short_chase` / `_name` / `_day_line` / `goal_short_done`；`enter short-goal`；优先 day_left>0 已解锁短征（稳定序；可选对齐 sx_today）
 - W1b：`ember_p1_short` Layout 落 **F**（`'#PRSJDF #'`）；名「本周短征可冲」；lore 挂 goal_short + chase；真 enter；灰态诚实
@@ -16,8 +21,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M
-- [ ] 插件交 chase* + short-goal + 单测
+- [x] 插件交 chase* + short-goal + 单测 · W1a `1.65.808-d13312.local`
 - [ ] 物品交 F 格 + TrMenu reload
 - [ ] 测岗：点进本成功 · 有奖计进度 · 零抬 short:5/日帽
 
-## STATUS: APPROVED · 批 A·M · 已派余烬-插件 W1a · 2026-10-13 23:27 Asia/Shanghai
+## STATUS: W1a DONE · jar `1.65.808-d13312.local` · 物品 W1b/c 等键 · 2026-10-13 Asia/Shanghai
