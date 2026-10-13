@@ -1,3 +1,4 @@
+# TIP-CL / D13317: 庭内顺手互换（W/w · held_swap_cost · p1 swap/confirm · 甲灰 · 零改价/第五花料）
 # TIP-CK / D13316: 庭内顺手分解（D · held_dismantle_yield · p1 dismantle · 零抬拆表/第五花料）
 # TIP-CJ / D13315: 庭内顺手推荐花（P · afk_rec_flower* · enter afk-rec-flower · 零抬产/第五花料）
 # D612: 战况/Open 挂「挂机在养手持」希望表盘（held_*_hope · 零改产量）
@@ -25,7 +26,7 @@ Options:
   Min-Click-Delay: 200
 Layout:
   - '#########'
-  - '#P1 2 3D#'
+  - '#P1W2w3D#'
   - '#US4QVRE#'
   - '#ueIqFrH#'
   - '####B####'
@@ -46,6 +47,7 @@ Events:
     - 'tell: §8成色也可本页点'
     - 'tell: §a仓够推荐见本页 P：§f%corerpg_p1_afk_rec_flower%'
     - 'tell: §8本页也可顺手拆（本页 D）'
+    - 'tell: §8本页也可顺手换轨（本页 W）'
 Icons:
   '#':
     display:
@@ -204,6 +206,58 @@ Icons:
         - 'command: corerpg p1 dismantle'
         - close
 
+  # TIP-CL / D13317: 顺手互换（第二行 W/w · 与 forge S/s 同链路 · 甲灰 · 不撤 E/e/U/u/R/r/Q/q/P/D/S）
+  W:
+    update: 20
+    display:
+      material: hopper
+      name: '§b顺手互换'
+      lore:
+        - '§e%corerpg_p1_held_swap_cost%'
+        - '§a免费确定 §8· §f预览直办'
+        - '§e➥ §f点预览·再确认'
+    actions:
+      all:
+        - 'command: corerpg p1 swap'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8互换 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e%corerpg_p1_held_swap_cost%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
+  w:
+    update: 20
+    display:
+      material: ender pearl
+      name: '§b顺手互换 · 确认'
+      lore:
+        - '§e%corerpg_p1_held_swap_cost%'
+        - '§a免费确定 §8· §f预览直办'
+        - '§e➥ §f点确认'
+    actions:
+      all:
+        - 'command: corerpg p1 swap confirm'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8互换 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e%corerpg_p1_held_swap_cost%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
+
   # D375: 产→花可见跳转（零抬日表）
 # D381: 去哪花 lore +半行「工坊内可回本庭」（反向互指；不重做主格）
 # D398: 去哪花 +半行「工坊有配方速览看 ×N」
@@ -218,6 +272,7 @@ Icons:
         - '§7本页也可顺手强化/升阶/精工/成色'
         - '§a也可看推荐花（本页 P）'
         - '§7本页也可顺手拆（本页 D）'
+        - '§7本页也可顺手换轨（本页 W）'
         - '§e➥ §f打开工坊'
     actions:
       all:
