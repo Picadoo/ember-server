@@ -617,36 +617,36 @@ final class EmberRunDirector {
                     }
                 } catch (Throwable ignored) { }
                 placeCrystals(r, cx);
-                svc.tellRun(s, "§b砸余烬晶 §7· 砸掉本房 " + v.crystalCount + " 块发光晶再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                tellVarietyEventStart("§b砸余烬晶 §7· 砸掉本房 " + v.crystalCount + " 块发光晶再清完");
                 EmberSmashPath.maybeAfterPlace(s); // D564
             } else if ("escort".equals(kind)) {
                 spawnEscort(r, v);
-                svc.tellRun(s, "§b护宝兔 §7· 清房前别让发光小兔倒下 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                tellVarietyEventStart("§b护宝兔 §7· 清房前别让发光小兔倒下");
                 EmberGuardPath.maybeAfterEscort(s); // D565
             } else if ("hold".equals(kind)) {
                 placeHold(r, v);
-                svc.tellRun(s, "§b占点 §7· 站进发光圈攒满进度再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                tellVarietyEventStart("§b占点 §7· 站进发光圈攒满进度再清完");
                 EmberHoldPath.maybeAfterHold(s); // D566
             } else if ("beacon".equals(kind)) {
                 placeBeacon(r, v);
-                svc.tellRun(s, "§b护灯 §7· 清房前别让发光灯柱被砸碎 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                tellVarietyEventStart("§b护灯 §7· 清房前别让发光灯柱被砸碎");
                 EmberBeaconPath.maybeAfterBeacon(s); // D567
             } else if ("relay".equals(kind)) {
                 placeRelay(r, v);
-                svc.tellRun(s, "§b传火 §7· 按 1→2→3 点亮标记再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                tellVarietyEventStart("§b传火 §7· 按 1→2→3 点亮标记再清完");
                 EmberRelayPath.maybeAfterRelay(s); // D568
             } else if ("breach".equals(kind)) {
                 placeBreach(r, v);
-                svc.tellRun(s, "§b裂隙 §7· 紫圈会慢慢收拢，在圈里杀怪能把它撑开；清房时圈没合上 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                tellVarietyEventStart("§b裂隙 §7· 紫圈会慢慢收拢，在圈里杀怪能把它撑开；清房时圈没合上");
                 EmberBreachPath.maybeAfterBreach(s); // D569
             } else if ("chain".equals(kind)) {
                 chainReset(ok, v);
-                svc.tellRun(s, "§b连斩 §7· 连续击杀 " + chainNeedNow + " 只怪，每两次击杀间隔不超过 "
-                        + String.format(Locale.ROOT, "%.0f", v.chainGap) + " 秒 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                tellVarietyEventStart("§b连斩 §7· 连续击杀 " + chainNeedNow + " 只怪，每两次击杀间隔不超过 "
+                        + String.format(Locale.ROOT, "%.0f", v.chainGap) + " 秒");
                 EmberStreakPath.maybeAfterChain(s); // D577
             } else if ("unscathed".equals(kind)) {
                 unscathedReset(participantsHere().size(), v);
-                svc.tellRun(s, "§b无伤 §7· 清完这个房间时全队被怪打中不超过 " + unscathedBudgetNow + " 次 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                tellVarietyEventStart("§b无伤 §7· 清完这个房间时全队被怪打中不超过 " + unscathedBudgetNow + " 次");
                 EmberCleanPath.maybeAfterClean(s); // D578
             } else {
                 timedLimitBonus = 0;
@@ -656,7 +656,7 @@ final class EmberRunDirector {
                         svc.tellRun(s, "§a限时加秒 · +" + timedLimitBonus + "s（本局一次）");
                 } catch (Throwable ignored) { }
                 int tLim = v.eventLimit(kind) + timedLimitBonus;
-                svc.tellRun(s, "§b限时清房 §7· " + tLim + " 秒内清完这个房间 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                tellVarietyEventStart("§b限时清房 §7· " + tLim + " 秒内清完这个房间");
                 EmberRushPath.maybeAfterRush(s); // D579
             }
             // D296 W1c: per-run first event-room ActionBar short name (chat still fires every time)
@@ -675,6 +675,11 @@ final class EmberRunDirector {
                         svc.flushData(p.getUniqueId());
                     }
                 }
+            }
+            // TIP-CP D13321: short light variety event banner (零发核心承诺已在 tellVarietyEventStart)
+            if (def.shortExpedition) {
+                String el = EmberRunMaps.Variety.eventLabel(kind);
+                for (Player p : participantsHere()) EmberShortVarietyFeel.eventCue(p, el);
             }
         }
         if (ok == 0) {
@@ -2383,6 +2388,17 @@ final class EmberRunDirector {
     private long moltenBoomAt;   // when damage lands
     private double moltenDmg;    // absolute damage (atk × mult at death)
 
+
+    /** TIP-CP D13321: room-event start chat; short path omits event_core reward promise. */
+    private void tellVarietyEventStart(String instruction) {
+        EmberRunMaps.Variety v = svc.maps().variety;
+        if (def.shortExpedition) {
+            svc.tellRun(s, instruction);
+        } else {
+            svc.tellRun(s, instruction + " → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+        }
+    }
+
     /** The room's toughest mob (heavy, else melee, else the first) becomes the affixed elite. */
     static Tracked affixPick(List<Tracked> ts) {
         for (Tracked t : ts) if ("heavy".equals(t.role)) return t;
@@ -2410,7 +2426,12 @@ final class EmberRunDirector {
         t.le.setCustomNameVisible(true);
         t.le.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 600, 0, false, false), true);
         String how = EmberAffixes.how(t.affix, v);
-        svc.tellRun(s, "§6词缀精英「" + tag + "」§7出现：" + how + " · 击败 → 结算时 §f余烬碎片 +" + v.affixShard);
+        if (def.shortExpedition) { // TIP-CP D13321: short light variety — no affix_shard promise
+            svc.tellRun(s, EmberShortVarietyFeel.affixHowTell(tag, how));
+            for (Player p : participantsHere()) EmberShortVarietyFeel.affixCue(p, tag);
+        } else {
+            svc.tellRun(s, "§6词缀精英「" + tag + "」§7出现：" + how + " · 击败 → 结算时 §f余烬碎片 +" + v.affixShard);
+        }
         EmberSpicePath.maybeAlignCue(s, svc, "affix", t.affix); // D2926
         EmberFocusPath.maybeAfterFocus(s); // D597
         if ("shield".equals(t.affix)) EmberShellPath.maybeAfterShell(s); // D583

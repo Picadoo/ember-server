@@ -110,6 +110,7 @@ public final class EmberShortService {
         EmberRunRules.Ledger l = runs.store().ledger(u);
         int before = rewardedToday(pd, m);
         boolean fcPaid = EmberFirstClear.paid(pd, m.key, m.contentVersion);
+        // TIP-CP D13321 W1d: short settle path never calls varietyGrants — zero event_core/affix_shard even if variety hit
         SettleResult r = applyGrants(m, l, s.runId, pd, before, fcPaid, DailyService.today(), System.currentTimeMillis());
         runs.store().saveLedger(u, r.changed);
         runs.plugin().getDataStore().flushMutation(u);

@@ -60,9 +60,13 @@ public final class EmberSessionService {
                 + "-" + Long.toString(nowMs, 36) + "-" + Integer.toString(rndToken, 36);
     }
 
-    /** D138: variety rolls only on plain repeatable main-line runs (same predicate as the enter gate). */
-    static boolean varietyEligible(boolean challenge, int abyss, boolean raid, boolean rush, boolean varietyOn) {
-        return !challenge && abyss == 0 && !raid && !rush && varietyOn;
+    /**
+     * D138/D13321: variety rolls on plain main OR short expedition (call site still gates firstCleared).
+     * Never challenge / abyss / raid / rush. {@code shortExpedition} is intentionally allowed (TIP-CP light variety).
+     */
+    static boolean varietyEligible(boolean challenge, int abyss, boolean raid, boolean rush,
+                                   boolean shortExpedition, boolean varietyOn) {
+        return EmberShortVarietyFeel.varietyEligible(challenge, abyss, raid, rush, shortExpedition, varietyOn);
     }
 
     /**
@@ -224,7 +228,7 @@ public final class EmberSessionService {
                 }
             }
         }
-        if (varietyEligible(challenge, abyss, m.raid, m.rush, maps.variety.on())) { // D138: repeat-run variety, first clears stay canonical
+        if (varietyEligible(challenge, abyss, m.raid, m.rush, m.shortExpedition, maps.variety.on())) { // D138/D13321: main or short after firstCleared
             boolean all = true;
             for (Player p : party) if (!runs.firstCleared(runs.dataOf(p.getUniqueId()), m)) { all = false; break; }
             if (all || forcedVariety != null) {

@@ -42,21 +42,28 @@ public final class EmberSessionServiceTest {
         assertEquals(3, id.split("-").length);
     }
 
-    @Test public void varietyEligible_plainMainOnly() {
+    @Test public void varietyEligible_plainMainOrShort() {
         EmberRunMaps maps = bundled();
         assertTrue(maps.variety.on());
-        assertTrue(EmberSessionService.varietyEligible(false, 0, false, false, true));
-        assertFalse(EmberSessionService.varietyEligible(true, 0, false, false, true));
-        assertFalse(EmberSessionService.varietyEligible(false, 1, false, false, true));
-        assertFalse(EmberSessionService.varietyEligible(false, 0, true, false, true));
-        assertFalse(EmberSessionService.varietyEligible(false, 0, false, true, true));
-        assertFalse(EmberSessionService.varietyEligible(false, 0, false, false, false));
+        // plain main
+        assertTrue(EmberSessionService.varietyEligible(false, 0, false, false, false, true));
+        // D13321: short expedition explicitly eligible
+        assertTrue(EmberSessionService.varietyEligible(false, 0, false, false, true, true));
+        assertFalse(EmberSessionService.varietyEligible(true, 0, false, false, false, true));
+        assertFalse(EmberSessionService.varietyEligible(false, 1, false, false, false, true));
+        assertFalse(EmberSessionService.varietyEligible(false, 0, true, false, false, true));
+        assertFalse(EmberSessionService.varietyEligible(false, 0, false, true, false, true));
+        assertFalse(EmberSessionService.varietyEligible(false, 0, false, false, false, false));
+        assertFalse(EmberSessionService.varietyEligible(false, 0, false, false, true, false));
         EmberRunMaps.MapDef q01 = maps.byKey("q01");
         EmberRunMaps.MapDef r01 = maps.byKey("r01");
         EmberRunMaps.MapDef rush = maps.byKey("rush");
-        assertTrue(EmberSessionService.varietyEligible(false, 0, q01.raid, q01.rush, maps.variety.on()));
-        assertFalse(EmberSessionService.varietyEligible(false, 0, r01.raid, r01.rush, maps.variety.on()));
-        assertFalse(EmberSessionService.varietyEligible(false, 0, rush.raid, rush.rush, maps.variety.on()));
+        EmberRunMaps.MapDef sx01 = maps.byKey("sx01");
+        assertTrue(EmberSessionService.varietyEligible(false, 0, q01.raid, q01.rush, q01.shortExpedition, maps.variety.on()));
+        assertFalse(EmberSessionService.varietyEligible(false, 0, r01.raid, r01.rush, r01.shortExpedition, maps.variety.on()));
+        assertFalse(EmberSessionService.varietyEligible(false, 0, rush.raid, rush.rush, rush.shortExpedition, maps.variety.on()));
+        assertTrue(sx01.shortExpedition);
+        assertTrue(EmberSessionService.varietyEligible(false, 0, sx01.raid, sx01.rush, sx01.shortExpedition, maps.variety.on()));
     }
 
     @Test public void applyForcedVariety_knownAffixAndEvent() {

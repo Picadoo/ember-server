@@ -30,7 +30,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 02:21 Asia/Shanghai
-- [ ] 插件交短征轻量 variety · 房内可感 · settle 零发核心/碎片
+- [x] 插件交短征轻量 variety · 房内可感 · settle 零发核心/碎片 · jar `1.65.813-d13321.local`（等 tip+push）
 - [ ] 抽测：首通无花样、重打可感；零抬表；零改 Cast/Aid/todayRot cue；零 sx20
 
 ## STATUS: APPROVED · 批 A·M · 已派插件 · 拟 D13321 · TIP-CP · **勿勾 CLOSED** · 2026-10-14 02:21 Asia/Shanghai

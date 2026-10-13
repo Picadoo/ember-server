@@ -118,10 +118,11 @@ raid_revive:
   last_phase_hp: 0.2
   delay: 20
 
-# D138/D171 repeat-run variety (Pack 2): only on a NORMAL Q01–Q07 run where every member already has the map's
-# first clear (never on a first clear, challenge, abyss, raid or rush). Fixed at entry from the run seed. Rewards are
-# existing types only, paid at settlement: killing the affixed elite → affix_shard 余烬碎片; finishing the marked room
-# event → event_core 余烬核心碎片. Affix pool 6 / event pool 3 (equal weight).
+# D138/D171 repeat-run variety (Pack 2): NORMAL Q01–Q07 where every member already has the map's first clear
+# (never on a first clear, challenge, abyss, raid or rush). D13321 TIP-CP: short expeditions (sx*) after firstCleared
+# also roll the same pool (Director promote/event); short settle pays **zero** event_core/affix_shard (light variety).
+# Fixed at entry from the run seed. Main-line rewards at settlement: affixed elite → affix_shard; room event → event_core.
+# Affix pool 6 / event pool 3 (equal weight).
 #   blazing 炽热 / split 分裂 / shield 厚甲 (D138)
 #   regen   再生: every s try heal×maxHP; interrupt_window; interrupt if hurt ≥ interrupt_hp×maxHP
 #   charge  冲锋: telegraph strip (≥1.2s), strip damage only (no body dash out of leash)
