@@ -1,3 +1,4 @@
+# TIP-CJ / D13315: 庭内顺手推荐花（P · afk_rec_flower* · enter afk-rec-flower · 零抬产/第五花料）
 # D612: 战况/Open 挂「挂机在养手持」希望表盘（held_*_hope · 零改产量）
 # TIP-BY / D13304: 庭内顺手强化+1（E/e · gap_enhance1 · 零改产量/价）
 # TIP-CA / D13306: 庭内顺手升阶（U/u · held_upgrade_cost/lack · 护甲灰 · 零改产量）
@@ -23,7 +24,7 @@ Options:
   Min-Click-Delay: 200
 Layout:
   - '#########'
-  - '# 1 2 3 #'
+  - '#P1 2 3 #'
   - '#US4QVRE#'
   - '#ueIqFrH#'
   - '####B####'
@@ -42,6 +43,7 @@ Events:
     - 'tell: §8升阶也可本页点'
     - 'tell: §8精工也可本页点'
     - 'tell: §8成色也可本页点'
+    - 'tell: §a仓够推荐见本页 P：§f%corerpg_p1_afk_rec_flower%'
 Icons:
   '#':
     display:
@@ -154,6 +156,36 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-0'
         - close
         - 'command: hub'
+  # TIP-CJ / D13315: 顺手推荐花（第二行空位 P · 保留 1/2/3/U/S/4/Q/V/R/E/e/u/r/q · 禁第五花料/静默 confirm）
+  P:
+    icons:
+      - condition: 'check papi %corerpg_p1_afk_rec_flower_ok% < 1'
+        priority: 1
+        display:
+          material: gray stained glass pane
+          name: '§7顺手推荐 · 暂无'
+          lore:
+            - '§c暂无仓够可花 · 先回挂或去工坊'
+            - '§7推荐：§f%corerpg_p1_afk_rec_flower_name%'
+            - '§8kind：%corerpg_p1_afk_rec_flower_kind%'
+            - '§e➥ §f工坊'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_BASS-1-0'
+            - 'menu: ember_p1_forge'
+    update: 20
+    display:
+      material: yellow flower
+      name: '§a顺手推荐花'
+      lore:
+        - '§7推荐：§f%corerpg_p1_afk_rec_flower_name%'
+        - '§8kind：%corerpg_p1_afk_rec_flower_kind%'
+        - '§e➥ §f点预览·再回确认格'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg p1 enter afk-rec-flower'
+
   # D375: 产→花可见跳转（零抬日表）
 # D381: 去哪花 lore +半行「工坊内可回本庭」（反向互指；不重做主格）
 # D398: 去哪花 +半行「工坊有配方速览看 ×N」
@@ -166,6 +198,7 @@ Icons:
       lore:
         - '§7挂机材料去工坊花'
         - '§7本页也可顺手强化/升阶/精工/成色'
+        - '§a也可看推荐花（本页 P）'
         - '§e➥ §f打开工坊'
     actions:
       all:
