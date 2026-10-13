@@ -34,9 +34,10 @@ Layout:
 Events:
   Open:
     - 'command: corerpg p1 setchase'
-    # D12301 TIP-H: 教学 tell ≤2 · 稳/赌并排 + 缺料/配方/本周指针
+    # D12301 TIP-H: 教学 tell · 稳/赌并排 + 缺料/配方/本周指针；TIP-BX 半行：分解首拆+1待用
     - 'tell: §a稳§7上排确定+1 §8· §6赌§7点F（有下限·极品0）'
     - 'tell: §8缺料→材料哪来 · 配方速览 · 本周：%corerpg_p1_forge_goal_line%'
+    - 'tell: §8分解预览可见今日首拆+1待用（不改表）'
     - 'sound: BLOCK_ANVIL_LAND-1-0.6'
     - 'command: corerpg p1 forgegoal nudge'
 
@@ -271,7 +272,8 @@ Icons:
       name: '§7分解 · 预览'
       lore:
         - '§e预览：§f%corerpg_p1_held_dismantle_yield%'
-        - '§7只限普通掉落件；甲→白板胚零头（0.1×阶），攒满 1 到账'
+        - '§7只限普通掉落件；甲→白板胚零头'
+        - '§e➥ §f点预览·聊天确认'
     actions:
       all:
         - 'command: corerpg p1 dismantle'
@@ -302,12 +304,14 @@ Icons:
           all:
             - 'tell: §8护甲随护符成长；成色和精工看掉落'
   d:
+    update: 20
     display:
       material: gray dye
       name: '§7分解 · 确认在聊天栏'
       lore:
-        - '§7点上面的预览后，聊天栏出现 §c[确认分解]'
-        - '§7只限普通掉落件；首通和起步件拆不了'
+        - '§e%corerpg_p1_held_dismantle_yield%'
+        - '§7点上面预览后，聊天栏 §c[确认分解]'
+        - '§8首通/起步件拆不了'
   # D381: 产花反向 · 工坊→挂机庭
   A:
     display:
