@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13325 · 挂机庭「顺手随机锻」· docs-only · ≠第五件花料 · ≠推荐花复读 · ≠洗练/烙纹/转化再拧 · ≠半行 · ≠sx20 · ≠抬日表 · ≠宝石无同构 · ≠forgeroll densify）
 
-> **旁注（已批 A · 方案 M · 2026-10-14 03:35 Asia/Shanghai · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石仍后置 · 零 densify）：** tip **待批 A · 荐方案 M** · DESIGN [`DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-forgeroll-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-forgeroll-2026-10-14.md) · backlog `B-afk-courtyard-quick-forgeroll` · **TIP-CT** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_core ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠烙纹再拧 ≠转化再拧 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令 ≠forgeroll densify ≠庭内宝石本窗（同构未过）**。
+> **旁注（CLOSED live · feat `2705550cd` · tip `07738f8bb` · PASS `2b24a1647` · 2026-10-14 03:46 Asia/Shanghai · 宝石仍后置）：** tip **待批 A · 荐方案 M** · DESIGN [`DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md) · RESEARCH [`RESEARCH-ember-afk-courtyard-quick-forgeroll-2026-10-14.md`](../design/RESEARCH-ember-afk-courtyard-quick-forgeroll-2026-10-14.md) · backlog `B-afk-courtyard-quick-forgeroll` · **TIP-CT** · **≠关观察 ≠抬日表 ≠sx20 ≠开 R/K3 ≠假开旧日常 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠Aid再拧 ≠todayRot再拧 ≠W1e独批 ≠抬 event_core ≠新 variety kind ≠第五件花料 ≠推荐花复读 ≠洗练再拧 ≠烙纹再拧 ≠转化再拧 ≠P格兼确认 ≠复开 D423 ≠stage 脏 runtime ≠撤分格 ≠教裸指令 ≠forgeroll densify ≠庭内宝石本窗（同构未过）**。
 
 > **上游结案：** **TIP-CS CLOSED** live `00fae3f34`（D13324 挂机庭顺手转化齐 · feat `0eb85b785` · tip `b5aea9bc5` · jar `1.65.816-d13324.local` · PASS `372360684` · 批 sha `3ab6a4792` · 宝石/随机锻仍后置→本窗兑现随机锻）。总控连开：优先短征日更/乐趣或庭**新轨**真入口；D13324§6③ 随机锻须同构四项；宝石须庭面 gap；Cast+Aid+todayRot+variety+庭内四花+推荐+拆+换+洗练+烙纹+转化 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · 拟 D13325 · TIP-CT · 全弧非 L · 派插件+物品 · 勿勾 CLOSED · 宝石仍后置 · 零 densify · 2026-10-14 03:35 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `2705550cd` · tip `07738f8bb` · PASS `2b24a1647` · jar `1.65.817-d13325.local` · 拟 D13325 · TIP-CT · 宝石仍后置 · 2026-10-14 03:46 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md`](../design/DESIGN-ember-afk-courtyard-quick-forgeroll-2026-10-14.md) · backlog `B-afk-courtyard-quick-forgeroll`
 **打开理由：** 短征日更玩法层已饱和；GEM 同构仍缺庭面 gap → 不交宝石；D13324§6③ 随机锻同构四项齐——庭内无随机锻入口而战况已亮 roll 仓差、工坊有 live 随机锻页、缺 FROM。
 
