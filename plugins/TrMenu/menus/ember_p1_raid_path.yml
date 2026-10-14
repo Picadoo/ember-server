@@ -1,0 +1,261 @@
+# TIP-DG / D13338 · 团本路径选打薄页 · raid_path* · raidpath r01|r02|r03|clear
+# 入口：RaidPath.offerPick / 无参 raidpath / 冒险 Open → /ember_p1_raid_path（插件并行改开菜单）
+# 选打：corerpg p1 raidpath r01|r02|r03|clear
+# 禁：教裸指令主 UI · 抬掉落/体力价/周帽 · 改 raid_settle / featured_path / challenge_path / 已齐 settle / 庭内
+# PAPI（插件可能后到·静态接线）：raid_path / raid_path_label · q07done
+# ≠ ember_p1_raid_settle（settle 下一环另页已齐勿复读）· ≠ ember_p1_featured_path · ≠ ember_p1_challenge_path
+
+Title: '§9团本 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_raid_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '##S#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §9团本路径 §7· 当前 §e%corerpg_p1_raid_path_label%'
+    - 'tell: §8点选 · R01 锈轨 / R02 霜封 / R03 断塔 / 清空 · 或回大厅 / 冒险 / 工坊'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§9团本路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_raid_path_label%'
+        - '§8点选 · R01 锈轨 / R02 霜封 / R03 断塔 / 清空'
+        - '§8周选路径后进对应团本 · 掉落偏向不同'
+        - '§8需本人首通 Q07 后可选'
+
+  # R01 锈轨 · PATH=1
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7R01 锈轨 §8（需首通 Q07）'
+          lore:
+            - '§c团本路径需本人首通 Q07'
+            - '§7名片冲撞撞墙 · 掉落偏向烬爆'
+            - '§8通关 Q07 后再选路径'
+      - condition: 'check papi %corerpg_p1_raid_path% == 1'
+        priority: 2
+        display:
+          material: iron chestplate
+          shiny: true
+          name: '§aR01 锈轨 §8· §f已选'
+          lore:
+            - '§7名片冲撞撞墙 · 掉落偏向烬爆'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 raidpath r01'
+            - 'menu: ember_p1_raid_path'
+    display:
+      material: iron chestplate
+      name: '§eR01 锈轨'
+      lore:
+        - '§7名片冲撞撞墙 · 掉落偏向烬爆'
+        - '§8点选切换团本路径'
+        - '§e➥ §f设为 R01'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 raidpath r01'
+        - 'menu: ember_p1_raid_path'
+
+  # R02 霜封 · PATH=2
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7R02 霜封 §8（需首通 Q07）'
+          lore:
+            - '§c团本路径需本人首通 Q07'
+            - '§7名片半血砸地 · 掉落偏向炽愈'
+            - '§8通关 Q07 后再选路径'
+      - condition: 'check papi %corerpg_p1_raid_path% == 2'
+        priority: 2
+        display:
+          material: diamond chestplate
+          shiny: true
+          name: '§aR02 霜封 §8· §f已选'
+          lore:
+            - '§7名片半血砸地 · 掉落偏向炽愈'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 raidpath r02'
+            - 'menu: ember_p1_raid_path'
+    display:
+      material: diamond chestplate
+      name: '§eR02 霜封'
+      lore:
+        - '§7名片半血砸地 · 掉落偏向炽愈'
+        - '§8点选切换团本路径'
+        - '§e➥ §f设为 R02'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 raidpath r02'
+        - 'menu: ember_p1_raid_path'
+
+  # R03 断塔 · PATH=3
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7R03 断塔 §8（需首通 Q07）'
+          lore:
+            - '§c团本路径需本人首通 Q07'
+            - '§7名片烬核分摊 · 掉落偏向焚烬'
+            - '§8通关 Q07 后再选路径'
+      - condition: 'check papi %corerpg_p1_raid_path% == 3'
+        priority: 2
+        display:
+          material: golden chestplate
+          shiny: true
+          name: '§aR03 断塔 §8· §f已选'
+          lore:
+            - '§7名片烬核分摊 · 掉落偏向焚烬'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 raidpath r03'
+            - 'menu: ember_p1_raid_path'
+    display:
+      material: golden chestplate
+      name: '§eR03 断塔'
+      lore:
+        - '§7名片烬核分摊 · 掉落偏向焚烬'
+        - '§8点选切换团本路径'
+        - '§e➥ §f设为 R03'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 raidpath r03'
+        - 'menu: ember_p1_raid_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需首通 Q07）'
+          lore:
+            - '§c团本路径需本人首通 Q07'
+            - '§8通关后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_raid_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无团本路径焦点'
+            - '§8先点 R01 / R02 / R03'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 raidpath clear'
+            - 'menu: ember_p1_raid_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_raid_path_label%'
+        - '§8清焦点 · 可重选'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 raidpath clear'
+        - 'menu: ember_p1_raid_path'
+
+  # 团本大厅（可选）
+  S:
+    display:
+      material: nether star
+      name: '§9团本大厅'
+      lore:
+        - '§7回团本大厅'
+        - '§8看奖励 / 进本入口'
+        - '§e➥ §f开大厅'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_raid'
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊（可选）
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
