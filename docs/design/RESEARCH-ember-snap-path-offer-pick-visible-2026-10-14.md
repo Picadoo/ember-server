@@ -1,6 +1,6 @@
 # RESEARCH · SnapPath.offerPick / applyAndReply「断链路径选打」菜单化 · 拟 D13351 · TIP-DT
 
-> **状态：** **待批 A** · 荐 M · 2026-10-14 15:20 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13351 · TIP-DT · 可施工 · 勿勾 CLOSED · 2026-10-14 15:22 Asia/Shanghai
 > **起因：** 总控【下一窗 TIP-DT · 只钉一支 · 禁全族大扫】。祖先 TIP-DS **CLOSED live** `6d95eabe1` · feat `3e3a8f876` · tip `3947da6bf` · menu `bf2645adf` · jar `1.65.843-d13350.local` · PASS `0364f3334` · 证据 `/workspace/tmp/tip-ds-veil-path/`。**避毒路径选打菜单化同题勿再交**。选题钉死：**SnapPath.offerPick**「断链路径选打」菜单化 → TrMenu `ember_p1_snap_path`。总控实扫：offerPick ConfirmTokens→`snappath auto|ask|mute|clear`；applyAndReply 下一步 ConfirmTokens→`/corerpg p1`/`snappath`；glance 教手打；局内「火链」战斗钮≠选打薄页；TrMenu **无** `ember_p1_snap_path`；与刚 CLOSED Veil 同构；DESIGN-DQ§6⑦ Veil 后下一位。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–DS 选打勿复；Spin/Blaze **后置**；禁全族 *Path.offerPick 大扫；半行 REJECT `d00ed84bc`；零抬伤害/CD表/掉落/体力价；零改 veil_path / free_path 等已齐；勿勾 CLOSED。
 > **上游：** TIP-DS CLOSED live `6d95eabe1` · feat `3e3a8f876` · tip `3947da6bf` · PASS `0364f3334` · jar `1.65.843-d13350.local` · 批 sha `3947da6bf` · menu tip `bf2645adf` · D13350
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · SnapPath.offerPick / applyAndReply 断链路径选打菜单化 · **待批 A** · 荐 M · TIP-DT / D13351 · 半行 REJECT `d00ed84bc` 保持 · Spin/Blaze等剩支/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DS CLOSED `6d95eabe1` · 2026-10-14 15:20 Asia/Shanghai.*
+*RESEARCH · SnapPath.offerPick / applyAndReply 断链路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DT / D13351 · 半行 REJECT `d00ed84bc` 保持 · Spin/Blaze 后置 · ancestor TIP-DS CLOSED `6d95eabe1` · 2026-10-14 15:22 Asia/Shanghai.**待批 A** · 荐 M · TIP-DT / D13351 · 半行 REJECT `d00ed84bc` 保持 · Spin/Blaze等剩支/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DS CLOSED `6d95eabe1` · 2026-10-14 15:20 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐 M · D13351 · TIP-DT · 2026-10-14 15:20 Asia/Shanghai · 勿勾 CLOSED
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13351 · TIP-DT · 2026-10-14 15:22 Asia/Shanghai
