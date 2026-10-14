@@ -2,9 +2,10 @@
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 10:22 Asia/Shanghai | 总控批 A·M · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · afterSettle+D794→开 ember_p1_featured_settle · 清 ConfirmTokens 教 enter/featurepath/forge 主 UI · 零改掉落/体力价/周帽 · |
 | 2026-10-14 10:18 Asia/Shanghai | 初稿 STATUS=**待批 A** · 荐 M · TIP-DC CLOSED 后连开 · 拟 D13335 · TIP-DD |
 
-STATUS=**待批 A** · 荐 M · 全弧非 L · L不荐 · 拟 D13335 · TIP-DD · 2026-10-14 10:18 Asia/Shanghai
+STATUS=**已批 A · 方案 M** · APPROVED A·M · D13335 · TIP-DD · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改掉落/体力价/周帽 · 2026-10-14 10:22 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-featured-settle-next-loop-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-featured-settle-next-loop-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-featured-settle-next-loop-visible-2026-10-14.md`](RESEARCH-ember-featured-settle-next-loop-visible-2026-10-14.md) · backlog `B-featured-settle-next-loop-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬掉落/体力价/周帽 ≠图身份settle下一环同题 ≠深渊settle下一环同题 ≠挑战settle下一环同题 ≠团本settle下一环同题 ≠短征settle下一环同题 ≠短征settle回看同题 ≠D673同题复读 ≠variety再拧 ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠路径追同题 ≠日差同题 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠legacy abyss evacuate 大扫**
 
 > **一句话玩家价值：** 精选图打完 / 周帽满后一点开「精选下一环」——再进同图、换精选/硬本路径、回冒险、去工坊、图装追都能点；**不**抬掉落/体力价/周帽、**不**教手打指令、**不**复读已齐 settle 同题、**不**复开 D673。
@@ -61,10 +62,10 @@ STATUS=**待批 A** · 荐 M · 全弧非 L · L不荐 · 拟 D13335 · TIP-DD �
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 插件改 FeaturedPath.afterSettle + D794 下一环入口必做；W1b 薄 settle 页必做；W1c 清裸指令主路径同批；见 §3）
+- [x] **方案 M**（W1a 插件改 FeaturedPath.afterSettle + D794 下一环入口必做；W1b 薄 settle 页必做；W1c 清裸指令主路径同批；见 §3）
 - [ ] 或勾 **方案 L**（仅改单钮命令；薄页后置）· **本窗不批 L**
-- [ ] 否决 A（只半行）/ W（抬表/sx20/已齐同题/庭内/D673复读）
-- [ ] 批注：
+- [x] 否决 A（只半行）/ W（抬表/sx20/已齐同题/庭内/D673复读）
+- [x] 批注：总控批 A·M · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · afterSettle+D794→开 ember_p1_featured_settle · 清 ConfirmTokens 教 enter/featurepath/forge 主 UI · 零改掉落/体力价/周帽 · 2026-10-14 10:22 Asia/Shanghai
 
 ---
 
@@ -156,6 +157,7 @@ STATUS=**待批 A** · 荐 M · 全弧非 L · L不荐 · 拟 D13335 · TIP-DD �
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 10:22 Asia/Shanghai | 总控 · **批 A·M** · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · afterSettle+D794→开 ember_p1_featured_settle · 清 ConfirmTokens 教 enter/featurepath/forge 主 UI · 零改掉落/体力价/周帽 · 半行 REJECT `d00ed84bc` 保持 |
 | 2026-10-14 10:18 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-DC CLOSED 后连开 · 选题精选周帽满 D794 / FeaturedPath.afterSettle 下一环菜单化 · 拟 D13335 · TIP-DD · ≠半行 ≠图身份/深渊/短征/团本/挑战settle同题 ≠D673同题 ≠variety再拧 ≠庭内旁路 · **改题有证据**（挂机近饱和·gem gap未亮；短征薄债已齐；DESIGN-DC§6⑤；afterSettle ConfirmTokens；D794 ConfirmTokens；无薄页；见 RESEARCH） |
 
-*D13335 **待批 A** · 荐 M · 精选周帽满 D794 / FeaturedPath.afterSettle 下一环菜单化 · TIP-DD。L不荐 · 勿勾 CLOSED · ≠半行 ≠已齐 settle 同题复读 ≠sx20 · 2026-10-14 10:18 Asia/Shanghai*
+*D13335 **已批 A · 方案 M** · APPROVED A·M · 精选周帽满 D794 / FeaturedPath.afterSettle 下一环菜单化 · TIP-DD。**可施工 W1a插件+W1b物品** · L不批 · 勿勾 CLOSED · afterSettle+D794→开 ember_p1_featured_settle · 清 ConfirmTokens 教 enter/featurepath/forge 主 UI · 零改掉落/体力价/周帽 · ≠半行 ≠已齐 settle 同题复读 ≠sx20 · 2026-10-14 10:22 Asia/Shanghai*
