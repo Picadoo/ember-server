@@ -11,8 +11,8 @@
 - 局内 `maybeAfterBlaze`/`maybeProbe`「避焰」战斗钮语义 **零改**（仍 `/corerpg p1 blaze`）；「改路径」随 offerPick 改开薄页 `PATH_PICK_CMD`
 - PAPI：`%corerpg_p1_blaze_path%`/`_label`/`_tip`/`_line`（`menuLine`）
 - 单测：`EmberBlazePathPickTest`（新 8）· `EmberBlazePathTest` · `EmberSpinPathPickTest` · `EmberRunPapiTest` 绿
-- jar：`1.65.846-d13353.local` · ECONOMY_BV **123** 未动
-- play：装 jar + restart 后核 live / storage=mysql / bv123 / MySQL connected
+- jar：`1.65.846-d13353.local` · sha256 `74af0b7bcc0f…` · ECONOMY_BV **123** 未动
+- play：live `1.65.846-d13353.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / D576 焰圈避焰语义(auto/ask/mute) / Cast·Aid / variety / 已齐 settle 薄页 / Spin·Snap·Veil·Free·Dodge·Sidestep·Step·Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Pace 同窗 / 庭内 / TrMenu yml（物品 W1b 并行）
 - tip **勿勾 CLOSED** · 可派测 / 物品 W1b
 
