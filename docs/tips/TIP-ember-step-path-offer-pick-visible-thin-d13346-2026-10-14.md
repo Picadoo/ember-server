@@ -36,7 +36,7 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 13:45 Asia/Shanghai
 - [x] 插件交 offerPick / applyAndReply / 无参 steppath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat_commit `bb9accd40` · jar `1.65.839-d13346.local`
-- [ ] 物品交薄 step_path 页 + TrMenu reload
-- [ ] 抽测 PASS live（选前冲/后撤/清空/进本/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 flex_path·零已齐选打同题复读）
+- [x] 物品交薄 step_path 页 + TrMenu reload · menu `a8c288f57` · TrMenu 94
+- [x] 抽测 PASS live（选前冲/后撤/清空/进本/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 flex_path·零已齐选打同题复读）· spot STATUS 见 STATUS-ember-step-path-offer-pick-tip-do-spot-d13346 · **勿勾 CLOSED**
 
 ## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a插件已交（勿勾 CLOSED · 待测岗/物品W1b） · L不批 · D13346 · TIP-DO · 2026-10-14 Asia/Shanghai
