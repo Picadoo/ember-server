@@ -3,8 +3,9 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-14 18:08 Asia/Shanghai | 总控批 A·M · tip `e7fe1a9ae` · 可施工 W1a+W1b · 勿勾 CLOSED |
+| 2026-10-14 18:24 Asia/Shanghai | CLOSED live · feat `84d6cda17` · PASS `4406988ff` · menu `4b57c2815` · jar `1.65.853-d13360.local` · 下一窗 SoakPath.offerPick |
 | 2026-10-14 18:11 Asia/Shanghai | W1a 插件已交 · feat `84d6cda17` · jar `1.65.853-d13360.local` · 勿勾 tip CLOSED · 可派测 / 物品 W1b |
-| 2026-10-14 18:05 Asia/Shanghai | 初稿 STATUS=**待批 A** · 荐 M · TIP-EB CLOSED 后连开 · 拟 D13360 · TIP-EC |
+| 2026-10-14 18:05 Asia/Shanghai | 初稿 STATUS=**CLOSED live** · feat `84d6cda17` · tip `a388b9f32` · menu `4b57c2815` · jar `1.65.853-d13360.local` · PASS `4406988ff` · 批 sha `a388b9f32` · 证据 `/workspace/tmp/tip-ec-shell-path/` · 2026-10-14 18:24 Asia/Shanghai · 铁壁路径选打菜单化同题勿再交 · 下一窗：SoakPath.offerPick（只钉一支 · 禁全族大扫）· 其它剩支 D585+ 后置 / PacePath（本仓无）后置 / 挂机若新硬债 / legacy evacuate 后置
 
 STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `a388b9f32` · 2026-10-14 18:08 Asia/Shanghai · **W1a 插件已交** · 勿勾 CLOSED · 可派测 / 物品 W1b
 > tip [`STATUS-ember-next-hard-debt-shell-path-offer-pick-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-shell-path-offer-pick-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-shell-path-offer-pick-visible-2026-10-14.md`](RESEARCH-ember-shell-path-offer-pick-visible-2026-10-14.md) · backlog `B-shell-path-offer-pick-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬伤害/CD表/掉落/体力价 ≠分身路径选打同题 ≠压伤路径选打同题 ≠打断路径选打同题 ≠限时路径选打同题 ≠净伤路径选打同题 ≠连斩路径选打同题 ≠避焰路径选打同题 ≠避旋路径选打同题 ≠断链路径选打同题 ≠避毒路径选打同题 ≠解锢路径选打同题 ≠闪榴路径选打同题 ≠闪冲路径选打同题 ≠身法路径选打同题 ≠轻技路径选打同题 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠步态路径选打同题 ≠已齐 settle 下一环同题 ≠短征settle回看同题 ≠D673同题复读 ≠variety再拧 ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠路径追同题 ≠日差同题 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠legacy abyss evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠Pace同窗 ≠其它 *Path 同窗 ≠复开 D583 玩法本体 ≠L13 ≠灰烬/R ≠抬 AFK 表 ≠Affix 加密**

@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EB CLOSED** live（D13359 分身路径选打齐 · feat `fdd409b97` · tip `3e31ae7c8` · jar `1.65.852-d13359.local` · PASS `0f135a72e` · 批 sha `3e31ae7c8` · menu tip `938e20faa` · CLOSED `ecffe124f` · 证据 `/workspace/tmp/tip-eb-clone-path/` · **分身路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **ShellPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EB 选打勿复；PacePath（本仓无）后置；Soak… D584+ 后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `e7fe1a9ae` · 2026-10-14 18:08 Asia/Shanghai · 勿勾 CLOSED · 可施工
+**本窗性质：** **CLOSED live** · feat `84d6cda17` · tip `a388b9f32` · menu `4b57c2815` · jar `1.65.853-d13360.local` · PASS `4406988ff` · 批 sha `a388b9f32` · 证据 `/workspace/tmp/tip-ec-shell-path/` · 2026-10-14 18:24 Asia/Shanghai · 铁壁路径选打菜单化同题勿再交 · 下一窗：SoakPath.offerPick（只钉一支 · 禁全族大扫）· 其它剩支 D585+ 后置 / PacePath（本仓无）后置 / 挂机若新硬债 / legacy evacuate 后置
 **硬规格：** [`DESIGN-ember-shell-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-shell-path-offer-pick-visible-2026-10-14.md) · backlog `B-shell-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EB 已齐；铁壁**选打**仍 ConfirmTokens 教裸 shellpath——总控钉死本支；内容闭环断在铁壁路径选打（≠分身选打；≠ settle 同题；局内铁壁钮≠选打页）。
 
@@ -61,7 +61,7 @@
 | RESEARCH | `docs/design/RESEARCH-ember-shell-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-14.md` |
 | backlog | `B-shell-path-offer-pick-visible` |
-| 号段 | **D13360** · 字母窗 **TIP-EC** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `e7fe1a9ae` · 2026-10-14 18:08 Asia/Shanghai · 勿勾 CLOSED
+| 号段 | **D13360** · 字母窗 **TIP-EC** · STATUS=**CLOSED live** · feat `84d6cda17` · tip `a388b9f32` · menu `4b57c2815` · jar `1.65.853-d13360.local` · PASS `4406988ff` · 批 sha `a388b9f32` · 证据 `/workspace/tmp/tip-ec-shell-path/` · 2026-10-14 18:24 Asia/Shanghai
 | 上游 | TIP-EB CLOSED live `ecffe124f` · feat `fdd409b97` · tip `3e31ae7c8` · PASS `0f135a72e` · jar `1.65.852-d13359.local` · 批 sha `3e31ae7c8` · menu tip `938e20faa` · D13359；半行 REJECT `d00ed84bc` 保持否决；分身路径选打菜单化同题勿再交 |
 
 *选题 ShellPath.offerPick / applyAndReply 铁壁路径选打菜单化 · tip **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13360 · TIP-EC · 半行 REJECT `d00ed84bc` **保持否决** · Soak… D584+ / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EB CLOSED `ecffe124f` · 2026-10-14 18:05 Asia/Shanghai.*
