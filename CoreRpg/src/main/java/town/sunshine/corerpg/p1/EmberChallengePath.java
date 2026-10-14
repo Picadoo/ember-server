@@ -15,12 +15,20 @@ import town.sunshine.corerpg.PlayerData;
  * NEW play+acquisition: sticky default for challenge vs normal when re-entering a first-cleared mainline map.
  * Distinct from FeaturedPath (weekly featured identity buttons only). Chat only. Zero power / AFK / sx.
  * Not combo sticky, not forge chase, not enter/card/ActionBar cue twin (rewrites enter flag, no ActionBar).
- * TIP-DA D13332: afterSettle / glance / offer 下一环开薄页 /ember_p1_challenge_settle；禁教手打 enter challenge|forge|mapfarm|challengepath 主 UI。
+ * TIP-DA D13332: afterSettle / glance 下一环开薄页 /ember_p1_challenge_settle；禁教手打 enter challenge|forge|mapfarm|challengepath 主 UI。
+ * TIP-DF D13337: offerPick / applyAndReply / 无参 challengepath →开 /ember_p1_challenge_path；禁借 settle ConfirmTokens 当选打主 UI。
  */
 public final class EmberChallengePath {
 
     public static final String C_PATH = "p1_challenge_path";
     public static final String C_OFFER = "p1_challenge_path_offer";
+
+    /** TIP-DF D13337 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_challenge_path";
+    public static final String PATH_PICK_LABEL = "[硬本路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
+    public static final String PATH_FORGE_CMD = "/ember_p1_forge";
+    public static final String PATH_CHALLENGE_CMD = "/ember_p1_challenge";
 
     public static final int NONE = 0;
     /** Prefer challenge when re-entering a cleared map (if challenge unlocked) */
@@ -84,8 +92,16 @@ public final class EmberChallengePath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8硬本路径：首进/首通 Q07 后可选";
-        if (!valid(id)) return "§8硬本路径：未选 · 点下一环选路径"; // TIP-DA D13332 禁教手打
+        // TIP-DF D13337: 禁教手打 /corerpg p1 challengepath；禁借 settle「下一环」当选打主教
+        if (!valid(id)) return "§8硬本路径：未选 · 点硬本路径页";
         return "§e硬本路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DF D13337 · 薄页 lore 一行（无 §）：当前硬本路径。
+     */
+    public static String menuLine(int id) {
+        return "硬本路径 · " + label(id);
     }
 
     /**
@@ -104,11 +120,19 @@ public final class EmberChallengePath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选已首通主线图默认（改获取节奏 · 可随时改 · 不改掉落表）：");
-        // TIP-DA D13332: 开薄页点选；禁教手打 challengepath 主 UI
-        ConfirmTokens.sendButtons(p, P + "§7硬本路径：",
-                new String[]{EmberChallengeSettle.SETTLE_NEXT_LOOP_LABEL, EmberChallengeSettle.SETTLE_NEXT_LOOP_CMD,
-                        "薄页点选偏挑战/普通/随令", "AQUA"},
-                new String[]{"[冒险页]", EmberChallengeSettle.SETTLE_ADVENTURE_CMD, "进已首通图试默认", "GREEN"});
+        // TIP-DF D13337: 开选打薄页；禁借 settle ConfirmTokens 当选打主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_challenge_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_challenge_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "偏挑战/偏普通/随令/清空/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -174,11 +198,11 @@ public final class EmberChallengePath {
         if (id == PREFER) p.sendMessage(P + "§7例：已首通图进本默认挑战版（指令写普通可覆盖）");
         else if (id == EASY) p.sendMessage(P + "§7例：已首通图进本默认普通版（指令写挑战可覆盖）");
         else p.sendMessage(P + "§7例：完全按进本指令，不自动改版");
-        // TIP-DA D13332: 主钮开薄页；禁教手打 challengepath 主 UI
+        // TIP-DF D13337: 下一步→选打薄页（冒险/重选/选图可点）；禁借 settle ConfirmTokens 为主 UI
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{EmberChallengeSettle.SETTLE_NEXT_LOOP_LABEL, EmberChallengeSettle.SETTLE_NEXT_LOOP_CMD,
-                        "再挑战/选图/路径/工坊", "GREEN"},
-                new String[]{"[打开冒险]", EmberChallengeSettle.SETTLE_ADVENTURE_CMD, "进已首通图试默认", "AQUA"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "偏挑战/偏普通/随令/清空/冒险", "GREEN"},
+                new String[]{"[打开冒险]", PATH_ADVENTURE_CMD, "进已首通图试默认", "AQUA"},
+                new String[]{"[挑战选图]", PATH_CHALLENGE_CMD, "挑已首通图", "GOLD"});
     }
 
 
@@ -189,7 +213,8 @@ public final class EmberChallengePath {
         int id = get(d);
         if (!valid(id)) {
             if (challenge) {
-                p.sendMessage(EmberRunService.P + "§7未选硬本路径 · 点下一环选路径"); // TIP-DA 禁教手打
+                // TIP-DF D13337: 禁教手打 challengepath；开选打薄页
+                p.sendMessage(EmberRunService.P + "§7未选硬本路径 · 点硬本路径页");
                 offerPick(p);
             }
             return;

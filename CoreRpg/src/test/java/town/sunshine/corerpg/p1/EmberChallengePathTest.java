@@ -13,8 +13,9 @@ public class EmberChallengePathTest {
     }
     @Test public void glance_menuFirst_noBareChallengepath() {
         String g = EmberChallengePath.glance(EmberChallengePath.NONE, true);
-        assertTrue(g.contains("点下一环"));
+        assertTrue(g.contains("点硬本路径页")); // TIP-DF D13337
         assertFalse(g.contains("/corerpg p1 challengepath"));
+        assertFalse(g.contains("点下一环"));
         assertTrue(EmberChallengePath.glance(EmberChallengePath.PREFER, true).contains("偏挑战"));
     }
 }

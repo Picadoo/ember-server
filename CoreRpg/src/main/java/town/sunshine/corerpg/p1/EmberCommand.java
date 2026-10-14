@@ -2718,14 +2718,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberChallengePath.get(d);
-                    if (EmberChallengePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberChallengePath.label(cur) + " · 改路径再 /corerpg p1 challengepath");
+                    if (EmberChallengePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberChallengePath.label(cur) + " · 改路径点硬本路径页");
                     else EmberChallengePath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberChallengePath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 challengepath <prefer|easy|follow|clear>");
+                p.sendMessage(P + "用法：点硬本路径页选偏挑战/偏普通/随令/清空");
                 return true;
             }
             EmberChallengePath.applyAndReply(p, id);

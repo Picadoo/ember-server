@@ -47,7 +47,9 @@ public class EmberChallengeSettleNextLoopTest {
                 Paths.get("src/main/java/town/sunshine/corerpg/p1/EmberChallengePath.java")),
                 StandardCharsets.UTF_8);
         assertFalse(src.contains("未选 · /corerpg p1 challengepath"));
-        assertTrue(src.contains("未选 · 点下一环选路径"));
+        // TIP-DF: glance/选打 → 点硬本路径页；TIP-DA afterSettle 仍「点下一环」
+        assertTrue(src.contains("未选 · 点硬本路径页"));
+        assertTrue(src.contains("PATH_PICK_CMD"));
         assertFalse(src.contains("可设硬本路径：/corerpg p1 challengepath"));
         assertTrue(src.contains("可设硬本路径 · 点下一环选路径"));
         assertFalse(src.contains("\"/corerpg p1 challengepath prefer\""));
