@@ -1,6 +1,6 @@
 # tip · TIP-CY 短征花样结算回看（真可点/菜单可感 · ≠soft-reward同题 · ≠variety再拧 · ≠完整variety经济 · ≠settle下一环同题 · ≠路径追同题 · ≠日差本同题 · ≠今日推/周目标复读 · ≠半行 · ≠庭内旁路 · ≠抬 event_core）· 拟 D13330
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13330 · TIP-CY · 全弧非 L · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L 不批 · 零经济 · 零改率 · 零新 variety kind · 2026-10-14 08:16 Asia/Shanghai
+> **状态：** **抽测 PASS** · feat `e5cb2ddd6` · menu `a1f5a2537` · jar `1.65.823-d13330.local` · **勿勾 CLOSED**（总控收口）· D13330 · TIP-CY · 零经济 · 零改率 · 2026-10-14 08:34 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-short-variety-settle-review-2026-10-14.md`](../design/DESIGN-ember-short-variety-settle-review-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-variety-settle-review`  
 > **施工岗（批后）：** 余烬-插件（settle 花样记忆 + PAPI）+ 余烬-物品（结算薄页 V）· **不派怪物/地图**  
 > **硬禁：** 零半行独批 · 零 soft-reward 同题 · 零 settle下一环同题 · 零路径追同题 · 零日差本同题 · 零今日推/周目标/三冲复读主交 · 零 Cast 粒子主交付 · 零拧 EliteAid/BossAid · 零 todayRot/W1e 独批 · 零 variety 再拧/完整经济 · 零抬 event_rate/event_core/affix_shard · 零新 variety kind · 零 sx20 · 零抬日表/伤表/S表/targets · 零庭内旁路再拧 · 零 densify · 零教裸指令主 UI · 零改 ShortPath resolve  
@@ -29,8 +29,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 08:16 Asia/Shanghai
-- [ ] 插件交 settle 记忆 + PAPI + 单测
-- [ ] 物品交 V 格 + TrMenu reload
-- [ ] 抽测 PASS live（有花样/无花样/零经济多发）
+- [x] 插件交 settle 记忆 + PAPI + 单测 · feat `e5cb2ddd6`
+- [x] 物品交 V 格 + TrMenu reload · menu `a1f5a2537` · 79
+- [x] 抽测 PASS live（有花样/无花样/零经济多发）· 证据 `/workspace/tmp/tip-cy-variety-settle/` · 2026-10-14 08:34 Asia/Shanghai · **勿勾 CLOSED**
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · D13330 · TIP-CY · 2026-10-14 08:16 Asia/Shanghai
+## STATUS: **抽测 PASS** · feat `e5cb2ddd6` · menu `a1f5a2537` · jar `1.65.823-d13330.local` · **勿勾 CLOSED**（总控收口）· D13330 · TIP-CY · 2026-10-14 08:34 Asia/Shanghai
