@@ -1,7 +1,7 @@
 # 状态 · TIP-DJ 试炼路径选打菜单化抽测
 
 **裁决：** **PASS** · feat `845a99920` · menu tip `9dabb653e` · tip/批 `dbbc499b0` · jar `1.65.834-d13341.local` · 证据 `/workspace/tmp/tip-dj-trial-path/`  
-**范围：** offerPick / 无参 trialpath / 周要约 → 开 `ember_p1_trial_path`（**禁** ConfirmTokens 教 trialpath 为主 UI）· 薄页稳慎/猛开/加压/清空/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `trial_path_*` 诚实 · Q06 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_abyss_path` 及其他已齐 path 选打页 · **≠**已齐选打同题复读 · **勿勾 tip CLOSED**（总控收口）· 2026-10-14 12:19 Asia/Shanghai
+**范围：** offerPick / 无参 trialpath / 周要约 → 开 `ember_p1_trial_path`（**禁** ConfirmTokens 教 trialpath 为主 UI）· 薄页稳慎/猛开/加压/清空/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `trial_path_*` 诚实 · Q06 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_abyss_path` 及其他已齐 path 选打页 · **≠**已齐选打同题复读 · **勾毕 CLOSED live**（总控收口 · 2026-10-14 12:20 Asia/Shanghai）
 
 ## 必验
 
@@ -18,11 +18,11 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **89**（含 `ember_p1_trial_path`）· jar sha256 `91e07896d2fe…` plugins=server-runtime · MySQL connected · bv123
 - 单测 `EmberTrialPathPickTest`（6）/ `EmberTrialPathTest` / RunPapi / AbyssPathPick 绿
-- 39/39 PASS · tip **未勾 CLOSED**（总控收口）
+- 39/39 PASS · tip **勾毕 CLOSED live**（总控收口）
 - 选打主 UI = `ember_p1_trial_path`；未教裸 trialpath/pledgepath/counterpath；未复读深渊/短征等选打
 
 ## 纪律确认
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · rot weekly_cap=3 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改伤害/CD表/掉落/体力价/abyss_path/short·raid·featured·challenge path/variety/soft-reward · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `845a99920` · menu tip `9dabb653e` · tip `dbbc499b0` · jar `1.65.834-d13341.local` · **勿勾 CLOSED**（总控收口）· 2026-10-14 12:19 Asia/Shanghai
+> **测岗抽测：** PASS live · feat `845a99920` · menu tip `9dabb653e` · tip `dbbc499b0` · jar `1.65.834-d13341.local` · **CLOSED live**（总控收口）· 2026-10-14 12:20 Asia/Shanghai

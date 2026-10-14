@@ -1,6 +1,6 @@
 # STATUS · TIP-DJ W1a 试炼路径选打菜单化 · D13341
 
-> 2026-10-14 12:11 Asia/Shanghai · 余烬-插件岗 · W1a 已交 · feat `845a99920` · **勿勾 tip CLOSED** · 待物品 W1b / 测岗抽测
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `61e500086` · tip `dbbc499b0` · 总控收口 2026-10-14 12:20 Asia/Shanghai
 
 ## 交付
 - `EmberTrialPath.offerPick` →开 `/ember_p1_trial_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `trialpath` 为主 UI
@@ -12,7 +12,7 @@
 - jar：`1.65.834-d13341.local` · sha256 `91e07896d2fe…` · ECONOMY_BV **123** 未动
 - play：live `1.65.834-d13341.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / 试炼语义 / Cast·Aid / variety / 已齐 settle 薄页 / Short·Raid·Featured·Challenge·Abyss Path / 签律·破绽·步态 / 庭内 / TrMenu yml（物品 W1b 并行）
-- **勿勾 tip CLOSED** · 待物品 W1b + 测岗 PASS 后总控收口
+- **勾毕 CLOSED live** · PASS `61e500086` · 总控收口 2026-10-14 12:20 Asia/Shanghai
 
 ## 落点
 - `EmberTrialPath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine
@@ -29,5 +29,12 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_trial_path`）
 
 ## 下步
-- 物品 W1b 薄页 `ember_p1_trial_path`
-- 测岗抽测 PASS 后总控收口 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-DJ spot）
+- **PASS** · 2026-10-14 12:20 Asia/Shanghai · 证据 `/workspace/tmp/tip-dj-trial-path/` · 详 `STATUS-ember-trial-path-offer-pick-tip-dj-spot-d13341-2026-10-14.md`
+- live jar `1.65.834-d13341.local` · feat `845a99920` · tip `dbbc499b0` · 批 `dbbc499b0` · 试炼路径选打菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `845a99920` · 证据 `/workspace/tmp/tip-dj-trial-path/` · STATUS `61e500086`
+- **CLOSED live**（总控收口）· tip `dbbc499b0` · jar `1.65.834-d13341.local`
