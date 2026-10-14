@@ -3,7 +3,7 @@
 > 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip APPROVED `f5cea1e1d` · 勿勾 tip CLOSED
 
 ## 交付
-- feat: `4417ea595`
+- feat: `b9d06e01a`
 - `EmberSnapPath.offerPick` →开 `/ember_p1_snap_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `snappath` 为主 UI
 - 无参 `/corerpg p1 snappath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_snap_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `snappath` ConfirmTokens 为主 UI
@@ -11,7 +11,7 @@
 - 局内 `maybeAfterLink`/`maybeProbe`「断链」战斗钮语义 **零改**（仍 `/corerpg p1 snap`）；「改路径」随 offerPick 改开薄页 `PATH_PICK_CMD`
 - PAPI：`%corerpg_p1_snap_path%`/`_label`/`_tip`/`_line`（`menuLine`）
 - 单测：`EmberSnapPathPickTest`（新 8）· `EmberSnapPathTest` · `EmberVeilPathPickTest` · `EmberRunPapiTest` 绿
-- jar：`1.65.844-d13351.local` · sha256 `PENDING` · ECONOMY_BV **123** 未动
+- jar：`1.65.844-d13351.local` · sha256 `882303837d6c…` · ECONOMY_BV **123** 未动
 - play：live `1.65.844-d13351.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / D574 火链断链语义(auto/ask/mute) / Cast·Aid / variety / 已齐 settle 薄页 / Veil·Free·Dodge·Sidestep·Step·Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Pace 同窗 / Spin/Blaze 同窗 / 庭内 / TrMenu yml（物品 W1b 并行 `4070a04f7`）
 - tip **勿勾 CLOSED**（总控勾）
