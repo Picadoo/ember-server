@@ -1,0 +1,34 @@
+# STATUS · TIP-DP W1a 闪冲路径选打菜单化 · D13347
+
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交 · 勿勾 tip CLOSED** · tip APPROVED `116eea312` · 待测岗/物品 W1b
+
+## 交付
+- feat: `5d111339e7339f27981b27892f7c192b5b7f3d90`
+- `EmberSidestepPath.offerPick` →开 `/ember_p1_sidestep_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `sidesteppath` 为主 UI
+- 无参 `/corerpg p1 sidesteppath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
+- `applyAndReply` 下一步→同薄页 `/ember_p1_sidestep_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `sidesteppath` ConfirmTokens 为主 UI
+- glance / 用法：清「手打 sidesteppath auto|ask|mute|clear」主教 →「点闪冲路径页」
+- 局内 `maybeAfterCharge`/`maybeProbe`「闪冲」战斗钮语义 **零改**（仍 `/corerpg p1 sidestep`）；「改路径」随 offerPick 改开薄页 `PATH_PICK_CMD`
+- PAPI：`%corerpg_p1_sidestep_path%`/`_label`/`_tip`/`_line`（`menuLine`）
+- 单测：`EmberSidestepPathPickTest`（新 8）· `EmberSidestepPathTest` · `EmberStepPathPickTest` · `EmberFlexPathPickTest` · `EmberRunPapiTest` 绿
+- jar：`1.65.840-d13347.local` · sha256 `ed84c0233c554ebe…` · ECONOMY_BV **123** 未动
+- play：live `1.65.840-d13347.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
+- **零改**伤害 / CD 表 / 掉落 / 体力价 / D572 冲锋侧移语义(auto/ask/mute) / Cast·Aid / variety / 已齐 settle 薄页 / Step·Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Pace 同窗 / 庭内 / TrMenu yml（物品 W1b 并行）
+- **勿勾 tip CLOSED** · 待测岗 PASS / 物品 W1b / 总控收口
+
+## 落点
+- `EmberSidestepPath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine · 改路径薄页
+- `EmberCommand`：用法改「点闪冲路径页」
+- `EmberRunPapi`：sidestep_path / sidestep_path_label / tip / line → Section.RUSH
+- `pom.xml` / `plugin.yml`：1.65.840-d13347.local
+- 单测 `EmberSidestepPathPickTest`（新）
+
+## 零改边界
+- 伤害 / CD 表 / 掉落 / 体力价 / auto/ask/mute 冲锋侧移语义(D572)
+- step_path / flex_path / stride_path / counter_path / pledge_path / trial_path / short_path / raid_path / featured_path / challenge_path / abyss_path / 已齐 settle
+- variety / soft-reward / Cast/Aid / 庭内 / PacePath
+- balance_version 123 · sx20 · Pack6 · 开K3 · legacy evacuate · 全族 *Path.offerPick
+- TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_sidestep_path`）
+
+## 下步
+- 物品 W1b 并行薄页 · 测岗抽测 · 总控收口 CLOSED（本岗勿勾）

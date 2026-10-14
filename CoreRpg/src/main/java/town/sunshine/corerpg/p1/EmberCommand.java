@@ -5332,14 +5332,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberSidestepPath.get(d);
-                    if (EmberSidestepPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSidestepPath.label(cur) + " · 改路径再 /corerpg p1 sidesteppath");
+                    if (EmberSidestepPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSidestepPath.label(cur) + " · 点闪冲路径页可改");
                     else EmberSidestepPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberSidestepPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 sidesteppath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点闪冲路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberSidestepPath.applyAndReply(p, id);
