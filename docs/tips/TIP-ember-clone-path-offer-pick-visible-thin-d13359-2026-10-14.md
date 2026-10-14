@@ -1,10 +1,10 @@
 # tip · TIP-EB ClonePath.offerPick / applyAndReply「分身路径选打」菜单化（选路径聊天钮去指令化 · ≠压伤路径选打同题 · ≠打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D582 玩法本体）· 拟 D13359
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13359 · TIP-EB · W1a插件已交 · jar `1.65.852-d13359.local` · 可派测 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 clonepath/周要约→开 ember_p1_clone_path · 清 ConfirmTokens 教 clonepath 主 UI · 2026-10-14 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13359 · TIP-EB · W1a插件已交  · feat_commit  · jar `1.65.852-d13359.local` · 可派测 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 clonepath/周要约→开 ember_p1_clone_path · 清 ConfirmTokens 教 clonepath 主 UI · 2026-10-14 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-clone-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-clone-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-clone-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（ClonePath.offerPick / applyAndReply / 无参 clonepath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_clone_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零压伤路径选打同题复读（TIP-EA） · 零打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-DZ–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零其它 *Path 同窗 · 零复开 D582 玩法本体（auto/ask/mute 真改分身清掉语义零改）· 零改 press_path / cut_path / rush_path / clean_path / streak_path / blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
-> **ancestor：** TIP-EA CLOSED live `8772b030c`（feat `afa2cf969` · tip `1b4f236e6` · PASS `19c58c9ee` · jar `1.65.851-d13358.local` · 批 sha `1b4f236e6` · menu tip `9a9c42d6e` · 证据 `/workspace/tmp/tip-ea-press-path/`）
+> **ancestor：** TIP-EA CLOSED live `8772b030c`（feat `afa2cf969` · tip `1b4f236e6` · PASS `19c58c9ee` · feat_commit  · jar `1.65.851-d13358.local` · 批 sha `1b4f236e6` · menu tip `9a9c42d6e` · 证据 `/workspace/tmp/tip-ea-press-path/`）
 > **下一窗提示（旁注）：** Shell… 等 D583+ 剩支 **后置**（逐支另窗 · 禁全族大扫）· PacePath（本仓无）后置 / 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EB（本窗批后）
 
 ## 一句话
@@ -35,7 +35,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 17:47 Asia/Shanghai
-- [x] 插件交 offerPick / applyAndReply / 无参 clonepath / 周要约改开菜单 + 清裸指令主路径 + 单测 · jar `1.65.852-d13359.local`
+- [x] 插件交 offerPick / applyAndReply / 无参 clonepath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat_commit  · jar `1.65.852-d13359.local`
 - [ ] 物品交薄 clone_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 press_path·零已齐选打同题复读·零改 D582 分身语义）
 

@@ -1,9 +1,9 @@
 # STATUS · TIP-EB W1a 分身路径选打菜单化 · D13359
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · jar `1.65.852-d13359.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat  · jar `1.65.852-d13359.local`
 
 ## 交付
-- feat: （commit 后钉死）
+- feat: 
 - `EmberClonePath.offerPick` →开 `/ember_p1_clone_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `clonepath` 为主 UI
 - 无参 `/corerpg p1 clonepath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_clone_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `clonepath` ConfirmTokens 为主 UI
