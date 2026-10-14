@@ -1,6 +1,6 @@
 # RESEARCH · ShortPath.offerPick / applyAndReply「短征路径选打」菜单化 · 拟 D13339 · TIP-DH
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13339 · TIP-DH · 可施工 · 勿勾 CLOSED · 2026-10-14 11:32 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `ec5264ef9` · tip `fbe2cce5c` · PASS `191f0be8c` · jar `1.65.832-d13339.local` · 批 sha `fbe2cce5c` · TIP-DH · 2026-10-14 11:47 Asia/Shanghai · 短征路径选打菜单化同题勿再交 · 下一窗：内容优先（挂机若新硬债 / 其他菜单去指令残留如试炼/签律/步态等 *Path.offerPick 另窗逐支 / legacy evacuate 另窗；短征路径追+选打本支已齐）
 > **起因：** 总控【派·TIP-DH 选题】默认钉 ShortPath.offerPick「短征路径选打」菜单化 · 拟 D13339。祖先 TIP-DG 抽测 PASS `7ec45e0a1` · feat `c81c9e7e2` · jar `1.65.831-d13338` · CLOSED 收口。DESIGN-DG §6⑦ 后置其他 *Path 逐支另窗。选题优先级：①挂机庭资源环加厚（须新硬债；旁路近饱和·gem gap 未亮则跳过）②短征日更乐趣（非sx20；非已齐路径追页/settle；**offerPick 入口仍教指令**）③已齐勿复读：各 settle 下一环（CW–DD）+ 精选·硬本·团本选打 DE–DG ④默认钉 ShortPath.offerPick（可改题须证据压过本支）⑤AbyssPath/TrialPath / legacy evacuate 后置。**禁：** 半行独批 · 已齐 settle/选打/路径追同题复读 · 抬日表/掉落/体力价 · sx20 / densify / Pack6 / 开 K3 / 关观察 · variety 完整经济 / Cast·Aid 再拧 / 庭内旁路 · 教裸指令主 UI · 全族 Path 大扫 · 零改 `ember_p1_short_settle` / RaidPath/FeaturedPath/ChallengePath。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-DG CLOSED live `f8fef8025` · feat `c81c9e7e2` · tip `fd80fd696` · PASS `7ec45e0a1` · jar `1.65.831-d13338.local` · 批 sha `fd80fd696` · menu tip `b9b8f688f` · D13338
 
@@ -62,6 +62,6 @@
 
 ---
 
-*RESEARCH · ShortPath.offerPick / applyAndReply 短征路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DH / D13339 · 半行 REJECT `d00ed84bc` 保持 · ancestor TIP-DG CLOSED · ≠路径追同题/short_settle · Abyss/Trial 后置 · 2026-10-14 11:32 Asia/Shanghai.*
+*RESEARCH · ShortPath.offerPick / applyAndReply 短征路径选打菜单化 · **CLOSED live** · `ec5264ef9` / `fbe2cce5c` · PASS `191f0be8c` · TIP-DH / D13339 · 半行 REJECT `d00ed84bc` 保持 · 短征路径选打菜单化同题勿再交 · 下一窗：内容优先（挂机若新硬债 / 其他菜单去指令残留如试炼/签律/步态等 *Path.offerPick 另窗逐支 / legacy evacuate 另窗；短征路径追+选打本支已齐）.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13339 · TIP-DH · 2026-10-14 11:32 Asia/Shanghai
+## STATUS: **CLOSED live** · `ec5264ef9` / `fbe2cce5c` · PASS `191f0be8c` · D13339 · TIP-DH · 2026-10-14 11:47 Asia/Shanghai

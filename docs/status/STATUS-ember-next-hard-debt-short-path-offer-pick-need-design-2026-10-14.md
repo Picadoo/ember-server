@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13339 · ShortPath.offerPick / applyAndReply 短征路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠路径追同题 · ≠短征settle下一环同题 · ≠短征settle回看同题 · ≠团本/硬本/精选路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬日表/掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠全族 *Path.offerPick 大扫 · ≠AbyssPath/TrialPath同窗）
 
-> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 11:32 Asia/Shanghai · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改日表/掉落/体力价/resolve）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-short-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-short-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-short-path-offer-pick-visible-2026-10-14.md) · backlog `B-short-path-offer-pick-visible` · **TIP-DH** · **勿勾 CLOSED** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠路径追同题 ≠短征settle下一环同题 ≠短征settle回看同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠已齐 settle 下一环同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬日表/掉落/体力价 ≠D673同题复读 ≠legacy evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠AbyssPath/TrialPath同窗**。
+> **旁注（勾毕 · CLOSED live · 2026-10-14 11:47 Asia/Shanghai · feat `ec5264ef9` · tip `fbe2cce5c` · PASS `191f0be8c` · jar `1.65.832-d13339.local` · 批 sha `fbe2cce5c` · menu tip `9a81a840e` · 证据 `/workspace/tmp/tip-dh-short-path/`）：** tip **CLOSED live** · DESIGN [`DESIGN-ember-short-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-short-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-short-path-offer-pick-visible-2026-10-14.md) · backlog `B-short-path-offer-pick-visible` · **TIP-DH** · **短征路径选打菜单化同题勿再交** · 下一窗：内容优先（挂机若新硬债 / 其他菜单去指令残留如试炼/签律/步态等 *Path.offerPick 另窗逐支 / legacy evacuate 另窗；短征路径追+选打本支已齐） · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠路径追同题 ≠短征settle下一环同题 ≠短征settle回看同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠已齐 settle 下一环同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬日表/掉落/体力价 ≠D673同题复读 ≠legacy evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠AbyssPath/TrialPath同窗**。
 
 > **上游结案：** **TIP-DG CLOSED** live（D13338 团本路径选打齐 · feat `c81c9e7e2` · tip `fd80fd696` · jar `1.65.831-d13338.local` · PASS `7ec45e0a1` · 批 sha `fd80fd696` · menu tip `b9b8f688f` · **团本路径选打菜单化同题勿再交**）。总控派 TIP-DH：内容优先；挂机加厚须新硬债；短征乐趣非已齐路径追页/settle；已齐勿复读 settle CW–DD + 选打 DE–DG；**默认钉** ShortPath.offerPick；AbyssPath/TrialPath / legacy evacuate 默认后置。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13339 · TIP-DH · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改日表/掉落/体力价/resolve · 2026-10-14 11:32 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `ec5264ef9` · tip `fbe2cce5c` · PASS `191f0be8c` · jar `1.65.832-d13339.local` · 拟 D13339 · TIP-DH · 2026-10-14 11:47 Asia/Shanghai · 短征路径选打菜单化同题勿再交
 **硬规格：** [`DESIGN-ember-short-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-short-path-offer-pick-visible-2026-10-14.md) · backlog `B-short-path-offer-pick-visible`
 **打开理由：** 挂机无新硬债；短征已齐支勿复读，但 **offerPick/周要约/无参/选页 Open 仍 ConfirmTokens 教 shortpath**——薄页已在 TIP-CV、settle「换一条」已菜单，唯入口未开薄页；内容优先钉短征选打（≠路径追同题；≠ settle 同题；≠ 团本选打同题）。
 
@@ -63,9 +63,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-short-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-short-path-offer-pick-visible-thin-d13339-2026-10-14.md` |
 | backlog | `B-short-path-offer-pick-visible` |
-| 号段 | **D13339** · 字母窗 **TIP-DH** · STATUS=**已批 A · 方案 M** · APPROVED A·M |
+| 号段 | **D13339** · 字母窗 **TIP-DH** · STATUS=**CLOSED live** · PASS `191f0be8c` |
 | 上游 | TIP-DG CLOSED live `f8fef8025` · feat `c81c9e7e2` · tip `fd80fd696` · PASS `7ec45e0a1` · jar `1.65.831-d13338.local` · 批 sha `fd80fd696` · D13338；半行 REJECT `d00ed84bc` 保持否决；团本路径选打菜单化同题勿再交 |
 
-*选题 ShortPath.offerPick / applyAndReply 短征路径选打菜单化 · tip **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13339 · TIP-DH · 半行 REJECT `d00ed84bc` **保持否决** · ancestor TIP-DG CLOSED · 2026-10-14 11:32 Asia/Shanghai.*
+*选题 ShortPath.offerPick / applyAndReply 短征路径选打菜单化 · tip **CLOSED live** · `ec5264ef9` / `fbe2cce5c` · PASS `191f0be8c` · D13339 · TIP-DH · 半行 REJECT `d00ed84bc` **保持否决** · 短征路径选打菜单化同题勿再交 · 下一窗：内容优先（挂机若新硬债 / 其他菜单去指令残留如试炼/签律/步态等 *Path.offerPick 另窗逐支 / legacy evacuate 另窗；短征路径追+选打本支已齐） · ancestor TIP-DG CLOSED · 2026-10-14 11:47 Asia/Shanghai.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13339 · TIP-DH · 2026-10-14 11:32 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `ec5264ef9` · tip `fbe2cce5c` · PASS `191f0be8c` · jar `1.65.832-d13339.local` · D13339 · TIP-DH · 2026-10-14 11:47 Asia/Shanghai · 短征路径选打菜单化同题勿再交

@@ -1,6 +1,6 @@
 # STATUS · TIP-DH W1a 短征路径选打菜单化 · D13339
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · 勿勾 tip CLOSED · 待物品 W1b + 测岗抽测
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `191f0be8c` · tip `fbe2cce5c` · 总控收口 2026-10-14 11:47 Asia/Shanghai
 
 ## 交付
 - `EmberShortPath.offerPick` →开 `/ember_p1_short_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `shortpath` 为主 UI
@@ -12,7 +12,7 @@
 - jar：`1.65.832-d13339.local` · sha256 `2d1d760d705d…` · ECONOMY_BV **123** 未动
 - play：live `1.65.832-d13339.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**日表 / 掉落 / 体力价 / ShortPath resolve / Cast·Aid / variety / 已齐 settle 薄页（含 `ember_p1_short_settle`）/ Raid·Featured·Challenge Path / Abyss/Trial / 庭内 / TrMenu yml（物品 W1b 并行）
-- **勿勾 tip CLOSED** · 待 W1b + 抽测 PASS 后总控收口
+- **勾毕 CLOSED live** · PASS `191f0be8c` · 总控收口 2026-10-14 11:47 Asia/Shanghai
 
 ## 落点
 - `EmberShortPath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine
@@ -28,5 +28,12 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_short_path` 接线/补洞）
 
 ## 下步
-- 物品 W1b：既有薄页接线/补洞 + 清选页 Open 旁路
-- 测岗抽测 → 总控收口 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-DH spot）
+- **PASS** · 2026-10-14 11:47 Asia/Shanghai · 证据 `/workspace/tmp/tip-dh-short-path/` · 详 `STATUS-ember-short-path-offer-pick-tip-dh-spot-d13339-2026-10-14.md`
+- live jar `1.65.832-d13339.local` · feat `ec5264ef9` · tip `fbe2cce5c` · 批 `fbe2cce5c` · 短征路径选打菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `ec5264ef9` · 证据 `/workspace/tmp/tip-dh-short-path/` · STATUS `191f0be8c`
+- **CLOSED live**（总控收口）· tip `fbe2cce5c` · jar `1.65.832-d13339.local`

@@ -1,6 +1,6 @@
 # tip · TIP-DH ShortPath.offerPick / applyAndReply「短征路径选打」菜单化（选路径聊天钮去指令化 · ≠路径追同题 · ≠短征settle下一环同题 · ≠短征settle回看同题 · ≠团本/硬本/精选路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬日表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠AbyssPath/TrialPath同窗）· 拟 D13339
 
-> **状态：** **抽测 PASS live · 待总控收口** · APPROVED A·M · D13339 · TIP-DH · jar `1.65.832-d13339.local` · L不批 · **勿勾 CLOSED** · 零改日表/掉落/体力价/resolve · 2026-10-14 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `ec5264ef9` · tip `fbe2cce5c` · jar `1.65.832-d13339.local` · PASS `191f0be8c` · 批 sha `fbe2cce5c` · menu tip `9a81a840e` · 证据 `/workspace/tmp/tip-dh-short-path/` · 2026-10-14 11:47 Asia/Shanghai · 短征路径选打菜单化同题勿再交
 > **DESIGN** [`DESIGN-ember-short-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-short-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（ShortPath.offerPick / 无参 shortpath / 周要约改开菜单）+ 余烬-物品（既有 `ember_p1_short_path` 接线/补洞；清选页 Open 旁路）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零路径追同题复读（TIP-CV） · 零短征settle下一环同题复读（TIP-CW） · 零短征settle回看同题复读（TIP-CY） · 零团本/硬本/精选路径选打同题复读（TIP-DG/DF/DE） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬日表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 AbyssPath/TrialPath 同窗
@@ -36,6 +36,6 @@
 - [x] 总控批 A·M · 2026-10-14 11:32 Asia/Shanghai
 - [x] 插件交 offerPick / 无参 shortpath / 周要约改开菜单 + 清裸指令主路径 + 单测 · W1a `1.65.832-d13339.local` · 2026-10-14 Asia/Shanghai
 - [x] 物品交 short_path 接线/补洞 + 清选页 Open 旁路 + TrMenu reload · W1b `9a81a840e`
-- [x] 抽测 PASS live（选首通/有奖/后段/清空/进下一本真开·PAPI·零抬日表/掉落/体力价·零改 short_settle·零路径追同题复读）· **勿勾 CLOSED** · 证据 `/workspace/tmp/tip-dh-short-path/` · 2026-10-14 Asia/Shanghai
+- [x] 抽测 PASS live（选首通/有奖/后段/清空/进下一本真开·PAPI·零抬日表/掉落/体力价·零改 short_settle·零路径追同题复读）· STATUS-ember-short-path-offer-pick-tip-dh-spot-d13339-2026-10-14.md · PASS `191f0be8c` · 证据 `/workspace/tmp/tip-dh-short-path/` · **CLOSED by 总控**
 
-## STATUS: **抽测 PASS live · 待总控收口** · APPROVED A·M · 勿勾 CLOSED · L不批 · D13339 · TIP-DH · 2026-10-14 Asia/Shanghai
+## STATUS: **CLOSED live** · `ec5264ef9` / `9a81a840e` · PASS `191f0be8c` · jar `1.65.832-d13339.local` · D13339 · TIP-DH · 2026-10-14 11:47 Asia/Shanghai · 短征路径选打菜单化同题勿再交
