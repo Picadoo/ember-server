@@ -1,8 +1,9 @@
 # STATUS · TIP-DK W1a 誓约路径选打菜单化 · D13342
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · 勿勾 tip CLOSED · tip APPROVED `6ee232766`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · feat `42fc81f49` · 勿勾 tip CLOSED · tip APPROVED `6ee232766`
 
 ## 交付
+- feat: `42fc81f49`
 - `EmberPledgePath.offerPick` →开 `/ember_p1_pledge_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `pledgepath` 为主 UI
 - 无参 `/corerpg p1 pledgepath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ06` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_pledge_path` / 誓约页 `/ember_p1_pledge` / 冒险 `/ember_p1_adventure`；**禁**以裸 `pledgepath`/`pledge`/`modes` ConfirmTokens 为主 UI

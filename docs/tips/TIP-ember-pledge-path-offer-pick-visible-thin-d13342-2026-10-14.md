@@ -35,7 +35,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 12:26 Asia/Shanghai
-- [x] 插件交 offerPick / applyAndReply / 无参 pledgepath / 周要约改开菜单 + 清裸指令主路径 + 单测 · jar `1.65.835-d13342.local` · 勿勾 CLOSED
+- [x] 插件交 offerPick / applyAndReply / 无参 pledgepath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat `42fc81f49` · jar `1.65.835-d13342.local` · 勿勾 CLOSED
 - [ ] 物品交薄 pledge_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选限药/逆行/双挂/清空/誓约页/进阶/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价/誓约徽记表·零改 trial_path·零已齐选打同题复读）
 
