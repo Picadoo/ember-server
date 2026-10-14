@@ -1,0 +1,362 @@
+# TIP-DD / D13335 · 精选结算「下一环」薄页 · featured_settle*
+# 入口：FeaturedPath.afterSettle + Settle D794 周帽满 → /ember_p1_featured_settle（插件并行改开菜单）
+# 再进：corerpg p1 enter %corerpg_p1_featured_settle_map% [challenge] · 精选路径 featurepath challenge|normal|clear
+# 硬本路径薄格：challengepath prefer|easy|follow|clear · 图装追 mapfarm
+# 禁：教裸指令主 UI · 抬掉落/体力价/周帽 · 改已齐 settle / 庭内 / Cast/Aid/variety
+# PAPI（插件可能后到·静态接线）：featured_settle_map/name/line/week_left/week_line · featured_path / featured_path_label · challenge_path / challenge_path_label
+
+Title: '§b精选 · 下一环'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_featured_settle'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#E#A#F#M#'
+  - '#1#2#C##'
+  - '#P#Q#R#K#'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §b精选下一环 §7· %corerpg_p1_featured_settle_line%'
+    - 'tell: §7路径：§e%corerpg_p1_featured_path_label% §8· 周帽 %corerpg_p1_featured_settle_week_line% §8· 点选再进 / 换路径 / 冒险 / 花料'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: paper
+      name: '§b精选下一环'
+      lore:
+        - '§7本周：§f%corerpg_p1_featured_settle_name%'
+        - '§7精选路径：§e%corerpg_p1_featured_path_label%'
+        - '§7周帽：§f%corerpg_p1_featured_settle_week_line%'
+        - '§8点选 · 再进 / 换精选·硬本路径 / 冒险 / 工坊 / 图装追'
+
+  # 再进精选同图 · 真 enter（路径挑战→challenge；普通→无后缀）
+  E:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_featured_settle_week_left% <= 0'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7再进精选同图 §8（周帽已满）'
+          lore:
+            - '§a本周周帽已满 §7· 再进灰'
+            - '§7本周：§f%corerpg_p1_featured_settle_week_line%'
+            - '§7图：§f%corerpg_p1_featured_settle_name%'
+            - '§8仍可换路径 / 冒险 / 工坊 · 周一 0 点重置'
+      - condition: 'check papi %corerpg_p1_featured_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7再进精选同图 §8（先选路径）'
+          lore:
+            - '§c尚未选精选路径'
+            - '§7点下方 精选·挑战 / 精选·普通 定焦点'
+            - '§8选好后再进 · 勿假开'
+      - condition: 'check papi %corerpg_p1_featured_path% == 1'
+        priority: 3
+        display:
+          material: emerald
+          name: '§a再进精选同图 §8· §c挑战'
+          lore:
+            - '§7本图：§f%corerpg_p1_featured_settle_name%'
+            - '§7路径：§e%corerpg_p1_featured_path_label% §7· 周帽 %corerpg_p1_featured_settle_week_line%'
+            - '§8点进 · 真进挑战精选 · §e➥进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 enter %corerpg_p1_featured_settle_map% challenge'
+            - close
+    display:
+      material: emerald
+      name: '§a再进精选同图'
+      lore:
+        - '§7本图：§f%corerpg_p1_featured_settle_name%'
+        - '§7路径：§e%corerpg_p1_featured_path_label% §7· 周帽 %corerpg_p1_featured_settle_week_line%'
+        - '§8点进 · 真进普通精选 · §e➥进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter %corerpg_p1_featured_settle_map%'
+        - close
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊花料'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  # 图装追 · 真 mapfarm（禁发明新追猎经济）
+  M:
+    display:
+      material: map
+      name: '§e图装追'
+      lore:
+        - '§7本图：§f%corerpg_p1_featured_settle_name%'
+        - '§7刷同族补件 · 既有追猎'
+        - '§e➥ §f图装追'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 mapfarm'
+        - close
+
+  # 精选路径 · 挑战
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_featured_path% == 1'
+        priority: 1
+        display:
+          material: redstone
+          shiny: true
+          name: '§a精选·挑战 §8· §f已选'
+          lore:
+            - '§7打本周精选挑战 · 吃周规则与精选印记'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 featurepath challenge'
+            - 'menu: ember_p1_featured_settle'
+    display:
+      material: redstone
+      name: '§c精选·挑战'
+      lore:
+        - '§7打本周精选挑战 · 吃周规则与精选印记'
+        - '§8点选切换精选路径'
+        - '§e➥ §f设为精选·挑战'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 featurepath challenge'
+        - 'menu: ember_p1_featured_settle'
+
+  # 精选路径 · 普通
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_featured_path% == 2'
+        priority: 1
+        display:
+          material: light blue dye
+          shiny: true
+          name: '§a精选·普通 §8· §f已选'
+          lore:
+            - '§7打本周精选普通 · 练名片/掉落偏 · 控强度'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 featurepath normal'
+            - 'menu: ember_p1_featured_settle'
+    display:
+      material: light blue dye
+      name: '§b精选·普通'
+      lore:
+        - '§7打本周精选普通 · 练名片/掉落偏 · 控强度'
+        - '§8点选切换精选路径'
+        - '§e➥ §f设为精选·普通'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 featurepath normal'
+        - 'menu: ember_p1_featured_settle'
+
+  # 清空精选路径
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_featured_path% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空精选路径 §8（未选）'
+          lore:
+            - '§7当前无精选路径焦点'
+            - '§8先点 精选·挑战 / 精选·普通'
+    display:
+      material: barrier
+      name: '§7清空精选路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_featured_path_label%'
+        - '§8清焦点 · 可重选'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 featurepath clear'
+        - 'menu: ember_p1_featured_settle'
+
+  # 硬本路径 · 偏挑战
+  P:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_challenge_path% == 1'
+        priority: 1
+        display:
+          material: redstone
+          shiny: true
+          name: '§a偏挑战 §8· §f已选'
+          lore:
+            - '§7硬本路径 · 已首通主线图默认进挑战版'
+            - '§a当前硬本焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 challengepath prefer'
+            - 'menu: ember_p1_featured_settle'
+    display:
+      material: nether wart
+      name: '§c硬本·偏挑战'
+      lore:
+        - '§7已首通主线图默认进挑战版'
+        - '§8点选切换硬本路径'
+        - '§e➥ §f设为偏挑战'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 challengepath prefer'
+        - 'menu: ember_p1_featured_settle'
+
+  # 硬本路径 · 偏普通
+  Q:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_challenge_path% == 2'
+        priority: 1
+        display:
+          material: emerald
+          shiny: true
+          name: '§a偏普通 §8· §f已选'
+          lore:
+            - '§7硬本路径 · 已首通主线图默认进普通版'
+            - '§a当前硬本焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 challengepath easy'
+            - 'menu: ember_p1_featured_settle'
+    display:
+      material: lime dye
+      name: '§a硬本·偏普通'
+      lore:
+        - '§7已首通主线图默认进普通版'
+        - '§8点选切换硬本路径'
+        - '§e➥ §f设为偏普通'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 challengepath easy'
+        - 'menu: ember_p1_featured_settle'
+
+  # 硬本路径 · 随令
+  R:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_challenge_path% == 3'
+        priority: 1
+        display:
+          material: light blue dye
+          shiny: true
+          name: '§a随令 §8· §f已选'
+          lore:
+            - '§7硬本路径 · 完全按进本指令 · 写 challenge 才挑战'
+            - '§a当前硬本焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 challengepath follow'
+            - 'menu: ember_p1_featured_settle'
+    display:
+      material: cyan dye
+      name: '§b硬本·随令'
+      lore:
+        - '§7完全按进本指令 · 写 challenge 才挑战'
+        - '§8点选切换硬本路径'
+        - '§e➥ §f设为随令'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 challengepath follow'
+        - 'menu: ember_p1_featured_settle'
+
+  # 清空硬本路径
+  K:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_challenge_path% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空硬本路径 §8（未选）'
+          lore:
+            - '§7当前无硬本路径焦点'
+            - '§8先点 偏挑战 / 偏普通 / 随令'
+    display:
+      material: barrier
+      name: '§7清空硬本路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_challenge_path_label%'
+        - '§8清焦点 · 可重选'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 challengepath clear'
+        - 'menu: ember_p1_featured_settle'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
