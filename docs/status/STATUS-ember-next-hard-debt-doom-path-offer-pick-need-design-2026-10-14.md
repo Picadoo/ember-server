@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EO CLOSED** live（D13372 卡点路径选打齐 · feat `666909038` · tip `ea22f6140` · jar `1.65.865-d13372.local` · PASS `375570391` · 批 sha `ea22f6140` · menu tip `a6ed60e6c` · CLOSED `f4fcc3e60` · 证据 `/workspace/tmp/tip-eo-nest-path/` · **卡点路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **DoomPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EO 选打勿复；PacePath（本仓无）后置；本窗只钉 Doom 一支 · Focus D597+ 等另窗证据逐支（禁全族大扫 · 禁与 Focus/Hurry/Stock/Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip thin · **待批 A** · 荐 M · docs-only · 勿勾 CLOSED
+**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `5b629e8af` · 2026-10-14 22:06 Asia/Shanghai · 勿勾 CLOSED · 可施工
 **硬规格：** [`DESIGN-ember-doom-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-doom-path-offer-pick-visible-2026-10-14.md) · backlog `B-doom-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EO 已齐；灾临**选打**仍 ConfirmTokens 教裸 doompath——总控钉死本支；内容闭环断在灾临路径选打（≠卡点选打；≠ settle 同题；局内灾临钮≠选打页）。
 
@@ -59,11 +59,11 @@
 | tip（本文件） | `docs/status/STATUS-ember-next-hard-debt-doom-path-offer-pick-need-design-2026-10-14.md` |
 | DESIGN | `docs/design/DESIGN-ember-doom-path-offer-pick-visible-2026-10-14.md` |
 | RESEARCH | `docs/design/RESEARCH-ember-doom-path-offer-pick-visible-2026-10-14.md` |
-| 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-14.md` |
+| 薄 tip | `docs/tips/TIP-ember-doom-path-offer-pick-visible-thin-d13373-2026-10-14.md` |
 | backlog | `B-doom-path-offer-pick-visible` |
-| 号段 | **D13373** · 字母窗 **TIP-EP** · STATUS=**待批 A** · 荐 M |
+| 号段 | **D13373** · 字母窗 **TIP-EP** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `5b629e8af` · 2026-10-14 22:06 Asia/Shanghai · 勿勾 CLOSED |
 | 上游 | TIP-EO CLOSED live `f4fcc3e60` · feat `666909038` · tip `ea22f6140` · PASS `375570391` · jar `1.65.865-d13372.local` · 批 sha `ea22f6140` · menu tip `a6ed60e6c` · D13372；半行 REJECT `d00ed84bc` 保持否决；卡点路径选打菜单化同题勿再交 |
 
-*选题 DoomPath.offerPick / applyAndReply 灾临路径选打菜单化 · tip **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13373 · TIP-EP · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Doom 一支 · Focus D597+ 等另窗证据逐支（禁全族大扫 · 禁与 Focus/Hurry/Stock/Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EO CLOSED `f4fcc3e60` · 2026-10-14 22:04 Asia/Shanghai.*
+*选题 DoomPath.offerPick / applyAndReply 灾临路径选打菜单化 · tip **已批 A** · 方案 M · APPROVED A·M · tip `5b629e8af` · 勿勾 CLOSED · L不批 · D13373 · TIP-EP · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Doom 一支 · Focus D597+ 等另窗证据逐支（禁全族大扫 · 禁与 Focus/Hurry/Stock/Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EO CLOSED `f4fcc3e60` · 2026-10-14 22:06 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13373 · TIP-EP · 2026-10-14 22:04 Asia/Shanghai
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `5b629e8af` · 勿勾 CLOSED · L不批 · D13373 · TIP-EP · 2026-10-14 22:06 Asia/Shanghai
