@@ -1,6 +1,6 @@
 # STATUS · TIP-DL W1a 破绽路径选打菜单化 · D13343
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · 勿勾 tip CLOSED · 待测岗/物品 W1b
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `2b54c0d0b` · tip `7490a03eb` · 总控收口 2026-10-14 12:59 Asia/Shanghai
 
 ## 交付
 - feat: `2b7617600`
@@ -13,7 +13,7 @@
 - jar：`1.65.836-d13343.local` · sha256 `8961daa00067…` · ECONOMY_BV **123** 未动
 - play：live `1.65.836-d13343.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / 破绽眩晕加秒表(D480 +0.12s) / 破绽规则语义(wall/whiff/break) / Cast·Aid / variety / 已齐 settle 薄页 / Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Stride / 庭内 / TrMenu yml（物品 W1b 并行）
-- **勿勾 tip CLOSED**
+- **勾毕 CLOSED live** · PASS `2b54c0d0b` · 总控收口 2026-10-14 12:59 Asia/Shanghai
 
 ## 落点
 - `EmberCounterPath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine
@@ -30,4 +30,12 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_counter_path`）
 
 ## 下步
-- 物品 W1b 薄页 `ember_p1_counter_path` · 测岗抽测 · 总控收口 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-DL spot）
+- **PASS** · 2026-10-14 12:59 Asia/Shanghai · 证据 `/workspace/tmp/tip-dl-counter-path/` · 详 `STATUS-ember-counter-path-offer-pick-tip-dl-spot-d13343-2026-10-14.md`
+- live jar `1.65.836-d13343.local` · feat `2b7617600` · tip `7490a03eb` · 批 `7490a03eb` · 破绽路径选打菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `2b7617600` · 证据 `/workspace/tmp/tip-dl-counter-path/` · STATUS `2b54c0d0b`
+- **CLOSED live**（总控收口）· tip `7490a03eb` · jar `1.65.836-d13343.local`

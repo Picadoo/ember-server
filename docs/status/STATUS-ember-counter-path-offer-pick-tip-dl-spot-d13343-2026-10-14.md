@@ -1,7 +1,7 @@
 # 状态 · TIP-DL 破绽路径选打菜单化抽测
 
 **裁决：** **PASS** · feat `2b7617600` · menu tip `c2b3b37bd` · tip/批 `7490a03eb` · jar `1.65.836-d13343.local` · 证据 `/workspace/tmp/tip-dl-counter-path/`  
-**范围：** offerPick / 无参 counterpath / 周要约 → 开 `ember_p1_counter_path`（**禁** ConfirmTokens 教 counterpath 为主 UI）· 薄页撞墙/落空/破招/清空/进本/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `counter_path_*` 诚实 · Q02 灰态+亮态 · **零改**伤害/CD表/掉落/体力价/破绽眩晕加秒表(+0.12s) · **零改** `ember_p1_pledge_path` / `ember_p1_trial_path` 及其他已齐 path · **≠**已齐选打同题复读 · **勿勾 tip CLOSED**（总控收口）· 2026-10-14 12:58 Asia/Shanghai
+**范围：** offerPick / 无参 counterpath / 周要约 → 开 `ember_p1_counter_path`（**禁** ConfirmTokens 教 counterpath 为主 UI）· 薄页撞墙/落空/破招/清空/进本/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `counter_path_*` 诚实 · Q02 灰态+亮态 · **零改**伤害/CD表/掉落/体力价/破绽眩晕加秒表(+0.12s) · **零改** `ember_p1_pledge_path` / `ember_p1_trial_path` 及其他已齐 path · **≠**已齐选打同题复读 · **勾毕 CLOSED live**（总控收口 · 2026-10-14 12:59 Asia/Shanghai)
 
 ## 必验
 
@@ -18,11 +18,11 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **91**（含 `ember_p1_counter_path`）· jar sha256 `8961daa00067…` plugins=server-runtime · MySQL connected · bv123
 - 单测 `EmberCounterPathPickTest`（8）/ `EmberCounterPathTest` / RunPapi 绿
-- 44/44 PASS · tip **勿勾 CLOSED**（总控收口）
+- 44/44 PASS · tip **勾毕 CLOSED live**（总控收口）
 - 选打主 UI = `ember_p1_counter_path`；未教裸 counterpath/enter；未复读誓约/试炼/深渊等选打
 
 ## 纪律确认
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · rot weekly_cap=3 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改伤害/CD表/掉落/体力价/破绽眩晕加秒表(+0.12s)/pledge_path/trial_path/abyss·short·raid·featured·challenge path/variety/soft-reward · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `2b7617600` · menu tip `c2b3b37bd` · tip `7490a03eb` · jar `1.65.836-d13343.local` · **勿勾 CLOSED**（总控收口）· 2026-10-14 12:58 Asia/Shanghai
+> **测岗抽测：** PASS live · feat `2b7617600` · menu tip `c2b3b37bd` · tip `7490a03eb` · jar `1.65.836-d13343.local` · **CLOSED live**（总控收口）· 2026-10-14 12:59 Asia/Shanghai

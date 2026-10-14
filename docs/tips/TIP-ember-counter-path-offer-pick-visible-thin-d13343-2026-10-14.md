@@ -1,11 +1,11 @@
 # tip · TIP-DL CounterPath.offerPick / applyAndReply「破绽路径选打」菜单化（选路径聊天钮去指令化 · ≠誓约路径选打同题 · ≠试炼/深渊/短征/团本/硬本/精选路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价/破绽眩晕加秒表 · ≠全族 *Path.offerPick 大扫 · ≠步态同窗 · ≠复开 D480 玩法本体）· 拟 D13343
 
-> **状态：** **抽测 PASS** · APPROVED A·M · D13343 · TIP-DL · feat `2b7617600` · menu `c2b3b37bd` · jar `1.65.836-d13343.local` · L不批 · **勿勾 CLOSED**（总控收口）· 零改伤害/CD表/掉落/体力价/破绽眩晕加秒表 · offerPick/无参 counterpath/周要约→开 ember_p1_counter_path · 清 ConfirmTokens 教 counterpath 主 UI · 2026-10-14 12:58 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `2b7617600` · tip `7490a03eb` · jar `1.65.836-d13343.local` · PASS `2b54c0d0b` · 批 sha `7490a03eb` · menu tip `c2b3b37bd` · 证据 `/workspace/tmp/tip-dl-counter-path/` · 2026-10-14 12:59 Asia/Shanghai · 破绽路径选打菜单化同题勿再交
 > **DESIGN** [`DESIGN-ember-counter-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-counter-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-counter-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（CounterPath.offerPick / applyAndReply / 无参 counterpath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_counter_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零誓约路径选打同题复读（TIP-DK） · 零试炼/深渊/短征/团本/硬本/精选路径选打同题复读（TIP-DJ–DE） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价/破绽眩晕加秒表 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零步态同窗 · 零复开 D480 玩法本体
 > **ancestor：** TIP-DK CLOSED live `dc3d50522`（feat `42fc81f49` · tip `6ee232766` · PASS `14a003c56` · jar `1.65.835-d13342.local` · 批 sha `6ee232766` · menu tip `fb95767dd`）
-> **下一窗提示（旁注）：** 步态 StridePath 等 *Path.offerPick **逐支**（禁全族大扫）/ 挂机若新硬债 / legacy evacuate 后置
+> **下一窗提示（旁注）：** 步态 StridePath 等 *Path.offerPick 逐支（禁全族大扫）/ 挂机若新硬债 / legacy evacuate 后置
 
 ## 一句话
 周选/改破绽路径时一点开「破绽路径」薄页：撞墙 / 落空 / 破招 / 清空 / 进本练破绽 / 冒险可点；清 ConfirmTokens 教 `counterpath`/`enter` 主 UI；伤害·CD表·掉落·体力价·破绽眩晕加秒表不动。
@@ -37,6 +37,6 @@
 - [x] 总控批 A·M · 2026-10-14 12:46 Asia/Shanghai
 - [x] 插件交 offerPick / applyAndReply / 无参 counterpath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat `2b7617600` · jar `1.65.836-d13343.local`
 - [x] 物品交薄 counter_path 页 + TrMenu reload · menu `c2b3b37bd` · TrMenu **91**
-- [x] 抽测 PASS live · STATUS spot · 证据 `/workspace/tmp/tip-dl-counter-path/` · **勿勾 CLOSED**（总控收口）
+- [x] 抽测 PASS live（选撞墙/落空/破招/清空/进本/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价/破绽眩晕加秒表·零改 pledge_path·零已齐选打同题复读）· STATUS-ember-counter-path-offer-pick-tip-dl-spot-d13343-2026-10-14.md · PASS `2b54c0d0b` · 证据 `/workspace/tmp/tip-dl-counter-path/` · **CLOSED by 总控**
 
-## STATUS: **抽测 PASS** · APPROVED A·M · feat `2b7617600` · menu `c2b3b37bd` · jar `1.65.836-d13343.local` · **勿勾 CLOSED**（总控收口）· L不批 · D13343 · TIP-DL · 2026-10-14 12:58 Asia/Shanghai
+## STATUS: **CLOSED live** · `2b7617600` / `c2b3b37bd` · PASS `2b54c0d0b` · jar `1.65.836-d13343.local` · D13343 · TIP-DL · 2026-10-14 12:59 Asia/Shanghai · 破绽路径选打菜单化同题勿再交

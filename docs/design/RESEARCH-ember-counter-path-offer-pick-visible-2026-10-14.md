@@ -1,6 +1,6 @@
 # RESEARCH · CounterPath.offerPick / applyAndReply「破绽路径选打」菜单化 · 拟 D13343 · TIP-DL
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13343 · TIP-DL · 可施工 · 勿勾 CLOSED · 2026-10-14 12:46 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `2b7617600` · tip `7490a03eb` · PASS `2b54c0d0b` · jar `1.65.836-d13343.local` · 批 sha `7490a03eb` · TIP-DL · 2026-10-14 12:59 Asia/Shanghai · 破绽路径选打菜单化同题勿再交 · 下一窗：步态 StridePath 等 *Path.offerPick 逐支（禁全族大扫）/ 挂机若新硬债 / legacy evacuate 后置；破绽路径选打本支已齐
 > **起因：** 总控【派下一窗 tip · ancestor TIP-DK CLOSED】。祖先 TIP-DK CLOSED live `dc3d50522` · feat `42fc81f49` · jar `1.65.835-d13342.local` · PASS `14a003c56` · menu `fb95767dd` · APPROVED `6ee232766`。DESIGN-DK §6⑦ 明文后置破绽/步态等 *Path.offerPick 逐支另窗。选题闸：①挂机庭资源环加厚（须新硬债；旁路近饱和·gem gap 未亮则跳过）②短征日更乐趣（非sx20；非已齐路径）③若无新硬债：只钉一支剩余路径选打（Counter/Stride 等，以 ConfirmTokens 教裸指令证据选一支）· 镜像 DE–DK。**禁：** 半行独批 · 已齐 settle/选打同题复读 · 抬伤害/CD表/掉落/体力价 · sx20 / densify / Pack6 / 开 K3 / 关观察 · variety 完整经济 / Cast·Aid 再拧 / 庭内旁路 · 教裸指令主 UI · 全族 Path 大扫。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-DK CLOSED live `dc3d50522` · feat `42fc81f49` · tip `6ee232766` · PASS `14a003c56` · jar `1.65.835-d13342.local` · 批 sha `6ee232766` · menu tip `fb95767dd` · D13342
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · CounterPath.offerPick / applyAndReply 破绽路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DL / D13343 · 半行 REJECT `d00ed84bc` 保持 · 步态后置 · ancestor TIP-DK CLOSED `dc3d50522` · 2026-10-14 12:46 Asia/Shanghai.*
+*RESEARCH · CounterPath.offerPick / applyAndReply 破绽路径选打菜单化 · **CLOSED live** · `2b7617600` / `7490a03eb` · PASS `2b54c0d0b` · TIP-DL / D13343 · 半行 REJECT `d00ed84bc` 保持 · 破绽路径选打菜单化同题勿再交 · 下一窗：步态 StridePath 等 *Path.offerPick 逐支（禁全族大扫）/ 挂机若新硬债 / legacy evacuate 后置；破绽路径选打本支已齐.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13343 · TIP-DL · 2026-10-14 12:46 Asia/Shanghai
+## STATUS: **CLOSED live** · `2b7617600` / `7490a03eb` · PASS `2b54c0d0b` · D13343 · TIP-DL · 2026-10-14 12:59 Asia/Shanghai
