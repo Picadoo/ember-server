@@ -114,6 +114,7 @@ public final class EmberRunPapi {
         if ("short_div".equals(key) || key.startsWith("short_div_")) return Section.SHORT; // TIP-CU D13326
         if ("short_path".equals(key) || key.startsWith("short_path_")) return Section.SHORT; // TIP-CV D13327
         if ("short_settle".equals(key) || key.startsWith("short_settle_")) return Section.SHORT; // TIP-CW D13328
+        if ("short_var".equals(key) || key.startsWith("short_var_")) return Section.SHORT; // TIP-CY D13330
         if ("today_triple".equals(key) || "today_triple_name".equals(key) || "today_triple_kind".equals(key) || "today_triple_ok".equals(key)) return Section.SHORT; // TIP-CH D13313
         if ("awaken_route".equals(key) || isLoadoutKey(key)) return Section.LOADOUT;
         if (key.startsWith("codex") || "codex_hope".equals(key)) return Section.CODEX;
@@ -176,6 +177,7 @@ public final class EmberRunPapi {
     static boolean isShortDayKey(String key) {
         if (key == null) return false;
         if ("short_settle".equals(key) || key.startsWith("short_settle_")) return true; // TIP-CW D13328
+        if ("short_var".equals(key) || key.startsWith("short_var_")) return true; // TIP-CY D13330
         if ("sx_day_left_sum".equals(key)) return true;
         if ("sx_fc_left".equals(key) || "sx_fc_pending_line".equals(key) || "sx_fc_hope".equals(key)) return true; // D406/D634
         if ("sx_today".equals(key) || "sx_today_name".equals(key) || "sx_today_day_line".equals(key)) return true; // TIP-CD D13309
@@ -425,6 +427,9 @@ public final class EmberRunPapi {
         if ("short_settle".equals(key) || (key != null && key.startsWith("short_settle_"))) { // TIP-CW D13328
             return shortSettle(d, key, maps, shortEx);
         }
+        if ("short_var".equals(key) || (key != null && key.startsWith("short_var_"))) { // TIP-CY D13330
+            return shortVariety(d, key);
+        }
         if ("today_triple".equals(key) || "today_triple_name".equals(key)
                 || "today_triple_kind".equals(key) || "today_triple_ok".equals(key)) { // TIP-CH D13313
             return todayTriple(d, key, maps, shortEx);
@@ -546,6 +551,16 @@ public final class EmberRunPapi {
         }
         // short_div_chase_day_line
         return EmberShortRules.dayLine(rewardedFor(d, maps, shortEx, chase), capFor(maps, shortEx, chase));
+    }
+
+
+    /** TIP-CY D13330 %corerpg_p1_short_var*% — last settled short variety labels; zero economy. */
+    private String shortVariety(PlayerData d, String key) {
+        if ("short_var_hit".equals(key)) return EmberShortVarietySettle.hitBit(d);
+        if ("short_var_affix_label".equals(key)) return EmberShortVarietySettle.affixLabel(d);
+        if ("short_var_event_label".equals(key)) return EmberShortVarietySettle.eventLabel(d);
+        if ("short_var_line".equals(key) || "short_var".equals(key)) return EmberShortVarietySettle.line(d);
+        return "";
     }
 
     /** TIP-CW D13328 %corerpg_p1_short_settle*% — last settled short map + day leftover; zero economy. */

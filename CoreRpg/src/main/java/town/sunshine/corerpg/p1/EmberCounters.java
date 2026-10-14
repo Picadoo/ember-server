@@ -560,6 +560,9 @@ public final class EmberCounters {
         px("p1_sig_charge_first", "EmberSigChargeFirst", A, PR, NV, "D7617 sig charge first day");
         px("p1_short_blank_boost", "EmberShortBlankBoost", A, PR, NV, "D7681 short blank boost day");
         px("p1_short_div_soft_claim", "EmberShortDayDivSoftClaim", A, PR, NV, "D13329 short day-div soft claim day");
+        x("p1_short_var_affix", "EmberShortVarietySettle", A, PR, NV, "D13330 short variety settle affix@all");
+        x("p1_short_var_event", "EmberShortVarietySettle", A, PR, NV, "D13330 short variety settle event@all");
+        x("p1_short_settle_last", "EmberShortSettle", A, PR, NV, "D13328 short settle last map@all");
         px("p1_brand_auto_pin_", "EmberBrandSure", A, PR, NV, "D5025 craft→path auto-pin latch");
         px("p1_marks_awk_auto_t", "EmberMarksBreak", D, HI, OW, "D4513 marks awaken auto-redeem per tier@day");
         px("p1_awk_break_", "EmberAwakenBreak", A, PR, NV, "D4385 awakening breakthrough latch I..III");

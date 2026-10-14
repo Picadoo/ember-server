@@ -56,7 +56,9 @@ public final class EmberRunPapiTest {
                 "short_div_chase_day_line", "short_div_chase_ok", "short_div_done",
                 "short_div_claim_ok", "short_div_claimed", "short_div_claim_line",
                 "short_path", "short_path_label", "short_path_tip", "short_path_resolve", "short_path_resolve_name",
-                "short_path_ok", "short_path_line"); // D395+…+TIP-CU + TIP-CV + TIP-CX D13329
+                "short_path_ok", "short_path_line",
+                "short_settle", "short_settle_map", "short_settle_name", "short_settle_day_left", "short_settle_day_line",
+                "short_var_hit", "short_var_affix_label", "short_var_event_label", "short_var_line"); // D395+…+TIP-CY D13330
         r(VAULT, "vault_shard", "vault_bone", "vault_core", "vault_blank", "recipe_gap_enhance1", "recipe_gap_upgrade_t2", "recipe_gap_refine1"); // D404
         r(MAP, "q01_state", "q07_fc", "r01_name", "q01_nosuch", "nosuch", "", null, "sx01_state", "sx02_open", "sx01_fc", "sx02_fc", "sx03_fc", "sx04_fc", "sx05_fc", "sx06_fc", "sx07_fc", "sx08_fc", "sx09_fc", "sx10_fc", "sx11_fc", "sx12_fc", "sx13_fc", "sx14_fc", "sx15_fc", "sx16_fc", "sx17_fc", "sx18_fc", "sx19_fc"); // D406…D428 nineteen _fc → MAP
     }
@@ -101,6 +103,12 @@ public final class EmberRunPapiTest {
         assertEquals(SHORT, EmberRunPapi.route("short_path_resolve_name"));
         assertEquals(SHORT, EmberRunPapi.route("short_path_ok"));
         assertEquals(SHORT, EmberRunPapi.route("short_path_line"));
+        assertEquals(SHORT, EmberRunPapi.route("short_settle")); // TIP-CW
+        assertEquals(SHORT, EmberRunPapi.route("short_settle_map"));
+        assertEquals(SHORT, EmberRunPapi.route("short_var_hit")); // TIP-CY D13330
+        assertEquals(SHORT, EmberRunPapi.route("short_var_affix_label"));
+        assertEquals(SHORT, EmberRunPapi.route("short_var_event_label"));
+        assertEquals(SHORT, EmberRunPapi.route("short_var_line"));
         assertEquals(BOARD, EmberRunPapi.route("top_featured_1"));
         assertEquals(ABYSS, EmberRunPapi.route("abyss_best"));  // before abyss_t*
         assertEquals(ABYSS, EmberRunPapi.route("abyss_tier"));  // abyss_t* (parse fails → "")

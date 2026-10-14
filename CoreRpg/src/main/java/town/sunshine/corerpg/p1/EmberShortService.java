@@ -116,6 +116,7 @@ public final class EmberShortService {
         if (r.fresh && m != null && m.key != null) {
             try { EmberShortSettle.remember(pd, m.key); } catch (Throwable ignored) { } // TIP-CW D13328 PAPI
         }
+        try { EmberShortVarietySettle.remember(pd, s); } catch (Throwable ignored) { } // TIP-CY D13330 short_var_*
         runs.plugin().getDataStore().flushMutation(u);
         // D401: optional weekly goal short — Q07 gate inside addGoal; 4+/fail (pays=false) skipped
         if (countsTowardShortGoal(r) && runs.season() != null) {
