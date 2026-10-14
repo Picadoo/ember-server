@@ -1,9 +1,9 @@
 # 状态 · TIP-EA 压伤路径选打菜单化抽测
 
-> **抽测 PASS · tip 勿勾 CLOSED（总控收口）** · feat `afa2cf969` · tip批 `1b4f236e6` · menu `9a9c42d6e` · jar `1.65.851-d13358.local` · 2026-10-14 Asia/Shanghai · ancestor TIP-DZ CLOSED live
+> **抽测 PASS · tip CLOSED live（总控已收口）** · feat `afa2cf969` · tip批 `1b4f236e6` · menu `9a9c42d6e` · jar `1.65.851-d13358.local` · 2026-10-14 Asia/Shanghai · ancestor TIP-DZ CLOSED live
 
 **裁决：** **PASS** · 2026-10-14 17:42 Asia/Shanghai · feat `afa2cf969` · menu tip `9a9c42d6e` · tip/批 `1b4f236e6` · jar `1.65.851-d13358.local` · sha12 `cc8e2bc95a47` · 证据 `/workspace/tmp/tip-ea-press-path/`  
-**范围：** offerPick / 无参 presspath / 周要约 → 开 `ember_p1_press_path`（**禁** ConfirmTokens 教 presspath 为主 UI）· 薄页自动/提醒/静默/清空/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `press_path_*` 诚实 · Q01 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_cut_path` / `ember_p1_rush_path` / `ember_p1_clean_path` / `ember_p1_streak_path` / `ember_p1_blaze_path` / `ember_p1_spin_path` / `ember_p1_snap_path` / `ember_p1_veil_path` / `ember_p1_free_path` 及其他已齐 path · **零改** D581 压伤「压伤」战斗钮语义 · **零**新建 `ember_p1_pace_path` · **≠**已齐选打同题复读 · **勿勾 tip CLOSED**（总控收口）
+**范围：** offerPick / 无参 presspath / 周要约 → 开 `ember_p1_press_path`（**禁** ConfirmTokens 教 presspath 为主 UI）· 薄页自动/提醒/静默/清空/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `press_path_*` 诚实 · Q01 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_cut_path` / `ember_p1_rush_path` / `ember_p1_clean_path` / `ember_p1_streak_path` / `ember_p1_blaze_path` / `ember_p1_spin_path` / `ember_p1_snap_path` / `ember_p1_veil_path` / `ember_p1_free_path` 及其他已齐 path · **零改** D581 压伤「压伤」战斗钮语义 · **零**新建 `ember_p1_pace_path` · **≠**已齐选打同题复读 · **tip CLOSED live**（总控已收口）
 
 ## 必验
 
@@ -29,4 +29,4 @@
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · rot weekly_cap=3 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改伤害/CD表/掉落/体力价/cut_path/rush_path/clean_path/streak_path/blaze_path/spin_path/snap_path/veil_path/free_path/dodge_path/sidestep_path/step_path/flex_path/stride_path/counter_path/pledge_path/trial_path/abyss·short·raid·featured·challenge path/variety/soft-reward · 零改 D581 压伤战斗钮 · 零新建 pace_path · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB（抽测中误发 proxy end 后已按 start.sh 拉回，play/login 未动）
 
-> **测岗抽测：** PASS live · feat `afa2cf969` · menu tip `9a9c42d6e` · tip `1b4f236e6` · jar `1.65.851-d13358.local` · **勿勾 CLOSED**（总控收口）
+> **测岗抽测：** PASS live · feat `afa2cf969` · menu tip `9a9c42d6e` · tip `1b4f236e6` · jar `1.65.851-d13358.local` · **CLOSED live**（总控已收口）
