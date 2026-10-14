@@ -1,8 +1,9 @@
 # STATUS · TIP-EH W1a 侧安路径选打菜单化 · D13365
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · jar `1.65.858-d13365.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `65ae19a37` · jar `1.65.858-d13365.local`
 
 ## 交付
+- feat: `65ae19a37f84b11d8ab5492cb2d4153bb6a9e4b9`
 - `EmberShiftPath.offerPick` →开 `/ember_p1_shift_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `shiftpath` 为主 UI
 - 无参 `/corerpg p1 shiftpath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_shift_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `shiftpath` ConfirmTokens 为主 UI
