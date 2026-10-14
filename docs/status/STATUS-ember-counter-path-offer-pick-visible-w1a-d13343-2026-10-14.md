@@ -3,7 +3,7 @@
 > 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · 勿勾 tip CLOSED · 待测岗/物品 W1b
 
 ## 交付
-- feat: 
+- feat: `2b7617600`
 - `EmberCounterPath.offerPick` →开 `/ember_p1_counter_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `counterpath` 为主 UI
 - 无参 `/corerpg p1 counterpath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ02` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_counter_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `counterpath`/`enter` ConfirmTokens 为主 UI
