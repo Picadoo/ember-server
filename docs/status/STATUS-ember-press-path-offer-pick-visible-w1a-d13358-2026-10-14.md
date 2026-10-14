@@ -1,9 +1,9 @@
 # STATUS · TIP-EA W1a 压伤路径选打菜单化 · D13358
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `4d204659e` · jar `1.65.851-d13358.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `afa2cf969` · jar `1.65.851-d13358.local`
 
 ## 交付
-- feat: `4d204659e`（commit 后钉死）
+- feat: `afa2cf969`（commit 后钉死）
 - `EmberPressPath.offerPick` →开 `/ember_p1_press_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `presspath` 为主 UI
 - 无参 `/corerpg p1 presspath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_press_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `presspath` ConfirmTokens 为主 UI
