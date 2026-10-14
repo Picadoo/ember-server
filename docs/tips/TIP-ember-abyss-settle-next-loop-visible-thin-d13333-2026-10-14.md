@@ -28,8 +28,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 09:34 Asia/Shanghai
-- [ ] 插件交深渊 settle 入口改菜单 + 清裸指令主路径 + 单测
-- [ ] 物品交薄 abyss settle 页 + TrMenu reload（含清 `ember_p1_abyss` Open 教指令旁路）
-- [ ] 抽测 PASS live（再深渊/选层/冒险/工坊真开·PAPI·零抬掉落/体力价/层表）· **勿勾 CLOSED**
+- [x] 插件交深渊 settle 入口改菜单 + 清裸指令主路径 + 单测
+- [x] 物品交薄 abyss settle 页 + TrMenu reload（含清 `ember_p1_abyss` Open 教指令旁路）
+- [x] 抽测 PASS live（再深渊/选层/冒险/工坊真开·PAPI·零抬掉落/体力价/层表）· **勿勾 CLOSED**
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13333 · TIP-DB · 2026-10-14 09:34 Asia/Shanghai
+## STATUS: **抽测 PASS live** · feat `6e22b5d2f` · menu `1d575cf83` · tip `8a3f93564` · jar `1.65.826-d13333.local` · **勿勾 CLOSED**（总控收口）· D13333 · TIP-DB · 2026-10-14 09:49 Asia/Shanghai
