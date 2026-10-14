@@ -28,4 +28,4 @@
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · short target=5 · daycap=3 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零 Cast/Aid/variety/路径追/settle/sx20 · ≠关观察 · 未改 YAML/jar · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `1b93bc6b4` · tip `0749d92c7` · STATUS _(push 后填)_ · **勿勾 CLOSED**（总控收口）· 2026-10-14 08:10 Asia/Shanghai
+> **测岗抽测：** PASS live · feat `1b93bc6b4` · tip `0749d92c7` · STATUS `ed440e0e1` · **勿勾 CLOSED**（总控收口）· 2026-10-14 08:10 Asia/Shanghai
