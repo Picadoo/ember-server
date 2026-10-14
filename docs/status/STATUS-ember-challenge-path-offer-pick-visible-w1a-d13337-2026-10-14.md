@@ -1,6 +1,6 @@
 # STATUS · TIP-DF W1a 硬本路径选打菜单化 · D13337
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交待测** · 勿勾 tip CLOSED
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `6d98cb62a` · tip `17d0f7ddf` · 总控收口 2026-10-14 11:11 Asia/Shanghai
 
 ## 交付
 - `EmberChallengePath.offerPick` →开 `/ember_p1_challenge_path`（`openPathPick` / `PATH_PICK_*`）；**禁**借 `ember_p1_challenge_settle` ConfirmTokens 当选打主 UI
@@ -12,7 +12,7 @@
 - jar：`1.65.830-d13337.local` · sha256 `b34dc2ffa59f…` · feat `5927286ca` · ECONOMY_BV **123** 未动
 - play：live `1.65.830-d13337.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**掉落 / 体力价 / 硬本语义 / Cast·Aid / variety / 已齐 settle 薄页（含 `ember_p1_challenge_settle` / afterSettle）/ FeaturedPath / RaidPath / 庭内 / TrMenu yml（物品 W1b 并行已交 `ember_p1_challenge_path.yml`）
-- **未勾** tip CLOSED · **未派测**（总控派测）
+- **勾毕 CLOSED live** · PASS `6d98cb62a` · 总控收口 2026-10-14 11:11 Asia/Shanghai
 
 ## 落点
 - `EmberChallengePath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/enterCue/menuLine
@@ -29,4 +29,12 @@
 - TrMenu yml（本窗插件未改；W1b 物品已交 `ember_p1_challenge_path.yml`）
 
 ## 下步
-- 测岗抽测 PASS live → 总控收口 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-DF spot）
+- **PASS** · 2026-10-14 11:11 Asia/Shanghai · 证据 `/workspace/tmp/tip-df-challenge-path/` · 详 `STATUS-ember-challenge-path-offer-pick-tip-df-spot-d13337-2026-10-14.md`
+- live jar `1.65.830-d13337.local` · feat `5927286ca` · tip `17d0f7ddf` · 批 `17d0f7ddf` · 硬本路径选打菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `5927286ca` · 证据 `/workspace/tmp/tip-df-challenge-path/` · STATUS `6d98cb62a`
+- **CLOSED live**（总控收口）· tip `17d0f7ddf` · jar `1.65.830-d13337.local`

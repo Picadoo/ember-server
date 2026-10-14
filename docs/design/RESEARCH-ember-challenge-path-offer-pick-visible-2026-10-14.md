@@ -1,6 +1,6 @@
 # RESEARCH · ChallengePath.offerPick / applyAndReply「硬本路径选打」菜单化 · 拟 D13337 · TIP-DF
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13337 · TIP-DF · 可施工 · 勿勾 CLOSED · 2026-10-14 10:59 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `5927286ca` · tip `17d0f7ddf` · PASS `6d98cb62a` · jar `1.65.830-d13337.local` · 批 sha `17d0f7ddf` · TIP-DF · 2026-10-14 11:11 Asia/Shanghai · 硬本路径选打菜单化同题勿再交 · 下一窗：内容优先（挂机若新硬债 / 短征若新薄债 / 其他菜单去指令残留如 RaidPath.offerPick 等另窗逐支 / legacy evacuate 另窗；硬本 settle+选打本支已齐）
 > **起因：** 总控【派·TIP-DF / 拟 D13337】上游 TIP-DE 抽测 PASS `687033a51`（feat `1465d7622` · menu `c161fff0d` · tip `c72e8a964` · jar `1.65.829-d13336` · 证据 `/workspace/tmp/tip-de-featured-path/`）。总控盖 CLOSED；连开写稿。选题优先级：①挂机庭资源环加厚（须新硬债；旁路近饱和·gem gap 未亮则跳过）②短征日更乐趣（非sx20；非已齐路径）③已齐勿复读：各 settle 下一环（CW–DD）+ 精选路径选打（TIP-DE）④菜单去指令残留：可扫 ChallengePath.offerPick / 其他 *Path.offerPick（**逐支另窗，禁全族大扫**）⑤legacy evacuate 后置。若①②无新薄债：优先钉一条有证据的路径选打残留（如硬本路径 offerPick），镜像 TIP-DE。**禁：** 半行独批 · 已齐 settle/精选选打同题复读 · 抬掉落/日帽/体力价 · sx20 / densify / Pack6 / 开 K3 / 关观察 · variety 完整经济 / Cast·Aid 再拧 / 庭内旁路 · 教裸指令主 UI · 全族 Path 大扫。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-DE CLOSED live `678cd409a` · feat `1465d7622` · tip `c72e8a964` · PASS `687033a51` · jar `1.65.829-d13336.local` · 批 sha `c72e8a964` · menu tip `c161fff0d` · D13336
 
@@ -61,6 +61,6 @@
 
 ---
 
-*RESEARCH · ChallengePath.offerPick / applyAndReply 硬本路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DF / D13337 · 半行 REJECT `d00ed84bc` 保持 · ≠ challenge_settle 同题 · ≠ featured_path 选打同题 · ≠图身份/深渊/短征/团本/精选settle同题 · RaidPath 后置 · 2026-10-14 10:59 Asia/Shanghai.*
+*RESEARCH · ChallengePath.offerPick / applyAndReply 硬本路径选打菜单化 · **CLOSED live** · `5927286ca` / `17d0f7ddf` · PASS `6d98cb62a` · TIP-DF / D13337 · 半行 REJECT `d00ed84bc` 保持 · 硬本路径选打菜单化同题勿再交 · 下一窗：内容优先（挂机若新硬债 / 短征若新薄债 / 其他菜单去指令残留如 RaidPath.offerPick 等另窗逐支 / legacy evacuate 另窗；硬本 settle+选打本支已齐）.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13337 · TIP-DF · 2026-10-14 10:59 Asia/Shanghai
+## STATUS: **CLOSED live** · `5927286ca` / `17d0f7ddf` · PASS `6d98cb62a` · D13337 · TIP-DF · 2026-10-14 11:11 Asia/Shanghai
