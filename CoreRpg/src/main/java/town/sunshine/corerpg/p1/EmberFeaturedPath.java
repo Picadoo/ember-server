@@ -13,6 +13,7 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D488: weekly featured-map play path — challenge vs normal.
  * Map identity (名片 hint + loot family) + combat rule choice; chat buttons only.
+ * TIP-DD D13335: afterSettle / D794 下一环开薄页 /ember_p1_featured_settle；禁教手打 enter|featurepath|forge|mapfarm 主 UI。
  * Zero featured marks / rotation rule / AFK / sx change. Not a forge spend-chase.
  */
 public final class EmberFeaturedPath {
@@ -205,17 +206,41 @@ public final class EmberFeaturedPath {
     }
 
     /**
-     * D790: after featured-map clear — path glance + next enter when path set.
+     * D790: after featured-map clear — path glance + next-loop thin page.
+     * TIP-DD D13335: 有路径/无路径皆开 {@link EmberFeaturedSettle#SETTLE_NEXT_LOOP_CMD}；
+     * 记住 settle 图/路径/周帽态；禁 enter/forge/mapfarm 裸指令主 UI。
      * @param featured true when this run map is this week's featured
      * @param rotation true when this clear counted toward weekly rotation marks
      */
     public static void afterSettle(Player p, PlayerData d, boolean featured, boolean challenge, boolean rotation,
                                    String mapKey) {
+        afterSettle(p, d, featured, challenge, rotation, mapKey, false);
+    }
+
+    /**
+     * TIP-DD D13335 overload · weekCapFull 时 D794 已发薄页钮，本处只 glance + remember。
+     * @param weekCapFull true when D794 already announced week-cap-full (skip duplicate buttons)
+     */
+    public static void afterSettle(Player p, PlayerData d, boolean featured, boolean challenge, boolean rotation,
+                                   String mapKey, boolean weekCapFull) {
         if (p == null || !featured || mapKey == null) return;
-        int id = get(d);
+        int id = d == null ? NONE : get(d);
+        // TIP-DD: remember settle 图/路径/周帽态（覆盖）
+        if (d != null)
+            EmberFeaturedSettle.remember(d, mapKey, id, weekCapFull);
         if (!valid(id)) {
-            p.sendMessage(EmberRunService.P + "§7可设精选路径：/corerpg p1 featurepath");
-            offerPick(p, featuredLabelLive(p)); // D801
+            p.sendMessage(EmberRunService.P + "§7可设精选路径 · 点下一环选路径"); // TIP-DD 禁教手打 featurepath
+            if (!weekCapFull) {
+                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7精选下一环：",
+                        new String[]{EmberFeaturedSettle.SETTLE_NEXT_LOOP_LABEL, EmberFeaturedSettle.SETTLE_NEXT_LOOP_CMD,
+                                "再进/换路径/冒险/工坊/图装追", "GREEN"},
+                        new String[]{"[冒险页]", EmberFeaturedSettle.SETTLE_ADVENTURE_CMD, "换内容", "AQUA"},
+                        new String[]{"[工坊]", EmberFeaturedSettle.SETTLE_FORGE_CMD, "花精选料", "GOLD"});
+            }
+            // D795 still when no path
+            CoreRpgPlugin pl0 = plugin();
+            if (pl0 != null && pl0.getEmberRuns() != null)
+                EmberGoalPath.maybeGlance(p, pl0.getEmberRuns(), "featured");
             return;
         }
         boolean match = (id == CHALLENGE && challenge) || (id == NORMAL && !challenge);
@@ -223,13 +248,17 @@ public final class EmberFeaturedPath {
                 ? "§b精选路径 · 入账 §8· " + label(id)
                 : "§e精选路径 §f" + label(id) + " §7· 本局" + (challenge ? "挑战" : "普通");
         if (rotation) line += " §8· 周帽印记";
+        if (weekCapFull) line += " §e· 周帽已满";
         p.sendMessage(EmberRunService.P + line);
         try { p.sendActionBar(line); } catch (Throwable ignored) { }
-        String cmd = enterCmd(id, mapKey);
-        ConfirmTokens.sendButtons(p, EmberRunService.P + "§7精选下一环：", // D881
-                new String[]{enterLabel(id, mapKey), cmd, tip(id), "GREEN"},
-                new String[]{"[工坊]", "/corerpg p1 forge", "花精选料", "GOLD"},
-                new String[]{"[图装追]", "/corerpg p1 mapfarm", "补同族件", "AQUA"});
+        // TIP-DD D13335: 主钮开薄页；工坊→菜单；禁 enter/forge/mapfarm 裸指令
+        if (!weekCapFull) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P + "§7精选下一环：", // D881
+                    new String[]{EmberFeaturedSettle.SETTLE_NEXT_LOOP_LABEL, EmberFeaturedSettle.SETTLE_NEXT_LOOP_CMD,
+                            "再进/换路径/冒险/工坊/图装追", "GREEN"},
+                    new String[]{"[工坊]", EmberFeaturedSettle.SETTLE_FORGE_CMD, "花精选料", "GOLD"},
+                    new String[]{"[冒险页]", EmberFeaturedSettle.SETTLE_ADVENTURE_CMD, "换内容", "AQUA"});
+        }
         // D795: weekly goal focus chase if pinned to featured
         CoreRpgPlugin pl = plugin();
         if (pl != null && pl.getEmberRuns() != null)

@@ -33,7 +33,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 10:22 Asia/Shanghai
-- [ ] 插件交 FeaturedPath.afterSettle + D794 入口改菜单 + 清裸指令主路径 + 单测
+- [x] 插件交 FeaturedPath.afterSettle + D794 入口改菜单 + 清裸指令主路径 + 单测
 - [ ] 物品交薄 featured settle 页 + TrMenu reload
 - [ ] 抽测 PASS（再进/换路径/冒险/工坊真开·PAPI·零抬掉落/体力价/周帽）· **勿勾本窗 CLOSED**
 

@@ -100,6 +100,7 @@ public final class EmberRunPapi {
         if ("title".equals(key) || "honors".equals(key)) return Section.COSMETIC;
         if (key.startsWith("loot_") || key.startsWith("mapid_") || "mapid_board".equals(key)) return Section.ROTATION;
         if ("abyss_best".equals(key) || "abyss_hope".equals(key)) return Section.ABYSS;
+        if ("featured_settle".equals(key) || (key != null && key.startsWith("featured_settle_"))) return Section.ROTATION; // TIP-DD D13335
         if ("bounty".equals(key) || "bounty_hope".equals(key) || "featured_hope".equals(key)) return Section.ROTATION;
         if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
         if ("setchase_line".equals(key)) return Section.LOADOUT; // D12266 hub 套装 menuLine
@@ -827,7 +828,25 @@ public final class EmberRunPapi {
         return unlocked ? "1" : "0";
     }
 
-    private String rotation(PlayerData d, String key, EmberRunMaps maps) {
+    /** TIP-DD D13335 %corerpg_p1_featured_settle*% — last featured settle map + path + week-cap; zero economy. */
+    private String featuredSettle(PlayerData d, String key, EmberRunMaps maps) {
+        String mk = EmberFeaturedSettle.lastMap(d);
+        int path = EmberFeaturedSettle.lastPath(d);
+        boolean cap = EmberFeaturedSettle.lastCapFull(d);
+        EmberRunMaps.MapDef m = (maps == null || mk.isEmpty()) ? null : maps.byKey(mk);
+        if ("featured_settle".equals(key) || "featured_settle_map".equals(key)) return mk;
+        if ("featured_settle_name".equals(key)) return EmberFeaturedSettle.displayName(m, mk);
+        if ("featured_settle_path".equals(key)) return String.valueOf(path);
+        if ("featured_settle_path_label".equals(key)) return EmberFeaturedPath.label(path);
+        if ("featured_settle_cap".equals(key) || "featured_settle_cap_full".equals(key)) return cap ? "1" : "0";
+        if ("featured_settle_cap_label".equals(key)) return cap ? "周帽已满" : "周帽未满";
+        if ("featured_settle_line".equals(key)) return EmberFeaturedSettle.line(m, mk, path, cap);
+        return "";
+    }
+
+        private String rotation(PlayerData d, String key, EmberRunMaps maps) {
+        if ("featured_settle".equals(key) || (key != null && key.startsWith("featured_settle_"))) // TIP-DD D13335
+            return featuredSettle(d, key, maps);
         if ("featured".equals(key)) return runs.featuredLabel(d); // P2-1
         if ("modifier".equals(key)) return runs.modifierLabel(); // P2-8
         if (key.startsWith("rule_")) return runs.ruleLine(d, key.substring(5)); // D94

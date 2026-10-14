@@ -801,6 +801,7 @@ public final class EmberSettleService {
                 p.sendMessage(EmberRunService.P + "§7可设深渊层目标 · 点下一环设目标");
             }
         }
+        boolean weekCapFull = false;
         if (p != null && p.isOnline() && rotation) {
             int rotNow = pd.periodCount(EmberRunService.C_ROTATION, week);
             int rotCap = runs.maps().rotationWeeklyCap;
@@ -812,23 +813,27 @@ public final class EmberSettleService {
                 if (EmberChallengePath.valid(cpath))
                     p.sendMessage(EmberRunService.P + "§c硬本路径 · 精选挑战入账 §8· " + EmberChallengePath.label(cpath));
             }
-            // D782: week-full → path glance + change (mirror raid D758)
+            // D782: week-full → path glance + thin page (TIP-DD D13335)
             if (rotCap > 0 && rotNow >= rotCap) {
+                weekCapFull = true;
                 int cpath = EmberChallengePath.get(pd);
+                int fpath = EmberFeaturedPath.get(pd);
                 p.sendMessage(EmberRunService.P + "§e精选周帽已满 §8· "
                         + (EmberChallengePath.valid(cpath) ? EmberChallengePath.label(cpath) : "未选硬本路径"));
                 try { p.sendActionBar("§e精选周帽已满"); } catch (Throwable ignored) { }
-                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7下一步：", // D794
-                        new String[]{"[换精选路径]", "/corerpg p1 featurepath", "挑战/普通精选", "GOLD"},
-                        new String[]{"[换硬本路径]", "/corerpg p1 challengepath", "改挑战/普通偏好", "AQUA"},
-                        new String[]{"[冒险页]", "/ember_p1_adventure", "换图继续", "GREEN"});
+                EmberFeaturedSettle.remember(pd, m.key, fpath, true); // TIP-DD settle 图/路径/周帽满
+                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7下一步：", // D794 TIP-DD 下一环→薄页；禁教 featurepath/challengepath
+                        new String[]{EmberFeaturedSettle.SETTLE_NEXT_LOOP_LABEL, EmberFeaturedSettle.SETTLE_NEXT_LOOP_CMD,
+                                "再进/换路径/冒险/工坊/图装追", "GOLD"},
+                        new String[]{"[冒险页]", EmberFeaturedSettle.SETTLE_ADVENTURE_CMD, "换图继续", "GREEN"},
+                        new String[]{"[工坊]", EmberFeaturedSettle.SETTLE_FORGE_CMD, "花精选料", "AQUA"});
             }
         }
-        // D790 weekly featured settle path
+        // D790 weekly featured settle path · TIP-DD D13335 weekCapFull 时 D794 已发钮
         if (p != null && p.isOnline() && s.abyss == 0 && !m.raid) {
             String feat = runs.featured(today);
             if (feat != null && feat.equalsIgnoreCase(m.key))
-                EmberFeaturedPath.afterSettle(p, pd, true, s.challenge, rotation, m.key);
+                EmberFeaturedPath.afterSettle(p, pd, true, s.challenge, rotation, m.key, weekCapFull);
         }
         if (p != null && p.isOnline() && vbMoved) { // D144 / D292
             p.sendMessage(EmberRunService.P + varietyBountyTip(vbDone, runs.varietyBountyLine(pd)));
