@@ -1,6 +1,6 @@
 # RESEARCH · 团本结算「下一环」菜单化（settle 聊天钮去指令化 · ≠短征settle下一环同题 · ≠短征settle回看同题 · ≠variety再拧 · ≠半行 · ≠庭内旁路 · ≠抬周帽）· 2026-10-14
 
-> **状态：** **待批 A** · 荐 **M** · 拟 D13331 · TIP-CZ · docs-only · 2026-10-14 08:40 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `166586585` · tip `f7a3b824c` · PASS `64bfa4265` · jar `1.65.824-d13331.local` · 批 sha `2e12d099e` · TIP-CZ · 2026-10-14 08:56 Asia/Shanghai · 团本结算下一环菜单化同题勿再交
 > **起因：** 总控【派·TIP-CZ / D13331】上游 TIP-CY CLOSED live `bdf88e272`（jar `1.65.823-d13330` · feat `e5cb2ddd6` · tip `a1f5a2537` · PASS `176e2fe03` · 批 `afeb9a210`）。请交下一薄窗。方向：内容优先拉长在线——挂机加厚须新硬债证据；短征再一趣味薄窗；或 DESIGN §6 仍缓可施工项。**禁：** variety再拧/完整经济 · soft-reward · settle回看 · settle下一环（短征）· 路径追 · 日差同题 · 庭内旁路再拧。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内全弧+今日推/冲一下/周短征/三冲+日差本可冲+路径追+settle下一环+soft-reward+settle花样回看 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-CY CLOSED live `bdf88e272` · feat `e5cb2ddd6` · tip `a1f5a2537` · PASS `176e2fe03` · jar `1.65.823-d13330.local` · 批 sha `afeb9a210` · D13330
 > **硬禁：** **零** 半行独批 · **零** Cast粒子主交付 · **零** Aid/variety再拧 · **零** todayRot/W1e独批 · **零** 庭内旁路再拧 · **零** soft-reward同题 · **零** 短征settle下一环同题 · **零** 短征settle回看同题 · **零** 路径追同题 · **零** 日差本同题 · **零** sx20 · **零** 抬周帽/weeklyCap/loot · **零** Pack6 · **零** 开R/K3 · **零** 关观察 · **零** 灾厄/fest重开 · **零** 教裸指令 · **零** densify · **零** stage脏runtime · **零** 挑战/深渊同窗大扫
@@ -71,6 +71,6 @@
 
 ---
 
-*RESEARCH · 团本结算下一环菜单化 · **待批 A** · 荐 M · TIP-CZ / D13331 · 半行 REJECT `d00ed84bc` 保持 · ≠短征settle下一环同题 · ≠短征settle回看同题。*
+*RESEARCH · 团本结算下一环菜单化 · **CLOSED live** · `166586585` / `f7a3b824c` · PASS `64bfa4265` · TIP-CZ / D13331 · 半行 REJECT `d00ed84bc` 保持 · 团本结算下一环菜单化同题勿再交。*
 
-## STATUS: **待批 A** · 荐 **M** · 拟 D13331 · TIP-CZ · 2026-10-14 08:40 Asia/Shanghai
+## STATUS: **CLOSED live** · `166586585` / `f7a3b824c` · PASS `64bfa4265` · D13331 · TIP-CZ · 2026-10-14 08:56 Asia/Shanghai

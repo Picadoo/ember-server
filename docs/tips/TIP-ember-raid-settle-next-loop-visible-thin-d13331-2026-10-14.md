@@ -1,6 +1,6 @@
 # tip · TIP-CZ 团本结算「下一环」菜单化（settle 聊天钮去指令化 · ≠短征settle下一环同题 · ≠短征settle回看同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬周帽）· 拟 D13331
 
-> **状态：** **抽测 PASS** · feat `166586585` · menu `f7a3b824c` · jar `1.65.824-d13331.local` · **勿勾 CLOSED**（总控收口）· D13331 · TIP-CZ · 零改 weeklyCap/loot · 2026-10-14 08:54 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `166586585` · tip `f7a3b824c` · jar `1.65.824-d13331.local` · PASS `64bfa4265` · 批 sha `2e12d099e` · 证据 `/workspace/tmp/tip-cz-raid-settle/` · 2026-10-14 08:56 Asia/Shanghai · 团本结算下一环菜单化同题勿再交
 > **DESIGN** [`DESIGN-ember-raid-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-raid-settle-next-loop-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-raid-settle-next-loop-visible`  
 > **施工岗（批后）：** 余烬-插件（RaidLoop 下一环改开菜单）+ 余烬-物品（薄页 `ember_p1_raid_settle`）· **不派怪物/地图**  
 > **硬禁：** 零半行独批 · 零短征settle下一环同题 · 零短征settle回看同题 · 零 variety再拧/完整经济 · 零 soft-reward同题 · 零路径追/日差/今日推/周目标/三冲复读主交 · 零 Cast 粒子主交付 · 零拧 EliteAid/BossAid · 零 todayRot/W1e 独批 · 零 sx20 · 零抬周帽/伤表/S表/weeklyCap/loot · 零庭内旁路再拧 · 零 densify · 零教裸指令主 UI · 零挑战/深渊同窗大扫（§6 后置）  
@@ -30,6 +30,6 @@
 - [x] 总控批 A·M · 2026-10-14 08:41 Asia/Shanghai
 - [x] 插件交 RaidLoop 入口改菜单 + 清裸指令主路径 + 单测 · feat `166586585`
 - [x] 物品交薄 raid settle 页 + TrMenu reload · menu `f7a3b824c` · 80
-- [x] 抽测 PASS live（满/未满入口·薄页真开·PAPI·零抬周帽）· 证据 `/workspace/tmp/tip-cz-raid-settle/` · 2026-10-14 08:54 Asia/Shanghai · **勿勾 CLOSED**
+- [x] 抽测 PASS live（满/未满入口·薄页真开·PAPI·零抬周帽）· STATUS-ember-raid-settle-next-loop-tip-cz-spot-d13331-2026-10-14.md · PASS `64bfa4265` · 证据 `/workspace/tmp/tip-cz-raid-settle/`
 
-## STATUS: **抽测 PASS** · feat `166586585` · menu `f7a3b824c` · jar `1.65.824-d13331.local` · **勿勾 CLOSED**（总控收口）· D13331 · TIP-CZ · 2026-10-14 08:54 Asia/Shanghai
+## STATUS: **CLOSED live** · `166586585` / `f7a3b824c` · PASS `64bfa4265` · jar `1.65.824-d13331.local` · D13331 · TIP-CZ · 2026-10-14 08:56 Asia/Shanghai

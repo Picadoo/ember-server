@@ -1,6 +1,6 @@
 # STATUS · TIP-CZ W1a 团本结算「下一环」菜单化 · D13331
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **交 W1a** · 勿勾 tip CLOSED · 物品可接薄页 V
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `64bfa4265` · tip `f7a3b824c` · 总控收口 2026-10-14 08:56 Asia/Shanghai
 
 ## 交付
 - `EmberRaidLoop.afterWeeklyClear`：额度满/未满两态主钮 → `/ember_p1_raid_settle`（`EmberRaidSettle.SETTLE_NEXT_LOOP_*`）
@@ -27,4 +27,12 @@
 - balance_version 123 · sx20 · 挑战/深渊 settle
 
 ## 下步
-- 物品薄页抽测 / 测岗 · 总控收口后再 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-CZ spot）
+- **PASS** · 2026-10-14 08:56 Asia/Shanghai · 证据 `/workspace/tmp/tip-cz-raid-settle/` · 详 `STATUS-ember-raid-settle-next-loop-tip-cz-spot-d13331-2026-10-14.md`
+- live jar `1.65.824-d13331.local` · feat `166586585` · tip `f7a3b824c` · 批 `2e12d099e` · 团本结算下一环菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `166586585` · 证据 `/workspace/tmp/tip-cz-raid-settle/` · STATUS `64bfa4265`
+- **CLOSED live**（总控收口）· tip `f7a3b824c` · jar `1.65.824-d13331.local`
