@@ -1,0 +1,327 @@
+# TIP-DL / D13343 · 破绽路径选打薄页 · counter_path* · counterpath wall|whiff|break|clear
+# 入口：CounterPath.offerPick / 无参 counterpath / 周要约 / Q02 → /ember_p1_counter_path（插件并行改开菜单）
+# 选打：corerpg p1 counterpath wall|whiff|break|clear
+# 进本：按当前 enterCmd（撞墙→q02 / 落空→q01 / 破招→q06）
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落/体力价/破绽眩晕加秒表 · 改 pledge_path / trial_path / 其他已齐选打 / 破绽规则语义 / 庭内
+# PAPI（插件可能后到·静态接线）：counter_path / counter_path_label / counter_path_tip · q02done（灰态·首通 Q02）
+# ≠ ember_p1_pledge_path · ≠ ember_p1_trial_path · ≠ ember_p1_abyss_path · ≠ ember_p1_short_path · ≠ ember_p1_raid_path · ≠ ember_p1_challenge_path · ≠ ember_p1_featured_path
+
+Title: '§6破绽 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_counter_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '##E#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §6破绽路径 §7· 当前 §e%corerpg_p1_counter_path_label%'
+    - 'tell: §8点选 · 撞墙 / 落空 / 破招 / 清空 · 或进本 / 冒险 / 工坊'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§6破绽路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_counter_path_label%'
+        - '§8%corerpg_p1_counter_path_tip%'
+        - '§8点选 · 撞墙 / 落空 / 破招 / 清空'
+        - '§8需本人首进或首通 Q02'
+
+  # 撞墙 · WALL=1 · 练 Q02/Q07
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q02done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7撞墙 §8（需首进/首通 Q02）'
+          lore:
+            - '§c需本人首进或首通 Q02'
+            - '§7撞墙破绽略久 · 开招提示 · 练 Q02/Q07'
+            - '§8通关 / 首进 Q02 后再选路径'
+      - condition: 'check papi %corerpg_p1_counter_path% == 1'
+        priority: 2
+        display:
+          material: brick
+          shiny: true
+          name: '§a撞墙 §8· §f已选'
+          lore:
+            - '§7撞墙破绽略久 · 开招提示 · 练 Q02/Q07'
+            - '§8%corerpg_p1_counter_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 counterpath wall'
+            - 'menu: ember_p1_counter_path'
+    display:
+      material: cobblestone
+      name: '§e撞墙'
+      lore:
+        - '§7撞墙破绽略久 · 开招提示 · 练 Q02/Q07'
+        - '§8点选切换破绽路径'
+        - '§e➥ §f设为撞墙'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 counterpath wall'
+        - 'menu: ember_p1_counter_path'
+
+  # 落空 · WHIFF=2 · 练 Q01–Q05
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q02done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7落空 §8（需首进/首通 Q02）'
+          lore:
+            - '§c需本人首进或首通 Q02'
+            - '§7落空破绽略久 · 开招提示 · 练 Q01–Q05'
+            - '§8通关 / 首进 Q02 后再选路径'
+      - condition: 'check papi %corerpg_p1_counter_path% == 2'
+        priority: 2
+        display:
+          material: feather
+          shiny: true
+          name: '§a落空 §8· §f已选'
+          lore:
+            - '§7落空破绽略久 · 开招提示 · 练 Q01–Q05'
+            - '§8%corerpg_p1_counter_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 counterpath whiff'
+            - 'menu: ember_p1_counter_path'
+    display:
+      material: feather
+      name: '§b落空'
+      lore:
+        - '§7落空破绽略久 · 开招提示 · 练 Q01–Q05'
+        - '§8点选切换破绽路径'
+        - '§e➥ §f设为落空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 counterpath whiff'
+        - 'menu: ember_p1_counter_path'
+
+  # 破招 · BREAK=3 · 练 Q06/Q07
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q02done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7破招 §8（需首进/首通 Q02）'
+          lore:
+            - '§c需本人首进或首通 Q02'
+            - '§7破招踉跄略久 · 开招提示 · 练 Q06/Q07'
+            - '§8通关 / 首进 Q02 后再选路径'
+      - condition: 'check papi %corerpg_p1_counter_path% == 3'
+        priority: 2
+        display:
+          material: diamond sword
+          shiny: true
+          name: '§a破招 §8· §f已选'
+          lore:
+            - '§7破招踉跄略久 · 开招提示 · 练 Q06/Q07'
+            - '§8%corerpg_p1_counter_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 counterpath break'
+            - 'menu: ember_p1_counter_path'
+    display:
+      material: iron sword
+      name: '§d破招'
+      lore:
+        - '§7破招踉跄略久 · 开招提示 · 练 Q06/Q07'
+        - '§8点选切换破绽路径'
+        - '§e➥ §f设为破招'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 counterpath break'
+        - 'menu: ember_p1_counter_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q02done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需首进/首通 Q02）'
+          lore:
+            - '§c需本人首进或首通 Q02'
+            - '§8通关 / 首进后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_counter_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无破绽路径焦点'
+            - '§8先点 撞墙 / 落空 / 破招'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 counterpath clear'
+            - 'menu: ember_p1_counter_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_counter_path_label%'
+        - '§8清焦点 · 可重选（清破绽粘性）'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 counterpath clear'
+        - 'menu: ember_p1_counter_path'
+
+  # 进本 · 按当前 enterCmd（撞墙→q02 / 落空→q01 / 破招→q06）
+  E:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q02done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7进本练破绽 §8（需首进/首通 Q02）'
+          lore:
+            - '§c需本人首进或首通 Q02'
+            - '§8通关 / 首进后再进本'
+      - condition: 'check papi %corerpg_p1_counter_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7进本练破绽 §8（先选路径）'
+          lore:
+            - '§c尚未选破绽路径'
+            - '§7点上方 撞墙 / 落空 / 破招'
+            - '§8选好后再进 · 勿假开'
+      - condition: 'check papi %corerpg_p1_counter_path% == 1'
+        priority: 3
+        display:
+          material: emerald
+          name: '§a进本练破绽 §8· §e撞墙→Q02'
+          lore:
+            - '§7当前：§e%corerpg_p1_counter_path_label%'
+            - '§8%corerpg_p1_counter_path_tip%'
+            - '§7去练 Q02 撞墙 · §e➥进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 enter q02'
+            - close
+      - condition: 'check papi %corerpg_p1_counter_path% == 2'
+        priority: 4
+        display:
+          material: emerald
+          name: '§a进本练破绽 §8· §b落空→Q01'
+          lore:
+            - '§7当前：§e%corerpg_p1_counter_path_label%'
+            - '§8%corerpg_p1_counter_path_tip%'
+            - '§7去练 Q01 落空 · §e➥进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 enter q01'
+            - close
+      - condition: 'check papi %corerpg_p1_counter_path% == 3'
+        priority: 5
+        display:
+          material: emerald
+          name: '§a进本练破绽 §8· §d破招→Q06'
+          lore:
+            - '§7当前：§e%corerpg_p1_counter_path_label%'
+            - '§8%corerpg_p1_counter_path_tip%'
+            - '§7去练 Q06 破招 · §e➥进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 enter q06'
+            - close
+    display:
+      material: emerald
+      name: '§a进本练破绽'
+      lore:
+        - '§7按当前破绽 enter'
+        - '§7当前：§e%corerpg_p1_counter_path_label%'
+        - '§8点进 · 真进本 · §e➥进本'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'tell: §c请先选撞墙 / 落空 / 破招'
+        - 'menu: ember_p1_counter_path'
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊（可选）
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
