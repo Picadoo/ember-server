@@ -12,7 +12,7 @@
 - PAPI：`%corerpg_p1_dodge_path%`/`_label`/`_tip`/`_line`（`menuLine`）
 - 单测：`EmberDodgePathPickTest`（新 8）· `EmberDodgePathTest` · `EmberSidestepPathPickTest` · `EmberStepPathPickTest` · `EmberFlexPathPickTest` · `EmberRunPapiTest` 绿
 - jar：`1.65.841-d13348.local` · sha256 `4a926329d3462849…` · ECONOMY_BV **123** 未动
-- play：待装 live · storage=mysql · bv123
+- play：live `1.65.841-d13348.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / D571 榴弹拉开语义(auto/ask/mute) / Cast·Aid / variety / 已齐 settle 薄页 / Sidestep·Step·Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Pace 同窗 / 庭内 / TrMenu yml（物品 W1b 并行）
 - **勿勾 tip CLOSED** · 待测岗抽测 + 物品 W1b
 
