@@ -26,9 +26,10 @@ Layout:
 
 Events:
   Open:
-    - 'tell: §e层目标：§f/corerpg p1 abysstarget <层> §8（冲纪录对照）'
-    - 'command: corerpg p1 abysstarget'
+    # TIP-DB / D13333：清教 abysstarget 手打旁路；层目标改结算下一环页菜单点设
     - 'sound: BLOCK_CHEST_OPEN-1-0'
+    - 'tell: §5深渊选层 §7· %corerpg_p1_abyss_state%'
+    - 'tell: §8点层进本 · 层目标在结算下一环页点设'
 
 Icons:
   '#':

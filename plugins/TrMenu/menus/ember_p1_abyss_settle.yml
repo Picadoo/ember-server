@@ -1,0 +1,257 @@
+# TIP-DB / D13333 · 深渊结算「下一环」薄页 · abyss_settle*
+# 入口：EmberSettleService 深渊 newBest → /ember_p1_abyss_settle（插件并行改开菜单）
+# 再深渊：corerpg p1 abyss next · 选层 ember_p1_abyss · 路径 abysspath push|farm|clear · 层目标 abysstarget next|clear
+# 禁：教裸指令主 UI · 抬掉落/体力价/层表/日帽 · 改十层 Layout 主交 / 短征·团本·挑战 settle / 庭内 / Cast/Aid/variety
+# PAPI（插件可能后到·静态接线）：abyss_settle_floor/line/next/can_next · abyss_path / abyss_path_label · abyss_best / abyss_hope
+
+Title: '§5深渊 · 下一环'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_abyss_settle'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#E#S#A#F#'
+  - '#1#2#T#PC'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §5深渊下一环 §7· %corerpg_p1_abyss_settle_line%'
+    - 'tell: §7深渊路径：§e%corerpg_p1_abyss_path_label% §8· 点选再深渊 / 选层 / 冒险 / 花料'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: paper
+      name: '§5深渊下一环'
+      lore:
+        - '§7本层：§f%corerpg_p1_abyss_settle_line%'
+        - '§7深渊路径：§e%corerpg_p1_abyss_path_label%'
+        - '§7最高通关：§f%corerpg_p1_abyss_best% §8· %corerpg_p1_abyss_hope%'
+        - '§8点选 · 再深渊 / 选层 / 冒险 / 花料 / 层目标'
+
+  # 再深渊下一层 · 真 abyss next
+  E:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_abyss_settle_can_next% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7再深渊 §8（未开层/层费）'
+          lore:
+            - '§c当前不可开下一层'
+            - '§7本层：§f%corerpg_p1_abyss_settle_line%'
+            - '§7%corerpg_p1_abyss_hope%'
+            - '§8仍可选层 / 冒险 / 工坊 · 勿假开'
+      - condition: 'check papi %corerpg_stamina% < 30'
+        priority: 2
+        display:
+          material: iron bars
+          name: '§7再深渊 §8（体力不足）'
+          lore:
+            - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§7本层：§f%corerpg_p1_abyss_settle_line%'
+            - '§8挂机/补给后再来 · 勿假开 · 仍可选层 / 工坊'
+    display:
+      material: emerald
+      name: '§a再深渊'
+      lore:
+        - '§7下一层：§f%corerpg_p1_abyss_settle_next% §7· 30体力+层费'
+        - '§7本层纪录：§f%corerpg_p1_abyss_settle_line%'
+        - '§7深渊路径：§e%corerpg_p1_abyss_path_label%'
+        - '§8点进 · 真开层 · §e➥进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 abyss next'
+        - close
+
+  # 回选层
+  S:
+    display:
+      material: ender eye
+      name: '§5回选层'
+      lore:
+        - '§7回十层深渊选页'
+        - '§8可点指定层进本'
+        - '§e➥ §f开选层'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_abyss'
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊花料'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  # 深渊路径 · 冲层
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_abyss_path% == 1'
+        priority: 1
+        display:
+          material: redstone
+          shiny: true
+          name: '§a冲层 §8· §f已选'
+          lore:
+            - '§7开最高可开层 · 冲纪录 · 层费随层涨'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 abysspath push'
+            - 'menu: ember_p1_abyss_settle'
+    display:
+      material: redstone
+      name: '§c冲层'
+      lore:
+        - '§7开最高可开层 · 冲纪录 · 层费随层涨'
+        - '§8点选切换深渊路径'
+        - '§e➥ §f设为冲层'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 abysspath push'
+        - 'menu: ember_p1_abyss_settle'
+
+  # 深渊路径 · 刷层
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_abyss_path% == 2'
+        priority: 1
+        display:
+          material: emerald
+          shiny: true
+          name: '§a刷层 §8· §f已选'
+          lore:
+            - '§7刷已通关层 · 控费 · 成色仍按该层表'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 abysspath farm'
+            - 'menu: ember_p1_abyss_settle'
+    display:
+      material: lime dye
+      name: '§a刷层'
+      lore:
+        - '§7刷已通关层 · 控费 · 成色仍按该层表'
+        - '§8点选切换深渊路径'
+        - '§e➥ §f设为刷层'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 abysspath farm'
+        - 'menu: ember_p1_abyss_settle'
+
+  # 层目标 · next（菜单点设 · 玩家不手打）
+  T:
+    update: 20
+    display:
+      material: target
+      name: '§e设层目标 · 下一档'
+      lore:
+        - '§7本层：§f%corerpg_p1_abyss_settle_line%'
+        - '§7最高：§f%corerpg_p1_abyss_best% §7· 点设下一档目标'
+        - '§8菜单点设 · 不手打'
+        - '§e➥ §f设目标'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 abysstarget next'
+        - 'menu: ember_p1_abyss_settle'
+
+  # 清空深渊路径
+  P:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_abyss_path% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（未选）'
+          lore:
+            - '§7当前无深渊路径焦点'
+            - '§8先点 冲层 / 刷层'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_abyss_path_label%'
+        - '§8清焦点 · 可重选'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 abysspath clear'
+        - 'menu: ember_p1_abyss_settle'
+
+  # 清空层目标
+  C:
+    display:
+      material: gray dye
+      name: '§7清空层目标'
+      lore:
+        - '§7清掉冲纪录对照目标'
+        - '§8可再点「设层目标」重设'
+        - '§e➥ §f清空目标'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 abysstarget clear'
+        - 'menu: ember_p1_abyss_settle'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
