@@ -1,6 +1,6 @@
 # RESEARCH · BlazePath.offerPick / applyAndReply「避焰路径选打」菜单化 · 拟 D13353 · TIP-DV
 
-> **状态：** **待批 A** · 荐 M · 2026-10-14 15:54 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13353 · TIP-DV · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 blazepath/周要约→开 ember_p1_blaze_path · 清 ConfirmTokens 教 blazepath 主 UI · 2026-10-14 15:56 Asia/Shanghai
 > **起因：** 总控【下一窗 TIP-DV · 只钉一支 · 禁全族大扫】。祖先 TIP-DU **CLOSED live** `79985fd2a` · feat `d21666151` · tip `093e5a641` · menu `74f28d8e5` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · 证据 `/workspace/tmp/tip-du-spin-path/`。**避旋路径选打菜单化同题勿再交**。选题钉死：**BlazePath.offerPick**「避焰路径选打」菜单化 → TrMenu `ember_p1_blaze_path`。总控实扫：offerPick ConfirmTokens→`blazepath auto|ask|mute|clear`；applyAndReply 下一步 ConfirmTokens→`/corerpg p1`/`blazepath`；glance 教手打；局内「炽热焰圈」战斗钮≠选打薄页；TrMenu **无** `ember_p1_blaze_path`；与刚 CLOSED Spin 同构；DESIGN-DU§6⑦ Spin 后下一位。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–DU 选打勿复；PacePath（本仓无）后置；禁全族 *Path.offerPick 大扫；半行 REJECT `d00ed84bc`；零抬伤害/CD表/掉落/体力价；零改 spin_path / snap_path 等已齐；勿勾 CLOSED。
 > **上游：** TIP-DU CLOSED live `79985fd2a` · feat `d21666151` · tip `093e5a641` · PASS `09e0e1e77` · jar `1.65.845-d13352.local` · 批 sha `093e5a641` · menu tip `74f28d8e5` · D13352
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · BlazePath.offerPick / applyAndReply 避焰路径选打菜单化 · **待批 A** · 荐 M · TIP-DV / D13353 · 半行 REJECT `d00ed84bc` 保持 · PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DU CLOSED `79985fd2a` · 2026-10-14 15:54 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · BlazePath.offerPick / applyAndReply 避焰路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DV / D13353 · 半行 REJECT `d00ed84bc` 保持 · PacePath（本仓无）后置 · ancestor TIP-DU CLOSED `79985fd2a` · 2026-10-14 15:56 Asia/Shanghai**待批 A** · 荐 M · TIP-DV / D13353 · 半行 REJECT `d00ed84bc` 保持 · PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DU CLOSED `79985fd2a` · 2026-10-14 15:54 Asia/Shanghai · 勿勾 CLOSED.*
 
-## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13353 · TIP-DV · 2026-10-14 15:54 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13353 · TIP-DV · 2026-10-14 15:56 Asia/Shanghai
