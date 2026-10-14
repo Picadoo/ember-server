@@ -10,7 +10,8 @@
 - `EmberAbyssSettle`：常量 + remember/lastFloor/displayName/line
 - PAPI（对齐物品薄页）：`%corerpg_p1_abyss_settle%/_floor/_name/_line/_path/_path_label/_next/_can_next%` · `%corerpg_p1_abyss_path%` / `_path_label%`（经 `EmberRunPapi` ABYSS）
 - 单测：`EmberAbyssSettleTest` · `EmberAbyssSettleNextLoopTest` · `EmberAbyssTargetTest` · `EmberRunPapiTest` 绿
-- jar：`1.65.826-d13333.local` · ECONOMY_BV **123** 未动
+- jar：`1.65.826-d13333.local` · sha256 `1ace1c6d1886…` · feat `6e22b5d2f` · ECONOMY_BV **123** 未动
+- play：live `1.65.826-d13333.local` · storage=mysql · bv123 · MySQL connected
 - **零改**深渊掉落 / 体力价 / 层表 / 日帽 / 短征·团本·挑战薄页 / variety / soft-reward / Cast/Aid / TrMenu yml（物品已并行薄页）
 - **未做** W1b（物品岗）· **未勾** tip CLOSED · **未派测**
 
