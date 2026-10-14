@@ -1,9 +1,9 @@
 # STATUS · TIP-DW W1a 连斩路径选打菜单化 · D13354
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `ac4b5949f` · jar `1.65.847-d13354.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `8058a9e51` · jar `1.65.847-d13354.local`
 
 ## 交付
-- feat: `ac4b5949f`（commit 后钉死）
+- feat: `8058a9e51`
 - `EmberStreakPath.offerPick` →开 `/ember_p1_streak_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `streakpath` 为主 UI
 - 无参 `/corerpg p1 streakpath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_streak_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `streakpath` ConfirmTokens 为主 UI
@@ -11,8 +11,8 @@
 - 局内 `maybeAfterChain`/`maybeProbe`「连斩」战斗钮语义 **零改**（仍 `/corerpg p1 streak`）；「改路径」随 offerPick 改开薄页 `PATH_PICK_CMD`
 - PAPI：`%corerpg_p1_streak_path%`/`_label`/`_tip`/`_line`（`menuLine`）
 - 单测：`EmberStreakPathPickTest`（新 8）· `EmberStreakPathTest` · `EmberBlazePathPickTest` · `EmberRunPapiTest` 绿
-- jar：`1.65.847-d13354.local` · sha256 见证据 · ECONOMY_BV **123** 未动
-- play：装 jar + restart 验证 storage=mysql · bv123 · MySQL connected
+- jar：`1.65.847-d13354.local` · sha256 `e5ee45ed1543…` · ECONOMY_BV **123** 未动
+- play：live `1.65.847-d13354.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / D577 连斩语义(auto/ask/mute) / Cast·Aid / variety / 已齐 settle 薄页 / Blaze·Spin·Snap·Veil·Free·Dodge·Sidestep·Step·Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Pace 同窗 / Clean·Rush·Cut 同窗 / 庭内 / TrMenu yml（物品 W1b 并行）
 - tip **勿勾 CLOSED** · 可派测 / 物品 W1b
 
