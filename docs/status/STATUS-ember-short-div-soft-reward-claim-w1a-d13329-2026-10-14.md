@@ -11,7 +11,7 @@
 - `EmberCounters`：登记 `p1_short_div_soft_claim`
 - jar：`1.65.822-d13329.local` · sha256 `1880338c6e4c…` · ECONOMY_BV **123** 未动
 - play：live `1.65.822-d13329.local` · storage=mysql · bv123 · MySQL connected
-- feat：`7b10d1683` → origin/main
+- feat：`1b93bc6b4` → origin/main
 - **零改** SOFT_TARGET / chase·enter 谓词 / 日帽 / S40–S58 / targets.short / weekly_goals / Cast / Aid / variety / 路径追 / settle / ShortPath resolve / 菜单 yml
 - **未做** 菜单 W1b（物品岗 L 可领态）
 
