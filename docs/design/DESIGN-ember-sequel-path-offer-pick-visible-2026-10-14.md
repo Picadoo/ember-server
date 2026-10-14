@@ -2,8 +2,9 @@
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 21:17 Asia/Shanghai | CLOSED live · feat `3f08561be` · tip `878ae0e5b` · menu `ec0cc64e1` · jar `1.65.863-d13370.local` · PASS `63d809d45` · 下一窗 SavePath.offerPick |
 | 2026-10-14 21:02 Asia/Shanghai | 总控批 A·M · tip `604cf1fdb` · 可施工 W1a+W1b · 勿勾 CLOSED |
-| 2026-10-14 20:59 Asia/Shanghai | 初稿 STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `604cf1fdb` · 2026-10-14 21:02 Asia/Shanghai · 勿勾 CLOSED · 可施工 |
+| 2026-10-14 20:59 Asia/Shanghai | 初稿 STATUS=**CLOSED live** · feat `3f08561be` · tip `878ae0e5b` · menu `ec0cc64e1` · jar `1.65.863-d13370.local` · PASS `63d809d45` · 2026-10-14 21:17 Asia/Shanghai · 续招路径选打菜单化同题勿再交 · 下一窗 SavePath.offerPick |
 
 STATUS=**待批 A** · 荐 M · 2026-10-14 20:59 Asia/Shanghai · 勿勾 CLOSED
 > tip [`STATUS-ember-next-hard-debt-sequel-path-offer-pick-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-sequel-path-offer-pick-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-sequel-path-offer-pick-visible-2026-10-14.md`](RESEARCH-ember-sequel-path-offer-pick-visible-2026-10-14.md) · backlog `B-sequel-path-offer-pick-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬伤害/CD表/掉落/体力价 ≠诱空路径选打同题 ≠闪招路径选打同题 ≠撞墙路径选打同题 ≠闪线路径选打同题 ≠侧安路径选打同题 ≠收招路径选打同题 ≠半血路径选打同题 ≠增援路径选打同题 ≠分摊路径选打同题 ≠铁壁路径选打同题 ≠分身路径选打同题 ≠压伤路径选打同题 ≠打断路径选打同题 ≠限时路径选打同题 ≠净伤路径选打同题 ≠连斩路径选打同题 ≠避焰路径选打同题 ≠避旋路径选打同题 ≠断链路径选打同题 ≠避毒路径选打同题 ≠解锢路径选打同题 ≠闪榴路径选打同题 ≠闪冲路径选打同题 ≠身法路径选打同题 ≠轻技路径选打同题 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠步态路径选打同题 ≠已齐 settle 下一环同题 ≠短征settle回看同题 ≠D673同题复读 ≠variety再拧 ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠路径追同题 ≠日差同题 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠legacy abyss evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠Pace同窗 ≠其它 *Path 同窗 ≠复开 D593 玩法本体 ≠L13 ≠灰烬/R ≠抬 AFK 表 ≠Affix 加密**
@@ -158,6 +159,7 @@ STATUS=**待批 A** · 荐 M · 2026-10-14 20:59 Asia/Shanghai · 勿勾 CLOSED
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 21:17 Asia/Shanghai | 总控 · CLOSED live · feat `3f08561be` · tip `878ae0e5b` · menu `ec0cc64e1` · jar `1.65.863-d13370.local` · PASS `63d809d45` · 下一窗 SavePath.offerPick |
 | 2026-10-14 20:59 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-EL CLOSED 后连开 · 选题 SequelPath.offerPick / applyAndReply 续招路径选打菜单化 · 拟 D13370 · TIP-EM · ≠半行 ≠诱空选打同题 ≠闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态选打同题 ≠已齐 settle 同题 ≠variety再拧 ≠庭内旁路 · **改题有证据**（挂机近饱和·gem gap未亮；短征薄债+选打已齐；settle CW–DD+DE–EL选打已齐；总控钉死 Sequel；offerPick ConfirmTokens→sequelpath；applyAndReply下一步仍聊天钮；无参/周要约/Q01；无 sequel_path；局内续招钮≠选打页；与刚 CLOSED Bait 同构；其它剩支·Pace后置；见 RESEARCH） |
 
-*D13370 **待批 A** · 荐 M · SequelPath.offerPick / applyAndReply 续招路径选打菜单化 · TIP-EM · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D594+（Save… Nest…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EL CLOSED `f9291ddaf` · 2026-10-14 20:59 Asia/Shanghai · 勿勾 CLOSED.*
+*D13370 **CLOSED live** · feat `3f08561be` · tip `878ae0e5b` · menu `ec0cc64e1` · jar `1.65.863-d13370.local` · PASS `63d809d45` · 下一窗 SavePath.offerPick · 2026-10-14 21:17 Asia/Shanghai**待批 A** · 荐 M · SequelPath.offerPick / applyAndReply 续招路径选打菜单化 · TIP-EM · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D594+（Save… Nest…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EL CLOSED `f9291ddaf` · 2026-10-14 20:59 Asia/Shanghai · 勿勾 CLOSED.*
