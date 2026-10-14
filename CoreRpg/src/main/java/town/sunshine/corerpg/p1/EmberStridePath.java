@@ -16,11 +16,18 @@ import town.sunshine.corerpg.SkillService;
  * D499: combat stride path — push / bail / bare.
  * Real play change: writes flex equip + step direction together.
  * Chat buttons only. Zero dmg/CD tables / AFK / sx. Not forge / enter-card / ActionBar twin.
+ * TIP-DM D13344: offerPick / applyAndReply / 无参 stridepath / 周要约 →开 /ember_p1_stride_path；
+ * 清 ConfirmTokens 教 stridepath/enter/flexpath/steppath 主 UI；零改伤害/CD表/掉落/体力价/步态规则语义(D499).
  */
 public final class EmberStridePath {
 
     public static final String C_PATH = "p1_stride_path";
     public static final String C_OFFER = "p1_stride_path_offer";
+
+    /** TIP-DM D13344 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_stride_path";
+    public static final String PATH_PICK_LABEL = "[步态路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     /** 装配踏步 + 前冲 */
@@ -88,8 +95,16 @@ public final class EmberStridePath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8步态路径：首通 Q05 后可选（需轻技+身法）";
-        if (!valid(id)) return "§8步态路径：未选 · /corerpg p1 stridepath";
+        // TIP-DM D13344: 禁教手打 /corerpg p1 stridepath
+        if (!valid(id)) return "§8步态路径：未选 · 点步态路径页";
         return "§e步态路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DM D13344 · 薄页 lore 一行（无 §）：当前步态路径。
+     */
+    public static String menuLine(int id) {
+        return "步态路径 · " + label(id);
     }
 
     public static String enterCmd(int id) {
@@ -108,11 +123,19 @@ public final class EmberStridePath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选步态玩法（一次写入轻技装配+身法方向 · 回城可换 · 不改伤害/CD 表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[突进踏]", "/corerpg p1 stridepath push", tip(PUSH), "GREEN"},
-                new String[]{"[后撤踏]", "/corerpg p1 stridepath bail", tip(BAIL), "YELLOW"},
-                new String[]{"[卸轻技]", "/corerpg p1 stridepath bare", tip(BARE), "GRAY"},
-                new String[]{"[取消]", "/corerpg p1 stridepath clear", "清空步态（装配/方向未自动回滚）", "DARK_GRAY"});
+        // TIP-DM D13344: 开选打薄页；禁 ConfirmTokens 教 stridepath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_stride_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_stride_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "突进踏/后撤踏/卸轻技/清空/进本/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -189,11 +212,10 @@ public final class EmberStridePath {
         p.sendMessage(P + "§a步态 → §f" + label(id) + " §7· " + tip(id)
                 + " §8（轻技=" + EmberFlexPath.label(flexId(id))
                 + " · 身法=" + EmberStepPath.label(stepId(id)) + "）");
+        // TIP-DM D13344: 下一步→选打薄页/冒险（禁教裸 stridepath/enter/flexpath/steppath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{enterLabel(id), enterCmd(id), "进图体感这套步态", "GREEN"},
-                new String[]{"[轻技路径]", "/corerpg p1 flexpath", "单改装配", "GOLD"},
-                new String[]{"[身法路径]", "/corerpg p1 steppath", "单改方向", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 stridepath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "突进踏/后撤踏/卸轻技/进本/重选", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

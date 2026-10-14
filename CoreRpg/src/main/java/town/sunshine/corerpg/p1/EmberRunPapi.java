@@ -78,6 +78,7 @@ public final class EmberRunPapi {
         if ("trial_path".equals(key) || (key != null && key.startsWith("trial_path_"))) return Section.RUSH; // TIP-DJ D13341
         if ("pledge_path".equals(key) || (key != null && key.startsWith("pledge_path_"))) return Section.RUSH; // TIP-DK D13342
         if ("counter_path".equals(key) || (key != null && key.startsWith("counter_path_"))) return Section.RUSH; // TIP-DL D13343
+        if ("stride_path".equals(key) || (key != null && key.startsWith("stride_path_"))) return Section.RUSH; // TIP-DM D13344
         if (key.startsWith("pledge_")) return Section.RUSH;
         if (key.startsWith("rush_")) return Section.RUSH;
         if (key.startsWith("passd_")) return Section.ENTRY;
@@ -625,6 +626,16 @@ public final class EmberRunPapi {
         return "";
     }
 
+    /** TIP-DM D13344 %corerpg_p1_stride_path*% — sticky StridePath preference; zero economy. */
+    private String stridePath(PlayerData d, String key) {
+        int path = EmberStridePath.get(d);
+        if ("stride_path".equals(key)) return String.valueOf(path);
+        if ("stride_path_label".equals(key)) return EmberStridePath.label(path);
+        if ("stride_path_tip".equals(key)) return EmberStridePath.tip(path);
+        if ("stride_path_line".equals(key)) return EmberStridePath.menuLine(path);
+        return "";
+    }
+
     /** TIP-CV D13327 %corerpg_p1_short_path*% — sticky ShortPath preference + resolve; zero algo change. */
     private String shortPathChase(PlayerData d, String key) {
         int path = EmberShortPath.get(d);
@@ -794,6 +805,8 @@ public final class EmberRunPapi {
             return pledgePath(d, key);
         if ("counter_path".equals(key) || (key != null && key.startsWith("counter_path_"))) // TIP-DL D13343
             return counterPath(d, key);
+        if ("stride_path".equals(key) || (key != null && key.startsWith("stride_path_"))) // TIP-DM D13344
+            return stridePath(d, key);
         if (key.startsWith("pledge_")) return runs.pledgePapi(d, key.substring(7)); // D174 stage 2b 自选誓约
         EmberRunMaps.MapDef rm = maps.rush.get(key.substring(5)); // rush_<entry>
         if (rm == null) return null; // old chain: not a rush entry → per-map tail

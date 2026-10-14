@@ -3447,14 +3447,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberStridePath.get(d);
-                    if (EmberStridePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberStridePath.label(cur) + " · 改路径再 /corerpg p1 stridepath");
+                    if (EmberStridePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberStridePath.label(cur) + " · 点步态路径页可改");
                     else EmberStridePath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberStridePath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 stridepath <push|bail|bare|clear>");
+                p.sendMessage(P + "用法：点步态路径页选突进踏/后撤踏/卸轻技/清空");
                 return true;
             }
             EmberStridePath.applyAndReply(p, id);
