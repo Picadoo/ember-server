@@ -6514,14 +6514,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberSequelPath.get(d);
-                    if (EmberSequelPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSequelPath.label(cur) + " · 改路径再 /corerpg p1 sequelpath");
+                    if (EmberSequelPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSequelPath.label(cur) + " · 点续招路径页可改");
                     else EmberSequelPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberSequelPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 sequelpath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点续招路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberSequelPath.applyAndReply(p, id);
