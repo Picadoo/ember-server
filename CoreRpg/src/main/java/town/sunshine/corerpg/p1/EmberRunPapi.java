@@ -101,6 +101,7 @@ public final class EmberRunPapi {
         if (key.startsWith("loot_") || key.startsWith("mapid_") || "mapid_board".equals(key)) return Section.ROTATION;
         if ("abyss_best".equals(key) || "abyss_hope".equals(key)) return Section.ABYSS;
         if ("featured_settle".equals(key) || (key != null && key.startsWith("featured_settle_"))) return Section.ROTATION; // TIP-DD D13335
+        if ("featured_path".equals(key) || (key != null && key.startsWith("featured_path_"))) return Section.ROTATION; // TIP-DE D13336
         if ("bounty".equals(key) || "bounty_hope".equals(key) || "featured_hope".equals(key)) return Section.ROTATION;
         if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
         if ("setchase_line".equals(key)) return Section.LOADOUT; // D12266 hub 套装 menuLine
@@ -828,6 +829,17 @@ public final class EmberRunPapi {
         return unlocked ? "1" : "0";
     }
 
+    /** TIP-DE D13336 %corerpg_p1_featured_path*% — sticky FeaturedPath preference + lore line; zero economy. */
+    private String featuredPath(PlayerData d, String key) {
+        int path = EmberFeaturedPath.get(d);
+        String fl = runs.featuredLabel(d);
+        if ("featured_path".equals(key)) return String.valueOf(path);
+        if ("featured_path_label".equals(key)) return EmberFeaturedPath.label(path);
+        if ("featured_path_tip".equals(key)) return EmberFeaturedPath.tip(path);
+        if ("featured_path_line".equals(key)) return EmberFeaturedPath.menuLine(path, fl);
+        return "";
+    }
+
     /** TIP-DD D13335 %corerpg_p1_featured_settle*% — last featured settle map + path + week-cap; zero economy. */
     private String featuredSettle(PlayerData d, String key, EmberRunMaps maps) {
         String mk = EmberFeaturedSettle.lastMap(d);
@@ -847,6 +859,8 @@ public final class EmberRunPapi {
         private String rotation(PlayerData d, String key, EmberRunMaps maps) {
         if ("featured_settle".equals(key) || (key != null && key.startsWith("featured_settle_"))) // TIP-DD D13335
             return featuredSettle(d, key, maps);
+        if ("featured_path".equals(key) || (key != null && key.startsWith("featured_path_"))) // TIP-DE D13336
+            return featuredPath(d, key);
         if ("featured".equals(key)) return runs.featuredLabel(d); // P2-1
         if ("modifier".equals(key)) return runs.modifierLabel(); // P2-8
         if (key.startsWith("rule_")) return runs.ruleLine(d, key.substring(5)); // D94

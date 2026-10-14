@@ -3797,7 +3797,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberFeaturedPath.get(d);
-                    if (EmberFeaturedPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFeaturedPath.label(cur) + " · 改路径再 /corerpg p1 featurepath");
+                    if (EmberFeaturedPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFeaturedPath.label(cur) + " · 改路径点精选路径页");
                     else EmberFeaturedPath.offerPick(p, fl);
                 }
                 return true;

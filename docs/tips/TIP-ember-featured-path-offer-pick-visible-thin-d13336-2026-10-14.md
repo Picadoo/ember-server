@@ -34,8 +34,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 10:41 Asia/Shanghai
-- [ ] 插件交 offerPick / applyAndReply / 无参 featurepath 改菜单 + 清裸指令主路径 + 单测
-- [ ] 物品交薄 featured_path 页 + TrMenu reload
+- [x] 插件交 offerPick / applyAndReply / 无参 featurepath 改菜单 + 清裸指令主路径 + 单测 · jar `1.65.829-d13336.local` · 2026-10-14 Asia/Shanghai
+- [x] 物品交薄 featured_path 页 + TrMenu reload · W1b `c161fff0d`
 - [ ] 抽测 PASS live（选挑战/普通/清空/进本/冒险真开·PAPI·零抬掉落/体力价/周帽）· **勿勾本窗 CLOSED**（总控收口）
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13336 · TIP-DE · 2026-10-14 10:41 Asia/Shanghai
+## STATUS: **施工中 · W1a+W1b 已交待测** · APPROVED A·M · 勿勾 CLOSED · L不批 · D13336 · TIP-DE · 2026-10-14 Asia/Shanghai

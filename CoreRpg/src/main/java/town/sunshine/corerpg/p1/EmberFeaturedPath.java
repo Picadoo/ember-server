@@ -12,14 +12,21 @@ import town.sunshine.corerpg.PlayerData;
 
 /**
  * D488: weekly featured-map play path — challenge vs normal.
- * Map identity (名片 hint + loot family) + combat rule choice; chat buttons only.
+ * Map identity (名片 hint + loot family) + combat rule choice.
  * TIP-DD D13335: afterSettle / D794 下一环开薄页 /ember_p1_featured_settle；禁教手打 enter|featurepath|forge|mapfarm 主 UI。
+ * TIP-DE D13336: offerPick / applyAndReply / 无参 featurepath →开 /ember_p1_featured_path；清 ConfirmTokens 教 featurepath/enter 主 UI。
  * Zero featured marks / rotation rule / AFK / sx change. Not a forge spend-chase.
  */
 public final class EmberFeaturedPath {
 
     public static final String C_PATH = "p1_featured_path";
     public static final String C_OFFER = "p1_featured_path_offer";
+
+    /** TIP-DE D13336 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_featured_path";
+    public static final String PATH_PICK_LABEL = "[精选路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
+    public static final String PATH_FORGE_CMD = "/ember_p1_forge";
 
     public static final int NONE = 0;
     public static final int CHALLENGE = 1; // 挑战版 · 周规则 + T3 精选印记
@@ -70,8 +77,18 @@ public final class EmberFeaturedPath {
     public static String glance(int id, boolean unlocked, String featuredLabel) {
         if (!unlocked) return "§8精选路径：首通 Q01 后可选";
         String fl = featuredLabel == null || featuredLabel.isEmpty() ? "本周精选" : featuredLabel;
-        if (!valid(id)) return "§8精选路径：未选 · /corerpg p1 featurepath §7· " + fl;
+        // TIP-DE D13336: 禁教手打 /corerpg p1 featurepath 主教
+        if (!valid(id)) return "§8精选路径：未选 · 点精选路径页 §7· " + fl;
         return "§e精选路径：§f" + label(id) + " §8· " + tip(id) + " §7· " + fl;
+    }
+
+    /**
+     * TIP-DE D13336 · 薄页 lore 一行（无 §）：本周精选 + 当前路径。
+     * featuredLabel 空 → 「本周精选」；未选 → 「未选」。
+     */
+    public static String menuLine(int id, String featuredLabel) {
+        String fl = featuredLabel == null || featuredLabel.isEmpty() ? "本周精选" : featuredLabel;
+        return fl + " · " + label(id);
     }
 
     /** Bukkit-free identity line: 名片 + loot. */
@@ -101,10 +118,19 @@ public final class EmberFeaturedPath {
         String P = EmberRunService.P;
         String fl = featuredLabel == null || featuredLabel.isEmpty() ? "本周精选" : featuredLabel;
         p.sendMessage(P + "§e选本周精选打法（" + fl + " · 可随时改 · 不改印记帽/周规则）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[精选·挑战]", "/corerpg p1 featurepath challenge", tip(CHALLENGE), "RED"},
-                new String[]{"[精选·普通]", "/corerpg p1 featurepath normal", tip(NORMAL), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 featurepath clear", "清空路径", "GRAY"});
+        // TIP-DE D13336: 开选打薄页；禁 ConfirmTokens 教 featurepath challenge|normal|clear 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_featured_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_featured_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "挑战/普通/清空/进本/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -168,15 +194,17 @@ public final class EmberFeaturedPath {
         p.sendMessage(P + identityLine(name, hint, loot));
         if (id == CHALLENGE && !runs.progressFlag(d, "q07")) {
             p.sendMessage(P + "§c挑战版需本人首通 Q07；可先改 [精选·普通] 或通关 Q07。");
+            // TIP-DE: 下一步→选打薄页（普通/重选可点）；禁裸 featurepath ConfirmTokens 为主 UI
             ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                    new String[]{"[改普通]", "/corerpg p1 featurepath normal", tip(NORMAL), "AQUA"},
-                    new String[]{"[换一条]", "/corerpg p1 featurepath", "重选", "GRAY"});
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "改普通/重选/进本/冒险", "AQUA"},
+                    new String[]{"[冒险页]", PATH_ADVENTURE_CMD, "换内容", "GOLD"});
             return;
         }
+        // TIP-DE D13336: 下一步→同薄页（进本/冒险/重选可点）；禁裸 enter/featurepath 为主 UI
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{enterLabel(id, key), enterCmd(id, key), "开本周精选", "GREEN"},
-                new String[]{"[冒险页]", "/corerpg p1 runs", "看精选与周帽", "GOLD"},
-                new String[]{"[换一条]", "/corerpg p1 featurepath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "进本周精选/重选/冒险", "GREEN"},
+                new String[]{"[冒险页]", PATH_ADVENTURE_CMD, "看精选与周帽", "GOLD"},
+                new String[]{"[工坊]", PATH_FORGE_CMD, "花精选料", "GRAY"});
     }
 
 
@@ -186,7 +214,8 @@ public final class EmberFeaturedPath {
         if (!mapKey.equalsIgnoreCase(featuredKey)) return;
         int id = get(d);
         if (!valid(id)) {
-            p.sendMessage(EmberRunService.P + "§7未选精选路径 · /corerpg p1 featurepath");
+            // TIP-DE D13336: 禁教手打 featurepath；开选打薄页
+            p.sendMessage(EmberRunService.P + "§7未选精选路径 · 点精选路径页");
             offerPick(p, featuredLabelLive(p)); // D804
             return;
         }
