@@ -1,6 +1,6 @@
 # tip · TIP-DQ DodgePath.offerPick / applyAndReply「闪榴路径选打」菜单化（选路径聊天钮去指令化 · ≠闪冲路径选打同题 · ≠身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠复开 D571 玩法本体）· 拟 D13348
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13348 · TIP-DQ · W1a+W1b+抽测 PASS · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 dodgepath/周要约→开 ember_p1_dodge_path · 清 ConfirmTokens 教 dodgepath 主 UI · 2026-10-14 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `7551786ea` · tip `68585e732` · jar `1.65.841-d13348.local` · PASS `3c21ca538` · 批 sha `68585e732` · menu tip `10fada73e` · 证据 `/workspace/tmp/tip-dq-dodge-path/` · 2026-10-14 14:41 Asia/Shanghai · 闪榴路径选打菜单化同题勿再交
 > **DESIGN** [`DESIGN-ember-dodge-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-dodge-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-dodge-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（DodgePath.offerPick / applyAndReply / 无参 dodgepath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_dodge_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零闪冲路径选打同题复读（TIP-DP） · 零身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-DO–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零复开 D571 玩法本体（auto/ask/mute 真改榴弹圈拉开语义零改）
@@ -37,6 +37,6 @@
 - [x] 总控批 A·M · 2026-10-14 14:29 Asia/Shanghai
 - [x] 插件交 offerPick / applyAndReply / 无参 dodgepath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat_commit `7551786ea` · jar `1.65.841-d13348.local`
 - [x] 物品交薄 dodge_path 页 + TrMenu reload · menu `10fada73e` · TrMenu 96
-- [x] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 sidestep_path·零已齐选打同题复读·零改 D571 榴弹拉开语义）· spot STATUS 见 STATUS-ember-dodge-path-offer-pick-tip-dq-spot-d13348 · **勿勾 CLOSED**
+- [x] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 sidestep_path·零已齐选打同题复读·零改 D571 榴弹拉开语义）· STATUS-ember-dodge-path-offer-pick-tip-dq-spot-d13348-2026-10-14.md · PASS `3c21ca538` · 证据 `/workspace/tmp/tip-dq-dodge-path/` · **CLOSED by 总控**
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a+W1b+抽测 PASS（勿勾 CLOSED · 待总控收口） · L不批 · D13348 · TIP-DQ · 2026-10-14 Asia/Shanghai
+## STATUS: **CLOSED live** · `7551786ea` / `10fada73e` · PASS `3c21ca538` · jar `1.65.841-d13348.local` · D13348 · TIP-DQ · 2026-10-14 14:41 Asia/Shanghai · 闪榴路径选打菜单化同题勿再交

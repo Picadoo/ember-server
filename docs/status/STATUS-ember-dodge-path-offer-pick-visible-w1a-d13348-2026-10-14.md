@@ -1,6 +1,6 @@
 # STATUS · TIP-DQ W1a 闪榴路径选打菜单化 · D13348
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip APPROVED `68585e732` · **勿勾 tip CLOSED** · 待测岗/物品 W1b
+> 2026-10-14 14:41 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `3c21ca538` · tip `68585e732` · 总控收口 2026-10-14 14:41 Asia/Shanghai
 
 ## 交付
 - feat: `7551786ea65488ce5b80b86e3dbff80b4e163d13`
@@ -31,4 +31,6 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_dodge_path`）
 
 ## 下步
-- 物品 W1b 并行薄页 · 测岗抽测 · 总控勿勾 CLOSED 至 PASS
+- 物品 W1b 并行薄页 · 测岗抽测 · 总控**勾毕 CLOSED live** · PASS `3c21ca538` · 总控收口 2026-10-14 14:41 Asia/Shanghai 至 PASS
+
+- **CLOSED live**（总控收口）· tip `68585e732` · jar `1.65.841-d13348.local` · PASS `3c21ca538` · 2026-10-14 14:41 Asia/Shanghai

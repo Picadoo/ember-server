@@ -1,6 +1,6 @@
 # RESEARCH · DodgePath.offerPick / applyAndReply「闪榴路径选打」菜单化 · 拟 D13348 · TIP-DQ
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13348 · TIP-DQ · 可施工 · 勿勾 CLOSED · 2026-10-14 14:29 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `7551786ea` · tip `68585e732` · jar `1.65.841-d13348.local` · PASS `3c21ca538` · 批 sha `68585e732` · menu tip `10fada73e` · 证据 `/workspace/tmp/tip-dq-dodge-path/` · 2026-10-14 14:41 Asia/Shanghai · 闪榴路径选打菜单化同题勿再交
 > **起因：** 总控【派下一窗 tip · TIP-DQ / 拟 D13348 · ancestor TIP-DP CLOSED】。祖先 TIP-DP CLOSED live `78a2ca585` · feat `adf9efa71` · jar `1.65.840-d13347.local` · PASS `2fc016f96` · menu `52e6da32b` · APPROVED `116eea312`。**闪冲路径选打菜单化同题勿再交**。DESIGN-DP §6⑦ 明文后置 PacePath 等剩支 / 其他仍 ConfirmTokens 的 *Path.offerPick 逐支另窗。选题闸：①挂机庭资源环加厚（须新硬债；旁路近饱和·gem gap 未亮则跳过）②短征日更乐趣（非sx20；非已齐路径）③若无新硬债：只钉 **一支** 仍 ConfirmTokens 教裸指令、且 **无** 专用 `ember_p1_*_path` 的 *Path.offerPick（实扫择最硬）· 镜像 DE–DP。**禁：** 半行独批 · 已齐 settle/选打同题复读（含 sidestep） · 抬伤害/CD表/掉落/体力价 · sx20 / densify / Pack6 / 开 K3 / 关观察 · variety 完整经济 / Cast·Aid 再拧 / 庭内旁路 · 教裸指令主 UI · 全族 Path 大扫 · PacePath（本仓无）· legacy evacuate 后置 · L13 / 灰烬/R / 抬 AFK 表 / Affix 加密 / menu-honesty/observe idle / P兼确认 / 第五庭花 / Cast particle 主交付 / disaster reopen / reopen D423。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-DP CLOSED live `78a2ca585` · feat `adf9efa71` · tip `116eea312` · PASS `2fc016f96` · jar `1.65.840-d13347.local` · 批 sha `116eea312` · menu tip `52e6da32b` · D13347
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · DodgePath.offerPick / applyAndReply 闪榴路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DQ / D13348 · 半行 REJECT `d00ed84bc` 保持 · Free/Veil等后置 · ancestor TIP-DP CLOSED `78a2ca585` · 2026-10-14 14:29 Asia/Shanghai.**已批 A · 方案 M** · APPROVED A·M · TIP-DQ / D13348 · 半行 REJECT `d00ed84bc` 保持 · Free/Veil等后置 · ancestor TIP-DP CLOSED `78a2ca585` · 2026-10-14 14:29 Asia/Shanghai.**待批 A** · 荐 M · TIP-DQ / D13348 · 半行 REJECT `d00ed84bc` 保持 · Free/Veil/Snap/Spin/Blaze等剩支/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DP CLOSED `78a2ca585` · 2026-10-14 14:28 Asia/Shanghai.*
+*RESEARCH · DodgePath.offerPick / applyAndReply 闪榴路径选打菜单化 · **CLOSED live** · feat `7551786ea` · PASS `3c21ca538` · tip `68585e732` · menu `10fada73e` · jar `1.65.841-d13348.local` · TIP-DQ / D13348 · 半行 REJECT `d00ed84bc` 保持 · 下一窗：Free/Veil/Snap/Spin/Blaze 等仍 ConfirmTokens 的 *Path.offerPick 逐支（禁全族大扫）/ PacePath（本仓无）后置 / 挂机若新硬债 / legacy evacuate 后置；闪榴路径选打本支已齐 · 2026-10-14 14:41 Asia/Shanghai.**已批 A · 方案 M** · APPROVED A·M · TIP-DQ / D13348 · 半行 REJECT `d00ed84bc` 保持 · Free/Veil等后置 · ancestor TIP-DP CLOSED `78a2ca585` · 2026-10-14 14:29 Asia/Shanghai.**已批 A · 方案 M** · APPROVED A·M · TIP-DQ / D13348 · 半行 REJECT `d00ed84bc` 保持 · Free/Veil等后置 · ancestor TIP-DP CLOSED `78a2ca585` · 2026-10-14 14:29 Asia/Shanghai.**待批 A** · 荐 M · TIP-DQ / D13348 · 半行 REJECT `d00ed84bc` 保持 · Free/Veil/Snap/Spin/Blaze等剩支/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DP CLOSED `78a2ca585` · 2026-10-14 14:28 Asia/Shanghai.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13348 · TIP-DQ · 2026-10-14 14:29 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `7551786ea` · tip `68585e732` · jar `1.65.841-d13348.local` · PASS `3c21ca538` · 批 sha `68585e732` · menu tip `10fada73e` · 证据 `/workspace/tmp/tip-dq-dodge-path/` · 2026-10-14 14:41 Asia/Shanghai · 闪榴路径选打菜单化同题勿再交
