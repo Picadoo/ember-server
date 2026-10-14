@@ -17,11 +17,18 @@ import town.sunshine.corerpg.PlayerData;
  * to focus it for affixShard / room clear, chat ask, or kite yourself.
  * Distinct from Clone (split-adds), Press (boss break), Cut (regen), Hunt (side extra).
  * Chat only. Zero shieldHp/affixShard table / AFK / sx / forge / combo / enter-cue.
+ * TIP-EC D13360: offerPick / applyAndReply / 无参 shellpath / 周要约 →开 /ember_p1_shell_path；
+ * 清 ConfirmTokens 教 shellpath 主 UI；零改伤害/CD表/掉落/体力价/D583 铁壁集火语义.
  */
 public final class EmberShellPath {
 
     public static final String C_PATH = "p1_shell_path";
     public static final String C_OFFER = "p1_shell_path_offer";
+
+    /** TIP-EC D13360 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_shell_path";
+    public static final String PATH_PICK_LABEL = "[铁壁路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -82,8 +89,16 @@ public final class EmberShellPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8铁壁路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8铁壁路径：未选 · /corerpg p1 shellpath";
+        // TIP-EC D13360: 禁教手打 /corerpg p1 shellpath
+        if (!valid(id)) return "§8铁壁路径：未选 · 点铁壁路径页";
         return "§e铁壁路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-EC D13360 · 薄页 lore 一行（无 §）：当前铁壁路径。
+     */
+    public static String menuLine(int id) {
+        return "铁壁路径 · " + label(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
@@ -113,7 +128,7 @@ public final class EmberShellPath {
             if (shouldMute(path)) continue;
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§6铁壁 ",
                     new String[]{"[集火]", "/corerpg p1 shell", "传至铁壁精英", "GREEN"},
-                    new String[]{"[改路径]", "/corerpg p1 shellpath", "自动/提醒/静默", "GRAY"});
+                    new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
         }
     }
 
@@ -135,18 +150,26 @@ public final class EmberShellPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§6铁壁 ",
                 new String[]{"[集火]", "/corerpg p1 shell", "传至铁壁精英", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 shellpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选铁壁节奏（改获取 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 shellpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 shellpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 shellpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 shellpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-EC D13360: 开选打薄页；禁 ConfirmTokens 教 shellpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_shell_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_shell_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -201,9 +224,10 @@ public final class EmberShellPath {
         flush(p);
         p.sendMessage(P + "§a铁壁 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-EC D13360: 下一步→选打薄页/冒险（禁教裸 shellpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 shellpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

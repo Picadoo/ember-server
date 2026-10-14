@@ -94,6 +94,7 @@ public final class EmberRunPapi {
         if ("cut_path".equals(key) || (key != null && key.startsWith("cut_path_"))) return Section.RUSH; // TIP-DZ D13357
         if ("press_path".equals(key) || (key != null && key.startsWith("press_path_"))) return Section.RUSH; // TIP-EA D13358
         if ("clone_path".equals(key) || (key != null && key.startsWith("clone_path_"))) return Section.RUSH; // TIP-EB D13359
+        if ("shell_path".equals(key) || (key != null && key.startsWith("shell_path_"))) return Section.RUSH; // TIP-EC D13360
         if (key.startsWith("pledge_")) return Section.RUSH;
         if (key.startsWith("rush_")) return Section.RUSH;
         if (key.startsWith("passd_")) return Section.ENTRY;
@@ -792,6 +793,16 @@ public final class EmberRunPapi {
         return "";
     }
 
+    /** TIP-EC D13360 %corerpg_p1_shell_path*% — sticky ShellPath preference; zero economy. */
+    private String shellPathPref(PlayerData d, String key) {
+        int path = EmberShellPath.get(d);
+        if ("shell_path".equals(key)) return String.valueOf(path);
+        if ("shell_path_label".equals(key)) return EmberShellPath.label(path);
+        if ("shell_path_tip".equals(key)) return EmberShellPath.tip(path);
+        if ("shell_path_line".equals(key)) return EmberShellPath.menuLine(path);
+        return "";
+    }
+
     /** TIP-DV D13353 %corerpg_p1_blaze_path*% — sticky BlazePath preference; zero economy. */
     private String blazePath(PlayerData d, String key) {
         int path = EmberBlazePath.get(d);
@@ -1003,6 +1014,8 @@ public final class EmberRunPapi {
             return pressPathPref(d, key);
         if ("clone_path".equals(key) || (key != null && key.startsWith("clone_path_"))) // TIP-EB D13359
             return clonePathPref(d, key);
+        if ("shell_path".equals(key) || (key != null && key.startsWith("shell_path_"))) // TIP-EC D13360
+            return shellPathPref(d, key);
         if (key.startsWith("pledge_")) return runs.pledgePapi(d, key.substring(7)); // D174 stage 2b 自选誓约
         EmberRunMaps.MapDef rm = maps.rush.get(key.substring(5)); // rush_<entry>
         if (rm == null) return null; // old chain: not a rush entry → per-map tail
