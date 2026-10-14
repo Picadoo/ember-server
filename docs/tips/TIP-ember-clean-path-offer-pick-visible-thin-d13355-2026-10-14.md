@@ -1,6 +1,6 @@
 # tip · TIP-DX CleanPath.offerPick / applyAndReply「净伤路径选打」菜单化（选路径聊天钮去指令化 · ≠连斩路径选打同题 · ≠避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠Rush/Cut同窗 · ≠复开 D578 玩法本体）· 拟 D13355
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13355 · TIP-DX · W1a插件已交 `913ad2caf` · jar `1.65.848-d13355.local` · W1b物品已交 `610e8eefb` · 可派测 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 cleanpath/周要约→开 ember_p1_clean_path · 清 ConfirmTokens 教 cleanpath 主 UI · 2026-10-14 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13355 · TIP-DX · W1a插件已交 `962b88252` · jar `1.65.848-d13355.local` · W1b物品已交 `610e8eefb` · 可派测 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 cleanpath/周要约→开 ember_p1_clean_path · 清 ConfirmTokens 教 cleanpath 主 UI · 2026-10-14 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-clean-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-clean-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-clean-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（CleanPath.offerPick / applyAndReply / 无参 cleanpath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_clean_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零连斩路径选打同题复读（TIP-DW） · 零避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-DV–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零 Rush/Cut 同窗 · 零复开 D578 玩法本体（auto/ask/mute 真改净伤事件拉开语义零改）· 零改 streak_path / blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
@@ -35,8 +35,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 16:32 Asia/Shanghai
-- [x] 插件交 offerPick / applyAndReply / 无参 cleanpath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat_commit `913ad2caf` · jar `1.65.848-d13355.local`
+- [x] 插件交 offerPick / applyAndReply / 无参 cleanpath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat_commit `962b88252` · jar `1.65.848-d13355.local`
 - [x] 物品交薄 clean_path 页 + TrMenu reload · `610e8eefb`
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 streak_path·零已齐选打同题复读·零改 D578 净伤语义）· **勿勾 CLOSED（总控勾）**
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a插件已交 `913ad2caf` / jar `1.65.848-d13355.local` · W1b `610e8eefb` · 可派测 · 勿勾 CLOSED · L不批 · D13355 · TIP-DX · 2026-10-14 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a插件已交 `962b88252` / jar `1.65.848-d13355.local` · W1b `610e8eefb` · 可派测 · 勿勾 CLOSED · L不批 · D13355 · TIP-DX · 2026-10-14 Asia/Shanghai
