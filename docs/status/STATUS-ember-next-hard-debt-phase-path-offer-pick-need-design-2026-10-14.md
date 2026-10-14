@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EE CLOSED** live（D13362 增援路径选打齐 · feat `ab8037d36` · tip `8f98ec8c8` · jar `1.65.855-d13362.local` · PASS `de6ef36f5` · 批 sha `8f98ec8c8` · menu tip `a27405c0c` · CLOSED `495677818` · 证据 `/workspace/tmp/tip-ee-wave-path/` · **增援路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **PhasePath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EE 选打勿复；PacePath（本仓无）后置；其它剩支 D587+（Gap…）后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip thin · **待批 A** · 荐 M · docs-only · 勿勾 CLOSED
+**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `7943dfc48` · 2026-10-14 19:01 Asia/Shanghai · 勿勾 CLOSED · 可施工
 **硬规格：** [`DESIGN-ember-phase-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-phase-path-offer-pick-visible-2026-10-14.md) · backlog `B-phase-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EE 已齐；半血**选打**仍 ConfirmTokens 教裸 phasepath——总控钉死本支；内容闭环断在半血路径选打（≠增援选打；≠ settle 同题；局内半血钮≠选打页）。
 
@@ -61,7 +61,7 @@
 | RESEARCH | `docs/design/RESEARCH-ember-phase-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-14.md` |
 | backlog | `B-phase-path-offer-pick-visible` |
-| 号段 | **D13363** · 字母窗 **TIP-EF** · STATUS=**待批 A** · 荐 M |
+| 号段 | **D13363** · 字母窗 **TIP-EF** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `7943dfc48` · 2026-10-14 19:01 Asia/Shanghai · 勿勾 CLOSED
 | 上游 | TIP-EE CLOSED live `495677818` · feat `ab8037d36` · tip `8f98ec8c8` · PASS `de6ef36f5` · jar `1.65.855-d13362.local` · 批 sha `8f98ec8c8` · menu tip `a27405c0c` · D13362；半行 REJECT `d00ed84bc` 保持否决；增援路径选打菜单化同题勿再交 |
 
 *选题 PhasePath.offerPick / applyAndReply 半血路径选打菜单化 · tip **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13363 · TIP-EF · 半行 REJECT `d00ed84bc` **保持否决** · 其它剩支 D587+（Gap…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EE CLOSED `495677818` · 2026-10-14 18:59 Asia/Shanghai.*
