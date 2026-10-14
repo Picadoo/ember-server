@@ -6066,14 +6066,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberWavePath.get(d);
-                    if (EmberWavePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberWavePath.label(cur) + " · 改路径再 /corerpg p1 wavepath");
+                    if (EmberWavePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberWavePath.label(cur) + " · 点增援路径页可改");
                     else EmberWavePath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberWavePath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 wavepath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点增援路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberWavePath.applyAndReply(p, id);
