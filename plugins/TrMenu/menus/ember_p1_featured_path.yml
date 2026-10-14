@@ -1,0 +1,272 @@
+# TIP-DE / D13336 · 精选路径选打薄页 · featured_path* · featurepath / enter 本周精选
+# 入口：FeaturedPath.offerPick / 无参 featurepath / 冒险 Open → /ember_p1_featured_path（插件并行改开菜单）
+# 选打：corerpg p1 featurepath challenge|normal|clear · 进本：enter %featured_key% [challenge]
+# 禁：教裸指令主 UI · 抬掉落/体力价/周帽 · 改 featured_settle / 已齐 settle / 庭内
+# PAPI（插件可能后到·静态接线）：featured_path / featured_path_label / featured_path_line · featured / featured_key · access_q01 / q07done
+# ≠ ember_p1_featured_settle（settle 下一环另页已齐勿复读）
+
+Title: '§b精选 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_featured_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '##1#2#C##'
+  - '##E#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §b精选路径 §7· %corerpg_p1_featured_path_line%'
+    - 'tell: §7本周：§f%corerpg_p1_featured% §8· 当前 §e%corerpg_p1_featured_path_label% §8· 点选打法 / 进本 / 冒险'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§b精选路径 · 说明'
+      lore:
+        - '§7本周精选：§f%corerpg_p1_featured%'
+        - '§7当前路径：§e%corerpg_p1_featured_path_label%'
+        - '§8%corerpg_p1_featured_path_line%'
+        - '§8点选 · 挑战 / 普通 / 清空 / 进本周精选 / 冒险'
+
+  # 精选·挑战 · CHALLENGE=1
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_access_q01% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7精选·挑战 §8（需首通 Q01）'
+          lore:
+            - '§c精选路径需本人首通 Q01'
+            - '§7本周：§f%corerpg_p1_featured%'
+            - '§8通关 Q01 后再选打法'
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7精选·挑战 §8（需首通 Q07）'
+          lore:
+            - '§c挑战版需本人首通 Q07'
+            - '§7可先选 §b精选·普通 §7练图'
+            - '§7本周：§f%corerpg_p1_featured%'
+            - '§8通关 Q07 后再选挑战'
+      - condition: 'check papi %corerpg_p1_featured_path% == 1'
+        priority: 3
+        display:
+          material: redstone
+          shiny: true
+          name: '§a精选·挑战 §8· §f已选'
+          lore:
+            - '§7打本周精选挑战 · 吃周规则与精选印记'
+            - '§a当前路径焦点'
+            - '§7本周：§f%corerpg_p1_featured%'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 featurepath challenge'
+            - 'menu: ember_p1_featured_path'
+    display:
+      material: redstone
+      name: '§c精选·挑战'
+      lore:
+        - '§7打本周精选挑战 · 吃周规则与精选印记'
+        - '§7本周：§f%corerpg_p1_featured%'
+        - '§8点选切换精选路径'
+        - '§e➥ §f设为精选·挑战'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 featurepath challenge'
+        - 'menu: ember_p1_featured_path'
+
+  # 精选·普通 · NORMAL=2
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_access_q01% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7精选·普通 §8（需首通 Q01）'
+          lore:
+            - '§c精选路径需本人首通 Q01'
+            - '§7本周：§f%corerpg_p1_featured%'
+            - '§8通关 Q01 后再选打法'
+      - condition: 'check papi %corerpg_p1_featured_path% == 2'
+        priority: 2
+        display:
+          material: light blue dye
+          shiny: true
+          name: '§a精选·普通 §8· §f已选'
+          lore:
+            - '§7打本周精选普通 · 练名片/掉落偏 · 控强度'
+            - '§a当前路径焦点'
+            - '§7本周：§f%corerpg_p1_featured%'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 featurepath normal'
+            - 'menu: ember_p1_featured_path'
+    display:
+      material: light blue dye
+      name: '§b精选·普通'
+      lore:
+        - '§7打本周精选普通 · 练名片/掉落偏 · 控强度'
+        - '§7本周：§f%corerpg_p1_featured%'
+        - '§8点选切换精选路径'
+        - '§e➥ §f设为精选·普通'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 featurepath normal'
+        - 'menu: ember_p1_featured_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_access_q01% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空精选路径 §8（需首通 Q01）'
+          lore:
+            - '§c精选路径需本人首通 Q01'
+            - '§8通关后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_featured_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无精选路径焦点'
+            - '§8先点 精选·挑战 / 精选·普通'
+            - '§8进本周精选需先选路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 featurepath clear'
+            - 'menu: ember_p1_featured_path'
+    display:
+      material: barrier
+      name: '§7清空精选路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_featured_path_label%'
+        - '§8清焦点 · 可重选'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 featurepath clear'
+        - 'menu: ember_p1_featured_path'
+
+  # 进本周精选 · 真 enter（挑战→challenge；普通→无后缀）
+  # 挑战钮已灰 Q07 → 有路径=1 即可进挑战；未选路径 / 未 Q01 灰
+  E:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_access_q01% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7进本周精选 §8（需首通 Q01）'
+          lore:
+            - '§c精选路径需本人首通 Q01'
+            - '§7本周：§f%corerpg_p1_featured%'
+            - '§8通关后再进'
+      - condition: 'check papi %corerpg_p1_featured_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7进本周精选 §8（先选路径）'
+          lore:
+            - '§c尚未选精选路径'
+            - '§7点上方 精选·挑战 / 精选·普通'
+            - '§7本周：§f%corerpg_p1_featured%'
+            - '§8选好后再进 · 勿假开'
+      - condition: 'check papi %corerpg_p1_featured_path% == 1'
+        priority: 3
+        display:
+          material: emerald
+          name: '§a进本周精选 §8· §c挑战'
+          lore:
+            - '§7本周：§f%corerpg_p1_featured%'
+            - '§7路径：§e%corerpg_p1_featured_path_label%'
+            - '§8点进 · 真进挑战精选 · §e➥进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 enter %corerpg_p1_featured_key% challenge'
+            - close
+    display:
+      material: emerald
+      name: '§a进本周精选'
+      lore:
+        - '§7本周：§f%corerpg_p1_featured%'
+        - '§7路径：§e%corerpg_p1_featured_path_label%'
+        - '§8点进 · 真进普通精选 · §e➥进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter %corerpg_p1_featured_key%'
+        - close
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊（可选）
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
