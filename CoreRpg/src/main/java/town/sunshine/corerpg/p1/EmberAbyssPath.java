@@ -12,13 +12,22 @@ import town.sunshine.corerpg.PlayerData;
 
 /**
  * D486: abyss combat path — push next floor vs farm cleared floor.
- * Real progression + quality-table choice; chat buttons only.
- * Zero abyss HP/dmg/fee / AFK / sx change.
+ * Real progression + quality-table choice.
+ * TIP-DB D13333: settle newBest 下一环开 /ember_p1_abyss_settle；禁教手打 abysstarget 主 UI.
+ * TIP-DI D13340: offerPick / applyAndReply / 无参 abysspath / 周要约 →开 /ember_p1_abyss_path；
+ * 清 ConfirmTokens 教 abysspath/abyss 主 UI；零改层费/强度/掉落/体力价/层表.
  */
 public final class EmberAbyssPath {
 
     public static final String C_PATH = "p1_abyss_path";
     public static final String C_OFFER = "p1_abyss_path_offer";
+
+    /** TIP-DI D13340 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_abyss_path";
+    public static final String PATH_PICK_LABEL = "[深渊路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
+    public static final String PATH_FORGE_CMD = "/ember_p1_forge";
+    public static final String PATH_ABYSS_CMD = "/ember_p1_abyss";
 
     public static final int NONE = 0;
     public static final int PUSH = 1; // 冲层 · maxStart / next
@@ -68,8 +77,16 @@ public final class EmberAbyssPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8深渊路径：首通 Q07 后可选";
-        if (!valid(id)) return "§8深渊路径：未选 · /corerpg p1 abysspath";
+        // TIP-DI D13340: 禁教手打 /corerpg p1 abysspath
+        if (!valid(id)) return "§8深渊路径：未选 · 点深渊路径页";
         return "§e深渊路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DI D13340 · 薄页 lore 一行（无 §）：当前深渊路径。
+     */
+    public static String menuLine(int id) {
+        return "深渊路径 · " + label(id);
     }
 
     /** Resolve enter tier hint (Bukkit-free when best/maxStart passed). */
@@ -95,10 +112,19 @@ public final class EmberAbyssPath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选本周深渊打法（冲层/刷层 · 可随时改 · 不改层费/强度）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[冲层]", "/corerpg p1 abysspath push", tip(PUSH), "RED"},
-                new String[]{"[刷层]", "/corerpg p1 abysspath farm", tip(FARM), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 abysspath clear", "清空路径", "GRAY"});
+        // TIP-DI D13340: 开选打薄页；禁 ConfirmTokens 教 abysspath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_abyss_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_abyss_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "冲层/刷层/清空/深渊表/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -166,10 +192,11 @@ public final class EmberAbyssPath {
         if (EmberAbyssTarget.get(d) <= 0) {
             p.sendMessage(P + "§7可设层目标 · 点下一环设目标"); // TIP-DB D13333 禁教手打
         }
+        // TIP-DI D13340: 下一步→选打薄页（冲层进本/深渊表/重选/冒险·工坊可点）；禁教裸 abysspath/abyss 为主 UI
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{enterLabel(id, best, maxStart), enterCmd(id, best, maxStart), "开深渊层（体力+层费）", "GREEN"},
-                new String[]{"[深渊表]", "/corerpg p1 abyss", "看各层状态", "GOLD"},
-                new String[]{"[换一条]", "/corerpg p1 abysspath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "冲层进本/深渊表/重选", "GREEN"},
+                new String[]{"[深渊表]", PATH_ABYSS_CMD, "看各层状态", "GOLD"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

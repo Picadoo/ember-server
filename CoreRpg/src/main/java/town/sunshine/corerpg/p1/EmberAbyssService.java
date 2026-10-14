@@ -192,7 +192,7 @@ public final class EmberAbyssService {
         PlayerData enterPd = runs.dataOf(leader.getUniqueId());
         EmberAbyssTarget.enterCue(leader, enterPd, tier, best(enterPd)); // D696
         if (enterPd != null && !EmberAbyssPath.valid(EmberAbyssPath.get(enterPd))) { // D718
-            leader.sendMessage(P() + "§7未选深渊路径 · /corerpg p1 abysspath（冲层/刷层）");
+            leader.sendMessage(P() + "§7未选深渊路径 · 点深渊路径页（冲层/刷层）"); // TIP-DI D13340 禁教手打
         }
         // D649: first-layer gift visible at entry (fee table already 0 · no price change)
         if (tier == 1 && best(runs.dataOf(leader.getUniqueId())) <= 0) {

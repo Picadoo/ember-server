@@ -113,7 +113,8 @@ public final class EmberRunPapi {
         if ("next".equals(key)) return Section.ENTRY;
         if (key.startsWith("raid_")) return Section.RAID;
         if ("abyss_settle".equals(key) || key.startsWith("abyss_settle_")
-                || "abyss_path".equals(key) || "abyss_path_label".equals(key)) return Section.ABYSS; // TIP-DB D13333
+                || "abyss_path".equals(key) || "abyss_path_label".equals(key)
+                || "abyss_path_tip".equals(key) || "abyss_path_line".equals(key)) return Section.ABYSS; // TIP-DB D13333 + TIP-DI D13340
         if ("abyss_state".equals(key) || key.startsWith("abyss_t")) return Section.ABYSS;
         if ("recruits".equals(key) || "failrefund".equals(key)) return Section.ENTRY;
         if ("featured_key".equals(key)) return Section.ROTATION;
@@ -995,6 +996,8 @@ public final class EmberRunPapi {
         int path = EmberAbyssPath.get(d);
         if ("abyss_path".equals(key)) return String.valueOf(path);
         if ("abyss_path_label".equals(key)) return EmberAbyssPath.label(path);
+        if ("abyss_path_tip".equals(key)) return EmberAbyssPath.tip(path); // TIP-DI D13340
+        if ("abyss_path_line".equals(key)) return EmberAbyssPath.menuLine(path); // TIP-DI D13340
         if ("abyss_settle".equals(key) || "abyss_settle_floor".equals(key))
             return floor > 0 ? String.valueOf(floor) : "";
         if ("abyss_settle_name".equals(key)) return EmberAbyssSettle.displayName(floor);
@@ -1020,7 +1023,8 @@ public final class EmberRunPapi {
 
     private String abyss(PlayerData d, String key, EmberRunMaps maps) {
         if ("abyss_settle".equals(key) || (key != null && key.startsWith("abyss_settle_"))
-                || "abyss_path".equals(key) || "abyss_path_label".equals(key)) // TIP-DB D13333
+                || "abyss_path".equals(key) || "abyss_path_label".equals(key)
+                || "abyss_path_tip".equals(key) || "abyss_path_line".equals(key)) // TIP-DB D13333 + TIP-DI D13340
             return abyssSettle(d, key, maps);
         if ("abyss_best".equals(key)) return String.valueOf(runs.abyssBest(d)); // P2-2
         if ("abyss_hope".equals(key)) { // D624 · TIP-AX peekFee

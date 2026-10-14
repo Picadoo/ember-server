@@ -1,6 +1,6 @@
 # tip · TIP-DI AbyssPath.offerPick / applyAndReply「深渊路径选打」菜单化（选路径聊天钮去指令化 · ≠深渊settle下一环同题 · ≠短征路径选打同题 · ≠团本/硬本/精选路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬层费/强度/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠TrialPath同窗）· 拟 D13340
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13340 · TIP-DI · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改层费/强度/掉落/体力价/层表 · offerPick/applyAndReply/无参 abysspath/周要约→开 ember_p1_abyss_path · 清 ConfirmTokens 教 abysspath 主 UI · 2026-10-14 11:50 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · W1a 已交 · **勿勾 CLOSED** · D13340 · TIP-DI · jar `1.65.833-d13340.local` · 零改层费/强度/掉落/体力价/层表 · 2026-10-14 11:53 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-abyss-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-abyss-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-abyss-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（AbyssPath.offerPick / applyAndReply / 无参 abysspath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_abyss_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零深渊settle下一环同题复读（TIP-DB） · 零短征路径选打同题复读（TIP-DH） · 零团本/硬本/精选路径选打同题复读（TIP-DG/DF/DE） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬层费/强度/掉落/体力价/层表 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 TrialPath 同窗
@@ -34,8 +34,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 11:50 Asia/Shanghai
-- [ ] 插件交 offerPick / applyAndReply / 无参 abysspath / 周要约改开菜单 + 清裸指令主路径 + 单测
-- [ ] 物品交薄 abyss_path 页 + TrMenu reload
+- [x] 插件交 offerPick / applyAndReply / 无参 abysspath / 周要约改开菜单 + 清裸指令主路径 + 单测 · W1a `1.65.833-d13340.local` · 2026-10-14 Asia/Shanghai
+- [ ] 物品交薄 abyss_path 页 + TrMenu reload（并行 W1b；yml 已见）
 - [ ] 抽测 PASS live（选冲层/刷层/清空/深渊表/冒险真开·PAPI·零抬层费/强度/掉落/体力价·零改 abyss_settle·零短征选打同题复读）· **勿勾 CLOSED**
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13340 · TIP-DI · 2026-10-14 11:50 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a 已交 · 勿勾 CLOSED · D13340 · TIP-DI · jar `1.65.833-d13340.local` · 2026-10-14 11:53 Asia/Shanghai

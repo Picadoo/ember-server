@@ -3830,14 +3830,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberAbyssPath.get(d);
-                    if (EmberAbyssPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberAbyssPath.label(cur) + " · 改路径再 /corerpg p1 abysspath");
+                    if (EmberAbyssPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberAbyssPath.label(cur) + " · 改路径点深渊路径页");
                     else EmberAbyssPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberAbyssPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 abysspath <push|farm|clear>");
+                p.sendMessage(P + "用法：点深渊路径页选冲层/刷层/清空");
                 return true;
             }
             EmberAbyssPath.applyAndReply(p, id);
