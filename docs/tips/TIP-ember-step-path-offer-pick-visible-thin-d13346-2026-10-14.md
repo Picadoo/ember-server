@@ -1,6 +1,6 @@
 # tip · TIP-DO StepPath.offerPick / applyAndReply「身法路径选打」菜单化（选路径聊天钮去指令化 · ≠轻技路径选打同题 · ≠破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠闪冲同窗 · ≠复开 D491 玩法本体）· 拟 D13346
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13346 · TIP-DO · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 steppath/周要约→开 ember_p1_step_path · 清 ConfirmTokens 教 steppath 主 UI · 2026-10-14 13:45 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13346 · TIP-DO · W1a插件已交 · 待测岗/物品W1b · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 steppath/周要约→开 ember_p1_step_path · 清 ConfirmTokens 教 steppath 主 UI · 2026-10-14 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-step-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-step-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-step-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（StepPath.offerPick / applyAndReply / 无参 steppath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_step_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零轻技路径选打同题复读（TIP-DN） · 零破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-DL–DE / TIP-DM） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零闪冲 SidestepPath 同窗 · 零复开 D491 玩法本体
@@ -35,8 +35,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 13:45 Asia/Shanghai
-- [ ] 插件交 offerPick / applyAndReply / 无参 steppath / 周要约改开菜单 + 清裸指令主路径 + 单测
+- [x] 插件交 offerPick / applyAndReply / 无参 steppath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat_commit `7fe0f4a9e` · jar `1.65.839-d13346.local`
 - [ ] 物品交薄 step_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选前冲/后撤/清空/进本/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 flex_path·零已齐选打同题复读）
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13346 · TIP-DO · 2026-10-14 13:45 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a插件已交（勿勾 CLOSED · 待测岗/物品W1b） · L不批 · D13346 · TIP-DO · 2026-10-14 Asia/Shanghai

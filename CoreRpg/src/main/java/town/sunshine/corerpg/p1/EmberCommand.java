@@ -3724,14 +3724,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberStepPath.get(d);
-                    if (EmberStepPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberStepPath.label(cur) + " · 改路径再 /corerpg p1 steppath");
+                    if (EmberStepPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberStepPath.label(cur) + " · 点身法路径页可改");
                     else EmberStepPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberStepPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 steppath <forward|back|clear>");
+                p.sendMessage(P + "用法：点身法路径页选前冲/后撤/清空");
                 return true;
             }
             EmberStepPath.applyAndReply(p, id);

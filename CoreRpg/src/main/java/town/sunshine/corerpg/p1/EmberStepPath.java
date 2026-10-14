@@ -15,11 +15,18 @@ import town.sunshine.corerpg.SkillService;
  * D491: step-dir combat path — forward / back.
  * Real play change (身法方向 via {@link EmberSkillKit#setStepDir}); chat buttons only.
  * Zero step distance / CD table / AFK / sx change. Not forge chase / enter-card / ActionBar twin.
+ * TIP-DO D13346: offerPick / applyAndReply / 无参 steppath / 周要约 →开 /ember_p1_step_path；
+ * 清 ConfirmTokens 教 steppath/enter 主 UI；零改伤害/CD表/掉落/体力价/身法规则语义(D491).
  */
 public final class EmberStepPath {
 
     public static final String C_PATH = "p1_step_path";
     public static final String C_OFFER = "p1_step_path_offer";
+
+    /** TIP-DO D13346 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_step_path";
+    public static final String PATH_PICK_LABEL = "[身法路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int FORWARD = 1; // → DIR_FORWARD
@@ -74,8 +81,16 @@ public final class EmberStepPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8身法路径：首通 Q05 后可选";
-        if (!valid(id)) return "§8身法路径：未选 · /corerpg p1 steppath";
+        // TIP-DO D13346: 禁教手打 /corerpg p1 steppath
+        if (!valid(id)) return "§8身法路径：未选 · 点身法路径页";
         return "§e身法路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DO D13346 · 薄页 lore 一行（无 §）：当前身法路径。
+     */
+    public static String menuLine(int id) {
+        return "身法路径 · " + label(id);
     }
 
     public static String enterCmd(int id) {
@@ -94,10 +109,19 @@ public final class EmberStepPath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选身法方向路径（真改潜行+Q · 回城可换 · 不改距离/CD 表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[前冲]", "/corerpg p1 steppath forward", tip(FORWARD), "GREEN"},
-                new String[]{"[后撤]", "/corerpg p1 steppath back", tip(BACK), "YELLOW"},
-                new String[]{"[取消]", "/corerpg p1 steppath clear", "清空路径（方向回前冲）", "GRAY"});
+        // TIP-DO D13346: 开选打薄页；禁 ConfirmTokens 教 steppath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_step_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_step_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "前冲/后撤/清空/进本/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -157,10 +181,10 @@ public final class EmberStepPath {
         flush(p);
         applyDir(p, toDirId(id));
         p.sendMessage(P + "§a身法路径 → §f" + label(id) + " §7· " + tip(id) + " §8（已写入潜行+Q 方向）");
+        // TIP-DO D13346: 下一步→选打薄页/冒险（禁教裸 steppath/enter 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{enterLabel(id), enterCmd(id), "进图体感这种身法", "GREEN"},
-                new String[]{"[技能组]", "trmenu open ember_skill_kit", "看按键与身法", "GOLD"},
-                new String[]{"[换一条]", "/corerpg p1 steppath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "前冲/后撤/清空/进本/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     /** Delegate to SkillService so flex CD behaviour stays single-sourced. */
