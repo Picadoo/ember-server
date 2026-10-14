@@ -1,6 +1,6 @@
 # tip · TIP-EK SlipPath.offerPick / applyAndReply「闪招路径选打」菜单化（选路径聊天钮去指令化 · ≠撞墙路径选打同题 · ≠闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D591 玩法本体）· 拟 D13368
 
-> **状态：** **已批 A** · 方案 M · APPROVED A·M · 2026-10-14 20:27 Asia/Shanghai · 勿勾 CLOSED · 可施工 W1a插件+W1b物品
+> **状态：** **已批 A** · 方案 M · APPROVED A·M · 2026-10-14 20:27 Asia/Shanghai · **W1a 插件已交** · 勿勾 CLOSED · 可派测/物品 W1b
 > **DESIGN** [`DESIGN-ember-slip-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-slip-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-slip-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（SlipPath.offerPick / applyAndReply / 无参 slippath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_slip_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零撞墙路径选打同题复读（TIP-EJ） · 零闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-EI–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零其它 *Path 同窗 · 零复开 D591 玩法本体（auto/ask/mute 真改闪招侧移出预警语义零改）· 零改 crash_path / bolt_path / shift_path / gap_path / phase_path / wave_path / soak_path / shell_path / clone_path / press_path / cut_path / rush_path / clean_path / streak_path / blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
@@ -35,8 +35,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M
-- [ ] 插件交 offerPick / applyAndReply / 无参 slippath / 周要约改开菜单 + 清裸指令主路径 + 单测
+- [x] 插件交 offerPick / applyAndReply / 无参 slippath / 周要约改开菜单 + 清裸指令主路径 + 单测 · W1a feat `606eea48f` · jar `1.65.861-d13368.local` · **勿勾 CLOSED**
 - [ ] 物品交薄 slip_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 crash_path·零已齐选打同题复读·零改 D591 闪招语义）
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · D13368 · TIP-EK · 2026-10-14 20:27 Asia/Shanghai · 勿勾 CLOSED · 可施工
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · D13368 · TIP-EK · 2026-10-14 20:27 Asia/Shanghai · **W1a 插件已交** · 勿勾 CLOSED · 可派测/物品 W1b
