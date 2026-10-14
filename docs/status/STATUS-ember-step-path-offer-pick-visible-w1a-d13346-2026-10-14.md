@@ -11,7 +11,7 @@
 - PAPI：`%corerpg_p1_step_path%`/`_label`/`_tip`/`_line`（`menuLine`）
 - 单测：`EmberStepPathPickTest`（新 7）· `EmberStepPathTest` · `EmberFlexPathPickTest` · `EmberStridePathPickTest` · `EmberCounterPathPickTest` · `EmberRunPapiTest` 绿
 - jar：`1.65.839-d13346.local` · sha256 `d35731caef43faac…` · ECONOMY_BV **123** 未动
-- play：live  · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
+- play：live `1.65.839-d13346.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / 身法规则语义(D491 forward/back 真改方向) / Cast·Aid / variety / 已齐 settle 薄页 / Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Sidestep 同窗 / 庭内 / TrMenu yml（物品 W1b 并行）
 - **勿勾 tip CLOSED**（测岗/总控勾）
 
