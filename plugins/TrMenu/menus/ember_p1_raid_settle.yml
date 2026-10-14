@@ -1,0 +1,275 @@
+# TIP-CZ / D13331 · 团本结算「下一环」薄页 · raid_settle*
+# 入口：周清 afterWeeklyClear → /ember_p1_raid_settle（插件并行改开菜单）
+# 再进：corerpg p1 enter %corerpg_p1_raid_settle_map% · 路径薄格 raidpath r01|r02|r03|clear · 招募 recruit map
+# 禁：教裸指令主 UI · 抬周帽/loot/体力价 · 改 ember_raid 大厅 / 短征薄页 / 庭内 / Cast/Aid/variety
+# PAPI（插件可能后到·静态接线）：raid_settle_map/name/week_left/week_line · raid_path / raid_path_label · stamina_blocked_raid
+
+Title: '§9团本 · 下一环'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_raid_settle'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#E##A##F#'
+  - '#1#2#3#RC'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §9团本下一环 §7· %corerpg_p1_raid_settle_week_line%'
+    - 'tell: §7路径：§e%corerpg_p1_raid_path_label% §8· 点选再进 / 换路径 / 冒险 / 花料'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: paper
+      name: '§9团本下一环'
+      lore:
+        - '§7本周额度：§f%corerpg_p1_raid_settle_week_line%'
+        - '§7路径：§e%corerpg_p1_raid_path_label%'
+        - '§8点选 · 再进 / 换路径 / 冒险 / 花料 / 招募'
+
+  # 再进路径团本 · 真 enter 当前路径本（PAPI 展开 settle_map）
+  E:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_raid_settle_week_left% <= 0'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7再进路径团本 §8（周额度满）'
+          lore:
+            - '§a本周额度已满 §7· 再进灰'
+            - '§7本周：§f%corerpg_p1_raid_settle_week_line%'
+            - '§8仍可换路径 / 冒险 / 工坊 · 周一 0 点重置'
+      - condition: 'check papi %corerpg_p1_raid_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7再进路径团本 §8（先选路径）'
+          lore:
+            - '§c尚未选团本路径'
+            - '§7点下方 R01 / R02 / R03 定焦点'
+            - '§8选好后再进 · 勿假开'
+      - condition: 'check papi %corerpg_stamina_blocked_raid% > 0'
+        priority: 3
+        display:
+          material: iron bars
+          name: '§7再进路径团本 §8（体力不足）'
+          lore:
+            - '§c需要 §e%corerpg_stamina_cost_raid% §c体力 · 当前 §f%corerpg_stamina%'
+            - '§7路径本：§f%corerpg_p1_raid_settle_name% §7· %corerpg_p1_raid_settle_week_line%'
+            - '§8挂机/补给后再来 · 勿假开'
+    display:
+      material: emerald
+      name: '§a再进路径团本'
+      lore:
+        - '§7本周剩余 §a%corerpg_p1_raid_settle_week_left%'
+        - '§7路径本：§f%corerpg_p1_raid_settle_name% §7· %corerpg_stamina_cost_raid%体力（周首免费）'
+        - '§8点进 · 真进本 · §e➥进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter %corerpg_p1_raid_settle_map%'
+        - close
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊花料'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  # 选·换路径 · 薄格 R01
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_raid_path% == 1'
+        priority: 1
+        display:
+          material: iron chestplate
+          shiny: true
+          name: '§aR01 锈轨 §8· §f已选'
+          lore:
+            - '§7名片冲撞撞墙 · 掉落偏向烬爆'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 raidpath r01'
+            - 'menu: ember_p1_raid_settle'
+    display:
+      material: iron chestplate
+      name: '§eR01 锈轨'
+      lore:
+        - '§7名片冲撞撞墙 · 掉落偏向烬爆'
+        - '§8点选切换路径焦点'
+        - '§e➥ §f设为 R01'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 raidpath r01'
+        - 'menu: ember_p1_raid_settle'
+
+  # 选·换路径 · 薄格 R02
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_raid_path% == 2'
+        priority: 1
+        display:
+          material: diamond chestplate
+          shiny: true
+          name: '§aR02 霜封 §8· §f已选'
+          lore:
+            - '§7名片半血砸地 · 掉落偏向炽愈'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 raidpath r02'
+            - 'menu: ember_p1_raid_settle'
+    display:
+      material: diamond chestplate
+      name: '§eR02 霜封'
+      lore:
+        - '§7名片半血砸地 · 掉落偏向炽愈'
+        - '§8点选切换路径焦点'
+        - '§e➥ §f设为 R02'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 raidpath r02'
+        - 'menu: ember_p1_raid_settle'
+
+  # 选·换路径 · 薄格 R03
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_raid_path% == 3'
+        priority: 1
+        display:
+          material: golden chestplate
+          shiny: true
+          name: '§aR03 断塔 §8· §f已选'
+          lore:
+            - '§7名片烬核分摊 · 掉落偏向焚烬'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 raidpath r03'
+            - 'menu: ember_p1_raid_settle'
+    display:
+      material: golden chestplate
+      name: '§eR03 断塔'
+      lore:
+        - '§7名片烬核分摊 · 掉落偏向焚烬'
+        - '§8点选切换路径焦点'
+        - '§e➥ §f设为 R03'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 raidpath r03'
+        - 'menu: ember_p1_raid_settle'
+
+  # 招募 · 有路径时真 recruit mapKey
+  R:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_raid_path% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7招募 §8（先选路径）'
+          lore:
+            - '§c尚未选团本路径'
+            - '§7点 R01 / R02 / R03 定焦点后再招'
+            - '§8凑 3～5 人再进'
+    display:
+      material: golden apple
+      name: '§6招募凑人'
+      lore:
+        - '§7路径本：§f%corerpg_p1_raid_settle_name%'
+        - '§7发招募 · 凑 3～5 人'
+        - '§e➥ §f招募'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 recruit %corerpg_p1_raid_settle_map%'
+        - close
+
+  # 清空路径焦点
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_raid_path% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（未选）'
+          lore:
+            - '§7当前无路径焦点'
+            - '§8先点 R01 / R02 / R03'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_raid_path_label%'
+        - '§8清焦点 · 可重选'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 raidpath clear'
+        - 'menu: ember_p1_raid_settle'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
