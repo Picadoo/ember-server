@@ -3556,14 +3556,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberTrialPath.get(d);
-                    if (EmberTrialPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberTrialPath.label(cur) + " · 改路径再 /corerpg p1 trialpath");
+                    if (EmberTrialPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberTrialPath.label(cur) + " · 改路径点试炼路径页");
                     else EmberTrialPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberTrialPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 trialpath <cautious|aggressive|pressure|clear>");
+                p.sendMessage(P + "用法：点试炼路径页选稳慎/猛开/加压/清空");
                 return true;
             }
             EmberTrialPath.applyAndReply(p, id);

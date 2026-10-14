@@ -75,6 +75,7 @@ public final class EmberRunPapi {
         if ("active".equals(key)) return Section.ENTRY;
         if ("vbounty".equals(key)) return Section.RUSH;
         if ("rush".equals(key)) return Section.RUSH;
+        if ("trial_path".equals(key) || (key != null && key.startsWith("trial_path_"))) return Section.RUSH; // TIP-DJ D13341
         if (key.startsWith("pledge_")) return Section.RUSH;
         if (key.startsWith("rush_")) return Section.RUSH;
         if (key.startsWith("passd_")) return Section.ENTRY;
@@ -592,6 +593,16 @@ public final class EmberRunPapi {
         return "";
     }
 
+    /** TIP-DJ D13341 %corerpg_p1_trial_path*% — sticky TrialPath preference; zero economy. */
+    private String trialPath(PlayerData d, String key) {
+        int path = EmberTrialPath.get(d);
+        if ("trial_path".equals(key)) return String.valueOf(path);
+        if ("trial_path_label".equals(key)) return EmberTrialPath.label(path);
+        if ("trial_path_tip".equals(key)) return EmberTrialPath.tip(path);
+        if ("trial_path_line".equals(key)) return EmberTrialPath.menuLine(path);
+        return "";
+    }
+
     /** TIP-CV D13327 %corerpg_p1_short_path*% — sticky ShortPath preference + resolve; zero algo change. */
     private String shortPathChase(PlayerData d, String key) {
         int path = EmberShortPath.get(d);
@@ -755,6 +766,8 @@ public final class EmberRunPapi {
             int used = runs.rushWeek(d, p.getUniqueId()); // D160
             return rushLine(EmberRunRules.rushPaysReward(used, EmberRunService.RUSH_WEEKLY));
         }
+        if ("trial_path".equals(key) || (key != null && key.startsWith("trial_path_"))) // TIP-DJ D13341
+            return trialPath(d, key);
         if (key.startsWith("pledge_")) return runs.pledgePapi(d, key.substring(7)); // D174 stage 2b 自选誓约
         EmberRunMaps.MapDef rm = maps.rush.get(key.substring(5)); // rush_<entry>
         if (rm == null) return null; // old chain: not a rush entry → per-map tail

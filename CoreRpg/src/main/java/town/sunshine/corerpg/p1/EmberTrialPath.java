@@ -15,12 +15,20 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D496: combat trial path — cautious / aggressive / pressure.
  * Real play change: writes self-select pledge rules + counter practice sticky together.
- * Chat buttons only. Zero dmg/CD tables / AFK / sx. Not forge chase / enter-card / ActionBar twin.
+ * Zero dmg/CD tables / AFK / sx. Not forge chase / enter-card / ActionBar twin.
+ * TIP-DJ D13341: offerPick / applyAndReply / 无参 trialpath / 周要约 →开 /ember_p1_trial_path；
+ * 清 ConfirmTokens 教 trialpath/pledgepath/counterpath 主 UI；零改伤害/CD表/掉落/体力价/试炼语义.
  */
 public final class EmberTrialPath {
 
     public static final String C_PATH = "p1_trial_path";
     public static final String C_OFFER = "p1_trial_path_offer";
+
+    /** TIP-DJ D13341 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_trial_path";
+    public static final String PATH_PICK_LABEL = "[试炼路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
+    public static final String PATH_FORGE_CMD = "/ember_p1_forge";
 
     public static final int NONE = 0;
     /** 限药 + 落空破绽 */
@@ -91,8 +99,16 @@ public final class EmberTrialPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8试炼路径：首进或首通 Q06 后可选（需自选誓约）";
-        if (!valid(id)) return "§8试炼路径：未选 · /corerpg p1 trialpath";
+        // TIP-DJ D13341: 禁教手打 /corerpg p1 trialpath
+        if (!valid(id)) return "§8试炼路径：未选 · 点试炼路径页";
         return "§e试炼路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DJ D13341 · 薄页 lore 一行（无 §）：当前试炼路径。
+     */
+    public static String menuLine(int id) {
+        return "试炼路径 · " + label(id);
     }
 
     public static String enterCmd(int id) {
@@ -107,11 +123,19 @@ public final class EmberTrialPath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选试炼玩法（一次写入自选誓约+破绽练法 · 回城可换 · 不改伤害/CD 表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[稳慎试炼]", "/corerpg p1 trialpath cautious", tip(CAUTIOUS), "YELLOW"},
-                new String[]{"[猛开试炼]", "/corerpg p1 trialpath aggressive", tip(AGGRESSIVE), "RED"},
-                new String[]{"[加压试炼]", "/corerpg p1 trialpath pressure", tip(PRESSURE), "LIGHT_PURPLE"},
-                new String[]{"[取消]", "/corerpg p1 trialpath clear", "清空试炼（清誓约+破绽粘性）", "GRAY"});
+        // TIP-DJ D13341: 开选打薄页；禁 ConfirmTokens 教 trialpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_trial_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_trial_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "稳慎/猛开/加压/清空/进本/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -175,11 +199,11 @@ public final class EmberTrialPath {
         p.sendMessage(P + "§a试炼 → §f" + label(id) + " §7· " + tip(id)
                 + " §8（已写入 " + EmberPledgePath.label(pledgeId(id))
                 + " + " + EmberCounterPath.label(counterId(id)) + "）");
+        // TIP-DJ D13341: 下一步→选打薄页（稳慎/猛开/加压/进本/重选/冒险·工坊可点）；禁教裸 trialpath/pledgepath/counterpath 为主 UI
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{enterLabel(id), enterCmd(id), "进图练这套试炼", "GREEN"},
-                new String[]{"[誓约路径]", "/corerpg p1 pledgepath", "单改誓约", "YELLOW"},
-                new String[]{"[破绽路径]", "/corerpg p1 counterpath", "单改破绽", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 trialpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "稳慎/猛开/加压/进本/重选", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"},
+                new String[]{"[工坊]", PATH_FORGE_CMD, "花料", "GOLD"});
     }
 
     private static PlayerData dataOf(Player p) {
