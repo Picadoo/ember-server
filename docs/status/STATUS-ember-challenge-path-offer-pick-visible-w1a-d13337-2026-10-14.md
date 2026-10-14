@@ -9,8 +9,8 @@
 - glance / enterCue / nudge / 用法：清「手打 /corerpg p1 challengepath」主教 →「点硬本路径页」
 - PAPI（复用+扩）：`%corerpg_p1_challenge_path%`/`_label`/`_tip`/`_line%`（经 `EmberRunPapi` GATE）；`q07done` 复用
 - 单测：`EmberChallengePathPickTest` · `EmberChallengePathTest` · `EmberChallengeSettleNextLoopTest` · `EmberChallengeSettleTest` · `EmberRunPapiTest` · `EmberFeaturedPathPickTest` 绿
-- jar：`1.65.830-d13337.local` · sha256 `b34dc2ffa59f…` · ECONOMY_BV **123** 未动
-- play：待装 jar 后验证 live（本 STATUS 交收时填）
+- jar：`1.65.830-d13337.local` · sha256 `b34dc2ffa59f…` · feat `5927286ca` · ECONOMY_BV **123** 未动
+- play：live `1.65.830-d13337.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**掉落 / 体力价 / 硬本语义 / Cast·Aid / variety / 已齐 settle 薄页（含 `ember_p1_challenge_settle` / afterSettle）/ FeaturedPath / RaidPath / 庭内 / TrMenu yml（物品 W1b 并行已交 `ember_p1_challenge_path.yml`）
 - **未勾** tip CLOSED · **未派测**（总控派测）
 
