@@ -109,6 +109,8 @@ public final class EmberRunPapi {
         if ("route_pri".equals(key) || "route_sec".equals(key) || "route_hope".equals(key) || "featured_left".equals(key)) return Section.ENTRY; // D306/D635
         if ("next".equals(key)) return Section.ENTRY;
         if (key.startsWith("raid_")) return Section.RAID;
+        if ("abyss_settle".equals(key) || key.startsWith("abyss_settle_")
+                || "abyss_path".equals(key) || "abyss_path_label".equals(key)) return Section.ABYSS; // TIP-DB D13333
         if ("abyss_state".equals(key) || key.startsWith("abyss_t")) return Section.ABYSS;
         if ("recruits".equals(key) || "failrefund".equals(key)) return Section.ENTRY;
         if ("featured_key".equals(key)) return Section.ROTATION;
@@ -933,7 +935,40 @@ public final class EmberRunPapi {
         return v == null ? "" : v;
     }
 
+
+    /** TIP-DB D13333 %corerpg_p1_abyss_settle*% / abyss_path* — last settled floor + path; zero economy. */
+    private String abyssSettle(PlayerData d, String key, EmberRunMaps maps) {
+        int floor = EmberAbyssSettle.lastFloor(d);
+        int path = EmberAbyssPath.get(d);
+        if ("abyss_path".equals(key)) return String.valueOf(path);
+        if ("abyss_path_label".equals(key)) return EmberAbyssPath.label(path);
+        if ("abyss_settle".equals(key) || "abyss_settle_floor".equals(key))
+            return floor > 0 ? String.valueOf(floor) : "";
+        if ("abyss_settle_name".equals(key)) return EmberAbyssSettle.displayName(floor);
+        if ("abyss_settle_path".equals(key)) return String.valueOf(path);
+        if ("abyss_settle_path_label".equals(key)) return EmberAbyssPath.label(path);
+        if ("abyss_settle_line".equals(key)) return EmberAbyssSettle.line(floor, path);
+        int next = floor > 0 ? Math.min(EmberAbyssSettle.MAX_FLOOR, floor + 1) : 0;
+        if ("abyss_settle_next".equals(key))
+            return next > 0 ? String.valueOf(next) : "";
+        if ("abyss_settle_can_next".equals(key)) {
+            if (next <= 0 || maps == null || maps.abyss.isEmpty() || !runs.abyssOpen(d)) return "0";
+            int max = runs.abyssMaxStart(d);
+            if (next > max) return "0";
+            EmberRunMaps.AbyssTier tier = maps.abyssTier(next);
+            if (tier == null) return "0";
+            int fee0 = tier.fee;
+            int feeShow = EmberAbyssFeeSoft.peekFee(d, fee0);
+            boolean afford = feeShow <= 0 || d.getCoin() >= feeShow || runs.feeMarks(d, feeShow) > 0;
+            return afford ? "1" : "0";
+        }
+        return "";
+    }
+
     private String abyss(PlayerData d, String key, EmberRunMaps maps) {
+        if ("abyss_settle".equals(key) || (key != null && key.startsWith("abyss_settle_"))
+                || "abyss_path".equals(key) || "abyss_path_label".equals(key)) // TIP-DB D13333
+            return abyssSettle(d, key, maps);
         if ("abyss_best".equals(key)) return String.valueOf(runs.abyssBest(d)); // P2-2
         if ("abyss_hope".equals(key)) { // D624 · TIP-AX peekFee
             if (maps.abyss.isEmpty() || !runs.abyssOpen(d)) return EmberHopeMeter.abyssHope(0, 0, 0, false);

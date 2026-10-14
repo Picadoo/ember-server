@@ -41,7 +41,7 @@ public final class EmberRunPapiTest {
         r(SEASON, "goals", "goal_core", "goal_short", "goal_short_chase", "goal_short_chase_name", "goal_short_chase_day_line", "goal_short_chase_ok", "goal_short_done", "goalnosuch", "season", "season_week", "sboard_1", "srank_abyss", "badges"); // D401 + TIP-CG D13312
         r(COSMETIC, "shop", "shopprice_x", "shopsel_name", "shop_x", "title", "honors");
         r(FESTIVAL, "fest_name", "fest_charm_price", "fest_nosuch");
-        r(ABYSS, "abyss_best", "abyss_state", "abyss_t1", "abyss_t10", "abyss_tx");
+        r(ABYSS, "abyss_best", "abyss_state", "abyss_t1", "abyss_t10", "abyss_tx", "abyss_settle", "abyss_settle_floor", "abyss_settle_name", "abyss_settle_path", "abyss_settle_path_label", "abyss_settle_line", "abyss_settle_next", "abyss_settle_can_next", "abyss_path", "abyss_path_label"); // TIP-DB D13333
         r(RAID, "raid_r01", "raid_r03");
         r(LOADOUT, "awaken_route", "awaken", "awaken_next", "set_progress", "set_blurb", "stats", "ehp", "blade", "charm", "blade_next_q", "blade_next_c", "charm_next_q", "charm_next_c", "held_next_q", "held_next_c", "held_enhance_cost", "held_enhance_lack", "held_upgrade_cost", "held_upgrade_lack", "held_refine_lack", "held_quality_lack", "held_swap_cost", "held_dismantle_yield", "held_is_armor", "enhance_blade_pity", "enhance_charm_pity", "held_enhance_pity", "held_enhance_rate", "quality_blade_hope", "quality_charm_hope", "held_quality_hope", "refine_blade_hope", "refine_charm_hope", "held_refine_hope",
                 "afk_rec_flower", "afk_rec_flower_name", "afk_rec_flower_kind", "afk_rec_flower_ok"); // TIP-CJ D13315
@@ -118,6 +118,13 @@ public final class EmberRunPapiTest {
         assertEquals(BOARD, EmberRunPapi.route("top_featured_1"));
         assertEquals(ABYSS, EmberRunPapi.route("abyss_best"));  // before abyss_t*
         assertEquals(ABYSS, EmberRunPapi.route("abyss_tier"));  // abyss_t* (parse fails → "")
+        assertEquals(ABYSS, EmberRunPapi.route("abyss_settle")); // TIP-DB D13333
+        assertEquals(ABYSS, EmberRunPapi.route("abyss_settle_line"));
+        assertEquals(ABYSS, EmberRunPapi.route("abyss_settle_path_label"));
+        assertEquals(ABYSS, EmberRunPapi.route("abyss_settle_next"));
+        assertEquals(ABYSS, EmberRunPapi.route("abyss_settle_can_next"));
+        assertEquals(ABYSS, EmberRunPapi.route("abyss_path"));
+        assertEquals(ABYSS, EmberRunPapi.route("abyss_path_label"));
         assertEquals(COSMETIC, EmberRunPapi.route("shop_"));
         assertEquals(GATE, EmberRunPapi.route("q0xdone"));       // 7-char q0?done
         assertEquals(MAP, EmberRunPapi.route("q01done_x"));

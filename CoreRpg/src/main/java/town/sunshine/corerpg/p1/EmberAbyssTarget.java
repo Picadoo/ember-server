@@ -8,6 +8,7 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D696: abyss layer target chase (numeric floor goal).
  * Zero fee / HP / AFK change. Chat+ActionBar only.
+ * TIP-DB D13333: afterBest / glance / cmd 主路径开薄页 /ember_p1_abyss_settle；禁教手打 abysstarget|forge 主 UI。
  */
 public final class EmberAbyssTarget {
 
@@ -33,7 +34,7 @@ public final class EmberAbyssTarget {
 
     public static String glance(PlayerData d, int best) {
         int t = get(d);
-        if (t <= 0) return "§8深渊层目标：未设 · /corerpg p1 abysstarget <层>";
+        if (t <= 0) return "§8深渊层目标：未设 · 点下一环设目标"; // TIP-DB D13333 禁教手打
         if (best >= t) return "§a深渊层目标 §f" + t + " §a已达成（最高 " + best + "）";
         return "§e深渊层目标 §f" + t + " §7· 最高 §f" + best + " §7· 还差 §e" + (t - best);
     }
@@ -60,13 +61,13 @@ public final class EmberAbyssTarget {
         int t = get(d);
         if (t <= 0) return;
         if (newBest >= t) {
-            p.sendMessage(EmberRunService.P + "§a深渊层目标达成：§f" + t + " §7· 可改 /corerpg p1 abysstarget");
+            p.sendMessage(EmberRunService.P + "§a深渊层目标达成：§f" + t + " §7· 点下一环改目标"); // TIP-DB 禁教手打
             int next = Math.min(MAX, newBest + 1);
-            p.sendMessage(EmberRunService.P + "§7下一目标可设：/corerpg p1 abysstarget " + next); // D719
+            p.sendMessage(EmberRunService.P + "§7下一目标可设第 §f" + next + " §7层 · 点下一环"); // D719 TIP-DB
             try { p.sendActionBar("§a层目标达成 · §f" + t); } catch (Throwable ignored) { }
-            town.sunshine.corerpg.ConfirmTokens.sendButton(p, EmberRunService.P + "§7下一档：", // D742
-                    "[目标第" + next + "层]", "/corerpg p1 abysstarget " + next,
-                    "把层目标抬到 " + next);
+            town.sunshine.corerpg.ConfirmTokens.sendButton(p, EmberRunService.P + "§7下一档：", // D742 TIP-DB 开薄页
+                    EmberAbyssSettle.SETTLE_NEXT_LOOP_LABEL, EmberAbyssSettle.SETTLE_NEXT_LOOP_CMD,
+                    "薄页设目标第 " + next + " 层");
         } else {
             p.sendMessage(EmberRunService.P + glance(d, newBest));
         }
@@ -81,18 +82,19 @@ public final class EmberAbyssTarget {
         int best = runs.abyssBest(d);
         if (args.length < 3) {
             p.sendMessage(P + glance(d, best));
-            p.sendMessage(P + "用法：/corerpg p1 abysstarget <1-" + MAX + "|next|clear>");
+            // TIP-DB D13333: 主路径开薄页；菜单 actions 仍可调本命令，禁教手打为主 UI
+            p.sendMessage(P + "§7点下一环设层目标（菜单可点）");
             int t = get(d);
             if (t <= 0 && best >= 0) { // D745
                 int n = Math.min(MAX, Math.max(1, best + 1));
                 town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7设目标：",
-                        "[目标第" + n + "层]", "/corerpg p1 abysstarget " + n,
-                        "冲纪录对照");
+                        EmberAbyssSettle.SETTLE_NEXT_LOOP_LABEL, EmberAbyssSettle.SETTLE_NEXT_LOOP_CMD,
+                        "薄页设第 " + n + " 层");
             } else if (t > 0 && best >= t) {
                 int n = Math.min(MAX, best + 1);
                 town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7下一档：",
-                        "[目标第" + n + "层]", "/corerpg p1 abysstarget next",
-                        "抬到 " + n);
+                        EmberAbyssSettle.SETTLE_NEXT_LOOP_LABEL, EmberAbyssSettle.SETTLE_NEXT_LOOP_CMD,
+                        "薄页抬到 " + n);
             }
             return true;
         }
@@ -119,11 +121,12 @@ public final class EmberAbyssTarget {
         runs.plugin().getDataStore().flushMutation(p.getUniqueId());
         p.sendMessage(P + glance(d, best));
         try { p.sendActionBar("§e层目标 · §f" + floor); } catch (Throwable ignored) { }
-        // D873 enter chase
+        // D873 TIP-DB D13333: 主路径开薄页；禁教手打 abysstarget 主 UI
         town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7冲目标：",
-                new String[]{"[进深渊]", "/corerpg p1 abyss next", "冲第 " + floor + " 层", "GREEN"},
-                new String[]{"[冒险页]", "/ember_p1_adventure", "看深渊入口", "AQUA"},
-                new String[]{"[改目标]", "/corerpg p1 abysstarget", "重设层", "GRAY"});
+                new String[]{EmberAbyssSettle.SETTLE_NEXT_LOOP_LABEL, EmberAbyssSettle.SETTLE_NEXT_LOOP_CMD,
+                        "再深渊/选层/目标", "GREEN"},
+                new String[]{"[冒险页]", EmberAbyssSettle.SETTLE_ADVENTURE_CMD, "看深渊入口", "AQUA"},
+                new String[]{"[深渊页]", EmberAbyssSettle.SETTLE_ABYSS_CMD, "回选层", "GRAY"});
         return true;
     }
 

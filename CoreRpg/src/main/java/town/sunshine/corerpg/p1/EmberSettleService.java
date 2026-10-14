@@ -707,6 +707,7 @@ public final class EmberSettleService {
             EmberAbyssService.FloorResult floor = EmberAbyssService.applyFloorGrant(pd, s.abyss); // P2-2: opens tier + 1
             newBest = floor.newBest;
             oldBest = floor.oldBest;
+            EmberAbyssSettle.remember(pd, s.abyss); // TIP-DB D13333 settle 层覆盖
         }
         if (newBest && runs.cosmetics() != null) runs.cosmetics().onAbyssBest(Bukkit.getPlayer(u), oldBest, s.abyss); // P2-9 (D83)
         if (newBest) {
@@ -780,21 +781,22 @@ public final class EmberSettleService {
         if (p != null && p.isOnline() && s.abyss > 0) {
             p.sendMessage(EmberRunService.P + "§5深渊第 " + s.abyss + " 层 已完整通关" + (newBest ? " §a· 新纪录，开放第 " + runs.abyssMaxStart(pd) + " 层" : "")
                     + " §7（下一层需重新确认与付费：冒险页 → 深渊）");
-            if (newBest) { // D675
+            if (newBest) { // D675 TIP-DB D13333 下一环→薄页；工坊→菜单
                 try { p.sendActionBar("§5深渊新纪录 · §f第 " + s.abyss + " 层"); } catch (Throwable ignored) { }
                 ConfirmTokens.sendButtons(p, EmberRunService.P + "§7下一步：",
-                        new String[]{"[深渊页]", "/ember_p1_abyss", "冲下一层", "LIGHT_PURPLE"},
-                        new String[]{"[冒险页]", "/ember_p1_adventure", "回冒险", "GREEN"},
-                        new String[]{"[工坊]", "/corerpg p1 forge", "花层奖", "GOLD"});
+                        new String[]{EmberAbyssSettle.SETTLE_NEXT_LOOP_LABEL, EmberAbyssSettle.SETTLE_NEXT_LOOP_CMD,
+                                "再深渊/选层/目标/工坊", "LIGHT_PURPLE"},
+                        new String[]{"[冒险页]", EmberAbyssSettle.SETTLE_ADVENTURE_CMD, "回冒险", "GREEN"},
+                        new String[]{"[工坊]", EmberAbyssSettle.SETTLE_FORGE_CMD, "花层奖", "GOLD"});
             }
             // D649: first clear of layer 1 — gift was free fee; celebrate once on rising best
             if (newBest && s.abyss == 1) {
                 p.sendMessage(EmberRunService.P + "§5首层礼兑现 · §f第 1 层免费通关 §a· 第 2 层已开放");
                 try { p.sendActionBar("§5首层礼 · §a已兑现"); } catch (Throwable ignored) { }
             }
-            if (newBest) EmberAbyssTarget.afterBest(p, pd, s.abyss); // D696
-            if (newBest && EmberAbyssTarget.get(pd) <= 0) { // D712
-                p.sendMessage(EmberRunService.P + "§7可设深渊层目标：/corerpg p1 abysstarget " + (s.abyss + 1));
+            if (newBest) EmberAbyssTarget.afterBest(p, pd, s.abyss); // D696 TIP-DB 菜单优先
+            if (newBest && EmberAbyssTarget.get(pd) <= 0) { // D712 TIP-DB 禁教手打 abysstarget
+                p.sendMessage(EmberRunService.P + "§7可设深渊层目标 · 点下一环设目标");
             }
         }
         if (p != null && p.isOnline() && rotation) {

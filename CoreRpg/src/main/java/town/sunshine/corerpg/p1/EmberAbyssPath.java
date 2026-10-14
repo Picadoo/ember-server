@@ -164,7 +164,7 @@ public final class EmberAbyssPath {
                     ? gl : ("§e深渊 · §f" + label(id) + " §7· 最高" + best));
         } catch (Throwable ignored) { }
         if (EmberAbyssTarget.get(d) <= 0) {
-            p.sendMessage(P + "§7可设层目标：/corerpg p1 abysstarget <层>");
+            p.sendMessage(P + "§7可设层目标 · 点下一环设目标"); // TIP-DB D13333 禁教手打
         }
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{enterLabel(id, best, maxStart), enterCmd(id, best, maxStart), "开深渊层（体力+层费）", "GREEN"},
