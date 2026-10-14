@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EI CLOSED** live（D13366 闪线路径选打齐 · feat `cb970b73c` · tip `6d6be8c54` · jar `1.65.859-d13366.local` · PASS `5699e0ace` · 批 sha `6d6be8c54` · menu tip `8638c526f` · CLOSED `abad283d0` · 证据 `/workspace/tmp/tip-ei-bolt-path/` · **闪线路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **CrashPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EI 选打勿复；PacePath（本仓无）后置；其它剩支 D591+（Slip…）后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip thin · **待批 A** · 荐 M · docs-only · 勿勾 CLOSED
+**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `b3d3c1db4` · 2026-10-14 20:06 Asia/Shanghai · 勿勾 CLOSED · 可施工
 **硬规格：** [`DESIGN-ember-crash-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-crash-path-offer-pick-visible-2026-10-14.md) · backlog `B-crash-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EI 已齐；撞墙**选打**仍 ConfirmTokens 教裸 crashpath——总控钉死本支；内容闭环断在撞墙路径选打（≠闪线选打；≠ settle 同题；局内撞墙钮≠选打页）。
 
@@ -61,7 +61,7 @@
 | RESEARCH | `docs/design/RESEARCH-ember-crash-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-14.md` |
 | backlog | `B-crash-path-offer-pick-visible` |
-| 号段 | **D13367** · 字母窗 **TIP-EJ** · STATUS=**待批 A** · 荐 M |
+| 号段 | **D13367** · 字母窗 **TIP-EJ** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `b3d3c1db4` · 2026-10-14 20:06 Asia/Shanghai · 勿勾 CLOSED
 | 上游 | TIP-EI CLOSED live `abad283d0` · feat `cb970b73c` · tip `6d6be8c54` · PASS `5699e0ace` · jar `1.65.859-d13366.local` · 批 sha `6d6be8c54` · menu tip `8638c526f` · D13366；半行 REJECT `d00ed84bc` 保持否决；闪线路径选打菜单化同题勿再交 |
 
 *选题 CrashPath.offerPick / applyAndReply 撞墙路径选打菜单化 · tip **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13367 · TIP-EJ · 半行 REJECT `d00ed84bc` **保持否决** · 其它剩支 D591+（Slip…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EI CLOSED `abad283d0` · 2026-10-14 20:03 Asia/Shanghai.*
