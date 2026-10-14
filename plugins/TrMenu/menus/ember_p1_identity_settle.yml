@@ -1,0 +1,115 @@
+# TIP-DC / D13334 · 图身份首通结算「下一环」薄页 · identity_settle*
+# 入口：EmberSettleService 图身份首通 D673 → /ember_p1_identity_settle（插件并行改开菜单）
+# 钮：工坊 ember_p1_forge · 装备 ember_p1_gear · 冒险 ember_p1_adventure · 图装追 mapfarm
+# 禁：教裸指令主 UI · 抬掉落/体力价/首通包 · 改深渊/短征/团本/挑战 settle · D794 · 庭内 · Cast/Aid/variety
+# PAPI（插件可能后到·静态接线）：identity_settle_name/family/slot/line · 零经济误导
+
+Title: '§6图身份 · 下一环'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_identity_settle'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#F#G#A#M#'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §6图身份下一环 §7· %corerpg_p1_identity_settle_line%'
+    - 'tell: §8点选 · 工坊养件 / 穿装备 / 下一张图 / 图装追'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: paper
+      name: '§6图身份下一环'
+      lore:
+        - '§7本图：§f%corerpg_p1_identity_settle_name%'
+        - '§7保底：§e%corerpg_p1_identity_settle_family% · %corerpg_p1_identity_settle_slot%'
+        - '§8点选 · 工坊养件 / 穿装备 / 下一张图 / 图装追'
+
+  # 工坊 · 养成特色件
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊养件'
+      lore:
+        - '§7本图保底：§e%corerpg_p1_identity_settle_family% · %corerpg_p1_identity_settle_slot%'
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  # 装备页 · 穿上同族
+  G:
+    display:
+      material: iron chestplate
+      name: '§b去装备页'
+      lore:
+        - '§7本图保底：§e%corerpg_p1_identity_settle_family% · %corerpg_p1_identity_settle_slot%'
+        - '§7穿上同族特色件'
+        - '§e➥ §f开装备页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_gear'
+
+  # 冒险页 · 下一张图
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7本图：§f%corerpg_p1_identity_settle_name%'
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一张图再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 图装追 · 真 mapfarm（禁发明新追猎经济）
+  M:
+    display:
+      material: map
+      name: '§e图装追'
+      lore:
+        - '§7本图：§f%corerpg_p1_identity_settle_name%'
+        - '§7保底族：§e%corerpg_p1_identity_settle_family%'
+        - '§7刷同族补件 · 既有追猎'
+        - '§e➥ §f图装追'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 mapfarm'
+        - close
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
