@@ -85,6 +85,7 @@ public final class EmberRunPapi {
         if ("forgeroll_back".equals(key)) return Section.LOADOUT; // D13325 TIP-CT forgeroll return label
         if (key.startsWith("sign_") || key.startsWith("online_") || key.startsWith("afk_") || key.startsWith("sig_")
                 || key.startsWith("reroll_") || key.startsWith("honor_") || key.startsWith("spec_")) return Section.GROWTH;
+        if ("identity_settle".equals(key) || key.startsWith("identity_settle_")) return Section.GATE; // TIP-DC D13334
         if ("challenge_settle".equals(key) || key.startsWith("challenge_settle_")
                 || "challenge_path".equals(key) || "challenge_path_label".equals(key)) return Section.GATE; // TIP-DA D13332
         if ("forge_t2".equals(key) || "forge_t3".equals(key) || "challenge".equals(key) || "q07done".equals(key)
@@ -773,6 +774,21 @@ public final class EmberRunPapi {
         return g == null ? "" : g.papi(p, d, key.substring(5)); // spec_ · D141
     }
 
+    /** TIP-DC D13334 %corerpg_p1_identity_settle*% — last identity-FC map + family + slot; zero economy. */
+    private String identitySettle(PlayerData d, String key) {
+        String mk = EmberIdentitySettle.lastMap(d);
+        String fam = EmberIdentitySettle.lastFamily(d);
+        String slot = EmberIdentitySettle.lastSlot(d);
+        EmberRunMaps maps = runs.maps();
+        EmberRunMaps.MapDef m = (maps == null || mk.isEmpty()) ? null : maps.byKey(mk);
+        if ("identity_settle".equals(key) || "identity_settle_map".equals(key)) return mk;
+        if ("identity_settle_name".equals(key)) return EmberIdentitySettle.displayName(m, mk);
+        if ("identity_settle_family".equals(key)) return EmberIdentitySettle.familyDisplay(fam);
+        if ("identity_settle_slot".equals(key)) return EmberIdentitySettle.slotDisplay(slot);
+        if ("identity_settle_line".equals(key)) return EmberIdentitySettle.line(m, mk, fam, slot);
+        return "";
+    }
+
     /** TIP-DA D13332 %corerpg_p1_challenge_settle*% — last settled challenge map + path; zero economy. */
     private String challengeSettle(PlayerData d, String key) {
         String mk = EmberChallengeSettle.lastMap(d);
@@ -789,6 +805,8 @@ public final class EmberRunPapi {
     }
 
     private String gate(PlayerData d, String key) {
+        if ("identity_settle".equals(key) || (key != null && key.startsWith("identity_settle_"))) // TIP-DC D13334
+            return identitySettle(d, key);
         if ("challenge_settle".equals(key) || (key != null && key.startsWith("challenge_settle_"))
                 || "challenge_path".equals(key) || "challenge_path_label".equals(key)) // TIP-DA D13332
             return challengeSettle(d, key);

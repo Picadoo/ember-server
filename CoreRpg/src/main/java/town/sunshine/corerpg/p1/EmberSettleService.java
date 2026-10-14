@@ -694,10 +694,12 @@ public final class EmberSettleService {
                     idp.sendMessage(EmberRunService.P + "§6图身份首通 · §f" + m.name + " §7保底 §e" + fam + " · " + slot
                             + " §8（本图特色件，可见追）");
                     try { idp.sendActionBar("§6图身份 · §f" + fam + " §7首通保底"); } catch (Throwable ignored) { }
-                    ConfirmTokens.sendButtons(idp, EmberRunService.P + "§7下一步：", // D673
-                            new String[]{"[工坊]", "/corerpg p1 forge", "养成特色件", "GOLD"},
-                            new String[]{"[装备页]", "/ember_p1_gear", "穿上同族", "AQUA"},
-                            new String[]{"[冒险页]", "/ember_p1_adventure", "下一张图", "GREEN"});
+                    EmberIdentitySettle.remember(pd, m.key, in.loot.family, in.loot.slot); // TIP-DC D13334 settle 图/族/槽
+                    ConfirmTokens.sendButtons(idp, EmberRunService.P + "§7下一步：", // D673 TIP-DC D13334 下一环→薄页；工坊→菜单
+                            new String[]{EmberIdentitySettle.SETTLE_NEXT_LOOP_LABEL, EmberIdentitySettle.SETTLE_NEXT_LOOP_CMD,
+                                    "工坊/装备/冒险/图装追", "GOLD"},
+                            new String[]{"[工坊]", EmberIdentitySettle.SETTLE_FORGE_CMD, "养成特色件", "GOLD"},
+                            new String[]{"[装备页]", EmberIdentitySettle.SETTLE_GEAR_CMD, "穿上同族", "AQUA"});
                 }
             }
         }

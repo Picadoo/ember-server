@@ -35,7 +35,7 @@ public final class EmberRunPapiTest {
         r(RUSH, "vbounty", "rush", "rush_q0r1", "rush_nosuch", "pledge_head", "pledge_n_lean", "pledge_ok");
         r(GROWTH, "sign_state", "online_d1", "online_min", "afk_today", "afk_t1", "afk_remain", "afk_eta_min", "afk_remain_line", "afk_next_farm", "sig_q01", "reroll_blade_cap",
                 "honor_name_1", "spec_x");
-        r(GATE, "forge_t2", "forge_t3", "challenge", "challenge_settle", "challenge_settle_map", "challenge_settle_name", "challenge_settle_path", "challenge_settle_path_label", "challenge_settle_line", "challenge_path", "challenge_path_label", "access_q01", "access_q07", "q07done", "q04done", "q05done", "q06done", "q09done"); // TIP-DA D13332
+        r(GATE, "forge_t2", "forge_t3", "challenge", "identity_settle", "identity_settle_map", "identity_settle_name", "identity_settle_family", "identity_settle_slot", "identity_settle_line", "challenge_settle", "challenge_settle_map", "challenge_settle_name", "challenge_settle_path", "challenge_settle_path_label", "challenge_settle_line", "challenge_path", "challenge_path_label", "access_q01", "access_q07", "q07done", "q04done", "q05done", "q06done", "q09done"); // TIP-DA D13332 + TIP-DC D13334
         r(ROTATION, "featured", "featured_key", "modifier", "rule_q01", "bounty", "loot_q01", "loot_r01", "event_chase", "event_chase_name", "event_chase_ok", "event_soft_ready"); // TIP-CE D13310
         r(BOARD, "top_abyss_1", "top_abyss_10", "top_featured_3", "top_abyss_x");
         r(SEASON, "goals", "goal_core", "goal_short", "goal_short_chase", "goal_short_chase_name", "goal_short_chase_day_line", "goal_short_chase_ok", "goal_short_done", "goalnosuch", "season", "season_week", "sboard_1", "srank_abyss", "badges"); // D401 + TIP-CG D13312
@@ -109,6 +109,11 @@ public final class EmberRunPapiTest {
         assertEquals(SHORT, EmberRunPapi.route("short_var_affix_label"));
         assertEquals(SHORT, EmberRunPapi.route("short_var_event_label"));
         assertEquals(SHORT, EmberRunPapi.route("short_var_line"));
+        assertEquals(GATE, EmberRunPapi.route("identity_settle")); // TIP-DC D13334
+        assertEquals(GATE, EmberRunPapi.route("identity_settle_map"));
+        assertEquals(GATE, EmberRunPapi.route("identity_settle_family"));
+        assertEquals(GATE, EmberRunPapi.route("identity_settle_slot"));
+        assertEquals(GATE, EmberRunPapi.route("identity_settle_line"));
         assertEquals(GATE, EmberRunPapi.route("challenge_settle")); // TIP-DA D13332
         assertEquals(GATE, EmberRunPapi.route("challenge_settle_map"));
         assertEquals(GATE, EmberRunPapi.route("challenge_settle_path_label"));
