@@ -1,6 +1,6 @@
 # RESEARCH · FeaturedPath.offerPick / applyAndReply「精选路径选打」菜单化 · 拟 D13336 · TIP-DE
 
-> **状态：** **待批 A** · 荐 M · 拟 D13336 · TIP-DE · 勿勾 CLOSED · 2026-10-14 10:40 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13336 · TIP-DE · 可施工 · 勿勾 CLOSED · 2026-10-14 10:41 Asia/Shanghai
 > **起因：** 总控【派·TIP-DE / 拟 D13336】上游 TIP-DD CLOSED live `36ecc1b43`（jar `1.65.828-d13335` · feat `b07074070` · tip `b7160ee19` · PASS `f864e36b9` · 批 `b7160ee19`）。请交下一薄窗（内容优先）。选题优先级：①挂机庭资源环加厚（须新硬债）②短征日更乐趣（非sx20；非已齐路径）③其余 settle 聊天钮：D673/D794 **已齐勿复读** ④legacy evacuate 后置。若①②无新薄债：扫其他真可点乐趣硬债（工坊/图装/日常短循环/菜单去指令残留等）。**禁：** 半行独批 · 已齐 settle 同题复读 · 抬掉落/日帽/体力价 · sx20 / densify / Pack6 / 开 K3 / 关观察 · variety 完整经济 / Cast·Aid 再拧 / 庭内旁路 · 教裸指令主 UI。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-DD CLOSED live `36ecc1b43` · feat `b07074070` · tip `b7160ee19` · PASS `f864e36b9` · jar `1.65.828-d13335.local` · 批 sha `b7160ee19` · D13335
 
@@ -60,6 +60,6 @@
 
 ---
 
-*RESEARCH · FeaturedPath.offerPick / applyAndReply 精选路径选打菜单化 · **待批 A** · 荐 M · TIP-DE / D13336 · 半行 REJECT `d00ed84bc` 保持 · ancestor TIP-DD CLOSED · 勿勾 CLOSED。*
+*RESEARCH · FeaturedPath.offerPick / applyAndReply 精选路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DE / D13336 · 半行 REJECT `d00ed84bc` 保持 · ≠ featured_settle 同题 · ≠图身份/深渊/短征/团本/挑战settle同题 · 2026-10-14 10:41 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐 M · 拟 D13336 · TIP-DE · 2026-10-14 10:40 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13336 · TIP-DE · 2026-10-14 10:41 Asia/Shanghai
