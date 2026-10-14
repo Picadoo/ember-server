@@ -1,6 +1,6 @@
 # tip · TIP-DR FreePath.offerPick / applyAndReply「解锢路径选打」菜单化（选路径聊天钮去指令化 · ≠闪榴路径选打同题 · ≠闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠复开 D570 玩法本体）· 拟 D13349
 
-> **状态：** **待批 A** · 荐 M · 2026-10-14 14:45 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13349 · TIP-DR · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 freepath/周要约→开 ember_p1_free_path · 清 ConfirmTokens 教 freepath 主 UI · 2026-10-14 14:46 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-free-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-free-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-free-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（FreePath.offerPick / applyAndReply / 无参 freepath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_free_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零闪榴路径选打同题复读（TIP-DQ） · 零闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-DP–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零复开 D570 玩法本体（auto/ask/mute 真改禁锢解锢语义零改）
@@ -34,9 +34,9 @@
 - **L** = 仅改一条聊天钮目标命令无薄页 · **本窗不批 L**
 
 ## 验收（批后施工）
-- [ ] 总控批 A·M
+- [x] 总控批 A·M · 2026-10-14 14:46 Asia/Shanghai
 - [ ] 插件交 offerPick / applyAndReply / 无参 freepath / 周要约改开菜单 + 清裸指令主路径 + 单测
 - [ ] 物品交薄 free_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 dodge_path·零已齐选打同题复读·零改 D570 解锢语义）
 
-## STATUS: **待批 A** · 荐 M · D13349 · TIP-DR · 2026-10-14 14:45 Asia/Shanghai · 勿勾 CLOSED
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13349 · TIP-DR · 2026-10-14 14:46 Asia/Shanghai
