@@ -9,8 +9,8 @@
 - glance / enterCue / nudge / 用法：清「手打 /corerpg p1 raidpath」主教 →「点团本路径页」
 - PAPI（复用+扩）：`%corerpg_p1_raid_path%`/`_label`/`_tip`/`_line%`（经 `EmberRaidService.papi` · RAID）；`raid_settle_*` 零改
 - 单测：`EmberRaidPathPickTest` · `EmberRaidPathTest` · `EmberRaidSettleNextLoopTest` · `EmberRunPapiTest` · `EmberChallengePathPickTest` · `EmberFeaturedPathPickTest` 绿
-- jar：`1.65.831-d13338.local` · sha256 `2e4eab9ab641…` · ECONOMY_BV **123** 未动
-- play：装 jar + restart play 验证 live（见交收回报）
+- jar：`1.65.831-d13338.local` · sha256 `2e4eab9ab641…` · feat `c81c9e7e2` · ECONOMY_BV **123** 未动
+- play：live `1.65.831-d13338.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**掉落 / 体力价 / 周帽 / 团本语义 / Cast·Aid / variety / 已齐 settle 薄页（含 `ember_p1_raid_settle` / afterClearHit）/ FeaturedPath / ChallengePath / 其他 *Path / 庭内 / TrMenu yml（物品 W1b 并行已交 `b9b8f688f`）
 - **勿勾 tip CLOSED** · 待测岗抽测
 
