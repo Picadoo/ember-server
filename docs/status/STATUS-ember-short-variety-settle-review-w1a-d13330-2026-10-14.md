@@ -38,3 +38,6 @@
 ## 下步
 - 物品 W1b 结算薄页 V（Layout 增 V · 接 short_var_*）— 可接/并行
 - 测岗抽测 PASS 后总控收口 CLOSED（本岗勿勾）
+
+## 抽测
+- 测岗 PASS live · STATUS/`176e2fe03` · 证据 `/workspace/tmp/tip-cy-variety-settle/` · **勿勾 tip CLOSED** · 2026-10-14 08:34 Asia/Shanghai
