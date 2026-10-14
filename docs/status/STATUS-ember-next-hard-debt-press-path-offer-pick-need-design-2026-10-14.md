@@ -1,9 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13358 · PressPath.offerPick / applyAndReply 压伤路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠打断路径选打同题 · ≠限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D581 玩法本体）
 
+> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 17:27 Asia/Shanghai · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-press-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-press-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-press-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-press-path-offer-pick-visible-2026-10-14.md) · backlog `B-press-path-offer-pick-visible` · **TIP-EA** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠打断路径选打同题 ≠已齐选打同题 ≠教裸指令 ≠全族大扫 ≠Pace同窗 ≠其它*Path同窗 ≠复开 D581**。
+
 > **上游结案：** **TIP-DZ CLOSED** live（D13357 打断路径选打齐 · feat `a7f634bc5` · tip `997e89eb6` · jar `1.65.850-d13357.local` · PASS `6622d6781` · 批 sha `997e89eb6` · menu tip `57544b97e` · CLOSED `ac3d7c9a7` · 证据 `/workspace/tmp/tip-dz-cut-path/` · **打断路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **PressPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–DZ 选打勿复；PacePath（本仓无）后置；Clone/Shell… D582+ 后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip thin · **待批 A** · 荐 M · docs-only · 勿勾 CLOSED
+**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13358 · TIP-EA · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 17:27 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-press-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-press-path-offer-pick-visible-2026-10-14.md) · backlog `B-press-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–DZ 已齐；压伤**选打**仍 ConfirmTokens 教裸 presspath——总控钉死本支；内容闭环断在压伤路径选打（≠打断选打；≠ settle 同题；局内破招钮≠选打页）。
 
