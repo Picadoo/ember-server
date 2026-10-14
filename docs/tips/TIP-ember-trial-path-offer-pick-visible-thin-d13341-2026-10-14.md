@@ -1,6 +1,6 @@
 # tip · TIP-DJ TrialPath.offerPick / applyAndReply「试炼路径选打」菜单化（选路径聊天钮去指令化 · ≠深渊路径选打同题 · ≠短征/团本/硬本/精选路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠签律/破绽/步态同窗）· 拟 D13341
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13341 · TIP-DJ · W1a插件已交 · 待W1b物品+抽测 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 trialpath/周要约→开 ember_p1_trial_path · 清 ConfirmTokens 教 trialpath 主 UI · 2026-10-14 12:11 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · W1a+W1b 已交 · 抽测 PASS · **勿勾 CLOSED** · D13341 · TIP-DJ · jar `1.65.834-d13341.local` · 零改伤害/CD表/掉落/体力价 · 2026-10-14 12:19 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-trial-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-trial-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-trial-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（TrialPath.offerPick / applyAndReply / 无参 trialpath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_trial_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零深渊路径选打同题复读（TIP-DI） · 零短征/团本/硬本/精选路径选打同题复读（TIP-DH/DG/DF/DE） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零签律/破绽/步态同窗
@@ -35,7 +35,7 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 12:10 Asia/Shanghai
 - [x] 插件交 offerPick / applyAndReply / 无参 trialpath / 周要约改开菜单 + 清裸指令主路径 + 单测 · W1a `1.65.834-d13341.local`
-- [ ] 物品交薄 trial_path 页 + TrMenu reload
-- [ ] 抽测 PASS live（选稳慎/猛开/加压/清空/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 abyss_path·零已齐选打同题复读）· **勿勾 CLOSED**
+- [x] 物品交薄 trial_path 页 + TrMenu reload（并行 W1b；yml 已见 · menu `9dabb653e` · TrMenu 89）
+- [x] 抽测 PASS live（选稳慎/猛开/加压/清空/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 abyss_path·零已齐选打同题复读）· **勿勾 CLOSED** · spot `STATUS-ember-trial-path-offer-pick-tip-dj-spot-d13341-2026-10-14.md` · 2026-10-14 12:19 Asia/Shanghai
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a插件已交 · 待W1b物品+抽测 · 勿勾 CLOSED · L不批 · D13341 · TIP-DJ · 2026-10-14 12:11 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a+W1b 已交 · 抽测 PASS · 勿勾 CLOSED · L不批 · D13341 · TIP-DJ · jar `1.65.834-d13341.local` · 2026-10-14 12:19 Asia/Shanghai
