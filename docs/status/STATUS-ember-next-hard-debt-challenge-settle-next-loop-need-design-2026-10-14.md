@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13332 · 挑战本结算下一环菜单化 · settle 聊天钮去指令化 · docs-only · ≠团本settle下一环同题 · ≠短征settle下一环·回看同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠深渊同窗大扫）
 
-> **旁注（待批 A · 方案 M · 2026-10-14 09:00 Asia/Shanghai · 勿勾 CLOSED · 零改挑战掉落/体力价/成色 · 深渊后置）：** tip **待批 A · 方案 M** · DESIGN [`DESIGN-ember-challenge-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-challenge-settle-next-loop-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-challenge-settle-next-loop-visible-2026-10-14.md`](../design/RESEARCH-ember-challenge-settle-next-loop-visible-2026-10-14.md) · backlog `B-challenge-settle-next-loop-visible` · **TIP-DA** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠团本settle下一环同题 ≠短征settle下一环同题 ≠短征settle回看同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬挑战掉落/体力价 ≠深渊同窗大扫**。
+> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 09:02 Asia/Shanghai · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改挑战掉落/体力价/成色 · 深渊后置）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-challenge-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-challenge-settle-next-loop-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-challenge-settle-next-loop-visible-2026-10-14.md`](../design/RESEARCH-ember-challenge-settle-next-loop-visible-2026-10-14.md) · backlog `B-challenge-settle-next-loop-visible` · **TIP-DA** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠团本settle下一环同题 ≠短征settle下一环同题 ≠短征settle回看同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬挑战掉落/体力价 ≠深渊同窗大扫**。
 
 > **上游结案：** **TIP-CZ CLOSED** live `dceae5440`（D13331 团本结算下一环齐 · feat `166586585` · tip `f7a3b824c` · jar `1.65.824-d13331.local` · PASS `64bfa4265` · 批 sha `2e12d099e` · **团本结算下一环菜单化同题勿再交**）。总控派 TIP-DA：内容优先拉长在线；已齐同题勿复读；庭内旁路近饱和默认勿交；宝石/Cast·Aid·variety完整经济/节·灾厄/sx20仍缓；§6 挑战/深渊 settle 去指令化可施工。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内全弧+今日推/冲一下/周短征/三冲+日差本可冲+路径追+短征settle下一环+soft-reward+settle花样回看+团本settle下一环 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **待批 A** · 荐方案 M · 拟 D13332 · TIP-DA · docs-only · 勿勾 CLOSED · 零改挑战掉落/体力价/成色 · 深渊后置 · 2026-10-14 09:00 Asia/Shanghai
+**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13332 · TIP-DA · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改挑战掉落/体力价/成色 · 深渊后置 · 2026-10-14 09:02 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-challenge-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-challenge-settle-next-loop-visible-2026-10-14.md) · backlog `B-challenge-settle-next-loop-visible`
 **打开理由：** 短征+团本 settle 下一环已菜单化，但挑战结算仍 ConfirmTokens 教指令——D13331§6① 明文后置「挑战本 settle 下一环」；内容闭环断在挑战结算。
 
@@ -51,7 +51,7 @@
 
 | 方案 | 一行 | 本窗 |
 |------|------|------|
-| **M（荐）** | 插件 ChallengePath.afterSettle 下一环改开菜单 + 薄页 `ember_p1_challenge_settle` 真可点；零改掉落/体力价 | **荐批** |
+| **M（荐）** | 插件 ChallengePath.afterSettle 下一环改开菜单 + 薄页 `ember_p1_challenge_settle` 真可点；零改掉落/体力价 | **批准** |
 | L | 仅改一条聊天钮目标无薄页 | **不批** |
 | A | 只半行 | **否决**（REJECT） |
 | W | 抬掉落/sx20/短征·团本同题复读/variety再拧/庭内/深渊大扫 | **否决** |
@@ -80,4 +80,4 @@
 
 ---
 
-## STATUS: **待批 A** · 荐方案 M · D13332 · TIP-DA · 2026-10-14 09:00 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13332 · TIP-DA · 2026-10-14 09:02 Asia/Shanghai
