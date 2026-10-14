@@ -1,7 +1,7 @@
 # 状态 · TIP-DP 闪冲路径选打菜单化抽测
 
-**裁决：** **PASS** · feat `adf9efa71` · menu tip `52e6da32b` · tip/批 `116eea312` · jar `1.65.840-d13347.local` · 证据 `/workspace/tmp/tip-dp-sidestep-path/`  
-**范围：** offerPick / 无参 sidesteppath / 周要约 → 开 `ember_p1_sidestep_path`（**禁** ConfirmTokens 教 sidesteppath 为主 UI）· 薄页自动/提醒/静默/清空/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `sidestep_path_*` 诚实 · Q01 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_step_path` 及其他已齐 path · **零改** D572 冲锋侧移「闪冲」战斗钮语义 · **零**新建 `ember_p1_pace_path` · **≠**已齐选打同题复读 · tip **未勾 CLOSED**（总控收口）
+**裁决：** **PASS** · **CLOSED live** · 2026-10-14 14:22 Asia/Shanghai · feat `adf9efa71` · menu tip `52e6da32b` · tip/批 `116eea312` · jar `1.65.840-d13347.local` · 证据 `/workspace/tmp/tip-dp-sidestep-path/`  
+**范围：** offerPick / 无参 sidesteppath / 周要约 → 开 `ember_p1_sidestep_path`（**禁** ConfirmTokens 教 sidesteppath 为主 UI）· 薄页自动/提醒/静默/清空/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `sidestep_path_*` 诚实 · Q01 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_step_path` 及其他已齐 path · **零改** D572 冲锋侧移「闪冲」战斗钮语义 · **零**新建 `ember_p1_pace_path` · **≠**已齐选打同题复读 · **勾毕 CLOSED live**（总控收口 · 2026-10-14 14:22 Asia/Shanghai)
 
 ## 必验
 
@@ -17,11 +17,11 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **95**（含 `ember_p1_sidestep_path`）· jar sha256 `ed84c0233c55…` plugins=server-runtime · MySQL connected · bv123
 - 单测 `EmberSidestepPathPickTest` / `EmberSidestepPathTest` / RunPapi / StepPathPick / FlexPathPick / StridePathPick / CounterPathPick / PledgePathPick / TrialPathPick 绿
-- 49/49 PASS · tip **未勾 CLOSED**（总控收口）
+- 49/49 PASS · **勾毕 CLOSED live**（总控收口 · 2026-10-14 14:22 Asia/Shanghai)
 - 选打主 UI = `ember_p1_sidestep_path`；未教裸 sidesteppath；D572 局内「闪冲」战斗钮语义零改；未复读身法/轻技/步态/破绽等选打；未建 pace_path
 
 ## 纪律确认
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · rot weekly_cap=3 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改伤害/CD表/掉落/体力价/step_path/flex_path/stride_path/counter_path/pledge_path/trial_path/abyss·short·raid·featured·challenge path/variety/soft-reward · 零改 D572 冲锋侧移战斗钮 · 零新建 pace_path · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `adf9efa71` · menu tip `52e6da32b` · tip `116eea312` · jar `1.65.840-d13347.local` · tip **未勾 CLOSED**（总控收口 · 2026-10-14 14:21 Asia/Shanghai)
+> **测岗抽测：** PASS live · feat `adf9efa71` · menu tip `52e6da32b` · tip `116eea312` · jar `1.65.840-d13347.local` · PASS `2fc016f96` · **勾毕 CLOSED live**（总控收口 · 2026-10-14 14:22 Asia/Shanghai)

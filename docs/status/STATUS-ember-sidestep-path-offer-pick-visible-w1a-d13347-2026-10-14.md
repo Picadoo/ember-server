@@ -1,6 +1,6 @@
 # STATUS · TIP-DP W1a 闪冲路径选打菜单化 · D13347
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交 · 勿勾 tip CLOSED** · tip APPROVED `116eea312` · 待测岗/物品 W1b
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `2fc016f96` · tip `116eea312` · 总控收口 2026-10-14 14:22 Asia/Shanghai
 
 ## 交付
 - feat: `adf9efa71425bb40c914f4bc55e423eebb6c4e87`
@@ -14,7 +14,7 @@
 - jar：`1.65.840-d13347.local` · sha256 `ed84c0233c554ebe…` · ECONOMY_BV **123** 未动
 - play：live `1.65.840-d13347.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / D572 冲锋侧移语义(auto/ask/mute) / Cast·Aid / variety / 已齐 settle 薄页 / Step·Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Pace 同窗 / 庭内 / TrMenu yml（物品 W1b 并行）
-- **勿勾 tip CLOSED** · 待测岗 PASS / 物品 W1b / 总控收口
+- **勾毕 CLOSED live** · PASS `2fc016f96` · 总控收口 2026-10-14 14:22 Asia/Shanghai
 
 ## 落点
 - `EmberSidestepPath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine · 改路径薄页
@@ -31,4 +31,13 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_sidestep_path`）
 
 ## 下步
-- 物品 W1b 并行薄页 · 测岗抽测 · 总控收口 CLOSED（本岗勿勾）
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+
+## 测岗抽测（TIP-DP spot）
+- **PASS** · 2026-10-14 14:22 Asia/Shanghai · 证据 `/workspace/tmp/tip-dp-sidestep-path/` · 详 `STATUS-ember-sidestep-path-offer-pick-tip-dp-spot-d13347-2026-10-14.md`
+- live jar `1.65.840-d13347.local` · feat `adf9efa71` · tip `116eea312` · 批 `116eea312` · 闪冲路径选打菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `adf9efa71` · 证据 `/workspace/tmp/tip-dp-sidestep-path/` · STATUS `2fc016f96`
+- **CLOSED live**（总控收口）· tip `116eea312` · jar `1.65.840-d13347.local`
