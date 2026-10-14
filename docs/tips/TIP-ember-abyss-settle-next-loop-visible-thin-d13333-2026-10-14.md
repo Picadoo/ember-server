@@ -1,6 +1,6 @@
 # tip · TIP-DB 深渊结算「下一环」菜单化（settle/evacuate 去指令化 · ≠挑战settle下一环同题 · ≠团本settle下一环同题 · ≠短征settle下一环·回看同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬深渊掉落/体力价/层表/日帽）· 拟 D13333
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13333 · TIP-DB · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改深渊掉落/体力价/层表/日帽 · EmberSettleService 深渊 newBest→开 ember_p1_abyss_settle · 清 ConfirmTokens/Open 教 abysstarget·forge 主 UI · 2026-10-14 09:34 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `6e22b5d2f` · tip `8a3f93564` · jar `1.65.826-d13333.local` · PASS `4503d824e` · 批 sha `8a3f93564` · 证据 `/workspace/tmp/tip-db-abyss-settle/` · 2026-10-14 09:50 Asia/Shanghai · 深渊结算下一环菜单化同题勿再交
 > **DESIGN** [`DESIGN-ember-abyss-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-abyss-settle-next-loop-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-abyss-settle-next-loop-visible`
 > **施工岗（批后）：** 余烬-插件（深渊 settle 下一环改开菜单 + 清 abysstarget/forge 教指令主 UI）+ 余烬-物品（薄页 `ember_p1_abyss_settle`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零短征/团本/挑战 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬深渊掉落/体力价/层表/日帽 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察
@@ -30,6 +30,6 @@
 - [x] 总控批 A·M · 2026-10-14 09:34 Asia/Shanghai
 - [x] 插件交深渊 settle 入口改菜单 + 清裸指令主路径 + 单测
 - [x] 物品交薄 abyss settle 页 + TrMenu reload（含清 `ember_p1_abyss` Open 教指令旁路）
-- [x] 抽测 PASS live（再深渊/选层/冒险/工坊真开·PAPI·零抬掉落/体力价/层表）· **勿勾 CLOSED**
+- [x] 抽测 PASS live（再深渊/选层/冒险/工坊真开·PAPI·零抬掉落/体力价/层表）· STATUS-ember-abyss-settle-next-loop-tip-db-spot-d13333-2026-10-14.md · PASS `4503d824e` · 证据 `/workspace/tmp/tip-db-abyss-settle/`
 
-## STATUS: **抽测 PASS live** · feat `6e22b5d2f` · menu `1d575cf83` · tip `8a3f93564` · jar `1.65.826-d13333.local` · **勿勾 CLOSED**（总控收口）· D13333 · TIP-DB · 2026-10-14 09:49 Asia/Shanghai
+## STATUS: **CLOSED live** · `6e22b5d2f` / `1d575cf83` · PASS `4503d824e` · jar `1.65.826-d13333.local` · D13333 · TIP-DB · 2026-10-14 09:50 Asia/Shanghai

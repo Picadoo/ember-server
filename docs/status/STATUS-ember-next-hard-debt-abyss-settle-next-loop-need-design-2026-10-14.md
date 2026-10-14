@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13333 · 深渊结算下一环菜单化 · settle/evacuate 去指令化 · docs-only · ≠挑战settle下一环同题 · ≠团本settle下一环同题 · ≠短征settle下一环·回看同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬掉落/体力价/层表 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧）
 
-> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 09:34 Asia/Shanghai · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改掉落/体力价/层表 · 短征/团本/挑战 settle 同题勿复读）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-abyss-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-abyss-settle-next-loop-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-abyss-settle-next-loop-visible-2026-10-14.md`](../design/RESEARCH-ember-abyss-settle-next-loop-visible-2026-10-14.md) · backlog `B-abyss-settle-next-loop-visible` · **TIP-DB** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠挑战settle下一环同题 ≠团本settle下一环同题 ≠短征settle下一环同题 ≠短征settle回看同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬深渊掉落/体力价/层表 ≠legacy evacuate 大扫**。
+> **旁注（勾毕 · CLOSED live · feat `6e22b5d2f` · tip `8a3f93564` · PASS `4503d824e` · jar `1.65.826-d13333.local` · 批 sha `8a3f93564` · 2026-10-14 09:50 Asia/Shanghai · 深渊结算下一环菜单化同题勿再交 · 下一窗：内容优先（挂机资源环/短征乐趣/其余 settle 聊天钮 D673·D794 / legacy evacuate 另窗））：** tip **CLOSED live** · DESIGN [`DESIGN-ember-abyss-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-abyss-settle-next-loop-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-abyss-settle-next-loop-visible-2026-10-14.md`](../design/RESEARCH-ember-abyss-settle-next-loop-visible-2026-10-14.md) · backlog `B-abyss-settle-next-loop-visible` · **TIP-DB** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠挑战settle下一环同题 ≠团本settle下一环同题 ≠短征settle下一环同题 ≠短征settle回看同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬深渊掉落/体力价/层表 ≠legacy evacuate 大扫**。
 
 > **上游结案：** **TIP-DA CLOSED** live `8e12b6985`（D13332 挑战结算下一环齐 · feat `3d218ee83` · tip `d0f10a344` · jar `1.65.825-d13332.local` · PASS `020a8f2a7` · 批 sha `d0f10a344` · **挑战结算下一环菜单化同题勿再交**）。总控派 TIP-DB：选题钉死深渊 settle/evacuate 去指令化；已齐同题勿复读；庭内旁路近饱和默认勿交；宝石/Cast·Aid·variety完整经济/节·灾厄/sx20仍缓。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内全弧+今日推/冲一下/周短征/三冲+日差本可冲+路径追+短征settle下一环+soft-reward+settle花样回看+团本settle下一环+挑战settle下一环 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13333 · TIP-DB · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改深渊掉落/体力价/层表 · legacy evacuate 后置 · 2026-10-14 09:34 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `6e22b5d2f` · tip `8a3f93564` · PASS `4503d824e` · jar `1.65.826-d13333.local` · D13333 · TIP-DB · 2026-10-14 09:50 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-abyss-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-abyss-settle-next-loop-visible-2026-10-14.md) · backlog `B-abyss-settle-next-loop-visible`
 **打开理由：** 短征+团本+挑战 settle 下一环已菜单化，但深渊结算仍 ConfirmTokens 教指令，且选层页 Open 教 `abysstarget`——D13332§6① 明文后置；内容闭环断在深渊结算。
 
@@ -80,4 +80,4 @@
 
 ---
 
-*选题深渊结算下一环菜单化 · tip **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13333 · TIP-DB · 半行 REJECT `d00ed84bc` **保持否决** · ancestor TIP-DA CLOSED `8e12b6985` · 2026-10-14 09:34 Asia/Shanghai。*
+*选题深渊结算下一环菜单化 · tip **CLOSED live** · `6e22b5d2f` / `8a3f93564` · PASS `4503d824e` · D13333 · TIP-DB · 半行 REJECT `d00ed84bc` **保持否决** · 深渊结算下一环菜单化同题勿再交 · 下一窗：内容优先（挂机资源环/短征乐趣/其余 settle 聊天钮 D673·D794 / legacy evacuate 另窗）。*

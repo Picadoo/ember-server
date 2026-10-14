@@ -1,6 +1,6 @@
 # STATUS · TIP-DB W1a 深渊结算「下一环」菜单化 · D13333
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **交卷** · 勿勾 tip CLOSED · 批 `8a3f93564` · ancestor TIP-DA `3d218ee83`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `4503d824e` · tip `8a3f93564` · 总控收口 2026-10-14 09:50 Asia/Shanghai
 
 ## 交付
 - `EmberSettleService` 深渊 `newBest`：主钮 → `/ember_p1_abyss_settle`（`EmberAbyssSettle.SETTLE_NEXT_LOOP_*`）；工坊 → `/ember_p1_forge`；remember settle 层（每次 abyss settle 覆盖）
@@ -29,4 +29,12 @@
 - balance_version 123 · sx20 · legacy evacuate
 
 ## 下步
-- 物品 W1b 薄页已并行存在 · 待测岗抽测 · 总控收口 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-DB spot）
+- **PASS** · 2026-10-14 09:50 Asia/Shanghai · 证据 `/workspace/tmp/tip-db-abyss-settle/` · 详 `STATUS-ember-abyss-settle-next-loop-tip-db-spot-d13333-2026-10-14.md`
+- live jar `1.65.826-d13333.local` · feat `6e22b5d2f` · tip `8a3f93564` · 批 `8a3f93564` · 深渊结算下一环菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `6e22b5d2f` · 证据 `/workspace/tmp/tip-db-abyss-settle/` · STATUS `4503d824e`
+- **CLOSED live**（总控收口）· tip `8a3f93564` · jar `1.65.826-d13333.local`
