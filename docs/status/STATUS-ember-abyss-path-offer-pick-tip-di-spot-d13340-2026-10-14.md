@@ -1,7 +1,7 @@
 # 状态 · TIP-DI 深渊路径选打菜单化抽测
 
 **裁决：** **PASS** · feat `724f53462` · menu tip `27541e2cb` · tip/批 `39e38c8b1` · jar `1.65.833-d13340.local` · 证据 `/workspace/tmp/tip-di-abyss-path/`  
-**范围：** offerPick / 无参 abysspath / 周要约 → 开 `ember_p1_abyss_path`（**禁** ConfirmTokens 教 abysspath 为主 UI）· 薄页冲层/刷层/清空/深渊表/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `abyss_path_*` 诚实 · Q07 灰态+亮态 · **零改** `ember_p1_abyss_settle` / 层费/强度/掉落/体力价 · **≠**短征选打同题复读（TIP-DH）· **勿勾 tip CLOSED**（总控收口）
+**范围：** offerPick / 无参 abysspath / 周要约 → 开 `ember_p1_abyss_path`（**禁** ConfirmTokens 教 abysspath 为主 UI）· 薄页冲层/刷层/清空/深渊表/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `abyss_path_*` 诚实 · Q07 灰态+亮态 · **零改** `ember_p1_abyss_settle` / 层费/强度/掉落/体力价 · **≠**短征选打同题复读（TIP-DH）· **勾毕 CLOSED live**（总控收口 · 2026-10-14 12:02 Asia/Shanghai）
 
 ## 必验
 
@@ -16,11 +16,11 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **88**（含 `ember_p1_abyss_path`）· jar sha256 `9e9754e7de9f…` plugins=server-runtime · MySQL connected · bv123
 - 单测 `EmberAbyssPathPickTest` / `EmberAbyssPathTest` / SettleNextLoop / RunPapi 绿
-- 39/39 PASS · tip **未勾 CLOSED**（总控收口）
+- 39/39 PASS · tip **勾毕 CLOSED live**（总控收口）
 - 选打主 UI = `ember_p1_abyss_path`；未借 settle ConfirmTokens；未复读短征选打
 
 ## 纪律确认
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · rot weekly_cap=3 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改层费/强度/掉落/体力价/层表/abyss_settle/short_path/raid·featured·challenge path/variety/soft-reward · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `724f53462` · menu tip `27541e2cb` · tip `39e38c8b1` · jar `1.65.833-d13340.local` · **勿勾 CLOSED** · 2026-10-14 12:00 Asia/Shanghai
+> **测岗抽测：** PASS live · feat `724f53462` · menu tip `27541e2cb` · tip `39e38c8b1` · jar `1.65.833-d13340.local` · **CLOSED live**（总控收口）· 2026-10-14 12:02 Asia/Shanghai

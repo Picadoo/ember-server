@@ -2,10 +2,11 @@
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 12:02 Asia/Shanghai | **CLOSED live** · feat `724f53462` · tip `39e38c8b1` · PASS `22aed762e` · jar `1.65.833-d13340.local` · 批 sha `39e38c8b1` · menu tip `27541e2cb` · 证据 `/workspace/tmp/tip-di-abyss-path/` · W1a–b 齐 · 深渊路径选打菜单化同题勿再交 · 下一窗：内容优先（挂机若新硬债 / 其他菜单去指令残留如试炼/签律/步态等 *Path.offerPick 另窗逐支 / legacy evacuate 另窗；深渊路径选打本支已齐） |
 | 2026-10-14 11:50 Asia/Shanghai | 总控批 A·M · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 abysspath/周要约→开 ember_p1_abyss_path · 清 ConfirmTokens 教 abysspath 主 UI · 零改层费/强度/掉落/体力价/层表 · ≠ abyss_settle / short_path 选打同题 · Trial 后置 · 2026-10-14 11:50 Asia/Shanghai |
 | 2026-10-14 11:50 Asia/Shanghai | 初稿 STATUS=**待批 A** · 荐 M · TIP-DH CLOSED 后连开 · 拟 D13340 · TIP-DI |
 
-STATUS=**已批 A · 方案 M** · APPROVED A·M · D13340 · TIP-DI · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改层费/强度/掉落/体力价/层表 · 2026-10-14 11:50 Asia/Shanghai
+STATUS=**CLOSED live** · feat `724f53462` · tip `39e38c8b1` · PASS `22aed762e` · jar `1.65.833-d13340.local` · 批 sha `39e38c8b1` · D13340 · TIP-DI · 2026-10-14 12:02 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-abyss-path-offer-pick-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-abyss-path-offer-pick-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-abyss-path-offer-pick-visible-2026-10-14.md`](RESEARCH-ember-abyss-path-offer-pick-visible-2026-10-14.md) · backlog `B-abyss-path-offer-pick-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬层费/强度/掉落/体力价/层表 ≠深渊settle下一环同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠已齐 settle 下一环同题 ≠短征settle回看同题 ≠D673同题复读 ≠variety再拧 ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠路径追同题 ≠日差同题 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠legacy abyss evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠TrialPath同窗**
 
 > **一句话玩家价值：** 周选/改深渊路径一点开「深渊路径」——冲层/刷层/清空/深渊表/回冒险都能点；**不**抬层费/强度/掉落/体力价、**不**教手打指令、**不**复读已齐 settle/短征·团本·硬本·精选选打同题、**不**扩成全族路径大扫。
@@ -153,7 +154,8 @@ STATUS=**已批 A · 方案 M** · APPROVED A·M · D13340 · TIP-DI · 可施�
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 12:02 Asia/Shanghai | 总控 · **勾毕 CLOSED live** · feat `724f53462` · tip `39e38c8b1` · PASS `22aed762e` · jar `1.65.833-d13340.local` · 批 sha `39e38c8b1` · menu tip `27541e2cb` · 证据 `/workspace/tmp/tip-di-abyss-path/` · 半行 REJECT `d00ed84bc` **保持否决** · 深渊路径选打菜单化同题勿再交 · 下一窗：内容优先（挂机若新硬债 / 其他菜单去指令残留如试炼/签律/步态等 *Path.offerPick 另窗逐支 / legacy evacuate 另窗；深渊路径选打本支已齐） |
 | 2026-10-14 11:50 Asia/Shanghai | 总控 · **批 A·M** · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 abysspath/周要约→开 ember_p1_abyss_path · 清 ConfirmTokens 教 abysspath 主 UI · 零改层费/强度/掉落/体力价/层表 · ≠ abyss_settle / short_path 选打同题 · Trial 后置 · 半行 REJECT `d00ed84bc` 保持 |
 | 2026-10-14 11:50 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-DH CLOSED 后连开 · 选题 AbyssPath.offerPick / applyAndReply 深渊路径选打菜单化 · 拟 D13340 · TIP-DI · ≠半行 ≠深渊settle同题 ≠短征选打同题 ≠团本/硬本/精选选打同题 ≠已齐 settle 同题 ≠variety再拧 ≠庭内旁路 · **改题有证据**（挂机近饱和·gem gap未亮；短征薄债+选打已齐；settle CW–DD+DE–DH选打已齐；DESIGN-DH§6⑦；offerPick ConfirmTokens→abysspath；无参/周要约；无 `ember_p1_abyss_path`；Trial 后置；见 RESEARCH） |
 
-*D13340 **已批 A · 方案 M** · APPROVED A·M · AbyssPath.offerPick / applyAndReply 深渊路径选打菜单化 · TIP-DI。**可施工 W1a插件+W1b物品** · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 abysspath/周要约→开 ember_p1_abyss_path · 清 ConfirmTokens 教 abysspath 主 UI · 零改层费/强度/掉落/体力价/层表 · ≠ abyss_settle / short_path 选打同题 · Trial 后置 · ≠半行 ≠已齐 settle/选打同题复读 ≠sx20 · 2026-10-14 11:50 Asia/Shanghai*
+*D13340 **CLOSED live** · `724f53462` / `39e38c8b1` · PASS `22aed762e` · AbyssPath.offerPick / applyAndReply 深渊路径选打菜单化 · TIP-DI。**已批 A · 方案 M** · offerPick/applyAndReply/无参 abysspath/周要约→开 ember_p1_abyss_path · 清 ConfirmTokens 教 abysspath 主 UI · 零改层费/强度/掉落/体力价/层表 · ≠ abyss_settle / short_path 选打同题 · Trial 后置 · ≠半行 ≠已齐 settle/选打同题复读 ≠sx20。*

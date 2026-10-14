@@ -1,6 +1,6 @@
 # STATUS · TIP-DI W1a 深渊路径选打菜单化 · D13340
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · 勿勾 tip CLOSED · 待测岗抽测
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `22aed762e` · tip `39e38c8b1` · 总控收口 2026-10-14 12:02 Asia/Shanghai
 
 ## 交付
 - `EmberAbyssPath.offerPick` →开 `/ember_p1_abyss_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `abysspath` 为主 UI
@@ -12,7 +12,7 @@
 - jar：`1.65.833-d13340.local` · sha256 `9e9754e7de9f…` · ECONOMY_BV **123** 未动
 - play：live `1.65.833-d13340.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**层费 / 强度 / 掉落 / 体力价 / 层表 / Cast·Aid / variety / 已齐 settle 薄页（含 `ember_p1_abyss_settle`）/ Short·Raid·Featured·Challenge Path / TrialPath / 庭内 / TrMenu yml（物品 W1b 并行）
-- **勿勾 tip CLOSED** · 待测岗 PASS 后总控收口
+- **勾毕 CLOSED live** · PASS `22aed762e` · 总控收口 2026-10-14 12:02 Asia/Shanghai
 
 ## 落点
 - `EmberAbyssPath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine
@@ -30,4 +30,12 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_abyss_path`）
 
 ## 下步
-- 物品 W1b / 测岗抽测 → 总控收口 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-DI spot）
+- **PASS** · 2026-10-14 12:02 Asia/Shanghai · 证据 `/workspace/tmp/tip-di-abyss-path/` · 详 `STATUS-ember-abyss-path-offer-pick-tip-di-spot-d13340-2026-10-14.md`
+- live jar `1.65.833-d13340.local` · feat `724f53462` · tip `39e38c8b1` · 批 `39e38c8b1` · 深渊路径选打菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `724f53462` · 证据 `/workspace/tmp/tip-di-abyss-path/` · STATUS `22aed762e`
+- **CLOSED live**（总控收口）· tip `39e38c8b1` · jar `1.65.833-d13340.local`
