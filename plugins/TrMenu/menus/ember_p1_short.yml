@@ -20,6 +20,7 @@
 # TIP-CU / D13326: 日差本可冲 L · short_div* · enter short-div · 零抬日帽/targets
 # TIP-CX / D13329: 日差软奖可领 L · short_div_claim* · claim short-div-soft · 零抬日帽/targets
 # TIP-CV / D13327: 路径追 0 · short_path* · 薄页 ember_p1_short_path · 零抬日帽/targets
+# TIP-DH / D13339: 清 Open 旁路 shortpath · 改点 Icon 0 开薄页 · 零教手打
 
 Title: '§6短征 · 选本'
 
@@ -45,7 +46,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'command: corerpg p1 shortpath'
+    # TIP-DH / D13339：清 Open 旁路 command shortpath（避免再弹 ConfirmTokens）；路径追见 Icon 0 → ember_p1_short_path
     # D409 W1b：日帽合计满 → 满态 Open；未满保持现网选本句（真键 sx_day_left_sum · 禁假写固定 N）
     - condition: 'check papi %corerpg_p1_sx_day_left_sum% <= 0'
       priority: 1

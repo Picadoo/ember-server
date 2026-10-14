@@ -1,7 +1,9 @@
 # TIP-CV / D13327 · 短征路径追薄页 · short_path* · enter short-path · 零抬日帽/targets
-# 入口：短征选页 Icon 0 · /ember_p1_short_path
+# TIP-DH / D13339 · 接线/补洞：Q01 灰态 + 冒险/工坊；清选页 Open shortpath 旁路（见 ember_p1_short）
+# 入口：ShortPath.offerPick / 无参 shortpath / 选页 Icon 0 / settle 换一条 → /ember_p1_short_path
 # 切偏好：corerpg p1 shortpath fc|day|late|clear · 进本：corerpg p1 enter short-path
-# 禁：教裸指令主 UI · 抬日帽/价/targets · 改 D/F/L/十九本
+# 禁：教裸指令主 UI · 抬日帽/价/targets · 改 short_settle / featured_path / challenge_path / raid_path
+# ≠ 路径追同题新建（薄页已在）· ≠ short_settle · ≠ 其他 path 选打页
 
 Title: '§6短征 · 路径追'
 
@@ -18,14 +20,14 @@ Options:
 Layout:
   - '####I####'
   - '##F#D#L##'
-  - '##C#E###'
+  - '#C#E#A#G#'
   - '####Z####'
 
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-1.1'
     - 'tell: §e路径追 §7· %corerpg_p1_short_path_line%'
-    - 'tell: §8点选偏好 · 再点「进下一本」真进本'
+    - 'tell: §8点选偏好 · 再点「进下一本」真进本 · 或回选页 / 冒险 / 工坊'
 
 Icons:
   '#':
@@ -42,13 +44,23 @@ Icons:
         - '§f当前：§e%corerpg_p1_short_path_label%'
         - '§7下一本：§f%corerpg_p1_short_path_resolve_name%'
         - '§8%corerpg_p1_short_path_tip% · %corerpg_p1_short_path_line%'
+        - '§8需本人首通 Q01 后可选 · 点选偏好 / 进下一本'
 
   # FC=1 · 首通追
   F:
     update: 20
     icons:
-      - condition: 'check papi %corerpg_p1_short_path% == 1'
+      - condition: 'check papi %corerpg_p1_access_q01% < 1'
         priority: 1
+        display:
+          material: gray dye
+          name: '§7首通追 §8（需首通 Q01）'
+          lore:
+            - '§c路径追需本人进过或首通主线 Q01'
+            - '§7优先未领生涯首通的短本'
+            - '§8通关 Q01 后再选偏好'
+      - condition: 'check papi %corerpg_p1_short_path% == 1'
+        priority: 2
         display:
           material: gold nugget
           name: '§a首通追 §8· §f已选'
@@ -78,8 +90,17 @@ Icons:
   D:
     update: 20
     icons:
-      - condition: 'check papi %corerpg_p1_short_path% == 2'
+      - condition: 'check papi %corerpg_p1_access_q01% < 1'
         priority: 1
+        display:
+          material: gray dye
+          name: '§7有奖追 §8（需首通 Q01）'
+          lore:
+            - '§c路径追需本人进过或首通主线 Q01'
+            - '§7优先今日仍有日奖次数的短本'
+            - '§8通关 Q01 后再选偏好'
+      - condition: 'check papi %corerpg_p1_short_path% == 2'
+        priority: 2
         display:
           material: gold ingot
           name: '§a有奖追 §8· §f已选'
@@ -109,8 +130,17 @@ Icons:
   L:
     update: 20
     icons:
-      - condition: 'check papi %corerpg_p1_short_path% == 3'
+      - condition: 'check papi %corerpg_p1_access_q01% < 1'
         priority: 1
+        display:
+          material: gray dye
+          name: '§7后段追 §8（需首通 Q01）'
+          lore:
+            - '§c路径追需本人进过或首通主线 Q01'
+            - '§7优先后段短本推进'
+            - '§8通关 Q01 后再选偏好'
+      - condition: 'check papi %corerpg_p1_short_path% == 3'
+        priority: 2
         display:
           material: ender eye
           name: '§a后段追 §8· §f已选'
@@ -140,8 +170,16 @@ Icons:
   C:
     update: 20
     icons:
-      - condition: 'check papi %corerpg_p1_short_path% == 0'
+      - condition: 'check papi %corerpg_p1_access_q01% < 1'
         priority: 1
+        display:
+          material: gray dye
+          name: '§7清空偏好 §8（需首通 Q01）'
+          lore:
+            - '§c路径追需本人进过或首通主线 Q01'
+            - '§8通关后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_short_path% == 0'
+        priority: 2
         display:
           material: barrier
           name: '§7已清空 §8· §f无偏好'
@@ -171,8 +209,16 @@ Icons:
   E:
     update: 20
     icons:
-      - condition: 'check papi %corerpg_p1_short_path_ok% < 1'
+      - condition: 'check papi %corerpg_p1_access_q01% < 1'
         priority: 1
+        display:
+          material: gray dye
+          name: '§7进下一本 §8（需首通 Q01）'
+          lore:
+            - '§c路径追需本人进过或首通主线 Q01'
+            - '§8通关后再进本'
+      - condition: 'check papi %corerpg_p1_short_path_ok% < 1'
+        priority: 2
         display:
           material: gray dye
           name: '§7进下一本 §8（未选/无 resolve）'
@@ -181,7 +227,7 @@ Icons:
             - '§f%corerpg_p1_short_path_label% §7· §f%corerpg_p1_short_path_resolve_name%'
             - '§8%corerpg_p1_short_path_tip%'
       - condition: 'check papi %corerpg_stamina% < 30'
-        priority: 2
+        priority: 3
         display:
           material: iron bars
           name: '§7进下一本 §8（体力不足）'
@@ -201,6 +247,34 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg p1 enter short-path'
         - close
+
+  # 冒险（可选）
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊（可选 · G 避与首通追 F 撞键）
+  G:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
 
   Z:
     display:
