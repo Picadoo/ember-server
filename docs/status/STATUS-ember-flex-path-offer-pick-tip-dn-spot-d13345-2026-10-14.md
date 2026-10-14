@@ -1,7 +1,7 @@
 # 状态 · TIP-DN 轻技路径选打菜单化抽测
 
 **裁决：** **PASS** · feat `53be7080e` · menu tip `55f8f3ea0` · tip/批 `68230fe44` · jar `1.65.838-d13345.local` · 证据 `/workspace/tmp/tip-dn-flex-path/`  
-**范围：** offerPick / 无参 flexpath / 周要约 → 开 `ember_p1_flex_path`（**禁** ConfirmTokens 教 flexpath 为主 UI）· 薄页装配踏步/卸下轻技/清空/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `flex_path_*` 诚实 · Q01 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_stride_path` 及其他已齐 path · **零**新建 `ember_p1_step_path` · **≠**已齐选打同题复读 · **勿勾 tip CLOSED**（总控收口 · 2026-10-14 13:36 Asia/Shanghai)
+**范围：** offerPick / 无参 flexpath / 周要约 → 开 `ember_p1_flex_path`（**禁** ConfirmTokens 教 flexpath 为主 UI）· 薄页装配踏步/卸下轻技/清空/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `flex_path_*` 诚实 · Q01 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_stride_path` 及其他已齐 path · **零**新建 `ember_p1_step_path` · **≠**已齐选打同题复读 · **勾毕 CLOSED live**（总控收口 · 2026-10-14 13:38 Asia/Shanghai)
 
 ## 必验
 
@@ -18,11 +18,11 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **93**（含 `ember_p1_flex_path`）· jar sha256 `ff6548cc0148…` plugins=server-runtime · MySQL connected · bv123
 - 单测 `EmberFlexPathPickTest` / `EmberFlexPathTest` / RunPapi / StridePathPick / CounterPathPick / PledgePathPick / TrialPathPick 绿
-- 46/46 PASS · tip **勿勾 CLOSED**（总控收口）
+- 46/46 PASS · tip **勾毕 CLOSED live**（总控收口）
 - 选打主 UI = `ember_p1_flex_path`；未教裸 flexpath/steppath；未复读步态/破绽/誓约/试炼等选打
 
 ## 纪律确认
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · rot weekly_cap=3 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改伤害/CD表/掉落/体力价/stride_path/counter_path/pledge_path/trial_path/abyss·short·raid·featured·challenge path/variety/soft-reward · 零新建 step_path · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `53be7080e` · menu tip `55f8f3ea0` · tip `68230fe44` · jar `1.65.838-d13345.local` · **勿勾 CLOSED**（总控收口 · 2026-10-14 13:36 Asia/Shanghai)
+> **测岗抽测：** PASS live · feat `53be7080e` · menu tip `55f8f3ea0` · tip `68230fe44` · jar `1.65.838-d13345.local` · **勾毕 CLOSED live**（总控收口 · 2026-10-14 13:38 Asia/Shanghai)
