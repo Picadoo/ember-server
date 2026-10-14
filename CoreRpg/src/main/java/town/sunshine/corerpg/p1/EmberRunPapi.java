@@ -516,7 +516,7 @@ public final class EmberRunPapi {
         return cm != null && cm.name != null && !cm.name.isEmpty() ? cm.name : pick.mapKey;
     }
 
-    /** TIP-CU D13326 %corerpg_p1_short_div*% — day-diversity chase; soft target 3 display-only; zero economy. */
+    /** TIP-CU D13326 %corerpg_p1_short_div*% — day-diversity chase; TIP-CX soft claim bits. */
     private String shortDayDiv(PlayerData d, String key, EmberRunMaps maps, EmberShortService shortEx) {
         java.util.function.Predicate<String> unlocked = k -> {
             EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(k);
@@ -534,6 +534,11 @@ public final class EmberRunPapi {
         if ("short_div_chase".equals(key)) return chase;
         if ("short_div_chase_ok".equals(key)) return EmberShortDayDivChase.chaseOk(chase);
         if ("short_div_done".equals(key)) return EmberShortDayDivChase.done(n, chase);
+        // TIP-CX D13329 soft claim bits (zero change chase/enter)
+        boolean claimed = EmberShortDayDivSoftClaim.claimedToday(d);
+        if ("short_div_claim_ok".equals(key)) return EmberShortDayDivSoftClaim.claimOk(n, claimed);
+        if ("short_div_claimed".equals(key)) return EmberShortDayDivSoftClaim.claimedBit(claimed);
+        if ("short_div_claim_line".equals(key)) return EmberShortDayDivSoftClaim.claimLine(n, claimed);
         if (chase.isEmpty()) return "";
         if ("short_div_chase_name".equals(key)) {
             EmberRunMaps.MapDef cm = maps == null ? null : maps.byKey(chase);

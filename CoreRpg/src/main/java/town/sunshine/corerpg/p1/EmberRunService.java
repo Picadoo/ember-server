@@ -3207,9 +3207,16 @@ public boolean pathForceOpenDoor(Player p) {
             case "forgeroll":
             case "随机锻造": return cmdForgeRoll(s, args);
             case "firstclear": return cmdFirstClear(s, args);
-            case "claim": { // D1574
+            case "claim": { // D1574 · TIP-CX soft claim alias
                 if (!(s instanceof Player)) return true;
                 Player cp = (Player) s;
+                if (args.length >= 3) {
+                    String claimArg = args[2].toLowerCase(Locale.ROOT);
+                    if ("short-div-soft".equals(claimArg) || "short_div_soft".equals(claimArg)
+                            || "short-div-soft-claim".equals(claimArg) || "short_div_soft_claim".equals(claimArg)) {
+                        return cmdShortDivSoftClaim(cp);
+                    }
+                }
                 if (blocksLegacy(cp.getWorld())) { s.sendMessage(P + "出本后再领取。"); return true; }
                 int got = deliver(cp);
                 int left = EmberLedgerGlance.claimable(this, cp.getUniqueId());
@@ -3483,6 +3490,36 @@ public boolean pathForceOpenDoor(Player p) {
         s.sendMessage(P + "/corerpg p1 firstclear <族> — 领取首通自选 · /corerpg p1 claim — 补领暂存奖励");
         s.sendMessage(P + "/corerpg p1 shop [buy [n]] — 补给商：回复药 " + EmberSupplyService.price() + " 余烬币/瓶（绑定，城内购买）");
         if (s.hasPermission("corerpg.admin")) s.sendMessage(P + "/corerpg p1 audit [玩家] · audit restore <玩家> <uid前缀> — 物品与 DB 对账 / 补发");
+    }
+
+    /** TIP-CX D13329: menu-driven soft claim — bone×2 once/day when n≥SOFT_TARGET. */
+    private boolean cmdShortDivSoftClaim(Player p) {
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) { p.sendMessage(P + "数据还没加载好"); return true; }
+        EmberRunMaps dm = maps();
+        EmberShortService dex = shortExpedition;
+        java.util.function.Predicate<String> unlocked = k -> {
+            EmberRunMaps.MapDef m = dm == null ? null : dm.byKey(k);
+            return EmberShortPath.unlocked(this, d, m);
+        };
+        java.util.function.ToIntFunction<String> rewarded = k -> {
+            EmberRunMaps.MapDef m = dm == null ? null : dm.byKey(k);
+            return (dex != null && m != null) ? dex.rewardedToday(d, m)
+                    : Math.max(0, d.periodCount(EmberShortRules.claimKey(k),
+                            town.sunshine.corerpg.DailyService.today()));
+        };
+        int n = EmberShortDayDivChase.distinctRewarded(unlocked, rewarded);
+        boolean claimed = EmberShortDayDivSoftClaim.claimedToday(d);
+        if (!EmberShortDayDivSoftClaim.claimable(n, claimed)) {
+            p.sendMessage(P + EmberShortDayDivSoftClaim.rejectHint(n, claimed));
+            try { p.sendActionBar("§7日差软奖 · " + EmberShortDayDivSoftClaim.claimLine(n, claimed)); } catch (Throwable ignored) { }
+            return true;
+        }
+        if (!EmberShortDayDivSoftClaim.tryClaim(p, d, n)) {
+            p.sendMessage(P + "发放失败（仓/背包可能满）· 请稍后再试。");
+            return true;
+        }
+        return true;
     }
 
     private boolean cmdTarget(CommandSender s, String[] args) {

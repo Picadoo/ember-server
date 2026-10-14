@@ -29,7 +29,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 07:53 Asia/Shanghai
-- [ ] 插件交 claim NI + PAPI + 单测
+- [x] 插件交 claim NI + PAPI + 单测
 - [ ] 物品交 L 可领态 + TrMenu reload
 - [ ] 抽测：满 3 可领骨尘×2；日一次；未满可进 chase；零抬日帽/targets；零写 weekly_goals；零改 Cast/Aid；零日差进本同题；零 sx20；零半行独档
 
