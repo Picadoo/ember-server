@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13345 · FlexPath.offerPick / applyAndReply 轻技路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠步态路径选打同题 · ≠破绽/誓约/试炼/深渊/短征/团本/硬本/精选路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠全族 *Path.offerPick 大扫 · ≠身法/闪冲同窗 · ≠复开 D494 玩法本体）
 
-> **旁注（待批 A · 荐 M · 2026-10-14 13:22 Asia/Shanghai · 勿勾 CLOSED）：** tip **待批 A** · DESIGN [`DESIGN-ember-flex-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-flex-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-flex-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-flex-path-offer-pick-visible-2026-10-14.md) · backlog `B-flex-path-offer-pick-visible` · **TIP-DN** · 下一窗：身法 StepPath / 闪冲 SidestepPath 等 *Path.offerPick 逐支（禁全族大扫）/ PacePath 等剩支后置 / 挂机若新硬债 / legacy evacuate 后置 · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠步态路径选打同题 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠已齐 settle 下一环同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬伤害/CD表/掉落/体力价 ≠D673同题复读 ≠legacy evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠身法/闪冲同窗 ≠复开 D494**。
+> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 13:24 Asia/Shanghai · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-flex-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-flex-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-flex-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-flex-path-offer-pick-visible-2026-10-14.md) · backlog `B-flex-path-offer-pick-visible` · **TIP-DN** · 下一窗：身法 StepPath / 闪冲 SidestepPath 等 *Path.offerPick 逐支（禁全族大扫）/ PacePath 等剩支后置 / 挂机若新硬债 / legacy evacuate 后置 · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠步态路径选打同题 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠已齐 settle 下一环同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬伤害/CD表/掉落/体力价 ≠D673同题复读 ≠legacy evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠身法/闪冲同窗 ≠复开 D494**。
 
 > **上游结案：** **TIP-DM CLOSED** live（D13344 步态路径选打齐 · feat `3daefff99` · tip `d2441d9f8` · jar `1.65.837-d13344.local` · PASS `1e7d58049` · 批 sha `d2441d9f8` · menu tip `e16208193` · CLOSED `584e17b53` · **步态路径选打菜单化同题勿再交**）。总控派下一窗：内容优先；挂机加厚须新硬债；短征乐趣非已齐路径；已齐勿复读 settle CW–DD + 选打 DE–DM；若无新硬债只钉 **一支**（Flex / Step / Sidestep，实扫 ConfirmTokens 择最硬）；Pace/legacy evacuate 默认后置。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **待批 A** · 荐 M · 拟 D13345 · TIP-DN · 2026-10-14 13:22 Asia/Shanghai · 勿勾 CLOSED
+**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13345 · TIP-DN · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 13:24 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-flex-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-flex-path-offer-pick-visible-2026-10-14.md) · backlog `B-flex-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–DM 已齐；轻技**选打**仍 ConfirmTokens 教裸 flexpath——DESIGN-DM §6⑦ 明文后置轻技/身法/闪冲；实扫择最硬=Flex；内容闭环断在轻技路径选打（≠步态选打；≠ settle 同题）。
 
@@ -44,7 +44,7 @@
 
 ---
 
-## 3. 派单摘要（待批 A · 荐 M）
+## 3. 派单摘要（已批 A·M · 可施工）
 
 ```
 【派单·内容真债待批A·拟D13345·TIP-DN】FlexPath.offerPick/applyAndReply轻技路径选打菜单化（真可点 · ≠步态选打同题 · ≠破绽/誓约/试炼/深渊/短征/团本/硬本/精选选打同题 · ≠已齐settle同题 · ≠半行空转 · ≠全族Path大扫 · ≠身法/闪冲同窗）
@@ -63,9 +63,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-flex-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-flex-path-offer-pick-visible-thin-d13345-2026-10-14.md` |
 | backlog | `B-flex-path-offer-pick-visible` |
-| 号段 | **D13345** · 字母窗 **TIP-DN** · STATUS=**待批 A** · 荐 M · 勿勾 CLOSED |
+| 号段 | **D13345** · 字母窗 **TIP-DN** · STATUS=**已批 A · 方案 M** · APPROVED A·M |
 | 上游 | TIP-DM CLOSED live `584e17b53` · feat `3daefff99` · tip `d2441d9f8` · PASS `1e7d58049` · jar `1.65.837-d13344.local` · 批 sha `d2441d9f8` · D13344；半行 REJECT `d00ed84bc` 保持否决；步态路径选打菜单化同题勿再交 |
 
-*选题 FlexPath.offerPick / applyAndReply 轻技路径选打菜单化 · tip **待批 A** · 荐 M · D13345 · TIP-DN · 半行 REJECT `d00ed84bc` **保持否决** · 勿勾 CLOSED · 下一窗：身法 StepPath / 闪冲 SidestepPath 等 *Path.offerPick 逐支（禁全族大扫）/ PacePath 等剩支后置 / 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-DM CLOSED · 2026-10-14 13:22 Asia/Shanghai.*
+*选题 FlexPath.offerPick / applyAndReply 轻技路径选打菜单化 · tip **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13345 · TIP-DN · 半行 REJECT `d00ed84bc` **保持否决** · 身法/闪冲后置 · ancestor TIP-DM CLOSED `584e17b53` · 2026-10-14 13:24 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐 M · D13345 · TIP-DN · 2026-10-14 13:22 Asia/Shanghai · 勿勾 CLOSED
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13345 · TIP-DN · 2026-10-14 13:24 Asia/Shanghai
