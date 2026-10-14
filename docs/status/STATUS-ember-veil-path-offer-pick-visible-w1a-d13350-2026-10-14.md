@@ -1,6 +1,6 @@
 # STATUS · TIP-DS W1a 避毒路径选打菜单化 · D13350
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip APPROVED `3947da6bf` · tip **勿勾 CLOSED**（待测+物品 W1b）
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip APPROVED `3947da6bf` · tip **CLOSED live** · PASS `0364f3334` · menu `bf2645adf` · 2026-10-14 15:18 Asia/Shanghai
 
 ## 交付
 - feat: `3e3a8f876`
@@ -14,7 +14,7 @@
 - jar：`1.65.843-d13350.local` · sha256 `3d129e65f95eb2d2…` · ECONOMY_BV **123** 未动
 - play：live `1.65.843-d13350.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / D573 毒十字避毒语义(auto/ask/mute) / Cast·Aid / variety / 已齐 settle 薄页 / Free·Dodge·Sidestep·Step·Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Pace 同窗 / Snap/Spin/Blaze 同窗 / 庭内 / TrMenu yml（物品 W1b 并行）
-- tip **勿勾 CLOSED** · 可派测 / 物品 W1b
+- tip **CLOSED live by 总控** · PASS `0364f3334` · menu `bf2645adf` · 2026-10-14 15:18 Asia/Shanghai
 
 ## 落点
 - `EmberVeilPath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine · 改路径薄页
@@ -31,4 +31,4 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_veil_path`）
 
 ## 下步
-- 可派测 · 物品 W1b 薄页 `ember_p1_veil_path` · **勿勾 tip CLOSED**
+- tip **CLOSED live** · PASS `0364f3334` · 总控收口 `2026-10-14 15:18 Asia/Shanghai` · 下一窗 SnapPath.offerPick

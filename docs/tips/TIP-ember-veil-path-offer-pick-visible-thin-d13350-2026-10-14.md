@@ -1,11 +1,11 @@
 # tip · TIP-DS VeilPath.offerPick / applyAndReply「避毒路径选打」菜单化（选路径聊天钮去指令化 · ≠解锢路径选打同题 · ≠闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠Snap/Spin/Blaze同窗 · ≠复开 D573 玩法本体）· 拟 D13350
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13350 · TIP-DS · W1a+W1b+抽测 PASS · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 veilpath/周要约→开 ember_p1_veil_path · 清 ConfirmTokens 教 veilpath 主 UI · 2026-10-14 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `3e3a8f876` · tip `3947da6bf` · jar `1.65.843-d13350.local` · PASS `0364f3334` · 批 sha `3947da6bf` · menu tip `bf2645adf` · 证据 `/workspace/tmp/tip-ds-veil-path/` · 2026-10-14 15:18 Asia/Shanghai · 避毒路径选打菜单化同题勿再交
 > **DESIGN** [`DESIGN-ember-veil-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-veil-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-veil-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（VeilPath.offerPick / applyAndReply / 无参 veilpath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_veil_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零解锢路径选打同题复读（TIP-DR） · 零闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-DQ–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零 Snap/Spin/Blaze 同窗 · 零复开 D573 玩法本体（auto/ask/mute 真改毒十字避毒语义零改）· 零改 free_path / dodge_path 等已齐
 > **ancestor：** TIP-DR CLOSED live `8d35ba6d7`（feat `446b2d907` · tip `66bfe1203` · PASS `36db6d583` · jar `1.65.842-d13349.local` · 批 sha `66bfe1203` · menu tip `b1f0db650` · 证据 `/workspace/tmp/tip-dr-free-path/`）
-> **下一窗提示（旁注）：** Snap/Spin/Blaze 等 *Path.offerPick **逐支**（禁全族大扫）/ PacePath（本仓无）后置 / 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-DS（批后）
+> **下一窗提示（旁注）：** **SnapPath.offerPick**（只钉一支 · 禁全族大扫）· Spin/Blaze 后置 / PacePath（本仓无）后置 / 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-DS CLOSED
 
 ## 一句话
 周选/改避毒路径时一点开「避毒路径」薄页：自动 / 提醒 / 静默 / 清空 / 技能组 / 冒险可点；清 ConfirmTokens 教 `veilpath` 主 UI；伤害·CD表·掉落·体力价不动；局内「毒十字」战斗钮语义零改。
@@ -37,6 +37,6 @@
 - [x] 总控批 A·M · 2026-10-14 15:03 Asia/Shanghai
 - [x] 插件交 offerPick / applyAndReply / 无参 veilpath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat_commit `3e3a8f876` · jar `1.65.843-d13350.local`
 - [x] 物品交薄 veil_path 页 + TrMenu reload · menu `bf2645adf` · TrMenu 98
-- [x] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 free_path·零已齐选打同题复读·零改 D573 避毒语义）· spot STATUS 见 STATUS-ember-veil-path-offer-pick-tip-ds-spot-d13350 · **勿勾 CLOSED**
+- [x] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 free_path·零已齐选打同题复读·零改 D573 避毒语义）· STATUS-ember-veil-path-offer-pick-tip-ds-spot-d13350-2026-10-14.md · PASS `0364f3334` · 证据 `/workspace/tmp/tip-ds-veil-path/` · **CLOSED by 总控**
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a+W1b+抽测 PASS（勿勾 CLOSED · 待总控收口） · L不批 · D13350 · TIP-DS · 2026-10-14 Asia/Shanghai
+## STATUS: **CLOSED live** · `3e3a8f876` / `bf2645adf` · PASS `0364f3334` · jar `1.65.843-d13350.local` · D13350 · TIP-DS · 2026-10-14 15:18 Asia/Shanghai · 避毒路径选打菜单化同题勿再交
