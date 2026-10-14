@@ -5,7 +5,7 @@
 > **上游结案：** **TIP-EA CLOSED** live（D13358 压伤路径选打齐 · feat `afa2cf969` · tip `1b4f236e6` · jar `1.65.851-d13358.local` · PASS `19c58c9ee` · 批 sha `1b4f236e6` · menu tip `9a9c42d6e` · CLOSED `8772b030c` · 证据 `/workspace/tmp/tip-ea-press-path/` · **压伤路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **ClonePath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EA 选打勿复；PacePath（本仓无）后置；Shell… D583+ 后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13359 · TIP-EB · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 17:47 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `fdd409b97` · tip `3e31ae7c8` · jar `1.65.852-d13359.local` · PASS `0f135a72e` · menu `938e20faa` · 2026-10-14 18:03 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-clone-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-clone-path-offer-pick-visible-2026-10-14.md) · backlog `B-clone-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EA 已齐；分身**选打**仍 ConfirmTokens 教裸 clonepath——总控钉死本支；内容闭环断在分身路径选打（≠压伤选打；≠ settle 同题；局内分裂钮≠选打页）。
 
