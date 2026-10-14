@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13335 · 精选周帽满 D794 / FeaturedPath.afterSettle 下一环菜单化 · settle 聊天钮去指令化 · docs-only · ≠图身份首通settle下一环同题 · ≠深渊settle下一环同题 · ≠挑战settle下一环同题 · ≠团本settle下一环同题 · ≠短征settle下一环·回看同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬掉落/体力价/周帽 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠D673同题复读）
 
-> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 10:22 Asia/Shanghai · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改掉落/体力价/周帽）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-featured-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-featured-settle-next-loop-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-featured-settle-next-loop-visible-2026-10-14.md`](../design/RESEARCH-ember-featured-settle-next-loop-visible-2026-10-14.md) · backlog `B-featured-settle-next-loop-visible` · **TIP-DD** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠图身份settle下一环同题 ≠深渊settle下一环同题 ≠挑战settle下一环同题 ≠团本settle下一环同题 ≠短征settle下一环同题 ≠短征settle回看同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬掉落/体力价/周帽 ≠D673同题复读 ≠legacy evacuate 大扫**。
+> **旁注（勾毕 · CLOSED live · feat `b07074070` · tip `b7160ee19` · PASS `f864e36b9` · jar `1.65.828-d13335.local` · 批 sha `b7160ee19` · 2026-10-14 10:37 Asia/Shanghai · 精选结算下一环菜单化同题勿再交 · 下一窗：内容优先（挂机资源环若新硬债 / 短征乐趣若新薄债 / legacy evacuate 另窗；D794/D673 settle 聊天钮本支已齐））：** tip **CLOSED live** · DESIGN [`DESIGN-ember-featured-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-featured-settle-next-loop-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-featured-settle-next-loop-visible-2026-10-14.md`](../design/RESEARCH-ember-featured-settle-next-loop-visible-2026-10-14.md) · backlog `B-featured-settle-next-loop-visible` · **TIP-DD** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠图身份settle下一环同题 ≠深渊settle下一环同题 ≠挑战settle下一环同题 ≠团本settle下一环同题 ≠短征settle下一环同题 ≠短征settle回看同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬掉落/体力价/周帽 ≠D673同题复读 ≠legacy evacuate 大扫**。
 
 > **上游结案：** **TIP-DC CLOSED** live `d5e5185a3`（D13334 图身份首通结算下一环齐 · feat `e1eb0f9b2` · tip `0a92cb3c8` · jar `1.65.827-d13334.local` · PASS `a0fcf6d66` · 批 sha `0a92cb3c8` · **图身份首通结算下一环菜单化同题勿再交**）。总控派 TIP-DD：内容优先；挂机加厚须新硬债；短征乐趣非已齐路径；其余 settle 聊天钮（**精选周帽满 D794 / FeaturedPath.afterSettle**）；legacy evacuate 默认后置。短征CW / variety回看CY / soft CX / 团本CZ / 挑战DA / 深渊DB / 图身份DC settle 下一环 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13335 · TIP-DD · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改掉落/体力价/周帽 · 2026-10-14 10:22 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `b07074070` · tip `b7160ee19` · PASS `f864e36b9` · jar `1.65.828-d13335.local` · D13335 · TIP-DD · 2026-10-14 10:37 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-featured-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-featured-settle-next-loop-visible-2026-10-14.md) · backlog `B-featured-settle-next-loop-visible`
 **打开理由：** 挂机/短征无新薄债；图身份 settle 已齐；精选结算仍 ConfirmTokens 教指令——DESIGN-DC §6⑤ 明文后置；内容闭环断在精选结算。
 
@@ -82,6 +82,6 @@
 
 ---
 
-*选题精选周帽满 D794 / FeaturedPath.afterSettle 下一环菜单化 · tip **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13335 · TIP-DD · 半行 REJECT `d00ed84bc` **保持否决** · 挂机/短征无新薄债故落 D794 · ancestor TIP-DC CLOSED · 2026-10-14 10:22 Asia/Shanghai.*
+*选题精选周帽满 D794 / FeaturedPath.afterSettle 下一环菜单化 · tip **CLOSED live** · `b07074070` / `b7160ee19` · PASS `f864e36b9` · D13335 · TIP-DD · 半行 REJECT `d00ed84bc` **保持否决** · 精选结算下一环菜单化同题勿再交 · 下一窗：内容优先（挂机资源环若新硬债 / 短征乐趣若新薄债 / legacy evacuate 另窗；D794/D673 settle 聊天钮本支已齐）。*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13335 · TIP-DD · 2026-10-14 10:22 Asia/Shanghai
+## STATUS: **CLOSED live** · `b07074070` / `b7160ee19` · PASS `f864e36b9` · D13335 · TIP-DD · 2026-10-14 10:37 Asia/Shanghai

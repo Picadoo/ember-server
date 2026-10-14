@@ -1,6 +1,6 @@
 # RESEARCH · 精选周帽满 D794 / FeaturedPath.afterSettle「精选下一环」菜单化（settle 聊天钮去指令化 · ≠图身份首通settle下一环同题 · ≠深渊settle下一环同题 · ≠挑战settle下一环同题 · ≠团本settle下一环同题 · ≠短征settle下一环·回看同题 · ≠variety再拧 · ≠半行 · ≠庭内旁路 · ≠抬掉落/体力价/周帽 · ≠D673同题复读）· 2026-10-14
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13335 · TIP-DD · 可施工 · 勿勾 CLOSED · 2026-10-14 10:22 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `b07074070` · tip `b7160ee19` · PASS `f864e36b9` · jar `1.65.828-d13335.local` · 批 sha `b7160ee19` · TIP-DD · 2026-10-14 10:37 Asia/Shanghai · 精选结算下一环菜单化同题勿再交 · 下一窗：内容优先（挂机资源环若新硬债 / 短征乐趣若新薄债 / legacy evacuate 另窗；D794/D673 settle 聊天钮本支已齐）
 > **起因：** 总控【派·TIP-DD / 拟 D13335】上游 TIP-DC CLOSED live `d5e5185a3`（jar `1.65.827-d13334` · feat `e1eb0f9b2` · tip `0a92cb3c8` · PASS `a0fcf6d66` · 批 `0a92cb3c8`）。请交下一薄窗（内容优先）。选题优先级：①挂机庭资源环加厚（须新硬债）②短征日更乐趣（非sx20；非已齐路径）③其余 settle 聊天钮：**精选周帽满 D794 / FeaturedPath.afterSettle**（DESIGN-DC §6⑤ 明文后置）④legacy evacuate 后置。**禁：** 半行独批 · 已齐 settle 同题复读 · 抬掉落/日帽/体力价 · sx20 / densify / Pack6 / 开 K3 / 关观察 · variety 完整经济 / Cast·Aid 再拧 / 庭内旁路 · 教裸指令主 UI · D673 同题复读。短征CW / variety回看CY / soft CX / 团本CZ / 挑战DA / 深渊DB / 图身份DC settle 下一环 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-DC CLOSED live `d5e5185a3` · feat `e1eb0f9b2` · tip `0a92cb3c8` · PASS `a0fcf6d66` · jar `1.65.827-d13334.local` · 批 sha `0a92cb3c8` · D13334
 > **硬禁：** **零** 半行独批 · **零** Cast粒子主交付 · **零** Aid/variety再拧 · **零** todayRot/W1e独批 · **零** 庭内旁路再拧 · **零** soft-reward同题 · **零** 短征settle下一环同题 · **零** 短征settle回看同题 · **零** 团本settle下一环同题 · **零** 挑战settle下一环同题 · **零** 深渊settle下一环同题 · **零** 图身份settle下一环同题 · **零** D673同题复读 · **零** 路径追同题 · **零** 日差本同题 · **零** sx20 · **零** 抬日帽/伤表/S表/掉落/体力价/周帽 · **零** Pack6 · **零** 开R/K3 · **零** 关观察 · **零** 灾厄/fest重开 · **零** 教裸指令 · **零** densify · **零** stage脏runtime · **零** legacy abyss evacuate 同窗大扫
@@ -72,6 +72,6 @@
 
 ---
 
-*RESEARCH · 精选周帽满 D794 / FeaturedPath.afterSettle 下一环菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DD / D13335 · 半行 REJECT `d00ed84bc` 保持 · ≠图身份/深渊/短征/团本/挑战settle同题 · ≠D673同题 · 2026-10-14 10:22 Asia/Shanghai.*
+*RESEARCH · 精选周帽满 D794 / FeaturedPath.afterSettle 下一环菜单化 · **CLOSED live** · `b07074070` / `b7160ee19` · PASS `f864e36b9` · TIP-DD / D13335 · 半行 REJECT `d00ed84bc` 保持 · 精选结算下一环菜单化同题勿再交 · 下一窗：内容优先（挂机资源环若新硬债 / 短征乐趣若新薄债 / legacy evacuate 另窗；D794/D673 settle 聊天钮本支已齐）。*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13335 · TIP-DD · 2026-10-14 10:22 Asia/Shanghai
+## STATUS: **CLOSED live** · `b07074070` / `b7160ee19` · PASS `f864e36b9` · D13335 · TIP-DD · 2026-10-14 10:37 Asia/Shanghai

@@ -1,6 +1,6 @@
 # STATUS · TIP-DD W1a 精选结算「下一环」菜单化 · D13335
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · W1a 交 feat `b07074070` · **勿勾 tip CLOSED** · 物品 W1b 已并行 · 待抽测
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `f864e36b9` · tip `b7160ee19` · 总控收口 2026-10-14 10:37 Asia/Shanghai
 
 ## 交付
 - `EmberFeaturedPath.afterSettle`：精选图结算下一环 → `/ember_p1_featured_settle`（`EmberFeaturedSettle.SETTLE_NEXT_LOOP_*`）；工坊 → `/ember_p1_forge`；冒险 → `/ember_p1_adventure`；remember settle 图/路径/周帽态
@@ -28,4 +28,12 @@
 - offerPick / glance / enterCue / applyAndReply 全链教指令大扫（后置；本窗只钉 settle 下一环）
 
 ## 下步
-- 物品 W1b 薄页 `ember_p1_featured_settle` · 测岗抽测 · 总控收口 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-DD spot）
+- **PASS** · 2026-10-14 10:37 Asia/Shanghai · 证据 `/workspace/tmp/tip-dd-featured-settle/` · 详 `STATUS-ember-featured-settle-next-loop-tip-dd-spot-d13335-2026-10-14.md`
+- live jar `1.65.828-d13335.local` · feat `b07074070` · tip `b7160ee19` · 批 `b7160ee19` · 精选结算下一环菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `b07074070` · 证据 `/workspace/tmp/tip-dd-featured-settle/` · STATUS `f864e36b9`
+- **CLOSED live**（总控收口）· tip `b7160ee19` · jar `1.65.828-d13335.local`

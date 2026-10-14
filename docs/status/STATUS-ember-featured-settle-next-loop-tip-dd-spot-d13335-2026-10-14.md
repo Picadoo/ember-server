@@ -1,7 +1,7 @@
 # 状态 · TIP-DD 精选结算「下一环」菜单化抽测
 
 **裁决：** **PASS** · feat `b07074070` · menu tip `7a098dda6`（feat `8b99da98e`）· tip/批 `b7160ee19` · jar `1.65.828-d13335.local` · 证据 `/workspace/tmp/tip-dd-featured-settle/`  
-**范围：** afterSettle / D794 周帽满 → 开 `ember_p1_featured_settle` · 薄页再进精选 E / 换精选路径 1–2·C / 换硬本路径 PQR·K / 冒险 A / 工坊 F / 图装追 M 真开 · 灰态诚实（周帽满、未选路径）· PAPI `featured_settle_*` lore 诚实 · 主 UI 不教手打 enter/featurepath/forge/mapfarm · **零抬**掉落/体力价/周帽数值 · **零改**已齐 settle 薄页（短征·团本·挑战·深渊·图身份）· tip **勿勾 CLOSED**（总控收口）
+**范围：** afterSettle / D794 周帽满 → 开 `ember_p1_featured_settle` · 薄页再进精选 E / 换精选路径 1–2·C / 换硬本路径 PQR·K / 冒险 A / 工坊 F / 图装追 M 真开 · 灰态诚实（周帽满、未选路径）· PAPI `featured_settle_*` lore 诚实 · 主 UI 不教手打 enter/featurepath/forge/mapfarm · **零抬**掉落/体力价/周帽数值 · **零改**已齐 settle 薄页（短征·团本·挑战·深渊·图身份）· **勾毕 CLOSED live**（总控收口 · 2026-10-14 10:37 Asia/Shanghai）
 
 ## 必验
 
@@ -16,7 +16,7 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **84**（含 `ember_p1_featured_settle`）· jar sha256 `642f02476144…` plugins=server-runtime · MySQL connected · 本周精选 **q03**
 - 单测 `EmberFeaturedSettleNextLoopTest` 6/0 · `EmberFeaturedSettleTest` 4/0
-- 39/39 PASS · tip **勿勾 CLOSED**（总控收口）
+- 39/39 PASS · tip **勾毕 CLOSED live**（总控收口）
 - live 精选挑战 settle：本测 Q03 挑战遇 T3 刃 ConfirmTokens（「通关率」假阳性已剔）；afterSettle 主钮由 unit afterSettle 两态 + D794 + OpenCommand 薄页覆盖（同 TIP-DA/DC 范式）
 - rescored：`V1_afterSettle` 假阳性「通关率会高很多」已剔 · `V2_papi_*` 空扩诚实（未 remember）
 
@@ -24,4 +24,4 @@
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · rot weekly_cap=3 · raid cost=50 · short target=5 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改掉落/体力价/周帽/短征薄页/团本薄页/挑战薄页/深渊薄页/图身份薄页/variety/soft-reward · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `b07074070` · menu tip `7a098dda6` · tip `b7160ee19` · jar `1.65.828-d13335.local` · **勿勾 CLOSED**（总控收口）· 2026-10-14 10:36 Asia/Shanghai
+> **测岗抽测：** PASS live · feat `b07074070` · menu tip `7a098dda6` · tip `b7160ee19` · jar `1.65.828-d13335.local` · **CLOSED live**（总控收口）· 2026-10-14 10:37 Asia/Shanghai
