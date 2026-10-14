@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EJ CLOSED** live（D13367 撞墙路径选打齐 · feat `09343d2bd` · tip `77c64770c` · jar `1.65.860-d13367.local` · PASS `30deaf257` · 批 sha `77c64770c` · menu tip `aa8a16fda` · CLOSED `9a81d121a` · 证据 `/workspace/tmp/tip-ej-crash-path/` · **撞墙路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **SlipPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EJ 选打勿复；PacePath（本仓无）后置；其它剩支 D592+ 后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `a3f4a9b55` · 2026-10-14 20:27 Asia/Shanghai · 勿勾 CLOSED · 可施工
+**本窗性质：** tip thin · **CLOSED live** · feat `606eea48f` · tip `5119931a6` · menu `dbd986adb` · jar `1.65.861-d13368.local` · PASS `e7648a86e` · 2026-10-14 20:39 Asia/Shanghai · 下一窗 BaitPath.offerPick
 **硬规格：** [`DESIGN-ember-slip-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-slip-path-offer-pick-visible-2026-10-14.md) · backlog `B-slip-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EJ 已齐；闪招**选打**仍 ConfirmTokens 教裸 slippath——总控钉死本支；内容闭环断在闪招路径选打（≠撞墙选打；≠ settle 同题；局内闪招钮≠选打页）。
 
@@ -61,9 +61,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-slip-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-14.md` |
 | backlog | `B-slip-path-offer-pick-visible` |
-| 号段 | **D13368** · 字母窗 **TIP-EK** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `a3f4a9b55` · 2026-10-14 20:27 Asia/Shanghai · 勿勾 CLOSED
+| 号段 | **D13368** · 字母窗 **TIP-EK** · STATUS=**CLOSED live** · feat `606eea48f` · tip `5119931a6` · menu `dbd986adb` · jar `1.65.861-d13368.local` · PASS `e7648a86e` · 2026-10-14 20:39 Asia/Shanghai
 | 上游 | TIP-EJ CLOSED live `9a81d121a` · feat `09343d2bd` · tip `77c64770c` · PASS `30deaf257` · jar `1.65.860-d13367.local` · 批 sha `77c64770c` · menu tip `aa8a16fda` · D13367；半行 REJECT `d00ed84bc` 保持否决；撞墙路径选打菜单化同题勿再交 |
 
 *选题 SlipPath.offerPick / applyAndReply 闪招路径选打菜单化 · tip **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13368 · TIP-EK · 半行 REJECT `d00ed84bc` **保持否决** · 其它剩支 D592+ / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EJ CLOSED `9a81d121a` · 2026-10-14 20:24 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13368 · TIP-EK · 2026-10-14 20:24 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `606eea48f` · tip `5119931a6` · menu `dbd986adb` · jar `1.65.861-d13368.local` · PASS `e7648a86e` · D13368 · TIP-EK · 2026-10-14 20:39 Asia/Shanghai · 闪招路径选打菜单化同题勿再交 · 下一窗 BaitPath.offerPick

@@ -1,6 +1,6 @@
 # RESEARCH · SlipPath.offerPick / applyAndReply「闪招路径选打」菜单化 · 拟 D13368 · TIP-EK
 
-> **状态：** **待批 A** · 荐 M · 2026-10-14 20:24 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **CLOSED live** · feat `606eea48f` · tip `5119931a6` · menu `dbd986adb` · jar `1.65.861-d13368.local` · PASS `e7648a86e` · 下一窗 BaitPath.offerPick · 2026-10-14 20:39 Asia/Shanghai
 > **起因：** 总控【下一窗 TIP-EK · 只钉一支 · 禁全族大扫】。祖先 TIP-EJ **CLOSED live** `9a81d121a` · feat `09343d2bd` · tip `77c64770c` · menu `aa8a16fda` · jar `1.65.860-d13367.local` · PASS `30deaf257` · 证据 `/workspace/tmp/tip-ej-crash-path/`。**撞墙路径选打菜单化同题勿再交**。选题钉死：**SlipPath.offerPick**「闪招路径选打」菜单化 → TrMenu `ember_p1_slip_path`（拟 D13368 · TIP-EK · 玩法本体 D591 紧接 Crash D590）。硬证：`EmberSlipPath.offerPick` 仍 ConfirmTokens 教 slippath auto|ask|mute|clear；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内闪招「闪招」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_slip_path.yml`；与刚 CLOSED Crash 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EJ 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁与其它 *Path 同窗；PacePath（本仓无）后置；legacy evacuate 后置；其它剩支 D592+ 后置（逐支另窗）；零抬伤害/CD表/掉落/体力价；零改 D591 闪招语义本体；零改已齐 `ember_p1_crash_path` 等；勿勾 CLOSED。
 > **上游：** TIP-EJ CLOSED live `9a81d121a` · feat `09343d2bd` · tip `77c64770c` · PASS `30deaf257` · jar `1.65.860-d13367.local` · 批 sha `77c64770c` · menu tip `aa8a16fda` · D13367
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · SlipPath.offerPick / applyAndReply 闪招路径选打菜单化 · **待批 A** · 荐 M · TIP-EK / D13368 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D592+ / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EJ CLOSED `9a81d121a` · 2026-10-14 20:24 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · SlipPath.offerPick 闪招路径选打 · **CLOSED live** · feat `606eea48f` · PASS `e7648a86e` · 下一窗 BaitPath.offerPick · 2026-10-14 20:39 Asia/Shanghai**待批 A** · 荐 M · TIP-EK / D13368 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D592+ / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EJ CLOSED `9a81d121a` · 2026-10-14 20:24 Asia/Shanghai · 勿勾 CLOSED.*
 
 ## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13368 · TIP-EK · 2026-10-14 20:24 Asia/Shanghai
