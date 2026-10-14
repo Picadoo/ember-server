@@ -19,11 +19,18 @@ import town.sunshine.corerpg.PlayerData;
  * chat ask, or dodge yourself. Distinct from Veil (venom cross), Sidestep (charge), Dodge
  * (mortar), Duck (molten). Chat only. Zero chainLinkWidth table / AFK / sx / forge / combo /
  * enter-cue.
+ * TIP-DT D13351: offerPick / applyAndReply / 无参 snappath / 周要约 →开 /ember_p1_snap_path；
+ * 清 ConfirmTokens 教 snappath 主 UI；零改伤害/CD表/掉落/体力价/D574 火链断链语义.
  */
 public final class EmberSnapPath {
 
     public static final String C_PATH = "p1_snap_path";
     public static final String C_OFFER = "p1_snap_path_offer";
+
+    /** TIP-DT D13351 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_snap_path";
+    public static final String PATH_PICK_LABEL = "[断链路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -87,8 +94,16 @@ public final class EmberSnapPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8断链路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8断链路径：未选 · /corerpg p1 snappath";
+        // TIP-DT D13351: 禁教手打 /corerpg p1 snappath
+        if (!valid(id)) return "§8断链路径：未选 · 点断链路径页";
         return "§e断链路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DT D13351 · 薄页 lore 一行（无 §）：当前断链路径。
+     */
+    public static String menuLine(int id) {
+        return "断链路径 · " + label(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
@@ -122,7 +137,7 @@ public final class EmberSnapPath {
             lastAsk.put(p.getUniqueId(), now);
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§6火链 ",
                     new String[]{"[断链]", "/corerpg p1 snap", "拉开火链", "GREEN"},
-                    new String[]{"[改路径]", "/corerpg p1 snappath", "自动/提醒/静默", "GRAY"});
+                    new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
         }
     }
 
@@ -144,18 +159,26 @@ public final class EmberSnapPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§6火链 ",
                 new String[]{"[断链]", "/corerpg p1 snap", "拉开火链", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 snappath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选火链闪避节奏（改战斗 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 snappath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 snappath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 snappath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 snappath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-DT D13351: 开选打薄页；禁 ConfirmTokens 教 snappath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_snap_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_snap_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -210,9 +233,10 @@ public final class EmberSnapPath {
         flush(p);
         p.sendMessage(P + "§a断链 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-DT D13351: 下一步→选打薄页/冒险（禁教裸 snappath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 snappath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
