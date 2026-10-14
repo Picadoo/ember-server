@@ -1,6 +1,6 @@
 # STATUS · TIP-DK W1a 誓约路径选打菜单化 · D13342
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · feat `42fc81f49` · 勿勾 tip CLOSED · tip APPROVED `6ee232766`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `14a003c56` · tip `6ee232766` · 总控收口 2026-10-14 12:41 Asia/Shanghai
 
 ## 交付
 - feat: `42fc81f49`
@@ -13,7 +13,7 @@
 - jar：`1.65.835-d13342.local` · sha256 `3ab2d2190517…` · ECONOMY_BV **123** 未动
 - play：live `1.65.835-d13342.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / 誓约规则语义(D481) / Cast·Aid / variety / 已齐 settle 薄页 / Trial·Abyss·Short·Raid·Featured·Challenge Path / Counter·Stride / 庭内 / TrMenu yml（物品 W1b 并行已交 `fb95767dd`）
-- **勿勾 tip CLOSED** · 待测岗抽测
+- **勾毕 CLOSED live** · PASS `14a003c56` · 总控收口 2026-10-14 12:41 Asia/Shanghai
 
 ## 落点
 - `EmberPledgePath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine
@@ -30,4 +30,12 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_pledge_path` · `fb95767dd`）
 
 ## 下步
-- 测岗抽测 PASS 后总控收口 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-DK spot）
+- **PASS** · 2026-10-14 12:41 Asia/Shanghai · 证据 `/workspace/tmp/tip-dk-pledge-path/` · 详 `STATUS-ember-pledge-path-offer-pick-tip-dk-spot-d13342-2026-10-14.md`
+- live jar `1.65.835-d13342.local` · feat `42fc81f49` · tip `6ee232766` · 批 `6ee232766` · 誓约路径选打菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `42fc81f49` · 证据 `/workspace/tmp/tip-dk-pledge-path/` · STATUS `14a003c56`
+- **CLOSED live**（总控收口）· tip `6ee232766` · jar `1.65.835-d13342.local`

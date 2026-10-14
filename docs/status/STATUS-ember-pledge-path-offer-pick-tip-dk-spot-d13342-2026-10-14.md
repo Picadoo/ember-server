@@ -1,7 +1,7 @@
 # 状态 · TIP-DK 誓约路径选打菜单化抽测
 
 **裁决：** **PASS** · feat `42fc81f49` · menu tip `fb95767dd` · tip/批 `6ee232766` · jar `1.65.835-d13342.local` · 证据 `/workspace/tmp/tip-dk-pledge-path/`  
-**范围：** offerPick / 无参 pledgepath / 周要约 → 开 `ember_p1_pledge_path`（**禁** ConfirmTokens 教 pledgepath 为主 UI）· 薄页限药/逆行/双挂/清空/誓约页/进阶/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `pledge_path_*` 诚实 · Q06 灰态+亮态 · **零改**伤害/CD表/掉落/体力价/誓约徽记表 · **零改** `ember_p1_trial_path` / `ember_p1_pledge` Layout · **≠**已齐选打同题复读 · **勿勾 tip CLOSED**（总控收口）· 2026-10-14 12:40 Asia/Shanghai
+**范围：** offerPick / 无参 pledgepath / 周要约 → 开 `ember_p1_pledge_path`（**禁** ConfirmTokens 教 pledgepath 为主 UI）· 薄页限药/逆行/双挂/清空/誓约页/进阶/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `pledge_path_*` 诚实 · Q06 灰态+亮态 · **零改**伤害/CD表/掉落/体力价/誓约徽记表 · **零改** `ember_p1_trial_path` / `ember_p1_pledge` Layout · **≠**已齐选打同题复读 · **勾毕 CLOSED live**（总控收口 · 2026-10-14 12:41 Asia/Shanghai)
 
 ## 必验
 
@@ -18,11 +18,11 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **90**（含 `ember_p1_pledge_path`）· jar sha256 `3ab2d2190517…` plugins=server-runtime · MySQL connected · bv123
 - 单测 `EmberPledgePathPickTest`（7）/ `EmberPledgePathTest` / RunPapi（5）/ TrialPathPick（6）绿
-- 45/45 PASS · tip **勿勾 CLOSED**（总控收口）
+- 45/45 PASS · tip **勾毕 CLOSED live**（总控收口）
 - 选打主 UI = `ember_p1_pledge_path`；未教裸 pledgepath/pledge/modes；未复读试炼/深渊等选打
 
 ## 纪律确认
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · rot weekly_cap=3 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改伤害/CD表/掉落/体力价/誓约徽记表/trial_path/pledge Layout/abyss·short·raid·featured·challenge path/variety/soft-reward · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `42fc81f49` · menu tip `fb95767dd` · tip `6ee232766` · jar `1.65.835-d13342.local` · **勿勾 tip CLOSED**（总控收口）· 2026-10-14 12:40 Asia/Shanghai
+> **测岗抽测：** PASS live · feat `42fc81f49` · menu tip `fb95767dd` · tip `6ee232766` · jar `1.65.835-d13342.local` · **CLOSED live**（总控收口）· 2026-10-14 12:41 Asia/Shanghai
