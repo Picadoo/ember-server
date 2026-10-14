@@ -51,7 +51,7 @@ public class EmberShortSettleNextLoopTest {
                 StandardCharsets.UTF_8);
         assertFalse(src.contains("可改 /corerpg p1 shortpath day"));
         assertTrue(src.contains("FC_CLEARED_HINT") || src.contains("点路径追"));
-        assertTrue(src.contains("SETTLE_PATH_CMD"));
+        assertTrue(src.contains("PATH_PICK_CMD") || src.contains("SETTLE_PATH_CMD") || src.contains("ember_p1_short_path"));
         // glance: no bare shortpath teach
         assertFalse(src.contains("未选 · /corerpg p1 shortpath"));
         assertTrue(src.contains("未选 · 点路径追"));

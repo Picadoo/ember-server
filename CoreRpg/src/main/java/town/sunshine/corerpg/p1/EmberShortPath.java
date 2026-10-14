@@ -17,12 +17,22 @@ import town.sunshine.corerpg.PlayerData;
  * D503: short-expedition chase path — first-clear / daily-reward / late-band.
  * NEW acquisition: sticky bias over which sx to farm next (resolve live).
  * Not combo sticky-path, not variety/Extra roll bias, not prep auto-buy twin,
- * not forge spend-chase, not ActionBar twin. Chat buttons only. Zero AFK/sx20/K3.
+ * not forge spend-chase, not ActionBar twin. Zero AFK/sx20/K3.
+ * TIP-CW D13328: settle「换一条」已指 /ember_p1_short_path.
+ * TIP-DH D13339: offerPick / applyAndReply / 无参 shortpath / 周要约 →开 /ember_p1_short_path；
+ * 清 ConfirmTokens 教 shortpath/enter 主 UI；零改日表/掉落/体力价/resolve.
  */
 public final class EmberShortPath {
 
     public static final String C_PATH = "p1_short_path";
     public static final String C_OFFER = "p1_short_path_offer";
+
+    /** TIP-DH D13339 · OpenCommand · 选打薄页 id 同名（TIP-CV 已在） */
+    public static final String PATH_PICK_CMD = "/ember_p1_short_path";
+    public static final String PATH_PICK_LABEL = "[路径追]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
+    public static final String PATH_FORGE_CMD = "/ember_p1_forge";
+    public static final String PATH_SHORT_CMD = "/ember_p1_short";
 
     public static final int NONE = 0;
     /** Chase unlocked shorts with unpaid career first-clear */
@@ -79,8 +89,16 @@ public final class EmberShortPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8短征路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8短征路径：未选 · 点路径追";
+        // TIP-DH D13339: 禁教手打 /corerpg p1 shortpath
+        if (!valid(id)) return "§8短征路径：未选 · 点路径追页";
         return "§e短征路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DH D13339 · 薄页 lore 一行（无 §）：当前短征路径。
+     */
+    public static String menuLine(int id) {
+        return "短征路径 · " + label(id);
     }
 
     /** D710: count unlocked shorts with unpaid career first-clear. */
@@ -185,11 +203,19 @@ public final class EmberShortPath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选短征追猎（改刷哪本 · 可随时改 · 不抬日表/不改奖励）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[首通追]", "/corerpg p1 shortpath fc", tip(FC), "GREEN"},
-                new String[]{"[有奖追]", "/corerpg p1 shortpath day", tip(DAY), "GOLD"},
-                new String[]{"[后段追]", "/corerpg p1 shortpath late", tip(LATE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 shortpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-DH D13339: 开选打薄页；禁 ConfirmTokens 教 shortpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_short_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_short_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "首通追/有奖追/后段追/清空/进下一本", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -260,17 +286,11 @@ public final class EmberShortPath {
         if (next == null && id == FC) { // D724
             p.sendMessage(P + EmberShortRules.FC_CLEARED_HINT); // TIP-CW D13328 禁教手打
         }
-        if (next != null) {
-            String cmd = "/corerpg p1 enter " + next.key;
-            ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                    new String[]{"[进 " + next.key.toUpperCase(Locale.ROOT) + "]", cmd, "按路径进下一本", "GREEN"},
-                    new String[]{"[短征选页]", "/ember_p1_short", "自己挑", "AQUA"},
-                    new String[]{"[换一条]", EmberShortRules.SETTLE_PATH_CMD, "重选 · 路径追页", "GRAY"});
-        } else {
-            ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                    new String[]{"[短征选页]", "/ember_p1_short", "自己挑", "AQUA"},
-                    new String[]{"[换一条]", EmberShortRules.SETTLE_PATH_CMD, "重选 · 路径追页", "GRAY"});
-        }
+        // TIP-DH D13339: 下一步→选打薄页（进下一本/重选可点）；禁以裸 enter ConfirmTokens 为主 UI
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "进下一本/重选 · 路径追页", "GREEN"},
+                new String[]{"[短征选页]", PATH_SHORT_CMD, "自己挑", "AQUA"},
+                new String[]{"[工坊]", PATH_FORGE_CMD, "花短征料", "GOLD"});
     }
 
     private static PlayerData dataOf(Player p) {

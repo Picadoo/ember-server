@@ -3300,7 +3300,7 @@ public final class EmberCommand {
                 if (!offered) {
                     int cur = EmberShortPath.get(d);
                     if (EmberShortPath.valid(cur)) {
-                        p.sendMessage(P + "§7当前：" + EmberShortPath.label(cur));
+                        p.sendMessage(P + "§7当前：" + EmberShortPath.label(cur) + " · 改路径点路径追页");
                         EmberRunMaps.MapDef next = EmberShortPath.resolve(runs, d, cur);
                         p.sendMessage(P + EmberShortPath.resolveLine(next));
                     } else EmberShortPath.offerPick(p);
@@ -3310,7 +3310,7 @@ public final class EmberCommand {
             }
             int id = EmberShortPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 shortpath <fc|day|late|clear>");
+                p.sendMessage(P + "用法：点路径追页选首通追/有奖追/后段追/清空");
                 return true;
             }
             EmberShortPath.applyAndReply(p, id);
