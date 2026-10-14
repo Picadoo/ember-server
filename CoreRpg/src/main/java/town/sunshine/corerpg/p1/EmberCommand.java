@@ -3863,14 +3863,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberRaidPath.get(d);
-                    if (EmberRaidPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRaidPath.label(cur) + " · 改路径再 /corerpg p1 raidpath");
+                    if (EmberRaidPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRaidPath.label(cur) + " · 改路径点团本路径页");
                     else EmberRaidPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberRaidPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 raidpath <r01|r02|r03|clear>");
+                p.sendMessage(P + "用法：点团本路径页选 R01/R02/R03/清空");
                 return true;
             }
             EmberRaidPath.applyAndReply(p, id);

@@ -42,7 +42,7 @@ public final class EmberRunPapiTest {
         r(COSMETIC, "shop", "shopprice_x", "shopsel_name", "shop_x", "title", "honors");
         r(FESTIVAL, "fest_name", "fest_charm_price", "fest_nosuch");
         r(ABYSS, "abyss_best", "abyss_state", "abyss_t1", "abyss_t10", "abyss_tx", "abyss_settle", "abyss_settle_floor", "abyss_settle_name", "abyss_settle_path", "abyss_settle_path_label", "abyss_settle_line", "abyss_settle_next", "abyss_settle_can_next", "abyss_path", "abyss_path_label"); // TIP-DB D13333
-        r(RAID, "raid_r01", "raid_r03");
+        r(RAID, "raid_r01", "raid_r03", "raid_path", "raid_path_label", "raid_path_tip", "raid_path_line", "raid_settle", "raid_settle_map"); // TIP-CZ + TIP-DG D13338
         r(LOADOUT, "awaken_route", "awaken", "awaken_next", "set_progress", "set_blurb", "stats", "ehp", "blade", "charm", "blade_next_q", "blade_next_c", "charm_next_q", "charm_next_c", "held_next_q", "held_next_c", "held_enhance_cost", "held_enhance_lack", "held_upgrade_cost", "held_upgrade_lack", "held_refine_lack", "held_quality_lack", "held_swap_cost", "held_dismantle_yield", "held_is_armor", "enhance_blade_pity", "enhance_charm_pity", "held_enhance_pity", "held_enhance_rate", "quality_blade_hope", "quality_charm_hope", "held_quality_hope", "refine_blade_hope", "refine_charm_hope", "held_refine_hope",
                 "afk_rec_flower", "afk_rec_flower_name", "afk_rec_flower_kind", "afk_rec_flower_ok"); // TIP-CJ D13315
         r(CODEX, "codex_count", "codex_stage_0", "codex_burst_blade_t1", "codexx");
@@ -129,6 +129,10 @@ public final class EmberRunPapiTest {
         assertEquals(GATE, EmberRunPapi.route("challenge_path"));
         assertEquals(GATE, EmberRunPapi.route("challenge_path_label"));
         assertEquals(GATE, EmberRunPapi.route("challenge_path_tip")); // TIP-DF D13337
+        assertEquals(RAID, EmberRunPapi.route("raid_path"));
+        assertEquals(RAID, EmberRunPapi.route("raid_path_label"));
+        assertEquals(RAID, EmberRunPapi.route("raid_path_tip")); // TIP-DG D13338
+        assertEquals(RAID, EmberRunPapi.route("raid_path_line"));
         assertEquals(GATE, EmberRunPapi.route("challenge_path_line"));
         assertEquals(GATE, EmberRunPapi.route("challenge")); // exact challenge still GATE unlock
         assertEquals(BOARD, EmberRunPapi.route("top_featured_1"));

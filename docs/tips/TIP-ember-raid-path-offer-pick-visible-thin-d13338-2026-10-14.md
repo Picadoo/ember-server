@@ -1,6 +1,6 @@
 # tip · TIP-DG RaidPath.offerPick / applyAndReply「团本路径选打」菜单化（选路径聊天钮去指令化 · ≠硬本路径选打同题 · ≠精选路径选打同题 · ≠团本settle下一环同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬掉落/体力价/周帽 · ≠全族 *Path.offerPick 大扫 · ≠FeaturedPath/ChallengePath同窗）· 拟 D13338
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13338 · TIP-DG · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改掉落/体力价/周帽 · offerPick/applyAndReply/无参 raidpath→开 ember_p1_raid_path · 清 ConfirmTokens 借 settle/教 raidpath 主 UI · 2026-10-14 11:16 Asia/Shanghai
+> **状态：** **施工中 · W1a 已交待测** · APPROVED A·M · D13338 · TIP-DG · jar `1.65.831-d13338.local` · L不批 · 勿勾 CLOSED · 零改掉落/体力价/周帽 · 2026-10-14 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-raid-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-raid-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-raid-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（RaidPath.offerPick / applyAndReply / 无参 raidpath 改开菜单）+ 余烬-物品（薄页 `ember_p1_raid_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零硬本路径选打同题复读（TIP-DF） · 零精选路径选打同题复读（TIP-DE） · 零团本settle下一环同题复读（TIP-CZ） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬掉落/体力价/周帽 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 FeaturedPath/ChallengePath 同窗
@@ -34,8 +34,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 11:16 Asia/Shanghai
-- [ ] 插件交 offerPick / applyAndReply / 无参 raidpath 改菜单 + 清裸指令主路径 + 单测
-- [ ] 物品交薄 raid_path 页 + TrMenu reload
+- [x] 插件交 offerPick / applyAndReply / 无参 raidpath 改菜单 + 清裸指令主路径 + 单测 · jar `1.65.831-d13338.local` · 2026-10-14 Asia/Shanghai
+- [x] 物品交薄 raid_path 页 + TrMenu reload · W1b 并行已交 `b9b8f688f`
 - [ ] 抽测 PASS live（选 R01/R02/R03/清空/冒险真开·PAPI·零抬掉落/体力价/周帽·零改 raid_settle）· **勿勾 CLOSED**
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13338 · TIP-DG · 2026-10-14 11:16 Asia/Shanghai
+## STATUS: **施工中 · W1a 已交待测** · APPROVED A·M · 勿勾 CLOSED · L不批 · D13338 · TIP-DG · 2026-10-14 Asia/Shanghai

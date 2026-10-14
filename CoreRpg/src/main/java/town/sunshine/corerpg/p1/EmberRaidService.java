@@ -198,7 +198,7 @@ public final class EmberRaidService {
                     new String[]{"[开本]", "/corerpg p1 enter " + rm.key, "队长点：全队需各自首进或首通 Q07，3～5 人", "GOLD"});
     }
 
-    /** P2-5 %corerpg_p1_raid_&lt;key&gt;% · TIP-CZ D13331 raid_settle_* / raid_path* */
+    /** P2-5 %corerpg_p1_raid_&lt;key&gt;% · TIP-CZ D13331 raid_settle_* / TIP-DG D13338 raid_path* */
     String papi(PlayerData d, String raidKey) {
         if ("hope".equals(raidKey)) { // D625 %corerpg_p1_raid_hope%
             EmberRunMaps.MapDef pick = null;
@@ -211,8 +211,10 @@ public final class EmberRaidService {
             int used = week(d, pick);
             return EmberHopeMeter.raidHope(used, pick.weeklyCap);
         }
-        if ("path".equals(raidKey)) return String.valueOf(EmberRaidPath.get(d)); // TIP-CZ
+        if ("path".equals(raidKey)) return String.valueOf(EmberRaidPath.get(d)); // TIP-CZ + TIP-DG
         if ("path_label".equals(raidKey)) return EmberRaidPath.label(EmberRaidPath.get(d));
+        if ("path_tip".equals(raidKey)) return EmberRaidPath.tip(EmberRaidPath.get(d)); // TIP-DG D13338
+        if ("path_line".equals(raidKey)) return EmberRaidPath.menuLine(EmberRaidPath.get(d)); // TIP-DG D13338
         if ("settle".equals(raidKey) || (raidKey != null && raidKey.startsWith("settle_")))
             return settlePapi(d, raidKey);
         EmberRunMaps.MapDef rm = runs.maps().raids.get(raidKey);

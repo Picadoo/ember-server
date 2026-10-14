@@ -13,13 +13,21 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D483: weekly raid focus path — R01 / R02 / R03.
  * Real combat + loot-family choice (名片 + raid_item fallback family).
- * TIP-CZ D13331: glance/offer/下一环菜单优先（/ember_p1_raid_settle）；禁教手打 raidpath 主 UI.
+ * TIP-CZ D13331: afterClearHit / 周清 settle 下一环开薄页 /ember_p1_raid_settle；禁教手打 raidpath 主 UI.
+ * TIP-DG D13338: offerPick / applyAndReply / 无参 raidpath →开 /ember_p1_raid_path；禁借 settle ConfirmTokens 当选打主 UI.
  * Zero raid HP/dmg/cap / AFK / sx change.
  */
 public final class EmberRaidPath {
 
     public static final String C_PATH = "p1_raid_path";
     public static final String C_OFFER = "p1_raid_path_offer";
+
+    /** TIP-DG D13338 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_raid_path";
+    public static final String PATH_PICK_LABEL = "[团本路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
+    public static final String PATH_FORGE_CMD = "/ember_p1_forge";
+    public static final String PATH_RAID_CMD = "/ember_raid";
 
     public static final int NONE = 0;
     public static final int R01 = 1; // 锈轨 · burst · 冲撞撞墙
@@ -80,8 +88,16 @@ public final class EmberRaidPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8团本路径：首通 Q07 后可选";
-        if (!valid(id)) return "§8团本路径：未选 · 点下一环选路径";
+        // TIP-DG D13338: 禁教手打 /corerpg p1 raidpath；禁借 settle「下一环」当选打主教
+        if (!valid(id)) return "§8团本路径：未选 · 点团本路径页";
         return "§e团本路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DG D13338 · 薄页 lore 一行（无 §）：当前团本路径。
+     */
+    public static String menuLine(int id) {
+        return "团本路径 · " + label(id);
     }
 
     public static String enterCmd(int id) {
@@ -100,11 +116,19 @@ public final class EmberRaidPath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选本周团本焦点（名片+掉落族 · 可随时改 · 不改团本数值/周帽）：");
-        // TIP-CZ D13331: 开薄页点选；禁教手打 raidpath 主 UI
-        ConfirmTokens.sendButtons(p, P + "§7团本路径：",
-                new String[]{EmberRaidSettle.SETTLE_NEXT_LOOP_LABEL, EmberRaidSettle.SETTLE_NEXT_LOOP_CMD,
-                        "薄页点选 R01/R02/R03", "AQUA"},
-                new String[]{"[冒险页]", EmberRaidSettle.SETTLE_ADVENTURE_CMD, "换内容", "GREEN"});
+        // TIP-DG D13338: 开选打薄页；禁借 settle ConfirmTokens 当选打主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_raid_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_raid_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "R01/R02/R03/清空/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -167,12 +191,11 @@ public final class EmberRaidPath {
         try {
             p.sendActionBar("§e团本路径 · §f" + label(id) + weekLine);
         } catch (Throwable ignored) { }
-        // TIP-CZ D13331: 主钮开薄页；可保留再进；禁教手打 raidpath|recruit 主 UI
+        // TIP-DG D13338: 下一步→选打薄页（冒险/重选/进本/工坊可点）；禁借 settle ConfirmTokens 为主 UI
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{EmberRaidSettle.SETTLE_NEXT_LOOP_LABEL, EmberRaidSettle.SETTLE_NEXT_LOOP_CMD,
-                        "再进/路径/冒险/工坊", "GREEN"},
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "R01/R02/R03/清空/冒险", "GREEN"},
                 new String[]{enterLabel(id), enterCmd(id), "开路径团本（3～5 人 · 共享周帽）", "AQUA"},
-                new String[]{"[工坊]", EmberRaidSettle.SETTLE_FORGE_CMD, "花团本料", "GOLD"});
+                new String[]{"[工坊]", PATH_FORGE_CMD, "花团本料", "GOLD"});
     }
 
 
@@ -181,8 +204,8 @@ public final class EmberRaidPath {
         if (p == null || d == null || mapKey == null) return;
         int id = get(d);
         if (!valid(id)) {
-            p.sendMessage(EmberRunService.P + "§7未选团本路径 · 点下一环选路径"); // TIP-CZ D13331 禁教手打
-            offerPick(p); // D814 → 薄页
+            p.sendMessage(EmberRunService.P + "§7未选团本路径 · 点团本路径页"); // TIP-DG D13338 禁教手打
+            offerPick(p); // D814 → 选打薄页
             return;
         }
         String mk = mapKey(id);

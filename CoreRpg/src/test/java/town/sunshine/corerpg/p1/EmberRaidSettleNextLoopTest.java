@@ -60,9 +60,10 @@ public class EmberRaidSettleNextLoopTest {
                 Paths.get("src/main/java/town/sunshine/corerpg/p1/EmberRaidPath.java")),
                 StandardCharsets.UTF_8);
         assertFalse(src.contains("未选 · /corerpg p1 raidpath"));
-        assertTrue(src.contains("未选 · 点下一环选路径"));
+        // TIP-DG: glance/选打 → 点团本路径页；TIP-CZ afterClearHit 仍「下一环」settle
+        assertTrue(src.contains("未选 · 点团本路径页"));
         assertFalse(src.contains("未选团本路径 · /corerpg p1 raidpath"));
-        assertTrue(src.contains("SETTLE_NEXT_LOOP_CMD"));
+        assertTrue(src.contains("SETTLE_NEXT_LOOP_CMD")); // afterClearHit 保持
         // offerPick / applyAndReply / afterClearHit 不以裸 raidpath|recruit 为主钮
         assertFalse(src.contains("\"/corerpg p1 raidpath\""));
         assertFalse(src.contains("\"/corerpg p1 raidpath r01\""));
