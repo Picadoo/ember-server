@@ -1,6 +1,6 @@
 # tip · TIP-EM SequelPath.offerPick / applyAndReply「续招路径选打」菜单化（选路径聊天钮去指令化 · ≠诱空路径选打同题 · ≠闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D593 玩法本体）· 拟 D13370
 
-> **状态：** **已批 A** · 方案 M · APPROVED A·M · 2026-10-14 21:02 Asia/Shanghai · **W1a 插件已交** · 勿勾 CLOSED · 可派测/物品 W1b
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13370 · TIP-EM · W1a+W1b+抽测 PASS · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 sequelpath/周要约→开 ember_p1_sequel_path · 清 ConfirmTokens 教 sequelpath 主 UI · 2026-10-14 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-sequel-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-sequel-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-sequel-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（SequelPath.offerPick / applyAndReply / 无参 sequelpath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_sequel_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零诱空路径选打同题复读（TIP-EL） · 零闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-EK–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零其它 *Path 同窗 · 零复开 D593 玩法本体（auto/ask/mute 真改续招按形状预站语义零改）· 零改 bait_path / slip_path / crash_path / bolt_path / shift_path / gap_path / phase_path / wave_path / soak_path / shell_path / clone_path / press_path / cut_path / rush_path / clean_path / streak_path / blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
@@ -36,7 +36,7 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M
 - [x] 插件交 offerPick / applyAndReply / 无参 sequelpath / 周要约改开菜单 + 清裸指令主路径 + 单测 · W1a feat `3f08561be` · jar `1.65.863-d13370.local` · **勿勾 CLOSED**
-- [ ] 物品交薄 sequel_path 页 + TrMenu reload
-- [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 bait_path·零已齐选打同题复读·零改 D593 续招语义）
+- [x] 物品交薄 sequel_path 页 + TrMenu reload · `ec0cc64e1`
+- [x] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 bait_path·零已齐选打同题复读·零改 D593 续招语义）· spot STATUS 见 STATUS-ember-sequel-path-offer-pick-tip-em-spot-d13370 · **勿勾 CLOSED**
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · D13370 · TIP-EM · 2026-10-14 21:02 Asia/Shanghai · **W1a 插件已交** · 勿勾 CLOSED · 可派测/物品 W1b
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a+W1b+抽测 PASS（勿勾 CLOSED · 待总控收口） · L不批 · D13370 · TIP-EM · 2026-10-14 Asia/Shanghai
