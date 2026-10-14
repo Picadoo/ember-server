@@ -1,9 +1,9 @@
 # STATUS · TIP-EE W1a 增援路径选打菜单化 · D13362
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat *(填 commit 后)* · jar `1.65.855-d13362.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `ab8037d368e3eef9aa5750c675bc8dcb4ad4bf46` · jar `1.65.855-d13362.local`
 
 ## 交付
-- feat: *(commit 后回填)*
+- feat: `ab8037d368e3eef9aa5750c675bc8dcb4ad4bf46`
 - `EmberWavePath.offerPick` →开 `/ember_p1_wave_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `wavepath` 为主 UI
 - 无参 `/corerpg p1 wavepath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_wave_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `wavepath` ConfirmTokens 为主 UI
