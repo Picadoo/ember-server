@@ -1,0 +1,42 @@
+# tip · TIP-DR FreePath.offerPick / applyAndReply「解锢路径选打」菜单化（选路径聊天钮去指令化 · ≠闪榴路径选打同题 · ≠闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠复开 D570 玩法本体）· 拟 D13349
+
+> **状态：** **待批 A** · 荐 M · 2026-10-14 14:45 Asia/Shanghai · 勿勾 CLOSED
+> **DESIGN** [`DESIGN-ember-free-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-free-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-free-path-offer-pick-visible`
+> **施工岗（批后）：** 余烬-插件（FreePath.offerPick / applyAndReply / 无参 freepath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_free_path`）· **不派怪物/地图**
+> **硬禁：** 零半行独批 · 零闪榴路径选打同题复读（TIP-DQ） · 零闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-DP–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零复开 D570 玩法本体（auto/ask/mute 真改禁锢解锢语义零改）
+> **ancestor：** TIP-DQ CLOSED live `62522b8c2`（feat `7551786ea` · tip `68585e732` · PASS `3c21ca538` · jar `1.65.841-d13348.local` · 批 sha `68585e732` · menu tip `10fada73e`）
+> **下一窗提示（旁注）：** Veil/Snap/Spin/Blaze 等仍 ConfirmTokens 的 *Path.offerPick **逐支**（禁全族大扫）/ PacePath（本仓无）后置 / 挂机若新硬债 / legacy evacuate 后置
+
+## 一句话
+周选/改解锢路径时一点开「解锢路径」薄页：自动 / 提醒 / 静默 / 清空 / 技能组 / 冒险可点；清 ConfirmTokens 教 `freepath` 主 UI；伤害·CD表·掉落·体力价不动；局内禁锢「解锢」战斗钮语义零改。
+
+## 为何不是半行
+- **主交付：** 插件 **改 EmberFreePath.offerPick + applyAndReply + 无参 freepath / 周要约入口** + 薄页 `ember_p1_free_path` 真开菜单选打 + 清 ConfirmTokens 教指令主路径
+- Open/半行 **不可独批**（REJECT `d00ed84bc` 保持）
+
+## ≠ 清单
+- ≠ 闪榴路径选打同题（TIP-DQ 已齐；`ember_p1_dodge_path` 零改本窗）· ≠ 闪冲路径选打同题（TIP-DP）· ≠ 身法路径选打同题（TIP-DO）· ≠ 轻技路径选打同题（TIP-DN）· ≠ 步态路径选打同题（TIP-DM）· ≠ 破绽路径选打同题（TIP-DL）· ≠ 誓约路径选打同题（TIP-DK）· ≠ 试炼路径选打同题（TIP-DJ）· ≠ 深渊路径选打同题（TIP-DI）· ≠ 短征路径选打同题（TIP-DH）· ≠ 团本路径选打同题（TIP-DG）· ≠ 硬本路径选打同题（TIP-DF）· ≠ 精选路径选打同题（TIP-DE）· ≠ 已齐 settle 下一环同题 · ≠ 短征settle回看同题 · ≠ variety再拧 · ≠ soft-reward同题 · ≠ 路径追同题 · ≠ 日差同题 · ≠ Cast·Aid 再拧 · ≠ 庭内旁路再拧 · ≠ 半行空转 · ≠ 抬伤害/CD表/掉落/体力价 · ≠ 教裸指令 · ≠ legacy evacuate 大扫 · ≠ Pace同窗 · ≠ 全族 *Path.offerPick 大扫 · ≠ 复开 D570 玩法本体（auto/ask/mute 真改禁锢解锢）
+
+## 选题为何合法（改题有证据）
+1. **挂机庭资源环：** 旁路 TIP-BY–CT **已齐**；afk 面 **零** `recipe_gap_gem`/`forge_gap_gem`（仅 enhance/upgrade/refine/brand/convert/roll/pin gap）→ 宝石同构未过 → **无新硬债**
+2. **短征日更乐趣：** Cast/Aid/todayRot/variety/日差/路径追/settle/soft/回看/路径选打 TIP-DH **已齐**；sx20 **硬禁** → **无薄窗新硬债**
+3. **已齐勿复读：** settle CW–DD + 精选/硬本/团本/短征/深渊/试炼/誓约/破绽/步态/轻技/身法/闪冲/闪榴路径选打 DE–DQ **全齐**
+4. **故落菜单去指令残留 · 只钉一支：** DESIGN-DQ §6⑦ 明文后置 Free/Veil/Snap/Spin/Blaze 等剩支 / 其他仍 ConfirmTokens 的 *Path.offerPick 逐支；本仓 **无** EmberPacePath → 实扫择最硬。实扫 FreePath：`offerPick` ConfirmTokens→`freepath auto|ask|mute|clear`；`applyAndReply` 下一步 ConfirmTokens→`/corerpg p1`/`freepath`；无参/周要约/`scheduleOfferAfterQ01` 同入口；glance 未选教手打；用法教 `auto|ask|mute|clear`；TrMenu **无** `ember_p1_free_path`。**注：** 局内禁锢预警有「解锢」战斗钮（ASK 路径提醒）≠ 选打专用薄页已齐——选打链仍教裸指令硬债成立。**择最硬=FreePath**（DESIGN-DQ§6⑦候选首位·D570 最早·与刚 CLOSED Dodge 同构 auto/ask/mute·Q01 全链·缺专用选打薄页）；Veil/Snap/Spin/Blaze 等剩支后置。
+
+## 施工钉死（批后）
+- W1a：`EmberFreePath.offerPick` → 开 `/ember_p1_free_path`；无参 `/corerpg p1 freepath` 与周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` 同开薄页（或等价）；`applyAndReply` 下一步→同薄页或菜单优先（自动/提醒/静默/清空/技能组/冒险可点，禁以 ConfirmTokens 教裸 `freepath` 为主 UI）；清用法「手打 freepath auto|ask|mute|clear」教指令主文案；glance 去手打主教；可选新增 `free_path_*` PAPI；单测。局内 `maybeAfterJailer`/`maybeProbe` 的「解锢」战斗钮语义 **零改**；其「改路径」可随 offerPick 改开薄页（同批可选，禁独批改战斗语义）
+- W1b：薄页 `ember_p1_free_path`：自动 / 提醒 / 静默 / 清空（菜单 actions `freepath auto|ask|mute|clear`）/ 技能组 `ember_skill_kit` / 冒险 `ember_p1_adventure` / 可选工坊；lore 挂当前解锢路径+tip；灰态诚实（需本人首通 Q01 · `%corerpg_p1_q01done%`）；玩家入口 TrMenu 点击 + `corerpg p1 from/back`；**不教玩家打指令**
+- W1c：同批辅指针若有 → **不可独批**
+- **不改** 伤害 / CD 表 / 掉落 / 体力价 / 解锢规则语义（D570 auto/ask/mute 真改禁锢解锢） / Cast/Aid/variety / 已齐 settle·选打薄页（含 `ember_p1_dodge_path` / `ember_p1_sidestep_path` / `ember_p1_step_path` / `ember_p1_flex_path` / `ember_p1_stride_path` / `ember_p1_counter_path`） / 庭内 / soft-reward / ShortPath/RaidPath/FeaturedPath/ChallengePath/AbyssPath/TrialPath/PledgePath/CounterPath/StridePath/FlexPath/StepPath/SidestepPath/DodgePath / Veil/Snap/Spin/Blaze 等其他 *Path
+
+## 方案
+- **M（荐）** = W1a+W1b+W1c 全弧
+- **L** = 仅改一条聊天钮目标命令无薄页 · **本窗不批 L**
+
+## 验收（批后施工）
+- [ ] 总控批 A·M
+- [ ] 插件交 offerPick / applyAndReply / 无参 freepath / 周要约改开菜单 + 清裸指令主路径 + 单测
+- [ ] 物品交薄 free_path 页 + TrMenu reload
+- [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 dodge_path·零已齐选打同题复读·零改 D570 解锢语义）
+
+## STATUS: **待批 A** · 荐 M · D13349 · TIP-DR · 2026-10-14 14:45 Asia/Shanghai · 勿勾 CLOSED
