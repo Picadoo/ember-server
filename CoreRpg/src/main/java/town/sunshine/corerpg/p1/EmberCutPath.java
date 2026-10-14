@@ -19,11 +19,18 @@ import town.sunshine.corerpg.PlayerData;
  * elite to land interrupt damage for affixShard / faster clear, chat ask, or DPS yourself.
  * Distinct from Rush (timed room mob), Streak (chain), telegraph pulls. Chat only.
  * Zero regenEvery/interrupt_hp/heal table / AFK / sx / forge / combo / enter-cue.
+ * TIP-DZ D13357: offerPick / applyAndReply / 无参 cutpath / 周要约 →开 /ember_p1_cut_path；
+ * 清 ConfirmTokens 教 cutpath 主 UI；零改伤害/CD表/掉落/体力价/D580 打断语义.
  */
 public final class EmberCutPath {
 
     public static final String C_PATH = "p1_cut_path";
     public static final String C_OFFER = "p1_cut_path_offer";
+
+    /** TIP-DZ D13357 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_cut_path";
+    public static final String PATH_PICK_LABEL = "[打断路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -97,8 +104,16 @@ public final class EmberCutPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8打断路径：首进/首通 Q01 后可选";
-        if (!valid(id)) return "§8打断路径：未选 · /corerpg p1 cutpath";
+        // TIP-DZ D13357: 禁教手打 /corerpg p1 cutpath
+        if (!valid(id)) return "§8打断路径：未选 · 点打断路径页";
         return "§e打断路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DZ D13357 · 薄页 lore 一行（无 §）：当前打断路径。
+     */
+    public static String menuLine(int id) {
+        return "打断路径 · " + label(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
@@ -133,7 +148,7 @@ public final class EmberCutPath {
             lastAsk.put(p.getUniqueId(), now);
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§6再生 ",
                     new String[]{"[打断]", "/corerpg p1 cut", "传至再生精英猛打", "GREEN"},
-                    new String[]{"[改路径]", "/corerpg p1 cutpath", "自动/提醒/静默", "GRAY"});
+                    new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
         }
     }
 
@@ -156,18 +171,26 @@ public final class EmberCutPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§6再生 ",
                 new String[]{"[打断]", "/corerpg p1 cut", "传至再生精英猛打", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 cutpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选打断节奏（改获取 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 cutpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 cutpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 cutpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 cutpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-DZ D13357: 开选打薄页；禁 ConfirmTokens 教 cutpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_cut_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_cut_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -236,9 +259,10 @@ public final class EmberCutPath {
         flush(p);
         p.sendMessage(P + "§a打断 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-DZ D13357: 下一步→选打薄页/冒险（禁教裸 cutpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 cutpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
