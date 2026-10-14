@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13344 · StridePath.offerPick / applyAndReply 步态路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠破绽路径选打同题 · ≠誓约/试炼/深渊/短征/团本/硬本/精选路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠全族 *Path.offerPick 大扫 · ≠轻技/身法/闪冲同窗 · ≠复开 D499 玩法本体）
 
-> **旁注（待批 A · 2026-10-14 13:03 Asia/Shanghai）：** tip **待批 A** · 荐 M · DESIGN [`DESIGN-ember-stride-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-stride-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-stride-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-stride-path-offer-pick-visible-2026-10-14.md) · backlog `B-stride-path-offer-pick-visible` · **TIP-DM** · **勿勾 CLOSED** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠已齐 settle 下一环同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬伤害/CD表/掉落/体力价 ≠D673同题复读 ≠legacy evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠轻技/身法/闪冲同窗 ≠复开 D499**。
+> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 13:04 Asia/Shanghai · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-stride-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-stride-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-stride-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-stride-path-offer-pick-visible-2026-10-14.md) · backlog `B-stride-path-offer-pick-visible` · **TIP-DM** · **勿勾 CLOSED** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠已齐 settle 下一环同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬伤害/CD表/掉落/体力价 ≠D673同题复读 ≠legacy evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠轻技/身法/闪冲同窗 ≠复开 D499**。
 
 > **上游结案：** **TIP-DL CLOSED** live（D13343 破绽路径选打齐 · feat `2b7617600` · tip `7490a03eb` · jar `1.65.836-d13343.local` · PASS `2b54c0d0b` · 批 sha `7490a03eb` · menu tip `c2b3b37bd` · CLOSED `999b7a383` · **破绽路径选打菜单化同题勿再交**）。总控派下一窗：内容优先；挂机加厚须新硬债；短征乐趣非已齐路径；已齐勿复读 settle CW–DD + 选打 DE–DL；若无新硬债只钉 **StridePath 步态选打**；Pace/legacy evacuate 默认后置。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **待批 A** · 荐 M · 拟 D13344 · TIP-DM · 2026-10-14 13:03 Asia/Shanghai · 勿勾 CLOSED
+**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13344 · TIP-DM · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 13:04 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-stride-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-stride-path-offer-pick-visible-2026-10-14.md) · backlog `B-stride-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–DL 已齐；步态**选打**仍 ConfirmTokens 教裸 stridepath——DESIGN-DL §6⑦ 明文后置步态首位；内容闭环断在步态路径选打（≠破绽选打；≠ settle 同题）。
 
@@ -44,7 +44,7 @@
 
 ---
 
-## 3. 派单摘要（待批 A · 荐 M）
+## 3. 派单摘要（已批 A·M · 可施工）
 
 ```
 【派单·内容真债待批A·拟D13344·TIP-DM】StridePath.offerPick/applyAndReply步态路径选打菜单化（真可点 · ≠破绽选打同题 · ≠誓约/试炼/深渊/短征/团本/硬本/精选选打同题 · ≠已齐settle同题 · ≠半行空转 · ≠全族Path大扫 · ≠轻技/身法/闪冲同窗）
@@ -63,9 +63,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-stride-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-stride-path-offer-pick-visible-thin-d13344-2026-10-14.md` |
 | backlog | `B-stride-path-offer-pick-visible` |
-| 号段 | **D13344** · 字母窗 **TIP-DM** · STATUS=**待批 A** · 荐 M · 勿勾 CLOSED |
+| 号段 | **D13344** · 字母窗 **TIP-DM** · STATUS=**已批 A · 方案 M** · APPROVED A·M |
 | 上游 | TIP-DL CLOSED live `999b7a383` · feat `2b7617600` · tip `7490a03eb` · PASS `2b54c0d0b` · jar `1.65.836-d13343.local` · 批 sha `7490a03eb` · D13343；半行 REJECT `d00ed84bc` 保持否决；破绽路径选打菜单化同题勿再交 |
 
-*选题 StridePath.offerPick / applyAndReply 步态路径选打菜单化 · tip **待批 A** · 荐 M · D13344 · TIP-DM · 半行 REJECT `d00ed84bc` **保持否决** · 勿勾 CLOSED · ancestor TIP-DL CLOSED · 2026-10-14 13:03 Asia/Shanghai.*
+*选题 StridePath.offerPick / applyAndReply 步态路径选打菜单化 · tip **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13344 · TIP-DM · 半行 REJECT `d00ed84bc` **保持否决** · 轻技/身法/闪冲后置 · ancestor TIP-DL CLOSED `999b7a383` · 2026-10-14 13:04 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐 M · 拟 D13344 · TIP-DM · 2026-10-14 13:03 Asia/Shanghai · 勿勾 CLOSED
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13344 · TIP-DM · 2026-10-14 13:04 Asia/Shanghai
