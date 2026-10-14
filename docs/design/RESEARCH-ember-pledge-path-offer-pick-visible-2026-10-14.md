@@ -1,6 +1,6 @@
 # RESEARCH · PledgePath.offerPick / applyAndReply「誓约路径选打」菜单化 · 拟 D13342 · TIP-DK
 
-> **状态：** **待批 A** · 荐 M · L 不荐 · TIP-DK · 2026-10-14 12:22 Asia/Shanghai · docs-only · 勿勾 CLOSED
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13342 · TIP-DK · 可施工 · 勿勾 CLOSED · 2026-10-14 12:26 Asia/Shanghai
 > **起因：** 总控【派下一窗 tip · ancestor TIP-DJ CLOSED】。祖先 TIP-DJ CLOSED live `f63d095b2` · feat `845a99920` · jar `1.65.834-d13341.local` · PASS `61e500086` · menu `9dabb653e` · APPROVED `dbbc499b0`。DESIGN-DJ §6⑦ 明文后置签律/破绽/步态等 *Path.offerPick 逐支另窗。选题闸：①挂机庭资源环加厚（须新硬债；旁路近饱和·gem gap 未亮则跳过）②短征日更乐趣（非sx20；非已齐路径）③若无新硬债：只钉一支剩余路径选打（Pledge/Counter/Stride 等，以 ConfirmTokens 教裸指令证据选一支）· 镜像 DE–DJ。**禁：** 半行独批 · 已齐 settle/选打同题复读 · 抬伤害/CD表/掉落/体力价 · sx20 / densify / Pack6 / 开 K3 / 关观察 · variety 完整经济 / Cast·Aid 再拧 / 庭内旁路 · 教裸指令主 UI · 全族 Path 大扫。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-DJ CLOSED live `f63d095b2` · feat `845a99920` · tip `dbbc499b0` · PASS `61e500086` · jar `1.65.834-d13341.local` · 批 sha `dbbc499b0` · menu tip `9dabb653e` · D13341
 
@@ -63,6 +63,6 @@
 
 ---
 
-*RESEARCH · PledgePath.offerPick / applyAndReply 誓约路径选打菜单化 · **待批 A** · 荐 M · TIP-DK / D13342 · 半行 REJECT `d00ed84bc` 保持 · 破绽/步态后置 · ancestor TIP-DJ CLOSED `f63d095b2`.*
+*RESEARCH · PledgePath.offerPick / applyAndReply 誓约路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DK / D13342 · 半行 REJECT `d00ed84bc` 保持 · 破绽/步态后置 · ancestor TIP-DJ CLOSED `f63d095b2` · 2026-10-14 12:26 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐 M · L 不荐 · 拟 D13342 · TIP-DK · 2026-10-14 12:22 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13342 · TIP-DK · 2026-10-14 12:26 Asia/Shanghai
