@@ -20,11 +20,18 @@ import town.sunshine.corerpg.PlayerData;
  * NEW dungeon combat loop: when jailer affix roots (JUMP 128 + SLOW 6), sticky strip it,
  * chat ask, or wait it out. Distinct from Thaw (frost slow), Duck (molten pull), and all
  * event-warp paths. Chat only. Zero jailerRoot table / AFK / sx / forge / combo / enter-cue.
+ * TIP-DR D13349: offerPick / applyAndReply / 无参 freepath / 周要约 →开 /ember_p1_free_path；
+ * 清 ConfirmTokens 教 freepath 主 UI；零改伤害/CD表/掉落/体力价/D570 禁锢解锢语义.
  */
 public final class EmberFreePath {
 
     public static final String C_PATH = "p1_free_path";
     public static final String C_OFFER = "p1_free_path_offer";
+
+    /** TIP-DR D13349 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_free_path";
+    public static final String PATH_PICK_LABEL = "[解锢路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -92,8 +99,16 @@ public final class EmberFreePath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8解锢路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8解锢路径：未选 · /corerpg p1 freepath";
+        // TIP-DR D13349: 禁教手打 /corerpg p1 freepath
+        if (!valid(id)) return "§8解锢路径：未选 · 点解锢路径页";
         return "§e解锢路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DR D13349 · 薄页 lore 一行（无 §）：当前解锢路径。
+     */
+    public static String menuLine(int id) {
+        return "解锢路径 · " + label(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
@@ -141,7 +156,7 @@ public final class EmberFreePath {
         lastAsk.put(p.getUniqueId(), now);
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§5禁锢定身 ",
                 new String[]{"[解锢]", "/corerpg p1 free", "解除禁锢定身", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 freepath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void maybeProbe(Player p) {
@@ -161,18 +176,26 @@ public final class EmberFreePath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§5禁锢定身 ",
                 new String[]{"[解锢]", "/corerpg p1 free", "解除禁锢定身", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 freepath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选禁锢解锢节奏（改战斗 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 freepath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 freepath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 freepath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 freepath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-DR D13349: 开选打薄页；禁 ConfirmTokens 教 freepath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_free_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_free_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -227,9 +250,10 @@ public final class EmberFreePath {
         flush(p);
         p.sendMessage(P + "§a解锢 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-DR D13349: 下一步→选打薄页/冒险（禁教裸 freepath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 freepath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
