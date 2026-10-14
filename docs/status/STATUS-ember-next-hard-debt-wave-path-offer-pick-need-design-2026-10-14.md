@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-ED CLOSED** live（D13361 分摊路径选打齐 · feat `4f9f34928` · tip `48f2c8226` · jar `1.65.854-d13361.local` · PASS `852c63428` · 批 sha `48f2c8226` · menu tip `653cfded7` · CLOSED `cf5f2d44f` · 证据 `/workspace/tmp/tip-ed-soak-path/` · **分摊路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **WavePath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–ED 选打勿复；PacePath（本仓无）后置；其它剩支 D586+（Phase…）后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `8b3f27ecb` · 2026-10-14 18:46 Asia/Shanghai · 勿勾 CLOSED · 可施工
+**本窗性质：** **CLOSED live** · feat `ab8037d36` · tip `8f98ec8c8` · menu `a27405c0c` · jar `1.65.855-d13362.local` · PASS `de6ef36f5` · 批 sha `8f98ec8c8` · 证据 `/workspace/tmp/tip-ee-wave-path/` · 2026-10-14 18:58 Asia/Shanghai · 增援路径选打菜单化同题勿再交 · 下一窗：PhasePath.offerPick（只钉一支 · 禁全族大扫）· 其它剩支 D587+ 后置 / PacePath（本仓无）后置 / 挂机若新硬债 / legacy evacuate 后置
 **硬规格：** [`DESIGN-ember-wave-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-wave-path-offer-pick-visible-2026-10-14.md) · backlog `B-wave-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–ED 已齐；增援**选打**仍 ConfirmTokens 教裸 wavepath——总控钉死本支；内容闭环断在增援路径选打（≠分摊选打；≠ settle 同题；局内增援钮≠选打页）。
 
@@ -61,7 +61,7 @@
 | RESEARCH | `docs/design/RESEARCH-ember-wave-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-14.md` |
 | backlog | `B-wave-path-offer-pick-visible` |
-| 号段 | **D13362** · 字母窗 **TIP-EE** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `8b3f27ecb` · 2026-10-14 18:46 Asia/Shanghai · 勿勾 CLOSED
+| 号段 | **D13362** · 字母窗 **TIP-EE** · STATUS=**CLOSED live** · feat `ab8037d36` · tip `8f98ec8c8` · menu `a27405c0c` · jar `1.65.855-d13362.local` · PASS `de6ef36f5` · 批 sha `8f98ec8c8` · 证据 `/workspace/tmp/tip-ee-wave-path/` · 2026-10-14 18:58 Asia/Shanghai
 | 上游 | TIP-ED CLOSED live `cf5f2d44f` · feat `4f9f34928` · tip `48f2c8226` · PASS `852c63428` · jar `1.65.854-d13361.local` · 批 sha `48f2c8226` · menu tip `653cfded7` · D13361；半行 REJECT `d00ed84bc` 保持否决；分摊路径选打菜单化同题勿再交 |
 
 *选题 WavePath.offerPick / applyAndReply 增援路径选打菜单化 · tip **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13362 · TIP-EE · 半行 REJECT `d00ed84bc` **保持否决** · 其它剩支 D586+（Phase…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-ED CLOSED `cf5f2d44f` · 2026-10-14 18:44 Asia/Shanghai.*
