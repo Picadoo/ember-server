@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13353 · BlazePath.offerPick / applyAndReply 避焰路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠避旋路径选打同题 · ≠断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠复开 D576 玩法本体）
 
-> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 15:56 Asia/Shanghai · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-blaze-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-blaze-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-blaze-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-blaze-path-offer-pick-visible-2026-10-14.md) · backlog `B-blaze-path-offer-pick-visible` · **TIP-DV** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠避旋路径选打同题 ≠已齐选打同题 ≠教裸指令 ≠全族大扫 ≠Pace同窗 ≠复开 D576**。
+> **旁注（CLOSED live · 2026-10-14 16:10 Asia/Shanghai）：** tip **CLOSED live** · feat `7696e36f6` · tip `6638c9880` · menu `efd291131` · jar `1.65.846-d13353.local` · PASS `8371e2d95` · 证据 `/workspace/tmp/tip-dv-blaze-path/` · DESIGN [`DESIGN-ember-blaze-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-blaze-path-offer-pick-visible-2026-10-14.md) · backlog `B-blaze-path-offer-pick-visible` **勾 CLOSED** · **TIP-DV** · 下一窗：挂机若新硬债 / legacy evacuate 后置 / 其他仍 ConfirmTokens 的 *Path.offerPick 若实扫仍残留则逐支另窗（禁全族大扫）· PacePath（本仓无）后置。
 
 > **上游结案：** **TIP-DU CLOSED** live（D13352 避旋路径选打齐 · feat `d21666151` · tip `093e5a641` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · 批 sha `093e5a641` · menu tip `74f28d8e5` · CLOSED `79985fd2a` · 证据 `/workspace/tmp/tip-du-spin-path/` · **避旋路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **BlazePath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–DU 选打勿复；PacePath（本仓无）后置；禁全族大扫；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13353 · TIP-DV · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 15:56 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `7696e36f6` · tip `6638c9880` · jar `1.65.846-d13353.local` · PASS `8371e2d95` · menu `efd291131` · 2026-10-14 16:10 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-blaze-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-blaze-path-offer-pick-visible-2026-10-14.md) · backlog `B-blaze-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–DU 已齐；避焰**选打**仍 ConfirmTokens 教裸 blazepath——总控钉死本支；内容闭环断在避焰路径选打（≠避旋选打；≠ settle 同题；局内炽热焰圈钮≠选打页）。
 

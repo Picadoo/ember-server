@@ -1,6 +1,6 @@
 # STATUS · TIP-DV W1a 避焰路径选打菜单化 · D13353
 
-> 2026-10-14 16:00 Asia/Shanghai · 余烬-插件岗 · W1a 已交 · tip **勿勾 CLOSED** · feat `7696e36f6` · jar `1.65.846-d13353.local`
+> 2026-10-14 16:00 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · tip CLOSED · feat `7696e36f6` · PASS `8371e2d95` · jar `1.65.846-d13353.local` · menu `efd291131` · 2026-10-14 16:10 Asia/Shanghai · feat `7696e36f6` · jar `1.65.846-d13353.local`
 
 ## 交付
 - feat: `7696e36f6`（commit 后钉死）
@@ -14,7 +14,7 @@
 - jar：`1.65.846-d13353.local` · sha256 `74af0b7bcc0f…` · ECONOMY_BV **123** 未动
 - play：live `1.65.846-d13353.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / D576 焰圈避焰语义(auto/ask/mute) / Cast·Aid / variety / 已齐 settle 薄页 / Spin·Snap·Veil·Free·Dodge·Sidestep·Step·Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Pace 同窗 / 庭内 / TrMenu yml（物品 W1b 并行）
-- tip **勿勾 CLOSED** · 可派测 / 物品 W1b
+- tip **CLOSED** · 总控收口 · 2026-10-14 16:10 Asia/Shanghai
 
 ## 落点
 - `EmberBlazePath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine · 改路径薄页
@@ -31,4 +31,4 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_blaze_path`）
 
 ## 下步
-- 可派测 · 物品 W1b 并行 · tip **勿勾 CLOSED** · 下一窗旁注 PacePath（本仓无）后置 / 其他残留 *Path.offerPick 逐支另窗
+- 可派测 · 物品 W1b 并行 · tip **CLOSED** · 下一窗旁注 PacePath（本仓无）后置 / 其他残留 *Path.offerPick 逐支另窗
