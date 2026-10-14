@@ -35,7 +35,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M
-- [x] 插件交 offerPick / applyAndReply / 无参 gappath / 周要约改开菜单 + 清裸指令主路径 + 单测（W1a · jar 1.65.857-d13364.local · 勿勾 CLOSED）
+- [x] 插件交 offerPick / applyAndReply / 无参 gappath / 周要约改开菜单 + 清裸指令主路径 + 单测（W1a · feat c9d2b431f · jar 1.65.857-d13364.local · 勿勾 CLOSED）
 - [ ] 物品交薄 gap_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 phase_path·零已齐选打同题复读·零改 D587 收招语义）
 

@@ -1,8 +1,9 @@
 # STATUS · TIP-EG W1a 收招路径选打菜单化 · D13364
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · jar `1.65.857-d13364.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `c9d2b431f7ee02c7479879d5223fd652bf8e29e2` · jar `1.65.857-d13364.local`
 
 ## 交付
+- feat: `c9d2b431f7ee02c7479879d5223fd652bf8e29e2`
 - `EmberGapPath.offerPick` →开 `/ember_p1_gap_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `gappath` 为主 UI
 - 无参 `/corerpg p1 gappath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_gap_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `gappath` ConfirmTokens 为主 UI
