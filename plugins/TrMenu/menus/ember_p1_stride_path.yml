@@ -1,0 +1,327 @@
+# TIP-DM / D13344 · 步态路径选打薄页 · stride_path* · stridepath push|bail|bare|clear
+# 入口：StridePath.offerPick / 无参 stridepath / 周要约 / Q05 → /ember_p1_stride_path（插件并行改开菜单）
+# 选打：corerpg p1 stridepath push|bail|bare|clear
+# 进本：按当前 enterCmd（突进踏→q05 / 后撤踏→q02 / 卸轻技→runs）
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落/体力价 · 改 counter_path / pledge_path / 其他已齐选打 / 步态规则语义 / 庭内
+# PAPI（插件可能后到·静态接线）：stride_path / stride_path_label / stride_path_tip · q05done（灰态单条件·首通 Q05；文案诚实写 Q01+Q05）
+# ≠ ember_p1_counter_path · ≠ ember_p1_pledge_path · ≠ ember_p1_trial_path · ≠ ember_p1_abyss_path · ≠ ember_p1_short_path · ≠ ember_p1_raid_path · ≠ ember_p1_challenge_path · ≠ ember_p1_featured_path
+
+Title: '§b步态 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_stride_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '##E#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §b步态路径 §7· 当前 §e%corerpg_p1_stride_path_label%'
+    - 'tell: §8点选 · 突进踏 / 后撤踏 / 卸轻技 / 清空 · 或进本 / 冒险 / 工坊'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§b步态路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_stride_path_label%'
+        - '§8%corerpg_p1_stride_path_tip%'
+        - '§8点选 · 突进踏 / 后撤踏 / 卸轻技 / 清空'
+        - '§8需本人首进/首通 Q01（轻技）与 Q05（身法）'
+
+  # 突进踏 · PUSH=1 · 装配踏步+前冲
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q05done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7突进踏 §8（需 Q01+Q05）'
+          lore:
+            - '§c需本人首进/首通 Q01（轻技）与 Q05（身法）'
+            - '§7装配踏步 + 前冲 · 潜行+Q 追击过刀'
+            - '§8通关 / 首进后再选路径'
+      - condition: 'check papi %corerpg_p1_stride_path% == 1'
+        priority: 2
+        display:
+          material: diamond boots
+          shiny: true
+          name: '§a突进踏 §8· §f已选'
+          lore:
+            - '§7装配踏步 + 前冲 · 潜行+Q 追击过刀'
+            - '§8%corerpg_p1_stride_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 stridepath push'
+            - 'menu: ember_p1_stride_path'
+    display:
+      material: iron boots
+      name: '§e突进踏'
+      lore:
+        - '§7装配踏步 + 前冲 · 潜行+Q 追击过刀'
+        - '§8点选切换步态路径'
+        - '§e➥ §f设为突进踏'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 stridepath push'
+        - 'menu: ember_p1_stride_path'
+
+  # 后撤踏 · BAIL=2 · 装配踏步+后撤
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q05done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7后撤踏 §8（需 Q01+Q05）'
+          lore:
+            - '§c需本人首进/首通 Q01（轻技）与 Q05（身法）'
+            - '§7装配踏步 + 后撤 · 潜行+Q 拉开躲预警'
+            - '§8通关 / 首进后再选路径'
+      - condition: 'check papi %corerpg_p1_stride_path% == 2'
+        priority: 2
+        display:
+          material: golden boots
+          shiny: true
+          name: '§a后撤踏 §8· §f已选'
+          lore:
+            - '§7装配踏步 + 后撤 · 潜行+Q 拉开躲预警'
+            - '§8%corerpg_p1_stride_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 stridepath bail'
+            - 'menu: ember_p1_stride_path'
+    display:
+      material: leather boots
+      name: '§b后撤踏'
+      lore:
+        - '§7装配踏步 + 后撤 · 潜行+Q 拉开躲预警'
+        - '§8点选切换步态路径'
+        - '§e➥ §f设为后撤踏'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 stridepath bail'
+        - 'menu: ember_p1_stride_path'
+
+  # 卸轻技 · BARE=3 · 卸下轻技
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q05done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7卸轻技 §8（需 Q01+Q05）'
+          lore:
+            - '§c需本人首进/首通 Q01（轻技）与 Q05（身法）'
+            - '§7卸下轻技 · 潜行+Q 不放身法（方向回前冲）'
+            - '§8通关 / 首进后再选路径'
+      - condition: 'check papi %corerpg_p1_stride_path% == 3'
+        priority: 2
+        display:
+          material: stick
+          shiny: true
+          name: '§a卸轻技 §8· §f已选'
+          lore:
+            - '§7卸下轻技 · 潜行+Q 不放身法（方向回前冲）'
+            - '§8%corerpg_p1_stride_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 stridepath bare'
+            - 'menu: ember_p1_stride_path'
+    display:
+      material: stick
+      name: '§7卸轻技'
+      lore:
+        - '§7卸下轻技 · 潜行+Q 不放身法（方向回前冲）'
+        - '§8点选切换步态路径'
+        - '§e➥ §f设为卸轻技'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 stridepath bare'
+        - 'menu: ember_p1_stride_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q05done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需 Q01+Q05）'
+          lore:
+            - '§c需本人首进/首通 Q01（轻技）与 Q05（身法）'
+            - '§8通关 / 首进后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_stride_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无步态路径焦点'
+            - '§8先点 突进踏 / 后撤踏 / 卸轻技'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 stridepath clear'
+            - 'menu: ember_p1_stride_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_stride_path_label%'
+        - '§8清焦点 · 可重选（轻技装配与身法方向未自动回滚）'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 stridepath clear'
+        - 'menu: ember_p1_stride_path'
+
+  # 进本 · 按当前 enterCmd（突进踏→q05 / 后撤踏→q02 / 卸轻技→runs）
+  E:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q05done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7进本练步态 §8（需 Q01+Q05）'
+          lore:
+            - '§c需本人首进/首通 Q01（轻技）与 Q05（身法）'
+            - '§8通关 / 首进后再进本'
+      - condition: 'check papi %corerpg_p1_stride_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7进本练步态 §8（先选路径）'
+          lore:
+            - '§c尚未选步态路径'
+            - '§7点上方 突进踏 / 后撤踏 / 卸轻技'
+            - '§8选好后再进 · 勿假开'
+      - condition: 'check papi %corerpg_p1_stride_path% == 1'
+        priority: 3
+        display:
+          material: emerald
+          name: '§a进本练步态 §8· §e突进踏→Q05'
+          lore:
+            - '§7当前：§e%corerpg_p1_stride_path_label%'
+            - '§8%corerpg_p1_stride_path_tip%'
+            - '§7去练 Q05 前冲 · §e➥进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 enter q05'
+            - close
+      - condition: 'check papi %corerpg_p1_stride_path% == 2'
+        priority: 4
+        display:
+          material: emerald
+          name: '§a进本练步态 §8· §b后撤踏→Q02'
+          lore:
+            - '§7当前：§e%corerpg_p1_stride_path_label%'
+            - '§8%corerpg_p1_stride_path_tip%'
+            - '§7去练 Q02 后撤 · §e➥进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 enter q02'
+            - close
+      - condition: 'check papi %corerpg_p1_stride_path% == 3'
+        priority: 5
+        display:
+          material: emerald
+          name: '§a进本练步态 §8· §7卸轻技→冒险'
+          lore:
+            - '§7当前：§e%corerpg_p1_stride_path_label%'
+            - '§8%corerpg_p1_stride_path_tip%'
+            - '§7打开冒险选本 · §e➥进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 runs'
+            - close
+    display:
+      material: emerald
+      name: '§a进本练步态'
+      lore:
+        - '§7按当前步态 enter'
+        - '§7当前：§e%corerpg_p1_stride_path_label%'
+        - '§8点进 · 真进本 · §e➥进本'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'tell: §c请先选突进踏 / 后撤踏 / 卸轻技'
+        - 'menu: ember_p1_stride_path'
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊（可选）
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
