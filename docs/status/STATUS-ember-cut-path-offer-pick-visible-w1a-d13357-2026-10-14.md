@@ -1,9 +1,9 @@
 # STATUS · TIP-DZ W1a 打断路径选打菜单化 · D13357
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `6390cf798` · jar `1.65.850-d13357.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `a7f634bc5` · jar `1.65.850-d13357.local`
 
 ## 交付
-- feat: `6390cf798`（commit 后钉死）
+- feat: `a7f634bc5`（commit 后钉死）
 - `EmberCutPath.offerPick` →开 `/ember_p1_cut_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `cutpath` 为主 UI
 - 无参 `/corerpg p1 cutpath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_cut_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `cutpath` ConfirmTokens 为主 UI
