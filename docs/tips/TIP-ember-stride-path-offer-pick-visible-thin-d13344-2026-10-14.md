@@ -1,6 +1,6 @@
 # tip · TIP-DM StridePath.offerPick / applyAndReply「步态路径选打」菜单化（选路径聊天钮去指令化 · ≠破绽路径选打同题 · ≠誓约/试炼/深渊/短征/团本/硬本/精选路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠轻技/身法/闪冲同窗 · ≠复开 D499 玩法本体）· 拟 D13344
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13344 · TIP-DM · W1a插件已交 · 待测岗/物品W1b · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 stridepath/周要约→开 ember_p1_stride_path · 清 ConfirmTokens 教 stridepath 主 UI · 2026-10-14 Asia/Shanghai
+> **状态：** **抽测 PASS** · APPROVED A·M · D13344 · TIP-DM · feat `3daefff99` · menu `e16208193` · jar `1.65.837-d13344.local` · L不批 · **勿勾 CLOSED**（总控收口）· 零改伤害/CD表/掉落/体力价 · offerPick/无参 stridepath/周要约→开 ember_p1_stride_path · 清 ConfirmTokens 教 stridepath 主 UI · 2026-10-14 13:17 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-stride-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-stride-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-stride-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（StridePath.offerPick / applyAndReply / 无参 stridepath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_stride_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零破绽路径选打同题复读（TIP-DL） · 零誓约/试炼/深渊/短征/团本/硬本/精选路径选打同题复读（TIP-DK–DE） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零轻技 FlexPath / 身法 StepPath / 闪冲 SidestepPath 同窗 · 零复开 D499 玩法本体
@@ -36,7 +36,7 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 13:04 Asia/Shanghai
 - [x] 插件交 offerPick / applyAndReply / 无参 stridepath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat `3daefff99` · jar `1.65.837-d13344.local`
-- [ ] 物品交薄 stride_path 页 + TrMenu reload
-- [ ] 抽测 PASS live（选突进踏/后撤踏/卸轻技/清空/进本/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 counter_path·零已齐选打同题复读）· **CLOSED by 总控**
+- [x] 物品交薄 stride_path 页 + TrMenu reload · menu `e16208193` · TrMenu **92**
+- [x] 抽测 PASS live · STATUS spot · 证据 `/workspace/tmp/tip-dm-stride-path/` · **勿勾 CLOSED**（总控收口）
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a插件已交（勿勾 CLOSED · 待测岗/物品W1b） · L不批 · D13344 · TIP-DM · 2026-10-14 Asia/Shanghai
+## STATUS: **抽测 PASS** · APPROVED A·M · feat `3daefff99` · menu `e16208193` · jar `1.65.837-d13344.local` · **勿勾 CLOSED**（总控收口）· L不批 · D13344 · TIP-DM · 2026-10-14 13:17 Asia/Shanghai
