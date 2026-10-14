@@ -1,6 +1,6 @@
 # RESEARCH · RushPath.offerPick / applyAndReply「限时/冲锋路径选打」菜单化 · 拟 D13356 · TIP-DY
 
-> **状态：** **待批 A** · 荐 M · 2026-10-14 16:50 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13356 · TIP-DY · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 rushpath/周要约→开 ember_p1_rush_path · 清 ConfirmTokens 教 rushpath 主 UI · 2026-10-14 16:51 Asia/Shanghai
 > **起因：** 总控【下一窗 TIP-DY · 只钉一支 · 禁全族大扫】。祖先 TIP-DX **CLOSED live** `dd9e7abce` · feat `962b88252` · tip `d44c80e86` · menu `610e8eefb` · jar `1.65.848-d13355.local` · PASS `f3c1766e1` · 证据 `/workspace/tmp/tip-dx-clean-path/`。**净伤路径选打菜单化同题勿再交**。选题钉死：**RushPath.offerPick**「限时/冲锋路径选打」菜单化 → TrMenu `ember_p1_rush_path`（拟 D13356 · TIP-DY · D579 紧接 Clean D578）。硬证：`EmberRushPath.offerPick` 仍 ConfirmTokens 教 rushpath；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内限时「冲」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_rush_path.yml`；与刚 CLOSED Clean 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–DX 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁 Rush/Cut 同窗；PacePath（本仓无）后置；legacy evacuate 后置；Cut… D580+ 后置（逐支另窗）；零抬伤害/CD表/掉落/体力价；零改 D579 限时语义本体；零改已齐 `ember_p1_clean_path` 等；勿勾 CLOSED。
 > **上游：** TIP-DX CLOSED live `dd9e7abce` · feat `962b88252` · tip `d44c80e86` · PASS `f3c1766e1` · jar `1.65.848-d13355.local` · 批 sha `d44c80e86` · menu tip `610e8eefb` · D13355
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · RushPath.offerPick / applyAndReply 限时/冲锋路径选打菜单化 · **待批 A** · 荐 M · TIP-DY / D13356 · 半行 REJECT `d00ed84bc` 保持 · Cut… D580+ / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DX CLOSED `dd9e7abce` · 2026-10-14 16:50 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · RushPath.offerPick / applyAndReply 限时路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DY / D13356 · 半行 REJECT `d00ed84bc` 保持 · Cut… D580+ 后置 · ancestor TIP-DX CLOSED `dd9e7abce` · 2026-10-14 16:51 Asia/Shanghai**待批 A** · 荐 M · TIP-DY / D13356 · 半行 REJECT `d00ed84bc` 保持 · Cut… D580+ / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DX CLOSED `dd9e7abce` · 2026-10-14 16:50 Asia/Shanghai · 勿勾 CLOSED.*
 
-## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13356 · TIP-DY · 2026-10-14 16:50 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13356 · TIP-DY · 2026-10-14 16:51 Asia/Shanghai
