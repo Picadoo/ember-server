@@ -1,6 +1,6 @@
 # RESEARCH · StepPath.offerPick / applyAndReply「身法路径选打」菜单化 · 拟 D13346 · TIP-DO
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13346 · TIP-DO · 可施工 · 勿勾 CLOSED · 2026-10-14 13:45 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `bb9accd40` · tip `057b6b380` · PASS `65ef1d315` · jar `1.65.839-d13346.local` · 批 sha `057b6b380` · TIP-DO · 2026-10-14 14:01 Asia/Shanghai · 身法路径选打菜单化同题勿再交 · 下一窗：闪冲 SidestepPath 等 *Path.offerPick 逐支（禁全族大扫）/ PacePath 等剩支后置 / 挂机若新硬债 / legacy evacuate 后置；身法路径选打本支已齐
 > **起因：** 总控【派下一窗 tip · ancestor TIP-DN CLOSED】。祖先 TIP-DN CLOSED live `300697d79` · feat `53be7080e` · jar `1.65.838-d13345.local` · PASS `89c68de74` · menu `55f8f3ea0` · APPROVED `68230fe44`。DESIGN-DN §6⑦ 明文后置身法 StepPath / 闪冲 SidestepPath 等 *Path.offerPick 逐支另窗。选题闸：①挂机庭资源环加厚（须新硬债；旁路近饱和·gem gap 未亮则跳过）②短征日更乐趣（非sx20；非已齐路径）③若无新硬债：只钉 **一支**（StepPath 身法 或 SidestepPath 闪冲，以实扫 ConfirmTokens 教裸指令证据择最硬）· 镜像 DE–DN。**禁：** 半行独批 · 已齐 settle/选打同题复读 · 抬伤害/CD表/掉落/体力价 · sx20 / densify / Pack6 / 开 K3 / 关观察 · variety 完整经济 / Cast·Aid 再拧 / 庭内旁路 · 教裸指令主 UI · 全族 Path 大扫 · PacePath 等剩支后置 · legacy evacuate 后置。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-DN CLOSED live `300697d79` · feat `53be7080e` · tip `68230fe44` · PASS `89c68de74` · jar `1.65.838-d13345.local` · 批 sha `68230fe44` · menu tip `55f8f3ea0` · D13345
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · StepPath.offerPick / applyAndReply 身法路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DO / D13346 · 半行 REJECT `d00ed84bc` 保持 · 闪冲后置 · ancestor TIP-DN CLOSED `300697d79` · 2026-10-14 13:45 Asia/Shanghai.*
+*RESEARCH · StepPath.offerPick / applyAndReply 身法路径选打菜单化 · **CLOSED live** · `bb9accd40` / `057b6b380` · PASS `65ef1d315` · TIP-DO / D13346 · 半行 REJECT `d00ed84bc` 保持 · 身法路径选打菜单化同题勿再交 · 下一窗：闪冲 SidestepPath 等 *Path.offerPick 逐支（禁全族大扫）/ PacePath 等剩支后置 / 挂机若新硬债 / legacy evacuate 后置；身法路径选打本支已齐.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13346 · TIP-DO · 2026-10-14 13:45 Asia/Shanghai
+## STATUS: **CLOSED live** · `bb9accd40` / `057b6b380` · PASS `65ef1d315` · D13346 · TIP-DO · 2026-10-14 14:01 Asia/Shanghai

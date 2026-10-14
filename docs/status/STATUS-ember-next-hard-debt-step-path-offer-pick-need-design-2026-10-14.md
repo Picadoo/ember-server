@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13346 · StepPath.offerPick / applyAndReply 身法路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠轻技路径选打同题 · ≠破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠全族 *Path.offerPick 大扫 · ≠闪冲同窗 · ≠复开 D491 玩法本体）
 
-> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 13:45 Asia/Shanghai · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-step-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-step-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-step-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-step-path-offer-pick-visible-2026-10-14.md) · backlog `B-step-path-offer-pick-visible` · **TIP-DO** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠轻技路径选打同题 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠步态路径选打同题 ≠已齐 settle 下一环同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬伤害/CD表/掉落/体力价 ≠D673同题复读 ≠legacy evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠闪冲同窗 ≠复开 D491**。
+> **旁注（勾毕 · CLOSED live · 2026-10-14 14:01 Asia/Shanghai · feat `bb9accd40` · tip `057b6b380` · PASS `65ef1d315` · jar `1.65.839-d13346.local` · 批 sha `057b6b380` · menu tip `a8c288f57` · 证据 `/workspace/tmp/tip-do-step-path/`）：** tip **CLOSED live** · DESIGN [`DESIGN-ember-step-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-step-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-step-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-step-path-offer-pick-visible-2026-10-14.md) · backlog `B-step-path-offer-pick-visible` · **TIP-DO** · **身法路径选打菜单化同题勿再交** · 下一窗：闪冲 SidestepPath 等 *Path.offerPick 逐支（禁全族大扫）/ PacePath 等剩支后置 / 挂机若新硬债 / legacy evacuate 后置；身法路径选打本支已齐 · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠轻技路径选打同题 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠步态路径选打同题 ≠已齐 settle 下一环同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬伤害/CD表/掉落/体力价 ≠D673同题复读 ≠legacy evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠闪冲同窗 ≠复开 D491**。
 
 > **上游结案：** **TIP-DN CLOSED** live（D13345 轻技路径选打齐 · feat `53be7080e` · tip `68230fe44` · jar `1.65.838-d13345.local` · PASS `89c68de74` · 批 sha `68230fe44` · menu tip `55f8f3ea0` · CLOSED `300697d79` · **轻技路径选打菜单化同题勿再交**）。总控派下一窗：内容优先；挂机加厚须新硬债；短征乐趣非已齐路径；已齐勿复读 settle CW–DD + 选打 DE–DN；若无新硬债只钉 **一支**（Step / Sidestep，实扫 ConfirmTokens 择最硬）；Pace/legacy evacuate 默认后置。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13346 · TIP-DO · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 13:45 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `bb9accd40` · tip `057b6b380` · PASS `65ef1d315` · jar `1.65.839-d13346.local` · 拟 D13346 · TIP-DO · 2026-10-14 14:01 Asia/Shanghai · 身法路径选打菜单化同题勿再交
 **硬规格：** [`DESIGN-ember-step-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-step-path-offer-pick-visible-2026-10-14.md) · backlog `B-step-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–DN 已齐；身法**选打**仍 ConfirmTokens 教裸 steppath——DESIGN-DN §6⑦ 明文后置身法/闪冲；实扫择最硬=Step；内容闭环断在身法路径选打（≠轻技选打；≠ settle 同题）。
 
@@ -63,9 +63,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-step-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-step-path-offer-pick-visible-thin-d13346-2026-10-14.md` |
 | backlog | `B-step-path-offer-pick-visible` |
-| 号段 | **D13346** · 字母窗 **TIP-DO** · STATUS=**已批 A · 方案 M** · APPROVED A·M |
+| 号段 | **D13346** · 字母窗 **TIP-DO** · STATUS=**CLOSED live** · PASS `65ef1d315` |
 | 上游 | TIP-DN CLOSED live `300697d79` · feat `53be7080e` · tip `68230fe44` · PASS `89c68de74` · jar `1.65.838-d13345.local` · 批 sha `68230fe44` · D13345；半行 REJECT `d00ed84bc` 保持否决；轻技路径选打菜单化同题勿再交 |
 
-*选题 StepPath.offerPick / applyAndReply 身法路径选打菜单化 · tip **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13346 · TIP-DO · 半行 REJECT `d00ed84bc` **保持否决** · 闪冲后置 · ancestor TIP-DN CLOSED `300697d79` · 2026-10-14 13:45 Asia/Shanghai.*
+*选题 StepPath.offerPick / applyAndReply 身法路径选打菜单化 · tip **CLOSED live** · `bb9accd40` / `057b6b380` · PASS `65ef1d315` · D13346 · TIP-DO · 半行 REJECT `d00ed84bc` **保持否决** · 身法路径选打菜单化同题勿再交 · 下一窗：闪冲 SidestepPath 等 *Path.offerPick 逐支（禁全族大扫）/ PacePath 等剩支后置 / 挂机若新硬债 / legacy evacuate 后置；身法路径选打本支已齐 · ancestor TIP-DN CLOSED · 2026-10-14 14:01 Asia/Shanghai.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13346 · TIP-DO · 2026-10-14 13:45 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `bb9accd40` · tip `057b6b380` · PASS `65ef1d315` · jar `1.65.839-d13346.local` · D13346 · TIP-DO · 2026-10-14 14:01 Asia/Shanghai · 身法路径选打菜单化同题勿再交

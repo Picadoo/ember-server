@@ -1,7 +1,7 @@
 # 状态 · TIP-DO 身法路径选打菜单化抽测
 
 **裁决：** **PASS** · feat `bb9accd40` · menu tip `a8c288f57` · tip/批 `057b6b380` · jar `1.65.839-d13346.local` · 证据 `/workspace/tmp/tip-do-step-path/`  
-**范围：** offerPick / 无参 steppath / 周要约 → 开 `ember_p1_step_path`（**禁** ConfirmTokens 教 steppath 为主 UI）· 薄页前冲/后撤/清空/进本/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `step_path_*` 诚实 · Q05 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_flex_path` 及其他已齐 path · **零**新建 `ember_p1_sidestep_path` · **≠**已齐选打同题复读 · **tip 未勾 CLOSED**（总控收口）
+**范围：** offerPick / 无参 steppath / 周要约 → 开 `ember_p1_step_path`（**禁** ConfirmTokens 教 steppath 为主 UI）· 薄页前冲/后撤/清空/进本/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `step_path_*` 诚实 · Q05 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_flex_path` 及其他已齐 path · **零**新建 `ember_p1_sidestep_path` · **≠**已齐选打同题复读 · **勾毕 CLOSED live**（总控收口 · 2026-10-14 14:01 Asia/Shanghai)
 
 ## 必验
 
@@ -18,11 +18,11 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **94**（含 `ember_p1_step_path`）· jar sha256 `d35731caef43…` plugins=server-runtime · MySQL connected · bv123
 - 单测 `EmberStepPathPickTest` / `EmberStepPathTest` / RunPapi / FlexPathPick / StridePathPick / CounterPathPick / PledgePathPick / TrialPathPick 绿
-- 47/47 PASS · **tip 未勾 CLOSED**（总控收口）
+- 47/47 PASS · **勾毕 CLOSED live**（总控收口 · 2026-10-14 14:01 Asia/Shanghai)
 - 选打主 UI = `ember_p1_step_path`；未教裸 steppath/enter；未复读轻技/步态/破绽/誓约/试炼等选打
 
 ## 纪律确认
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · rot weekly_cap=3 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改伤害/CD表/掉落/体力价/flex_path/stride_path/counter_path/pledge_path/trial_path/abyss·short·raid·featured·challenge path/variety/soft-reward · 零新建 sidestep_path · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `bb9accd40` · menu tip `a8c288f57` · tip `057b6b380` · jar `1.65.839-d13346.local` · **tip 未勾 CLOSED**（总控收口 · 2026-10-14 Asia/Shanghai)
+> **测岗抽测：** PASS live · feat `bb9accd40` · menu tip `a8c288f57` · tip `057b6b380` · jar `1.65.839-d13346.local` · **勾毕 CLOSED live**（总控收口 · 2026-10-14 14:01 Asia/Shanghai)

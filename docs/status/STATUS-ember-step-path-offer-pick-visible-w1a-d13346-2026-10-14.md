@@ -1,6 +1,6 @@
 # STATUS · TIP-DO W1a 身法路径选打菜单化 · D13346
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · W1a 已交 · **勿勾 tip CLOSED** · tip APPROVED `057b6b380`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `65ef1d315` · tip `057b6b380` · 总控收口 2026-10-14 14:01 Asia/Shanghai
 
 ## 交付
 - feat: `bb9accd40f1fb359c495f3d31f4d2d592d612cfb`
@@ -13,7 +13,7 @@
 - jar：`1.65.839-d13346.local` · sha256 `d35731caef43faac…` · ECONOMY_BV **123** 未动
 - play：live `1.65.839-d13346.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / 身法规则语义(D491 forward/back 真改方向) / Cast·Aid / variety / 已齐 settle 薄页 / Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Sidestep 同窗 / 庭内 / TrMenu yml（物品 W1b 并行）
-- **勿勾 tip CLOSED**（测岗/总控勾）
+- **勾毕 CLOSED live** · PASS `65ef1d315` · 总控收口 2026-10-14 14:01 Asia/Shanghai
 
 ## 落点
 - `EmberStepPath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine
@@ -30,4 +30,12 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_step_path`）
 
 ## 下步
-- 物品 W1b 并行薄页；测岗抽测；总控收口 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-DO spot）
+- **PASS** · 2026-10-14 14:01 Asia/Shanghai · 证据 `/workspace/tmp/tip-do-step-path/` · 详 `STATUS-ember-step-path-offer-pick-tip-do-spot-d13346-2026-10-14.md`
+- live jar `1.65.839-d13346.local` · feat `bb9accd40` · tip `057b6b380` · 批 `057b6b380` · 身法路径选打菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `bb9accd40` · 证据 `/workspace/tmp/tip-do-step-path/` · STATUS `65ef1d315`
+- **CLOSED live**（总控收口）· tip `057b6b380` · jar `1.65.839-d13346.local`
