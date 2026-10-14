@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13352 · SpinPath.offerPick / applyAndReply 避旋路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠断链路径选打同题 · ≠避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠Blaze同窗 · ≠复开 D575 玩法本体）
 
-> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 15:37 Asia/Shanghai · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-spin-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-spin-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-spin-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-spin-path-offer-pick-visible-2026-10-14.md) · backlog `B-spin-path-offer-pick-visible` · **TIP-DU** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠断链路径选打同题 ≠避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 ≠已齐 settle 下一环同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬伤害/CD表/掉落/体力价 ≠D673同题复读 ≠legacy evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠Pace同窗 ≠Blaze同窗 ≠复开 D575**。
+> **旁注（CLOSED live · 2026-10-14 15:51 Asia/Shanghai）：** tip **CLOSED live** · feat `d21666151` · tip `093e5a641` · menu `74f28d8e5` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · 证据 `/workspace/tmp/tip-du-spin-path/` · DESIGN [`DESIGN-ember-spin-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-spin-path-offer-pick-visible-2026-10-14.md) · backlog `B-spin-path-offer-pick-visible` **勾 CLOSED** · **TIP-DU** · 下一窗 **BlazePath.offerPick**（只钉一支 · 禁全族大扫）· PacePath（本仓无）后置。
 
 > **上游结案：** **TIP-DT CLOSED** live（D13351 断链路径选打齐 · feat `b9d06e01a` · tip `f5cea1e1d` · jar `1.65.844-d13351.local` · PASS `6f69cb256` · 批 sha `f5cea1e1d` · menu tip `4070a04f7` · CLOSED `3fe104477` · 证据 `/workspace/tmp/tip-dt-snap-path/` · **断链路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **SpinPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–DT 选打勿复；Blaze 后置；禁全族大扫；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13352 · TIP-DU · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 15:37 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `d21666151` · tip `093e5a641` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · menu `74f28d8e5` · 2026-10-14 15:51 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-spin-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-spin-path-offer-pick-visible-2026-10-14.md) · backlog `B-spin-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–DT 已齐；避旋**选打**仍 ConfirmTokens 教裸 spinpath——总控钉死本支；内容闭环断在避旋路径选打（≠断链选打；≠ settle 同题；局内旋光光束钮≠选打页）。
 

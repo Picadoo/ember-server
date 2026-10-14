@@ -1,7 +1,9 @@
 # 状态 · TIP-DU 避旋路径选打菜单化抽测
 
+> **CLOSED live** · feat `d21666151` · tip `093e5a641` · menu `74f28d8e5` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · 2026-10-14 15:51 Asia/Shanghai · 下一窗 BlazePath.offerPick（只钉一支 · 禁全族大扫）
+
 **裁决：** **PASS** · 2026-10-14 15:49 Asia/Shanghai · feat `d21666151` · menu tip `74f28d8e5` · tip/批 `093e5a641` · jar `1.65.845-d13352.local` · 证据 `/workspace/tmp/tip-du-spin-path/`  
-**范围：** offerPick / 无参 spinpath / 周要约 → 开 `ember_p1_spin_path`（**禁** ConfirmTokens 教 spinpath 为主 UI）· 薄页自动/提醒/静默/清空/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `spin_path_*` 诚实 · Q01 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_snap_path` / `ember_p1_veil_path` / `ember_p1_free_path` 及其他已齐 path · **零改** D575 旋光避旋「避旋」战斗钮语义 · **零**新建 `ember_p1_pace_path` · **≠**已齐选打同题复读 · **勿勾 tip CLOSED**（总控收口）
+**范围：** offerPick / 无参 spinpath / 周要约 → 开 `ember_p1_spin_path`（**禁** ConfirmTokens 教 spinpath 为主 UI）· 薄页自动/提醒/静默/清空/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `spin_path_*` 诚实 · Q01 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_snap_path` / `ember_p1_veil_path` / `ember_p1_free_path` 及其他已齐 path · **零改** D575 旋光避旋「避旋」战斗钮语义 · **零**新建 `ember_p1_pace_path` · **≠**已齐选打同题复读 · **CLOSED**（总控收口）
 
 ## 必验
 
@@ -20,11 +22,11 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **100**（含 `ember_p1_spin_path`）· jar sha256 `d5e0ad8d30d8…` plugins=server-runtime · MySQL connected · bv123
 - 单测 `EmberSpinPathPickTest` / `EmberSpinPathTest` / SnapPathPick / VeilPathPick / FreePathPick / DodgePathPick / SidestepPathPick / StepPathPick / FlexPathPick / StridePathPick / CounterPathPick / PledgePathPick / TrialPathPick / RunPapi 绿
-- 59/59 PASS · **tip 未勾 CLOSED**（总控收口）
+- 59/59 PASS · **tip CLOSED**（总控收口）
 - 选打主 UI = `ember_p1_spin_path`；未教裸 spinpath；D575 局内「避旋」战斗钮语义零改；未复读断链/避毒/解锢/闪榴/闪冲/身法/轻技/步态等选打；未建 pace_path
 
 ## 纪律确认
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · rot weekly_cap=3 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改伤害/CD表/掉落/体力价/snap_path/veil_path/free_path/dodge_path/sidestep_path/step_path/flex_path/stride_path/counter_path/pledge_path/trial_path/abyss·short·raid·featured·challenge path/variety/soft-reward · 零改 D575 旋光避旋战斗钮 · 零新建 pace_path · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `d21666151` · menu tip `74f28d8e5` · tip `093e5a641` · jar `1.65.845-d13352.local` · **勿勾 tip CLOSED**（总控收口）
+> **测岗抽测：** PASS live · feat `d21666151` · menu tip `74f28d8e5` · tip `093e5a641` · jar `1.65.845-d13352.local` · **CLOSED**（总控收口）

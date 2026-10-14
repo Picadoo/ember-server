@@ -2,10 +2,11 @@
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 15:51 Asia/Shanghai | 总控 CLOSED live · feat `d21666151` · tip `093e5a641` · menu `74f28d8e5` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · 证据 `/workspace/tmp/tip-du-spin-path/` · 2026-10-14 15:51 Asia/Shanghai · 下一窗：BlazePath.offerPick（只钉一支 · 禁全族大扫） · PacePath（本仓无）后置 / 挂机若新硬债 / legacy evacuate 后置 |
 | 2026-10-14 15:37 Asia/Shanghai | 总控批 A·M · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 spinpath/周要约→开 ember_p1_spin_path · 清 ConfirmTokens 教 spinpath 主 UI · 零改伤害/CD表/掉落/体力价 · ≠ snap_path / 已齐选打同题 · Blaze 后置 · 2026-10-14 15:37 Asia/Shanghai |
 | 2026-10-14 15:35 Asia/Shanghai | 初稿 STATUS=**待批 A** · 荐 M · TIP-DT CLOSED 后连开 · 拟 D13352 · TIP-DU |
 
-STATUS=**已批 A · 方案 M** · APPROVED A·M · D13352 · TIP-DU · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 15:37 Asia/Shanghai
+STATUS=**CLOSED live** · feat `d21666151` · tip `093e5a641` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · 批 sha `093e5a641` · menu tip `74f28d8e5` · 证据 `/workspace/tmp/tip-du-spin-path/` · 2026-10-14 15:51 Asia/Shanghai · 避旋路径选打菜单化同题勿再交 · APPROVED A·M `093e5a641` · feat `d21666151` · menu `74f28d8e5` · PASS `09e0e1e77` · jar `1.65.845-d13352.local`
 > tip [`STATUS-ember-next-hard-debt-spin-path-offer-pick-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-spin-path-offer-pick-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-spin-path-offer-pick-visible-2026-10-14.md`](RESEARCH-ember-spin-path-offer-pick-visible-2026-10-14.md) · backlog `B-spin-path-offer-pick-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬伤害/CD表/掉落/体力价 ≠断链路径选打同题 ≠避毒路径选打同题 ≠解锢路径选打同题 ≠闪榴路径选打同题 ≠闪冲路径选打同题 ≠身法路径选打同题 ≠轻技路径选打同题 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠步态路径选打同题 ≠已齐 settle 下一环同题 ≠短征settle回看同题 ≠D673同题复读 ≠variety再拧 ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠路径追同题 ≠日差同题 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠legacy abyss evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠Pace同窗 ≠Blaze同窗 ≠复开 D575 玩法本体 ≠L13 ≠灰烬/R ≠抬 AFK 表 ≠Affix 加密**
 
 > **一句话玩家价值：** 周选/改避旋路径一点开「避旋路径」——自动/提醒/静默/清空/技能组/冒险都能点；**不**抬伤害/CD表/掉落/体力价、**不**教手打指令、**不**复读已齐 settle/断链·避毒·解锢·闪榴·闪冲·身法·轻技·破绽·誓约·试炼·深渊·短征·团本·硬本·精选·步态选打同题、**不**扩成全族路径大扫、**不**改 D575 旋光光束避旋语义。
@@ -159,7 +160,8 @@ STATUS=**已批 A · 方案 M** · APPROVED A·M · D13352 · TIP-DU · 可施�
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 15:51 Asia/Shanghai | 总控 · **CLOSED live** · feat `d21666151` · tip `093e5a641` · menu `74f28d8e5` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · 证据 `/workspace/tmp/tip-du-spin-path/` · 下一窗 BlazePath.offerPick（只钉一支 · 禁全族大扫） |
 | 2026-10-14 15:37 Asia/Shanghai | 总控 · **批 A·M** · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 spinpath/周要约→开 ember_p1_spin_path · 清 ConfirmTokens 教 spinpath 主 UI · 零改伤害/CD表/掉落/体力价 · ≠ snap_path / 已齐选打同题 · Blaze 后置 · 半行 REJECT `d00ed84bc` 保持 |
 | 2026-10-14 15:35 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-DT CLOSED 后连开 · 选题 SpinPath.offerPick / applyAndReply 避旋路径选打菜单化 · 拟 D13352 · TIP-DU · ≠半行 ≠断链选打同题 ≠避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态选打同题 ≠已齐 settle 同题 ≠variety再拧 ≠庭内旁路 · **改题有证据**（挂机近饱和·gem gap未亮；短征薄债+选打已齐；settle CW–DD+DE–DT选打已齐；总控钉死 Spin；offerPick ConfirmTokens→spinpath；applyAndReply下一步仍聊天钮；无参/周要约/Q01；无 spin_path；局内旋光光束钮≠选打页；与刚 CLOSED Snap 同构；Blaze后置；见 RESEARCH） |
 
-*D13352 **已批 A · 方案 M** · APPROVED A·M · SpinPath.offerPick / applyAndReply 避旋路径选打菜单化 · TIP-DU。**可施工 W1a插件+W1b物品** · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 spinpath/周要约→开 ember_p1_spin_path · 清 ConfirmTokens 教 spinpath 主 UI · 零改伤害/CD表/掉落/体力价/避旋规则语义 · ≠ snap_path / 已齐选打同题 · Blaze 后置 · ≠半行 ≠已齐 settle/选打同题复读 ≠sx20 · 2026-10-14 15:37 Asia/Shanghai*
+*D13352 **CLOSED live** · feat `d21666151` · tip `093e5a641` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · 批 sha `093e5a641` · menu tip `74f28d8e5` · 证据 `/workspace/tmp/tip-du-spin-path/` · 2026-10-14 15:51 Asia/Shanghai · 避旋路径选打菜单化同题勿再交 · SpinPath.offerPick / applyAndReply 避旋路径选打菜单化 · TIP-DU · feat `d21666151` · menu `74f28d8e5` · PASS `09e0e1e77` · jar `1.65.845-d13352.local` · 批 `093e5a641` · 下一窗 BlazePath.offerPick（只钉一支 · 禁全族大扫） · 2026-10-14 15:51 Asia/Shanghai**可施工 W1a插件+W1b物品** · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 spinpath/周要约→开 ember_p1_spin_path · 清 ConfirmTokens 教 spinpath 主 UI · 零改伤害/CD表/掉落/体力价/避旋规则语义 · ≠ snap_path / 已齐选打同题 · Blaze 后置 · ≠半行 ≠已齐 settle/选打同题复读 ≠sx20 · 2026-10-14 15:37 Asia/Shanghai*

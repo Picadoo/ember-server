@@ -1,6 +1,6 @@
 # STATUS · TIP-DU W1a 避旋路径选打菜单化 · D13352
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip APPROVED `093e5a641` · 勿勾 tip CLOSED · 可派测/物品 W1b
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · tip CLOSED · feat `d21666151` · PASS `09e0e1e77` · jar `1.65.845-d13352.local` · menu `74f28d8e5` · 2026-10-14 15:51 Asia/Shanghai
 
 ## 交付
 - feat: `d21666151`
@@ -14,7 +14,7 @@
 - jar：`1.65.845-d13352.local` · sha256 `d5e0ad8d30d8…` · ECONOMY_BV **123** 未动
 - play：live `1.65.845-d13352.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / D575 旋光避旋语义(auto/ask/mute) / Cast·Aid / variety / 已齐 settle 薄页 / Snap·Veil·Free·Dodge·Sidestep·Step·Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Pace 同窗 / Blaze 同窗 / 庭内 / TrMenu yml（物品 W1b 并行）
-- tip **勿勾 CLOSED**（总控勾）
+- tip **CLOSED** · 总控收口 `09e0e1e77` / CLOSED commit pending · 2026-10-14 15:51 Asia/Shanghai
 
 ## 落点
 - `EmberSpinPath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine · 改路径薄页
@@ -31,4 +31,4 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_spin_path`）
 
 ## 下步
-- 可派测 · 物品 W1b 并行 · tip **勿勾 CLOSED** · 下一窗旁注 BlazePath.offerPick
+- 可派测 · 物品 W1b 并行 · tip **CLOSED** · 下一窗旁注 BlazePath.offerPick

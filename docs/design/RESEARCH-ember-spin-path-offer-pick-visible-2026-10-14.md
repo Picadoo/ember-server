@@ -1,6 +1,6 @@
 # RESEARCH · SpinPath.offerPick / applyAndReply「避旋路径选打」菜单化 · 拟 D13352 · TIP-DU
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13352 · TIP-DU · 可施工 · 勿勾 CLOSED · 2026-10-14 15:37 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `d21666151` · tip `093e5a641` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · 批 sha `093e5a641` · menu tip `74f28d8e5` · 证据 `/workspace/tmp/tip-du-spin-path/` · 2026-10-14 15:51 Asia/Shanghai · 避旋路径选打菜单化同题勿再交
 > **起因：** 总控【下一窗 TIP-DU · 只钉一支 · 禁全族大扫】。祖先 TIP-DT **CLOSED live** `3fe104477` · feat `b9d06e01a` · tip `f5cea1e1d` · menu `4070a04f7` · jar `1.65.844-d13351.local` · PASS `6f69cb256` · 证据 `/workspace/tmp/tip-dt-snap-path/`。**断链路径选打菜单化同题勿再交**。选题钉死：**SpinPath.offerPick**「避旋路径选打」菜单化 → TrMenu `ember_p1_spin_path`。总控实扫：offerPick ConfirmTokens→`spinpath auto|ask|mute|clear`；applyAndReply 下一步 ConfirmTokens→`/corerpg p1`/`spinpath`；glance 教手打；局内「旋光光束」战斗钮≠选打薄页；TrMenu **无** `ember_p1_spin_path`；与刚 CLOSED Snap 同构；DESIGN-DQ§6⑦ Snap 后下一位。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–DT 选打勿复；Blaze **后置**；禁全族 *Path.offerPick 大扫；半行 REJECT `d00ed84bc`；零抬伤害/CD表/掉落/体力价；零改 snap_path / veil_path 等已齐；勿勾 CLOSED。
 > **上游：** TIP-DT CLOSED live `3fe104477` · feat `b9d06e01a` · tip `f5cea1e1d` · PASS `6f69cb256` · jar `1.65.844-d13351.local` · 批 sha `f5cea1e1d` · menu tip `4070a04f7` · D13351
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · SpinPath.offerPick / applyAndReply 避旋路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DU / D13352 · 半行 REJECT `d00ed84bc` 保持 · Blaze 后置 · ancestor TIP-DT CLOSED `3fe104477` · 2026-10-14 15:37 Asia/Shanghai.**待批 A** · 荐 M · TIP-DU / D13352 · 半行 REJECT `d00ed84bc` 保持 · Blaze等剩支/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DT CLOSED `3fe104477` · 2026-10-14 15:35 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · SpinPath.offerPick / applyAndReply 避旋路径选打菜单化 · **CLOSED live** · feat `d21666151` · tip `093e5a641` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · 批 sha `093e5a641` · menu tip `74f28d8e5` · 证据 `/workspace/tmp/tip-du-spin-path/` · 2026-10-14 15:51 Asia/Shanghai · 避旋路径选打菜单化同题勿再交 · TIP-DU / D13352 · 下一窗 BlazePath.offerPick（只钉一支 · 禁全族大扫） · ancestor TIP-DT CLOSED `3fe104477` · 2026-10-14 15:51 Asia/Shanghai**已批 A · 方案 M** · APPROVED A·M · TIP-DU / D13352 · 半行 REJECT `d00ed84bc` 保持 · Blaze 后置 · ancestor TIP-DT CLOSED `3fe104477` · 2026-10-14 15:37 Asia/Shanghai.**待批 A** · 荐 M · TIP-DU / D13352 · 半行 REJECT `d00ed84bc` 保持 · Blaze等剩支/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DT CLOSED `3fe104477` · 2026-10-14 15:35 Asia/Shanghai · 勿勾 CLOSED.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13352 · TIP-DU · 2026-10-14 15:37 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `d21666151` · tip `093e5a641` · jar `1.65.845-d13352.local` · PASS `09e0e1e77` · 批 sha `093e5a641` · menu tip `74f28d8e5` · 证据 `/workspace/tmp/tip-du-spin-path/` · 2026-10-14 15:51 Asia/Shanghai · 避旋路径选打菜单化同题勿再交 · D13352 · TIP-DU · 2026-10-14 15:51 Asia/Shanghai
