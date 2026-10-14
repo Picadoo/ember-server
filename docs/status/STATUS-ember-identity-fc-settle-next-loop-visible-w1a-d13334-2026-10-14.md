@@ -1,6 +1,6 @@
 # STATUS · TIP-DC W1a 图身份首通结算「下一环」菜单化 · D13334
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · W1a 已交 · 勿勾 tip CLOSED · 批 A·M `0a92cb3c8`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `a0fcf6d66` · tip `0a92cb3c8` · 总控收口 2026-10-14 10:16 Asia/Shanghai
 
 ## 交付
 - `EmberSettleService` 图身份首通（firstClear + 有效 family / D673）：主钮 → `/ember_p1_identity_settle`（`EmberIdentitySettle.SETTLE_NEXT_LOOP_*`）；工坊 → `/ember_p1_forge`；装备 → `/ember_p1_gear`；remember settle 图/族/槽
@@ -25,4 +25,12 @@
 - balance_version 123 · sx20 · legacy evacuate · TrMenu yml（本窗未改）
 
 ## 下步
-- 物品 W1b 薄页已并行存在（`ember_p1_identity_settle.yml`）· 待测岗抽测 · 总控收口 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-DC spot）
+- **PASS** · 2026-10-14 10:16 Asia/Shanghai · 证据 `/workspace/tmp/tip-dc-identity-settle/` · 详 `STATUS-ember-identity-fc-settle-next-loop-tip-dc-spot-d13334-2026-10-14.md`
+- live jar `1.65.827-d13334.local` · feat `e1eb0f9b2` · tip `0a92cb3c8` · 批 `0a92cb3c8` · 图身份首通结算下一环菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `e1eb0f9b2` · 证据 `/workspace/tmp/tip-dc-identity-settle/` · STATUS `a0fcf6d66`
+- **CLOSED live**（总控收口）· tip `0a92cb3c8` · jar `1.65.827-d13334.local`

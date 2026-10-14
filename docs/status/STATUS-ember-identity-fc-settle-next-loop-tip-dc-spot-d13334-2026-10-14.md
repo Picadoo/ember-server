@@ -1,7 +1,7 @@
 # 状态 · TIP-DC 图身份首通结算「下一环」菜单化抽测
 
 **裁决：** **PASS** · feat `e1eb0f9b2` · menu `2241f0f90` · tip/批 `0a92cb3c8` · jar `1.65.827-d13334.local` · 证据 `/workspace/tmp/tip-dc-identity-settle/`  
-**范围：** 图身份 firstClear 结算主钮开 `ember_p1_identity_settle` · 薄页工坊 F / 装备 G / 冒险 A / 图装追 M 真开 · lore 图名+族+槽诚实 · PAPI `identity_settle_*` 诚实 · 主 UI 不教手打 `/corerpg p1 forge` · **零改**掉落/体力价/首通包 · **零碰**短征·团本·挑战·深渊 settle / variety/soft / D794 · tip **勿勾 CLOSED**（总控收口）
+**范围：** 图身份 firstClear 结算主钮开 `ember_p1_identity_settle` · 薄页工坊 F / 装备 G / 冒险 A / 图装追 M 真开 · lore 图名+族+槽诚实 · PAPI `identity_settle_*` 诚实 · 主 UI 不教手打 `/corerpg p1 forge` · **零改**掉落/体力价/首通包 · **零碰**短征·团本·挑战·深渊 settle / variety/soft / D794 · **勾毕 CLOSED live**（总控收口 · 2026-10-14 10:16 Asia/Shanghai）
 
 ## 必验
 
@@ -16,7 +16,7 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **83**（含 `ember_p1_identity_settle`）· jar sha256 `94d211372105…` plugins=server-runtime
 - 单测 `EmberIdentitySettleNextLoopTest` 5/0 · `EmberIdentitySettleTest` 5/0
-- 30/30 PASS · tip **勿勾 CLOSED**（总控收口）
+- 30/30 PASS · tip **勾毕 CLOSED live**（总控收口）
 - live 图身份 firstClear settle：本测 Q01 清房未在时限内击杀首领（倒塌 soft）；afterSettle 主钮由 unit D673 + remember + OpenCommand 薄页覆盖（同 TIP-DA/DB 范式）
 - rescored：`V1_afterSettle` 假阳性「图装下一环」已剔 · `V2_papi_*` 空扩诚实 + Open tell 接线
 
@@ -24,4 +24,4 @@
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · raid cost=50 · short target=5 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改掉落/体力价/首通包/短征薄页/团本薄页/挑战薄页/深渊薄页/variety/soft-reward/D794 · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `e1eb0f9b2` · menu `2241f0f90` · tip `0a92cb3c8` · jar `1.65.827-d13334.local` · **勿勾 CLOSED**（总控收口）· 2026-10-14 10:14 Asia/Shanghai
+> **测岗抽测：** PASS live · feat `e1eb0f9b2` · menu `2241f0f90` · tip `0a92cb3c8` · jar `1.65.827-d13334.local` · **CLOSED live**（总控收口）· 2026-10-14 10:16 Asia/Shanghai
