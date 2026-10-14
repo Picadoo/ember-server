@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EM CLOSED** live（D13370 续招路径选打齐 · feat `3f08561be` · tip `878ae0e5b` · jar `1.65.863-d13370.local` · PASS `63d809d45` · 批 sha `878ae0e5b` · menu tip `ec0cc64e1` · CLOSED `37b4c61be` · 证据 `/workspace/tmp/tip-em-sequel-path/` · **续招路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **SavePath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EM 选打勿复；PacePath（本仓无）后置；其它剩支 D595+（Nest…）后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `0151ff0cc` · 2026-10-14 21:27 Asia/Shanghai · 勿勾 CLOSED · 可施工
+**本窗性质：** tip thin · **CLOSED live** · feat `c06956c70` · tip `48eb81132` · menu `299bc3a51` · jar `1.65.864-d13371.local` · PASS `37c4e1387` · 2026-10-14 21:38 Asia/Shanghai · 终救路径选打菜单化同题勿再交 · 下一窗 NestPath.offerPick
 **硬规格：** [`DESIGN-ember-save-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-save-path-offer-pick-visible-2026-10-14.md) · backlog `B-save-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EM 已齐；终救**选打**仍 ConfirmTokens 教裸 savepath——总控钉死本支；内容闭环断在终救路径选打（≠续招选打；≠ settle 同题；局内终救钮≠选打页）。
 
@@ -61,9 +61,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-save-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-save-path-offer-pick-visible-thin-d13371-2026-10-14.md` |
 | backlog | `B-save-path-offer-pick-visible` |
-| 号段 | **D13371** · 字母窗 **TIP-EN** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `0151ff0cc` · 2026-10-14 21:27 Asia/Shanghai · 勿勾 CLOSED |
+| 号段 | **D13371** · 字母窗 **TIP-EN** · STATUS=**CLOSED live** · feat `c06956c70` · tip `48eb81132` · menu `299bc3a51` · jar `1.65.864-d13371.local` · PASS `37c4e1387` · 2026-10-14 21:38 Asia/Shanghai · 终救路径选打菜单化同题勿再交 · 下一窗 NestPath.offerPick |
 | 上游 | TIP-EM CLOSED live `37b4c61be` · feat `3f08561be` · tip `878ae0e5b` · PASS `63d809d45` · jar `1.65.863-d13370.local` · 批 sha `878ae0e5b` · menu tip `ec0cc64e1` · D13370；半行 REJECT `d00ed84bc` 保持否决；续招路径选打菜单化同题勿再交 |
 
-*选题 SavePath.offerPick / applyAndReply 终救路径选打菜单化 · tip **已批 A** · 方案 M · APPROVED A·M · tip `0151ff0cc` · 勿勾 CLOSED · L不批 · D13371 · TIP-EN · 半行 REJECT `d00ed84bc` **保持否决** · 其它剩支 D595+（Nest…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EM CLOSED `37b4c61be` · 2026-10-14 21:27 Asia/Shanghai.*
+*选题 SavePath.offerPick / applyAndReply 终救路径选打菜单化 · tip **CLOSED live** · feat `c06956c70` · tip `48eb81132` · menu `299bc3a51` · jar `1.65.864-d13371.local` · PASS `37c4e1387` · 终救路径选打菜单化同题勿再交 · 下一窗 NestPath.offerPick · L不批 · D13371 · TIP-EN · 半行 REJECT `d00ed84bc` **保持否决** · 本 telegraph 族 Nest=末支后 / PacePath（本仓无）/挂机若新硬债/legacy evacuate / 其它 ConfirmTokens *Path 逐支另窗 · ancestor TIP-EM CLOSED `37b4c61be` · 2026-10-14 21:38 Asia/Shanghai.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `0151ff0cc` · 勿勾 CLOSED · L不批 · D13371 · TIP-EN · 2026-10-14 21:27 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `c06956c70` · tip `48eb81132` · menu `299bc3a51` · jar `1.65.864-d13371.local` · PASS `37c4e1387` · D13371 · TIP-EN · 2026-10-14 21:38 Asia/Shanghai · 终救路径选打菜单化同题勿再交 · 下一窗 NestPath.offerPick

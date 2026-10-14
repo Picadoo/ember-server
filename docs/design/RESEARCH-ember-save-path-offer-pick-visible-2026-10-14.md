@@ -1,6 +1,6 @@
 # RESEARCH · SavePath.offerPick / applyAndReply「终救路径选打」菜单化 · 拟 D13371 · TIP-EN
 
-> **状态：** **待批 A** · 荐 M · 2026-10-14 21:20 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **CLOSED live** · feat `c06956c70` · tip `48eb81132` · menu `299bc3a51` · jar `1.65.864-d13371.local` · PASS `37c4e1387` · 2026-10-14 21:38 Asia/Shanghai · 终救路径选打菜单化同题勿再交 · 下一窗 NestPath.offerPick
 > **起因：** 总控【下一窗 TIP-EN · 只钉一支 · 禁全族大扫】。祖先 TIP-EM **CLOSED live** `37b4c61be` · feat `3f08561be` · tip `878ae0e5b` · menu `ec0cc64e1` · jar `1.65.863-d13370.local` · PASS `63d809d45` · 证据 `/workspace/tmp/tip-em-sequel-path/`。**续招路径选打菜单化同题勿再交**。选题钉死：**SavePath.offerPick**「终救路径选打」菜单化 → TrMenu `ember_p1_save_path`（拟 D13371 · TIP-EN · 玩法本体 D594 紧接 Sequel D593）。硬证：`EmberSavePath.offerPick` 仍 ConfirmTokens 教 savepath auto|ask|mute|clear；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内终救「靠拢」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_save_path.yml`；与刚 CLOSED Sequel 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EM 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁与其它 *Path 同窗；PacePath（本仓无）后置；legacy evacuate 后置；其它剩支 D595+（Nest…）后置（逐支另窗）；零抬伤害/CD表/掉落/体力价；零改 D594 终救语义本体；零改已齐 `ember_p1_sequel_path` 等；勿勾 CLOSED。
 > **上游：** TIP-EM CLOSED live `37b4c61be` · feat `3f08561be` · tip `878ae0e5b` · PASS `63d809d45` · jar `1.65.863-d13370.local` · 批 sha `878ae0e5b` · menu tip `ec0cc64e1` · D13370
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · SavePath.offerPick / applyAndReply 终救路径选打菜单化 · **待批 A** · 荐 M · TIP-EN / D13371 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D595+（Nest…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EM CLOSED `37b4c61be` · 2026-10-14 21:20 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · SavePath.offerPick 终救路径选打 · **CLOSED live** · feat `c06956c70` · tip `48eb81132` · menu `299bc3a51` · jar `1.65.864-d13371.local` · PASS `37c4e1387` · 下一窗 NestPath.offerPick · 2026-10-14 21:38 Asia/Shanghai**待批 A** · 荐 M · TIP-EN / D13371 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D595+（Nest…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EM CLOSED `37b4c61be` · 2026-10-14 21:20 Asia/Shanghai · 勿勾 CLOSED.*
 
 ## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13371 · TIP-EN · 2026-10-14 21:20 Asia/Shanghai
