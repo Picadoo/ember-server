@@ -1,7 +1,7 @@
 # 状态 · TIP-CY 短征花样结算回看抽测
 
 **裁决：** **PASS** · feat `e5cb2ddd6` · menu `a1f5a2537` · tip/批 `afeb9a210` · jar `1.65.823-d13330.local` · 证据 `/workspace/tmp/tip-cy-variety-settle/`  
-**范围：** 有奖/无奖 settle 后薄页 V「本局花样」有 hit 亮 affix/event · 无 hit 灰「本局无花样」· PAPI `short_var_hit/_affix_label/_event_label/_line` 诚实 · 关菜单再开仍见上一局直至下次 settle 覆盖 · E/S/P/F 再进/选页/路径/工坊未坏 · **零发** event_core/affix_shard/NI · **零改** rate/kind/yaml/soft-reward/日帽/targets · tip **勿勾 CLOSED**（总控收口）
+**范围：** 有奖/无奖 settle 后薄页 V「本局花样」有 hit 亮 affix/event · 无 hit 灰「本局无花样」· PAPI `short_var_hit/_affix_label/_event_label/_line` 诚实 · 关菜单再开仍见上一局直至下次 settle 覆盖 · E/S/P/F 再进/选页/路径/工坊未坏 · **零发** event_core/affix_shard/NI · **零改** rate/kind/yaml/soft-reward/日帽/targets · **勾毕 CLOSED live**（总控收口 · 2026-10-14 08:36 Asia/Shanghai）
 
 ## 必验
 
@@ -16,7 +16,7 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **79** reload · jar sha256 `62cc4277282b…` plugins=server-runtime
 - 单测 `EmberShortVarietySettleTest` 8/0 · `EmberRunPapiTest` 5/0
-- 30/30 PASS · tip **未勾 CLOSED**（总控收口）
+- 30/30 PASS · tip **勾毕 CLOSED live**（总控收口）
 - 对照 TIP-CP：短征 settle 仍不调 varietyGrants；本票只加 settle 记忆 + V 回看
 - 对照 TIP-CW：E/S/P/F 主弧未拧；Layout 仅增 V
 
@@ -24,4 +24,4 @@
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · short target=5 · daycap=3 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改 event_rate/event_core/affix_shard/variety yaml/soft-reward/日帽/targets/Cast/Aid/ShortPath · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `e5cb2ddd6` · menu `a1f5a2537` · tip `afeb9a210` · jar `1.65.823-d13330.local` · **勿勾 CLOSED** · 2026-10-14 08:34 Asia/Shanghai
+> **测岗抽测：** PASS live · feat `e5cb2ddd6` · menu `a1f5a2537` · tip `afeb9a210` · jar `1.65.823-d13330.local` · **CLOSED live**（总控收口）· 2026-10-14 08:36 Asia/Shanghai

@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13330 · 短征花样结算回看 · 真可点/菜单可感 · docs-only · ≠soft-reward同题 · ≠variety再拧 · ≠完整variety经济 · ≠settle下一环同题 · ≠路径追同题 · ≠日差本同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬日表 · ≠抬 event_core · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧）
 
-> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 08:16 Asia/Shanghai · 全弧非 L · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L 不批 · 零经济 · 零改率 · 零新 variety kind）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-short-variety-settle-review-2026-10-14.md`](../design/DESIGN-ember-short-variety-settle-review-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-variety-settle-review-2026-10-14.md`](../design/RESEARCH-ember-short-variety-settle-review-2026-10-14.md) · backlog `B-short-variety-settle-review` · **TIP-CY** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠soft-reward同题 ≠settle下一环同题 ≠完整variety经济 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬 event_core**。
+> **旁注（勾毕 · CLOSED live · feat `e5cb2ddd6` · tip `a1f5a2537` · PASS `176e2fe03` · jar `1.65.823-d13330.local` · 批 sha `afeb9a210` · 2026-10-14 08:36 Asia/Shanghai · 短征花样结算回看同题勿再交）：** tip **CLOSED live** · DESIGN [`DESIGN-ember-short-variety-settle-review-2026-10-14.md`](../design/DESIGN-ember-short-variety-settle-review-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-variety-settle-review-2026-10-14.md`](../design/RESEARCH-ember-short-variety-settle-review-2026-10-14.md) · backlog `B-short-variety-settle-review` · **TIP-CY** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠soft-reward同题 ≠settle下一环同题 ≠完整variety经济 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬 event_core**。
 
 > **上游结案：** **TIP-CX CLOSED** live `934fc0fe2`（D13329 短征日差软目标极薄有奖齐 · feat `1b93bc6b4` · tip `0749d92c7` · jar `1.65.822-d13329.local` · PASS `ed440e0e1` · 批 sha `e469ba35e` · **soft-reward 同题勿再交**）。总控派 TIP-CY：内容优先拉长在线；短征再一趣味薄窗优先；庭内旁路近饱和默认勿交；宝石/Cast·Aid·variety完整经济/节·灾厄/sx20/全服settle去指令化仍缓。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内全弧+今日推/冲一下/周短征/三冲+日差本可冲+路径追+settle下一环+soft-reward **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13330 · TIP-CY · 全弧非 L · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L 不批 · 零经济 · 零改率 · 零新 variety kind · 2026-10-14 08:16 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `e5cb2ddd6` · tip `a1f5a2537` · PASS `176e2fe03` · jar `1.65.823-d13330.local` · D13330 · TIP-CY · 2026-10-14 08:36 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-short-variety-settle-review-2026-10-14.md`](../design/DESIGN-ember-short-variety-settle-review-2026-10-14.md) · backlog `B-short-variety-settle-review`
 **打开理由：** 短征轻量 variety 房内 cue 已齐（D13321），但结算薄页/记忆 **零回看**——D13321/28/29§6③ 明文后置「短征花样结算回看」；本局词缀/事件打完即丢，日更乐趣断在「打完看不见本局花样」。
 
@@ -79,4 +79,4 @@
 
 ---
 
-*STATUS · 短征花样结算回看 · **已批 A · 方案 M** · APPROVED A·M · TIP-CY / 拟 D13330 · 全弧非 L · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L 不批 · 零经济 · 零改率 · 零新 variety kind · 2026-10-14 08:16 Asia/Shanghai。*
+*选题短征花样结算回看 · tip **CLOSED live** · `e5cb2ddd6` / `a1f5a2537` · PASS `176e2fe03` · D13330 · TIP-CY · 半行 REJECT `d00ed84bc` **保持否决** · 短征花样结算回看同题勿再交。*
