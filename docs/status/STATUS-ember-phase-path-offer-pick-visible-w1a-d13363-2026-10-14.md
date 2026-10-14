@@ -1,9 +1,9 @@
 # STATUS · TIP-EF W1a 半血路径选打菜单化 · D13363
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `PENDING` · jar `1.65.856-d13363.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `8393246107a8034e02b6a955badfffa98a6942e9` · jar `1.65.856-d13363.local`
 
 ## 交付
-- feat: `PENDING`（commit 后回填）
+- feat: `8393246107a8034e02b6a955badfffa98a6942e9`
 - `EmberPhasePath.offerPick` →开 `/ember_p1_phase_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `phasepath` 为主 UI
 - 无参 `/corerpg p1 phasepath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_phase_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `phasepath` ConfirmTokens 为主 UI

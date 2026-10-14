@@ -39,4 +39,4 @@
 - [ ] 物品交薄 phase_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 wave_path·零已齐选打同题复读·零改 D586 半血语义）
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · D13363 · TIP-EF · 2026-10-14 19:01 Asia/Shanghai · **W1a 插件已交**（feat  · jar `1.65.856-d13363.local`）· 勿勾 CLOSED · 可派测/物品 W1b
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · D13363 · TIP-EF · 2026-10-14 19:01 Asia/Shanghai · **W1a 插件已交**（feat `839324610` · jar `1.65.856-d13363.local`）· 勿勾 CLOSED · 可派测/物品 W1b
