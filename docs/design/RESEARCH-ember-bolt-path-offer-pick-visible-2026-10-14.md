@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · BoltPath.offerPick / applyAndReply 闪线路径选打菜单化 · **待批 A** · 荐 M · TIP-EI / D13366 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D590+（Crash…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EH CLOSED `e4bccf93b` · 2026-10-14 19:48 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · BoltPath.offerPick 闪线路径选打 · **CLOSED live** · feat `cb970b73c` · PASS `5699e0ace` · 下一窗 CrashPath.offerPick · 2026-10-14 20:02 Asia/Shanghai**待批 A** · 荐 M · TIP-EI / D13366 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D590+（Crash…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EH CLOSED `e4bccf93b` · 2026-10-14 19:48 Asia/Shanghai · 勿勾 CLOSED.*
 
 ## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13366 · TIP-EI · 2026-10-14 19:48 Asia/Shanghai

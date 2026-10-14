@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EH CLOSED** live（D13365 侧安路径选打齐 · feat `65ae19a37` · tip `b42ce4a52` · jar `1.65.858-d13365.local` · PASS `cff0d78d0` · 批 sha `b42ce4a52` · menu tip `f2c690343` · CLOSED `e4bccf93b` · 证据 `/workspace/tmp/tip-eh-shift-path/` · **侧安路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **BoltPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EH 选打勿复；PacePath（本仓无）后置；其它剩支 D590+（Crash…）后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `b38e143b4` · 2026-10-14 19:50 Asia/Shanghai · 勿勾 CLOSED · 可施工
+**本窗性质：** tip thin · **CLOSED live** · feat `cb970b73c` · tip `6d6be8c54` · menu `8638c526f` · jar `1.65.859-d13366.local` · PASS `5699e0ace` · 2026-10-14 20:02 Asia/Shanghai · 下一窗 CrashPath.offerPick
 **硬规格：** [`DESIGN-ember-bolt-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-bolt-path-offer-pick-visible-2026-10-14.md) · backlog `B-bolt-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EH 已齐；闪线**选打**仍 ConfirmTokens 教裸 boltpath——总控钉死本支；内容闭环断在闪线路径选打（≠侧安选打；≠ settle 同题；局内闪线钮≠选打页）。
 
@@ -61,7 +61,7 @@
 | RESEARCH | `docs/design/RESEARCH-ember-bolt-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-14.md` |
 | backlog | `B-bolt-path-offer-pick-visible` |
-| 号段 | **D13366** · 字母窗 **TIP-EI** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `b38e143b4` · 2026-10-14 19:50 Asia/Shanghai · 勿勾 CLOSED
+| 号段 | **D13366** · 字母窗 **TIP-EI** · STATUS=**CLOSED live** · feat `cb970b73c` · tip `6d6be8c54` · menu `8638c526f` · jar `1.65.859-d13366.local` · PASS `5699e0ace` · 2026-10-14 20:02 Asia/Shanghai
 | 上游 | TIP-EH CLOSED live `e4bccf93b` · feat `65ae19a37` · tip `b42ce4a52` · PASS `cff0d78d0` · jar `1.65.858-d13365.local` · 批 sha `b42ce4a52` · menu tip `f2c690343` · D13365；半行 REJECT `d00ed84bc` 保持否决；侧安路径选打菜单化同题勿再交 |
 
 *选题 BoltPath.offerPick / applyAndReply 闪线路径选打菜单化 · tip **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13366 · TIP-EI · 半行 REJECT `d00ed84bc` **保持否决** · 其它剩支 D590+（Crash…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EH CLOSED `e4bccf93b` · 2026-10-14 19:48 Asia/Shanghai.*
