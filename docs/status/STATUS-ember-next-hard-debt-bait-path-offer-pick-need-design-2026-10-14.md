@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EK CLOSED** live（D13368 闪招路径选打齐 · feat `606eea48f` · tip `5119931a6` · jar `1.65.861-d13368.local` · PASS `e7648a86e` · 批 sha `5119931a6` · menu tip `dbd986adb` · CLOSED `4e4a8b979` · 证据 `/workspace/tmp/tip-ek-slip-path/` · **闪招路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **BaitPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EK 选打勿复；PacePath（本仓无）后置；其它剩支 D593+（Sequel…）后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip thin · **待批 A** · 荐 M · docs-only · 勿勾 CLOSED
+**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `82c607ebc` · 2026-10-14 20:43 Asia/Shanghai · 勿勾 CLOSED · 可施工
 **硬规格：** [`DESIGN-ember-bait-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-bait-path-offer-pick-visible-2026-10-14.md) · backlog `B-bait-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EK 已齐；诱空**选打**仍 ConfirmTokens 教裸 baitpath——总控钉死本支；内容闭环断在诱空路径选打（≠闪招选打；≠ settle 同题；局内诱空钮≠选打页）。
 
@@ -59,11 +59,11 @@
 | tip（本文件） | `docs/status/STATUS-ember-next-hard-debt-bait-path-offer-pick-need-design-2026-10-14.md` |
 | DESIGN | `docs/design/DESIGN-ember-bait-path-offer-pick-visible-2026-10-14.md` |
 | RESEARCH | `docs/design/RESEARCH-ember-bait-path-offer-pick-visible-2026-10-14.md` |
-| 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-14.md` |
+| 薄 tip | `docs/tips/TIP-ember-bait-path-offer-pick-visible-thin-d13369-2026-10-14.md` |
 | backlog | `B-bait-path-offer-pick-visible` |
-| 号段 | **D13369** · 字母窗 **TIP-EL** · STATUS=**待批 A** · 荐 M |
+| 号段 | **D13369** · 字母窗 **TIP-EL** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `82c607ebc` · 2026-10-14 20:43 Asia/Shanghai · 勿勾 CLOSED |
 | 上游 | TIP-EK CLOSED live `4e4a8b979` · feat `606eea48f` · tip `5119931a6` · PASS `e7648a86e` · jar `1.65.861-d13368.local` · 批 sha `5119931a6` · menu tip `dbd986adb` · D13368；半行 REJECT `d00ed84bc` 保持否决；闪招路径选打菜单化同题勿再交 |
 
-*选题 BaitPath.offerPick / applyAndReply 诱空路径选打菜单化 · tip **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13369 · TIP-EL · 半行 REJECT `d00ed84bc` **保持否决** · 其它剩支 D593+（Sequel…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EK CLOSED `4e4a8b979` · 2026-10-14 20:41 Asia/Shanghai.*
+*选题 BaitPath.offerPick / applyAndReply 诱空路径选打菜单化 · tip **已批 A** · 方案 M · APPROVED A·M · tip `82c607ebc` · 勿勾 CLOSED · L不批 · D13369 · TIP-EL · 半行 REJECT `d00ed84bc` **保持否决** · 其它剩支 D593+（Sequel…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EK CLOSED `4e4a8b979` · 2026-10-14 20:43 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13369 · TIP-EL · 2026-10-14 20:41 Asia/Shanghai
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `82c607ebc` · 勿勾 CLOSED · L不批 · D13369 · TIP-EL · 2026-10-14 20:43 Asia/Shanghai
