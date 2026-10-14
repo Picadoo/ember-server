@@ -2,9 +2,10 @@
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 15:03 Asia/Shanghai | 总控批 A·M · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 veilpath/周要约→开 ember_p1_veil_path · 清 ConfirmTokens 教 veilpath 主 UI · 零改伤害/CD表/掉落/体力价 · ≠ free_path / 已齐选打同题 · Snap/Spin/Blaze 后置 · 2026-10-14 15:03 Asia/Shanghai |
 | 2026-10-14 15:01 Asia/Shanghai | 初稿 STATUS=**待批 A** · 荐 M · TIP-DR CLOSED 后连开 · 拟 D13350 · TIP-DS |
 
-STATUS=**待批 A** · 荐 M · 2026-10-14 15:01 Asia/Shanghai · 勿勾 CLOSED
+STATUS=**已批 A · 方案 M** · APPROVED A·M · D13350 · TIP-DS · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 15:03 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-veil-path-offer-pick-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-veil-path-offer-pick-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-veil-path-offer-pick-visible-2026-10-14.md`](RESEARCH-ember-veil-path-offer-pick-visible-2026-10-14.md) · backlog `B-veil-path-offer-pick-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬伤害/CD表/掉落/体力价 ≠解锢路径选打同题 ≠闪榴路径选打同题 ≠闪冲路径选打同题 ≠身法路径选打同题 ≠轻技路径选打同题 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠步态路径选打同题 ≠已齐 settle 下一环同题 ≠短征settle回看同题 ≠D673同题复读 ≠variety再拧 ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠路径追同题 ≠日差同题 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠legacy abyss evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠Pace同窗 ≠Snap/Spin/Blaze同窗 ≠复开 D573 玩法本体 ≠L13 ≠灰烬/R ≠抬 AFK 表 ≠Affix 加密**
 
 > **一句话玩家价值：** 周选/改避毒路径一点开「避毒路径」——自动/提醒/静默/清空/技能组/冒险都能点；**不**抬伤害/CD表/掉落/体力价、**不**教手打指令、**不**复读已齐 settle/解锢·闪榴·闪冲·身法·轻技·破绽·誓约·试炼·深渊·短征·团本·硬本·精选·步态选打同题、**不**扩成全族路径大扫、**不**改 D573 毒十字避毒语义。
@@ -71,11 +72,10 @@ STATUS=**待批 A** · 荐 M · 2026-10-14 15:01 Asia/Shanghai · 勿勾 CLOSED
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 插件改 offerPick + applyAndReply + 无参 veilpath + 周要约必做；W1b 薄选打页必做；W1c 清裸指令主路径同批；见 §3）
+- [x] **方案 M**（W1a 插件改 offerPick + applyAndReply + 无参 veilpath + 周要约必做；W1b 薄选打页必做；W1c 清裸指令主路径同批；见 §3）
 - [ ] 或勾 **方案 L**（仅改单钮命令；薄页后置）· **本窗不批 L**
-- [ ] 否决 A（只半行）/ W（抬表/sx20/已齐同题/庭内/全族大扫/Pace同窗）
-- [ ] 批注：
-
+- [x] 否决 A（只半行）/ W（抬表/sx20/已齐同题/庭内/全族大扫/Pace同窗/Snap同窗）
+- [x] 批注：总控批 A·M · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 veilpath/周要约→开 ember_p1_veil_path · 清 ConfirmTokens 教 veilpath 主 UI · 零改伤害/CD表/掉落/体力价 · ≠ free_path / 已齐选打同题 · Snap/Spin/Blaze 后置 · 2026-10-14 15:03 Asia/Shanghai
 ---
 
 ## 3. 可落地（方案 M）
@@ -158,6 +158,7 @@ STATUS=**待批 A** · 荐 M · 2026-10-14 15:01 Asia/Shanghai · 勿勾 CLOSED
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 15:03 Asia/Shanghai | 总控 · **批 A·M** · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 veilpath/周要约→开 ember_p1_veil_path · 清 ConfirmTokens 教 veilpath 主 UI · 零改伤害/CD表/掉落/体力价 · ≠ free_path / 已齐选打同题 · Snap/Spin/Blaze 后置 · 半行 REJECT `d00ed84bc` 保持 |
 | 2026-10-14 15:01 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-DR CLOSED 后连开 · 选题 VeilPath.offerPick / applyAndReply 避毒路径选打菜单化 · 拟 D13350 · TIP-DS · ≠半行 ≠解锢选打同题 ≠闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态选打同题 ≠已齐 settle 同题 ≠variety再拧 ≠庭内旁路 · **改题有证据**（挂机近饱和·gem gap未亮；短征薄债+选打已齐；settle CW–DD+DE–DR选打已齐；总控钉死 Veil；offerPick ConfirmTokens→veilpath；applyAndReply下一步仍聊天钮；无参/周要约/Q01；无 veil_path；局内毒十字钮≠选打页；与刚 CLOSED Free 同构；Snap/Spin/Blaze后置；见 RESEARCH） |
 
-*D13350 **待批 A** · 荐 M · VeilPath.offerPick / applyAndReply 避毒路径选打菜单化 · TIP-DS · 半行 REJECT `d00ed84bc` 保持 · Snap/Spin/Blaze 后置 · ancestor TIP-DR CLOSED `8d35ba6d7` · 2026-10-14 15:01 Asia/Shanghai*
+*D13350 **已批 A · 方案 M** · APPROVED A·M · VeilPath.offerPick / applyAndReply 避毒路径选打菜单化 · TIP-DS。**可施工 W1a插件+W1b物品** · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 veilpath/周要约→开 ember_p1_veil_path · 清 ConfirmTokens 教 veilpath 主 UI · 零改伤害/CD表/掉落/体力价/避毒规则语义 · ≠ free_path / 已齐选打同题 · Snap/Spin/Blaze 后置 · ≠半行 ≠已齐 settle/选打同题复读 ≠sx20 · 2026-10-14 15:03 Asia/Shanghai*
