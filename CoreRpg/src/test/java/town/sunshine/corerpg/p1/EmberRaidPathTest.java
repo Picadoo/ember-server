@@ -11,5 +11,7 @@ public class EmberRaidPathTest {
         assertTrue(EmberRaidPath.tip(EmberRaidPath.R01).contains("撞墙"));
         assertTrue(EmberRaidPath.enterCmd(EmberRaidPath.R03).contains("r03"));
         assertTrue(EmberRaidPath.glance(EmberRaidPath.R02, true).contains("R02"));
+        assertTrue(EmberRaidPath.glance(EmberRaidPath.NONE, true).contains("点下一环"));
+        assertFalse(EmberRaidPath.glance(EmberRaidPath.NONE, true).contains("/corerpg p1 raidpath"));
     }
 }

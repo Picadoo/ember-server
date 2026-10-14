@@ -198,7 +198,7 @@ public final class EmberRaidService {
                     new String[]{"[开本]", "/corerpg p1 enter " + rm.key, "队长点：全队需各自首进或首通 Q07，3～5 人", "GOLD"});
     }
 
-    /** P2-5 %corerpg_p1_raid_&lt;key&gt;% */
+    /** P2-5 %corerpg_p1_raid_&lt;key&gt;% · TIP-CZ D13331 raid_settle_* / raid_path* */
     String papi(PlayerData d, String raidKey) {
         if ("hope".equals(raidKey)) { // D625 %corerpg_p1_raid_hope%
             EmberRunMaps.MapDef pick = null;
@@ -211,8 +211,37 @@ public final class EmberRaidService {
             int used = week(d, pick);
             return EmberHopeMeter.raidHope(used, pick.weeklyCap);
         }
+        if ("path".equals(raidKey)) return String.valueOf(EmberRaidPath.get(d)); // TIP-CZ
+        if ("path_label".equals(raidKey)) return EmberRaidPath.label(EmberRaidPath.get(d));
+        if ("settle".equals(raidKey) || (raidKey != null && raidKey.startsWith("settle_")))
+            return settlePapi(d, raidKey);
         EmberRunMaps.MapDef rm = runs.maps().raids.get(raidKey);
         return rm == null ? "" : label(d, rm);
+    }
+
+    /** TIP-CZ D13331 %corerpg_p1_raid_settle*% — path map + week leftover; zero economy. */
+    private String settlePapi(PlayerData d, String key) {
+        int path = EmberRaidPath.get(d);
+        String mk = EmberRaidSettle.settleMap(d);
+        EmberRunMaps.MapDef pathMap = mk.isEmpty() ? null : runs.maps().raids.get(mk);
+        // week counter is shared via cap_group; prefer path map, else any raid with weeklyCap
+        EmberRunMaps.MapDef capMap = pathMap;
+        if (capMap == null || capMap.weeklyCap <= 0) {
+            for (EmberRunMaps.MapDef m : runs.maps().raids.values()) {
+                if (m != null && m.weeklyCap > 0) { capMap = m; break; }
+            }
+        }
+        int used = 0, cap = 0;
+        if (capMap != null && capMap.weeklyCap > 0) {
+            used = week(d, capMap);
+            cap = capMap.weeklyCap;
+        }
+        if ("settle".equals(key) || "settle_map".equals(key)) return mk;
+        if ("settle_name".equals(key)) return EmberRaidSettle.displayName(pathMap, mk, path);
+        if ("settle_week_left".equals(key)) return String.valueOf(EmberRaidSettle.weekLeft(used, cap));
+        if ("settle_week_line".equals(key)) return EmberRaidSettle.weekLine(used, cap);
+        if ("settle_reenter_grey".equals(key)) return EmberRaidSettle.reenterGrey(used, cap) ? "1" : "0";
+        return "";
     }
 
     // ------------------------------------------------------------------ D106 raid falls: watch a teammate, revive later

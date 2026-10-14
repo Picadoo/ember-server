@@ -7,6 +7,7 @@ import town.sunshine.corerpg.PlayerData;
 
 /**
  * D657: raid weekly-clear acquisition feel after raid_mark lands.
+ * TIP-CZ D13331: 下一环开薄页 /ember_p1_raid_settle；禁教手打 raidpath|recruit 主 UI。
  * Zero weeklyCap / stamina / loot math change. Not a PAPI meter twin.
  */
 public final class EmberRaidLoop {
@@ -33,29 +34,24 @@ public final class EmberRaidLoop {
                     + " §8（周一 0 点重置）");
             try { p.sendActionBar("§d团本周额度满 · §f" + used + "/" + cap); } catch (Throwable ignored) { }
             p.sendMessage(P + EmberRaidPath.glance(EmberRaidPath.get(d), true)); // D758
+            // TIP-CZ D13331: 满额仍进薄页；禁教手打 raidpath
             ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                    new String[]{"[冒险页]", "/ember_p1_adventure", "主线/挑战/深渊", "GREEN"},
-                    EmberForgeCommitNext.enhance(),
-                    new String[]{"[换团本路径]", "/corerpg p1 raidpath", "下周焦点", "AQUA"});
+                    new String[]{EmberRaidSettle.SETTLE_NEXT_LOOP_LABEL, EmberRaidSettle.SETTLE_NEXT_LOOP_CMD,
+                            "路径/冒险/工坊 · 再进灰", "GREEN"},
+                    new String[]{"[冒险页]", EmberRaidSettle.SETTLE_ADVENTURE_CMD, "主线/挑战/深渊", "AQUA"},
+                    new String[]{"[工坊]", EmberRaidSettle.SETTLE_FORGE_CMD, "花团本料", "GOLD"});
         } else {
             String line = "§d团本入账 · §f" + name + " §7本周 §e" + used + "/" + cap
                     + (firstClear ? " §a· 首通" : "")
                     + (used == cap - 1 ? " §e· 下周额度前最后 1 次" : ""); // D810
             try { p.sendActionBar(line); } catch (Throwable ignored) { }
             p.sendMessage(P + line + " §8（通关才扣周次数）");
-            // D807 next-loop while week cap remains
-            int path = EmberRaidPath.get(d);
-            if (EmberRaidPath.valid(path)) {
-                ConfirmTokens.sendButtons(p, P + "§7团本下一环：",
-                        new String[]{EmberRaidPath.enterLabel(path), EmberRaidPath.enterCmd(path),
-                                "再开路径团本 · 剩 " + (cap - used) + " 次", "GREEN"},
-                        new String[]{"[招募]", "/corerpg p1 recruit " + EmberRaidPath.mapKey(path), "凑人", "GOLD"},
-                        new String[]{"[换路径]", "/corerpg p1 raidpath", "改焦点", "GRAY"});
-            } else {
-                ConfirmTokens.sendButtons(p, P + "§7团本下一环：",
-                        new String[]{"[选团本路径]", "/corerpg p1 raidpath", "定本周焦点", "AQUA"},
-                        new String[]{"[冒险页]", "/ember_p1_adventure", "换内容", "GREEN"});
-            }
+            // TIP-CZ D13331: 未满也进薄页；禁教手打 raidpath|recruit 主 UI
+            int left = cap - used;
+            ConfirmTokens.sendButtons(p, P + "§7团本下一环：",
+                    new String[]{EmberRaidSettle.SETTLE_NEXT_LOOP_LABEL, EmberRaidSettle.SETTLE_NEXT_LOOP_CMD,
+                            "再进/路径/冒险/工坊 · 剩 " + left + " 次", "GREEN"},
+                    new String[]{"[冒险页]", EmberRaidSettle.SETTLE_ADVENTURE_CMD, "换内容", "AQUA"});
         }
         EmberRaidPath.afterClearHit(p, d, m.key); // D752
     }

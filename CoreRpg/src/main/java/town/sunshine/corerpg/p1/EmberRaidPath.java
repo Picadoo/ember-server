@@ -12,7 +12,8 @@ import town.sunshine.corerpg.PlayerData;
 
 /**
  * D483: weekly raid focus path — R01 / R02 / R03.
- * Real combat + loot-family choice (名片 + raid_item fallback family); chat buttons only.
+ * Real combat + loot-family choice (名片 + raid_item fallback family).
+ * TIP-CZ D13331: glance/offer/下一环菜单优先（/ember_p1_raid_settle）；禁教手打 raidpath 主 UI.
  * Zero raid HP/dmg/cap / AFK / sx change.
  */
 public final class EmberRaidPath {
@@ -79,7 +80,7 @@ public final class EmberRaidPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8团本路径：首通 Q07 后可选";
-        if (!valid(id)) return "§8团本路径：未选 · /corerpg p1 raidpath";
+        if (!valid(id)) return "§8团本路径：未选 · 点下一环选路径";
         return "§e团本路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -99,11 +100,11 @@ public final class EmberRaidPath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选本周团本焦点（名片+掉落族 · 可随时改 · 不改团本数值/周帽）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[R01 锈轨]", "/corerpg p1 raidpath r01", tip(R01), "GOLD"},
-                new String[]{"[R02 霜封]", "/corerpg p1 raidpath r02", tip(R02), "AQUA"},
-                new String[]{"[R03 断塔]", "/corerpg p1 raidpath r03", tip(R03), "RED"},
-                new String[]{"[取消]", "/corerpg p1 raidpath clear", "清空焦点", "GRAY"});
+        // TIP-CZ D13331: 开薄页点选；禁教手打 raidpath 主 UI
+        ConfirmTokens.sendButtons(p, P + "§7团本路径：",
+                new String[]{EmberRaidSettle.SETTLE_NEXT_LOOP_LABEL, EmberRaidSettle.SETTLE_NEXT_LOOP_CMD,
+                        "薄页点选 R01/R02/R03", "AQUA"},
+                new String[]{"[冒险页]", EmberRaidSettle.SETTLE_ADVENTURE_CMD, "换内容", "GREEN"});
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -166,10 +167,12 @@ public final class EmberRaidPath {
         try {
             p.sendActionBar("§e团本路径 · §f" + label(id) + weekLine);
         } catch (Throwable ignored) { }
+        // TIP-CZ D13331: 主钮开薄页；可保留再进；禁教手打 raidpath|recruit 主 UI
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{enterLabel(id), enterCmd(id), "开团本（3～5 人 · 共享周帽）", "GREEN"},
-                new String[]{"[招募]", "/corerpg p1 recruit " + mapKey(id), "发招募", "GOLD"},
-                new String[]{"[换一条]", "/corerpg p1 raidpath", "重选", "GRAY"});
+                new String[]{EmberRaidSettle.SETTLE_NEXT_LOOP_LABEL, EmberRaidSettle.SETTLE_NEXT_LOOP_CMD,
+                        "再进/路径/冒险/工坊", "GREEN"},
+                new String[]{enterLabel(id), enterCmd(id), "开路径团本（3～5 人 · 共享周帽）", "AQUA"},
+                new String[]{"[工坊]", EmberRaidSettle.SETTLE_FORGE_CMD, "花团本料", "GOLD"});
     }
 
 
@@ -178,8 +181,8 @@ public final class EmberRaidPath {
         if (p == null || d == null || mapKey == null) return;
         int id = get(d);
         if (!valid(id)) {
-            p.sendMessage(EmberRunService.P + "§7未选团本路径 · /corerpg p1 raidpath");
-            offerPick(p); // D814
+            p.sendMessage(EmberRunService.P + "§7未选团本路径 · 点下一环选路径"); // TIP-CZ D13331 禁教手打
+            offerPick(p); // D814 → 薄页
             return;
         }
         String mk = mapKey(id);
@@ -217,10 +220,12 @@ public final class EmberRaidPath {
             if (m != null && m.weeklyCap > 0) {
                 int used = EmberRaidService.weekCount(d, m, week);
                 if (used < m.weeklyCap) {
+                    // TIP-CZ D13331: 路径达成下一环开薄页；禁教手打 forge/setchase/raidpath 主 UI
                     ConfirmTokens.sendButtons(p, EmberRunService.P + "§7路径团本再开：", // D897
-                            new String[]{enterLabel(id), enterCmd(id), "剩 " + (m.weeklyCap - used) + " 次", "GREEN"},
-                            new String[]{"[工坊]", "/corerpg p1 forge", "花团本料", "GOLD"},
-                            new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "AQUA"});
+                            new String[]{EmberRaidSettle.SETTLE_NEXT_LOOP_LABEL, EmberRaidSettle.SETTLE_NEXT_LOOP_CMD,
+                                    "再进/路径/冒险 · 剩 " + (m.weeklyCap - used) + " 次", "GREEN"},
+                            new String[]{enterLabel(id), enterCmd(id), "再开路径团本", "AQUA"},
+                            new String[]{"[工坊]", EmberRaidSettle.SETTLE_FORGE_CMD, "花团本料", "GOLD"});
                 }
             }
         }
