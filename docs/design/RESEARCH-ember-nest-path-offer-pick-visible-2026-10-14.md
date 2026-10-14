@@ -1,6 +1,6 @@
 # RESEARCH · NestPath.offerPick / applyAndReply「卡点路径选打」菜单化 · 拟 D13372 · TIP-EO
 
-> **状态：** **待批 A** · 荐 M · 2026-10-14 21:40 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **CLOSED live** · feat `666909038` · tip `ea22f6140` · menu `a6ed60e6c` · jar `1.65.865-d13372.local` · PASS `375570391` · 2026-10-14 22:01 Asia/Shanghai · 卡点路径选打菜单化同题勿再交 · Nest=telegraph族末支已齐 · 勿默念 Pace（本仓无）· 下一窗其它 ConfirmTokens *Path 须另窗证据逐支（禁全族大扫）· 挂机若新硬债 / legacy evacuate 后置
 > **起因：** 总控【下一窗 TIP-EO · 只钉一支 · 禁全族大扫】。祖先 TIP-EN **CLOSED live** `042593089` · feat `c06956c70` · tip `48eb81132` · menu `299bc3a51` · jar `1.65.864-d13371.local` · PASS `37c4e1387` · 证据 `/workspace/tmp/tip-en-save-path/`。**终救路径选打菜单化同题勿再交**。选题钉死：**NestPath.offerPick**「卡点路径选打」菜单化 → TrMenu `ember_p1_nest_path`（拟 D13372 · TIP-EO · 玩法本体 D595 紧接 Save D594）。硬证：`EmberNestPath.offerPick` 仍 ConfirmTokens 教 nestpath auto|ask|mute|clear；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内卡点「卡点」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_nest_path.yml`；与刚 CLOSED Save 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EN 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁与其它 *Path 同窗；PacePath（本仓无）后置；legacy evacuate 后置；Nest=本 telegraph 族（Save…Nest）末支 · PacePath（本仓无）后置 / 勿默念 Pace / 其它 ConfirmTokens *Path 另窗证据逐支 / 挂机若新硬债 / legacy evacuate 后置后置（逐支另窗）；零抬伤害/CD表/掉落/体力价；零改 D595 卡点语义本体；零改已齐 `ember_p1_save_path` 等；勿勾 CLOSED。
 > **上游：** TIP-EN CLOSED live `042593089` · feat `c06956c70` · tip `48eb81132` · PASS `37c4e1387` · jar `1.65.864-d13371.local` · 批 sha `48eb81132` · menu tip `299bc3a51` · D13371
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · NestPath.offerPick / applyAndReply 卡点路径选打菜单化 · **待批 A** · 荐 M · TIP-EO / D13372 · 半行 REJECT `d00ed84bc` 保持 · Nest=本 telegraph 族（Save…Nest）末支 · PacePath（本仓无）后置 / 勿默念 Pace / 其它 ConfirmTokens *Path 另窗证据逐支 / 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EN CLOSED `042593089` · 2026-10-14 21:40 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · NestPath.offerPick 卡点路径选打 · **CLOSED live** · feat `666909038` · tip `ea22f6140` · menu `a6ed60e6c` · jar `1.65.865-d13372.local` · PASS `375570391` · 2026-10-14 22:01 Asia/Shanghai · 卡点路径选打菜单化同题勿再交 · Nest=telegraph族末支已齐 · 勿默念 Pace（本仓无）· 下一窗其它 ConfirmTokens *Path 须另窗证据逐支（禁全族大扫）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EN CLOSED `042593089`.*
 
-## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13372 · TIP-EO · 2026-10-14 21:40 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `666909038` · tip `ea22f6140` · menu `a6ed60e6c` · jar `1.65.865-d13372.local` · PASS `375570391` · D13372 · TIP-EO · 2026-10-14 22:01 Asia/Shanghai · 卡点路径选打菜单化同题勿再交 · Nest=telegraph族末支已齐 · 勿默念 Pace（本仓无）· 下一窗其它 ConfirmTokens *Path 须另窗证据逐支（禁全族大扫）· 挂机若新硬债 / legacy evacuate 后置
