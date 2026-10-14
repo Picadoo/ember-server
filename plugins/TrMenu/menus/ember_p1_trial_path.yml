@@ -1,0 +1,327 @@
+# TIP-DJ / D13341 · 试炼路径选打薄页 · trial_path* · trialpath cautious|aggressive|pressure|clear
+# 入口：TrialPath.offerPick / 无参 trialpath / 周要约 → /ember_p1_trial_path（插件并行改开菜单）
+# 选打：corerpg p1 trialpath cautious|aggressive|pressure|clear
+# 进本：按当前试炼 enterCmd（稳慎→q01 / 猛开→q02 / 加压→q06）
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落/体力价 · 改试炼写入语义 / abyss_path / short_path / raid_path / challenge_path / featured_path / 已齐 settle / 庭内
+# PAPI（插件可能后到·静态接线）：trial_path / trial_path_label / trial_path_tip · pledge_ok（灰态·自选誓约解锁）
+# ≠ ember_p1_abyss_path · ≠ ember_p1_short_path · ≠ ember_p1_raid_path · ≠ ember_p1_challenge_path · ≠ ember_p1_featured_path
+
+Title: '§d试炼 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_trial_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '##E#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §d试炼路径 §7· 当前 §e%corerpg_p1_trial_path_label%'
+    - 'tell: §8点选 · 稳慎 / 猛开 / 加压 / 清空 · 或进本 / 冒险 / 工坊'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§d试炼路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_trial_path_label%'
+        - '§8%corerpg_p1_trial_path_tip%'
+        - '§8点选 · 稳慎 / 猛开 / 加压 / 清空'
+        - '§8需首通 Q06（自选誓约解锁）'
+
+  # 稳慎 · CAUTIOUS=1 · 限药+落空
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_pledge_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7稳慎 §8（需首通 Q06）'
+          lore:
+            - '§c试炼路径需首通 Q06（自选誓约解锁）'
+            - '§7限药 + 落空破绽 · 省药站开练 Q01–Q05'
+            - '§8通关 Q06 后再选路径'
+      - condition: 'check papi %corerpg_p1_trial_path% == 1'
+        priority: 2
+        display:
+          material: potion
+          shiny: true
+          name: '§a稳慎 §8· §f已选'
+          lore:
+            - '§7限药 + 落空破绽 · 省药站开练 Q01–Q05'
+            - '§8%corerpg_p1_trial_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 trialpath cautious'
+            - 'menu: ember_p1_trial_path'
+    display:
+      material: glass bottle
+      name: '§e稳慎'
+      lore:
+        - '§7限药 + 落空破绽 · 省药站开练 Q01–Q05'
+        - '§8点选切换试炼路径'
+        - '§e➥ §f设为稳慎'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 trialpath cautious'
+        - 'menu: ember_p1_trial_path'
+
+  # 猛开 · AGGRESSIVE=2 · 逆行+撞墙
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_pledge_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7猛开 §8（需首通 Q06）'
+          lore:
+            - '§c试炼路径需首通 Q06（自选誓约解锁）'
+            - '§7逆行 + 撞墙破绽 · 开局最重练 Q02/Q07 撞墙'
+            - '§8通关 Q06 后再选路径'
+      - condition: 'check papi %corerpg_p1_trial_path% == 2'
+        priority: 2
+        display:
+          material: iron sword
+          shiny: true
+          name: '§a猛开 §8· §f已选'
+          lore:
+            - '§7逆行 + 撞墙破绽 · 开局最重练 Q02/Q07 撞墙'
+            - '§8%corerpg_p1_trial_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 trialpath aggressive'
+            - 'menu: ember_p1_trial_path'
+    display:
+      material: stone sword
+      name: '§c猛开'
+      lore:
+        - '§7逆行 + 撞墙破绽 · 开局最重练 Q02/Q07 撞墙'
+        - '§8点选切换试炼路径'
+        - '§e➥ §f设为猛开'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 trialpath aggressive'
+        - 'menu: ember_p1_trial_path'
+
+  # 加压 · PRESSURE=3 · 双挂+破招
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_pledge_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7加压 §8（需首通 Q06）'
+          lore:
+            - '§c试炼路径需首通 Q06（自选誓约解锁）'
+            - '§7限药+逆行 + 破招 · 双徽记加压练 Q06/Q07'
+            - '§8通关 Q06 后再选路径'
+      - condition: 'check papi %corerpg_p1_trial_path% == 3'
+        priority: 2
+        display:
+          material: nether star
+          shiny: true
+          name: '§a加压 §8· §f已选'
+          lore:
+            - '§7限药+逆行 + 破招 · 双徽记加压练 Q06/Q07'
+            - '§8%corerpg_p1_trial_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 trialpath pressure'
+            - 'menu: ember_p1_trial_path'
+    display:
+      material: ender eye
+      name: '§d加压'
+      lore:
+        - '§7限药+逆行 + 破招 · 双徽记加压练 Q06/Q07'
+        - '§8点选切换试炼路径'
+        - '§e➥ §f设为加压'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 trialpath pressure'
+        - 'menu: ember_p1_trial_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_pledge_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需首通 Q06）'
+          lore:
+            - '§c试炼路径需首通 Q06（自选誓约解锁）'
+            - '§8通关后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_trial_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无试炼路径焦点'
+            - '§8先点 稳慎 / 猛开 / 加压'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 trialpath clear'
+            - 'menu: ember_p1_trial_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_trial_path_label%'
+        - '§8清焦点 · 可重选（清誓约+破绽粘性）'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 trialpath clear'
+        - 'menu: ember_p1_trial_path'
+
+  # 进本 · 按当前试炼 enterCmd（稳慎→q01 / 猛开→q02 / 加压→q06）
+  E:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_pledge_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7进本练试炼 §8（需首通 Q06）'
+          lore:
+            - '§c试炼路径需首通 Q06（自选誓约解锁）'
+            - '§8通关后再进本'
+      - condition: 'check papi %corerpg_p1_trial_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7进本练试炼 §8（先选路径）'
+          lore:
+            - '§c尚未选试炼路径'
+            - '§7点上方 稳慎 / 猛开 / 加压'
+            - '§8选好后再进 · 勿假开'
+      - condition: 'check papi %corerpg_p1_trial_path% == 1'
+        priority: 3
+        display:
+          material: emerald
+          name: '§a进本练试炼 §8· §e稳慎→Q01'
+          lore:
+            - '§7当前：§e%corerpg_p1_trial_path_label%'
+            - '§8%corerpg_p1_trial_path_tip%'
+            - '§7去练 Q01 落空 · §e➥进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 enter q01'
+            - close
+      - condition: 'check papi %corerpg_p1_trial_path% == 2'
+        priority: 4
+        display:
+          material: emerald
+          name: '§a进本练试炼 §8· §c猛开→Q02'
+          lore:
+            - '§7当前：§e%corerpg_p1_trial_path_label%'
+            - '§8%corerpg_p1_trial_path_tip%'
+            - '§7去练 Q02 撞墙 · §e➥进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 enter q02'
+            - close
+      - condition: 'check papi %corerpg_p1_trial_path% == 3'
+        priority: 5
+        display:
+          material: emerald
+          name: '§a进本练试炼 §8· §d加压→Q06'
+          lore:
+            - '§7当前：§e%corerpg_p1_trial_path_label%'
+            - '§8%corerpg_p1_trial_path_tip%'
+            - '§7去练 Q06 破招 · §e➥进本'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 enter q06'
+            - close
+    display:
+      material: emerald
+      name: '§a进本练试炼'
+      lore:
+        - '§7按当前试炼 enter'
+        - '§7当前：§e%corerpg_p1_trial_path_label%'
+        - '§8点进 · 真进本 · §e➥进本'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'tell: §c请先选稳慎 / 猛开 / 加压'
+        - 'menu: ember_p1_trial_path'
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊（可选）
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
