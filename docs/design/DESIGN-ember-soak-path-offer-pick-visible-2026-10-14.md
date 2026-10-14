@@ -3,6 +3,7 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-14 18:28 Asia/Shanghai | 总控批 A·M · tip `22ef0518c` · 可施工 W1a+W1b · 勿勾 CLOSED |
+| 2026-10-14 Asia/Shanghai | W1a 插件已交 feat `4f9f34928` · jar `1.65.854-d13361.local` · 勿勾 CLOSED |
 | 2026-10-14 18:26 Asia/Shanghai | 初稿 STATUS=**待批 A** · 荐 M · TIP-EC CLOSED 后连开 · 拟 D13361 · TIP-ED |
 
 STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `22ef0518c` · 2026-10-14 18:28 Asia/Shanghai · 勿勾 CLOSED · 可施工

@@ -1,9 +1,9 @@
 # STATUS · TIP-ED W1a 分摊路径选打菜单化 · D13361
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat  · jar `1.65.854-d13361.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `4f9f34928494365b4d43fa0c3be3035bbd51be82` · jar `1.65.854-d13361.local`
 
 ## 交付
-- feat: 
+- feat: `4f9f34928494365b4d43fa0c3be3035bbd51be82`
 - `EmberSoakPath.offerPick` →开 `/ember_p1_soak_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `soakpath` 为主 UI
 - 无参 `/corerpg p1 soakpath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_soak_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `soakpath` ConfirmTokens 为主 UI
