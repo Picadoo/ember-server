@@ -4,7 +4,7 @@
 > **DESIGN** [`DESIGN-ember-pledge-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-pledge-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-pledge-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（PledgePath.offerPick / applyAndReply / 无参 pledgepath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_pledge_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零试炼路径选打同题复读（TIP-DJ） · 零深渊/短征/团本/硬本/精选路径选打同题复读（TIP-DI–DE） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价/誓约徽记表 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零破绽/步态同窗 · 零复开 D481 玩法本体
-> **ancestor：** TIP-DJ CLOSED live `f63d095b2`（feat `845a99920` · tip `dbbc499b0` · PASS `61e500086` · jar `1.65.834-d13341.local` · 批 sha `dbbc499b0` · menu tip `9dabb653e`）
+> **ancestor：** TIP-DJ CLOSED live `f63d095b2`（feat `f17970800` · tip `dbbc499b0` · PASS `61e500086` · jar `1.65.834-d13341.local` · 批 sha `dbbc499b0` · menu tip `9dabb653e`）
 > **下一窗提示（旁注）：** 破绽/步态等 *Path.offerPick **逐支**（禁全族大扫）/ 挂机若新硬债 / legacy evacuate 后置
 
 ## 一句话
@@ -35,7 +35,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 12:26 Asia/Shanghai
-- [ ] 插件交 offerPick / applyAndReply / 无参 pledgepath / 周要约改开菜单 + 清裸指令主路径 + 单测
+- [x] 插件交 offerPick / applyAndReply / 无参 pledgepath / 周要约改开菜单 + 清裸指令主路径 + 单测 · jar `1.65.835-d13342.local` · 勿勾 CLOSED
 - [ ] 物品交薄 pledge_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选限药/逆行/双挂/清空/誓约页/进阶/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价/誓约徽记表·零改 trial_path·零已齐选打同题复读）
 

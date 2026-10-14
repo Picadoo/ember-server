@@ -16,11 +16,20 @@ import town.sunshine.corerpg.PlayerData;
  * D481: self-pledge combat path — lean / reverse / both.
  * Real difficulty choice on repeat Q clears the player leads; chat buttons only (no ActionBar HUD).
  * Zero stamp / AFK / boss-table change — only which {@code p1_pledge_*} rules are on.
+ * TIP-DK D13342: offerPick / applyAndReply / 无参 pledgepath / 周要约 →开 /ember_p1_pledge_path；
+ * 清 ConfirmTokens 教 pledgepath/pledge/modes 主 UI；零改伤害/CD表/掉落/体力价/誓约规则语义(D481).
  */
 public final class EmberPledgePath {
 
     public static final String C_PATH = "p1_pledge_path";
     public static final String C_OFFER = "p1_pledge_path_offer";
+
+    /** TIP-DK D13342 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_pledge_path";
+    public static final String PATH_PICK_LABEL = "[誓约路径]";
+    public static final String PATH_PLEDGE_CMD = "/ember_p1_pledge";
+    public static final String PATH_MODES_CMD = "/ember_p1_modes";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int LEAN = 1;     // 限药
@@ -65,8 +74,16 @@ public final class EmberPledgePath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8誓约路径：首进/首通 Q06 后可选";
-        if (!valid(id)) return "§8誓约路径：未选 · /corerpg p1 pledgepath";
+        // TIP-DK D13342: 禁教手打 /corerpg p1 pledgepath
+        if (!valid(id)) return "§8誓约路径：未选 · 点誓约路径页";
         return "§e誓约路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DK D13342 · 薄页 lore 一行（无 §）：当前誓约路径。
+     */
+    public static String menuLine(int id) {
+        return "誓约路径 · " + label(id);
     }
 
     /**
@@ -93,11 +110,19 @@ public final class EmberPledgePath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选自选誓约路径（重打已首通图时生效 · 可随时改 · 不改数值表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[限药]", "/corerpg p1 pledgepath lean", tip(LEAN), "YELLOW"},
-                new String[]{"[逆行]", "/corerpg p1 pledgepath reverse", tip(REVERSE), "RED"},
-                new String[]{"[双挂]", "/corerpg p1 pledgepath both", tip(BOTH), "LIGHT_PURPLE"},
-                new String[]{"[清空]", "/corerpg p1 pledgepath clear", "取消全部誓约", "GRAY"});
+        // TIP-DK D13342: 开选打薄页；禁 ConfirmTokens 教 pledgepath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_pledge_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_pledge_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "限药/逆行/双挂/清空/誓约页/进阶/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -148,10 +173,11 @@ public final class EmberPledgePath {
             return;
         }
         p.sendMessage(P + "§a誓约路径 → §f" + label(id) + " §7· " + tip(id));
+        // TIP-DK D13342: 下一步→选打薄页/誓约页/冒险（禁教裸 pledgepath/pledge/modes 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[誓约页]", "/corerpg p1 pledge", "查看已挂规则", "AQUA"},
-                new String[]{"[进阶模式]", "/corerpg p1 modes", "残响/前哨/誓约入口", "GOLD"},
-                new String[]{"[换一条]", "/corerpg p1 pledgepath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "限药/逆行/双挂/重选", "GREEN"},
+                new String[]{"[誓约页]", PATH_PLEDGE_CMD, "查看已挂规则", "AQUA"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

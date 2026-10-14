@@ -76,6 +76,7 @@ public final class EmberRunPapi {
         if ("vbounty".equals(key)) return Section.RUSH;
         if ("rush".equals(key)) return Section.RUSH;
         if ("trial_path".equals(key) || (key != null && key.startsWith("trial_path_"))) return Section.RUSH; // TIP-DJ D13341
+        if ("pledge_path".equals(key) || (key != null && key.startsWith("pledge_path_"))) return Section.RUSH; // TIP-DK D13342
         if (key.startsWith("pledge_")) return Section.RUSH;
         if (key.startsWith("rush_")) return Section.RUSH;
         if (key.startsWith("passd_")) return Section.ENTRY;
@@ -603,6 +604,16 @@ public final class EmberRunPapi {
         return "";
     }
 
+    /** TIP-DK D13342 %corerpg_p1_pledge_path*% — sticky PledgePath preference; zero economy. */
+    private String pledgePath(PlayerData d, String key) {
+        int path = EmberPledgePath.get(d);
+        if ("pledge_path".equals(key)) return String.valueOf(path);
+        if ("pledge_path_label".equals(key)) return EmberPledgePath.label(path);
+        if ("pledge_path_tip".equals(key)) return EmberPledgePath.tip(path);
+        if ("pledge_path_line".equals(key)) return EmberPledgePath.menuLine(path);
+        return "";
+    }
+
     /** TIP-CV D13327 %corerpg_p1_short_path*% — sticky ShortPath preference + resolve; zero algo change. */
     private String shortPathChase(PlayerData d, String key) {
         int path = EmberShortPath.get(d);
@@ -768,6 +779,8 @@ public final class EmberRunPapi {
         }
         if ("trial_path".equals(key) || (key != null && key.startsWith("trial_path_"))) // TIP-DJ D13341
             return trialPath(d, key);
+        if ("pledge_path".equals(key) || (key != null && key.startsWith("pledge_path_"))) // TIP-DK D13342
+            return pledgePath(d, key);
         if (key.startsWith("pledge_")) return runs.pledgePapi(d, key.substring(7)); // D174 stage 2b 自选誓约
         EmberRunMaps.MapDef rm = maps.rush.get(key.substring(5)); // rush_<entry>
         if (rm == null) return null; // old chain: not a rush entry → per-map tail

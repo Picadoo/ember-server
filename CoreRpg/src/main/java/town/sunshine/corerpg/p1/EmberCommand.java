@@ -3937,14 +3937,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberPledgePath.get(d);
-                    if (EmberPledgePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPledgePath.label(cur) + " · 改路径再 /corerpg p1 pledgepath");
+                    if (EmberPledgePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPledgePath.label(cur) + " · 改路径点誓约路径页");
                     else EmberPledgePath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberPledgePath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 pledgepath <lean|reverse|both|clear>");
+                p.sendMessage(P + "用法：点誓约路径页选限药/逆行/双挂/清空");
                 return true;
             }
             EmberPledgePath.applyAndReply(p, id);
