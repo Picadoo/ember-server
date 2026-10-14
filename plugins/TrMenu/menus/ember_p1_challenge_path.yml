@@ -1,0 +1,261 @@
+# TIP-DF / D13337 · 硬本路径选打薄页 · challenge_path* · challengepath prefer|easy|follow|clear
+# 入口：ChallengePath.offerPick / 无参 challengepath / 冒险 Open → /ember_p1_challenge_path（插件并行改开菜单）
+# 选打：corerpg p1 challengepath prefer|easy|follow|clear
+# 禁：教裸指令主 UI · 抬掉落/体力价 · 改 challenge_settle / featured_path / 已齐 settle / 庭内
+# PAPI（插件可能后到·静态接线）：challenge_path / challenge_path_label · q07done
+# ≠ ember_p1_challenge_settle（settle 下一环另页已齐勿复读）· ≠ ember_p1_featured_path
+
+Title: '§c硬本 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_challenge_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '##S#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §c硬本路径 §7· 当前 §e%corerpg_p1_challenge_path_label%'
+    - 'tell: §8点选打法 · 偏挑战 / 偏普通 / 随令 / 清空 · 或回冒险 / 选图 / 工坊'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§c硬本路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_challenge_path_label%'
+        - '§8点选 · 偏挑战 / 偏普通 / 随令 / 清空'
+        - '§8已首通主线图默认进挑战或普通 · 随令按指令'
+        - '§8需本人首通 Q07 后可选'
+
+  # 偏挑战 · PREFER=1
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7偏挑战 §8（需首通 Q07）'
+          lore:
+            - '§c硬本路径需本人首通 Q07'
+            - '§7已首通主线图默认进挑战版'
+            - '§8通关 Q07 后再选打法'
+      - condition: 'check papi %corerpg_p1_challenge_path% == 1'
+        priority: 2
+        display:
+          material: redstone
+          shiny: true
+          name: '§a偏挑战 §8· §f已选'
+          lore:
+            - '§7已首通主线图默认进挑战版'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 challengepath prefer'
+            - 'menu: ember_p1_challenge_path'
+    display:
+      material: redstone
+      name: '§c偏挑战'
+      lore:
+        - '§7已首通主线图默认进挑战版'
+        - '§8点选切换硬本路径'
+        - '§e➥ §f设为偏挑战'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 challengepath prefer'
+        - 'menu: ember_p1_challenge_path'
+
+  # 偏普通 · EASY=2
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7偏普通 §8（需首通 Q07）'
+          lore:
+            - '§c硬本路径需本人首通 Q07'
+            - '§7已首通主线图默认进普通版'
+            - '§8通关 Q07 后再选打法'
+      - condition: 'check papi %corerpg_p1_challenge_path% == 2'
+        priority: 2
+        display:
+          material: lime dye
+          shiny: true
+          name: '§a偏普通 §8· §f已选'
+          lore:
+            - '§7已首通主线图默认进普通版'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 challengepath easy'
+            - 'menu: ember_p1_challenge_path'
+    display:
+      material: lime dye
+      name: '§a偏普通'
+      lore:
+        - '§7已首通主线图默认进普通版'
+        - '§8点选切换硬本路径'
+        - '§e➥ §f设为偏普通'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 challengepath easy'
+        - 'menu: ember_p1_challenge_path'
+
+  # 随令 · FOLLOW=3
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7随令 §8（需首通 Q07）'
+          lore:
+            - '§c硬本路径需本人首通 Q07'
+            - '§7完全按进本指令 · 写 challenge 才挑战'
+            - '§8通关 Q07 后再选打法'
+      - condition: 'check papi %corerpg_p1_challenge_path% == 3'
+        priority: 2
+        display:
+          material: light blue dye
+          shiny: true
+          name: '§a随令 §8· §f已选'
+          lore:
+            - '§7完全按进本指令 · 写 challenge 才挑战'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 challengepath follow'
+            - 'menu: ember_p1_challenge_path'
+    display:
+      material: light blue dye
+      name: '§b随令'
+      lore:
+        - '§7完全按进本指令 · 写 challenge 才挑战'
+        - '§8点选切换硬本路径'
+        - '§e➥ §f设为随令'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 challengepath follow'
+        - 'menu: ember_p1_challenge_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需首通 Q07）'
+          lore:
+            - '§c硬本路径需本人首通 Q07'
+            - '§8通关后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_challenge_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无硬本路径焦点'
+            - '§8先点 偏挑战 / 偏普通 / 随令'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 challengepath clear'
+            - 'menu: ember_p1_challenge_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_challenge_path_label%'
+        - '§8清焦点 · 可重选'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 challengepath clear'
+        - 'menu: ember_p1_challenge_path'
+
+  # 挑战选图（可选）
+  S:
+    display:
+      material: blaze rod
+      name: '§c挑战选图'
+      lore:
+        - '§7回七图挑战选页'
+        - '§8可换另一张挑战图'
+        - '§e➥ §f开选图'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_challenge'
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊（可选）
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
