@@ -1,9 +1,9 @@
 # STATUS · TIP-EC W1a 铁壁路径选打菜单化 · D13360
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · jar `1.65.853-d13360.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `84d6cda17648437e564b401441ac8f938ceb2329` · jar `1.65.853-d13360.local`
 
 ## 交付
-- feat: （见本窗 feat commit · 勿 tip blob）
+- feat: `84d6cda17648437e564b401441ac8f938ceb2329`
 - `EmberShellPath.offerPick` →开 `/ember_p1_shell_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `shellpath` 为主 UI
 - 无参 `/corerpg p1 shellpath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_shell_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `shellpath` ConfirmTokens 为主 UI

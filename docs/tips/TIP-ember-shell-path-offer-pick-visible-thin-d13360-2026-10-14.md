@@ -1,6 +1,6 @@
 # tip · TIP-EC ShellPath.offerPick / applyAndReply「铁壁路径选打」菜单化（选路径聊天钮去指令化 · ≠分身路径选打同题 · ≠压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D583 玩法本体）· 拟 D13360
 
-> **状态：** **已批 A** · 方案 M · APPROVED A·M · 2026-10-14 18:08 Asia/Shanghai · **W1a 插件已交** · 勿勾 CLOSED · 可派测 / 物品 W1b
+> **状态：** **已批 A** · 方案 M · APPROVED A·M · 2026-10-14 18:08 Asia/Shanghai · **W1a 插件已交** feat `84d6cda17` · jar `1.65.853-d13360.local` · 勿勾 CLOSED · 可派测 / 物品 W1b
 > **DESIGN** [`DESIGN-ember-shell-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-shell-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-shell-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（ShellPath.offerPick / applyAndReply / 无参 shellpath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_shell_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零分身路径选打同题复读（TIP-EB） · 零压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-EA–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零其它 *Path 同窗 · 零复开 D583 玩法本体（auto/ask/mute 真改铁壁集火语义零改）· 零改 clone_path / press_path / cut_path / rush_path / clean_path / streak_path / blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
@@ -39,4 +39,4 @@
 - [ ] 物品交薄 shell_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 clone_path·零已齐选打同题复读·零改 D583 铁壁语义）
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · D13360 · TIP-EC · 2026-10-14 18:08 Asia/Shanghai · **W1a 插件已交** · 勿勾 CLOSED · 可派测 / 物品 W1b
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · D13360 · TIP-EC · 2026-10-14 18:08 Asia/Shanghai · **W1a 插件已交** feat `84d6cda17` · jar `1.65.853-d13360.local` · 勿勾 CLOSED · 可派测 / 物品 W1b
