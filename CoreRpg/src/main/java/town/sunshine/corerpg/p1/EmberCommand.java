@@ -5898,14 +5898,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberClonePath.get(d);
-                    if (EmberClonePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberClonePath.label(cur) + " · 改路径再 /corerpg p1 clonepath");
+                    if (EmberClonePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberClonePath.label(cur) + " · 点分身路径页可改");
                     else EmberClonePath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberClonePath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 clonepath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点分身路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberClonePath.applyAndReply(p, id);
