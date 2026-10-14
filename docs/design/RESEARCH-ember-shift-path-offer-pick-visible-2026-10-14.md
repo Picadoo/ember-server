@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · ShiftPath.offerPick / applyAndReply 侧安路径选打菜单化 · **待批 A** · 荐 M · TIP-EH / D13365 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D589+（Shell…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EG CLOSED `10d06ab27` · 2026-10-14 19:33 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · ShiftPath.offerPick 侧安路径选打 · **CLOSED live** · feat `65ae19a37` · PASS `cff0d78d0` · 下一窗 BoltPath.offerPick · 2026-10-14 19:47 Asia/Shanghai**待批 A** · 荐 M · TIP-EH / D13365 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D589+（Shell…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EG CLOSED `10d06ab27` · 2026-10-14 19:33 Asia/Shanghai · 勿勾 CLOSED.*
 
 ## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13365 · TIP-EH · 2026-10-14 19:33 Asia/Shanghai
