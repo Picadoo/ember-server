@@ -1,6 +1,6 @@
 # RESEARCH · StreakPath.offerPick / applyAndReply「连斩路径选打」菜单化 · 拟 D13354 · TIP-DW
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13354 · TIP-DW · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 streakpath/周要约→开 ember_p1_streak_path · 清 ConfirmTokens 教 streakpath 主 UI · 2026-10-14 16:15 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `8058a9e51` · tip `c785e5f2e` · jar `1.65.847-d13354.local` · PASS `05105f88a` · 批 sha `c785e5f2e` · menu tip `4790be622` · 证据 `/workspace/tmp/tip-dw-streak-path/` · 2026-10-14 16:28 Asia/Shanghai · 连斩路径选打菜单化同题勿再交
 > **起因：** 总控【下一窗 TIP-DW · 只钉一支 · 禁全族大扫】。祖先 TIP-DV **CLOSED live** `b6f356ac9` · feat `7696e36f6` · tip `6638c9880` · menu `efd291131` · jar `1.65.846-d13353.local` · PASS `8371e2d95` · 证据 `/workspace/tmp/tip-dv-blaze-path/`。**避焰路径选打菜单化同题勿再交**。选题钉死：**StreakPath.offerPick**「连斩路径选打」菜单化 → TrMenu `ember_p1_streak_path`（拟 D13354 · TIP-DW · D577 紧接 Blaze D576）。总控实扫：offerPick ConfirmTokens→`streakpath auto|ask|mute|clear`；无参/周要约/Q01 同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内连斩战斗钮「改路径」≠选打薄页；TrMenu **无** `ember_p1_streak_path`；与刚 CLOSED Blaze 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–DV 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；PacePath（本仓无）后置；legacy evacuate 后置；Clean/Rush/Cut… D578+ 后置（逐支另窗）；零抬伤害/CD表/掉落/体力价；零改 D577 连斩语义本体；零改已齐 `ember_p1_blaze_path` 等；勿勾 CLOSED。
 > **上游：** TIP-DV CLOSED live `b6f356ac9` · feat `7696e36f6` · tip `6638c9880` · PASS `8371e2d95` · jar `1.65.846-d13353.local` · 批 sha `6638c9880` · menu tip `efd291131` · D13353
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · StreakPath.offerPick / applyAndReply 连斩路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DW / D13354 · 半行 REJECT `d00ed84bc` 保持 · Clean/Rush/Cut D578+ 后置 · ancestor TIP-DV CLOSED `b6f356ac9` · 2026-10-14 16:15 Asia/Shanghai**待批 A** · 荐 M · TIP-DW / D13354 · 半行 REJECT `d00ed84bc` 保持 · Clean/Rush/Cut… D578+ / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DV CLOSED `b6f356ac9` · 2026-10-14 16:13 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · StreakPath.offerPick / applyAndReply 连斩路径选打菜单化 · **CLOSED live** · feat `8058a9e51` · tip `c785e5f2e` · jar `1.65.847-d13354.local` · PASS `05105f88a` · 批 sha `c785e5f2e` · menu tip `4790be622` · 证据 `/workspace/tmp/tip-dw-streak-path/` · 2026-10-14 16:28 Asia/Shanghai · 连斩路径选打菜单化同题勿再交 · TIP-DW / D13354 · 下一窗 CleanPath.offerPick（只钉一支 · 禁全族大扫）· Rush/Cut… D579+ 后置 / PacePath（本仓无）后置 / 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-DV CLOSED `b6f356ac9` · 2026-10-14 16:28 Asia/Shanghai**已批 A · 方案 M** · APPROVED A·M · TIP-DW / D13354 · 半行 REJECT `d00ed84bc` 保持 · Clean/Rush/Cut D578+ 后置 · ancestor TIP-DV CLOSED `b6f356ac9` · 2026-10-14 16:15 Asia/Shanghai**待批 A** · 荐 M · TIP-DW / D13354 · 半行 REJECT `d00ed84bc` 保持 · Clean/Rush/Cut… D578+ / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-DV CLOSED `b6f356ac9` · 2026-10-14 16:13 Asia/Shanghai · 勿勾 CLOSED.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13354 · TIP-DW · 2026-10-14 16:15 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `8058a9e51` · tip `c785e5f2e` · jar `1.65.847-d13354.local` · PASS `05105f88a` · 批 sha `c785e5f2e` · menu tip `4790be622` · 证据 `/workspace/tmp/tip-dw-streak-path/` · 2026-10-14 16:28 Asia/Shanghai · 连斩路径选打菜单化同题勿再交 · D13354 · TIP-DW · 2026-10-14 16:28 Asia/Shanghai

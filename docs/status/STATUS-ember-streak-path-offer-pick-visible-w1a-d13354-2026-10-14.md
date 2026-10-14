@@ -1,6 +1,6 @@
 # STATUS · TIP-DW W1a 连斩路径选打菜单化 · D13354
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `8058a9e51` · jar `1.65.847-d13354.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · tip CLOSED · feat `8058a9e51` · PASS `05105f88a` · jar `1.65.847-d13354.local` · menu `4790be622` · 2026-10-14 16:28 Asia/Shanghai · feat `8058a9e51` · jar `1.65.847-d13354.local`
 
 ## 交付
 - feat: `8058a9e51`
@@ -14,7 +14,7 @@
 - jar：`1.65.847-d13354.local` · sha256 `e5ee45ed1543…` · ECONOMY_BV **123** 未动
 - play：live `1.65.847-d13354.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**伤害 / CD 表 / 掉落 / 体力价 / D577 连斩语义(auto/ask/mute) / Cast·Aid / variety / 已齐 settle 薄页 / Blaze·Spin·Snap·Veil·Free·Dodge·Sidestep·Step·Flex·Stride·Counter·Pledge·Trial·Abyss·Short·Raid·Featured·Challenge Path / Pace 同窗 / Clean·Rush·Cut 同窗 / 庭内 / TrMenu yml（物品 W1b 并行）
-- tip **勿勾 CLOSED** · 可派测 / 物品 W1b
+- tip **CLOSED** · 可派测 / 物品 W1b
 
 ## 落点
 - `EmberStreakPath`：PATH_PICK_* · offerPick→openPathPick · applyAndReply 下一步菜单 · glance/menuLine · 改路径薄页
@@ -31,4 +31,4 @@
 - TrMenu yml（本窗插件未改；W1b 物品并行 `ember_p1_streak_path`）
 
 ## 下步
-- 可派测 · 物品 W1b 并行 · **勿勾 tip CLOSED** · 下一窗旁注 Clean/Rush/Cut… D578+ 后置 / PacePath（本仓无）后置
+- 可派测 · 物品 W1b 并行 · **CLOSED** · 下一窗旁注 Clean/Rush/Cut… D578+ 后置 / PacePath（本仓无）后置
