@@ -3,7 +3,7 @@
 > 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip APPROVED `66bfe1203` · **勿勾 tip CLOSED** · 待测岗/物品 W1b
 
 ## 交付
-- feat: `518469c9d`
+- feat: `446b2d907`
 - `EmberFreePath.offerPick` →开 `/ember_p1_free_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `freepath` 为主 UI
 - 无参 `/corerpg p1 freepath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_free_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `freepath` ConfirmTokens 为主 UI
