@@ -1,6 +1,6 @@
 # STATUS · TIP-DD W1a 精选结算「下一环」菜单化 · D13335
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · W1a 交 · **勿勾 tip CLOSED** · 待物品 W1b / 抽测
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · W1a 交 feat `b07074070` · **勿勾 tip CLOSED** · 物品 W1b 已并行 · 待抽测
 
 ## 交付
 - `EmberFeaturedPath.afterSettle`：精选图结算下一环 → `/ember_p1_featured_settle`（`EmberFeaturedSettle.SETTLE_NEXT_LOOP_*`）；工坊 → `/ember_p1_forge`；冒险 → `/ember_p1_adventure`；remember settle 图/路径/周帽态
