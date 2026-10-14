@@ -1,6 +1,6 @@
 # tip · TIP-DN FlexPath.offerPick / applyAndReply「轻技路径选打」菜单化（选路径聊天钮去指令化 · ≠步态路径选打同题 · ≠破绽/誓约/试炼/深渊/短征/团本/硬本/精选路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠身法/闪冲同窗 · ≠复开 D494 玩法本体）· 拟 D13345
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13345 · TIP-DN · W1a插件已交 · 待测岗/物品W1b · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 flexpath/周要约→开 ember_p1_flex_path · 清 ConfirmTokens 教 flexpath 主 UI · 2026-10-14 Asia/Shanghai
+> **状态：** **抽测 PASS** · APPROVED A·M · D13345 · TIP-DN · feat `53be7080e` · menu `55f8f3ea0` · jar `1.65.838-d13345.local` · L不批 · **勿勾 CLOSED**（总控收口）· 零改伤害/CD表/掉落/体力价 · offerPick/无参 flexpath/周要约→开 ember_p1_flex_path · 清 ConfirmTokens 教 flexpath 主 UI · 2026-10-14 13:36 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-flex-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-flex-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-flex-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（FlexPath.offerPick / applyAndReply / 无参 flexpath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_flex_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零步态路径选打同题复读（TIP-DM） · 零破绽/誓约/试炼/深渊/短征/团本/硬本/精选路径选打同题复读（TIP-DL–DE） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零身法 StepPath / 闪冲 SidestepPath 同窗 · 零复开 D494 玩法本体
@@ -36,7 +36,7 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 13:24 Asia/Shanghai
 - [x] 插件交 offerPick / applyAndReply / 无参 flexpath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat_commit `53be7080e08572f2f981287e74b814cea7d45be3` · jar `1.65.838-d13345.local`
-- [ ] 物品交薄 flex_path 页 + TrMenu reload
-- [ ] 抽测 PASS（选装配踏步/卸下轻技/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 stride_path·零已齐选打同题复读）
+- [x] 物品交薄 flex_path 页 + TrMenu reload · menu `55f8f3ea0` · TrMenu **93**
+- [x] 抽测 PASS live · STATUS spot · 证据 `/workspace/tmp/tip-dn-flex-path/` · **勿勾 CLOSED**（总控收口）
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a插件已交（勿勾 CLOSED · 待测岗/物品W1b） · L不批 · D13345 · TIP-DN · 2026-10-14 Asia/Shanghai
+## STATUS: **抽测 PASS** · APPROVED A·M · feat `53be7080e` · menu `55f8f3ea0` · jar `1.65.838-d13345.local` · **勿勾 CLOSED**（总控收口）· L不批 · D13345 · TIP-DN · 2026-10-14 13:36 Asia/Shanghai
