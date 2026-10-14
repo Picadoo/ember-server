@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · CrashPath.offerPick / applyAndReply 撞墙路径选打菜单化 · **待批 A** · 荐 M · TIP-EJ / D13367 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D591+（Slip…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EI CLOSED `abad283d0` · 2026-10-14 20:03 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · CrashPath.offerPick 撞墙路径选打 · **CLOSED live** · feat `09343d2bd` · PASS `30deaf257` · 下一窗 SlipPath.offerPick · 2026-10-14 20:21 Asia/Shanghai**待批 A** · 荐 M · TIP-EJ / D13367 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D591+（Slip…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EI CLOSED `abad283d0` · 2026-10-14 20:03 Asia/Shanghai · 勿勾 CLOSED.*
 
 ## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13367 · TIP-EJ · 2026-10-14 20:03 Asia/Shanghai
