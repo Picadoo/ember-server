@@ -1,6 +1,6 @@
 # RESEARCH · ClonePath.offerPick / applyAndReply「分身路径选打」菜单化 · 拟 D13359 · TIP-EB
 
-> **状态：** **待批 A** · 荐 M · 2026-10-14 17:45 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13359 · TIP-EB · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 clonepath/周要约→开 ember_p1_clone_path · 清 ConfirmTokens 教 clonepath 主 UI · 2026-10-14 17:47 Asia/Shanghai
 > **起因：** 总控【下一窗 TIP-EB · 只钉一支 · 禁全族大扫】。祖先 TIP-EA **CLOSED live** `8772b030c` · feat `afa2cf969` · tip `1b4f236e6` · menu `9a9c42d6e` · jar `1.65.851-d13358.local` · PASS `19c58c9ee` · 证据 `/workspace/tmp/tip-ea-press-path/`。**压伤路径选打菜单化同题勿再交**。选题钉死：**ClonePath.offerPick**「分身路径选打」菜单化 → TrMenu `ember_p1_clone_path`（拟 D13359 · TIP-EB · 玩法本体 D582 紧接 Press D581）。硬证：`EmberClonePath.offerPick` 仍 ConfirmTokens 教 clonepath；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内分裂「清分身」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_clone_path.yml`；与刚 CLOSED Press 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EA 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁与其它 *Path 同窗；PacePath（本仓无）后置；legacy evacuate 后置；Shell… D583+ 后置（逐支另窗）；零抬伤害/CD表/掉落/体力价；零改 D582 分身语义本体；零改已齐 `ember_p1_press_path` 等；勿勾 CLOSED。
 > **上游：** TIP-EA CLOSED live `8772b030c` · feat `afa2cf969` · tip `1b4f236e6` · PASS `19c58c9ee` · jar `1.65.851-d13358.local` · 批 sha `1b4f236e6` · menu tip `9a9c42d6e` · D13358
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · ClonePath.offerPick / applyAndReply 分身路径选打菜单化 · **待批 A** · 荐 M · TIP-EB / D13359 · 半行 REJECT `d00ed84bc` 保持 · Shell… D583+ / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EA CLOSED `8772b030c` · 2026-10-14 17:45 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · ClonePath.offerPick / applyAndReply 分身路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-EB / D13359 · 半行 REJECT `d00ed84bc` 保持 · Shell… D583+ 后置 · ancestor TIP-EA CLOSED `8772b030c` · 2026-10-14 17:47 Asia/Shanghai**待批 A** · 荐 M · TIP-EB / D13359 · 半行 REJECT `d00ed84bc` 保持 · Shell… D583+ / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EA CLOSED `8772b030c` · 2026-10-14 17:45 Asia/Shanghai · 勿勾 CLOSED.*
 
-## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13359 · TIP-EB · 2026-10-14 17:45 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13359 · TIP-EB · 2026-10-14 17:47 Asia/Shanghai

@@ -2,9 +2,10 @@
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 17:47 Asia/Shanghai | 总控批 A·M · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 clonepath/周要约→开 ember_p1_clone_path · 清 ConfirmTokens 教 clonepath 主 UI · 零改伤害/CD表/掉落/体力价 · ≠ press_path / 已齐选打同题 · Shell… D583+ 后置 · 2026-10-14 17:47 Asia/Shanghai |
 | 2026-10-14 17:45 Asia/Shanghai | 初稿 STATUS=**待批 A** · 荐 M · TIP-EA CLOSED 后连开 · 拟 D13359 · TIP-EB |
 
-STATUS=**待批 A** · 荐 M · 2026-10-14 17:45 Asia/Shanghai · 勿勾 CLOSED
+STATUS=**已批 A · 方案 M** · APPROVED A·M · D13359 · TIP-EB · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 clonepath/周要约→开 ember_p1_clone_path · 清 ConfirmTokens 教 clonepath 主 UI · 2026-10-14 17:47 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-clone-path-offer-pick-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-clone-path-offer-pick-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-clone-path-offer-pick-visible-2026-10-14.md`](RESEARCH-ember-clone-path-offer-pick-visible-2026-10-14.md) · backlog `B-clone-path-offer-pick-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬伤害/CD表/掉落/体力价 ≠压伤路径选打同题 ≠打断路径选打同题 ≠限时路径选打同题 ≠净伤路径选打同题 ≠连斩路径选打同题 ≠避焰路径选打同题 ≠避旋路径选打同题 ≠断链路径选打同题 ≠避毒路径选打同题 ≠解锢路径选打同题 ≠闪榴路径选打同题 ≠闪冲路径选打同题 ≠身法路径选打同题 ≠轻技路径选打同题 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠步态路径选打同题 ≠已齐 settle 下一环同题 ≠短征settle回看同题 ≠D673同题复读 ≠variety再拧 ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠路径追同题 ≠日差同题 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠legacy abyss evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠Pace同窗 ≠其它 *Path 同窗 ≠复开 D582 玩法本体 ≠L13 ≠灰烬/R ≠抬 AFK 表 ≠Affix 加密**
 
 > **一句话玩家价值：** 周选/改分身路径一点开「分身路径」——自动/提醒/静默/清空/技能组/冒险都能点；**不**抬伤害/CD表/掉落/体力价、**不**教手打指令、**不**复读已齐 settle/压伤·打断·限时·净伤·连斩·避焰·避旋·断链·避毒·解锢·闪榴·闪冲·身法·轻技·破绽·誓约·试炼·深渊·短征·团本·硬本·精选·步态选打同题、**不**扩成全族路径大扫、**不**改 D582 分身清掉语义。
@@ -157,6 +158,7 @@ STATUS=**待批 A** · 荐 M · 2026-10-14 17:45 Asia/Shanghai · 勿勾 CLOSED
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 17:47 Asia/Shanghai | 总控 · **批 A·M** · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 clonepath/周要约→开 ember_p1_clone_path · 清 ConfirmTokens 教 clonepath 主 UI · 零改伤害/CD表/掉落/体力价 · ≠ press_path / 已齐选打同题 · Shell… D583+ 后置 · 半行 REJECT `d00ed84bc` 保持 |
 | 2026-10-14 17:45 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-EA CLOSED 后连开 · 选题 ClonePath.offerPick / applyAndReply 分身路径选打菜单化 · 拟 D13359 · TIP-EB · ≠半行 ≠压伤选打同题 ≠打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态选打同题 ≠已齐 settle 同题 ≠variety再拧 ≠庭内旁路 · **改题有证据**（挂机近饱和·gem gap未亮；短征薄债+选打已齐；settle CW–DD+DE–EA选打已齐；总控钉死 Clone；offerPick ConfirmTokens→clonepath；applyAndReply下一步仍聊天钮；无参/周要约/Q01；无 clone_path；局内分裂钮≠选打页；与刚 CLOSED Press 同构；Shell·Pace后置；见 RESEARCH） |
 
-*D13359 **待批 A** · 荐 M · ClonePath.offerPick / applyAndReply 分身路径选打菜单化 · TIP-EB · 半行 REJECT `d00ed84bc` 保持 · Shell… D583+ / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EA CLOSED `8772b030c` · 2026-10-14 17:45 Asia/Shanghai · 勿勾 CLOSED.*
+*D13359 **已批 A · 方案 M** · APPROVED A·M · D13359 · TIP-EB · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 clonepath/周要约→开 ember_p1_clone_path · 清 ConfirmTokens 教 clonepath 主 UI · 2026-10-14 17:47 Asia/Shanghai · ClonePath.offerPick / applyAndReply 分身路径选打菜单化 · TIP-EB · ≠ press_path / 已齐选打同题 · Shell… D583+ 后置 · 2026-10-14 17:47 Asia/Shanghai*
