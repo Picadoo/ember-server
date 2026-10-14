@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EF CLOSED** live（D13363 半血路径选打齐 · feat `839324610` · tip `2b56b3fde` · jar `1.65.856-d13363.local` · PASS `544b98ead` · 批 sha `2b56b3fde` · menu tip `077702e37` · CLOSED `80b2ce3d2` · 证据 `/workspace/tmp/tip-ef-phase-path/` · **半血路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **GapPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EF 选打勿复；PacePath（本仓无）后置；其它剩支 D588+（Shift…）后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `9a092fe93` · 2026-10-14 19:18 Asia/Shanghai · 勿勾 CLOSED · 可施工
+**本窗性质：** tip thin · **CLOSED live** · feat `c9d2b431f` · tip `98f341015` · menu `ce0ac0d97` · jar `1.65.857-d13364.local` · PASS `e81317dfd` · 2026-10-14 19:31 Asia/Shanghai · 下一窗 ShiftPath.offerPick
 **硬规格：** [`DESIGN-ember-gap-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-gap-path-offer-pick-visible-2026-10-14.md) · backlog `B-gap-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EF 已齐；收招**选打**仍 ConfirmTokens 教裸 gappath——总控钉死本支；内容闭环断在收招路径选打（≠半血选打；≠ settle 同题；局内收招钮≠选打页）。
 
@@ -61,7 +61,7 @@
 | RESEARCH | `docs/design/RESEARCH-ember-gap-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-14.md` |
 | backlog | `B-gap-path-offer-pick-visible` |
-| 号段 | **D13364** · 字母窗 **TIP-EG** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `9a092fe93` · 2026-10-14 19:18 Asia/Shanghai · 勿勾 CLOSED
+| 号段 | **D13364** · 字母窗 **TIP-EG** · STATUS=**CLOSED live** · feat `c9d2b431f` · tip `98f341015` · menu `ce0ac0d97` · jar `1.65.857-d13364.local` · PASS `e81317dfd` · 2026-10-14 19:31 Asia/Shanghai
 | 上游 | TIP-EF CLOSED live `80b2ce3d2` · feat `839324610` · tip `2b56b3fde` · PASS `544b98ead` · jar `1.65.856-d13363.local` · 批 sha `2b56b3fde` · menu tip `077702e37` · D13363；半行 REJECT `d00ed84bc` 保持否决；半血路径选打菜单化同题勿再交 |
 
 *选题 GapPath.offerPick / applyAndReply 收招路径选打菜单化 · tip **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13364 · TIP-EG · 半行 REJECT `d00ed84bc` **保持否决** · 其它剩支 D588+（Shift…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EF CLOSED `80b2ce3d2` · 2026-10-14 19:15 Asia/Shanghai.*

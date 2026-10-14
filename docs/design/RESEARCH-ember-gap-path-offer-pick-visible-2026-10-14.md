@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · GapPath.offerPick / applyAndReply 收招路径选打菜单化 · **待批 A** · 荐 M · TIP-EG / D13364 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D588+（Shift…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EF CLOSED `80b2ce3d2` · 2026-10-14 19:15 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · GapPath.offerPick 收招路径选打 · **CLOSED live** · feat `c9d2b431f` · PASS `e81317dfd` · 下一窗 ShiftPath.offerPick · 2026-10-14 19:31 Asia/Shanghai**待批 A** · 荐 M · TIP-EG / D13364 · 半行 REJECT `d00ed84bc` 保持 · 其它剩支 D588+（Shift…） / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EF CLOSED `80b2ce3d2` · 2026-10-14 19:15 Asia/Shanghai · 勿勾 CLOSED.*
 
 ## STATUS: **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13364 · TIP-EG · 2026-10-14 19:15 Asia/Shanghai
