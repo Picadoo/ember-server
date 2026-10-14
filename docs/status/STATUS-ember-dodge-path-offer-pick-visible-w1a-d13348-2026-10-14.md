@@ -3,7 +3,7 @@
 > 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip APPROVED `68585e732` · **勿勾 tip CLOSED** · 待测岗/物品 W1b
 
 ## 交付
-- feat: _(本提交后填对齐)_
+- feat: `7551786ea65488ce5b80b86e3dbff80b4e163d13`_
 - `EmberDodgePath.offerPick` →开 `/ember_p1_dodge_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `dodgepath` 为主 UI
 - 无参 `/corerpg p1 dodgepath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_dodge_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `dodgepath` ConfirmTokens 为主 UI

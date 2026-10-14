@@ -35,7 +35,7 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 14:29 Asia/Shanghai
-- [x] 插件交 offerPick / applyAndReply / 无参 dodgepath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat_commit `PENDING` · jar `1.65.841-d13348.local`
+- [x] 插件交 offerPick / applyAndReply / 无参 dodgepath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat_commit `7551786ea` · jar `1.65.841-d13348.local`
 - [ ] 物品交薄 dodge_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 sidestep_path·零已齐选打同题复读·零改 D571 榴弹拉开语义）
 
