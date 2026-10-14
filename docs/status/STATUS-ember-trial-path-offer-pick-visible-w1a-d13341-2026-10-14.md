@@ -1,6 +1,6 @@
 # STATUS · TIP-DJ W1a 试炼路径选打菜单化 · D13341
 
-> 2026-10-14 12:11 Asia/Shanghai · 余烬-插件岗 · W1a 已交 · **勿勾 tip CLOSED** · 待物品 W1b / 测岗抽测
+> 2026-10-14 12:11 Asia/Shanghai · 余烬-插件岗 · W1a 已交 · feat `845a99920` · **勿勾 tip CLOSED** · 待物品 W1b / 测岗抽测
 
 ## 交付
 - `EmberTrialPath.offerPick` →开 `/ember_p1_trial_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `trialpath` 为主 UI
