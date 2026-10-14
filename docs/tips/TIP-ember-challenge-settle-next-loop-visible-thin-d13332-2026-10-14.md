@@ -1,6 +1,6 @@
 # tip · TIP-DA 挑战本结算「下一环」菜单化（settle 聊天钮去指令化 · ≠团本settle下一环同题 · ≠短征settle下一环·回看同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠深渊同窗大扫 · ≠抬掉落/体力价）· 拟 D13332
 
-> **状态：** **抽测 PASS** · feat `3d218ee83` · menu `b56f20912` · tip `d0f10a344` · jar `1.65.825-d13332.local` · **勿勾 CLOSED**（总控收口）· 2026-10-14 09:25 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `3d218ee83` · tip `d0f10a344` · jar `1.65.825-d13332.local` · PASS `020a8f2a7` · 批 sha `d0f10a344` · 证据 `/workspace/tmp/tip-da-challenge-settle/` · 2026-10-14 09:28 Asia/Shanghai · 挑战结算下一环菜单化同题勿再交
 > **DESIGN** [`DESIGN-ember-challenge-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-challenge-settle-next-loop-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-challenge-settle-next-loop-visible`  
 > **施工岗（批后）：** 余烬-插件（ChallengePath.afterSettle 下一环改开菜单）+ 余烬-物品（薄页 `ember_p1_challenge_settle`）· **不派怪物/地图**  
 > **硬禁：** 零半行独批 · 零团本settle下一环同题 · 零短征settle下一环同题 · 零短征settle回看同题 · 零 variety再拧/完整经济 · 零 soft-reward同题 · 零路径追/日差/今日推/周目标/三冲复读主交 · 零 Cast 粒子主交付 · 零拧 EliteAid/BossAid · 零 todayRot/W1e 独批 · 零 sx20 · 零抬日帽/伤表/S表/挑战掉落/体力价/成色 · 零庭内旁路再拧 · 零 densify · 零教裸指令主 UI · 零深渊同窗大扫（§6 后置）  
@@ -30,6 +30,6 @@
 - [x] 总控批 A·M · 2026-10-14 09:02 Asia/Shanghai
 - [x] 插件交 ChallengePath 入口改菜单 + 清裸指令主路径 + 单测
 - [x] 物品交薄 challenge settle 页 + TrMenu reload
-- [x] 抽测 PASS live（再挑战/选图/路径/工坊真开·PAPI·零抬掉落/体力价）· **勿勾 CLOSED** · 测岗 2026-10-14 09:25 Asia/Shanghai
+- [x] 抽测 PASS live（再挑战/选图/路径/工坊真开·PAPI·零抬掉落/体力价）· STATUS-ember-challenge-settle-next-loop-tip-da-spot-d13332-2026-10-14.md · PASS `020a8f2a7` · 证据 `/workspace/tmp/tip-da-challenge-settle/`
 
-## STATUS: **抽测 PASS** · feat `3d218ee83` · menu `b56f20912` · tip `d0f10a344` · jar `1.65.825-d13332.local` · **勿勾 CLOSED**（总控收口）· D13332 · TIP-DA · 2026-10-14 09:25 Asia/Shanghai
+## STATUS: **CLOSED live** · `3d218ee83` / `b56f20912` · PASS `020a8f2a7` · jar `1.65.825-d13332.local` · D13332 · TIP-DA · 2026-10-14 09:28 Asia/Shanghai

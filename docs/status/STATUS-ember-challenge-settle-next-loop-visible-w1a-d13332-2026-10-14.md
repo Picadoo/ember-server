@@ -1,6 +1,6 @@
 # STATUS · TIP-DA W1a 挑战本结算「下一环」菜单化 · D13332
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **交仓** · 勿勾 tip CLOSED · 物品可接薄页 V
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `020a8f2a7` · tip `d0f10a344` · 总控收口 2026-10-14 09:28 Asia/Shanghai
 
 ## 交付
 - `EmberChallengePath.afterSettle`：非首通（有路径/无路径）主钮 → `/ember_p1_challenge_settle`（`EmberChallengeSettle.SETTLE_NEXT_LOOP_*`）；remember settle map（q01–q07 period）
@@ -28,4 +28,12 @@
 - balance_version 123 · sx20 · 深渊 settle
 
 ## 下步
-- 物品 W1b 薄页（若未齐）/ 测岗抽测 · 总控收口 CLOSED（本岗勿勾）
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-DA spot）
+- **PASS** · 2026-10-14 09:28 Asia/Shanghai · 证据 `/workspace/tmp/tip-da-challenge-settle/` · 详 `STATUS-ember-challenge-settle-next-loop-tip-da-spot-d13332-2026-10-14.md`
+- live jar `1.65.825-d13332.local` · feat `3d218ee83` · tip `d0f10a344` · 批 `d0f10a344` · 挑战结算下一环菜单化全绿
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `3d218ee83` · 证据 `/workspace/tmp/tip-da-challenge-settle/` · STATUS `020a8f2a7`
+- **CLOSED live**（总控收口）· tip `d0f10a344` · jar `1.65.825-d13332.local`

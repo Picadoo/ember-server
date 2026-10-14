@@ -2,10 +2,11 @@
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 09:28 Asia/Shanghai | **CLOSED live** · feat `3d218ee83` · tip `d0f10a344` · PASS `020a8f2a7` · jar `1.65.825-d13332.local` · 批 sha `d0f10a344` · 证据 `/workspace/tmp/tip-da-challenge-settle/` · W1a–b 齐 · 挑战结算下一环菜单化同题勿再交 · 下一窗：深渊 settle 去指令化 §6 |
 | 2026-10-14 09:02 Asia/Shanghai | 总控批 A·M · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · ChallengePath.afterSettle→开 ember_p1_challenge_settle · 清 ConfirmTokens 教裸指令主 UI · 零改挑战掉落/体力价/成色 · 深渊后置 · |
 | 2026-10-14 09:00 Asia/Shanghai | 初稿 STATUS=**待批 A** · 荐 M · TIP-CZ CLOSED 后连开 · 拟 D13332 · TIP-DA |
 
-STATUS=**已批 A · 方案 M** · APPROVED A·M · D13332 · TIP-DA · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改挑战掉落/体力价/成色 · 2026-10-14 09:02 Asia/Shanghai
+STATUS=**CLOSED live** · feat `3d218ee83` · tip `d0f10a344` · PASS `020a8f2a7` · jar `1.65.825-d13332.local` · 批 sha `d0f10a344` · D13332 · TIP-DA · 2026-10-14 09:28 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-challenge-settle-next-loop-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-challenge-settle-next-loop-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-challenge-settle-next-loop-visible-2026-10-14.md`](RESEARCH-ember-challenge-settle-next-loop-visible-2026-10-14.md) · backlog `B-challenge-settle-next-loop-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬挑战掉落/体力价/成色表 ≠团本settle下一环同题 ≠短征settle下一环同题 ≠短征settle回看同题 ≠variety再拧 ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠路径追同题 ≠日差同题 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠深渊同窗大扫**
 
 > **一句话玩家价值：** 挑战本结算后一点开「下一环」——再挑战同图、回挑战选图、换硬本路径、回冒险、去工坊、图装追都能点；**不**抬掉落/体力价、**不**教手打指令、**不**复读短征/团本同题。
@@ -155,7 +156,8 @@ STATUS=**已批 A · 方案 M** · APPROVED A·M · D13332 · TIP-DA · 可施�
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 09:28 Asia/Shanghai | 总控 · **勾毕 CLOSED live** · feat `3d218ee83` · tip `d0f10a344` · PASS `020a8f2a7` · jar `1.65.825-d13332.local` · 批 sha `d0f10a344` · 证据 `/workspace/tmp/tip-da-challenge-settle/` · 半行 REJECT `d00ed84bc` **保持否决** · 挑战结算下一环菜单化同题勿再交 · 下一窗：深渊 settle 去指令化 §6 |
 | 2026-10-14 09:02 Asia/Shanghai | 总控 · **批 A·M** · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · ChallengePath.afterSettle→开 ember_p1_challenge_settle · 清 ConfirmTokens 教裸指令主 UI · 零改挑战掉落/体力价/成色 · 深渊后置 · 半行 REJECT `d00ed84bc` 保持 |
 | 2026-10-14 09:00 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-CZ CLOSED 后连开 · 选题挑战本结算下一环菜单化 · 拟 D13332 · TIP-DA · ≠半行 ≠团本settle下一环同题 ≠短征settle同题 ≠variety再拧 ≠庭内旁路 · **改题有证据**（§6①；ChallengePath ConfirmTokens；无薄页；见 RESEARCH） |
 
-*D13332 **已批 A · 方案 M** · APPROVED A·M · 挑战本结算下一环菜单化 · TIP-DA。**可施工 W1a插件+W1b物品** · L不批 · 勿勾 CLOSED · ChallengePath.afterSettle→开 ember_p1_challenge_settle · 清 ConfirmTokens 教裸指令主 UI · 零改挑战掉落/体力价/成色 · 深渊后置 · ≠半行 ≠短征·团本同题复读 ≠sx20 · 2026-10-14 09:02 Asia/Shanghai*
+*D13332 **CLOSED live** · `3d218ee83` / `d0f10a344` · PASS `020a8f2a7` · 挑战本结算下一环菜单化 · TIP-DA。**已批 A · 方案 M** · ChallengePath.afterSettle→开 ember_p1_challenge_settle · 清 ConfirmTokens 教裸指令主 UI · 零改挑战掉落/体力价/成色 · 深渊后置 · ≠半行 ≠短征·团本同题复读 ≠sx20。*
