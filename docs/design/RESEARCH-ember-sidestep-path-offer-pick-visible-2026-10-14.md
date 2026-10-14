@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · SidestepPath.offerPick / applyAndReply 闪冲路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DP / D13347 · 半行 REJECT `d00ed84bc` 保持 · PacePath后置 · ancestor TIP-DO CLOSED `439b37f46` · 2026-10-14 14:08 Asia/Shanghai.*
+*RESEARCH · SidestepPath.offerPick / applyAndReply 闪冲路径选打菜单化 · **CLOSED live** · feat `adf9efa71` · PASS `2fc016f96` · tip `116eea312` · menu `52e6da32b` · jar `1.65.840-d13347.local` · TIP-DP / D13347 · 半行 REJECT `d00ed84bc` 保持 · PacePath等剩支/挂机若新硬债/legacy evacuate 后置 · 2026-10-14 14:23 Asia/Shanghai.**已批 A · 方案 M** · APPROVED A·M · TIP-DP / D13347 · 半行 REJECT `d00ed84bc` 保持 · PacePath后置 · ancestor TIP-DO CLOSED `439b37f46` · 2026-10-14 14:08 Asia/Shanghai.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13347 · TIP-DP · 2026-10-14 14:08 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `adf9efa71` · tip `116eea312` · PASS `2fc016f96` · jar `1.65.840-d13347.local` · menu `52e6da32b` · D13347 · TIP-DP · 2026-10-14 14:23 Asia/Shanghai · 闪冲路径选打菜单化同题勿再交

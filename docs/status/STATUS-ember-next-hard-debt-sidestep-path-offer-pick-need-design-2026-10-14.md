@@ -63,9 +63,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-sidestep-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-sidestep-path-offer-pick-visible-thin-d13347-2026-10-14.md` |
 | backlog | `B-sidestep-path-offer-pick-visible` |
-| 号段 | **D13347** · 字母窗 **TIP-DP** · STATUS=**已批 A · 方案 M** · APPROVED A·M |
+| 号段 | **D13347** · 字母窗 **TIP-DP** · STATUS=**CLOSED live** · PASS `2fc016f96` |
 | 上游 | TIP-DO CLOSED live `439b37f46` · feat `bb9accd40` · tip `057b6b380` · PASS `65ef1d315` · jar `1.65.839-d13346.local` · 批 sha `057b6b380` · D13346；半行 REJECT `d00ed84bc` 保持否决；身法路径选打菜单化同题勿再交 |
 
 *选题 SidestepPath.offerPick / applyAndReply 闪冲路径选打菜单化 · tip **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13347 · TIP-DP · 半行 REJECT `d00ed84bc` **保持否决** · PacePath后置 · ancestor TIP-DO CLOSED `439b37f46` · 2026-10-14 14:08 Asia/Shanghai.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13347 · TIP-DP · 2026-10-14 14:08 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `adf9efa71` · tip `116eea312` · PASS `2fc016f96` · jar `1.65.840-d13347.local` · menu `52e6da32b` · D13347 · TIP-DP · 2026-10-14 14:23 Asia/Shanghai · 闪冲路径选打菜单化同题勿再交
