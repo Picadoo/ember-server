@@ -1,9 +1,9 @@
 # STATUS · TIP-DY W1a 限时路径选打菜单化 · D13356
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `bf05bfbaf` · jar `1.65.849-d13356.local`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交** · tip **勿勾 CLOSED** · feat `90f5bb643` · jar `1.65.849-d13356.local`
 
 ## 交付
-- feat: `bf05bfbaf`（commit 后钉死）
+- feat: `90f5bb643`（commit 后钉死）
 - `EmberRushPath.offerPick` →开 `/ember_p1_rush_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `rushpath` 为主 UI
 - 无参 `/corerpg p1 rushpath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ01` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_rush_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `rushpath` ConfirmTokens 为主 UI
