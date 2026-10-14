@@ -2,10 +2,11 @@
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 11:29 Asia/Shanghai | **CLOSED live** · feat `c81c9e7e2` · tip `fd80fd696` · PASS `7ec45e0a1` · jar `1.65.831-d13338.local` · 批 sha `fd80fd696` · menu tip `b9b8f688f` · 证据 `/workspace/tmp/tip-dg-raid-path/` · W1a–b 齐 · 团本路径选打菜单化同题勿再交 · 下一窗：内容优先（挂机若新硬债 / 短征若新薄债 / 其他菜单去指令残留如试炼/签律/步态等 *Path.offerPick 另窗逐支 / legacy evacuate 另窗；团本 settle+选打本支已齐） |
 | 2026-10-14 11:16 Asia/Shanghai | 总控批 A·M · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 raidpath→开 ember_p1_raid_path · 清 ConfirmTokens 借 settle/教 raidpath 主 UI · 零改掉落/体力价/周帽 · ≠ raid_settle / featured_path / challenge_path 同题 · 其他 *Path 后置 · 2026-10-14 11:16 Asia/Shanghai |
 | 2026-10-14 11:15 Asia/Shanghai | 初稿 STATUS=**待批 A** · 荐 M · TIP-DF CLOSED 后连开 · 拟 D13338 · TIP-DG |
 
-STATUS=**已批 A · 方案 M** · APPROVED A·M · D13338 · TIP-DG · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改掉落/体力价/周帽 · 2026-10-14 11:16 Asia/Shanghai
+STATUS=**CLOSED live** · feat `c81c9e7e2` · tip `fd80fd696` · PASS `7ec45e0a1` · jar `1.65.831-d13338.local` · 批 sha `fd80fd696` · D13338 · TIP-DG · 2026-10-14 11:29 Asia/Shanghai
 > tip [`STATUS-ember-next-hard-debt-raid-path-offer-pick-need-design-2026-10-14.md`](../status/STATUS-ember-next-hard-debt-raid-path-offer-pick-need-design-2026-10-14.md) · RESEARCH [`RESEARCH-ember-raid-path-offer-pick-visible-2026-10-14.md`](RESEARCH-ember-raid-path-offer-pick-visible-2026-10-14.md) · backlog `B-raid-path-offer-pick-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬掉落/体力价/周帽 ≠硬本路径选打同题 ≠精选路径选打同题 ≠团本settle下一环同题 ≠已齐 settle 下一环同题 ≠短征settle回看同题 ≠D673同题复读 ≠variety再拧 ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠路径追同题 ≠日差同题 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠legacy abyss evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠FeaturedPath/ChallengePath同窗**
 
 > **一句话玩家价值：** 周选/改团本路径一点开「团本路径」——R01/R02/R03/清空/回冒险都能点；**不**抬掉落/体力价/周帽、**不**教手打指令、**不**复读已齐 settle/硬本·精选选打同题、**不**扩成全族路径大扫。
@@ -152,7 +153,8 @@ STATUS=**已批 A · 方案 M** · APPROVED A·M · D13338 · TIP-DG · 可施�
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-14 11:29 Asia/Shanghai | 总控 · **勾毕 CLOSED live** · feat `c81c9e7e2` · tip `fd80fd696` · PASS `7ec45e0a1` · jar `1.65.831-d13338.local` · 批 sha `fd80fd696` · menu tip `b9b8f688f` · 证据 `/workspace/tmp/tip-dg-raid-path/` · 半行 REJECT `d00ed84bc` **保持否决** · 团本路径选打菜单化同题勿再交 · 下一窗：内容优先（挂机若新硬债 / 短征若新薄债 / 其他菜单去指令残留如试炼/签律/步态等 *Path.offerPick 另窗逐支 / legacy evacuate 另窗；团本 settle+选打本支已齐） |
 | 2026-10-14 11:16 Asia/Shanghai | 总控 · **批 A·M** · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 raidpath→开 ember_p1_raid_path · 清 ConfirmTokens 借 settle/教 raidpath 主 UI · 零改掉落/体力价/周帽 · ≠ raid_settle / featured_path / challenge_path 同题 · 其他 *Path 后置 · 半行 REJECT `d00ed84bc` 保持 |
 | 2026-10-14 11:15 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-DF CLOSED 后连开 · 选题 RaidPath.offerPick / applyAndReply 团本路径选打菜单化 · 拟 D13338 · TIP-DG · ≠半行 ≠硬本选打同题 ≠精选选打同题 ≠团本settle同题 ≠已齐 settle 同题 ≠variety再拧 ≠庭内旁路 · **改题有证据**（挂机近饱和·gem gap未亮；短征薄债已齐；settle CW–DD+DE+DF选打已齐；DESIGN-DF§6⑦；offerPick ConfirmTokens→raid_settle；无参/冒险 Open；无 `ember_p1_raid_path`；见 RESEARCH） |
 
-*D13338 **已批 A · 方案 M** · APPROVED A·M · RaidPath.offerPick / applyAndReply 团本路径选打菜单化 · TIP-DG。**可施工 W1a插件+W1b物品** · L不批 · 勿勾 CLOSED · offerPick/applyAndReply/无参 raidpath→开 ember_p1_raid_path · 清 ConfirmTokens 借 settle/教 raidpath 主 UI · 零改掉落/体力价/周帽 · ≠ raid_settle / featured_path / challenge_path 同题 · 其他 *Path 后置 · ≠半行 ≠已齐 settle 同题复读 ≠sx20 · 2026-10-14 11:16 Asia/Shanghai*
+*D13338 **CLOSED live** · `c81c9e7e2` / `fd80fd696` · PASS `7ec45e0a1` · RaidPath.offerPick / applyAndReply 团本路径选打菜单化 · TIP-DG。**已批 A · 方案 M** · offerPick/applyAndReply/无参 raidpath→开 ember_p1_raid_path · 清 ConfirmTokens 借 settle/教 raidpath 主 UI · 零改掉落/体力价/周帽 · ≠ raid_settle / featured_path / challenge_path 同题 · 其他 *Path 后置 · ≠半行 ≠已齐 settle 同题复读 ≠sx20。*

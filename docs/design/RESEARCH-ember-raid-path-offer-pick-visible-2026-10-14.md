@@ -1,6 +1,6 @@
 # RESEARCH · RaidPath.offerPick / applyAndReply「团本路径选打」菜单化 · 拟 D13338 · TIP-DG
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13338 · TIP-DG · 可施工 · 勿勾 CLOSED · 2026-10-14 11:16 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `c81c9e7e2` · tip `fd80fd696` · PASS `7ec45e0a1` · jar `1.65.831-d13338.local` · 批 sha `fd80fd696` · TIP-DG · 2026-10-14 11:29 Asia/Shanghai · 团本路径选打菜单化同题勿再交 · 下一窗：内容优先（挂机若新硬债 / 短征若新薄债 / 其他菜单去指令残留如试炼/签律/步态等 *Path.offerPick 另窗逐支 / legacy evacuate 另窗；团本 settle+选打本支已齐）
 > **起因：** 总控【派·TIP-DG 选题】RaidPath.offerPick / applyAndReply「团本路径选打」菜单化 · 拟 D13338。祖先 TIP-DF 抽测 PASS `6d98cb62a` · feat `5927286ca` · jar `1.65.830-d13337` · CLOSED 收口。DESIGN-DF §6⑦ 明文后置本支。选题优先级：①挂机庭资源环加厚（须新硬债；旁路近饱和·gem gap 未亮则跳过）②短征日更乐趣（非sx20；非已齐路径）③已齐勿复读：各 settle 下一环（CW–DD）+ 精选选打 DE + 硬本选打 DF ④默认钉 RaidPath.offerPick（可改题须证据压过本支）⑤legacy evacuate 后置。**禁：** 半行独批 · 已齐 settle/精选·硬本选打同题复读 · 抬掉落/日帽/体力价/周帽 · sx20 / densify / Pack6 / 开 K3 / 关观察 · variety 完整经济 / Cast·Aid 再拧 / 庭内旁路 · 教裸指令主 UI · 全族 Path 大扫 · 零改 `ember_p1_raid_settle` / FeaturedPath / ChallengePath。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-DF CLOSED live `6b1fc942d` · feat `5927286ca` · tip `17d0f7ddf` · PASS `6d98cb62a` · jar `1.65.830-d13337.local` · 批 sha `17d0f7ddf` · menu tip `bebeb7f17` · D13337
 
@@ -60,6 +60,6 @@
 
 ---
 
-*RESEARCH · RaidPath.offerPick / applyAndReply 团本路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DG / D13338 · 半行 REJECT `d00ed84bc` 保持 · ancestor TIP-DF CLOSED · ≠ raid_settle / featured_path / challenge_path 同题 · 其他 *Path 后置 · 2026-10-14 11:16 Asia/Shanghai.*
+*RESEARCH · RaidPath.offerPick / applyAndReply 团本路径选打菜单化 · **CLOSED live** · `c81c9e7e2` / `fd80fd696` · PASS `7ec45e0a1` · TIP-DG / D13338 · 半行 REJECT `d00ed84bc` 保持 · 团本路径选打菜单化同题勿再交 · 下一窗：内容优先（挂机若新硬债 / 短征若新薄债 / 其他菜单去指令残留如试炼/签律/步态等 *Path.offerPick 另窗逐支 / legacy evacuate 另窗；团本 settle+选打本支已齐）.*
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13338 · TIP-DG · 2026-10-14 11:16 Asia/Shanghai
+## STATUS: **CLOSED live** · `c81c9e7e2` / `fd80fd696` · PASS `7ec45e0a1` · D13338 · TIP-DG · 2026-10-14 11:29 Asia/Shanghai
