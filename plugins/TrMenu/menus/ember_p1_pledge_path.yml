@@ -1,0 +1,279 @@
+# TIP-DK / D13342 · 誓约路径选打薄页 · pledge_path* · pledgepath lean|reverse|both|clear
+# 入口：PledgePath.offerPick / 无参 pledgepath / 周要约 → /ember_p1_pledge_path（插件并行改开菜单）
+# 选打：corerpg p1 pledgepath lean|reverse|both|clear
+# 导航：誓约页 ember_p1_pledge / 进阶 ember_p1_modes / 冒险 / 可选工坊（仅链入·零改 pledge Layout）
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落/体力价/誓约徽记表 · 改 trial_path / 其他已齐选打 / pledge Layout / 庭内
+# PAPI（插件可能后到·静态接线）：pledge_path / pledge_path_label / pledge_path_tip · pledge_ok（灰态·自选誓约解锁）
+# ≠ ember_p1_trial_path · ≠ ember_p1_abyss_path · ≠ ember_p1_short_path · ≠ ember_p1_raid_path · ≠ ember_p1_challenge_path · ≠ ember_p1_featured_path · ≠ ember_p1_pledge（规则开关另页）
+
+Title: '§d誓约 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_pledge_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '#P#M#A#F#'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §d誓约路径 §7· 当前 §e%corerpg_p1_pledge_path_label%'
+    - 'tell: §8点选 · 限药 / 逆行 / 双挂 / 清空 · 或誓约页 / 进阶 / 冒险 / 工坊'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§d誓约路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_pledge_path_label%'
+        - '§8%corerpg_p1_pledge_path_tip%'
+        - '§8点选 · 限药 / 逆行 / 双挂 / 清空'
+        - '§8需首通 Q06（自选誓约解锁）'
+
+  # 限药 · LEAN=1
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_pledge_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7限药 §8（需首通 Q06）'
+          lore:
+            - '§c需首通 Q06（自选誓约解锁）'
+            - '§7每人最多 3 瓶回复药 · 重打多一枚徽记'
+            - '§8通关 Q06 后再选路径'
+      - condition: 'check papi %corerpg_p1_pledge_path% == 1'
+        priority: 2
+        display:
+          material: potion
+          shiny: true
+          name: '§a限药 §8· §f已选'
+          lore:
+            - '§7每人最多 3 瓶回复药 · 重打多一枚徽记'
+            - '§8%corerpg_p1_pledge_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 pledgepath lean'
+            - 'menu: ember_p1_pledge_path'
+    display:
+      material: glass bottle
+      name: '§e限药'
+      lore:
+        - '§7每人最多 3 瓶回复药 · 重打多一枚徽记'
+        - '§8点选切换誓约路径'
+        - '§e➥ §f设为限药'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 pledgepath lean'
+        - 'menu: ember_p1_pledge_path'
+
+  # 逆行 · REVERSE=2
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_pledge_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7逆行 §8（需首通 Q06）'
+          lore:
+            - '§c需首通 Q06（自选誓约解锁）'
+            - '§7第一间↔第三间敌群互换 · 开局最重'
+            - '§8通关 Q06 后再选路径'
+      - condition: 'check papi %corerpg_p1_pledge_path% == 2'
+        priority: 2
+        display:
+          material: iron sword
+          shiny: true
+          name: '§a逆行 §8· §f已选'
+          lore:
+            - '§7第一间↔第三间敌群互换 · 开局最重'
+            - '§8%corerpg_p1_pledge_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 pledgepath reverse'
+            - 'menu: ember_p1_pledge_path'
+    display:
+      material: compass
+      name: '§c逆行'
+      lore:
+        - '§7第一间↔第三间敌群互换 · 开局最重'
+        - '§8点选切换誓约路径'
+        - '§e➥ §f设为逆行'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 pledgepath reverse'
+        - 'menu: ember_p1_pledge_path'
+
+  # 双挂 · BOTH=3
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_pledge_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7双挂 §8（需首通 Q06）'
+          lore:
+            - '§c需首通 Q06（自选誓约解锁）'
+            - '§7两条都挂 · 徽记×2 · 压迫最强'
+            - '§8通关 Q06 后再选路径'
+      - condition: 'check papi %corerpg_p1_pledge_path% == 3'
+        priority: 2
+        display:
+          material: nether star
+          shiny: true
+          name: '§a双挂 §8· §f已选'
+          lore:
+            - '§7两条都挂 · 徽记×2 · 压迫最强'
+            - '§8%corerpg_p1_pledge_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 pledgepath both'
+            - 'menu: ember_p1_pledge_path'
+    display:
+      material: ender eye
+      name: '§d双挂'
+      lore:
+        - '§7两条都挂 · 徽记×2 · 压迫最强'
+        - '§8点选切换誓约路径'
+        - '§e➥ §f设为双挂'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 pledgepath both'
+        - 'menu: ember_p1_pledge_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_pledge_ok% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需首通 Q06）'
+          lore:
+            - '§c需首通 Q06（自选誓约解锁）'
+            - '§8通关后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_pledge_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无誓约路径焦点'
+            - '§8先点 限药 / 逆行 / 双挂'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 pledgepath clear'
+            - 'menu: ember_p1_pledge_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_pledge_path_label%'
+        - '§8清焦点 · 可重选（清誓约规则）'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 pledgepath clear'
+        - 'menu: ember_p1_pledge_path'
+
+  # 誓约页（规则开关 · 仅链入·零改 Layout）
+  P:
+    display:
+      material: writable book
+      name: '§d去誓约页'
+      lore:
+        - '§7查看/开关已挂规则'
+        - '§8限药 / 逆行 单条 toggle'
+        - '§e➥ §f开自选誓约'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_pledge'
+
+  # 进阶模式
+  M:
+    display:
+      material: nether star
+      name: '§6进阶模式'
+      lore:
+        - '§7残响 / 前哨 / 誓约入口'
+        - '§8换玩法入口'
+        - '§e➥ §f开进阶页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_modes'
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊（可选）
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
