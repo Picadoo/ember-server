@@ -5,7 +5,7 @@
 > **上游结案：** **TIP-DZ CLOSED** live（D13357 打断路径选打齐 · feat `a7f634bc5` · tip `997e89eb6` · jar `1.65.850-d13357.local` · PASS `6622d6781` · 批 sha `997e89eb6` · menu tip `57544b97e` · CLOSED `ac3d7c9a7` · 证据 `/workspace/tmp/tip-dz-cut-path/` · **打断路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **PressPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–DZ 选打勿复；PacePath（本仓无）后置；Clone/Shell… D582+ 后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13358 · TIP-EA · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 17:27 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `afa2cf969` · tip `1b4f236e6` · jar `1.65.851-d13358.local` · PASS `19c58c9ee` · menu `9a9c42d6e` · 2026-10-14 17:43 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-press-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-press-path-offer-pick-visible-2026-10-14.md) · backlog `B-press-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–DZ 已齐；压伤**选打**仍 ConfirmTokens 教裸 presspath——总控钉死本支；内容闭环断在压伤路径选打（≠打断选打；≠ settle 同题；局内破招钮≠选打页）。
 
