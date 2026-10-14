@@ -1,6 +1,6 @@
 # tip · TIP-CX 短征日差软目标极薄有奖（真可点领 NI · ≠日差本同题 · ≠路径追同题 · ≠settle下一环同题 · ≠今日推/周目标复读 · ≠半行 · ≠庭内旁路 · ≠抬表 · ≠写 weekly_goals）· 拟 D13329
 
-> **状态：** **抽测 PASS live** · feat `1b93bc6b4` · tip `0749d92c7` · **勿勾 CLOSED**（总控收口）· D13329 · TIP-CX · 零抬日帽/S/targets · 2026-10-14 08:10 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `1b93bc6b4` · tip `0749d92c7` · jar `1.65.822-d13329.local` · PASS `ed440e0e1` · 批 sha `e469ba35e` · 证据 `/workspace/tmp/tip-cx-short-div-soft/` · 2026-10-14 08:13 Asia/Shanghai · 日差软目标极薄有奖同题勿再交
 > **DESIGN** [`DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md`](../design/DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md) · RESEARCH 同日 · backlog `B-short-div-soft-reward-claim`  
 > **施工岗（批后）：** 余烬-插件（软目标 claim NI + PAPI）+ 余烬-物品（选页 L 可领态）· **不派怪物/地图**  
 > **硬禁：** 零半行独批 · 零日差本同题 · 零路径追同题 · 零 settle下一环同题 · 零今日推/周目标/三冲复读主交 · 零 Cast 粒子主交付 · 零拧 EliteAid/BossAid · 零 todayRot/W1e 独批 · 零 variety 再拧/完整经济 · 零 sx20 · 零抬日表/伤表/S表/targets.short · 零写入 weekly_goals · 零庭内旁路再拧 · 零 densify · 零教裸指令主 UI · 零改 ShortPath resolve / enter short-div 谓词  
@@ -31,6 +31,6 @@
 - [x] 总控批 A·M · 2026-10-14 07:53 Asia/Shanghai
 - [x] 插件交 claim NI + PAPI + 单测
 - [x] 物品交 L 可领态 + TrMenu reload · tip `0749d92c7` · TrMenu 79
-- [x] 抽测 PASS live · STATUS-ember-short-div-soft-reward-claim-tip-cx-spot-d13329-2026-10-14.md · 证据 `/workspace/tmp/tip-cx-short-div-soft/` · **勿勾 CLOSED**
+- [x] 抽测 PASS live · STATUS-ember-short-div-soft-reward-claim-tip-cx-spot-d13329-2026-10-14.md · PASS `ed440e0e1` · 证据 `/workspace/tmp/tip-cx-short-div-soft/`
 
-## STATUS: **抽测 PASS live** · feat `1b93bc6b4` · tip `0749d92c7` · jar `1.65.822-d13329.local` · **勿勾 CLOSED**（总控收口）· D13329 · TIP-CX · 2026-10-14 08:10 Asia/Shanghai
+## STATUS: **CLOSED live** · `1b93bc6b4` / `0749d92c7` · PASS `ed440e0e1` · jar `1.65.822-d13329.local` · D13329 · TIP-CX · 2026-10-14 08:13 Asia/Shanghai

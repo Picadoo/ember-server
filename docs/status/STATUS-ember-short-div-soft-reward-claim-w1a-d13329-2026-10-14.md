@@ -1,6 +1,6 @@
 # STATUS · TIP-CX W1a 短征日差软目标极薄有奖 · D13329
 
-> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **W1a 已交 · 勿 CLOSED** · 批 A·M `e469ba35e`
+> 2026-10-14 Asia/Shanghai · 余烬-插件岗 · **CLOSED live** · PASS `ed440e0e1` · tip `0749d92c7` · 总控收口 2026-10-14 08:13 Asia/Shanghai
 
 ## 交付
 - `EmberShortDayDivSoftClaim`：`claimedToday` / `claimable(n,claimed)` / `tryClaim` → period `p1_short_div_soft_claim`（day）+ Vault/NI `mat_ember_bone_dust`×2
@@ -36,5 +36,12 @@
 - balance_version 123 · sx20 · event_core
 
 ## 下步
-- 物品 W1b（选页 L 可领态）等键
-- 测岗抽测后总控再 CLOSED
+- 物品 W1b / 测岗均已齐 · 总控收口 CLOSED
+
+## 测岗抽测（TIP-CX spot）
+- **PASS** · 2026-10-14 08:13 Asia/Shanghai · 证据 `/workspace/tmp/tip-cx-short-div-soft/` · 详 `STATUS-ember-short-div-soft-reward-claim-tip-cx-spot-d13329-2026-10-14.md`
+- live jar `1.65.822-d13329.local` · feat `1b93bc6b4` · tip `0749d92c7` · 批 `e469ba35e` · 满 soft3→骨尘×2 · 日一次已领灰
+
+## 续 · 测岗抽测 PASS（2026-10-14 Asia/Shanghai · 余烬-测试）
+- PASS live · feat `1b93bc6b4` · 证据 `/workspace/tmp/tip-cx-short-div-soft/` · STATUS `ed440e0e1`
+- **CLOSED live**（总控收口）· tip `0749d92c7` · jar `1.65.822-d13329.local`

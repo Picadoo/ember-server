@@ -1,7 +1,7 @@
 # 状态 · TIP-CX 短征日差软目标极薄有奖抽测
 
 **裁决：** **PASS** · feat `1b93bc6b4` · tip `0749d92c7` · 批 `e469ba35e` · jar `1.65.822-d13329.local` · 证据 `/workspace/tmp/tip-cx-short-div-soft/`  
-**范围：** 满 soft 3 → L「日差软奖可领」→ `claim short-div-soft` 骨尘×2 · 日一次已领灰 · 未满仍 `enter short-div` · PAPI `short_div_claim_ok/_claimed/_claim_line` 诚实 · **零改** SOFT_TARGET=3 / 日帽 / targets.short / weekly_goals / Cast / Aid / variety / 路径追 / settle · 零 sx20 · 零半行独档 · Stage2 未拧 · bv123 · gate_daily=no · **tip 勿勾 CLOSED**（总控收口）
+**范围：** 满 soft 3 → L「日差软奖可领」→ `claim short-div-soft` 骨尘×2 · 日一次已领灰 · 未满仍 `enter short-div` · PAPI `short_div_claim_ok/_claimed/_claim_line` 诚实 · **零改** SOFT_TARGET=3 / 日帽 / targets.short / weekly_goals / Cast / Aid / variety / 路径追 / settle · 零 sx20 · 零半行独档 · Stage2 未拧 · bv123 · gate_daily=no · **勾毕 CLOSED live**（总控收口 · 2026-10-14 08:13 Asia/Shanghai）
 
 ## 必验
 
@@ -19,7 +19,7 @@
 
 - TrMenu **79** 已载；short.yml live=repo md5 `d6575c0d…`
 - jar sha256 `1880338c6e4c…` 与 plugins/ + server-runtime/ 一致 · HEAD 测前 `8010d5e34`
-- 27/27 PASS · tip **未勾 CLOSED**（总控收口）
+- 27/27 PASS · tip **勾毕 CLOSED live**（总控收口）
 - 对照 TIP-CU：本票 = 满 soft 后极薄有奖 claim（TIP-CU 软目标仅展示零发奖）
 - 对照 TIP-CW：settle 下一环未拧（feat 零 ShortSettle / short_settle.yml）
 - claim 发奖路径 live chat 确认骨尘+2；`vault_bone` PAPI 测时未即时跳数（仓/NI 双路径 · SoftClaim Vault 优先 + NI 回落）
@@ -28,4 +28,4 @@
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · short target=5 · daycap=3 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零 Cast/Aid/variety/路径追/settle/sx20 · ≠关观察 · 未改 YAML/jar · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `1b93bc6b4` · tip `0749d92c7` · STATUS `ed440e0e1` · **勿勾 CLOSED**（总控收口）· 2026-10-14 08:10 Asia/Shanghai
+> **测岗抽测：** PASS live · feat `1b93bc6b4` · tip `0749d92c7` · STATUS `ed440e0e1` · **CLOSED live**（总控收口）· 2026-10-14 08:13 Asia/Shanghai

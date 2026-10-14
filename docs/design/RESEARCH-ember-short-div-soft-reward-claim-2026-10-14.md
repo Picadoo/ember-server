@@ -1,6 +1,6 @@
 # RESEARCH · 短征日差软目标极薄有奖（真可点领 NI · ≠日差本同题 · ≠路径追同题 · ≠settle下一环同题 · ≠今日推/周目标复读 · ≠半行 · ≠庭内旁路 · ≠抬表 · ≠写 weekly_goals）· 2026-10-14
 
-> **状态：** **待批 A · 荐方案 M** · 拟 D13329 · TIP-CX · docs-only · 批准前禁改 YAML/Java · 2026-10-14 07:48 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `1b93bc6b4` · tip `0749d92c7` · PASS `ed440e0e1` · jar `1.65.822-d13329.local` · 批 sha `e469ba35e` · TIP-CX · 2026-10-14 08:13 Asia/Shanghai · 日差软目标极薄有奖同题勿再交
 > **起因：** 总控【派·TIP-CX / D13329】上游 TIP-CW CLOSED live `71db92dfb`（jar `1.65.821-d13328b` · feat `8c2dc7d95` · PASS `72e8e6a4e` · 批 `e73f5847e`）。请交下一薄窗。方向：短征日循环仍优先；可选 **soft-target 日分流极薄有奖**（此前零经济）。DESIGN §6 仍缓：宝石、Cast/Aid/variety 经济、节/灾厄、sx20、全服结算去指令化；**本窗例外开 soft-target 薄有奖**。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内全弧+今日推/冲一下/周短征/三冲+日差本可冲+路径追+settle下一环 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-CW CLOSED live `71db92dfb` · feat `8c2dc7d95` · tip `374a142fd` · PASS `72e8e6a4e` · jar `1.65.821-d13328b.local` · 批 sha `e73f5847e` · D13328
 > **硬禁：** **零** 半行独批 · **零** Cast粒子主交付 · **零** Aid/variety再拧 · **零** todayRot/W1e独批 · **零** 庭内旁路再拧 · **零** 日差本同题 · **零** 路径追同题 · **零** settle下一环同题 · **零** sx20 · **零** 抬日帽/S/targets · **零** 写入 weekly_goals · **零** Pack6 · **零** 开R/K3 · **零** 关观察 · **零** 灾厄/fest重开 · **零** 教裸指令 · **零** densify · **零** stage脏runtime
@@ -70,6 +70,6 @@
 
 ---
 
-*RESEARCH · 短征日差软目标极薄有奖 · **待批 A · 荐方案 M** · TIP-CX / 拟 D13329 · 半行 REJECT `d00ed84bc` 保持 · 日差本/路径追/settle下一环同题勿再交。*
+*RESEARCH · 短征日差软目标极薄有奖 · **CLOSED live** · `1b93bc6b4` / `0749d92c7` · PASS `ed440e0e1` · TIP-CX / D13329 · 半行 REJECT `d00ed84bc` 保持 · 日差软目标极薄有奖同题勿再交。*
 
-## STATUS: **待批 A · 荐方案 M** · docs-only · D13329 · TIP-CX · 2026-10-14 07:48 Asia/Shanghai
+## STATUS: **CLOSED live** · `1b93bc6b4` / `0749d92c7` · PASS `ed440e0e1` · D13329 · TIP-CX · 2026-10-14 08:13 Asia/Shanghai

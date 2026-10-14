@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13329 · 短征日差软目标极薄有奖 · 真可点领 NI · docs-only · ≠日差本同题 · ≠路径追同题 · ≠settle下一环同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬日表 · ≠抬 targets · ≠写入 weekly_goals · ≠庭内旁路 · ≠Cast/Aid/variety再拧）
 
-> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 07:53 Asia/Shanghai · 全弧非 L · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · 零抬日帽/S/targets · 零写 weekly_goals · L 不批）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md`](../design/DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-div-soft-reward-claim-2026-10-14.md`](../design/RESEARCH-ember-short-div-soft-reward-claim-2026-10-14.md) · backlog `B-short-div-soft-reward-claim` · **TIP-CX** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠日差本同题 ≠路径追同题 ≠settle下一环同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬 targets.short ≠写入 weekly_goals**。
+> **旁注（勾毕 · CLOSED live · feat `1b93bc6b4` · tip `0749d92c7` · PASS `ed440e0e1` · jar `1.65.822-d13329.local` · 批 sha `e469ba35e` · 2026-10-14 08:13 Asia/Shanghai · 日差软目标极薄有奖同题勿再交）：** tip **CLOSED live** · DESIGN [`DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md`](../design/DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md) · RESEARCH [`RESEARCH-ember-short-div-soft-reward-claim-2026-10-14.md`](../design/RESEARCH-ember-short-div-soft-reward-claim-2026-10-14.md) · backlog `B-short-div-soft-reward-claim` · **TIP-CX** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠日差本同题 ≠路径追同题 ≠settle下一环同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬 targets.short ≠写入 weekly_goals**。
 
 > **上游结案：** **TIP-CW CLOSED** live `71db92dfb`（D13328 短征结算下一环齐 · feat `8c2dc7d95` · tip `374a142fd` · jar `1.65.821-d13328b.local` · PASS `72e8e6a4e` · 批 sha `e73f5847e` · **结算下一环同题勿再交**）。总控派 TIP-CX：优先短征日循环；可选 **soft-target 日分流极薄有奖**（此前零经济）。Cast+BossAid+EliteAid+todayRot+variety(W1a–d)+庭内全弧+今日推/冲一下/周短征/三冲+日差本可冲+路径追+settle下一环 **已齐勿复读**。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13329 · TIP-CX · 全弧非 L · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · 零抬日帽/S/targets · 零写 weekly_goals · 2026-10-14 07:53 Asia/Shanghai
+**本窗性质：** tip **CLOSED live** · feat `1b93bc6b4` · tip `0749d92c7` · PASS `ed440e0e1` · jar `1.65.822-d13329.local` · D13329 · TIP-CX · 2026-10-14 08:13 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md`](../design/DESIGN-ember-short-div-soft-reward-claim-2026-10-14.md) · backlog `B-short-div-soft-reward-claim`
 **打开理由：** D13326 日差冲口齐但软目标 3 **零发奖**；D13326–28§6① 明文后置「日差软目标发奖」；总控本窗开「soft-target 日分流极薄有奖」可选——日更换本乐趣缺「满 3 可领」闭环。
 
@@ -79,4 +79,4 @@
 
 ---
 
-*选题短征日差软目标极薄有奖 · tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13329 · TIP-CX · 全弧非 L · 可施工 W1a插件+W1b物品 · 半行 REJECT `d00ed84bc` **保持否决** · 日差本/路径追/settle下一环同题勿再交 · 2026-10-14 07:53 Asia/Shanghai。*
+*选题短征日差软目标极薄有奖 · tip **CLOSED live** · `1b93bc6b4` / `0749d92c7` · PASS `ed440e0e1` · D13329 · TIP-CX · 半行 REJECT `d00ed84bc` **保持否决** · 日差软目标极薄有奖同题勿再交。*
