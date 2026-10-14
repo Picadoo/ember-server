@@ -9,8 +9,8 @@
 - glance / enterCue：清「手打 /corerpg p1 featurepath」主教 →「点精选路径页」
 - PAPI（对齐物品薄页）：`%corerpg_p1_featured_path%/_label/_tip/_line%`（经 `EmberRunPapi` ROTATION）；既有 `featured` / `featured_key` / `access_q01` / `q07done` 复用
 - 单测：`EmberFeaturedPathPickTest` · `EmberFeaturedPathTest` · `EmberFeaturedSettle*Test` · `EmberRunPapiTest` 绿
-- jar：`1.65.829-d13336.local` · sha256 `05551d1620bb…` · feat `5070491b0` · ECONOMY_BV **123** 未动
-- play：live `1.65.829-d13336.local` · storage=mysql · bv123 · MySQL connected（装 jar 后 reload 验证）
+- jar：`1.65.829-d13336.local` · sha256 `05551d1620bb…` · feat `1465d7622` · ECONOMY_BV **123** 未动
+- play：live `1.65.829-d13336.local` · storage=mysql · bv123 · MySQL connected（装 jar + restart play 验证）
 - **零改**掉落 / 体力价 / 周帽数值 / 精选语义 / Cast·Aid / variety / 已齐 settle 薄页（含 `ember_p1_featured_settle`）/ 庭内 / 其他 *Path.offerPick / TrMenu yml（物品 W1b 并行已交）
 - **未勾** tip CLOSED · **未派测**（总控派测）
 
