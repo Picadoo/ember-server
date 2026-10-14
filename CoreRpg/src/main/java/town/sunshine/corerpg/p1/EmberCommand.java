@@ -6178,14 +6178,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberGapPath.get(d);
-                    if (EmberGapPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGapPath.label(cur) + " · 改路径再 /corerpg p1 gappath");
+                    if (EmberGapPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGapPath.label(cur) + " · 点收招路径页可改");
                     else EmberGapPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberGapPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 gappath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点收招路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberGapPath.applyAndReply(p, id);
