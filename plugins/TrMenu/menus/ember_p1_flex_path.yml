@@ -1,0 +1,223 @@
+# TIP-DN / D13345 · 轻技路径选打薄页 · flex_path* · flexpath on|off|clear
+# 入口：FlexPath.offerPick / 无参 flexpath / 周要约 / Q01 → /ember_p1_flex_path（插件并行改开菜单）
+# 选打：corerpg p1 flexpath on|off|clear
+# 导航：技能组 ember_skill_kit / 冒险 / 可选工坊
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落/体力价 · 改 stride_path / 其他已齐选打 / 轻技规则语义(D494) / 庭内 · 不建 step_path
+# PAPI（插件可能后到·静态接线）：flex_path / flex_path_label / flex_path_tip · q01done（灰态单条件·首通 Q01）
+# ≠ ember_p1_stride_path · ≠ ember_p1_counter_path · ≠ ember_p1_pledge_path · ≠ ember_p1_trial_path · ≠ ember_p1_abyss_path · ≠ ember_p1_short_path · ≠ ember_p1_raid_path · ≠ ember_p1_challenge_path · ≠ ember_p1_featured_path · ≠ ember_p1_step_path
+
+Title: '§a轻技 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_flex_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '##1#2#C##'
+  - '##K#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §a轻技路径 §7· 当前 §e%corerpg_p1_flex_path_label%'
+    - 'tell: §8点选 · 装配踏步 / 卸下轻技 / 清空 · 或技能组 / 冒险 / 工坊'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§a轻技路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_flex_path_label%'
+        - '§8%corerpg_p1_flex_path_tip%'
+        - '§8点选 · 装配踏步 / 卸下轻技 / 清空'
+        - '§8需本人首进/首通 Q01'
+
+  # 装配踏步 · ON=1 · 潜行+Q 放身法
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7装配踏步 §8（需首进/首通 Q01）'
+          lore:
+            - '§c需本人首进/首通 Q01'
+            - '§7潜行+Q 放身法（前冲/后撤）'
+            - '§8通关 / 首进后再选路径'
+      - condition: 'check papi %corerpg_p1_flex_path% == 1'
+        priority: 2
+        display:
+          material: feather
+          shiny: true
+          name: '§a装配踏步 §8· §f已选'
+          lore:
+            - '§7潜行+Q 放身法（前冲/后撤）'
+            - '§8%corerpg_p1_flex_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 flexpath on'
+            - 'menu: ember_p1_flex_path'
+    display:
+      material: feather
+      name: '§e装配踏步'
+      lore:
+        - '§7潜行+Q 放身法（前冲/后撤）'
+        - '§8点选切换轻技路径'
+        - '§e➥ §f设为装配踏步'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 flexpath on'
+        - 'menu: ember_p1_flex_path'
+
+  # 卸下轻技 · OFF=2 · 潜行+Q 不放身法
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7卸下轻技 §8（需首进/首通 Q01）'
+          lore:
+            - '§c需本人首进/首通 Q01'
+            - '§7潜行+Q 不放身法 · 留给丢弃/背包手感'
+            - '§8通关 / 首进后再选路径'
+      - condition: 'check papi %corerpg_p1_flex_path% == 2'
+        priority: 2
+        display:
+          material: stick
+          shiny: true
+          name: '§a卸下轻技 §8· §f已选'
+          lore:
+            - '§7潜行+Q 不放身法 · 留给丢弃/背包手感'
+            - '§8%corerpg_p1_flex_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 flexpath off'
+            - 'menu: ember_p1_flex_path'
+    display:
+      material: stick
+      name: '§7卸下轻技'
+      lore:
+        - '§7潜行+Q 不放身法 · 留给丢弃/背包手感'
+        - '§8点选切换轻技路径'
+        - '§e➥ §f设为卸下轻技'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 flexpath off'
+        - 'menu: ember_p1_flex_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需首进/首通 Q01）'
+          lore:
+            - '§c需本人首进/首通 Q01'
+            - '§8通关 / 首进后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_flex_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无轻技路径焦点'
+            - '§8先点 装配踏步 / 卸下轻技'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 flexpath clear'
+            - 'menu: ember_p1_flex_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_flex_path_label%'
+        - '§8清焦点 · 可重选（当前装配未自动回滚）'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 flexpath clear'
+        - 'menu: ember_p1_flex_path'
+
+  # 技能组
+  K:
+    display:
+      material: book
+      name: '§6去技能组'
+      lore:
+        - '§7看按键 / 形状 / 身法方向'
+        - '§8装配后可对照手感'
+        - '§e➥ §f开技能组'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_skill_kit'
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊（可选）
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
