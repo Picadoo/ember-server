@@ -1,6 +1,6 @@
 # tip · TIP-DD 精选周帽满 D794 / FeaturedPath.afterSettle「精选下一环」菜单化（settle 聊天钮去指令化 · ≠图身份首通settle下一环同题 · ≠深渊settle下一环同题 · ≠挑战settle下一环同题 · ≠团本settle下一环同题 · ≠短征settle下一环·回看同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬掉落/体力价/周帽 · ≠D673同题复读）· 拟 D13335
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13335 · TIP-DD · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改掉落/体力价/周帽 · afterSettle+D794→开 ember_p1_featured_settle · 清 ConfirmTokens 教 enter/featurepath/forge 主 UI · 2026-10-14 10:22 Asia/Shanghai
+> **状态：** **抽测 PASS** · feat `b07074070` · menu tip `7a098dda6` · tip `b7160ee19` · jar `1.65.828-d13335.local` · **勿勾 CLOSED**（总控收口）· 2026-10-14 10:36 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-featured-settle-next-loop-visible-2026-10-14.md`](../design/DESIGN-ember-featured-settle-next-loop-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-featured-settle-next-loop-visible`
 > **施工岗（批后）：** 余烬-插件（FeaturedPath.afterSettle + Settle D794 下一环改开菜单）+ 余烬-物品（薄页 `ember_p1_featured_settle`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零图身份/深渊/短征/团本/挑战 settle 同题复读 · 零 D673 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬掉落/体力价/周帽 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察
@@ -34,7 +34,7 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 10:22 Asia/Shanghai
 - [x] 插件交 FeaturedPath.afterSettle + D794 入口改菜单 + 清裸指令主路径 + 单测
-- [ ] 物品交薄 featured settle 页 + TrMenu reload
-- [ ] 抽测 PASS（再进/换路径/冒险/工坊真开·PAPI·零抬掉落/体力价/周帽）· **勿勾本窗 CLOSED**
+- [x] 物品交薄 featured settle 页 + TrMenu reload · W1b `8b99da98e` / tip `7a098dda6`
+- [x] 抽测 PASS live（再进/换路径/冒险/工坊真开·PAPI·零抬掉落/体力价/周帽）· **勿勾 CLOSED** · 测岗 2026-10-14 10:36 Asia/Shanghai
 
-## STATUS: **已批 A · 方案 M** · W1a 插件交 feat `b07074070` jar `1.65.828-d13335.local` · 待物品 W1b / 抽测 · 勿勾 CLOSED · L不批 · D13335 · TIP-DD · 2026-10-14 Asia/Shanghai
+## STATUS: **抽测 PASS** · feat `b07074070` · menu tip `7a098dda6` · tip `b7160ee19` · jar `1.65.828-d13335.local` · **勿勾 CLOSED**（总控收口）· D13335 · TIP-DD · 2026-10-14 10:36 Asia/Shanghai
