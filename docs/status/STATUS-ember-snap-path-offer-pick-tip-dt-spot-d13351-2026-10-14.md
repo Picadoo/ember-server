@@ -1,7 +1,7 @@
 # 状态 · TIP-DT 断链路径选打菜单化抽测
 
 **裁决：** **PASS** · 2026-10-14 15:30 Asia/Shanghai · feat `b9d06e01a` · menu tip `4070a04f7` · tip/批 `f5cea1e1d` · jar `1.65.844-d13351.local` · 证据 `/workspace/tmp/tip-dt-snap-path/`  
-**范围：** offerPick / 无参 snappath / 周要约 → 开 `ember_p1_snap_path`（**禁** ConfirmTokens 教 snappath 为主 UI）· 薄页自动/提醒/静默/清空/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `snap_path_*` 诚实 · Q01 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_veil_path` / `ember_p1_free_path` / `ember_p1_dodge_path` 及其他已齐 path · **零改** D574 火链断链「断链」战斗钮语义 · **零**新建 `ember_p1_pace_path` · **≠**已齐选打同题复读 · **勿勾 tip CLOSED**（总控收口）
+**范围：** offerPick / 无参 snappath / 周要约 → 开 `ember_p1_snap_path`（**禁** ConfirmTokens 教 snappath 为主 UI）· 薄页自动/提醒/静默/清空/技能组/冒险/工坊真开 · applyAndReply 下一步走选打薄页 · PAPI `snap_path_*` 诚实 · Q01 灰态+亮态 · **零改**伤害/CD表/掉落/体力价 · **零改** `ember_p1_veil_path` / `ember_p1_free_path` / `ember_p1_dodge_path` 及其他已齐 path · **零改** D574 火链断链「断链」战斗钮语义 · **零**新建 `ember_p1_pace_path` · **≠**已齐选打同题复读 · **CLOSED live by 总控**（总控收口）
 
 ## 必验
 
@@ -20,11 +20,13 @@
 
 - Stage2 三开 · daily_kills=2400 · ×0.97 · gate_daily=no · TrMenu **99**（含 `ember_p1_snap_path`）· jar sha256 `882303837d6c…` plugins=server-runtime · MySQL connected · bv123
 - 单测 `EmberSnapPathPickTest` / `EmberSnapPathTest` / VeilPathPick / FreePathPick / DodgePathPick / SidestepPathPick / StepPathPick / FlexPathPick / StridePathPick / CounterPathPick / PledgePathPick / TrialPathPick / RunPapi 绿
-- 57/57 PASS · **tip 未勾 CLOSED**（总控收口）
+- 57/57 PASS · **tip **CLOSED live by 总控** · 2026-10-14 15:32 Asia/Shanghai**（总控收口）
 - 选打主 UI = `ember_p1_snap_path`；未教裸 snappath；D574 局内「断链」战斗钮语义零改；未复读避毒/解锢/闪榴/闪冲/身法/轻技/步态等选打；未建 pace_path
 
 ## 纪律确认
 
 six_slot enabled/migrate/set_bonus 仍 true · daily_kills=2400 · weekly_cap=3 · rot weekly_cap=3 · top cost=30 · SOFT_TARGET=3 · ×0.97 未改 · bv123 · 零改伤害/CD表/掉落/体力价/veil_path/free_path/dodge_path/sidestep_path/step_path/flex_path/stride_path/counter_path/pledge_path/trial_path/abyss·short·raid·featured·challenge path/variety/soft-reward · 零改 D574 火链断链战斗钮 · 零新建 pace_path · 零 sx20 · 未改玩法数值 · 未切分支/stash/reset/force-push · 未碰 login/proxy/MariaDB
 
-> **测岗抽测：** PASS live · feat `b9d06e01a` · menu tip `4070a04f7` · tip `f5cea1e1d` · jar `1.65.844-d13351.local` · **勿勾 tip CLOSED**（总控收口）
+> **测岗抽测：** PASS live · feat `b9d06e01a` · menu tip `4070a04f7` · tip `f5cea1e1d` · jar `1.65.844-d13351.local` · **CLOSED live by 总控**（总控收口） · **CLOSED live by 总控** · 2026-10-14 15:32 Asia/Shanghai
+
+## STATUS: **CLOSED live** · `b9d06e01a` / `4070a04f7` · PASS `6f69cb256` · jar `1.65.844-d13351.local` · D13351 · TIP-DT · 2026-10-14 15:32 Asia/Shanghai · 断链路径选打菜单化同题勿再交
