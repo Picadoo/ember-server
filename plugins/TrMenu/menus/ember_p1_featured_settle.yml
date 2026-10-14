@@ -3,7 +3,7 @@
 # 再进：corerpg p1 enter %corerpg_p1_featured_settle_map% [challenge] · 精选路径 featurepath challenge|normal|clear
 # 硬本路径薄格：challengepath prefer|easy|follow|clear · 图装追 mapfarm
 # 禁：教裸指令主 UI · 抬掉落/体力价/周帽 · 改已齐 settle / 庭内 / Cast/Aid/variety
-# PAPI（插件可能后到·静态接线）：featured_settle_map/name/line/week_left/week_line · featured_path / featured_path_label · challenge_path / challenge_path_label
+# PAPI（对齐插件 W1a）：featured_settle_map/name/line/path/path_label/cap/cap_full/cap_label · challenge_path / challenge_path_label
 
 Title: '§b精选 · 下一环'
 
@@ -28,7 +28,7 @@ Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-1.1'
     - 'tell: §b精选下一环 §7· %corerpg_p1_featured_settle_line%'
-    - 'tell: §7路径：§e%corerpg_p1_featured_path_label% §8· 周帽 %corerpg_p1_featured_settle_week_line% §8· 点选再进 / 换路径 / 冒险 / 花料'
+    - 'tell: §7路径：§e%corerpg_p1_featured_settle_path_label% §8· %corerpg_p1_featured_settle_cap_label% §8· 点选再进 / 换路径 / 冒险 / 花料'
 
 Icons:
   '#':
@@ -43,25 +43,25 @@ Icons:
       name: '§b精选下一环'
       lore:
         - '§7本周：§f%corerpg_p1_featured_settle_name%'
-        - '§7精选路径：§e%corerpg_p1_featured_path_label%'
-        - '§7周帽：§f%corerpg_p1_featured_settle_week_line%'
+        - '§7精选路径：§e%corerpg_p1_featured_settle_path_label%'
+        - '§7周帽：§f%corerpg_p1_featured_settle_cap_label%'
         - '§8点选 · 再进 / 换精选·硬本路径 / 冒险 / 工坊 / 图装追'
 
   # 再进精选同图 · 真 enter（路径挑战→challenge；普通→无后缀）
   E:
     update: 20
     icons:
-      - condition: 'check papi %corerpg_p1_featured_settle_week_left% <= 0'
+      - condition: 'check papi %corerpg_p1_featured_settle_cap% > 0'
         priority: 1
         display:
           material: gray dye
           name: '§7再进精选同图 §8（周帽已满）'
           lore:
             - '§a本周周帽已满 §7· 再进灰'
-            - '§7本周：§f%corerpg_p1_featured_settle_week_line%'
+            - '§7本周：§f%corerpg_p1_featured_settle_cap_label%'
             - '§7图：§f%corerpg_p1_featured_settle_name%'
             - '§8仍可换路径 / 冒险 / 工坊 · 周一 0 点重置'
-      - condition: 'check papi %corerpg_p1_featured_path% < 1'
+      - condition: 'check papi %corerpg_p1_featured_settle_path% < 1'
         priority: 2
         display:
           material: gray dye
@@ -70,14 +70,14 @@ Icons:
             - '§c尚未选精选路径'
             - '§7点下方 精选·挑战 / 精选·普通 定焦点'
             - '§8选好后再进 · 勿假开'
-      - condition: 'check papi %corerpg_p1_featured_path% == 1'
+      - condition: 'check papi %corerpg_p1_featured_settle_path% == 1'
         priority: 3
         display:
           material: emerald
           name: '§a再进精选同图 §8· §c挑战'
           lore:
             - '§7本图：§f%corerpg_p1_featured_settle_name%'
-            - '§7路径：§e%corerpg_p1_featured_path_label% §7· 周帽 %corerpg_p1_featured_settle_week_line%'
+            - '§7路径：§e%corerpg_p1_featured_settle_path_label% §7· %corerpg_p1_featured_settle_cap_label%'
             - '§8点进 · 真进挑战精选 · §e➥进本'
         actions:
           all:
@@ -89,7 +89,7 @@ Icons:
       name: '§a再进精选同图'
       lore:
         - '§7本图：§f%corerpg_p1_featured_settle_name%'
-        - '§7路径：§e%corerpg_p1_featured_path_label% §7· 周帽 %corerpg_p1_featured_settle_week_line%'
+        - '§7路径：§e%corerpg_p1_featured_settle_path_label% §7· %corerpg_p1_featured_settle_cap_label%'
         - '§8点进 · 真进普通精选 · §e➥进本'
     actions:
       all:
@@ -144,7 +144,7 @@ Icons:
   '1':
     update: 20
     icons:
-      - condition: 'check papi %corerpg_p1_featured_path% == 1'
+      - condition: 'check papi %corerpg_p1_featured_settle_path% == 1'
         priority: 1
         display:
           material: redstone
@@ -176,7 +176,7 @@ Icons:
   '2':
     update: 20
     icons:
-      - condition: 'check papi %corerpg_p1_featured_path% == 2'
+      - condition: 'check papi %corerpg_p1_featured_settle_path% == 2'
         priority: 1
         display:
           material: light blue dye
@@ -208,7 +208,7 @@ Icons:
   C:
     update: 20
     icons:
-      - condition: 'check papi %corerpg_p1_featured_path% < 1'
+      - condition: 'check papi %corerpg_p1_featured_settle_path% < 1'
         priority: 1
         display:
           material: gray dye
@@ -220,7 +220,7 @@ Icons:
       material: barrier
       name: '§7清空精选路径'
       lore:
-        - '§7当前：§e%corerpg_p1_featured_path_label%'
+        - '§7当前：§e%corerpg_p1_featured_settle_path_label%'
         - '§8清焦点 · 可重选'
         - '§e➥ §f清空'
     actions:
