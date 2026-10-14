@@ -5839,14 +5839,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberPressPath.get(d);
-                    if (EmberPressPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPressPath.label(cur) + " · 改路径再 /corerpg p1 presspath");
+                    if (EmberPressPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPressPath.label(cur) + " · 点压伤路径页可改");
                     else EmberPressPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberPressPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 presspath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点压伤路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberPressPath.applyAndReply(p, id);
