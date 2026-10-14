@@ -1,6 +1,6 @@
 # tip · TIP-DW StreakPath.offerPick / applyAndReply「连斩路径选打」菜单化（选路径聊天钮去指令化 · ≠避焰路径选打同题 · ≠避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠Clean/Rush/Cut同窗 · ≠复开 D577 玩法本体）· 拟 D13354
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13354 · TIP-DW · W1a插件已交 `8058a9e51` · jar `1.65.847-d13354.local` · 可派测/物品 W1b · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 streakpath/周要约→开 ember_p1_streak_path · 清 ConfirmTokens 教 streakpath 主 UI · 2026-10-14 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13354 · TIP-DW · W1a+W1b+抽测 PASS · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 streakpath/周要约→开 ember_p1_streak_path · 清 ConfirmTokens 教 streakpath 主 UI · 2026-10-14 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-streak-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-streak-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-streak-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（StreakPath.offerPick / applyAndReply / 无参 streakpath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_streak_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零避焰路径选打同题复读（TIP-DV） · 零避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-DU–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零 Clean/Rush/Cut 同窗 · 零复开 D577 玩法本体（auto/ask/mute 真改连斩事件续斩语义零改）· 零改 blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
@@ -36,7 +36,7 @@
 ## 验收（批后施工）
 - [x] 总控批 A·M · 2026-10-14 16:15 Asia/Shanghai
 - [x] 插件交 offerPick / applyAndReply / 无参 streakpath / 周要约改开菜单 + 清裸指令主路径 + 单测 · feat_commit `8058a9e51` · jar `1.65.847-d13354.local`
-- [ ] 物品交薄 streak_path 页 + TrMenu reload
-- [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 blaze_path·零已齐选打同题复读·零改 D577 连斩语义）· **勿勾 CLOSED（总控勾）**
+- [x] 物品交薄 streak_path 页 + TrMenu reload · `4790be622`
+- [x] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 blaze_path·零已齐选打同题复读·零改 D577 连斩语义）· spot STATUS 见 STATUS-ember-streak-path-offer-pick-tip-dw-spot-d13354 · **勿勾 CLOSED**
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a插件已交 `8058a9e51` / jar `1.65.847-d13354.local` · 可派测/物品 W1b · 勿勾 CLOSED · L不批 · D13354 · TIP-DW · 2026-10-14 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a+W1b+抽测 PASS（勿勾 CLOSED · 待总控收口） · L不批 · D13354 · TIP-DW · 2026-10-14 Asia/Shanghai
