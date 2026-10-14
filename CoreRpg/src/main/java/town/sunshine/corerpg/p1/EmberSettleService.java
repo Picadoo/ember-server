@@ -662,10 +662,11 @@ public final class EmberSettleService {
                 chp.sendMessage(EmberRunService.P + "§c挑战首通 · §f" + m.name + " §7保底 §e" + fam
                         + " §8（挑战图身份 · 专精点进度）");
                 try { chp.sendActionBar("§c挑战首通 · §f" + fam + " §7保底"); } catch (Throwable ignored) { }
-                ConfirmTokens.sendButtons(chp, EmberRunService.P + "§7下一步：", // D671
-                        new String[]{"[工坊]", "/corerpg p1 forge", "养成这件", "GOLD"},
-                        new String[]{"[冒险页]", "/ember_p1_adventure", "下一张挑战", "GREEN"},
-                        new String[]{"[装备页]", "/ember_p1_gear", "穿上同族", "AQUA"});
+                ConfirmTokens.sendButtons(chp, EmberRunService.P + "§7下一步：", // D671 TIP-DA D13332 工坊→菜单；主钮开薄页
+                        new String[]{EmberChallengeSettle.SETTLE_NEXT_LOOP_LABEL, EmberChallengeSettle.SETTLE_NEXT_LOOP_CMD,
+                                "再挑战/选图/路径/工坊", "GREEN"},
+                        new String[]{"[工坊]", EmberChallengeSettle.SETTLE_FORGE_CMD, "养成这件", "GOLD"},
+                        new String[]{"[冒险页]", EmberChallengeSettle.SETTLE_ADVENTURE_CMD, "下一张挑战", "AQUA"});
             }
         }
         if (s.challenge && s.abyss == 0) { // D762

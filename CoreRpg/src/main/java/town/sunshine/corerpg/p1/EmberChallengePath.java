@@ -15,6 +15,7 @@ import town.sunshine.corerpg.PlayerData;
  * NEW play+acquisition: sticky default for challenge vs normal when re-entering a first-cleared mainline map.
  * Distinct from FeaturedPath (weekly featured identity buttons only). Chat only. Zero power / AFK / sx.
  * Not combo sticky, not forge chase, not enter/card/ActionBar cue twin (rewrites enter flag, no ActionBar).
+ * TIP-DA D13332: afterSettle / glance / offer 下一环开薄页 /ember_p1_challenge_settle；禁教手打 enter challenge|forge|mapfarm|challengepath 主 UI。
  */
 public final class EmberChallengePath {
 
@@ -83,7 +84,7 @@ public final class EmberChallengePath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8硬本路径：首进/首通 Q07 后可选";
-        if (!valid(id)) return "§8硬本路径：未选 · /corerpg p1 challengepath";
+        if (!valid(id)) return "§8硬本路径：未选 · 点下一环选路径"; // TIP-DA D13332 禁教手打
         return "§e硬本路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -103,11 +104,11 @@ public final class EmberChallengePath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选已首通主线图默认（改获取节奏 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[偏挑战]", "/corerpg p1 challengepath prefer", tip(PREFER), "RED"},
-                new String[]{"[偏普通]", "/corerpg p1 challengepath easy", tip(EASY), "GREEN"},
-                new String[]{"[随令]", "/corerpg p1 challengepath follow", tip(FOLLOW), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 challengepath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-DA D13332: 开薄页点选；禁教手打 challengepath 主 UI
+        ConfirmTokens.sendButtons(p, P + "§7硬本路径：",
+                new String[]{EmberChallengeSettle.SETTLE_NEXT_LOOP_LABEL, EmberChallengeSettle.SETTLE_NEXT_LOOP_CMD,
+                        "薄页点选偏挑战/普通/随令", "AQUA"},
+                new String[]{"[冒险页]", EmberChallengeSettle.SETTLE_ADVENTURE_CMD, "进已首通图试默认", "GREEN"});
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -173,9 +174,11 @@ public final class EmberChallengePath {
         if (id == PREFER) p.sendMessage(P + "§7例：已首通图进本默认挑战版（指令写普通可覆盖）");
         else if (id == EASY) p.sendMessage(P + "§7例：已首通图进本默认普通版（指令写挑战可覆盖）");
         else p.sendMessage(P + "§7例：完全按进本指令，不自动改版");
+        // TIP-DA D13332: 主钮开薄页；禁教手打 challengepath 主 UI
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[打开冒险]", "/ember_p1_adventure", "进已首通图试默认", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 challengepath", "重选", "GRAY"});
+                new String[]{EmberChallengeSettle.SETTLE_NEXT_LOOP_LABEL, EmberChallengeSettle.SETTLE_NEXT_LOOP_CMD,
+                        "再挑战/选图/路径/工坊", "GREEN"},
+                new String[]{"[打开冒险]", EmberChallengeSettle.SETTLE_ADVENTURE_CMD, "进已首通图试默认", "AQUA"});
     }
 
 
@@ -185,8 +188,10 @@ public final class EmberChallengePath {
         if (p == null || d == null) return;
         int id = get(d);
         if (!valid(id)) {
-            if (challenge)
-                p.sendMessage(EmberRunService.P + "§7未选硬本路径 · /corerpg p1 challengepath");
+            if (challenge) {
+                p.sendMessage(EmberRunService.P + "§7未选硬本路径 · 点下一环选路径"); // TIP-DA 禁教手打
+                offerPick(p);
+            }
             return;
         }
         String line = challenge
@@ -196,13 +201,27 @@ public final class EmberChallengePath {
         try { p.sendActionBar(line); } catch (Throwable ignored) { }
     }
 
-    /** D762/D764: after challenge clear — path glance + next challenge enter when PREFER. */
+    /**
+     * D762/D764: after challenge clear — path glance + next-loop thin page.
+     * TIP-DA D13332: 有路径/无路径皆开 {@link EmberChallengeSettle#SETTLE_NEXT_LOOP_CMD}；
+     * 首通旁路交 D671（同批改菜单）；禁 enter challenge/forge/mapfarm 裸指令主 UI。
+     */
     public static void afterSettle(Player p, PlayerData d, boolean challenge, boolean challengeFirst, String mapKey) {
         if (p == null || !challenge) return;
-        int id = get(d);
+        // TIP-DA: remember settle map every challenge clear (overwrite)
+        if (d != null && mapKey != null && !mapKey.isEmpty())
+            EmberChallengeSettle.remember(d, mapKey);
+        int id = d == null ? NONE : get(d);
         if (!valid(id)) {
             if (challengeFirst)
-                p.sendMessage(EmberRunService.P + "§7可设硬本路径：/corerpg p1 challengepath");
+                p.sendMessage(EmberRunService.P + "§7可设硬本路径 · 点下一环选路径"); // TIP-DA 禁教手打
+            // 非首通无路径：仍进薄页（有路径/无路径皆主钮）
+            if (!challengeFirst) {
+                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7硬本下一环：",
+                        new String[]{EmberChallengeSettle.SETTLE_NEXT_LOOP_LABEL, EmberChallengeSettle.SETTLE_NEXT_LOOP_CMD,
+                                "再挑战/选图/路径/工坊", "GREEN"},
+                        new String[]{"[冒险页]", EmberChallengeSettle.SETTLE_ADVENTURE_CMD, "换内容", "AQUA"});
+            }
             return;
         }
         // D774: EASY path still acknowledges challenge clear (path preference ≠ this run)
@@ -219,14 +238,13 @@ public final class EmberChallengePath {
         if (!challengeFirst) {
             try { p.sendActionBar(line); } catch (Throwable ignored) { }
         }
-        // D764/D780: next-loop when prefer-challenge (skip first-clear — D671 already buttons)
-        if (!challengeFirst && id == PREFER && mapKey != null && !mapKey.isEmpty()) {
-            String mk = mapKey.toLowerCase(Locale.ROOT);
+        // TIP-DA D13332: 非首通一律开薄页（含 PREFER/EASY/FOLLOW）；首通交 D671
+        if (!challengeFirst) {
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§7硬本下一环：", // D894
-                    new String[]{"[再挑战·" + mk.toUpperCase(Locale.ROOT) + "]",
-                            "/corerpg p1 enter " + mk + " challenge", "同图挑战再刷", "RED"},
-                    new String[]{"[工坊]", "/corerpg p1 forge", "花挑战料", "GOLD"},
-                    new String[]{"[图装追]", "/corerpg p1 mapfarm", "补同族", "AQUA"});
+                    new String[]{EmberChallengeSettle.SETTLE_NEXT_LOOP_LABEL, EmberChallengeSettle.SETTLE_NEXT_LOOP_CMD,
+                            "再挑战/选图/路径/工坊", "GREEN"},
+                    new String[]{"[冒险页]", EmberChallengeSettle.SETTLE_ADVENTURE_CMD, "换内容", "AQUA"},
+                    new String[]{"[工坊]", EmberChallengeSettle.SETTLE_FORGE_CMD, "花挑战料", "GOLD"});
         }
     }
 

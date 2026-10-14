@@ -85,6 +85,8 @@ public final class EmberRunPapi {
         if ("forgeroll_back".equals(key)) return Section.LOADOUT; // D13325 TIP-CT forgeroll return label
         if (key.startsWith("sign_") || key.startsWith("online_") || key.startsWith("afk_") || key.startsWith("sig_")
                 || key.startsWith("reroll_") || key.startsWith("honor_") || key.startsWith("spec_")) return Section.GROWTH;
+        if ("challenge_settle".equals(key) || key.startsWith("challenge_settle_")
+                || "challenge_path".equals(key) || "challenge_path_label".equals(key)) return Section.GATE; // TIP-DA D13332
         if ("forge_t2".equals(key) || "forge_t3".equals(key) || "challenge".equals(key) || "q07done".equals(key)
                 || "access_q01".equals(key) || "access_q07".equals(key)) return Section.GATE; // TIP-BR MG2
         if (isQDone(key)) return Section.GATE;
@@ -769,7 +771,25 @@ public final class EmberRunPapi {
         return g == null ? "" : g.papi(p, d, key.substring(5)); // spec_ · D141
     }
 
+    /** TIP-DA D13332 %corerpg_p1_challenge_settle*% — last settled challenge map + path; zero economy. */
+    private String challengeSettle(PlayerData d, String key) {
+        String mk = EmberChallengeSettle.lastMap(d);
+        int path = EmberChallengePath.get(d);
+        EmberRunMaps maps = runs.maps();
+        EmberRunMaps.MapDef m = (maps == null || mk.isEmpty()) ? null : maps.byKey(mk);
+        if ("challenge_settle".equals(key) || "challenge_settle_map".equals(key)) return mk;
+        if ("challenge_settle_name".equals(key)) return EmberChallengeSettle.displayName(m, mk);
+        if ("challenge_settle_path".equals(key) || "challenge_path".equals(key)) return String.valueOf(path);
+        if ("challenge_settle_path_label".equals(key) || "challenge_path_label".equals(key))
+            return EmberChallengePath.label(path);
+        if ("challenge_settle_line".equals(key)) return EmberChallengeSettle.line(m, mk, path);
+        return "";
+    }
+
     private String gate(PlayerData d, String key) {
+        if ("challenge_settle".equals(key) || (key != null && key.startsWith("challenge_settle_"))
+                || "challenge_path".equals(key) || "challenge_path_label".equals(key)) // TIP-DA D13332
+            return challengeSettle(d, key);
         if ("forge_t2".equals(key)) return EmberSkillKit.directedForgeOpen(d, runs, 2) ? "已开放" : "需本人首进或首通 Q04";
         if ("forge_t3".equals(key)) return EmberSkillKit.directedForgeOpen(d, runs, 3) ? "已开放" : "需本人首进或首通 Q07";
         if ("challenge".equals(key)) return runs.challengeOpen(d) ? "已开放" : "需本人首进/首通 Q07";

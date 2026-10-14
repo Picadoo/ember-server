@@ -11,4 +11,10 @@ public class EmberChallengePathTest {
         assertFalse(EmberChallengePath.resolve(false, EmberChallengePath.PREFER, true, false)); // locked
         assertEquals(EmberChallengePath.PREFER, EmberChallengePath.parse("偏挑战"));
     }
+    @Test public void glance_menuFirst_noBareChallengepath() {
+        String g = EmberChallengePath.glance(EmberChallengePath.NONE, true);
+        assertTrue(g.contains("点下一环"));
+        assertFalse(g.contains("/corerpg p1 challengepath"));
+        assertTrue(EmberChallengePath.glance(EmberChallengePath.PREFER, true).contains("偏挑战"));
+    }
 }
