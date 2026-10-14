@@ -77,6 +77,7 @@ public final class EmberRunPapi {
         if ("rush".equals(key)) return Section.RUSH;
         if ("trial_path".equals(key) || (key != null && key.startsWith("trial_path_"))) return Section.RUSH; // TIP-DJ D13341
         if ("pledge_path".equals(key) || (key != null && key.startsWith("pledge_path_"))) return Section.RUSH; // TIP-DK D13342
+        if ("counter_path".equals(key) || (key != null && key.startsWith("counter_path_"))) return Section.RUSH; // TIP-DL D13343
         if (key.startsWith("pledge_")) return Section.RUSH;
         if (key.startsWith("rush_")) return Section.RUSH;
         if (key.startsWith("passd_")) return Section.ENTRY;
@@ -614,6 +615,16 @@ public final class EmberRunPapi {
         return "";
     }
 
+    /** TIP-DL D13343 %corerpg_p1_counter_path*% — sticky CounterPath preference; zero economy. */
+    private String counterPath(PlayerData d, String key) {
+        int path = EmberCounterPath.get(d);
+        if ("counter_path".equals(key)) return String.valueOf(path);
+        if ("counter_path_label".equals(key)) return EmberCounterPath.label(path);
+        if ("counter_path_tip".equals(key)) return EmberCounterPath.tip(path);
+        if ("counter_path_line".equals(key)) return EmberCounterPath.menuLine(path);
+        return "";
+    }
+
     /** TIP-CV D13327 %corerpg_p1_short_path*% — sticky ShortPath preference + resolve; zero algo change. */
     private String shortPathChase(PlayerData d, String key) {
         int path = EmberShortPath.get(d);
@@ -781,6 +792,8 @@ public final class EmberRunPapi {
             return trialPath(d, key);
         if ("pledge_path".equals(key) || (key != null && key.startsWith("pledge_path_"))) // TIP-DK D13342
             return pledgePath(d, key);
+        if ("counter_path".equals(key) || (key != null && key.startsWith("counter_path_"))) // TIP-DL D13343
+            return counterPath(d, key);
         if (key.startsWith("pledge_")) return runs.pledgePapi(d, key.substring(7)); // D174 stage 2b 自选誓约
         EmberRunMaps.MapDef rm = maps.rush.get(key.substring(5)); // rush_<entry>
         if (rm == null) return null; // old chain: not a rush entry → per-map tail

@@ -14,11 +14,18 @@ import town.sunshine.corerpg.PlayerData;
  * D480: counterplay combat path — wall / whiff / break.
  * Real fight-style choice (which boss window to chase); chat buttons only — no ActionBar HUD spam.
  * Zero boss dmg / CD / AFK / stamp change.
+ * TIP-DL D13343: offerPick / applyAndReply / 无参 counterpath / 周要约 →开 /ember_p1_counter_path；
+ * 清 ConfirmTokens 教 counterpath/enter 主 UI；零改伤害/CD表/掉落/体力价/破绽眩晕加秒表(D480).
  */
 public final class EmberCounterPath {
 
     public static final String C_PATH = "p1_counter_path";
     public static final String C_OFFER = "p1_counter_path_offer";
+
+    /** TIP-DL D13343 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_counter_path";
+    public static final String PATH_PICK_LABEL = "[破绽路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     /** 撞墙破绽 · Q02 焦冲 / Q07 冲撞 */
@@ -132,8 +139,16 @@ public final class EmberCounterPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8破绽路径：首进/首通 Q02 后可选";
-        if (!valid(id)) return "§8破绽路径：未选 · /corerpg p1 counterpath";
+        // TIP-DL D13343: 禁教手打 /corerpg p1 counterpath
+        if (!valid(id)) return "§8破绽路径：未选 · 点破绽路径页";
         return "§e破绽路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DL D13343 · 薄页 lore 一行（无 §）：当前破绽路径。
+     */
+    public static String menuLine(int id) {
+        return "破绽路径 · " + label(id);
     }
 
     /** Suggested enter command after path set. */
@@ -155,11 +170,19 @@ public final class EmberCounterPath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选破绽玩法路径（练哪类首领窗口 · 可随时改 · 不改数值）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[撞墙]", "/corerpg p1 counterpath wall", tip(WALL), "GOLD"},
-                new String[]{"[落空]", "/corerpg p1 counterpath whiff", tip(WHIFF), "AQUA"},
-                new String[]{"[破招]", "/corerpg p1 counterpath break", tip(BREAK), "LIGHT_PURPLE"},
-                new String[]{"[取消]", "/corerpg p1 counterpath clear", "清空路径", "GRAY"});
+        // TIP-DL D13343: 开选打薄页；禁 ConfirmTokens 教 counterpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_counter_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_counter_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "撞墙/落空/破招/清空/进本/冒险", "GREEN"});
+        }
     }
 
     /** Once per ISO week when unset. */
@@ -212,9 +235,10 @@ public final class EmberCounterPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a破绽路径 → §f" + label(id) + " §7· " + tip(id));
+        // TIP-DL D13343: 下一步→选打薄页/冒险（禁教裸 counterpath/enter 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{enterLabel(id), enterCmd(id), "进图练这种破绽", "GREEN"},
-                new String[]{"[换一条]", "/corerpg p1 counterpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "撞墙/落空/破招/进本/重选", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

@@ -233,7 +233,7 @@ public final class EmberCommand {
             }
             int id = EmberCounterPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 counterpath <wall|whiff|break|clear>");
+                p.sendMessage(P + "用法：点破绽路径页选撞墙/落空/破招/清空");
                 return true;
             }
             EmberCounterPath.applyAndReply(p, id);
