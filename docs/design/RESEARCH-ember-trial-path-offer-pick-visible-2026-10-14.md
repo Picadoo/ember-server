@@ -1,6 +1,6 @@
 # RESEARCH · TrialPath.offerPick / applyAndReply「试炼路径选打」菜单化 · 拟 D13341 · TIP-DJ
 
-> **状态：** **待批 A** · 荐方案 **M** · 拟 D13341 · TIP-DJ · 勿勾 CLOSED · 2026-10-14 12:05 Asia/Shanghai
+> **状态：** **已批 A · 方案 M** · APPROVED A·M · 拟 D13341 · TIP-DJ · 可施工 · 勿勾 CLOSED · 2026-10-14 12:10 Asia/Shanghai
 > **起因：** 总控【派·TIP-DJ 选题】默认钉 TrialPath.offerPick「试炼路径选打」菜单化 · 拟 D13341。祖先 TIP-DI 抽测 PASS `22aed762e` · feat `724f53462` · jar `1.65.833-d13340` · CLOSED live `326f7d3bd`。DESIGN-DI §6⑦ 明文后置 TrialPath 等逐支另窗。选题优先级：①挂机庭资源环加厚（须新硬债；旁路近饱和·gem gap 未亮则跳过）②短征日更乐趣（非sx20；非已齐路径/选打 TIP-DH）③已齐勿复读：各 settle 下一环（CW–DD）+ 精选·硬本·团本·短征·深渊选打 DE–DI ④默认钉 TrialPath.offerPick（可改题须证据压过本支）⑤签律/破绽/步态 / legacy evacuate 后置。**禁：** 半行独批 · 已齐 settle/深渊选打同题复读 · 抬伤害/CD表/掉落/体力价 · sx20 / densify / Pack6 / 开 K3 / 关观察 · variety 完整经济 / Cast·Aid 再拧 / 庭内旁路 · 教裸指令主 UI · 全族 Path 大扫 · 零改 `ember_p1_abyss_path` / ShortPath/RaidPath/FeaturedPath/ChallengePath。半行 REJECT `d00ed84bc` **保持否决**。
 > **上游：** TIP-DI CLOSED live `326f7d3bd` · feat `724f53462` · tip `39e38c8b1` · PASS `22aed762e` · jar `1.65.833-d13340.local` · 批 sha `39e38c8b1` · menu tip `27541e2cb` · D13340
 
@@ -62,6 +62,6 @@
 
 ---
 
-*RESEARCH · TrialPath.offerPick / applyAndReply 试炼路径选打菜单化 · **待批 A** · 荐方案 **M** · TIP-DJ / D13341 · 半行 REJECT `d00ed84bc` 保持 · ancestor TIP-DI CLOSED · ≠深渊选打同题 · 签律/破绽/步态后置 · 2026-10-14 12:05 Asia/Shanghai.*
+*RESEARCH · TrialPath.offerPick / applyAndReply 试炼路径选打菜单化 · **已批 A · 方案 M** · APPROVED A·M · TIP-DJ / D13341 · 半行 REJECT `d00ed84bc` 保持 · ancestor TIP-DI CLOSED · ≠深渊选打同题 · 签律/破绽/步态后置 · 2026-10-14 12:10 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐方案 **M** · 勿勾 CLOSED · L不批 · 拟 D13341 · TIP-DJ · 2026-10-14 12:05 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13341 · TIP-DJ · 2026-10-14 12:10 Asia/Shanghai

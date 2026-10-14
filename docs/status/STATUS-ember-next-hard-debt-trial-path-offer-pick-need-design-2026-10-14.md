@@ -1,11 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13341 · TrialPath.offerPick / applyAndReply 试炼路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠深渊路径选打同题 · ≠短征/团本/硬本/精选路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠全族 *Path.offerPick 大扫 · ≠签律/破绽/步态同窗）
 
-> **旁注（待批 A · 荐方案 M · 2026-10-14 12:05 Asia/Shanghai · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价）：** tip **待批 A** · DESIGN [`DESIGN-ember-trial-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-trial-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-trial-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-trial-path-offer-pick-visible-2026-10-14.md) · backlog `B-trial-path-offer-pick-visible` · **TIP-DJ** · **勿勾 CLOSED** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠已齐 settle 下一环同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬伤害/CD表/掉落/体力价 ≠D673同题复读 ≠legacy evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠签律/破绽/步态同窗**。
+> **旁注（已批 A · 方案 M · APPROVED A·M · 2026-10-14 12:10 Asia/Shanghai · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价）：** tip **已批 A · 方案 M** · DESIGN [`DESIGN-ember-trial-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-trial-path-offer-pick-visible-2026-10-14.md) · RESEARCH [`RESEARCH-ember-trial-path-offer-pick-visible-2026-10-14.md`](../design/RESEARCH-ember-trial-path-offer-pick-visible-2026-10-14.md) · backlog `B-trial-path-offer-pick-visible` · **TIP-DJ** · **勿勾 CLOSED** · **≠关观察 ≠抬日表 ≠sx20 ≠半行独批 ≠Cast/Aid/variety再拧 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠已齐 settle 下一环同题 ≠soft-reward同题 ≠庭内旁路再拧 ≠教裸指令 ≠densify ≠抬伤害/CD表/掉落/体力价 ≠D673同题复读 ≠legacy evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠签律/破绽/步态同窗**。
 
 > **上游结案：** **TIP-DI CLOSED** live（D13340 深渊路径选打齐 · feat `724f53462` · tip `39e38c8b1` · jar `1.65.833-d13340.local` · PASS `22aed762e` · 批 sha `39e38c8b1` · menu tip `27541e2cb` · CLOSED `326f7d3bd` · **深渊路径选打菜单化同题勿再交**）。总控派 TIP-DJ：内容优先；挂机加厚须新硬债；短征乐趣非已齐路径；已齐勿复读 settle CW–DD + 选打 DE–DI；**默认钉** TrialPath.offerPick；签律/破绽/步态 / legacy evacuate 默认后置。半行 REJECT `d00ed84bc` **保持否决**。
 
 **日期：** 2026-10-14（上海时间）
-**本窗性质：** tip **待批 A** · 荐方案 **M** · 拟 D13341 · TIP-DJ · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 12:05 Asia/Shanghai
+**本窗性质：** tip **已批 A · 方案 M** · APPROVED A·M · 拟 D13341 · TIP-DJ · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · 2026-10-14 12:10 Asia/Shanghai
 **硬规格：** [`DESIGN-ember-trial-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-trial-path-offer-pick-visible-2026-10-14.md) · backlog `B-trial-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–DI 已齐；试炼**选打**仍 ConfirmTokens 教裸 trialpath——DESIGN-DI §6⑦ 明文后置；内容闭环断在试炼路径选打（≠深渊选打；≠ settle 同题）。
 
@@ -44,7 +44,7 @@
 
 ---
 
-## 3. 派单摘要（待批 A · 荐 M）
+## 3. 派单摘要（已批 A·M · 可施工）
 
 ```
 【派单·内容真债待批A·拟D13341·TIP-DJ】TrialPath.offerPick/applyAndReply试炼路径选打菜单化（真可点 · ≠深渊选打同题 · ≠短征/团本/硬本/精选选打同题 · ≠已齐settle同题 · ≠半行空转 · ≠全族Path大扫 · ≠签律/破绽/步态同窗）
@@ -63,9 +63,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-trial-path-offer-pick-visible-2026-10-14.md` |
 | 薄 tip | `docs/tips/TIP-ember-trial-path-offer-pick-visible-thin-d13341-2026-10-14.md` |
 | backlog | `B-trial-path-offer-pick-visible` |
-| 号段 | **拟 D13341** · 字母窗 **TIP-DJ** · STATUS=**待批 A** · 荐方案 **M** |
+| 号段 | **D13341** · 字母窗 **TIP-DJ** · STATUS=**已批 A · 方案 M** · APPROVED A·M |
 | 上游 | TIP-DI CLOSED live `326f7d3bd` · feat `724f53462` · tip `39e38c8b1` · PASS `22aed762e` · jar `1.65.833-d13340.local` · 批 sha `39e38c8b1` · D13340；半行 REJECT `d00ed84bc` 保持否决；深渊路径选打菜单化同题勿再交 |
 
-*选题 TrialPath.offerPick / applyAndReply 试炼路径选打菜单化 · tip **待批 A** · 荐方案 **M** · 勿勾 CLOSED · L不批 · 拟 D13341 · TIP-DJ · 半行 REJECT `d00ed84bc` **保持否决** · ancestor TIP-DI CLOSED · 2026-10-14 12:05 Asia/Shanghai.*
+*选题 TrialPath.offerPick / applyAndReply 试炼路径选打菜单化 · tip **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13341 · TIP-DJ · 半行 REJECT `d00ed84bc` **保持否决** · ancestor TIP-DI CLOSED · 2026-10-14 12:10 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐方案 **M** · 勿勾 CLOSED · L不批 · 拟 D13341 · TIP-DJ · 2026-10-14 12:05 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 · 勿勾 CLOSED · L不批 · D13341 · TIP-DJ · 2026-10-14 12:10 Asia/Shanghai
