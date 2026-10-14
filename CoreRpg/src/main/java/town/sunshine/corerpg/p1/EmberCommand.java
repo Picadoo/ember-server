@@ -3625,14 +3625,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberFlexPath.get(d);
-                    if (EmberFlexPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFlexPath.label(cur) + " · 改路径再 /corerpg p1 flexpath");
+                    if (EmberFlexPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFlexPath.label(cur) + " · 点轻技路径页可改");
                     else EmberFlexPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberFlexPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 flexpath <on|off|clear>");
+                p.sendMessage(P + "用法：点轻技路径页选装配踏步/卸下轻技/清空");
                 return true;
             }
             EmberFlexPath.applyAndReply(p, id);

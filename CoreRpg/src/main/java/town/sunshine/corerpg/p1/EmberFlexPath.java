@@ -15,11 +15,18 @@ import town.sunshine.corerpg.PlayerData;
  * D494: flex-step combat path — equip / unequip 余烬踏步.
  * Real play change (sneak+Q casts 身法 only when equipped); chat buttons only.
  * Zero step distance / CD table / AFK / sx change. Not forge chase / enter-card / ActionBar twin.
+ * TIP-DN D13345: offerPick / applyAndReply / 无参 flexpath / 周要约 →开 /ember_p1_flex_path；
+ * 清 ConfirmTokens 教 flexpath/steppath 主 UI；零改伤害/CD表/掉落/体力价/轻技规则语义(D494).
  */
 public final class EmberFlexPath {
 
     public static final String C_PATH = "p1_flex_path";
     public static final String C_OFFER = "p1_flex_path_offer";
+
+    /** TIP-DN D13345 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_flex_path";
+    public static final String PATH_PICK_LABEL = "[轻技路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int ON = 1;  // equip PILOT
@@ -71,18 +78,35 @@ public final class EmberFlexPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8轻技路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8轻技路径：未选 · /corerpg p1 flexpath";
+        // TIP-DN D13345: 禁教手打 /corerpg p1 flexpath
+        if (!valid(id)) return "§8轻技路径：未选 · 点轻技路径页";
         return "§e轻技路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-DN D13345 · 薄页 lore 一行（无 §）：当前轻技路径。
+     */
+    public static String menuLine(int id) {
+        return "轻技路径 · " + label(id);
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选轻技路径（真改潜行+Q 是否放身法 · 可随时改 · 不改距离/CD 表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[装配踏步]", "/corerpg p1 flexpath on", tip(ON), "GREEN"},
-                new String[]{"[卸下轻技]", "/corerpg p1 flexpath off", tip(OFF), "YELLOW"},
-                new String[]{"[取消]", "/corerpg p1 flexpath clear", "清空路径", "GRAY"});
+        // TIP-DN D13345: 开选打薄页；禁 ConfirmTokens 教 flexpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_flex_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_flex_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "装配踏步/卸下轻技/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -148,17 +172,10 @@ public final class EmberFlexPath {
         else flex.cmdUnequip(p);
         p.sendMessage(P + "§a轻技路径 → §f" + label(id) + " §7· " + tip(id)
                 + " §8（已" + (id == ON ? "装配" : "卸下") + "）");
-        if (id == ON) {
-            ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                    new String[]{"[身法方向]", "/corerpg p1 steppath", "前冲 / 后撤", "AQUA"},
-                    new String[]{"[技能组]", "trmenu open ember_skill_kit", "看按键", "GOLD"},
-                    new String[]{"[换一条]", "/corerpg p1 flexpath", "重选", "GRAY"});
-        } else {
-            ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                    new String[]{"[再装配]", "/corerpg p1 flexpath on", tip(ON), "GREEN"},
-                    new String[]{"[技能组]", "trmenu open ember_skill_kit", "看按键", "GOLD"},
-                    new String[]{"[换一条]", "/corerpg p1 flexpath", "重选", "GRAY"});
-        }
+        // TIP-DN D13345: 下一步→选打薄页/冒险（禁教裸 flexpath/steppath 为主 UI；身法方向后置 Step 窗）
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "装配踏步/卸下轻技/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

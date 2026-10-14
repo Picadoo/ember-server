@@ -32,7 +32,7 @@ public final class EmberRunPapiTest {
     @Test public void routesEveryMenuFamily() {
         r(ENTRY, "pass_q01", "pass_rush", "pass_gq26", "passd_emberq01", "target", "marks_t1", "marks_t3", "marks_tx",
                 "pending", "active", "next", "recruits", "failrefund", "route_pri", "route_sec", "featured_left");
-        r(RUSH, "vbounty", "rush", "rush_q0r1", "rush_nosuch", "pledge_head", "pledge_n_lean", "pledge_ok", "trial_path", "trial_path_label", "trial_path_tip", "trial_path_line", "pledge_path", "pledge_path_label", "pledge_path_tip", "pledge_path_line", "counter_path", "counter_path_label", "counter_path_tip", "counter_path_line", "stride_path", "stride_path_label", "stride_path_tip", "stride_path_line"); // TIP-DJ D13341 + TIP-DK D13342 + TIP-DL D13343 + TIP-DM D13344
+        r(RUSH, "vbounty", "rush", "rush_q0r1", "rush_nosuch", "pledge_head", "pledge_n_lean", "pledge_ok", "trial_path", "trial_path_label", "trial_path_tip", "trial_path_line", "pledge_path", "pledge_path_label", "pledge_path_tip", "pledge_path_line", "counter_path", "counter_path_label", "counter_path_tip", "counter_path_line", "stride_path", "stride_path_label", "stride_path_tip", "stride_path_line", "flex_path", "flex_path_label", "flex_path_tip", "flex_path_line"); // TIP-DJ–DN D13341–D13345
         r(GROWTH, "sign_state", "online_d1", "online_min", "afk_today", "afk_t1", "afk_remain", "afk_eta_min", "afk_remain_line", "afk_next_farm", "sig_q01", "reroll_blade_cap",
                 "honor_name_1", "spec_x");
         r(GATE, "forge_t2", "forge_t3", "challenge", "identity_settle", "identity_settle_map", "identity_settle_name", "identity_settle_family", "identity_settle_slot", "identity_settle_line", "challenge_settle", "challenge_settle_map", "challenge_settle_name", "challenge_settle_path", "challenge_settle_path_label", "challenge_settle_line", "challenge_path", "challenge_path_label", "challenge_path_tip", "challenge_path_line", "access_q01", "access_q07", "q07done", "q04done", "q05done", "q06done", "q09done"); // TIP-DA + TIP-DC + TIP-DF D13337
@@ -159,6 +159,10 @@ public final class EmberRunPapiTest {
         assertEquals(RUSH, EmberRunPapi.route("stride_path_label"));
         assertEquals(RUSH, EmberRunPapi.route("stride_path_tip"));
         assertEquals(RUSH, EmberRunPapi.route("stride_path_line"));
+        assertEquals(RUSH, EmberRunPapi.route("flex_path")); // TIP-DN D13345
+        assertEquals(RUSH, EmberRunPapi.route("flex_path_label"));
+        assertEquals(RUSH, EmberRunPapi.route("flex_path_tip"));
+        assertEquals(RUSH, EmberRunPapi.route("flex_path_line"));
         assertEquals(ABYSS, EmberRunPapi.route("abyss_path"));
         assertEquals(ABYSS, EmberRunPapi.route("abyss_path_label"));
         assertEquals(ABYSS, EmberRunPapi.route("abyss_path_tip"));
