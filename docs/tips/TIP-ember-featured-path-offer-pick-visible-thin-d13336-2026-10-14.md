@@ -1,6 +1,6 @@
 # tip · TIP-DE FeaturedPath.offerPick / applyAndReply「精选路径选打」菜单化（选路径聊天钮去指令化 · ≠精选结算下一环同题 · ≠图身份/深渊/挑战/团本/短征 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬掉落/体力价/周帽 · ≠全族 *Path.offerPick 大扫）· 拟 D13336
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · D13336 · TIP-DE · 可施工 W1a插件+W1b物品 · L不批 · 勿勾 CLOSED · 零改掉落/体力价/周帽 · offerPick/applyAndReply/无参 featurepath→开 ember_p1_featured_path · 清 ConfirmTokens 教 featurepath/enter 主 UI · 2026-10-14 10:41 Asia/Shanghai
+> **状态：** **抽测 PASS** · feat `1465d7622` · menu tip `c161fff0d` · tip `c72e8a964` · jar `1.65.829-d13336.local` · **勿勾 CLOSED**（总控收口）· 2026-10-14 10:53 Asia/Shanghai
 > **DESIGN** [`DESIGN-ember-featured-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-featured-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-featured-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（FeaturedPath.offerPick / applyAndReply / 无参 featurepath 改开菜单）+ 余烬-物品（薄页 `ember_p1_featured_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零精选结算下一环同题复读（TIP-DD） · 零图身份/深渊/短征/团本/挑战 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬掉落/体力价/周帽 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫
@@ -36,6 +36,6 @@
 - [x] 总控批 A·M · 2026-10-14 10:41 Asia/Shanghai
 - [x] 插件交 offerPick / applyAndReply / 无参 featurepath 改菜单 + 清裸指令主路径 + 单测 · jar `1.65.829-d13336.local` · 2026-10-14 Asia/Shanghai
 - [x] 物品交薄 featured_path 页 + TrMenu reload · W1b `c161fff0d`
-- [ ] 抽测 PASS live（选挑战/普通/清空/进本/冒险真开·PAPI·零抬掉落/体力价/周帽）· **勿勾本窗 CLOSED**（总控收口）
+- [x] 抽测 PASS live（选挑战/普通/清空/进本/冒险真开·PAPI·零抬掉落/体力价/周帽）· **勿勾 CLOSED** · 测岗 2026-10-14 10:53 Asia/Shanghai
 
-## STATUS: **施工中 · W1a+W1b 已交待测** · APPROVED A·M · 勿勾 CLOSED · L不批 · D13336 · TIP-DE · 2026-10-14 Asia/Shanghai
+## STATUS: **抽测 PASS** · feat `1465d7622` · menu tip `c161fff0d` · tip `c72e8a964` · jar `1.65.829-d13336.local` · **勿勾 CLOSED**（总控收口）· D13336 · TIP-DE · 2026-10-14 10:53 Asia/Shanghai
