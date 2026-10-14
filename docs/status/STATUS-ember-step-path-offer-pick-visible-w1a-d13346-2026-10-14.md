@@ -3,7 +3,7 @@
 > 2026-10-14 Asia/Shanghai · 余烬-插件岗 · W1a 已交 · **勿勾 tip CLOSED** · tip APPROVED `057b6b380`
 
 ## 交付
-- feat: `7fe0f4a9e50f92bc7c8057822d1f43b15e86dd42`
+- feat: `bb9accd40f1fb359c495f3d31f4d2d592d612cfb`
 - `EmberStepPath.offerPick` →开 `/ember_p1_step_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `steppath` 为主 UI
 - 无参 `/corerpg p1 steppath` + 周要约 `maybeOfferWeekly` / `scheduleOfferAfterQ05` →同薄页（经 offerPick）
 - `applyAndReply` 下一步→同薄页 `/ember_p1_step_path` / 冒险 `/ember_p1_adventure`；**禁**以裸 `steppath`/`enter` ConfirmTokens 为主 UI
