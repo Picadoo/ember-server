@@ -37,4 +37,4 @@
 - [ ] 物品交薄 featured settle 页 + TrMenu reload
 - [ ] 抽测 PASS（再进/换路径/冒险/工坊真开·PAPI·零抬掉落/体力价/周帽）· **勿勾本窗 CLOSED**
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · 可施工 W1a插件+W1b物品 · 勿勾 CLOSED · L不批 · D13335 · TIP-DD · 2026-10-14 10:22 Asia/Shanghai
+## STATUS: **已批 A · 方案 M** · W1a 插件交 feat `b07074070` jar `1.65.828-d13335.local` · 待物品 W1b / 抽测 · 勿勾 CLOSED · L不批 · D13335 · TIP-DD · 2026-10-14 Asia/Shanghai
