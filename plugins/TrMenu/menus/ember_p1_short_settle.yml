@@ -1,8 +1,10 @@
 # TIP-CW / D13328 · 短征结算「下一环」薄页 · short_settle*
+# TIP-CY / D13330 · V「本局花样」· short_var_* · 有 hit 亮标签 · 无 hit 灰「本局无花样」· 不改 E/S/P/F
 # 入口：有奖 settle → /ember_p1_short_settle（插件并行改开菜单）
 # 再进：corerpg p1 enter %corerpg_p1_short_settle_map% · 回选页/路径追/工坊真开菜单
 # 禁：教裸指令主 UI · 抬日帽/价/targets · 改选页 Layout / 路径薄页内部 / D/F/L/十九本 / 庭内
 # PAPI（插件可能后到·静态接线）：settle_map/name/day_left/day_line · short_path_label · stamina
+# PAPI TIP-CY：short_var_hit / _affix_label / _event_label / _line · 零经济误导
 
 Title: '§e短征 · 下一环'
 
@@ -18,7 +20,7 @@ Options:
 
 Layout:
   - '####I####'
-  - '##E#S#P##'
+  - '#VE#S#P#'
   - '####F####'
   - '####Z####'
 
@@ -43,6 +45,30 @@ Icons:
         - '§7本日本图/日奖：§f%corerpg_p1_short_settle_day_line%'
         - '§7路径：§e%corerpg_p1_short_path_label% §8· 合计剩 §f%corerpg_p1_sx_day_left_sum%'
         - '§8点选 · 再进 / 改追 / 花料'
+
+
+  # TIP-CY / D13330 · 本局花样回看 · short_var_* · 只读 · 零经济误导 · 不改 E/S/P/F
+  V:
+    update: 20
+    icons:
+      # 无 hit 灰态 · 单条件（禁七段 and）
+      - condition: 'check papi %corerpg_p1_short_var_hit% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7本局花样 §8（本局无花样）'
+          lore:
+            - '§7本局无花样'
+            - '§8%corerpg_p1_short_var_line%'
+            - '§8词缀/事件回看 · 仅展示'
+    display:
+      material: firework star
+      name: '§d本局花样'
+      lore:
+        - '§f%corerpg_p1_short_var_line%'
+        - '§7词缀：§e%corerpg_p1_short_var_affix_label%'
+        - '§7事件：§e%corerpg_p1_short_var_event_label%'
+        - '§8仅回看 · 无领奖'
 
   # 再进本图 · 真 enter 当前本（PAPI 展开 settle_map）
   E:
