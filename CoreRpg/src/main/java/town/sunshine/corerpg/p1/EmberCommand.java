@@ -6794,14 +6794,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberHurryPath.get(d);
-                    if (EmberHurryPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberHurryPath.label(cur) + " · 改路径再 /corerpg p1 hurrypath");
+                    if (EmberHurryPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberHurryPath.label(cur) + " · 点急清路径页可改");
                     else EmberHurryPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberHurryPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 hurrypath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点急清路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberHurryPath.applyAndReply(p, id);
