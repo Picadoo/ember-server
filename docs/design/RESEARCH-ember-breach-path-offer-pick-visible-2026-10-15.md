@@ -1,6 +1,6 @@
 # RESEARCH · BreachPath.offerPick / applyAndReply「裂隙路径选打」菜单化 · 拟 D13378 · TIP-EU
 
-> **状态：** **已批 A** · 方案 M · APPROVED A·M · tip批 `521d55ef1` · feat `afa21fbef` · menu `dba5004a2` · jar `1.65.871-d13378.local` · PASS `5d7e02ac9` · 2026-10-15 10:10 Asia/Shanghai · 勿勾 CLOSED · 待总控 CLOSED live · 下一窗 RelayPath.offerPick
+> **状态：** **CLOSED live** · feat `afa21fbef` · tip `521d55ef1` · menu `dba5004a2` · jar `1.65.871-d13378.local` · PASS `5d7e02ac9` · 2026-10-15 10:10 Asia/Shanghai · 裂隙路径选打菜单化同题勿再交 · Relay D568+ 另窗证据逐支（禁全族大扫 · 禁与 Relay/Beacon/Hold 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
 > **起因：** 总控【下一窗 TIP-EU · 只钉一支 · 禁全族大扫】。祖先 TIP-ET CLOSED live `8b1b37a38`（feat `0517e92ed` · tip批 `52edcaf29` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · **98/98** · 证据 `/workspace/tmp/tip-et-alert-path/` · **预警路径选打同题勿再交**）。**预警路径选打同题勿再交**。选题钉死：**BreachPath.offerPick**「裂隙路径选打」菜单化 → TrMenu `ember_p1_breach_path`（拟 D13378 · TIP-EU · 玩法本体 D569；Alert D600 链已尽，按残留 D# 最高未菜单化钉 Breach）。硬证：`EmberBreachPath.offerPick` 仍 ConfirmTokens 教 breachpath auto|ask|mute|clear；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内裂隙「裂隙」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_breach_path.yml`；与刚 PASS Alert 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–ET 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁与其它 *Path 同窗；PacePath（本仓无）后置；legacy evacuate 后置；本窗只钉 Breach 一支 · Relay D568+ 等另窗证据逐支（禁全族大扫 · 禁与 Relay/Beacon/Hold 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置（逐支另窗）；零抬伤害/CD表/掉落/体力价；零改 D569 裂隙语义本体；零改已齐 `ember_p1_alert_path` 等；勿勾 CLOSED。
 > **上游：** TIP-ET CLOSED live `8b1b37a38` · feat `0517e92ed` · tip `52edcaf29` · PASS `b8c70fc74` · jar `1.65.870-d13377.local` · 批 sha `52edcaf29` · menu tip `1248a512b` · D13377
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · BreachPath.offerPick / applyAndReply 裂隙路径选打菜单化 · **已批 A** · 方案 M · APPROVED A·M · tip `86cefa16c` · TIP-EU / D13378 · 半行 REJECT `d00ed84bc` 保持 · 本窗只钉 Breach 一支 · Relay D568+ 等另窗证据逐支（禁全族大扫 · 禁与 Relay/Beacon/Hold 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-ET CLOSED `8b1b37a38` / PASS `b8c70fc74` / 批 `52edcaf29` · 2026-10-15 09:47 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · BreachPath.offerPick 裂隙路径选打 · **CLOSED live** · feat `afa21fbef` · tip `521d55ef1` · menu `dba5004a2` · jar `1.65.871-d13378.local` · PASS `5d7e02ac9` · 2026-10-15 10:10 Asia/Shanghai · 裂隙路径选打菜单化同题勿再交 · Relay D568+ 另窗证据逐支（禁全族大扫 · 禁与 Relay/Beacon/Hold 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-ET CLOSED `8b1b37a38`.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip批 `521d55ef1` · feat `afa21fbef` · menu `dba5004a2` · jar `1.65.871-d13378.local` · PASS `5d7e02ac9` · 勿勾 CLOSED · 待总控 CLOSED live · D13378 · TIP-EU · 2026-10-15 10:10 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `afa21fbef` · tip `521d55ef1` · menu `dba5004a2` · jar `1.65.871-d13378.local` · PASS `5d7e02ac9` · 2026-10-15 10:10 Asia/Shanghai · 裂隙路径选打菜单化同题勿再交 · Relay D568+ 另窗证据逐支（禁全族大扫 · 禁与 Relay/Beacon/Hold 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · D13378 · TIP-EU
