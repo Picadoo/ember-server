@@ -4,6 +4,7 @@
 
 **日期：** 2026-10-15（上海时间）
 **本窗性质：** need-design · docs-only · 拟 D13385 · TIP-FB · **待批 A · 荐 M（W1a 插件 + W1b 菜单）· L不批 · 勿勾 CLOSED**
+**策划旁注（2026-10-15 16:20 Asia/Shanghai）：** 已交 [`DESIGN`](../design/DESIGN-ember-rally-path-offer-pick-visible-2026-10-15.md) · [`RESEARCH`](../design/RESEARCH-ember-rally-path-offer-pick-visible-2026-10-15.md) · 薄 tip [`TIP-ember-rally-path-offer-pick-visible-thin-d13385-2026-10-15.md`](../tips/TIP-ember-rally-path-offer-pick-visible-thin-d13385-2026-10-15.md) · backlog `B-rally-path-offer-pick-visible` · STATUS=待批 A · 荐 M（W1a+W1b）· L不批 · 勿勾 CLOSED · 玩家文案定名「清房突进」（W1a 改 label L71–73 + `EmberCommand` L4937/L4944 教手打，行号复核无偏移）· ancestor TIP-FA CLOSED `46e138454` / PASS `c9047b97a` · 半行 REJECT `d00ed84bc` 保持
 **打开理由：** D563 Burst 刚 CLOSED；其下最高残留 D# = **EmberRallyPath D562**（突进），仍 ConfirmTokens 教裸 `rallypath`，TrMenu **无** `ember_p1_rally_path.yml`。次位 Thaw D561 / Duck D560 后置另窗。
 
 ## 1. 选题
@@ -47,9 +48,9 @@
 | 项 | 路径 |
 |----|------|
 | 本 STATUS | `docs/status/STATUS-ember-next-hard-debt-rally-path-offer-pick-need-design-2026-10-15.md` |
-| DESIGN | `docs/design/DESIGN-ember-rally-path-offer-pick-visible-2026-10-15.md`（待策划） |
-| RESEARCH | `docs/design/RESEARCH-ember-rally-path-offer-pick-visible-2026-10-15.md`（待策划） |
-| 薄 tip | `docs/tips/TIP-ember-rally-path-offer-pick-visible-thin-d13385-2026-10-15.md`（待策划） |
+| DESIGN | `docs/design/DESIGN-ember-rally-path-offer-pick-visible-2026-10-15.md`（已交） |
+| RESEARCH | `docs/design/RESEARCH-ember-rally-path-offer-pick-visible-2026-10-15.md`（已交） |
+| 薄 tip | `docs/tips/TIP-ember-rally-path-offer-pick-visible-thin-d13385-2026-10-15.md`（已交） |
 | backlog | `B-rally-path-offer-pick-visible` |
 | 号段 | D13385 · TIP-FB · 玩法本体 D562 · menu id `ember_p1_rally_path` |
 | 上游 | TIP-FA CLOSED |
