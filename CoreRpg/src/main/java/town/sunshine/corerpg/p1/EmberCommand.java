@@ -4766,14 +4766,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberGuardPath.get(d);
-                    if (EmberGuardPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGuardPath.label(cur) + " · 改路径再 /corerpg p1 guardpath");
+                    if (EmberGuardPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGuardPath.label(cur) + " · 点护兔路径页可改");
                     else EmberGuardPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberGuardPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 guardpath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点护兔路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberGuardPath.applyAndReply(p, id);

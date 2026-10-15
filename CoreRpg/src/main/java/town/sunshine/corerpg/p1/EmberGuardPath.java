@@ -16,11 +16,18 @@ import town.sunshine.corerpg.PlayerData;
  * NEW dungeon acquisition: when variety escort rabbit spawns, sticky warp beside it to protect
  * for eventCore, chat ask, or find it yourself. Distinct from Smash (crystals), Hunt (extra mob),
  * Burst/Rally/Thaw/Duck/Link/Call. Chat only. Zero eventCore table / AFK / sx / forge / combo / enter-cue.
+ * TIP-EY D13382: offerPick / applyAndReply / 无参 guardpath / 周要约 →开 /ember_p1_guard_path；
+ * 清 ConfirmTokens 教 guardpath 主 UI；零改伤害/CD表/掉落/体力价/D565 护兔语义.
  */
 public final class EmberGuardPath {
 
     public static final String C_PATH = "p1_guard_path";
     public static final String C_OFFER = "p1_guard_path_offer";
+
+    /** TIP-EY D13382 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_guard_path";
+    public static final String PATH_PICK_LABEL = "[护兔路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -81,8 +88,14 @@ public final class EmberGuardPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8护兔路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8护兔路径：未选 · /corerpg p1 guardpath";
+        // TIP-EY D13382: 禁教手打 /corerpg p1 guardpath
+        if (!valid(id)) return "§8护兔路径：未选 · 点护兔路径页";
         return "§e护兔路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /** TIP-EY D13382 · 薄页 lore 一行（无 §）：当前护兔路径。 */
+    public static String menuLine(int id) {
+        return "护兔路径 · " + label(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
@@ -112,7 +125,7 @@ public final class EmberGuardPath {
             if (shouldMute(path)) continue;
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§b护宝兔 ",
                     new String[]{"[护兔]", "/corerpg p1 guard", "传到小兔旁守护", "GREEN"},
-                    new String[]{"[改路径]", "/corerpg p1 guardpath", "自动/提醒/静默", "GRAY"});
+                    new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
         }
     }
 
@@ -134,18 +147,26 @@ public final class EmberGuardPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§b护宝兔 ",
                 new String[]{"[护兔]", "/corerpg p1 guard", "传到小兔旁守护", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 guardpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选护兔节奏（改获取 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 guardpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 guardpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 guardpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 guardpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-EY D13382: 开选打薄页；禁 ConfirmTokens 教 guardpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_guard_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_guard_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -200,9 +221,10 @@ public final class EmberGuardPath {
         flush(p);
         p.sendMessage(P + "§a护兔 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-EY D13382: 下一步→选打薄页/冒险（禁教裸 guardpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 guardpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
