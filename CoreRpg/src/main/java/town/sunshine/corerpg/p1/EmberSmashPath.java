@@ -16,11 +16,18 @@ import town.sunshine.corerpg.PlayerData;
  * NEW dungeon acquisition: when variety crystal event places SEA_LANTERN crystals, sticky warp to nearest,
  * chat ask, or smash yourself. Distinct from Hunt (mob extra), Chest, Burst/Rally/Thaw/Duck/Link.
  * Chat only. Zero eventCore table / AFK / sx / forge / combo sticky / enter-card / ActionBar.
+ * TIP-EZ D13383: offerPick / applyAndReply / 无参 smashpath / 周要约 →开 /ember_p1_smash_path；
+ * 清 ConfirmTokens 教 smashpath 主 UI；零改伤害/CD表/掉落/体力价/D564 砸晶语义.
  */
 public final class EmberSmashPath {
 
     public static final String C_PATH = "p1_smash_path";
     public static final String C_OFFER = "p1_smash_path_offer";
+
+    /** TIP-EZ D13383 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_smash_path";
+    public static final String PATH_PICK_LABEL = "[砸晶路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -81,8 +88,14 @@ public final class EmberSmashPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8砸晶路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8砸晶路径：未选 · /corerpg p1 smashpath";
+        // TIP-EZ D13383: 禁教手打 /corerpg p1 smashpath
+        if (!valid(id)) return "§8砸晶路径：未选 · 点砸晶路径页";
         return "§e砸晶路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /** TIP-EZ D13383 · 薄页 lore 一行（无 §）：当前砸晶路径。 */
+    public static String menuLine(int id) {
+        return "砸晶路径 · " + label(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
@@ -112,7 +125,7 @@ public final class EmberSmashPath {
             if (shouldMute(path)) continue;
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§b砸余烬晶 ",
                     new String[]{"[砸晶]", "/corerpg p1 smash", "传到最近晶块", "GREEN"},
-                    new String[]{"[改路径]", "/corerpg p1 smashpath", "自动/提醒/静默", "GRAY"});
+                    new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
         }
     }
 
@@ -134,18 +147,26 @@ public final class EmberSmashPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§b砸余烬晶 ",
                 new String[]{"[砸晶]", "/corerpg p1 smash", "传到最近晶块", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 smashpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选砸晶节奏（改获取 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 smashpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 smashpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 smashpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 smashpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-EZ D13383: 开选打薄页；禁 ConfirmTokens 教 smashpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_smash_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_smash_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -200,9 +221,10 @@ public final class EmberSmashPath {
         flush(p);
         p.sendMessage(P + "§a砸晶 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-EZ D13383: 下一步→选打薄页/冒险（禁教裸 smashpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 smashpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
