@@ -4,6 +4,7 @@
 
 **日期：** 2026-10-15（上海时间）
 **本窗性质：** need-design · **待批 A** · 荐 M · docs-only · 拟 D13383 · TIP-EZ · 勿勾 CLOSED
+**策划旁注（2026-10-15 15:58 Asia/Shanghai）：** 已交 [`DESIGN`](../design/DESIGN-ember-smash-path-offer-pick-visible-2026-10-15.md) · [`RESEARCH`](../design/RESEARCH-ember-smash-path-offer-pick-visible-2026-10-15.md) · 薄 tip [`TIP-ember-smash-path-offer-pick-visible-thin-d13383-2026-10-15.md`](../tips/TIP-ember-smash-path-offer-pick-visible-thin-d13383-2026-10-15.md) · backlog `B-smash-path-offer-pick-visible` · STATUS=待批 A · 荐 M（W1a+W1b）· L不批 · 勿勾 CLOSED · ancestor TIP-EY CLOSED `8ac9b2ebc` / PASS `5ecfb6686` · 半行 REJECT `d00ed84bc` 保持
 **打开理由：** 扫全部 `Ember*Path.offerPick`：D565–D600 已全部有 TrMenu `ember_p1_*_path`（Guard 刚 CLOSED）；Guard 之下最高残留 D# = **EmberSmashPath D564**（砸晶），仍 ConfirmTokens 教裸 `smashpath`。
 
 ## 1. 选题
@@ -35,6 +36,9 @@
 | 项 | 路径 |
 |----|------|
 | 本 STATUS | `docs/status/STATUS-ember-next-hard-debt-smash-path-offer-pick-need-design-2026-10-15.md` |
+| DESIGN | `docs/design/DESIGN-ember-smash-path-offer-pick-visible-2026-10-15.md` |
+| RESEARCH | `docs/design/RESEARCH-ember-smash-path-offer-pick-visible-2026-10-15.md` |
+| 薄 tip | `docs/tips/TIP-ember-smash-path-offer-pick-visible-thin-d13383-2026-10-15.md` |
 | backlog | `B-smash-path-offer-pick-visible` |
 | 号段 | D13383 · TIP-EZ · 玩法本体 D564 · menu id `ember_p1_smash_path` |
 | 上游 | TIP-EY CLOSED `8ac9b2ebc` |
