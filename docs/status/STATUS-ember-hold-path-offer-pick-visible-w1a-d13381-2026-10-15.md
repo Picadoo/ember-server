@@ -1,5 +1,8 @@
 # STATUS · TIP-EX W1a 占点路径选打菜单化 · D13381
 
+
+> **CLOSED live** · tip TIP-EX · feat `ad2720cfe` · jar `1.65.874-d13381.local` · 2026-10-15 15:05 Asia/Shanghai · 证据 `/workspace/tmp/tip-ex-hold-path/`
+
 > 2026-10-15 11:55 Asia/Shanghai · 总控收口 · **W1a 已交** · tip **勿勾 CLOSED** · jar `1.65.874-d13381.local` · menu `ddb1f6ce6` · tip批 `6b5357baf`
 
 ## 交付
