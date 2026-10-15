@@ -1,0 +1,266 @@
+# TIP-ES / D13376 · 备药路径选打薄页 · stock_path* · stockpath auto|ask|mute|clear
+# 入口：StockPath.offerPick / 无参 stockpath / 周要约 / Q01 → /ember_p1_stock_path（插件并行改开菜单）
+# 选打：corerpg p1 stockpath auto|ask|mute|clear
+# 导航：技能组 ember_skill_kit / 冒险 / 可选工坊
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落/体力价 · 改 hurry_path / focus_path / doom_path / nest_path / save_path / sequel_path / bait_path / slip_path / crash_path / bolt_path / shift_path / gap_path / phase_path / wave_path / soak_path / shell_path / clone_path / press_path / cut_path / rush_path / clean_path / streak_path / blaze_path / spin_path / snap_path / veil_path / free_path / 其他已齐选打 / 备药规则语义(D599) / 庭内 · 不建 pace_path
+# PAPI（插件可能后到·静态接线）：stock_path / stock_path_label / stock_path_tip · q01done（灰态单条件·首通 Q01）
+# ≠ ember_p1_hurry_path · ≠ ember_p1_focus_path · ≠ ember_p1_doom_path · ≠ ember_p1_nest_path · ≠ ember_p1_save_path · ≠ ember_p1_sequel_path · ≠ ember_p1_bait_path · ≠ ember_p1_slip_path · ≠ ember_p1_crash_path · ≠ ember_p1_bolt_path · ≠ ember_p1_shift_path · ≠ ember_p1_gap_path · ≠ ember_p1_phase_path · ≠ ember_p1_wave_path · ≠ ember_p1_soak_path · ≠ ember_p1_shell_path · ≠ ember_p1_clone_path · ≠ ember_p1_press_path · ≠ ember_p1_cut_path · ≠ ember_p1_rush_path · ≠ ember_p1_clean_path · ≠ ember_p1_streak_path · ≠ ember_p1_blaze_path · ≠ ember_p1_spin_path · ≠ ember_p1_snap_path · ≠ ember_p1_veil_path · ≠ ember_p1_free_path · ≠ ember_p1_dodge_path · ≠ ember_p1_sidestep_path · ≠ ember_p1_step_path · ≠ ember_p1_flex_path · ≠ ember_p1_stride_path · ≠ ember_p1_counter_path · ≠ ember_p1_pledge_path · ≠ ember_p1_trial_path · ≠ ember_p1_abyss_path · ≠ ember_p1_short_path · ≠ ember_p1_raid_path · ≠ ember_p1_challenge_path · ≠ ember_p1_featured_path
+
+Title: '§6备药 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_stock_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '##K#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §6备药路径 §7· 当前 §e%corerpg_p1_stock_path_label%'
+    - 'tell: §8点选 · 自动 / 提醒 / 静默 / 清空 · 或技能组 / 冒险 / 工坊'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§6备药路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_stock_path_label%'
+        - '§8%corerpg_p1_stock_path_tip%'
+        - '§8点选 · 自动 / 提醒 / 静默 / 清空'
+        - '§8需本人首通 Q01'
+        - '§8首领厅预备核对回复药'
+
+  # 自动 · AUTO=1 · 首领厅预备时自动核对回复药（建议 ≥2 瓶）
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7自动 §8（需首通 Q01）'
+          lore:
+            - '§c需本人首通 Q01'
+            - '§7首领厅预备时自动核对回复药（建议 ≥2 瓶）'
+            - '§8通关后再选路径'
+      - condition: 'check papi %corerpg_p1_stock_path% == 1'
+        priority: 2
+        display:
+          material: emerald
+          shiny: true
+          name: '§a自动 §8· §f已选'
+          lore:
+            - '§7首领厅预备时自动核对回复药（建议 ≥2 瓶）'
+            - '§8%corerpg_p1_stock_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 stockpath auto'
+            - 'menu: ember_p1_stock_path'
+    display:
+      material: lime dye
+      name: '§a自动'
+      lore:
+        - '§7首领厅预备时自动核对回复药（建议 ≥2 瓶）'
+        - '§8点选切换备药路径'
+        - '§e➥ §f设为自动'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 stockpath auto'
+        - 'menu: ember_p1_stock_path'
+
+  # 提醒 · ASK=2 · 首领厅预备时聊天提醒核对备药（默认）
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7提醒 §8（需首通 Q01）'
+          lore:
+            - '§c需本人首通 Q01'
+            - '§7首领厅预备时聊天提醒核对备药（默认）'
+            - '§8通关后再选路径'
+      - condition: 'check papi %corerpg_p1_stock_path% == 2'
+        priority: 2
+        display:
+          material: gold nugget
+          shiny: true
+          name: '§a提醒 §8· §f已选'
+          lore:
+            - '§7首领厅预备时聊天提醒核对备药（默认）'
+            - '§8%corerpg_p1_stock_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 stockpath ask'
+            - 'menu: ember_p1_stock_path'
+    display:
+      material: gold nugget
+      name: '§e提醒'
+      lore:
+        - '§7首领厅预备时聊天提醒核对备药（默认）'
+        - '§8点选切换备药路径'
+        - '§e➥ §f设为提醒'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 stockpath ask'
+        - 'menu: ember_p1_stock_path'
+
+  # 静默 · MUTE=3 · 不刷个人备药提醒（可选）
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7静默 §8（需首通 Q01）'
+          lore:
+            - '§c需本人首通 Q01'
+            - '§7不刷个人备药提醒（可选）'
+            - '§8通关后再选路径'
+      - condition: 'check papi %corerpg_p1_stock_path% == 3'
+        priority: 2
+        display:
+          material: ink sac
+          shiny: true
+          name: '§a静默 §8· §f已选'
+          lore:
+            - '§7不刷个人备药提醒（可选）'
+            - '§8%corerpg_p1_stock_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 stockpath mute'
+            - 'menu: ember_p1_stock_path'
+    display:
+      material: ink sac
+      name: '§7静默'
+      lore:
+        - '§7不刷个人备药提醒（可选）'
+        - '§8点选切换备药路径'
+        - '§e➥ §f设为静默'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 stockpath mute'
+        - 'menu: ember_p1_stock_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需首通 Q01）'
+          lore:
+            - '§c需本人首通 Q01'
+            - '§8通关后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_stock_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无备药路径焦点'
+            - '§8先点 自动 / 提醒 / 静默'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 stockpath clear'
+            - 'menu: ember_p1_stock_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_stock_path_label%'
+        - '§8清焦点 · 可重选（默认回提醒语义由插件）'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 stockpath clear'
+        - 'menu: ember_p1_stock_path'
+
+  # 技能组
+  K:
+    display:
+      material: book
+      name: '§6去技能组'
+      lore:
+        - '§7看按键 / 形状 / 身法方向'
+        - '§8选好后可对照手感'
+        - '§e➥ §f开技能组'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_skill_kit'
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 工坊（可选）
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7材料在仓 · 去工坊花'
+        - '§8强化 / 升级 / 分解'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
