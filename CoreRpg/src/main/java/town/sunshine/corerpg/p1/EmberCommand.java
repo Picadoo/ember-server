@@ -5158,14 +5158,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberBreachPath.get(d);
-                    if (EmberBreachPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBreachPath.label(cur) + " · 改路径再 /corerpg p1 breachpath");
+                    if (EmberBreachPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBreachPath.label(cur) + " · 点裂隙路径页可改");
                     else EmberBreachPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberBreachPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 breachpath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点裂隙路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberBreachPath.applyAndReply(p, id);
