@@ -35,8 +35,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M
-- [ ] 插件交 offerPick / applyAndReply / 无参 holdpath / 周要约改开菜单 + 清裸指令主路径 + 单测
-- [ ] 物品交薄 hold_path 页 + TrMenu reload
+- [x] 插件交 offerPick / applyAndReply / 无参 holdpath / 周要约改开菜单 + 清裸指令主路径 + 单测（jar 1.65.874-d13381.local）
+- [x] 物品交薄 hold_path 页 + TrMenu reload（menu `ddb1f6ce6`）
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 beacon_path·零已齐选打同题复读·零改 D566 占点语义）
 
 ## STATUS: **已批 A** · 方案 M · APPROVED A·M · D13381 · TIP-EX · 2026-10-15 10:53 Asia/Shanghai · 勿勾 CLOSED · 可施工

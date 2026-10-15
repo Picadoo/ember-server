@@ -17,11 +17,18 @@ import town.sunshine.corerpg.PlayerData;
  * accumulate hold progress for eventCore, chat ask, or find it yourself. Distinct from Guard
  * (escort rabbit), Smash (crystals), Hunt (extra). Chat only. Zero holdNeed/eventCore / AFK / sx /
  * forge / combo / enter-cue.
+ * TIP-EX D13381: offerPick / applyAndReply / 无参 holdpath / 周要约 →开 /ember_p1_hold_path；
+ * 清 ConfirmTokens 教 holdpath 主 UI；零改伤害/CD表/掉落/体力价/D566 占点传入圈内攒进度语义.
  */
 public final class EmberHoldPath {
 
     public static final String C_PATH = "p1_hold_path";
     public static final String C_OFFER = "p1_hold_path_offer";
+
+    /** TIP-EX D13381 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_hold_path";
+    public static final String PATH_PICK_LABEL = "[占点路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -82,8 +89,16 @@ public final class EmberHoldPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8占点路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8占点路径：未选 · /corerpg p1 holdpath";
+        // TIP-EX D13381: 禁教手打 /corerpg p1 holdpath
+        if (!valid(id)) return "§8占点路径：未选 · 点占点路径页";
         return "§e占点路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-EX D13381 · 薄页 lore 一行（无 §）：当前占点路径。
+     */
+    public static String menuLine(int id) {
+        return "占点路径 · " + label(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
@@ -113,7 +128,7 @@ public final class EmberHoldPath {
             if (shouldMute(path)) continue;
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§b占点圈 ",
                     new String[]{"[占点]", "/corerpg p1 hold", "传到圈内攒进度", "GREEN"},
-                    new String[]{"[改路径]", "/corerpg p1 holdpath", "自动/提醒/静默", "GRAY"});
+                    new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
         }
     }
 
@@ -135,18 +150,26 @@ public final class EmberHoldPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§b占点圈 ",
                 new String[]{"[占点]", "/corerpg p1 hold", "传到圈内攒进度", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 holdpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选占点节奏（改获取 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 holdpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 holdpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 holdpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 holdpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-EX D13381: 开选打薄页；禁 ConfirmTokens 教 holdpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_hold_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_hold_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -201,9 +224,10 @@ public final class EmberHoldPath {
         flush(p);
         p.sendMessage(P + "§a占点 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-EX D13381: 下一步→选打薄页/冒险（禁教裸 holdpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 holdpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
