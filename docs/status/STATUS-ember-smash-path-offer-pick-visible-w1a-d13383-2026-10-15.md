@@ -14,3 +14,8 @@
 
 ## 证据
 - `/workspace/tmp/tip-ez-smash-path/`
+
+
+## STATUS: **CLOSED live** · TIP-EZ / D13383 · SmashPath.offerPick → `ember_p1_smash_path` · 2026-10-15 16:10 Asia/Shanghai
+
+> **CLOSED live：** APPROVED `156e3572a` · feat `26423759a` · menu `caa9e282a` · jar `1.65.876-d13383.local` · PASS `b6b79b7a1` · spot **103/103** · TrMenu **131** · bv123 · 证据 `/workspace/tmp/tip-ez-smash-path/` · 砸晶路径选打同题勿再交 · reload WARN duplicate keys priority/display 源自 `ember_p1_short.yml`（非 smash/guard/hold，见 backlog B-trmenu-short-dup-keys）· 下一支 TIP-FA / D13384 BurstPath（破绽）待批

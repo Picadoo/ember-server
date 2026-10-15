@@ -40,3 +40,8 @@
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 guard_path / hold_path·零已齐选打同题复读·零改 D564 砸晶语义）
 
 ## STATUS: **APPROVED A · M（W1a 插件 + W1b 菜单）· L不批 · 勿勾 CLOSED** · 总控 2026-10-15 16:00 Asia/Shanghai · L不批 · 勿勾 CLOSED · D13383 · TIP-EZ · 2026-10-15 15:58 Asia/Shanghai
+
+
+## STATUS: **CLOSED live** · TIP-EZ / D13383 · SmashPath.offerPick → `ember_p1_smash_path` · 2026-10-15 16:10 Asia/Shanghai
+
+> **CLOSED live：** APPROVED `156e3572a` · feat `26423759a` · menu `caa9e282a` · jar `1.65.876-d13383.local` · PASS `b6b79b7a1` · spot **103/103** · TrMenu **131** · bv123 · 证据 `/workspace/tmp/tip-ez-smash-path/` · 砸晶路径选打同题勿再交 · reload WARN duplicate keys priority/display 源自 `ember_p1_short.yml`（非 smash/guard/hold，见 backlog B-trmenu-short-dup-keys）· 下一支 TIP-FA / D13384 BurstPath（破绽）待批
