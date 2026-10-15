@@ -18,11 +18,18 @@ import town.sunshine.corerpg.PlayerData;
  * NEW dungeon combat loop: after a non-final room clear, sticky short Speed to the next room,
  * chat ask, or walk. Distinct from Thaw/Duck/Hunt/Link/Call/Gate/Pack/Flee/Sight/Sip.
  * Chat only. Zero dmg tables / AFK / sx / forge / combo sticky / enter-card / ActionBar.
+ * TIP-FB D13385: offerPick / applyAndReply / 无参 rallypath / 周要约 →开 /ember_p1_rally_path；
+ * 清 ConfirmTokens 教 rallypath 主 UI；玩家可见「突进」→「清房突进」；零改伤害/CD表/掉落/体力价/D562 语义.
  */
 public final class EmberRallyPath {
 
     public static final String C_PATH = "p1_rally_path";
     public static final String C_OFFER = "p1_rally_path_offer";
+
+    /** TIP-FB D13385 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_rally_path";
+    public static final String PATH_PICK_LABEL = "[清房突进路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -68,23 +75,31 @@ public final class EmberRallyPath {
     }
 
     public static String label(int id) {
-        if (id == AUTO) return "突进·自动";
-        if (id == ASK) return "突进·提醒";
-        if (id == MUTE) return "突进·静默";
+        if (id == AUTO) return "清房突进·自动";
+        if (id == ASK) return "清房突进·提醒";
+        if (id == MUTE) return "清房突进·静默";
         return "未选";
     }
 
     public static String tip(int id) {
         if (id == AUTO) return "清完非终房时自动短加速冲下一房";
-        if (id == ASK) return "清房后聊天提醒，点按钮突进（默认）";
+        if (id == ASK) return "清房后聊天提醒，点按钮清房突进（默认）";
         if (id == MUTE) return "不刷提醒；自己走去下一房";
         return "点选清房突进节奏（改副本循环 · 不改掉落表）";
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8突进路径：首进/首通 Q01 后可选";
-        if (!valid(id)) return "§8突进路径：未选 · /corerpg p1 rallypath";
-        return "§e突进路径：§f" + label(id) + " §8· " + tip(id);
+        if (!unlocked) return "§8清房突进路径：首进/首通 Q01 后可选";
+        // TIP-FB D13385: 禁教手打 /corerpg p1 rallypath
+        if (!valid(id)) return "§8清房突进路径：未选 · 点清房突进路径页";
+        return "§e清房突进路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-FB D13385 · 薄页 lore 一行（无 §）：当前清房突进路径。
+     */
+    public static String menuLine(int id) {
+        return "清房突进路径 · " + label(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
@@ -123,15 +138,15 @@ public final class EmberRallyPath {
                 Bukkit.getScheduler().runTaskLater(pl, () -> {
                     if (!p.isOnline()) return;
                     if (runs.pathRally(p)) {
-                        p.sendMessage(EmberRunService.P + "§a突进·自动 §7短加速 4 秒");
+                        p.sendMessage(EmberRunService.P + "§a清房突进·自动 §7短加速 4 秒");
                     }
                 }, 2L);
                 continue;
             }
             if (shouldMute(path)) continue;
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§e房间已清空 ",
-                    new String[]{"[突进]", "/corerpg p1 rally", "短加速冲下一房", "GREEN"},
-                    new String[]{"[改路径]", "/corerpg p1 rallypath", "自动/提醒/静默", "GRAY"});
+                    new String[]{"[清房突进]", "/corerpg p1 rally", "短加速冲下一房", "GREEN"},
+                    new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
         }
     }
 
@@ -145,24 +160,32 @@ public final class EmberRallyPath {
         if (shouldAuto(path)) {
             boolean ok = runs != null && runs.pathRally(p);
             if (!ok) ok = rallyLocal(p);
-            if (ok) p.sendMessage(EmberRunService.P + "§a突进·自动 §7短加速 4 秒");
+            if (ok) p.sendMessage(EmberRunService.P + "§a清房突进·自动 §7短加速 4 秒");
             return;
         }
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e房间已清空 ",
-                new String[]{"[突进]", "/corerpg p1 rally", "短加速冲下一房", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 rallypath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[清房突进]", "/corerpg p1 rally", "短加速冲下一房", "GREEN"},
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选清房突进节奏（改循环 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 rallypath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 rallypath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 rallypath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 rallypath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FB D13385: 开选打薄页；禁 ConfirmTokens 教 rallypath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_rally_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_rally_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -199,14 +222,14 @@ public final class EmberRallyPath {
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
         if (!EmberSkillKit.rallyPathUnlocked(d, runs)) {
-            p.sendMessage(EmberRunService.P + "§c突进路径需本人首进或首通 Q01。");
+            p.sendMessage(EmberRunService.P + "§c清房突进路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;
         if (id == NONE) {
             set(d, NONE);
             flush(p);
-            p.sendMessage(P + "已清空突进路径（按默认提醒）");
+            p.sendMessage(P + "已清空清房突进路径（按默认提醒）");
             return;
         }
         if (!valid(id)) {
@@ -215,11 +238,12 @@ public final class EmberRallyPath {
         }
         set(d, id);
         flush(p);
-        p.sendMessage(P + "§a突进 → §f" + label(id) + " §7· " + tip(id));
+        p.sendMessage(P + "§a清房突进 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-FB D13385: 下一步→选打薄页/冒险（禁教裸 rallypath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 rallypath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

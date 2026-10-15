@@ -4921,27 +4921,27 @@ public final class EmberCommand {
             if (args.length < 3) {
                 p.sendMessage(P + EmberRallyPath.glance(EmberRallyPath.get(d), unlocked));
                 if (!unlocked) {
-                    p.sendMessage(P + "§c突进路径需本人首通 Q01。");
+                    p.sendMessage(P + "§c清房突进路径需本人首通 Q01。");
                     return true;
                 }
                 EmberRallyPath.offerPick(p);
                 return true;
             }
             if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
-                if (!unlocked) { p.sendMessage(P + "§c突进路径需本人首通 Q01。"); return true; }
+                if (!unlocked) { p.sendMessage(P + "§c清房突进路径需本人首通 Q01。"); return true; }
                 String week = EmberPlayfeelTelemetry.weekKey();
                 boolean offered = EmberRallyPath.maybeOfferWeekly(p, d, week);
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberRallyPath.get(d);
-                    if (EmberRallyPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRallyPath.label(cur) + " · 改路径再 /corerpg p1 rallypath");
+                    if (EmberRallyPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRallyPath.label(cur) + " · 点清房突进路径页可改");
                     else EmberRallyPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberRallyPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 rallypath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点清房突进路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberRallyPath.applyAndReply(p, id);
@@ -4963,7 +4963,7 @@ public final class EmberCommand {
             Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
             if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
             EmberRallyPath.maybeProbe(t);
-            s.sendMessage(P + "已触发突进路径探测 → " + t.getName());
+            s.sendMessage(P + "已触发清房突进路径探测 → " + t.getName());
             return true;
         }
 
