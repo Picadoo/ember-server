@@ -1,5 +1,7 @@
 # STATUS · TIP-FA W1a 破绽爆发路径选打菜单化 · D13384
 
+> **CLOSED live（2026-10-15 16:20 Asia/Shanghai）：** APPROVED `d876a2dfe` · feat `fd9bcf3d5` · menu `d8b9676df` · jar `1.65.877-d13384.local` · PASS `c9047b97a` · spot **104/104** · TrMenu **132** · bv123 · 玩家可见名「破绽爆发」（≠ CounterPath「破绽反击」）· 证据 `/workspace/tmp/tip-fa-burst-path/` · 破绽爆发路径选打同题勿再交 · reload duplicate keys WARN=0（B-trmenu-short-dup-keys `c259724f8` 生效）· 下一支 TIP-FB / D13385 RallyPath（突进）need-design 待批
+
 > 2026-10-15 Asia/Shanghai · **W1a 已交** · tip **勿勾 CLOSED** · APPROVED A·M `d876a2dfe` · jar `1.65.877-d13384.local`
 
 ## 交付
