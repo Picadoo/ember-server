@@ -1,6 +1,6 @@
 # STATUS · TIP-EV W1a 传火路径选打菜单化 · D13379
 
-> 2026-10-15 Asia/Shanghai · **W1a 已交** · tip **勿勾 CLOSED** · 等 W1b 物品联验
+> 2026-10-15 Asia/Shanghai · **W1a 已交** · feat `6eec10d81` · jar `1.65.872-d13379.local` · tip **勿勾 CLOSED** · 等 W1b 物品联验
 
 ## 交付
 - `EmberRelayPath.offerPick` →开 `/ember_p1_relay_path`（`openPathPick` / `PATH_PICK_*`）；**禁** ConfirmTokens 教 `relaypath` 为主 UI
