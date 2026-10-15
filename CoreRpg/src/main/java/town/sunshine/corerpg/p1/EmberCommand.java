@@ -6850,14 +6850,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberStockPath.get(d);
-                    if (EmberStockPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberStockPath.label(cur) + " · 改路径再 /corerpg p1 stockpath");
+                    if (EmberStockPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberStockPath.label(cur) + " · 点备药路径页可改");
                     else EmberStockPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberStockPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 stockpath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点备药路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberStockPath.applyAndReply(p, id);
