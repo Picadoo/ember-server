@@ -2,9 +2,10 @@
 
 | 日 | 事 |
 |----|-----|
-| 2026-10-15 09:24 Asia/Shanghai | 初稿 STATUS=**待批 A** · 荐 M · TIP-ES CLOSED 后连开 · 拟 D13377 · TIP-ET |
+| 2026-10-15 09:27 Asia/Shanghai | 总控批 A·M · tip `1a7ecb8ef` · 可施工 W1a+W1b · 勿勾 CLOSED |
+| 2026-10-15 09:24 Asia/Shanghai | 初稿 STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `1a7ecb8ef` · 2026-10-15 09:27 Asia/Shanghai · 勿勾 CLOSED · 可施工 |
 
-STATUS=**待批 A** · 荐 M · 2026-10-15 09:24 Asia/Shanghai · 勿勾 CLOSED
+STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `1a7ecb8ef` · 2026-10-15 09:27 Asia/Shanghai · 勿勾 CLOSED · 可施工
 > tip [`STATUS-ember-next-hard-debt-alert-path-offer-pick-need-design-2026-10-15.md`](../status/STATUS-ember-next-hard-debt-alert-path-offer-pick-need-design-2026-10-15.md) · RESEARCH [`RESEARCH-ember-alert-path-offer-pick-visible-2026-10-15.md`](RESEARCH-ember-alert-path-offer-pick-visible-2026-10-15.md) · backlog `B-alert-path-offer-pick-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬伤害/CD表/掉落/体力价 ≠备药路径选打同题 ≠急清路径选打同题 ≠集火路径选打同题 ≠灾临路径选打同题 ≠卡点路径选打同题 ≠终救路径选打同题 ≠续招路径选打同题 ≠诱空路径选打同题 ≠闪招路径选打同题 ≠撞墙路径选打同题 ≠闪线路径选打同题 ≠侧安路径选打同题 ≠收招路径选打同题 ≠半血路径选打同题 ≠增援路径选打同题 ≠分摊路径选打同题 ≠铁壁路径选打同题 ≠分身路径选打同题 ≠压伤路径选打同题 ≠打断路径选打同题 ≠限时路径选打同题 ≠净伤路径选打同题 ≠连斩路径选打同题 ≠避焰路径选打同题 ≠避旋路径选打同题 ≠断链路径选打同题 ≠避毒路径选打同题 ≠解锢路径选打同题 ≠闪榴路径选打同题 ≠闪冲路径选打同题 ≠身法路径选打同题 ≠轻技路径选打同题 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠步态路径选打同题 ≠已齐 settle 下一环同题 ≠短征settle回看同题 ≠D673同题复读 ≠variety再拧 ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠路径追同题 ≠日差同题 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠legacy abyss evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠Pace同窗 ≠其它 *Path 同窗 ≠复开 D600 玩法本体 ≠L13 ≠灰烬/R ≠抬 AFK 表 ≠Affix 加密**
 
 > **一句话玩家价值：** 周选/改预警路径一点开「预警路径」——自动/提醒/静默/清空/技能组/冒险都能点；**不**抬伤害/CD表/掉落/体力价、**不**教手打指令、**不**复读已齐 settle/备药·急清·集火·灾临·卡点·终救·续招·诱空·闪招·撞墙·闪线·侧安·收招·半血·增援·分摊·铁壁·分身·压伤·打断·限时·净伤·连斩·避焰·避旋·断链·避毒·解锢·闪榴·闪冲·身法·轻技·破绽·誓约·试炼·深渊·短征·团本·硬本·精选·步态选打同题、**不**扩成全族路径大扫、**不**改 D600 预警接复活语义。
@@ -17,7 +18,7 @@ STATUS=**待批 A** · 荐 M · 2026-10-15 09:24 Asia/Shanghai · 勿勾 CLOSED
 
 | # | 来源 | 口径 |
 |---|------|------|
-| E1 | 总控 TIP-ET 已批+PASS · 派 TIP-ET · **只钉 AlertPath** | 内容优先；禁已齐 settle/选打同题；剩支逐支；只钉一支；禁全族大扫 |
+| E1 | 总控 TIP-ES 已批+PASS · 派 TIP-ET · **只钉 AlertPath** | 内容优先；禁已齐 settle/选打同题；剩支逐支；只钉一支；禁全族大扫 |
 | E2 | 实扫挂机庭 | 旁路全弧 CLOSED；afk **零** `recipe_gap_gem`/`forge_gap_gem` → **无新硬债**；gem gap 未亮 → 勿交 gem |
 | E3 | 实扫短征乐趣 | Cast/Aid/todayRot/variety/日差/路径追/settle/soft/回看/选打 TIP-DH 已齐；sx20 禁 → **无薄窗新硬债** |
 | E4 | settle CW–DD + 选打 TIP-DE–ES | **已齐勿复读**（含备药 TIP-ES） |
@@ -70,7 +71,7 @@ STATUS=**待批 A** · 荐 M · 2026-10-15 09:24 Asia/Shanghai · 勿勾 CLOSED
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 插件改 offerPick + applyAndReply + 无参 alertpath + 周要约必做；W1b 薄选打页必做；W1c 清裸指令主路径同批；见 §3）
+- [x] **方案 M**（W1a 插件改 offerPick + applyAndReply + 无参 alertpath + 周要约必做；W1b 薄选打页必做；W1c 清裸指令主路径同批；见 §3）
 - [ ] 或勾 **方案 L**（仅改单钮命令；薄页后置）· **本窗不批 L**
 - [ ] 否决 A（只半行）/ W（抬表/sx20/已齐同题/庭内/全族大扫/Pace同窗/其它 *Path 同窗）
 - [ ] 批注：________________
@@ -159,4 +160,4 @@ STATUS=**待批 A** · 荐 M · 2026-10-15 09:24 Asia/Shanghai · 勿勾 CLOSED
 |----|-----|
 | 2026-10-15 09:24 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-ES CLOSED 后连开 · 选题 AlertPath.offerPick / applyAndReply 预警路径选打菜单化 · 拟 D13377 · TIP-ET · ≠半行 ≠备药选打同题 ≠闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态选打同题 ≠已齐 settle 同题 ≠variety再拧 ≠庭内旁路 · **改题有证据**（挂机近饱和·gem gap未亮；短征薄债+选打已齐；settle CW–DD+DE–ES选打已齐；总控钉死 Sequel；offerPick ConfirmTokens→alertpath；applyAndReply下一步仍聊天钮；无参/周要约/Q01；无 alert_path；局内预警钮≠选打页；与刚 PASS Stock 同构；其它剩支·Pace后置；见 RESEARCH） |
 
-*D13377 **待批 A** · 荐 M · AlertPath.offerPick / applyAndReply 预警路径选打菜单化 · TIP-ET · 半行 REJECT `d00ed84bc` 保持 · 本窗只钉 Alert 一支 · 剩支另窗证据逐支（扫后再定 · 勿默念 Pace）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-ES PASS `1201f5d52` / 批 `2ab321047` · 2026-10-15 09:24 Asia/Shanghai · 勿勾 CLOSED.*
+*D13377 **已批 A** · 方案 M · APPROVED A·M · tip `1a7ecb8ef` · AlertPath.offerPick / applyAndReply 预警路径选打菜单化 · TIP-ET · 半行 REJECT `d00ed84bc` 保持 · 本窗只钉 Alert 一支 · 剩支另窗证据逐支（扫后再定 · 勿默念 Pace）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-ES PASS `1201f5d52` / 批 `2ab321047` · 2026-10-15 09:27 Asia/Shanghai · 勿勾 CLOSED.*
