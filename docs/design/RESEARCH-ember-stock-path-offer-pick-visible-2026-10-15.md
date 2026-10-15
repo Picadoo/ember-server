@@ -1,6 +1,6 @@
 # RESEARCH · StockPath.offerPick / applyAndReply「备药路径选打」菜单化 · 拟 D13376 · TIP-ES
 
-> **状态：** **已批 A** · 方案 M · APPROVED A·M · tip `bd67d9a25` · 2026-10-15 09:10 Asia/Shanghai · 勿勾 CLOSED · 可施工
+> **状态：** **已批 A** · 方案 M · APPROVED A·M · tip批 `2ab321047` · feat `e1b2553d4` · menu `ca133c931` · jar `1.65.869-d13376.local` · PASS `1201f5d52` · 2026-10-15 09:24 Asia/Shanghai · 勿勾 CLOSED · 待总控 CLOSED live · 下一窗 AlertPath.offerPick
 > **起因：** 总控【下一窗 TIP-ES · 只钉一支 · 禁全族大扫】。祖先 TIP-ER 已批 A·M · PASS live `dfe0e4724`（feat `f7fc5125f` · tip批 `4e0e9c6d2` · menu `5a4e37268` · jar `1.65.868-d13375.local` · 96/96 · 证据 `/workspace/tmp/tip-er-hurry-path/` · 急清路径选打菜单化同题勿再交 · 待总控 CLOSED live）。**急清路径选打菜单化同题勿再交**。选题钉死：**StockPath.offerPick**「备药路径选打」菜单化 → TrMenu `ember_p1_stock_path`（拟 D13376 · TIP-ES · 玩法本体 D599 紧接 Hurry D598）。硬证：`EmberStockPath.offerPick` 仍 ConfirmTokens 教 stockpath auto|ask|mute|clear；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内备药「核对」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_stock_path.yml`；与刚 PASS Hurry 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–ER 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁与其它 *Path 同窗；PacePath（本仓无）后置；legacy evacuate 后置；本窗只钉 Stock 一支 · Alert D600+ 等另窗证据逐支（禁全族大扫 · 禁与 Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置后置（逐支另窗）；零抬伤害/CD表/掉落/体力价；零改 D599 备药语义本体；零改已齐 `ember_p1_hurry_path` 等；勿勾 CLOSED。
 > **上游：** TIP-ER PASS live `dfe0e4724` · feat `f7fc5125f` · tip `4e0e9c6d2` · PASS `dfe0e4724` · jar `1.65.868-d13375.local` · 批 sha `4e0e9c6d2` · menu tip `5a4e37268` · D13375
 
@@ -66,4 +66,4 @@
 
 *RESEARCH · StockPath.offerPick / applyAndReply 备药路径选打菜单化 · **已批 A** · 方案 M · APPROVED A·M · tip `bd67d9a25` · TIP-ES / D13376 · 半行 REJECT `d00ed84bc` 保持 · 本窗只钉 Stock 一支 · Alert D600+ 等另窗证据逐支（禁全族大扫 · 禁与 Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-ER PASS `dfe0e4724` / 批 `4e0e9c6d2` · 2026-10-15 09:10 Asia/Shanghai · 勿勾 CLOSED.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `bd67d9a25` · 勿勾 CLOSED · L不批 · D13376 · TIP-ES · 2026-10-15 09:10 Asia/Shanghai
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip批 `2ab321047` · feat `e1b2553d4` · menu `ca133c931` · jar `1.65.869-d13376.local` · PASS `1201f5d52` · 勿勾 CLOSED · 待总控 CLOSED live · D13376 · TIP-ES · 2026-10-15 09:24 Asia/Shanghai
