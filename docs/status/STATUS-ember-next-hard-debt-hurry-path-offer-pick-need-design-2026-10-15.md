@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EQ CLOSED** live（D13374 集火路径选打齐 · feat `755be1f29` · tip `453590e06` · jar `1.65.867-d13374.local` · PASS `c6e933433` · 批 sha `453590e06` · menu tip `9d92087d5` · CLOSED `113839528` · 证据 `/workspace/tmp/tip-eq-focus-path/` · **集火路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **HurryPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EQ 选打勿复；PacePath（本仓无）后置；本窗只钉 Hurry 一支 · Stock D599+ 等另窗证据逐支（禁全族大扫 · 禁与 Stock/Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-15（上海时间）
-**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `4ebd05496` · 2026-10-15 08:45 Asia/Shanghai · 勿勾 CLOSED · 可施工
+**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip批 `4e0e9c6d2` · feat `f7fc5125f` · menu `5a4e37268` · jar `1.65.868-d13375.local` · PASS `dfe0e4724` · 96/96 · 勿勾 CLOSED · 可施工 · 待总控 CLOSED live · 下一窗 StockPath.offerPick
 **硬规格：** [`DESIGN-ember-hurry-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-hurry-path-offer-pick-visible-2026-10-15.md) · backlog `B-hurry-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EQ 已齐；急清**选打**仍 ConfirmTokens 教裸 hurrypath——总控钉死本支；内容闭环断在急清路径选打（≠集火选打；≠ settle 同题；局内急清钮≠选打页）。
 
@@ -61,9 +61,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-hurry-path-offer-pick-visible-2026-10-15.md` |
 | 薄 tip | `docs/tips/TIP-ember-hurry-path-offer-pick-visible-thin-d13375-2026-10-15.md` |
 | backlog | `B-hurry-path-offer-pick-visible` |
-| 号段 | **D13375** · 字母窗 **TIP-ER** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `4ebd05496` · 2026-10-15 08:45 Asia/Shanghai · 勿勾 CLOSED |
+| 号段 | **D13375** · 字母窗 **TIP-ER** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip批 `4e0e9c6d2` · feat `f7fc5125f` · menu `5a4e37268` · jar `1.65.868-d13375.local` · PASS `dfe0e4724` · 勿勾 CLOSED · 待总控 CLOSED live |
 | 上游 | TIP-EQ CLOSED live `113839528` · feat `755be1f29` · tip `453590e06` · PASS `c6e933433` · jar `1.65.867-d13374.local` · 批 sha `453590e06` · menu tip `9d92087d5` · D13374；半行 REJECT `d00ed84bc` 保持否决；集火路径选打菜单化同题勿再交 |
 
 *选题 HurryPath.offerPick / applyAndReply 急清路径选打菜单化 · tip **已批 A** · 方案 M · APPROVED A·M · tip `4ebd05496` · 勿勾 CLOSED · L不批 · D13375 · TIP-ER · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Hurry 一支 · Stock D599+ 等另窗证据逐支（禁全族大扫 · 禁与 Stock/Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EQ CLOSED `113839528` · 2026-10-15 08:45 Asia/Shanghai.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `4ebd05496` · 勿勾 CLOSED · L不批 · D13375 · TIP-ER · 2026-10-15 08:45 Asia/Shanghai
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip批 `4e0e9c6d2` · feat `f7fc5125f` · menu `5a4e37268` · jar `1.65.868-d13375.local` · PASS `dfe0e4724` · 勿勾 CLOSED · 待总控 CLOSED live · L不批 · D13375 · TIP-ER · 2026-10-15 09:06 Asia/Shanghai
