@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EP CLOSED** live（D13373 灾临路径选打齐 · feat `274c3299f` · tip `1064e9b7f` · jar `1.65.866-d13373.local` · PASS `00b50ba36` · 批 sha `1064e9b7f` · menu tip `635d5b670` · CLOSED `616563d47` · 证据 `/workspace/tmp/tip-ep-doom-path/` · **灾临路径选打菜单化同题勿再交**）。总控派下一窗：只钉 **FocusPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EP 选打勿复；PacePath（本仓无）后置；本窗只钉 Focus 一支 · Hurry D598+ 等另窗证据逐支（禁全族大扫 · 禁与 Hurry/Stock/Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-15（上海时间）
-**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `f1c8949e0` · 2026-10-15 08:26 Asia/Shanghai · 勿勾 CLOSED · 可施工
+**本窗性质：** tip thin · **CLOSED live** · feat `755be1f29` · tip `453590e06` · menu `9d92087d5` · jar `1.65.867-d13374.local` · PASS `c6e933433` · 2026-10-15 08:40 Asia/Shanghai · 集火路径选打菜单化同题勿再交 · Hurry D598+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
 **硬规格：** [`DESIGN-ember-focus-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-focus-path-offer-pick-visible-2026-10-15.md) · backlog `B-focus-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EP 已齐；集火**选打**仍 ConfirmTokens 教裸 focuspath——总控钉死本支；内容闭环断在集火路径选打（≠灾临选打；≠ settle 同题；局内集火钮≠选打页）。
 
@@ -61,9 +61,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-focus-path-offer-pick-visible-2026-10-15.md` |
 | 薄 tip | `docs/tips/TIP-ember-focus-path-offer-pick-visible-thin-d13374-2026-10-15.md` |
 | backlog | `B-focus-path-offer-pick-visible` |
-| 号段 | **D13374** · 字母窗 **TIP-EQ** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `f1c8949e0` · 2026-10-15 08:26 Asia/Shanghai · 勿勾 CLOSED |
+| 号段 | **D13374** · 字母窗 **TIP-EQ** · STATUS=**CLOSED live** · feat `755be1f29` · tip `453590e06` · menu `9d92087d5` · jar `1.65.867-d13374.local` · PASS `c6e933433` · 2026-10-15 08:40 Asia/Shanghai · 集火路径选打菜单化同题勿再交 · Hurry D598+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 |
 | 上游 | TIP-EP CLOSED live `616563d47` · feat `274c3299f` · tip `1064e9b7f` · PASS `00b50ba36` · jar `1.65.866-d13373.local` · 批 sha `1064e9b7f` · menu tip `635d5b670` · D13373；半行 REJECT `d00ed84bc` 保持否决；灾临路径选打菜单化同题勿再交 |
 
-*选题 FocusPath.offerPick / applyAndReply 集火路径选打菜单化 · tip **已批 A** · 方案 M · APPROVED A·M · tip `f1c8949e0` · 勿勾 CLOSED · L不批 · D13374 · TIP-EQ · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Focus 一支 · Hurry D598+ 等另窗证据逐支（禁全族大扫 · 禁与 Hurry/Stock/Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-EP CLOSED `616563d47` · 2026-10-15 08:26 Asia/Shanghai.*
+*选题 FocusPath.offerPick / applyAndReply 集火路径选打菜单化 · tip **CLOSED live** · feat `755be1f29` · tip `453590e06` · menu `9d92087d5` · jar `1.65.867-d13374.local` · PASS `c6e933433` · 2026-10-15 08:40 Asia/Shanghai · 集火路径选打菜单化同题勿再交 · Hurry D598+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · L不批 · D13374 · TIP-EQ · 半行 REJECT `d00ed84bc` **保持否决** · Hurry D598+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EP CLOSED `616563d47`.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `f1c8949e0` · 勿勾 CLOSED · L不批 · D13374 · TIP-EQ · 2026-10-15 08:26 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `755be1f29` · tip `453590e06` · menu `9d92087d5` · jar `1.65.867-d13374.local` · PASS `c6e933433` · 2026-10-15 08:40 Asia/Shanghai · 集火路径选打菜单化同题勿再交 · Hurry D598+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · D13374 · TIP-EQ
