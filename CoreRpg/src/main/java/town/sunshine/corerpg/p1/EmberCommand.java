@@ -6738,14 +6738,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberFocusPath.get(d);
-                    if (EmberFocusPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFocusPath.label(cur) + " · 改路径再 /corerpg p1 focuspath");
+                    if (EmberFocusPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFocusPath.label(cur) + " · 点集火路径页可改");
                     else EmberFocusPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberFocusPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 focuspath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点集火路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberFocusPath.applyAndReply(p, id);
