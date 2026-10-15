@@ -1,10 +1,10 @@
 # tip · TIP-EV RelayPath.offerPick / applyAndReply「传火路径选打」菜单化（选路径聊天钮去指令化 · ≠裂隙路径选打同题 · ≠预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D568 玩法本体）· 拟 D13379
 
-> **状态：** **待批 A** · 荐 M · 2026-10-15 10:10 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **已批 A** · 方案 M · APPROVED A·M · 2026-10-15 10:15 Asia/Shanghai · 勿勾 CLOSED · 可施工 W1a插件+W1b物品
 > **DESIGN** [`DESIGN-ember-relay-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-relay-path-offer-pick-visible-2026-10-15.md) · RESEARCH 同日 · backlog `B-relay-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（RelayPath.offerPick / applyAndReply / 无参 relaypath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_relay_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零裂隙路径选打同题复读（TIP-EU） · 零预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-ET–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零其它 *Path 同窗 · 零复开 D568 玩法本体（auto/ask/mute 真改传火传到下一未亮标记语义零改）· 零改 breach_path / alert_path / stock_path / hurry_path / focus_path / doom_path / nest_path / save_path / sequel_path / bait_path / slip_path / crash_path / bolt_path / shift_path / gap_path / phase_path / wave_path / soak_path / shell_path / clone_path / press_path / cut_path / rush_path / clean_path / streak_path / blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
-> **ancestor：** TIP-EU 已批 A·M · PASS live `5d7e02ac9`（feat `afa21fbef` · tip批 `521d55ef1` · menu `dba5004a2` · jar `1.65.871-d13378.local` · **99/99** · 证据 `/workspace/tmp/tip-eu-breach-path/` · **裂隙路径选打同题勿再交** · 待总控 CLOSED live）
+> **ancestor：** TIP-EU CLOSED live `556312f27`（feat `afa21fbef` · tip批 `521d55ef1` · menu `dba5004a2` · jar `1.65.871-d13378.local` · PASS `5d7e02ac9` · **99/99** · 证据 `/workspace/tmp/tip-eu-breach-path/` · **裂隙路径选打同题勿再交**）
 > **下一窗提示（旁注）：** Beacon/Hold 等另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EV（本窗批后）
 
 ## 一句话
@@ -15,7 +15,7 @@
 - Open/半行 **不可独批**（REJECT `d00ed84bc` 保持）
 
 ## ≠ 清单
-- ≠ 裂隙路径选打同题（TIP-EU PASS；`ember_p1_breach_path` 零改本窗）· ≠ 预警路径选打同题（TIP-ET）· ≠ 备药路径选打同题（TIP-ES）· ≠ 急清路径选打同题（TIP-ER）· ≠ 集火路径选打同题（TIP-EQ）· ≠ 灾临路径选打同题（TIP-EP）· ≠ 卡点路径选打同题（TIP-EO）· ≠ 终救路径选打同题（TIP-EN）· ≠ 续招路径选打同题（TIP-EM）· ≠ 诱空路径选打同题（TIP-EL）· ≠ 闪招路径选打同题（TIP-EK）· ≠ 撞墙路径选打同题（TIP-EJ）· ≠ 闪线路径选打同题（TIP-EI）· ≠ 侧安路径选打同题（TIP-EH）· ≠ 收招路径选打同题（TIP-EG）· ≠ 半血路径选打同题（TIP-EF）· ≠ 增援路径选打同题（TIP-EE）· ≠ 分摊路径选打同题（TIP-ED）· ≠ 铁壁路径选打同题（TIP-EC）· ≠ 分身路径选打同题（TIP-EB）· ≠ 压伤路径选打同题（TIP-EA）· ≠ 打断路径选打同题（TIP-DZ）· ≠ 限时路径选打同题（TIP-DY）· ≠ 净伤路径选打同题（TIP-DX）· ≠ 连斩路径选打同题（TIP-DW）· ≠ 避焰路径选打同题（TIP-DV）· ≠ 避旋路径选打同题（TIP-DU）· ≠ 断链路径选打同题（TIP-DT）· ≠ 避毒路径选打同题（TIP-DS）· ≠ 解锢路径选打同题（TIP-DR）· ≠ 闪榴路径选打同题（TIP-DQ）· ≠ 闪冲路径选打同题（TIP-DP）· ≠ 身法路径选打同题（TIP-DO）· ≠ 轻技路径选打同题（TIP-DN）· ≠ 步态路径选打同题（TIP-DM）· ≠ 破绽路径选打同题（TIP-DL）· ≠ 誓约路径选打同题（TIP-DK）· ≠ 试炼路径选打同题（TIP-DJ）· ≠ 深渊路径选打同题（TIP-DI）· ≠ 短征路径选打同题（TIP-DH）· ≠ 团本路径选打同题（TIP-DG）· ≠ 硬本路径选打同题（TIP-DF）· ≠ 精选路径选打同题（TIP-DE）· ≠ 已齐 settle 下一环同题 · ≠ 短征settle回看同题 · ≠ variety再拧 · ≠ soft-reward同题 · ≠ 路径追同题 · ≠ 日差同题 · ≠ Cast·Aid 再拧 · ≠ 庭内旁路再拧 · ≠ 半行空转 · ≠ 抬伤害/CD表/掉落/体力价 · ≠ 教裸指令 · ≠ legacy evacuate 大扫 · ≠ Pace同窗 · ≠ 其它 *Path 同窗 · ≠ 全族 *Path.offerPick 大扫 · ≠ 复开 D568 玩法本体（auto/ask/mute 真改传火传到下一未亮标记）
+- ≠ 裂隙路径选打同题（TIP-EU CLOSED；`ember_p1_breach_path` 零改本窗）· ≠ 预警路径选打同题（TIP-ET）· ≠ 备药路径选打同题（TIP-ES）· ≠ 急清路径选打同题（TIP-ER）· ≠ 集火路径选打同题（TIP-EQ）· ≠ 灾临路径选打同题（TIP-EP）· ≠ 卡点路径选打同题（TIP-EO）· ≠ 终救路径选打同题（TIP-EN）· ≠ 续招路径选打同题（TIP-EM）· ≠ 诱空路径选打同题（TIP-EL）· ≠ 闪招路径选打同题（TIP-EK）· ≠ 撞墙路径选打同题（TIP-EJ）· ≠ 闪线路径选打同题（TIP-EI）· ≠ 侧安路径选打同题（TIP-EH）· ≠ 收招路径选打同题（TIP-EG）· ≠ 半血路径选打同题（TIP-EF）· ≠ 增援路径选打同题（TIP-EE）· ≠ 分摊路径选打同题（TIP-ED）· ≠ 铁壁路径选打同题（TIP-EC）· ≠ 分身路径选打同题（TIP-EB）· ≠ 压伤路径选打同题（TIP-EA）· ≠ 打断路径选打同题（TIP-DZ）· ≠ 限时路径选打同题（TIP-DY）· ≠ 净伤路径选打同题（TIP-DX）· ≠ 连斩路径选打同题（TIP-DW）· ≠ 避焰路径选打同题（TIP-DV）· ≠ 避旋路径选打同题（TIP-DU）· ≠ 断链路径选打同题（TIP-DT）· ≠ 避毒路径选打同题（TIP-DS）· ≠ 解锢路径选打同题（TIP-DR）· ≠ 闪榴路径选打同题（TIP-DQ）· ≠ 闪冲路径选打同题（TIP-DP）· ≠ 身法路径选打同题（TIP-DO）· ≠ 轻技路径选打同题（TIP-DN）· ≠ 步态路径选打同题（TIP-DM）· ≠ 破绽路径选打同题（TIP-DL）· ≠ 誓约路径选打同题（TIP-DK）· ≠ 试炼路径选打同题（TIP-DJ）· ≠ 深渊路径选打同题（TIP-DI）· ≠ 短征路径选打同题（TIP-DH）· ≠ 团本路径选打同题（TIP-DG）· ≠ 硬本路径选打同题（TIP-DF）· ≠ 精选路径选打同题（TIP-DE）· ≠ 已齐 settle 下一环同题 · ≠ 短征settle回看同题 · ≠ variety再拧 · ≠ soft-reward同题 · ≠ 路径追同题 · ≠ 日差同题 · ≠ Cast·Aid 再拧 · ≠ 庭内旁路再拧 · ≠ 半行空转 · ≠ 抬伤害/CD表/掉落/体力价 · ≠ 教裸指令 · ≠ legacy evacuate 大扫 · ≠ Pace同窗 · ≠ 其它 *Path 同窗 · ≠ 全族 *Path.offerPick 大扫 · ≠ 复开 D568 玩法本体（auto/ask/mute 真改传火传到下一未亮标记）
 
 ## 选题为何合法（改题有证据 · 未改题）
 1. **挂机庭资源环：** 旁路 TIP-BY–CT **已齐**；afk 面 **零** `recipe_gap_gem`/`forge_gap_gem` → 宝石同构未过 → **无新硬债**（总控：gem gap 未亮 → 勿交 gem）
@@ -34,9 +34,9 @@
 - **L** = 仅改一条聊天钮目标命令无薄页 · **本窗不批 L**
 
 ## 验收（批后施工）
-- [ ] 总控批 A·M
+- [x] 总控批 A·M
 - [ ] 插件交 offerPick / applyAndReply / 无参 relaypath / 周要约改开菜单 + 清裸指令主路径 + 单测
 - [ ] 物品交薄 relay_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 breach_path·零已齐选打同题复读·零改 D568 传火语义）
 
-## STATUS: **待批 A** · 荐 M · L不批 · 勿勾 CLOSED · D13379 · TIP-EV · 2026-10-15 10:10 Asia/Shanghai
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · D13379 · TIP-EV · 2026-10-15 10:15 Asia/Shanghai · 勿勾 CLOSED · 可施工
