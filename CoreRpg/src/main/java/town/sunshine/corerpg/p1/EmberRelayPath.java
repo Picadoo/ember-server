@@ -17,11 +17,18 @@ import town.sunshine.corerpg.PlayerData;
  * to light for eventCore, chat ask, or find it yourself. Distinct from Beacon (defend lamp),
  * Hold (stand circle), Guard (escort), Smash (crystals). Chat only. Zero relayCount/eventCore /
  * AFK / sx / forge / combo / enter-cue.
+ * TIP-EV D13379: offerPick / applyAndReply / 无参 relaypath / 周要约 →开 /ember_p1_relay_path；
+ * 清 ConfirmTokens 教 relaypath 主 UI；零改伤害/CD表/掉落/体力价/D568 传火传到下一未亮标记语义.
  */
 public final class EmberRelayPath {
 
     public static final String C_PATH = "p1_relay_path";
     public static final String C_OFFER = "p1_relay_path_offer";
+
+    /** TIP-EV D13379 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_relay_path";
+    public static final String PATH_PICK_LABEL = "[传火路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -82,8 +89,16 @@ public final class EmberRelayPath {
 
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8传火路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8传火路径：未选 · /corerpg p1 relaypath";
+        // TIP-EV D13379: 禁教手打 /corerpg p1 relaypath
+        if (!valid(id)) return "§8传火路径：未选 · 点传火路径页";
         return "§e传火路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /**
+     * TIP-EV D13379 · 薄页 lore 一行（无 §）：当前传火路径。
+     */
+    public static String menuLine(int id) {
+        return "传火路径 · " + label(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
@@ -113,7 +128,7 @@ public final class EmberRelayPath {
             if (shouldMute(path)) continue;
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§b传火 ",
                     new String[]{"[传火]", "/corerpg p1 relay", "传到下一未亮标记", "GREEN"},
-                    new String[]{"[改路径]", "/corerpg p1 relaypath", "自动/提醒/静默", "GRAY"});
+                    new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
         }
     }
 
@@ -135,18 +150,26 @@ public final class EmberRelayPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§b传火 ",
                 new String[]{"[传火]", "/corerpg p1 relay", "传到下一未亮标记", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 relaypath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选传火节奏（改获取 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 relaypath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 relaypath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 relaypath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 relaypath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-EV D13379: 开选打薄页；禁 ConfirmTokens 教 relaypath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_relay_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_relay_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -201,9 +224,10 @@ public final class EmberRelayPath {
         flush(p);
         p.sendMessage(P + "§a传火 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-EV D13379: 下一步→选打薄页/冒险（禁教裸 relaypath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 relaypath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
