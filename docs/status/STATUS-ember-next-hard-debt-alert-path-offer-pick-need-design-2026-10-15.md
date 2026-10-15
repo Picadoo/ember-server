@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-ES 已批 A·M + PASS live**（D13376 备药路径选打 · feat `e1b2553d4` · tip批 `2ab321047` · menu `ca133c931` · jar `1.65.869-d13376.local` · PASS `1201f5d52` · 97/97 · 证据 `/workspace/tmp/tip-es-stock-path/` · **备药路径选打菜单化同题勿再交** · 待总控 CLOSED live）。总控派下一窗：只钉 **AlertPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–ES 选打勿复；PacePath（本仓无）后置；本窗只钉 Alert 一支 · 剩支另窗证据逐支（扫后再定 · 勿默念 Pace）· 挂机若新硬债 / legacy evacuate 后置后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-15（上海时间）
-**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip批 `52edcaf29` · feat `0517e92ed` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 98/98 · 勿勾 CLOSED · 可施工 · 待总控 CLOSED live · 下一窗 BreachPath.offerPick
+**本窗性质：** tip thin · **CLOSED live** · feat `0517e92ed` · tip `52edcaf29` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 2026-10-15 09:46 Asia/Shanghai · 预警路径选打菜单化同题勿再交 · Breach D569+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
 **硬规格：** [`DESIGN-ember-alert-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-alert-path-offer-pick-visible-2026-10-15.md) · backlog `B-alert-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–ES 已齐（备药 PASS·待 CLOSED）；预警**选打**仍 ConfirmTokens 教裸 alertpath——总控钉死本支；内容闭环断在预警路径选打（≠备药选打；≠ settle 同题；局内预警钮≠选打页）。
 
@@ -61,9 +61,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-alert-path-offer-pick-visible-2026-10-15.md` |
 | 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-15.md` |
 | backlog | `B-alert-path-offer-pick-visible` |
-| 号段 | **D13377** · 字母窗 **TIP-ET** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip批 `52edcaf29` · feat `0517e92ed` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 勿勾 CLOSED · 待总控 CLOSED live |
+| 号段 | **D13377** · 字母窗 **TIP-ET** · STATUS=**CLOSED live** · feat `0517e92ed` · tip `52edcaf29` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 2026-10-15 09:46 Asia/Shanghai · 预警路径选打菜单化同题勿再交 · Breach D569+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 |
 | 上游 | TIP-ES PASS live `1201f5d52` · feat `e1b2553d4` · tip `2ab321047` · PASS `1201f5d52` · jar `1.65.869-d13376.local` · 批 sha `2ab321047` · menu tip `ca133c931` · D13376；半行 REJECT `d00ed84bc` 保持否决；备药路径选打菜单化同题勿再交 |
 
-*选题 AlertPath.offerPick / applyAndReply 预警路径选打菜单化 · tip **已批 A** · 方案 M · APPROVED A·M · tip `1a7ecb8ef` · 勿勾 CLOSED · L不批 · D13377 · TIP-ET · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Alert 一支 · 剩支另窗证据逐支（扫后再定 · 勿默念 Pace）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-ES PASS `1201f5d52` / 批 `2ab321047` · 2026-10-15 09:27 Asia/Shanghai.*
+*选题 AlertPath.offerPick / applyAndReply 预警路径选打菜单化 · tip **CLOSED live** · feat `0517e92ed` · tip `52edcaf29` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 2026-10-15 09:46 Asia/Shanghai · 预警路径选打菜单化同题勿再交 · Breach D569+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · L不批 · D13377 · TIP-ET · 半行 REJECT `d00ed84bc` **保持否决** · Breach D569+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-ES CLOSED `24dc2ff5b`.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip批 `52edcaf29` · feat `0517e92ed` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 勿勾 CLOSED · 待总控 CLOSED live · L不批 · D13377 · TIP-ET · 2026-10-15 09:43 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `0517e92ed` · tip `52edcaf29` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 2026-10-15 09:46 Asia/Shanghai · 预警路径选打菜单化同题勿再交 · Breach D569+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · D13377 · TIP-ET

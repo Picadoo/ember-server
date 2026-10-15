@@ -1,6 +1,6 @@
 # RESEARCH · AlertPath.offerPick / applyAndReply「预警路径选打」菜单化 · 拟 D13377 · TIP-ET
 
-> **状态：** **已批 A** · 方案 M · APPROVED A·M · tip批 `52edcaf29` · feat `0517e92ed` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 2026-10-15 09:43 Asia/Shanghai · 勿勾 CLOSED · 待总控 CLOSED live · 下一窗 BreachPath.offerPick
+> **状态：** **CLOSED live** · feat `0517e92ed` · tip `52edcaf29` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 2026-10-15 09:46 Asia/Shanghai · 预警路径选打菜单化同题勿再交 · Breach D569+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
 > **起因：** 总控【下一窗 TIP-ET · 只钉一支 · 禁全族大扫】。祖先 TIP-ES PASS live `1201f5d52`（feat `e1b2553d4` · tip批 `2ab321047` · menu `ca133c931` · jar `1.65.869-d13376.local` · 97/97 · 证据 `/workspace/tmp/tip-es-stock-path/` · 备药路径选打菜单化同题勿再交 · 待总控 CLOSED）。**备药路径选打菜单化同题勿再交**。选题钉死：**AlertPath.offerPick**「预警路径选打」菜单化 → TrMenu `ember_p1_alert_path`（拟 D13377 · TIP-ET · 玩法本体 D600 紧接 Stock D599）。硬证：`EmberAlertPath.offerPick` 仍 ConfirmTokens 教 alertpath auto|ask|mute|clear；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内预警「就位」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_alert_path.yml`；与刚 PASS Stock 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–ES 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁与其它 *Path 同窗；PacePath（本仓无）后置；legacy evacuate 后置；本窗只钉 Alert 一支 · 剩支另窗证据逐支（扫后再定 · 勿默念 Pace）· 挂机若新硬债 / legacy evacuate 后置后置（逐支另窗）；零抬伤害/CD表/掉落/体力价；零改 D600 预警语义本体；零改已齐 `ember_p1_stock_path` 等；勿勾 CLOSED。
 > **上游：** TIP-ES PASS live `1201f5d52` · feat `e1b2553d4` · tip `2ab321047` · PASS `1201f5d52` · jar `1.65.869-d13376.local` · 批 sha `2ab321047` · menu tip `ca133c931` · D13376
 
@@ -64,6 +64,6 @@
 
 ---
 
-*RESEARCH · AlertPath.offerPick / applyAndReply 预警路径选打菜单化 · **已批 A** · 方案 M · APPROVED A·M · tip `1a7ecb8ef` · TIP-ET / D13377 · 半行 REJECT `d00ed84bc` 保持 · 本窗只钉 Alert 一支 · 剩支另窗证据逐支（扫后再定 · 勿默念 Pace）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-ES PASS `1201f5d52` / 批 `2ab321047` · 2026-10-15 09:27 Asia/Shanghai · 勿勾 CLOSED.*
+*RESEARCH · AlertPath.offerPick 预警路径选打 · **CLOSED live** · feat `0517e92ed` · tip `52edcaf29` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 2026-10-15 09:46 Asia/Shanghai · 预警路径选打菜单化同题勿再交 · Breach D569+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-ES CLOSED `24dc2ff5b`.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip批 `52edcaf29` · feat `0517e92ed` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 勿勾 CLOSED · 待总控 CLOSED live · D13377 · TIP-ET · 2026-10-15 09:43 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `0517e92ed` · tip `52edcaf29` · menu `1248a512b` · jar `1.65.870-d13377.local` · PASS `b8c70fc74` · 2026-10-15 09:46 Asia/Shanghai · 预警路径选打菜单化同题勿再交 · Breach D569+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · D13377 · TIP-ET
