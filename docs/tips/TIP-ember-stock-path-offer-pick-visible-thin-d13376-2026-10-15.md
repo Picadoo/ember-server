@@ -1,11 +1,11 @@
 # tip · TIP-ES StockPath.offerPick / applyAndReply「备药路径选打」菜单化（选路径聊天钮去指令化 · ≠急清路径选打同题 · ≠集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D599 玩法本体）· 拟 D13376
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · tip批 `2ab321047` · D13376 · TIP-ES · W1a+W1b+抽测 PASS `1201f5d52` · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 stockpath/周要约→开 ember_p1_stock_path · 清 ConfirmTokens 教 stockpath 主 UI · 2026-10-15 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `e1b2553d4` · tip `2ab321047` · menu `ca133c931` · jar `1.65.869-d13376.local` · PASS `1201f5d52` · 批 sha `2ab321047` · 证据 `/workspace/tmp/tip-es-stock-path/` · 2026-10-15 09:28 Asia/Shanghai · 备药路径选打菜单化同题勿再交 · 下一窗 Alert D600+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
 > **DESIGN** [`DESIGN-ember-stock-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-stock-path-offer-pick-visible-2026-10-15.md) · RESEARCH 同日 · backlog `B-stock-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（StockPath.offerPick / applyAndReply / 无参 stockpath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_stock_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零急清路径选打同题复读（TIP-ER） · 零集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-EQ–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零其它 *Path 同窗 · 零复开 D599 玩法本体（auto/ask/mute 真改备药核对回复药语义零改）· 零改 hurry_path / focus_path / doom_path / nest_path / save_path / sequel_path / bait_path / slip_path / crash_path / bolt_path / shift_path / gap_path / phase_path / wave_path / soak_path / shell_path / clone_path / press_path / cut_path / rush_path / clean_path / streak_path / blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
 > **ancestor：** TIP-ER CLOSED live `dc6838c45`（feat `f7fc5125f` · tip批 `4e0e9c6d2` · menu `5a4e37268` · jar `1.65.868-d13375.local` · PASS `dfe0e4724` · 证据 `/workspace/tmp/tip-er-hurry-path/` · **急清路径选打菜单化同题勿再交**）
-> **下一窗提示（旁注）：** Alert D600+ 等另窗证据逐支（禁全族大扫 · 禁与 Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-ES（本窗批后）
+> **下一窗提示（旁注）：** Alert D600+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-ES CLOSED
 
 ## 一句话
 周选/改备药路径时一点开「备药路径」薄页：自动 / 提醒 / 静默 / 清空 / 技能组 / 冒险可点；清 ConfirmTokens 教 `stockpath` 主 UI；伤害·CD表·掉落·体力价不动；局内备药战斗钮「核对」「改路径」语义零改。
@@ -35,8 +35,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M
-- [x] 插件交 offerPick / applyAndReply / 无参 stockpath / 周要约改开菜单 + 清裸指令主路径 + 单测 · W1a feat `e1b2553d4` · jar `1.65.869-d13376.local` · **勿勾 CLOSED**
+- [x] 插件交 offerPick / applyAndReply / 无参 stockpath / 周要约改开菜单 + 清裸指令主路径 + 单测 · W1a feat `e1b2553d4` · jar `1.65.869-d13376.local`
 - [x] 物品交薄 stock_path 页 + TrMenu reload · `ca133c931`
-- [x] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 hurry_path·零已齐选打同题复读·零改 D599 备药语义）· spot STATUS 见 STATUS-ember-stock-path-offer-pick-tip-es-spot-live-d13376 · **勿勾 CLOSED**
+- [x] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 hurry_path·零已齐选打同题复读·零改 D599 备药语义）· spot STATUS 见 STATUS-ember-stock-path-offer-pick-tip-es-spot-live-d13376 · **CLOSED**
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · W1a+W1b+抽测 PASS（勿勾 CLOSED · 待总控收口） · L不批 · D13376 · TIP-ES · 2026-10-15 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `e1b2553d4` · tip `2ab321047` · menu `ca133c931` · jar `1.65.869-d13376.local` · PASS `1201f5d52` · 批 sha `2ab321047` · 证据 `/workspace/tmp/tip-es-stock-path/` · 2026-10-15 09:28 Asia/Shanghai · 备药路径选打菜单化同题勿再交 · 下一窗 Alert D600+ 另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
