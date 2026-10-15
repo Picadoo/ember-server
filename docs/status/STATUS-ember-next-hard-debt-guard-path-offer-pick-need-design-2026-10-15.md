@@ -65,3 +65,8 @@
 ## STATUS: **待批 A** · 荐 M · 拟 D13382 · TIP-EY · 2026-10-15 15:30 Asia/Shanghai · 勿勾 CLOSED · L不批 · 只钉 Guard 一支 · 禁 Pace 默念 · 禁全族大扫 · ancestor TIP-EX CLOSED
 
 > **总控批（TIP-EY / D13382）：** **APPROVED A·M**（W1a+W1b · L不批 · 勿勾 CLOSED）· 总控批 2026-10-15 15:40 Asia/Shanghai · 祖先 TIP-EX CLOSED `bb58d357f` / PASS `afafda977` · 派 插件 W1a / 物品 W1b
+
+
+## STATUS: **CLOSED live** · TIP-EY / D13382 · GuardPath.offerPick → `ember_p1_guard_path` · 2026-10-15 15:55 Asia/Shanghai
+
+> **CLOSED live：** APPROVED `29ea1be01` · feat `22dc24411` · menu `a118e2ad6` · jar `1.65.875-d13382.local` · PASS `5ecfb6686` · spot **102/102** · TrMenu **130** · bv123 · 证据 `/workspace/tmp/tip-ey-guard-path/` · 护兔路径选打同题勿再交 · 下一支 TIP-EZ / D13383 SmashPath（砸晶）待批

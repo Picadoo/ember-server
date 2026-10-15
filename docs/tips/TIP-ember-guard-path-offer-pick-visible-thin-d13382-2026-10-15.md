@@ -40,3 +40,8 @@
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 hold_path·零已齐选打同题复读·零改 D565 护兔语义）
 
 ## STATUS: **APPROVED A·M** (W1a+W1b) · L不批 · 勿勾 CLOSED · D13382 · TIP-EY · 2026-10-15 15:35 Asia/Shanghai
+
+
+## STATUS: **CLOSED live** · TIP-EY / D13382 · GuardPath.offerPick → `ember_p1_guard_path` · 2026-10-15 15:55 Asia/Shanghai
+
+> **CLOSED live：** APPROVED `29ea1be01` · feat `22dc24411` · menu `a118e2ad6` · jar `1.65.875-d13382.local` · PASS `5ecfb6686` · spot **102/102** · TrMenu **130** · bv123 · 证据 `/workspace/tmp/tip-ey-guard-path/` · 护兔路径选打同题勿再交 · 下一支 TIP-EZ / D13383 SmashPath（砸晶）待批
