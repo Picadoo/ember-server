@@ -4,7 +4,7 @@
 
 **日期：** 2026-10-15（上海时间）
 **本窗性质：** tip thin · **待批 A** · 荐 M · docs-only · 拟 D13382 · TIP-EY · 勿勾 CLOSED
-**硬规格：** 待策划交 `DESIGN-ember-guard-path-offer-pick-visible-2026-10-15.md` · backlog `B-guard-path-offer-pick-visible`
+**硬规格：** 策划已交 [`DESIGN-ember-guard-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-guard-path-offer-pick-visible-2026-10-15.md) · RESEARCH 同日 · 薄 tip [`TIP-ember-guard-path-offer-pick-visible-thin-d13382-2026-10-15.md`](../tips/TIP-ember-guard-path-offer-pick-visible-thin-d13382-2026-10-15.md) · backlog `B-guard-path-offer-pick-visible` · 策划旁注 2026-10-15 15:35 Asia/Shanghai：待批 A · 荐 M（W1a+W1b）· L不批 · 勿勾 CLOSED
 **打开理由：** 挂机/短征无新薄债；选打 DE–EX 已齐（占点 CLOSED）；护兔**选打**仍 ConfirmTokens 教裸 guardpath——总控钉死本支；内容闭环断在护兔路径选打（≠占点选打；≠ settle 同题；局内护兔钮≠选打页）。
 
 ---
@@ -55,8 +55,9 @@
 | 项 | 路径 |
 |----|------|
 | tip（本文件） | `docs/status/STATUS-ember-next-hard-debt-guard-path-offer-pick-need-design-2026-10-15.md` |
-| DESIGN | 待策划 `docs/design/DESIGN-ember-guard-path-offer-pick-visible-2026-10-15.md` |
-| RESEARCH | 待策划 |
+| DESIGN | `docs/design/DESIGN-ember-guard-path-offer-pick-visible-2026-10-15.md`（已交） |
+| RESEARCH | `docs/design/RESEARCH-ember-guard-path-offer-pick-visible-2026-10-15.md`（已交） |
+| 薄 tip | `docs/tips/TIP-ember-guard-path-offer-pick-visible-thin-d13382-2026-10-15.md` |
 | backlog | `B-guard-path-offer-pick-visible` |
 | 号段 | **D13382** · 字母窗 **TIP-EY** · STATUS=**待批 A** · 荐 M · 2026-10-15 15:30 Asia/Shanghai · 勿勾 CLOSED |
 | 上游 | TIP-EX CLOSED live `bb58d357f` · feat `ad2720cfe` · tip批 `6b5357baf` · menu `ddb1f6ce6` · jar `1.65.874-d13381.local` · PASS `afafda977` · D13381；半行 REJECT `d00ed84bc` 保持否决；占点路径选打菜单化同题勿再交 |
