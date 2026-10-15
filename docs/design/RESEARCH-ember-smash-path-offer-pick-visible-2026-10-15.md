@@ -60,7 +60,7 @@
 |------|------|
 | A 只半行 | REJECT 保持 |
 | L 仅改一条聊天钮目标无薄页 | 弱于真动作；默认不批 |
-| W 抬表/sx20/已齐同题复读/variety再拧/庭内/诱空选打同题/全族Path大扫/Pace同窗/其它 *Path 同窗/legacy evacuate 大扫/复开 D564 | 硬禁 |
+| W 抬表/sx20/已齐同题复读/variety再拧/庭内/护兔/占点选打同题/全族Path大扫/Pace同窗/其它 *Path 同窗/legacy evacuate 大扫/复开 D564 | 硬禁 |
 
 ---
 

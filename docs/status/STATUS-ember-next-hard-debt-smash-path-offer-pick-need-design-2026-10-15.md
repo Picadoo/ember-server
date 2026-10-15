@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EY CLOSED live `8ac9b2ebc`**（D13382 护兔路径选打 · APPROVED `29ea1be01` · feat `22dc24411` · menu `a118e2ad6` · jar `1.65.875-d13382.local` · PASS `5ecfb6686` · spot 102/102 · TrMenu 130 · bv123 · **护兔路径选打同题勿再交**）。
 
 **日期：** 2026-10-15（上海时间）
-**本窗性质：** need-design · **待批 A** · 荐 M · docs-only · 拟 D13383 · TIP-EZ · 勿勾 CLOSED
+**本窗性质：** need-design · **APPROVED A · M（W1a 插件 + W1b 菜单）· L不批 · 勿勾 CLOSED** · 总控 2026-10-15 16:00 Asia/Shanghai · docs-only · 拟 D13383 · TIP-EZ · 勿勾 CLOSED
 **策划旁注（2026-10-15 15:58 Asia/Shanghai）：** 已交 [`DESIGN`](../design/DESIGN-ember-smash-path-offer-pick-visible-2026-10-15.md) · [`RESEARCH`](../design/RESEARCH-ember-smash-path-offer-pick-visible-2026-10-15.md) · 薄 tip [`TIP-ember-smash-path-offer-pick-visible-thin-d13383-2026-10-15.md`](../tips/TIP-ember-smash-path-offer-pick-visible-thin-d13383-2026-10-15.md) · backlog `B-smash-path-offer-pick-visible` · STATUS=待批 A · 荐 M（W1a+W1b）· L不批 · 勿勾 CLOSED · ancestor TIP-EY CLOSED `8ac9b2ebc` / PASS `5ecfb6686` · 半行 REJECT `d00ed84bc` 保持
 **打开理由：** 扫全部 `Ember*Path.offerPick`：D565–D600 已全部有 TrMenu `ember_p1_*_path`（Guard 刚 CLOSED）；Guard 之下最高残留 D# = **EmberSmashPath D564**（砸晶），仍 ConfirmTokens 教裸 `smashpath`。
 
@@ -43,4 +43,4 @@
 | 号段 | D13383 · TIP-EZ · 玩法本体 D564 · menu id `ember_p1_smash_path` |
 | 上游 | TIP-EY CLOSED `8ac9b2ebc` |
 
-## STATUS: **待批 A** · 荐 M · 拟 D13383 · TIP-EZ · 2026-10-15 15:58 Asia/Shanghai · 勿勾 CLOSED · 只钉 Smash 一支 · 禁 Pace · 禁全族大扫
+## STATUS: **APPROVED A · M（W1a 插件 + W1b 菜单）· L不批 · 勿勾 CLOSED** · 总控 2026-10-15 16:00 Asia/Shanghai · 拟 D13383 · TIP-EZ · 2026-10-15 15:58 Asia/Shanghai · 勿勾 CLOSED · 只钉 Smash 一支 · 禁 Pace · 禁全族大扫
