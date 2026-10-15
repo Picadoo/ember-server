@@ -1,11 +1,11 @@
 # tip · TIP-EV RelayPath.offerPick / applyAndReply「传火路径选打」菜单化（选路径聊天钮去指令化 · ≠裂隙路径选打同题 · ≠预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D568 玩法本体）· 拟 D13379
 
-> **状态：** **已批 A · 方案 M** · APPROVED A·M · tip批 `0acf03feb` · D13379 · TIP-EV · W1a+W1b+抽测 PASS `ffd10969f` · L不批 · 勿勾 CLOSED · 零改伤害/CD表/掉落/体力价 · offerPick/applyAndReply/无参 relaypath/周要约→开 ember_p1_relay_path · 清 ConfirmTokens 教 relaypath 主 UI · 2026-10-15 Asia/Shanghai
+> **状态：** **CLOSED live** · feat `6eec10d81` · tip `0acf03feb` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · 2026-10-15 10:36 Asia/Shanghai · 传火路径选打菜单化同题勿再交 · Beacon D567+ 另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · 批 sha `0acf03feb` · 证据 `/workspace/tmp/tip-ev-relay-path/` · 下一窗 Beacon D567+ 另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
 > **DESIGN** [`DESIGN-ember-relay-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-relay-path-offer-pick-visible-2026-10-15.md) · RESEARCH 同日 · backlog `B-relay-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（RelayPath.offerPick / applyAndReply / 无参 relaypath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_relay_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零裂隙路径选打同题复读（TIP-EU） · 零预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-ET–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零其它 *Path 同窗 · 零复开 D568 玩法本体（auto/ask/mute 真改传火传到下一未亮标记语义零改）· 零改 breach_path / alert_path / stock_path / hurry_path / focus_path / doom_path / nest_path / save_path / sequel_path / bait_path / slip_path / crash_path / bolt_path / shift_path / gap_path / phase_path / wave_path / soak_path / shell_path / clone_path / press_path / cut_path / rush_path / clean_path / streak_path / blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
 > **ancestor：** TIP-EU CLOSED live `556312f27`（feat `afa21fbef` · tip批 `521d55ef1` · menu `dba5004a2` · jar `1.65.871-d13378.local` · PASS `5d7e02ac9` · **99/99** · 证据 `/workspace/tmp/tip-eu-breach-path/` · **裂隙路径选打同题勿再交**）
-> **下一窗提示（旁注）：** Beacon/Hold 等另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EV（本窗批后）
+> **下一窗提示（旁注）：** Beacon D567+ 另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EV CLOSED
 
 ## 一句话
 周选/改传火路径时一点开「传火路径」薄页：自动 / 提醒 / 静默 / 清空 / 技能组 / 冒险可点；清 ConfirmTokens 教 `relaypath` 主 UI；伤害·CD表·掉落·体力价不动；局内传火战斗钮「传火」「改路径」语义零改。
@@ -35,8 +35,8 @@
 
 ## 验收（批后施工）
 - [x] 总控批 A·M
-- [x] 插件交 offerPick / applyAndReply / 无参 relaypath / 周要约改开菜单 + 清裸指令主路径 + 单测 · W1a feat `6eec10d81` · jar `1.65.872-d13379.local` · **勿勾 CLOSED**
+- [x] 插件交 offerPick / applyAndReply / 无参 relaypath / 周要约改开菜单 + 清裸指令主路径 + 单测 · W1a feat `6eec10d81` · jar `1.65.872-d13379.local`
 - [x] 物品交薄 relay_path 页 + TrMenu reload · `c9b84f30e`
-- [x] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 breach_path·零已齐选打同题复读·零改 D568 传火语义）· spot STATUS 见 STATUS-ember-relay-path-offer-pick-tip-ev-spot-live-d13379 · PASS `ffd10969f` · **勿勾 CLOSED**
+- [x] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 breach_path·零已齐选打同题复读·零改 D568 传火语义）· spot STATUS 见 STATUS-ember-relay-path-offer-pick-tip-ev-spot-live-d13379 · PASS `ffd10969f` · **CLOSED**
 
-## STATUS: **已批 A · 方案 M** · APPROVED A·M · tip批 `0acf03feb` · feat `6eec10d81` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · W1a+W1b+抽测 PASS（勿勾 CLOSED · 待总控收口 CLOSED live） · L不批 · D13379 · TIP-EV · 2026-10-15 10:33 Asia/Shanghai · 下一窗 BeaconPath.offerPick
+## STATUS: **CLOSED live** · feat `6eec10d81` · tip `0acf03feb` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · 2026-10-15 10:36 Asia/Shanghai · 传火路径选打菜单化同题勿再交 · Beacon D567+ 另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · 批 sha `0acf03feb` · 证据 `/workspace/tmp/tip-ev-relay-path/`

@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EU CLOSED live `556312f27`**（D13378 裂隙路径选打 · feat `afa21fbef` · tip批 `521d55ef1` · menu `dba5004a2` · jar `1.65.871-d13378.local` · PASS `5d7e02ac9` · 99/99 · 证据 `/workspace/tmp/tip-eu-breach-path/` · **裂隙路径选打同题勿再交**）。总控派下一窗：只钉 **RelayPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EU 选打勿复；PacePath（本仓无）后置；本窗只钉 Relay 一支 · Beacon/Hold 等另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-15（上海时间）
-**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip批 `0acf03feb` · feat `6eec10d81` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · 100/100 · 勿勾 CLOSED · 可施工 · 待总控 CLOSED live · 下一窗 BeaconPath.offerPick
+**本窗性质：** tip thin · **CLOSED live** · feat `6eec10d81` · tip `0acf03feb` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · 2026-10-15 10:36 Asia/Shanghai · 传火路径选打菜单化同题勿再交 · Beacon D567+ 另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
 **硬规格：** [`DESIGN-ember-relay-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-relay-path-offer-pick-visible-2026-10-15.md) · backlog `B-relay-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EU 已齐（裂隙 CLOSED）；传火**选打**仍 ConfirmTokens 教裸 relaypath——总控钉死本支；内容闭环断在传火路径选打（≠裂隙选打；≠ settle 同题；局内传火钮≠选打页）。
 
@@ -61,9 +61,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-relay-path-offer-pick-visible-2026-10-15.md` |
 | 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-15.md` |
 | backlog | `B-relay-path-offer-pick-visible` |
-| 号段 | **D13379** · 字母窗 **TIP-EV** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip批 `0acf03feb` · feat `6eec10d81` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · 勿勾 CLOSED · 待总控 CLOSED live |
+| 号段 | **D13379** · 字母窗 **TIP-EV** · STATUS=**CLOSED live** · feat `6eec10d81` · tip `0acf03feb` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · 2026-10-15 10:36 Asia/Shanghai · 传火路径选打菜单化同题勿再交 · Beacon D567+ 另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 |
 | 上游 | TIP-EU CLOSED live `556312f27` · feat `afa21fbef` · tip `521d55ef1` · PASS `5d7e02ac9` · jar `1.65.871-d13378.local` · 批 sha `521d55ef1` · menu tip `dba5004a2` · D13378；半行 REJECT `d00ed84bc` 保持否决；裂隙路径选打菜单化同题勿再交 |
 
-*选题 RelayPath.offerPick / applyAndReply 传火路径选打菜单化 · tip **已批 A** · 方案 M · APPROVED A·M · tip `843fbe436` · 勿勾 CLOSED · L不批 · D13379 · TIP-EV · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Relay 一支 · Beacon/Hold 等另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EU CLOSED `556312f27` / PASS `5d7e02ac9` / 批 `521d55ef1` · 2026-10-15 10:15 Asia/Shanghai.*
+*选题 RelayPath.offerPick / applyAndReply 传火路径选打菜单化 · tip **CLOSED live** · feat `6eec10d81` · tip `0acf03feb` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · 2026-10-15 10:36 Asia/Shanghai · 传火路径选打菜单化同题勿再交 · Beacon D567+ 另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · L不批 · D13379 · TIP-EV · 半行 REJECT `d00ed84bc` **保持否决** · Beacon D567+ 另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EU CLOSED `556312f27`.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip批 `0acf03feb` · feat `6eec10d81` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · 勿勾 CLOSED · 待总控 CLOSED live · L不批 · D13379 · TIP-EV · 2026-10-15 10:33 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `6eec10d81` · tip `0acf03feb` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · 2026-10-15 10:36 Asia/Shanghai · 传火路径选打菜单化同题勿再交 · Beacon D567+ 另窗证据逐支（禁全族大扫 · 禁与 Beacon/Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · D13379 · TIP-EV
