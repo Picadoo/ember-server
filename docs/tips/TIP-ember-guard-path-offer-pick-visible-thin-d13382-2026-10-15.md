@@ -1,6 +1,6 @@
 # tip · TIP-EY GuardPath.offerPick / applyAndReply「护兔路径选打」菜单化（选路径聊天钮去指令化 · ≠占点路径选打同题 · ≠传火/裂隙/预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D565 玩法本体）· 拟 D13382
 
-> **状态：** **待批 A** · 荐 M · 2026-10-15 15:35 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **APPROVED A·M**（W1a+W1b · L不批 · 勿勾 CLOSED）· 总控批 2026-10-15 15:40 Asia/Shanghai · 祖先 TIP-EX CLOSED `bb58d357f` / PASS `afafda977`
 > **DESIGN** [`DESIGN-ember-guard-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-guard-path-offer-pick-visible-2026-10-15.md) · RESEARCH 同日 · backlog `B-guard-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（GuardPath.offerPick / applyAndReply / 无参 guardpath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_guard_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零占点路径选打同题复读（TIP-EX） · 零传火/裂隙/预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-EW–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零其它 *Path 同窗 · 零复开 D565 玩法本体（auto/ask/mute 真改护兔传到小兔旁守护语义零改）· 零改 hold_path / relay_path / breach_path / alert_path / stock_path / hurry_path / focus_path / doom_path / nest_path / save_path / sequel_path / bait_path / slip_path / crash_path / bolt_path / shift_path / gap_path / phase_path / wave_path / soak_path / shell_path / clone_path / press_path / cut_path / rush_path / clean_path / streak_path / blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
@@ -20,7 +20,7 @@
 ## 选题为何合法（改题有证据 · 未改题）
 1. **挂机庭资源环：** 旁路 TIP-BY–CT **已齐**；afk 面 **零** `recipe_gap_gem`/`forge_gap_gem` → 宝石同构未过 → **无新硬债**（总控：gem gap 未亮 → 勿交 gem）
 2. **短征日更乐趣：** Cast/Aid/todayRot/variety/日差/路径追/settle/soft/回看/路径选打 TIP-DH **已齐**；sx20 **硬禁** → **无薄窗新硬债**
-3. **已齐勿复读：** settle CW–DD + 精选/硬本/团本/短征/深渊/试炼/誓约/破绽/步态/轻技/身法/闪冲/闪榴/解锢/避毒/断链/避旋/避焰/连斩/净伤/限时/打断/压伤/铁壁/分摊/增援/半血/收招/侧安/闪线/撞墙/闪招/诱空/续招/终救/卡点/灾临/集火/急清/备药/预警/裂隙/传火/护兔路径选打 DE–EX **全齐**
+3. **已齐勿复读：** settle CW–DD + 精选/硬本/团本/短征/深渊/试炼/誓约/破绽/步态/轻技/身法/闪冲/闪榴/解锢/避毒/断链/避旋/避焰/连斩/净伤/限时/打断/压伤/铁壁/分摊/增援/半血/收招/侧安/闪线/撞墙/闪招/诱空/续招/终救/卡点/灾临/集火/急清/备药/预警/裂隙/传火/占点路径选打 DE–EX **全齐**
 4. **故落菜单去指令残留 · 只钉一支：** 总控钉死 **GuardPath.offerPick**；D565；Hold D566 后按残留 D# 钉 Guard。实扫 GuardPath：`offerPick` ConfirmTokens→`guardpath auto|ask|mute|clear`；`applyAndReply` 下一步 ConfirmTokens→`/corerpg p1`/`guardpath`；无参/周要约/`scheduleOfferAfterQ01` 同入口；glance 未选教手打 `/corerpg p1 guardpath`；用法教 `auto|ask|mute|clear`；TrMenu **无** `ember_p1_guard_path`。**注：** 局内护兔战斗钮有「护兔」+「改路径」（ASK 路径提醒）≠ 选打专用薄页已齐——选打链仍教裸指令硬债成立。与刚 CLOSED Hold 同构 auto/ask/mute（护兔传到小兔旁守护；D565 玩法本体已 PASS，本窗只去指令化选打）；本窗只钉 Guard 一支 · 剩支另窗证据逐支（扫后再定 · 禁全族大扫 · 禁与其它 *Path 同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置；PacePath（本仓无）后置。
 
 ## 施工钉死（批后）
@@ -34,9 +34,9 @@
 - **L** = 仅改一条聊天钮目标命令无薄页 · **本窗不批 L**
 
 ## 验收（批后施工）
-- [ ] 总控批 A·M
+- [x] 总控批 A·M
 - [ ] 插件交 offerPick / applyAndReply / 无参 guardpath / 周要约改开菜单 + 清裸指令主路径 + 单测
 - [ ] 物品交薄 guard_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 hold_path·零已齐选打同题复读·零改 D565 护兔语义）
 
-## STATUS: **待批 A** · 荐 M · L不批 · 勿勾 CLOSED · D13382 · TIP-EY · 2026-10-15 15:35 Asia/Shanghai
+## STATUS: **APPROVED A·M** (W1a+W1b) · L不批 · 勿勾 CLOSED · D13382 · TIP-EY · 2026-10-15 15:35 Asia/Shanghai

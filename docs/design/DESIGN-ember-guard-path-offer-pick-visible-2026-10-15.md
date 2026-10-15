@@ -31,7 +31,7 @@ STATUS=**待批 A** · 荐 M · 2026-10-15 15:35 Asia/Shanghai · 勿勾 CLOSED 
 | E12 | PacePath 本仓无；本窗只钉 Guard 一支 · 剩支另窗证据逐支（扫后再定 · 禁全族大扫 · 禁与其它 *Path 同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 | **后置**（§6；禁全族大扫） |
 | E13 | **为何不是半行** | 主交付=薄页+改入口；见 §3.5 |
 | E14 | 半行 REJECT `d00ed84bc` 保持 | backlog |
-| E15 | 为何钉 Guard | 总控钉死；D565；Hold D566 后按残留 D# 钉 Guard；与刚 CLOSED Hold 同构 auto/ask/mute；ConfirmTokens 全链；缺专用选打薄页；Q01；DE–EX 诱空已齐后本支；Pace 不存在；其它剩支后置 |
+| E15 | 为何钉 Guard | 总控钉死；D565；Hold D566 后按残留 D# 钉 Guard；与刚 CLOSED Hold 同构 auto/ask/mute；ConfirmTokens 全链；缺专用选打薄页；Q01；DE–EX 占点已齐后本支；Pace 不存在；其它剩支后置 |
 
 **一句话问题：** 挂机/短征/各 settle/选打 DE–EX 已齐（护兔 CLOSED）后，**护兔路径选打**仍钉在 ConfirmTokens 教裸 `guardpath`，周要约/无参/Q01 同入口，`applyAndReply` 下一步仍聊天钮——**没有**选打专用薄页（局内护兔战斗钮≠选打页）。
 

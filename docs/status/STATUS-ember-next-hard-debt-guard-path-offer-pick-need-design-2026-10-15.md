@@ -63,3 +63,5 @@
 | 上游 | TIP-EX CLOSED live `bb58d357f` · feat `ad2720cfe` · tip批 `6b5357baf` · menu `ddb1f6ce6` · jar `1.65.874-d13381.local` · PASS `afafda977` · D13381；半行 REJECT `d00ed84bc` 保持否决；占点路径选打菜单化同题勿再交 |
 
 ## STATUS: **待批 A** · 荐 M · 拟 D13382 · TIP-EY · 2026-10-15 15:30 Asia/Shanghai · 勿勾 CLOSED · L不批 · 只钉 Guard 一支 · 禁 Pace 默念 · 禁全族大扫 · ancestor TIP-EX CLOSED
+
+> **总控批（TIP-EY / D13382）：** **APPROVED A·M**（W1a+W1b · L不批 · 勿勾 CLOSED）· 总控批 2026-10-15 15:40 Asia/Shanghai · 祖先 TIP-EX CLOSED `bb58d357f` / PASS `afafda977` · 派 插件 W1a / 物品 W1b
