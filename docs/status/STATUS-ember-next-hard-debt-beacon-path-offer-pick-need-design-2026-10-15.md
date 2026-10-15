@@ -1,9 +1,9 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13380 · BeaconPath.offerPick / applyAndReply 护灯路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠传火路径选打同题 · ≠裂隙/预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D567 玩法本体）
 
-> **上游结案：** **TIP-EV 已批 A·M + PASS live**（D13379 传火路径选打 · feat `6eec10d81` · tip批 `0acf03feb` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · 100/100 · 证据 `/workspace/tmp/tip-ev-relay-path/` · **传火路径选打同题勿再交** · 待总控 CLOSED live）。总控派下一窗：只钉 **BeaconPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EV 选打勿复；PacePath（本仓无）后置；本窗只钉 Beacon 一支 · Hold/Guard 等另窗证据逐支（禁全族大扫 · 禁与 Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
+> **上游结案：** **TIP-EV CLOSED live `4580b5583`**（D13379 传火路径选打 · feat `6eec10d81` · tip批 `0acf03feb` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · PASS `ffd10969f` · 100/100 · 证据 `/workspace/tmp/tip-ev-relay-path/` · **传火路径选打同题勿再交**）。总控派下一窗：只钉 **BeaconPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EV 选打勿复；PacePath（本仓无）后置；本窗只钉 Beacon 一支 · Hold/Guard 等另窗证据逐支（禁全族大扫 · 禁与 Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-15（上海时间）
-**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `4dbde88e7` · 2026-10-15 10:36 Asia/Shanghai · 勿勾 CLOSED · 可施工
+**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip批 `ead4c7ee4` · feat `113e9f7f0` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · PASS `02dcf7f0f` · 101/101 · 勿勾 CLOSED · 可施工 · 待总控 CLOSED live · 下一窗 HoldPath.offerPick
 **硬规格：** [`DESIGN-ember-beacon-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-beacon-path-offer-pick-visible-2026-10-15.md) · backlog `B-beacon-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EV 已齐（传火 PASS·待 CLOSED）；护灯**选打**仍 ConfirmTokens 教裸 beaconpath——总控钉死本支；内容闭环断在护灯路径选打（≠传火选打；≠ settle 同题；局内护灯钮≠选打页）。
 
@@ -61,9 +61,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-beacon-path-offer-pick-visible-2026-10-15.md` |
 | 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-15.md` |
 | backlog | `B-beacon-path-offer-pick-visible` |
-| 号段 | **D13380** · 字母窗 **TIP-EW** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `4dbde88e7` · 2026-10-15 10:36 Asia/Shanghai · 勿勾 CLOSED |
+| 号段 | **D13380** · 字母窗 **TIP-EW** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip批 `ead4c7ee4` · feat `113e9f7f0` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · PASS `02dcf7f0f` · 勿勾 CLOSED · 待总控 CLOSED live |
 | 上游 | TIP-EV PASS live `ffd10969f` · feat `6eec10d81` · tip批 `0acf03feb` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · D13379；半行 REJECT `d00ed84bc` 保持否决；传火路径选打菜单化同题勿再交 |
 
 *选题 BeaconPath.offerPick / applyAndReply 护灯路径选打菜单化 · tip **已批 A** · 方案 M · APPROVED A·M · tip `4dbde88e7` · 勿勾 CLOSED · L不批 · D13380 · TIP-EW · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Beacon 一支 · Hold/Guard 等另窗证据逐支（禁全族大扫 · 禁与 Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EV PASS `ffd10969f` / 批 `0acf03feb` · 2026-10-15 10:36 Asia/Shanghai.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `4dbde88e7` · 勿勾 CLOSED · L不批 · D13380 · TIP-EW · 2026-10-15 10:36 Asia/Shanghai
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip批 `ead4c7ee4` · feat `113e9f7f0` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · PASS `02dcf7f0f` · 勿勾 CLOSED · 待总控 CLOSED live · L不批 · D13380 · TIP-EW · 2026-10-15 10:50 Asia/Shanghai

@@ -2,8 +2,9 @@
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-15 10:50 Asia/Shanghai | 测岗 PASS live · feat `113e9f7f0` · tip批 `ead4c7ee4` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · PASS `02dcf7f0f` · 101/101 · 证据 `/workspace/tmp/tip-ew-beacon-path/` · 2026-10-15 10:50 Asia/Shanghai · 护灯路径选打同题勿再交 · **勿勾 CLOSED**（待总控收口 CLOSED live）· 下一窗 HoldPath.offerPick |
 | 2026-10-15 10:36 Asia/Shanghai | 总控批 A·M · tip `4dbde88e7` · 可施工 W1a+W1b · 勿勾 CLOSED |
-| 2026-10-15 10:33 Asia/Shanghai | 初稿 STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `4dbde88e7` · 2026-10-15 10:36 Asia/Shanghai · 勿勾 CLOSED · 可施工 |
+| 2026-10-15 10:33 Asia/Shanghai | 初稿 STATUS=**已批 A** · 方案 M · APPROVED A·M · tip批 `ead4c7ee4` · feat `113e9f7f0` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · PASS `02dcf7f0f` · 2026-10-15 10:36 Asia/Shanghai · 勿勾 CLOSED · 可施工 · 测岗 PASS 齐 · 待总控 CLOSED live |
 
 STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `4dbde88e7` · 2026-10-15 10:36 Asia/Shanghai · 勿勾 CLOSED · 可施工
 > tip [`STATUS-ember-next-hard-debt-beacon-path-offer-pick-need-design-2026-10-15.md`](../status/STATUS-ember-next-hard-debt-beacon-path-offer-pick-need-design-2026-10-15.md) · RESEARCH [`RESEARCH-ember-beacon-path-offer-pick-visible-2026-10-15.md`](RESEARCH-ember-beacon-path-offer-pick-visible-2026-10-15.md) · backlog `B-beacon-path-offer-pick-visible` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠sx20 ≠菜单诚实/observe 空转 ≠半行独批 ≠Cast粒子主交付 ≠EliteAid/BossAid再拧 ≠todayRot/W1e独批 ≠抬伤害/CD表/掉落/体力价 ≠传火路径选打同题 ≠裂隙路径选打同题 ≠预警路径选打同题 ≠备药路径选打同题 ≠急清路径选打同题 ≠集火路径选打同题 ≠灾临路径选打同题 ≠卡点路径选打同题 ≠终救路径选打同题 ≠续招路径选打同题 ≠诱空路径选打同题 ≠闪招路径选打同题 ≠撞墙路径选打同题 ≠闪线路径选打同题 ≠侧安路径选打同题 ≠收招路径选打同题 ≠半血路径选打同题 ≠增援路径选打同题 ≠分摊路径选打同题 ≠铁壁路径选打同题 ≠分身路径选打同题 ≠压伤路径选打同题 ≠打断路径选打同题 ≠限时路径选打同题 ≠净伤路径选打同题 ≠连斩路径选打同题 ≠避焰路径选打同题 ≠避旋路径选打同题 ≠断链路径选打同题 ≠避毒路径选打同题 ≠解锢路径选打同题 ≠闪榴路径选打同题 ≠闪冲路径选打同题 ≠身法路径选打同题 ≠轻技路径选打同题 ≠破绽路径选打同题 ≠誓约路径选打同题 ≠试炼路径选打同题 ≠深渊路径选打同题 ≠短征路径选打同题 ≠团本路径选打同题 ≠硬本路径选打同题 ≠精选路径选打同题 ≠步态路径选打同题 ≠已齐 settle 下一环同题 ≠短征settle回看同题 ≠D673同题复读 ≠variety再拧 ≠完整 variety 经济 ≠第五件花料 ≠推荐花复读 ≠洗练/烙纹/转化/随机锻再拧 ≠庭内旁路再拧 ≠今日推复读 ≠路径追同题 ≠日差同题 ≠P格兼确认 ≠复开 D423 ≠教裸指令 ≠灾厄/fest重开 ≠Pack6 ≠densify ≠legacy abyss evacuate 大扫 ≠全族 *Path.offerPick 大扫 ≠Pace同窗 ≠其它 *Path 同窗 ≠复开 D567 玩法本体 ≠L13 ≠灰烬/R ≠抬 AFK 表 ≠Affix 加密**
@@ -158,6 +159,7 @@ STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `4dbde88e7` · 2026-10-1
 
 | 日 | 事 |
 |----|-----|
+| 2026-10-15 10:50 Asia/Shanghai | 测岗 · 测岗 PASS live · feat `113e9f7f0` · tip批 `ead4c7ee4` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · PASS `02dcf7f0f` · 101/101 · 证据 `/workspace/tmp/tip-ew-beacon-path/` · 2026-10-15 10:50 Asia/Shanghai · 护灯路径选打同题勿再交 · **勿勾 CLOSED**（待总控收口 CLOSED live）· 下一窗 HoldPath.offerPick |
 | 2026-10-15 10:33 Asia/Shanghai | 策划 · 初稿 STATUS=**待批 A** · 荐 M · TIP-EW PASS 后连开（待总控 CLOSED） · 选题 BeaconPath.offerPick / applyAndReply 护灯路径选打菜单化 · 拟 D13380 · TIP-EW · ≠半行 ≠传火选打同题 ≠闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态选打同题 ≠已齐 settle 同题 ≠variety再拧 ≠庭内旁路 · **改题有证据**（挂机近饱和·gem gap未亮；短征薄债+选打已齐；settle CW–DD+DE–EV选打已齐；总控钉死 Beacon；offerPick ConfirmTokens→beaconpath；applyAndReply下一步仍聊天钮；无参/周要约/Q01；无 beacon_path；局内护灯钮≠选打页；与刚 PASS Relay 同构；其它剩支·Hold后置；见 RESEARCH） |
 
-*D13380 **已批 A** · 方案 M · APPROVED A·M · tip `4dbde88e7` · BeaconPath.offerPick / applyAndReply 护灯路径选打菜单化 · TIP-EW · 半行 REJECT `d00ed84bc` 保持 · 本窗只钉 Beacon 一支 · Hold/Guard 等另窗证据逐支（禁全族大扫 · 禁与 Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EV PASS `ffd10969f` / 批 `0acf03feb` · 2026-10-15 10:36 Asia/Shanghai · 勿勾 CLOSED.*
+*D13380 **已批 A** · 方案 M · APPROVED A·M · tip批 `ead4c7ee4` · feat `113e9f7f0` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · PASS `02dcf7f0f` · BeaconPath.offerPick / applyAndReply 护灯路径选打菜单化 · TIP-EW · 半行 REJECT `d00ed84bc` 保持 · 本窗只钉 Beacon 一支 · Hold/Guard 等另窗证据逐支（禁全族大扫 · 禁与 Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EV PASS `ffd10969f` / 批 `0acf03feb` · 2026-10-15 10:36 Asia/Shanghai · 勿勾 CLOSED.*

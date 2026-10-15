@@ -1,6 +1,6 @@
 # RESEARCH · BeaconPath.offerPick / applyAndReply「护灯路径选打」菜单化 · 拟 D13380 · TIP-EW
 
-> **状态：** **已批 A** · 方案 M · APPROVED A·M · tip `4dbde88e7` · 2026-10-15 10:36 Asia/Shanghai · 勿勾 CLOSED · 可施工
+> **状态：** **已批 A** · 方案 M · APPROVED A·M · tip批 `ead4c7ee4` · feat `113e9f7f0` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · PASS `02dcf7f0f` · 2026-10-15 10:50 Asia/Shanghai · 勿勾 CLOSED · 待总控 CLOSED live · 下一窗 HoldPath.offerPick
 > **起因：** 总控【下一窗 TIP-EW · 只钉一支 · 禁全族大扫】。祖先 TIP-EV 已批 A·M · PASS live `ffd10969f`（feat `6eec10d81` · tip批 `0acf03feb` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · **100/100** · 证据 `/workspace/tmp/tip-ev-relay-path/` · **传火路径选打同题勿再交** · 待总控 CLOSED live）。**传火路径选打同题勿再交**。选题钉死：**BeaconPath.offerPick**「护灯路径选打」菜单化 → TrMenu `ember_p1_beacon_path`（拟 D13380 · TIP-EW · 玩法本体 D567）。硬证：`EmberBeaconPath.offerPick` 仍 ConfirmTokens 教 beaconpath auto|ask|mute|clear；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内护灯「护灯」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_beacon_path.yml`；与刚 PASS Relay 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EV 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁与其它 *Path 同窗；PacePath（本仓无）后置；legacy evacuate 后置；本窗只钉 Beacon 一支 · Hold/Guard 等另窗证据逐支（禁全族大扫 · 禁与 Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置；零抬伤害/CD表/掉落/体力价；零改 D567 护灯语义本体；零改已齐 `ember_p1_relay_path` 等；勿勾 CLOSED。
 > **上游：** TIP-EV PASS live `ffd10969f` · feat `6eec10d81` · tip批 `0acf03feb` · menu `c9b84f30e` · jar `1.65.872-d13379.local` · D13379 · 待总控 CLOSED live
 
@@ -66,4 +66,4 @@
 
 *RESEARCH · BeaconPath.offerPick / applyAndReply 护灯路径选打菜单化 · **已批 A** · 方案 M · APPROVED A·M · tip `4dbde88e7` · TIP-EW / D13380 · 半行 REJECT `d00ed84bc` 保持 · 本窗只钉 Beacon 一支 · Hold/Guard 等另窗证据逐支（禁全族大扫 · 禁与 Hold/Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EV PASS `ffd10969f` / 批 `0acf03feb` · 2026-10-15 10:36 Asia/Shanghai · 勿勾 CLOSED.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `4dbde88e7` · 勿勾 CLOSED · L不批 · D13380 · TIP-EW · 2026-10-15 10:36 Asia/Shanghai
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip批 `ead4c7ee4` · feat `113e9f7f0` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · PASS `02dcf7f0f` · 勿勾 CLOSED · 待总控 CLOSED live · D13380 · TIP-EW · 2026-10-15 10:50 Asia/Shanghai
