@@ -333,7 +333,7 @@ public final class EmberCommand {
         if ("guard".equals(sub) && args.length == 2) return guardGoCmd(s); // D565
         if ("smashpath".equals(sub) || "砸晶路径".equals(sub)) return smashPathCmd(s, args); // D564
         if ("smash".equals(sub) && args.length == 2) return smashGoCmd(s); // D564
-        if ("burstpath".equals(sub) || "破绽路径".equals(sub)) return burstPathCmd(s, args); // D563
+        if ("burstpath".equals(sub) || "破绽爆发路径".equals(sub) || "破绽路径".equals(sub)) return burstPathCmd(s, args); // D563
         if ("burst".equals(sub) && args.length == 2) return burstGoCmd(s); // D563
         if ("rallypath".equals(sub) || "突进路径".equals(sub)) return rallyPathCmd(s, args); // D562
         if ("rally".equals(sub) && args.length == 2) return rallyGoCmd(s); // D562
@@ -4865,27 +4865,27 @@ public final class EmberCommand {
             if (args.length < 3) {
                 p.sendMessage(P + EmberBurstPath.glance(EmberBurstPath.get(d), unlocked));
                 if (!unlocked) {
-                    p.sendMessage(P + "§c破绽路径需本人首通 Q01。");
+                    p.sendMessage(P + "§c破绽爆发路径需本人首通 Q01。");
                     return true;
                 }
                 EmberBurstPath.offerPick(p);
                 return true;
             }
             if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
-                if (!unlocked) { p.sendMessage(P + "§c破绽路径需本人首通 Q01。"); return true; }
+                if (!unlocked) { p.sendMessage(P + "§c破绽爆发路径需本人首通 Q01。"); return true; }
                 String week = EmberPlayfeelTelemetry.weekKey();
                 boolean offered = EmberBurstPath.maybeOfferWeekly(p, d, week);
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberBurstPath.get(d);
-                    if (EmberBurstPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBurstPath.label(cur) + " · 改路径再 /corerpg p1 burstpath");
+                    if (EmberBurstPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBurstPath.label(cur) + " · 点破绽爆发路径页可改");
                     else EmberBurstPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberBurstPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 burstpath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点破绽爆发路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberBurstPath.applyAndReply(p, id);
@@ -4898,7 +4898,7 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             boolean ok = runs.pathBurst(p) || EmberBurstPath.burstLocal(p);
             if (!ok) p.sendMessage(P + "无法爆发");
-            else p.sendMessage(P + "§a破绽·手点 §7短力爆发 3 秒");
+            else p.sendMessage(P + "§a破绽爆发·手点 §7短力爆发 3 秒");
             return true;
         }
 
@@ -4907,7 +4907,7 @@ public final class EmberCommand {
             Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
             if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
             EmberBurstPath.maybeProbe(t);
-            s.sendMessage(P + "已触发破绽路径探测 → " + t.getName());
+            s.sendMessage(P + "已触发破绽爆发路径探测 → " + t.getName());
             return true;
         }
 

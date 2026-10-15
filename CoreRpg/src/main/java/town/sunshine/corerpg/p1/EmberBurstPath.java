@@ -18,11 +18,18 @@ import town.sunshine.corerpg.PlayerData;
  * NEW dungeon combat loop: when 落空 / 撞墙 / 破招 opens a stagger window, sticky Strength I burst,
  * chat ask, or swing yourself. Distinct from Rally (Speed after clear), Thaw/Duck/Hunt/Call.
  * Chat only. Zero dmg tables / AFK / sx / forge / combo sticky / enter-card / ActionBar cue.
+ * TIP-FA D13384: offerPick / applyAndReply / 无参 burstpath / 周要约 →开 /ember_p1_burst_path；
+ * 清 ConfirmTokens 教 burstpath 主 UI；玩家文案「破绽爆发」；零改 D563 / maybeAfterStagger / pathBurst 语义.
  */
 public final class EmberBurstPath {
 
     public static final String C_PATH = "p1_burst_path";
     public static final String C_OFFER = "p1_burst_path_offer";
+
+    /** TIP-FA D13384 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_burst_path";
+    public static final String PATH_PICK_LABEL = "[破绽爆发路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -68,9 +75,9 @@ public final class EmberBurstPath {
     }
 
     public static String label(int id) {
-        if (id == AUTO) return "破绽·自动";
-        if (id == ASK) return "破绽·提醒";
-        if (id == MUTE) return "破绽·静默";
+        if (id == AUTO) return "破绽爆发·自动";
+        if (id == ASK) return "破绽爆发·提醒";
+        if (id == MUTE) return "破绽爆发·静默";
         return "未选";
     }
 
@@ -82,9 +89,15 @@ public final class EmberBurstPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8破绽路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8破绽路径：未选 · /corerpg p1 burstpath";
-        return "§e破绽路径：§f" + label(id) + " §8· " + tip(id);
+        if (!unlocked) return "§8破绽爆发路径：首通 Q01 后可选";
+        // TIP-FA D13384: 禁教手打 /corerpg p1 burstpath
+        if (!valid(id)) return "§8破绽爆发路径：未选 · 点破绽爆发路径页";
+        return "§e破绽爆发路径：§f" + label(id) + " §8· " + tip(id);
+    }
+
+    /** TIP-FA D13384 · 薄页 lore 一行（无 §）：当前破绽爆发路径。 */
+    public static String menuLine(int id) {
+        return "破绽爆发路径 · " + label(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
@@ -112,7 +125,7 @@ public final class EmberBurstPath {
                 Bukkit.getScheduler().runTaskLater(pl, () -> {
                     if (!p.isOnline()) return;
                     if (runs.pathBurst(p)) {
-                        p.sendMessage(EmberRunService.P + "§a破绽·自动 §7短力爆发 3 秒");
+                        p.sendMessage(EmberRunService.P + "§a破绽爆发·自动 §7短力爆发 3 秒");
                     }
                 }, 2L);
                 continue;
@@ -120,7 +133,7 @@ public final class EmberBurstPath {
             if (shouldMute(path)) continue;
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§e破绽窗口 ",
                     new String[]{"[爆发]", "/corerpg p1 burst", "短力爆发输出", "GREEN"},
-                    new String[]{"[改路径]", "/corerpg p1 burstpath", "自动/提醒/静默", "GRAY"});
+                    new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
         }
     }
 
@@ -134,24 +147,32 @@ public final class EmberBurstPath {
         if (shouldAuto(path)) {
             boolean ok = runs != null && runs.pathBurst(p);
             if (!ok) ok = burstLocal(p);
-            if (ok) p.sendMessage(EmberRunService.P + "§a破绽·自动 §7短力爆发 3 秒");
+            if (ok) p.sendMessage(EmberRunService.P + "§a破绽爆发·自动 §7短力爆发 3 秒");
             return;
         }
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e破绽窗口 ",
                 new String[]{"[爆发]", "/corerpg p1 burst", "短力爆发输出", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 burstpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选破绽爆发节奏（改战斗 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 burstpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 burstpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 burstpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 burstpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FA D13384: 开选打薄页；禁 ConfirmTokens 教 burstpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_burst_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_burst_path");
+        } catch (Throwable t) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -188,14 +209,14 @@ public final class EmberBurstPath {
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
         if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c破绽路径需本人首通 Q01。");
+            p.sendMessage(EmberRunService.P + "§c破绽爆发路径需本人首通 Q01。");
             return;
         }
         String P = EmberRunService.P;
         if (id == NONE) {
             set(d, NONE);
             flush(p);
-            p.sendMessage(P + "已清空破绽路径（按默认提醒）");
+            p.sendMessage(P + "已清空破绽爆发路径（按默认提醒）");
             return;
         }
         if (!valid(id)) {
@@ -204,11 +225,12 @@ public final class EmberBurstPath {
         }
         set(d, id);
         flush(p);
-        p.sendMessage(P + "§a破绽 → §f" + label(id) + " §7· " + tip(id));
+        p.sendMessage(P + "§a破绽爆发 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-FA D13384: 下一步→选打薄页/冒险（禁教裸 burstpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 burstpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
