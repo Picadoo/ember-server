@@ -114,6 +114,7 @@ public final class EmberRunPapi {
         if ("alert_path".equals(key) || (key != null && key.startsWith("alert_path_"))) return Section.RUSH; // TIP-ET D13377
         if ("breach_path".equals(key) || (key != null && key.startsWith("breach_path_"))) return Section.RUSH; // TIP-EU D13378
         if ("relay_path".equals(key) || (key != null && key.startsWith("relay_path_"))) return Section.RUSH; // TIP-EV D13379
+        if ("beacon_path".equals(key) || (key != null && key.startsWith("beacon_path_"))) return Section.RUSH; // TIP-EW D13380
         if (key.startsWith("pledge_")) return Section.RUSH;
         if (key.startsWith("rush_")) return Section.RUSH;
         if (key.startsWith("passd_")) return Section.ENTRY;
@@ -1013,6 +1014,17 @@ public final class EmberRunPapi {
         return "";
     }
 
+
+    /** TIP-EW D13380 %corerpg_p1_beacon_path*% — sticky BeaconPath preference; zero economy. */
+    private String beaconPathPref(PlayerData d, String key) {
+        int path = EmberBeaconPath.get(d);
+        if ("beacon_path".equals(key)) return String.valueOf(path);
+        if ("beacon_path_label".equals(key)) return EmberBeaconPath.label(path);
+        if ("beacon_path_tip".equals(key)) return EmberBeaconPath.tip(path);
+        if ("beacon_path_line".equals(key)) return EmberBeaconPath.menuLine(path);
+        return "";
+    }
+
     /** TIP-DV D13353 %corerpg_p1_blaze_path*% — sticky BlazePath preference; zero economy. */
     private String blazePath(PlayerData d, String key) {
         int path = EmberBlazePath.get(d);
@@ -1264,6 +1276,8 @@ public final class EmberRunPapi {
             return breachPathPref(d, key);
         if ("relay_path".equals(key) || (key != null && key.startsWith("relay_path_"))) // TIP-EV D13379
             return relayPathPref(d, key);
+        if ("beacon_path".equals(key) || (key != null && key.startsWith("beacon_path_"))) // TIP-EW D13380
+            return beaconPathPref(d, key);
         if (key.startsWith("pledge_")) return runs.pledgePapi(d, key.substring(7)); // D174 stage 2b 自选誓约
         EmberRunMaps.MapDef rm = maps.rush.get(key.substring(5)); // rush_<entry>
         if (rm == null) return null; // old chain: not a rush entry → per-map tail

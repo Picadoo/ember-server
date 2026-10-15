@@ -5046,14 +5046,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberBeaconPath.get(d);
-                    if (EmberBeaconPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBeaconPath.label(cur) + " · 改路径再 /corerpg p1 beaconpath");
+                    if (EmberBeaconPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBeaconPath.label(cur) + " · 点护灯路径页可改");
                     else EmberBeaconPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberBeaconPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 beaconpath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点护灯路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberBeaconPath.applyAndReply(p, id);
