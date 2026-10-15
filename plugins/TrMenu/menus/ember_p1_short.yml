@@ -137,6 +137,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx01_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -170,6 +171,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx02_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -203,6 +205,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx03_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -236,6 +239,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx04_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -269,6 +273,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx05_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -303,6 +308,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx06_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -336,6 +342,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx07_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -371,6 +378,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx08_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -406,6 +414,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx09_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -441,6 +450,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx10_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -476,6 +486,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx11_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -511,6 +522,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx12_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -546,6 +558,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx13_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -581,6 +594,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx14_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
@@ -616,6 +630,7 @@ Icons:
             - '§c未解锁：进过或首通主线 Q01'
             - '§7进过即开 · 清过也开'
             - '§e%corerpg_p1_sx15_day_line%'
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
           material: iron bars
