@@ -1,5 +1,7 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13382 · GuardPath.offerPick / applyAndReply 护兔路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠占点路径选打同题 · ≠护灯/传火/裂隙/预警/备药/急清/集火/灾临/卡点/终救/续招/诱空及已齐选打同题 · ≠已齐 settle 下一环同题 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D565 玩法本体）
 
+> **CLOSED live（旁注）：** TIP-EY CLOSED `8ac9b2ebc` · 批 `29ea1be01` · feat `22dc24411` · menu `a118e2ad6` · jar `1.65.875-d13382.local` · PASS `5ecfb6686` · 102/102 · 护兔路径选打同题勿再交 · 2026-10-15 15:58 Asia/Shanghai
+
 > **上游结案：** **TIP-EX CLOSED live**（D13381 占点路径选打 · feat `ad2720cfe` · tip批 `6b5357baf` · menu `ddb1f6ce6` · jar `1.65.874-d13381.local` · PASS `afafda977` · 102/102 · 证据 `/workspace/tmp/tip-ex-hold-path/` · **占点路径选打同题勿再交**）。总控派下一窗：只钉 **GuardPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EX 选打勿复；PacePath（本仓无）后置；本窗只钉 Guard 一支 · 其它剩支另窗证据逐支（禁全族大扫 · 禁与其它 *Path 同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-15（上海时间）

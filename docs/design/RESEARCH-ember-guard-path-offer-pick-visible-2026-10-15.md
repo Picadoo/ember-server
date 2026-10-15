@@ -1,5 +1,7 @@
 # RESEARCH · GuardPath.offerPick / applyAndReply「护兔路径选打」菜单化 · 拟 D13382 · TIP-EY
 
+> **CLOSED live（旁注）：** TIP-EY CLOSED `8ac9b2ebc` · 批 `29ea1be01` · feat `22dc24411` · menu `a118e2ad6` · jar `1.65.875-d13382.local` · PASS `5ecfb6686` · 102/102 · 护兔路径选打同题勿再交 · 2026-10-15 15:58 Asia/Shanghai
+
 > **状态：** **待批 A** · 荐 M · 2026-10-15 15:35 Asia/Shanghai · 勿勾 CLOSED
 > **起因：** 总控【下一窗 TIP-EY · 只钉一支 · 禁全族大扫】。祖先 TIP-EX CLOSED live `bb58d357f`（feat `ad2720cfe` · tip批 `6b5357baf` · menu `ddb1f6ce6` · jar `1.65.874-d13381.local` · PASS `afafda977` · **102/102** · 证据 `/workspace/tmp/tip-ex-hold-path/` · **占点路径选打同题勿再交**）。**占点路径选打同题勿再交**。选题钉死：**GuardPath.offerPick**「护兔路径选打」菜单化 → TrMenu `ember_p1_guard_path`（拟 D13382 · TIP-EY · 玩法本体 D565）。硬证：`EmberGuardPath.offerPick` 仍 ConfirmTokens 教 guardpath auto|ask|mute|clear；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内护兔「护兔」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_guard_path.yml`；与刚 CLOSED Hold 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EX 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁与其它 *Path 同窗；PacePath（本仓无）后置；legacy evacuate 后置；本窗只钉 Guard 一支 · 剩支另窗证据逐支（扫后再定 · 禁全族大扫 · 禁与其它 *Path 同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置；零抬伤害/CD表/掉落/体力价；零改 D565 护兔语义本体；零改已齐 `ember_p1_hold_path` 等；勿勾 CLOSED。
 > **上游：** TIP-EX CLOSED live `bb58d357f`（feat `ad2720cfe` · tip批 `6b5357baf` · menu `ddb1f6ce6` · jar `1.65.874-d13381.local` · PASS `afafda977` · **102/102** · 证据 `/workspace/tmp/tip-ex-hold-path/` · **占点路径选打同题勿再交**）
@@ -19,7 +21,7 @@
 | 工坊升阶下一环 / 图装下一环 | **后置本窗** | 非本派明文优先 |
 | **GuardPath.offerPick / applyAndReply（荐）** | **采纳** | 总控钉死；ConfirmTokens 全链；**无**选打专用薄页；局内护兔钮≠选打页；镜像 TIP-DE–EX；≠ 护兔选打同题 |
 
-**择优结论：** ①②无新薄债 → ③已齐勿复读 → 总控钉死 Guard（D565；Hold D566 后按残留 D# 钉 Guard）→ 实扫残留 *Path.offerPick 仍教裸指令且无薄页者：Hold 与 Beacon 同构 → **钉 GuardPath**（offerPick ConfirmTokens→guardpath auto|ask|mute|clear；applyAndReply 下一步 ConfirmTokens 教裸 `guardpath`/`p1`；glance 未选教手打；用法教 `auto|ask|mute|clear`；TrMenu **无** `ember_p1_guard_path`）。**局内护兔「护兔」+「改路径」战斗钮**（ASK 路径提醒）**存在但不消解选打硬债**——选打链仍 ConfirmTokens。本窗只钉 Guard 一支 · 剩支另窗证据逐支（扫后再定 · 禁全族大扫 · 禁与其它 *Path 同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）后置。故交本支；**证据表见 §2**；**为何不是半行见 E13**；**改题有证据**（未改题：无更硬挂机/短日常 fun 债压过本支；总控选题已钉死）。
+**择优结论：** ①②无新薄债 → ③已齐勿复读 → 总控钉死 Guard（D565；Hold D566 后按残留 D# 钉 Guard）→ 实扫残留 *Path.offerPick 仍教裸指令且无薄页者：Guard 与 Hold 同构 → **钉 GuardPath**（offerPick ConfirmTokens→guardpath auto|ask|mute|clear；applyAndReply 下一步 ConfirmTokens 教裸 `guardpath`/`p1`；glance 未选教手打；用法教 `auto|ask|mute|clear`；TrMenu **无** `ember_p1_guard_path`）。**局内护兔「护兔」+「改路径」战斗钮**（ASK 路径提醒）**存在但不消解选打硬债**——选打链仍 ConfirmTokens。本窗只钉 Guard 一支 · 剩支另窗证据逐支（扫后再定 · 禁全族大扫 · 禁与其它 *Path 同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）后置。故交本支；**证据表见 §2**；**为何不是半行见 E13**；**改题有证据**（未改题：无更硬挂机/短日常 fun 债压过本支；总控选题已钉死）。
 
 ---
 
