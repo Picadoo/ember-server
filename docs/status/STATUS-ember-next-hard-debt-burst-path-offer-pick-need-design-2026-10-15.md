@@ -1,5 +1,7 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13384 · BurstPath.offerPick / applyAndReply 破绽路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠砸晶/护兔/占点路径选打同题 · ≠已齐选打同题 · ≠半行 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D563 玩法本体）
 
+> **CLOSED live（旁注）：** TIP-FA CLOSED `46e138454` · 批 `d876a2dfe` · feat `fd9bcf3d5` · menu `d8b9676df` · jar `1.65.877-d13384.local` · PASS `c9047b97a` · 104/104 · 破绽爆发路径选打同题勿再交 · 2026-10-15 16:20 Asia/Shanghai
+
 > **CLOSED live（2026-10-15 16:20 Asia/Shanghai）：** APPROVED `d876a2dfe` · feat `fd9bcf3d5` · menu `d8b9676df` · jar `1.65.877-d13384.local` · PASS `c9047b97a` · spot **104/104** · TrMenu **132** · bv123 · 玩家可见名「破绽爆发」（≠ CounterPath「破绽反击」）· 证据 `/workspace/tmp/tip-fa-burst-path/` · 破绽爆发路径选打同题勿再交 · reload duplicate keys WARN=0（B-trmenu-short-dup-keys `c259724f8` 生效）· 下一支 TIP-FB / D13385 RallyPath（突进）need-design 待批
 
 > **上游结案：** **TIP-EZ CLOSED live**（D13383 砸晶路径选打 · APPROVED `156e3572a` · feat `26423759a` · menu `caa9e282a` · jar `1.65.876-d13383.local` · PASS `b6b79b7a1` · spot 103/103 · TrMenu 131 · bv123 · **砸晶路径选打同题勿再交**）。
@@ -48,4 +50,4 @@
 | 号段 | D13384 · TIP-FA · 玩法本体 D563 · menu id `ember_p1_burst_path` |
 | 上游 | TIP-EZ CLOSED |
 
-## STATUS: **待批 A** · 荐 M · 拟 D13384 · TIP-FA · 2026-10-15 16:10 Asia/Shanghai · 勿勾 CLOSED · L不批 · 只钉 Burst 一支 · 禁 Pace 默念 · 禁全族大扫 · ancestor TIP-EZ CLOSED
+## STATUS: **CLOSED live** `46e138454` · 批 `d876a2dfe` · feat `fd9bcf3d5` · jar `1.65.877-d13384.local` · PASS `c9047b97a` · 104/104 · D13384 · TIP-FA · 2026-10-15 16:20 Asia/Shanghai

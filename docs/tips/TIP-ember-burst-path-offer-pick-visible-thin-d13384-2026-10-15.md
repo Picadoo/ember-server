@@ -1,5 +1,7 @@
 # tip · TIP-FA BurstPath.offerPick / applyAndReply「破绽路径选打」菜单化（选路径聊天钮去指令化 · ≠砸晶路径选打同题 ≠护兔路径选打同题 ≠占点路径选打同题 · ≠传火/裂隙/预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽反击(Counter)/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D563 玩法本体）· 拟 D13384
 
+> **CLOSED live（旁注）：** TIP-FA CLOSED `46e138454` · 批 `d876a2dfe` · feat `fd9bcf3d5` · menu `d8b9676df` · jar `1.65.877-d13384.local` · PASS `c9047b97a` · 104/104 · 破绽爆发路径选打同题勿再交 · 2026-10-15 16:20 Asia/Shanghai
+
 > **CLOSED live（2026-10-15 16:20 Asia/Shanghai）：** APPROVED `d876a2dfe` · feat `fd9bcf3d5` · menu `d8b9676df` · jar `1.65.877-d13384.local` · PASS `c9047b97a` · spot **104/104** · TrMenu **132** · bv123 · 玩家可见名「破绽爆发」（≠ CounterPath「破绽反击」）· 证据 `/workspace/tmp/tip-fa-burst-path/` · 破绽爆发路径选打同题勿再交 · reload duplicate keys WARN=0（B-trmenu-short-dup-keys `c259724f8` 生效）· 下一支 TIP-FB / D13385 RallyPath（突进）need-design 待批
 
 > **状态：** **APPROVED A·M**（W1a+W1b · L不批 · 勿勾 CLOSED）· 总控批 2026-10-15 16:12 Asia/Shanghai · 策划交 `2a1678317`
