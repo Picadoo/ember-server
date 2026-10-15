@@ -1,5 +1,7 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13383 · SmashPath.offerPick / applyAndReply 砸晶路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠护兔/占点路径选打同题 · ≠已齐选打同题 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D564 玩法本体）
 
+> **CLOSED live（旁注）：** TIP-EZ CLOSED `5be145227` · 批 `156e3572a` · feat `26423759a` · menu `caa9e282a` · jar `1.65.876-d13383.local` · PASS `b6b79b7a1` · 103/103 · 砸晶路径选打同题勿再交 · 2026-10-15 16:04 Asia/Shanghai
+
 > **上游结案：** **TIP-EY CLOSED live `8ac9b2ebc`**（D13382 护兔路径选打 · APPROVED `29ea1be01` · feat `22dc24411` · menu `a118e2ad6` · jar `1.65.875-d13382.local` · PASS `5ecfb6686` · spot 102/102 · TrMenu 130 · bv123 · **护兔路径选打同题勿再交**）。
 
 **日期：** 2026-10-15（上海时间）
