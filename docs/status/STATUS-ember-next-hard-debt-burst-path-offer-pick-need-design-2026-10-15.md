@@ -4,6 +4,7 @@
 
 **日期：** 2026-10-15（上海时间）
 **本窗性质：** need-design · docs-only · 拟 D13384 · TIP-FA · **待批 A · 荐 M（W1a 插件 + W1b 菜单）· L不批 · 勿勾 CLOSED**
+**策划旁注（2026-10-15 16:04 Asia/Shanghai）：** 已交 [`DESIGN`](../design/DESIGN-ember-burst-path-offer-pick-visible-2026-10-15.md) · [`RESEARCH`](../design/RESEARCH-ember-burst-path-offer-pick-visible-2026-10-15.md) · 薄 tip [`TIP-ember-burst-path-offer-pick-visible-thin-d13384-2026-10-15.md`](../tips/TIP-ember-burst-path-offer-pick-visible-thin-d13384-2026-10-15.md) · backlog `B-burst-path-offer-pick-visible` · STATUS=待批 A · 荐 M（W1a+W1b）· L不批 · 勿勾 CLOSED · ancestor TIP-EZ CLOSED `5be145227` / PASS `b6b79b7a1` · 半行 REJECT `d00ed84bc` 保持 · 命名注：≠ TIP-DL CounterPath「破绽反击」
 **打开理由：** 扫 `Ember*Path.offerPick` 无 TrMenu `ember_p1_*_path.yml` 者：D564 Smash 刚 CLOSED；其下最高残留 D# = **EmberBurstPath D563**（破绽），仍 ConfirmTokens 教裸 `burstpath`。次位 Rally D562 / Thaw D561 / Duck D560 后置另窗。
 
 ## 1. 选题
@@ -36,6 +37,9 @@
 | 项 | 路径 |
 |----|------|
 | 本 STATUS | `docs/status/STATUS-ember-next-hard-debt-burst-path-offer-pick-need-design-2026-10-15.md` |
+| DESIGN | `docs/design/DESIGN-ember-burst-path-offer-pick-visible-2026-10-15.md` |
+| RESEARCH | `docs/design/RESEARCH-ember-burst-path-offer-pick-visible-2026-10-15.md` |
+| 薄 tip | `docs/tips/TIP-ember-burst-path-offer-pick-visible-thin-d13384-2026-10-15.md` |
 | backlog | `B-burst-path-offer-pick-visible` |
 | 号段 | D13384 · TIP-FA · 玩法本体 D563 · menu id `ember_p1_burst_path` |
 | 上游 | TIP-EZ CLOSED |
