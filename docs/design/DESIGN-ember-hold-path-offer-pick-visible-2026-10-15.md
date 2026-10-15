@@ -1,5 +1,7 @@
 # 余烬 · HoldPath.offerPick / applyAndReply「占点路径选打」菜单化（选路径聊天钮去指令化 · ≠护灯路径选打同题 · ≠传火/裂隙/预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠半行 · ≠庭内旁路 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D566 玩法本体）
 
+> **CLOSED live（旁注补）：** TIP-EX CLOSED `bb58d357f` · 批 `6b5357baf` · feat `ad2720cfe` · menu `ddb1f6ce6` · jar `1.65.874-d13381.local` · PASS `afafda977` · 102/102 · 证据 `/workspace/tmp/tip-ex-hold-path/` · 占点路径选打同题勿再交 · 2026-10-15 15:35 Asia/Shanghai
+
 
 > **CLOSED live** · tip TIP-EX · feat `ad2720cfe` · jar `1.65.874-d13381.local` · 2026-10-15 15:05 Asia/Shanghai · 证据 `/workspace/tmp/tip-ex-hold-path/`
 

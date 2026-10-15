@@ -1,5 +1,7 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13381 · HoldPath.offerPick / applyAndReply 占点路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠护灯路径选打同题 · ≠传火/裂隙/预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D566 玩法本体）
 
+> **CLOSED live（旁注补）：** TIP-EX CLOSED `bb58d357f` · 批 `6b5357baf` · feat `ad2720cfe` · menu `ddb1f6ce6` · jar `1.65.874-d13381.local` · PASS `afafda977` · 102/102 · 证据 `/workspace/tmp/tip-ex-hold-path/` · 占点路径选打同题勿再交 · 2026-10-15 15:35 Asia/Shanghai
+
 > **上游结案：** **TIP-EW 已批 A·M + PASS live**（D13380 护灯路径选打 · feat `113e9f7f0` · tip批 `ead4c7ee4` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · PASS `02dcf7f0f` · 101/101 · 证据 `/workspace/tmp/tip-ew-beacon-path/` · **护灯路径选打同题勿再交** · 待总控 CLOSED live）。总控派下一窗：只钉 **HoldPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EW 选打勿复；PacePath（本仓无）后置；本窗只钉 Hold 一支 · Guard 等另窗证据逐支（禁全族大扫 · 禁与 Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-15（上海时间）
@@ -66,4 +68,4 @@
 
 *选题 HoldPath.offerPick / applyAndReply 占点路径选打菜单化 · tip **已批 A** · 方案 M · APPROVED A·M · tip `22c3d2154` · 勿勾 CLOSED · L不批 · D13381 · TIP-EX · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Hold 一支 · Guard 等另窗证据逐支（禁全族大扫 · 禁与 Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EW PASS `02dcf7f0f` / 批 `ead4c7ee4` · 2026-10-15 10:53 Asia/Shanghai.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `22c3d2154` · 勿勾 CLOSED · L不批 · D13381 · TIP-EX · 2026-10-15 10:53 Asia/Shanghai
+## STATUS: **CLOSED live** `bb58d357f` · 批 `6b5357baf` · feat `ad2720cfe` · jar `1.65.874-d13381.local` · PASS `afafda977` · 102/102 · D13381 · TIP-EX · 2026-10-15 15:35 Asia/Shanghai

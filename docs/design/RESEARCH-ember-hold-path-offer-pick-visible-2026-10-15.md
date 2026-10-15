@@ -1,5 +1,7 @@
 # RESEARCH · HoldPath.offerPick / applyAndReply「占点路径选打」菜单化 · 拟 D13381 · TIP-EX
 
+> **CLOSED live（旁注补）：** TIP-EX CLOSED `bb58d357f` · 批 `6b5357baf` · feat `ad2720cfe` · menu `ddb1f6ce6` · jar `1.65.874-d13381.local` · PASS `afafda977` · 102/102 · 证据 `/workspace/tmp/tip-ex-hold-path/` · 占点路径选打同题勿再交 · 2026-10-15 15:35 Asia/Shanghai
+
 > **状态：** **已批 A** · 方案 M · APPROVED A·M · tip `22c3d2154` · 2026-10-15 10:53 Asia/Shanghai · 勿勾 CLOSED · 可施工
 > **起因：** 总控【下一窗 TIP-EX · 只钉一支 · 禁全族大扫】。祖先 TIP-EW 已批 A·M · PASS live `02dcf7f0f`（feat `113e9f7f0` · tip批 `ead4c7ee4` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · **101/101** · 证据 `/workspace/tmp/tip-ew-beacon-path/` · **护灯路径选打同题勿再交** · 待总控 CLOSED live）。**护灯路径选打同题勿再交**。选题钉死：**HoldPath.offerPick**「占点路径选打」菜单化 → TrMenu `ember_p1_hold_path`（拟 D13381 · TIP-EX · 玩法本体 D566）。硬证：`EmberHoldPath.offerPick` 仍 ConfirmTokens 教 holdpath auto|ask|mute|clear；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内占点「占点」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_hold_path.yml`；与刚 PASS Beacon 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EW 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁与其它 *Path 同窗；PacePath（本仓无）后置；legacy evacuate 后置；本窗只钉 Hold 一支 · Guard 等另窗证据逐支（禁全族大扫 · 禁与 Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置；零抬伤害/CD表/掉落/体力价；零改 D566 占点语义本体；零改已齐 `ember_p1_beacon_path` 等；勿勾 CLOSED。
 > **上游：** TIP-EW PASS live `02dcf7f0f` · feat `113e9f7f0` · tip批 `ead4c7ee4` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · D13380 · 待总控 CLOSED live
@@ -66,4 +68,4 @@
 
 *RESEARCH · HoldPath.offerPick / applyAndReply 占点路径选打菜单化 · **已批 A** · 方案 M · APPROVED A·M · tip `22c3d2154` · TIP-EX / D13381 · 半行 REJECT `d00ed84bc` 保持 · 本窗只钉 Hold 一支 · Guard 等另窗证据逐支（禁全族大扫 · 禁与 Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EW PASS `02dcf7f0f` / 批 `ead4c7ee4` · 2026-10-15 10:53 Asia/Shanghai · 勿勾 CLOSED.*
 
-## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `22c3d2154` · 勿勾 CLOSED · L不批 · D13381 · TIP-EX · 2026-10-15 10:53 Asia/Shanghai
+## STATUS: **CLOSED live** `bb58d357f` · 批 `6b5357baf` · feat `ad2720cfe` · jar `1.65.874-d13381.local` · PASS `afafda977` · 102/102 · D13381 · TIP-EX · 2026-10-15 15:35 Asia/Shanghai

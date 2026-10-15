@@ -1,5 +1,7 @@
 # tip · TIP-EX HoldPath.offerPick / applyAndReply「占点路径选打」菜单化（选路径聊天钮去指令化 · ≠护灯路径选打同题 · ≠传火/裂隙/预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D566 玩法本体）· 拟 D13381
 
+> **CLOSED live（旁注补）：** TIP-EX CLOSED `bb58d357f` · 批 `6b5357baf` · feat `ad2720cfe` · menu `ddb1f6ce6` · jar `1.65.874-d13381.local` · PASS `afafda977` · 102/102 · 证据 `/workspace/tmp/tip-ex-hold-path/` · 占点路径选打同题勿再交 · 2026-10-15 15:35 Asia/Shanghai
+
 > **状态：** **CLOSED live** · feat `ad2720cfe` · tip `6b5357baf` · menu `ddb1f6ce6` · jar `1.65.874-d13381.local` · PASS spot · 2026-10-15 15:05 Asia/Shanghai · 占点路径选打菜单化同题勿再交 · Guard 等另窗证据逐支（禁全族大扫 · 禁与 Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · 批 sha `6b5357baf` · 证据 `/workspace/tmp/tip-ex-hold-path/`
 > **DESIGN** [`DESIGN-ember-hold-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-hold-path-offer-pick-visible-2026-10-15.md) · RESEARCH 同日 · backlog `B-hold-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（HoldPath.offerPick / applyAndReply / 无参 holdpath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_hold_path`）· **不派怪物/地图**
