@@ -1,6 +1,6 @@
 # tip · TIP-EP DoomPath.offerPick / applyAndReply「灾临路径选打」菜单化（选路径聊天钮去指令化 · ≠卡点路径选打同题 · ≠终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D596 玩法本体）· 拟 D13373
 
-> **状态：** **CLOSED live** · feat `274c3299f` · tip批 `1064e9b7f` · menu `635d5b670` · jar `1.65.866-d13373.local` · PASS spot · 批 sha `1064e9b7f` · 证据 `/workspace/tmp/tip-ep-doom-path/` · 2026-10-15 07:50 Asia/Shanghai · 灾临路径选打菜单化同题勿再交 · 下一窗 Focus D597+ 等另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
+> **状态：** **CLOSED live** · feat `274c3299f` · tip批 `1064e9b7f` · menu `635d5b670` · jar `1.65.866-d13373.local` · PASS `00b50ba36` · CLOSED `616563d47` · 批 sha `1064e9b7f` · 证据 `/workspace/tmp/tip-ep-doom-path/` · 2026-10-15 07:50 Asia/Shanghai · 灾临路径选打菜单化同题勿再交 · 下一窗 Focus D597+ 等另窗证据逐支（禁全族大扫）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
 > **DESIGN** [`DESIGN-ember-doom-path-offer-pick-visible-2026-10-14.md`](../design/DESIGN-ember-doom-path-offer-pick-visible-2026-10-14.md) · RESEARCH 同日 · backlog `B-doom-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（DoomPath.offerPick / applyAndReply / 无参 doompath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_doom_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零卡点路径选打同题复读（TIP-EO） · 零终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-EN–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零其它 *Path 同窗 · 零复开 D596 玩法本体（auto/ask/mute 真改灾临奔赴祭坛语义零改）· 零改 nest_path / save_path / sequel_path / bait_path / slip_path / crash_path / bolt_path / shift_path / gap_path / phase_path / wave_path / soak_path / shell_path / clone_path / press_path / cut_path / rush_path / clean_path / streak_path / blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
@@ -39,4 +39,4 @@
 - [x] 物品交薄 doom_path 页 + TrMenu reload · menu `635d5b670` · TrMenu 121
 - [x] 抽测 PASS live（静态+单测+硬红门+jar live 1.65.866·TrMenu 121·零抬 bv123·零改 nest_path·零改 D596 奔赴语义）· **CLOSED by 总控**
 
-## STATUS: **CLOSED live** · D13373 · TIP-EP · feat `274c3299f` · jar `1.65.866-d13373.local` · 2026-10-15 07:50 Asia/Shanghai
+## STATUS: **CLOSED live** · feat `274c3299f` · tip批 `1064e9b7f` · menu `635d5b670` · jar `1.65.866-d13373.local` · PASS `00b50ba36` · CLOSED `616563d47` · D13373 · TIP-EP · 2026-10-15 08:23 Asia/Shanghai · 灾临路径选打菜单化同题勿再交 · 下一窗 FocusPath.offerPick · 勿默念 Pace（本仓无）

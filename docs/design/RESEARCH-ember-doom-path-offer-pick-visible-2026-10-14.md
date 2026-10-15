@@ -1,6 +1,6 @@
 # RESEARCH · DoomPath.offerPick / applyAndReply「灾临路径选打」菜单化 · 拟 D13373 · TIP-EP
 
-> **状态：** **待批 A** · 荐 M · 2026-10-14 22:04 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **CLOSED live** · feat `274c3299f` · tip批 `1064e9b7f` · menu `635d5b670` · jar `1.65.866-d13373.local` · PASS `00b50ba36` · CLOSED `616563d47` · 2026-10-15 08:23 Asia/Shanghai · 灾临路径选打菜单化同题勿再交 · 下一窗 FocusPath.offerPick · 勿默念 Pace（本仓无）
 > **起因：** 总控【下一窗 TIP-EP · 只钉一支 · 禁全族大扫】。祖先 TIP-EO **CLOSED live** `f4fcc3e60` · feat `666909038` · tip `ea22f6140` · menu `a6ed60e6c` · jar `1.65.865-d13372.local` · PASS `375570391` · 证据 `/workspace/tmp/tip-eo-nest-path/`。**卡点路径选打菜单化同题勿再交**。选题钉死：**DoomPath.offerPick**「灾临路径选打」菜单化 → TrMenu `ember_p1_doom_path`（拟 D13373 · TIP-EP · 玩法本体 D596 紧接 Nest D595）。硬证：`EmberDoomPath.offerPick` 仍 ConfirmTokens 教 doompath auto|ask|mute|clear；无参/周要约同入口；applyAndReply 下一步仍 ConfirmTokens；glance 教手打；局内灾临「奔赴」+「改路径」≠选打薄页；TrMenu **无** `ember_p1_doom_path.yml`；与刚 CLOSED Nest 同构 auto/ask/mute。**禁：** 挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EO 选打勿复；半行 REJECT `d00ed84bc` 保持；禁全族 *Path.offerPick 大扫；禁与其它 *Path 同窗；PacePath（本仓无）后置；legacy evacuate 后置；本窗只钉 Doom 一支 · Focus D597+ 等另窗证据逐支（禁全族大扫 · 禁与 Focus/Hurry/Stock/Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置后置（逐支另窗）；零抬伤害/CD表/掉落/体力价；零改 D596 灾临语义本体；零改已齐 `ember_p1_nest_path` 等；勿勾 CLOSED。
 > **上游：** TIP-EO CLOSED live `f4fcc3e60` · feat `666909038` · tip `ea22f6140` · PASS `375570391` · jar `1.65.865-d13372.local` · 批 sha `ea22f6140` · menu tip `a6ed60e6c` · D13372
 
