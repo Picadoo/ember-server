@@ -3,7 +3,7 @@
 > **上游结案：** **TIP-EW 已批 A·M + PASS live**（D13380 护灯路径选打 · feat `113e9f7f0` · tip批 `ead4c7ee4` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · PASS `02dcf7f0f` · 101/101 · 证据 `/workspace/tmp/tip-ew-beacon-path/` · **护灯路径选打同题勿再交** · 待总控 CLOSED live）。总控派下一窗：只钉 **HoldPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–EW 选打勿复；PacePath（本仓无）后置；本窗只钉 Hold 一支 · Guard 等另窗证据逐支（禁全族大扫 · 禁与 Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-15（上海时间）
-**本窗性质：** tip thin · **待批 A** · 荐 M · 2026-10-15 10:50 Asia/Shanghai · 勿勾 CLOSED · 可施工 · 下一窗：Guard 等另窗证据逐支（禁全族大扫 · 禁与 Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
+**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `22c3d2154` · 2026-10-15 10:53 Asia/Shanghai · 勿勾 CLOSED · 可施工
 **硬规格：** [`DESIGN-ember-hold-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-hold-path-offer-pick-visible-2026-10-15.md) · backlog `B-hold-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–EW 已齐（护灯 PASS·待 CLOSED）；占点**选打**仍 ConfirmTokens 教裸 holdpath——总控钉死本支；内容闭环断在占点路径选打（≠护灯选打；≠ settle 同题；局内占点钮≠选打页）。
 
@@ -61,9 +61,9 @@
 | RESEARCH | `docs/design/RESEARCH-ember-hold-path-offer-pick-visible-2026-10-15.md` |
 | 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-15.md` |
 | backlog | `B-hold-path-offer-pick-visible` |
-| 号段 | **D13381** · 字母窗 **TIP-EX** · STATUS=**待批 A** · 荐 M · 2026-10-15 10:50 Asia/Shanghai · 勿勾 CLOSED |
+| 号段 | **D13381** · 字母窗 **TIP-EX** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `22c3d2154` · 2026-10-15 10:53 Asia/Shanghai · 勿勾 CLOSED |
 | 上游 | TIP-EW PASS live `02dcf7f0f` · feat `113e9f7f0` · tip批 `ead4c7ee4` · menu `b4a3273eb` · jar `1.65.873-d13380.local` · D13380；半行 REJECT `d00ed84bc` 保持否决；护灯路径选打菜单化同题勿再交 |
 
-*选题 HoldPath.offerPick / applyAndReply 占点路径选打菜单化 · tip **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13381 · TIP-EX · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Hold 一支 · Guard 等另窗证据逐支（禁全族大扫 · 禁与 Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EW PASS `02dcf7f0f` / 批 `ead4c7ee4` · 2026-10-15 10:50 Asia/Shanghai.*
+*选题 HoldPath.offerPick / applyAndReply 占点路径选打菜单化 · tip **已批 A** · 方案 M · APPROVED A·M · tip `22c3d2154` · 勿勾 CLOSED · L不批 · D13381 · TIP-EX · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Hold 一支 · Guard 等另窗证据逐支（禁全族大扫 · 禁与 Guard 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-EW PASS `02dcf7f0f` / 批 `ead4c7ee4` · 2026-10-15 10:53 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐 M · L不批 · 勿勾 CLOSED · D13381 · TIP-EX · 2026-10-15 10:50 Asia/Shanghai
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `22c3d2154` · 勿勾 CLOSED · L不批 · D13381 · TIP-EX · 2026-10-15 10:53 Asia/Shanghai
