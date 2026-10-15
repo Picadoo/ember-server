@@ -3,7 +3,9 @@
 > **上游结案：** **TIP-FA CLOSED live**（D13384 破绽爆发路径选打 · APPROVED `d876a2dfe` · feat `fd9bcf3d5` · menu `d8b9676df` · jar `1.65.877-d13384.local` · PASS `c9047b97a` · spot 104/104 · TrMenu 132 · bv123 · **破绽爆发路径选打同题勿再交**）。
 
 **日期：** 2026-10-15（上海时间）
-**本窗性质：** need-design · docs-only · 拟 D13385 · TIP-FB · **待批 A · 荐 M（W1a 插件 + W1b 菜单）· L不批 · 勿勾 CLOSED**
+**本窗性质：** need-design · docs-only · 拟 D13385 · TIP-FB · **APPROVED A·M（W1a 插件 + W1b 菜单）· L不批 · 勿勾 CLOSED**
+**总控裁定（2026-10-15 16:25 Asia/Shanghai）：APPROVED A·M**（W1a+W1b · L不批 · 勿勾 CLOSED）· D13385 · TIP-FB。W1a 将 Rally 自有的**全部**玩家可见「突进」改「清房突进」：`EmberRallyPath` label L71–73、glance L85–87（并去手打 rallypath）、局内钮「[突进]」L133(maybeAfterClear)/L153(maybeProbe)→「[清房突进]」，以及复核补列同类 Rally 自有字 L126/L148「突进·自动 短加速」、L202、L209、L218；`EmberCommand` Rally 函数内 L4924/L4931/L4937/L4944/L4956–4957/L4966（L4937/L4944 改指向薄页 `ember_p1_rally_path`）。**仅改字**，按钮行为/命令目标/D562 语义零改；Stride/Posture/Step 文案一字不动；类名 `EmberRallyPath`/命令 id `rallypath`·`rally`/别名「突进路径」/菜单 id `ember_p1_rally_path` 不变。复核：Rally only · 无 Pace · 无大扫 · 祖先 FA CLOSED `46e138454` / PASS `c9047b97a` · 行号于 `bf56af838` 无偏移 · 旧名残留零。
+
 **策划旁注（2026-10-15 16:20 Asia/Shanghai）：** 已交 [`DESIGN`](../design/DESIGN-ember-rally-path-offer-pick-visible-2026-10-15.md) · [`RESEARCH`](../design/RESEARCH-ember-rally-path-offer-pick-visible-2026-10-15.md) · 薄 tip [`TIP-ember-rally-path-offer-pick-visible-thin-d13385-2026-10-15.md`](../tips/TIP-ember-rally-path-offer-pick-visible-thin-d13385-2026-10-15.md) · backlog `B-rally-path-offer-pick-visible` · STATUS=待批 A · 荐 M（W1a+W1b）· L不批 · 勿勾 CLOSED · 玩家文案定名「清房突进」（W1a 改 label L71–73 + `EmberCommand` L4937/L4944 教手打，行号复核无偏移）· ancestor TIP-FA CLOSED `46e138454` / PASS `c9047b97a` · 半行 REJECT `d00ed84bc` 保持
 **打开理由：** D563 Burst 刚 CLOSED；其下最高残留 D# = **EmberRallyPath D562**（突进），仍 ConfirmTokens 教裸 `rallypath`，TrMenu **无** `ember_p1_rally_path.yml`。次位 Thaw D561 / Duck D560 后置另窗。
 

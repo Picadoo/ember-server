@@ -1,11 +1,13 @@
 # tip · TIP-FB RallyPath.offerPick / applyAndReply「清房突进选打」菜单化（选路径聊天钮去指令化 · ≠破绽爆发路径选打同题 ≠砸晶路径选打同题 ≠护兔路径选打同题 ≠占点路径选打同题 · ≠传火/裂隙/预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽反击(Counter)/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠半行 · ≠庭内旁路 · ≠抬伤害/CD表/掉落/体力价 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D562 玩法本体）· 拟 D13385
 
-> **状态：** **待批 A** · 荐 M · 2026-10-15 16:20 Asia/Shanghai · 勿勾 CLOSED
+> **状态：** **APPROVED A·M**（W1a+W1b · L不批） · 2026-10-15 16:20 Asia/Shanghai · 勿勾 CLOSED
 > **DESIGN** [`DESIGN-ember-rally-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-rally-path-offer-pick-visible-2026-10-15.md) · RESEARCH 同日 · backlog `B-rally-path-offer-pick-visible`
 > **施工岗（批后）：** 余烬-插件（RallyPath.offerPick / applyAndReply / 无参 rallypath / 周要约改开菜单）+ 余烬-物品（薄页 `ember_p1_rally_path`）· **不派怪物/地图**
 > **硬禁：** 零半行独批 · 零破绽爆发/砸晶/护兔/占点路径选打同题复读（TIP-FA/EZ/EY/EX） · 零传火/裂隙/预警/备药/急清/集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽反击(Counter)/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题复读（TIP-EW–DE / TIP-DM–DN） · 零已齐 settle 同题复读 · 零 variety再拧/完整经济 · 零 Cast·Aid 再拧 · 零庭内旁路再拧 · 零 sx20 · 零抬伤害/CD表/掉落/体力价 · 零 densify · 零教裸指令主 UI · 零 Pack6 · 零开 K3 · 零关观察 · 零全族 *Path.offerPick 大扫 · 零 PacePath 同窗 · 零其它 *Path 同窗 · 零复开 D562 玩法本体（auto/ask/mute 真改清完非终房时短加速冲下一房语义零改）· 零改 burst_path / smash_path / guard_path / hold_path / relay_path / breach_path / alert_path / stock_path / hurry_path / focus_path / doom_path / nest_path / save_path / sequel_path / bait_path / slip_path / crash_path / bolt_path / shift_path / gap_path / phase_path / wave_path / soak_path / shell_path / clone_path / press_path / cut_path / rush_path / clean_path / streak_path / blaze_path / spin_path / snap_path / veil_path / free_path 等已齐
 > **ancestor：** TIP-FA CLOSED live `46e138454`（批 `d876a2dfe` · feat `fd9bcf3d5` · menu `d8b9676df` · jar `1.65.877-d13384.local` · PASS `c9047b97a` · **104/104** · **破绽爆发路径选打同题勿再交**）
 > **下一窗提示（旁注）：** 剩支另窗证据逐支（扫后再定 · 禁全族大扫 · 禁与其它 *Path 同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 · ancestor TIP-FB（本窗批后）
+
+> **总控裁定（2026-10-15 16:25 Asia/Shanghai）：APPROVED A·M**（W1a+W1b · L不批 · 勿勾 CLOSED）· D13385 · TIP-FB。W1a 将 Rally 自有的**全部**玩家可见「突进」改「清房突进」：`EmberRallyPath` label L71–73、glance L85–87（并去手打 rallypath）、局内钮「[突进]」L133(maybeAfterClear)/L153(maybeProbe)→「[清房突进]」，以及复核补列同类 Rally 自有字 L126/L148「突进·自动 短加速」、L202、L209、L218；`EmberCommand` Rally 函数内 L4924/L4931/L4937/L4944/L4956–4957/L4966（L4937/L4944 改指向薄页 `ember_p1_rally_path`）。**仅改字**，按钮行为/命令目标/D562 语义零改；Stride/Posture/Step 文案一字不动；类名 `EmberRallyPath`/命令 id `rallypath`·`rally`/别名「突进路径」/菜单 id `ember_p1_rally_path` 不变。复核：Rally only · 无 Pace · 无大扫 · 祖先 FA CLOSED `46e138454` / PASS `c9047b97a` · 行号于 `bf56af838` 无偏移 · 旧名残留零。
 
 ## 一句话
 周选/改清房突进路径时一点开「清房突进路径」薄页：自动 / 提醒 / 静默 / 清空 / 技能组 / 冒险可点；清 ConfirmTokens 教 `rallypath` 主 UI；伤害·CD表·掉落·体力价不动；局内清房钮（源码现文案「[突进]」）「改路径」语义零改；钮字随 W1a 改「[清房突进]」。
@@ -36,9 +38,9 @@
 **W1a 定名改字（总控定名「清房突进」· 必做）：** ① `EmberRallyPath.label` L71–73 旧标签「突进·自动/提醒/静默」→「清房突进·自动/提醒/静默」；② `glance` L85–87「突进路径」→「清房突进路径」；③ `EmberCommand` **L4937**「当前：… · 改路径再 /corerpg p1 rallypath」与 **L4944**「用法：/corerpg p1 rallypath <auto|ask|mute|clear>」两处教手打 → 改为指向薄页 `ember_p1_rally_path`（不再教裸 `rallypath`）；④ 同函数 L4924/L4931「突进路径需本人首通 Q01」、L4956–4957「无法突进 / 突进·手点」、L4966「突进路径探测」玩家可见字同步改「清房突进」；⑤ 局内清房钮源码现文案「[突进]」（`maybeAfterClear` L133 / `maybeProbe`）→「[清房突进]」，**语义零改**。**不改：** 类名 `EmberRallyPath` · 命令 id `rallypath`/`rally` · 菜单 id `ember_p1_rally_path` · 别名「突进路径」（保留直达）· Stride「突进踏」/ Posture「突进点名」/ Step lore 一字不动。（行号 2026-10-15 16:20 复核于 main `46e138454`。）
 
 ## 验收（批后施工）
-- [ ] 总控批 A·M
+- [x] 总控批 A·M
 - [ ] 插件交 offerPick / applyAndReply / 无参 rallypath / 周要约改开菜单 + 清裸指令主路径 + 单测
 - [ ] 物品交薄 rally_path 页 + TrMenu reload
 - [ ] 抽测 PASS live（选自动/提醒/静默/清空/技能组/冒险真开·PAPI·零抬伤害/CD表/掉落/体力价·零改 burst_path / smash_path / guard_path / hold_path·零已齐选打同题复读·零改 D562 清房突进语义）
 
-## STATUS: **待批 A** · 荐 M · L不批 · 勿勾 CLOSED · D13385 · TIP-FB · 2026-10-15 16:20 Asia/Shanghai
+## STATUS: **APPROVED A·M**（W1a+W1b）· L不批 · 勿勾 CLOSED · D13385 · TIP-FB · 2026-10-15 16:20 Asia/Shanghai
