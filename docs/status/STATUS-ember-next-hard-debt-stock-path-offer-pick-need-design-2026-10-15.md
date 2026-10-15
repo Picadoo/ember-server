@@ -1,9 +1,9 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D13376 · StockPath.offerPick / applyAndReply 备药路径选打菜单化 · 选路径聊天钮去指令化 · docs-only · ≠急清路径选打同题 · ≠集火/灾临/卡点/终救/续招/诱空/闪招/撞墙/闪线/侧安/收招/半血/增援/分摊/铁壁/分身/压伤/打断/限时/净伤/连斩/避焰/避旋/断链/避毒/解锢/闪榴/闪冲/身法/轻技/破绽/誓约/试炼/深渊/短征/团本/硬本/精选/步态路径选打同题 · ≠已齐 settle 下一环同题 · ≠variety再拧 · ≠soft-reward同题 · ≠路径追同题 · ≠日差同题 · ≠今日推/周目标复读 · ≠半行 · ≠sx20 · ≠抬伤害/CD表/掉落/体力价 · ≠庭内旁路 · ≠Cast/Aid/todayRot再拧 · ≠全族 *Path.offerPick 大扫 · ≠Pace同窗 · ≠其它 *Path 同窗 · ≠复开 D599 玩法本体）
 
-> **上游结案：** **TIP-ER 已批 A·M + PASS live**（D13375 急清路径选打 · feat `f7fc5125f` · tip批 `4e0e9c6d2` · menu `5a4e37268` · jar `1.65.868-d13375.local` · PASS `dfe0e4724` · 96/96 · 证据 `/workspace/tmp/tip-er-hurry-path/` · **备药路径选打同题勿再交** · 待总控 CLOSED live）。总控派下一窗：只钉 **StockPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–ER 选打勿复；PacePath（本仓无）后置；本窗只钉 Stock 一支 · Alert D600+ 等另窗证据逐支（禁全族大扫 · 禁与 Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
+> **上游结案：** **TIP-ER 已批 A·M + PASS live**（D13375 急清路径选打 · feat `f7fc5125f` · tip批 `4e0e9c6d2` · menu `5a4e37268` · jar `1.65.868-d13375.local` · PASS `dfe0e4724` · 96/96 · 证据 `/workspace/tmp/tip-er-hurry-path/` · **急清路径选打菜单化同题勿再交** · 待总控 CLOSED live）。总控派下一窗：只钉 **StockPath.offerPick**；挂机 gem gap 未亮/短征已齐 → 勿交 gem/sx20；DE–ER 选打勿复；PacePath（本仓无）后置；本窗只钉 Stock 一支 · Alert D600+ 等另窗证据逐支（禁全族大扫 · 禁与 Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置后置；禁全族大扫；禁与其它 *Path 同窗；半行 REJECT `d00ed84bc` 保持。
 
 **日期：** 2026-10-15（上海时间）
-**本窗性质：** tip thin · **待批 A** · 荐 M · docs-only · 勿勾 CLOSED · 下一窗：Alert D600+ 等另窗证据逐支（禁全族大扫 · 禁与 Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置
+**本窗性质：** tip thin · **已批 A** · 方案 M · APPROVED A·M · tip `bd67d9a25` · 2026-10-15 09:10 Asia/Shanghai · 勿勾 CLOSED · 可施工
 **硬规格：** [`DESIGN-ember-stock-path-offer-pick-visible-2026-10-15.md`](../design/DESIGN-ember-stock-path-offer-pick-visible-2026-10-15.md) · backlog `B-stock-path-offer-pick-visible`
 **打开理由：** 挂机/短征无新薄债；各 settle 下一环+选打 DE–ER 已齐（急清 PASS·待 CLOSED）；备药**选打**仍 ConfirmTokens 教裸 stockpath——总控钉死本支；内容闭环断在备药路径选打（≠急清选打；≠ settle 同题；局内备药钮≠选打页）。
 
@@ -59,11 +59,11 @@
 | tip（本文件） | `docs/status/STATUS-ember-next-hard-debt-stock-path-offer-pick-need-design-2026-10-15.md` |
 | DESIGN | `docs/design/DESIGN-ember-stock-path-offer-pick-visible-2026-10-15.md` |
 | RESEARCH | `docs/design/RESEARCH-ember-stock-path-offer-pick-visible-2026-10-15.md` |
-| 薄 tip | `docs/tips/TIP-ember-shell-path-offer-pick-visible-thin-d13360-2026-10-15.md` |
+| 薄 tip | `docs/tips/TIP-ember-stock-path-offer-pick-visible-thin-d13376-2026-10-15.md` |
 | backlog | `B-stock-path-offer-pick-visible` |
-| 号段 | **D13376** · 字母窗 **TIP-ES** · STATUS=**待批 A** · 荐 M · 2026-10-15 09:06 Asia/Shanghai · 勿勾 CLOSED |
+| 号段 | **D13376** · 字母窗 **TIP-ES** · STATUS=**已批 A** · 方案 M · APPROVED A·M · tip `bd67d9a25` · 2026-10-15 09:10 Asia/Shanghai · 勿勾 CLOSED |
 | 上游 | TIP-ER PASS live `dfe0e4724` · feat `f7fc5125f` · tip `4e0e9c6d2` · PASS `dfe0e4724` · jar `1.65.868-d13375.local` · 批 sha `4e0e9c6d2` · menu tip `5a4e37268` · D13375；半行 REJECT `d00ed84bc` 保持否决；急清路径选打菜单化同题勿再交 |
 
-*选题 StockPath.offerPick / applyAndReply 备药路径选打菜单化 · tip **待批 A** · 荐 M · 勿勾 CLOSED · L不批 · D13376 · TIP-ES · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Stock 一支 · Alert D600+ 等另窗证据逐支（禁全族大扫 · 禁与 Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-ER PASS `dfe0e4724` / 批 `4e0e9c6d2` · 2026-10-15 09:06 Asia/Shanghai.*
+*选题 StockPath.offerPick / applyAndReply 备药路径选打菜单化 · tip **已批 A** · 方案 M · APPROVED A·M · tip `bd67d9a25` · 勿勾 CLOSED · L不批 · D13376 · TIP-ES · 半行 REJECT `d00ed84bc` **保持否决** · 本窗只钉 Stock 一支 · Alert D600+ 等另窗证据逐支（禁全族大扫 · 禁与 Alert 等同窗）· 勿默念 Pace（本仓无）· 挂机若新硬债 / legacy evacuate 后置 / PacePath（本仓无）/挂机若新硬债/legacy evacuate 后置 · ancestor TIP-ER PASS `dfe0e4724` / 批 `4e0e9c6d2` · 2026-10-15 09:10 Asia/Shanghai.*
 
-## STATUS: **待批 A** · 荐 M · L不批 · D13376 · TIP-ES · 2026-10-15 09:06 Asia/Shanghai · 勿勾 CLOSED
+## STATUS: **已批 A** · 方案 M · APPROVED A·M · tip `bd67d9a25` · 勿勾 CLOSED · L不批 · D13376 · TIP-ES · 2026-10-15 09:10 Asia/Shanghai
