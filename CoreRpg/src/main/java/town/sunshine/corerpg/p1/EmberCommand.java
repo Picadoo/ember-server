@@ -426,7 +426,7 @@ public final class EmberCommand {
             else p.sendMessage(P + "§a闪爆·手点 §7已拉出爆炸圈");
             return true;
         }
-        if ("huntpath".equals(sub) || "猎侧路径".equals(sub)) { // D559 side-extra hunt path
+        if ("huntpath".equals(sub) || "猎侧路径".equals(sub)) { // D559 side-extra hunt path · TIP-FE D13388
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
@@ -449,14 +449,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberHuntPath.get(d);
-                    if (EmberHuntPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberHuntPath.label(cur) + " · 改路径再 /corerpg p1 huntpath");
+                    if (EmberHuntPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberHuntPath.label(cur) + " · 点猎侧路径页可改");
                     else EmberHuntPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberHuntPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 huntpath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点猎侧路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberHuntPath.applyAndReply(p, id);
