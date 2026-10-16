@@ -337,7 +337,7 @@ public final class EmberCommand {
         if ("burst".equals(sub) && args.length == 2) return burstGoCmd(s); // D563
         if ("rallypath".equals(sub) || "突进路径".equals(sub)) return rallyPathCmd(s, args); // D562
         if ("rally".equals(sub) && args.length == 2) return rallyGoCmd(s); // D562
-        if ("thawpath".equals(sub) || "解冻路径".equals(sub)) { // D561 frost-thaw path
+        if ("thawpath".equals(sub) || "解冻路径".equals(sub)) { // D561 frost-thaw path · TIP-FC D13386
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
@@ -360,14 +360,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberThawPath.get(d);
-                    if (EmberThawPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberThawPath.label(cur) + " · 改路径再 /corerpg p1 thawpath");
+                    if (EmberThawPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberThawPath.label(cur) + " · 点解冻路径页可改");
                     else EmberThawPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberThawPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 thawpath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点解冻路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberThawPath.applyAndReply(p, id);
