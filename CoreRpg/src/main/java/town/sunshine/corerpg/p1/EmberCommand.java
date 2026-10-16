@@ -382,7 +382,7 @@ public final class EmberCommand {
             else p.sendMessage(P + "§a解冻·手点 §7已解除寒霜减速");
             return true;
         }
-        if ("duckpath".equals(sub) || "闪爆路径".equals(sub)) { // D560 molten-blast duck path
+        if ("duckpath".equals(sub) || "闪爆路径".equals(sub)) { // D560 molten-blast duck path · TIP-FD D13387
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
@@ -405,14 +405,14 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberDuckPath.get(d);
-                    if (EmberDuckPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberDuckPath.label(cur) + " · 改路径再 /corerpg p1 duckpath");
+                    if (EmberDuckPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberDuckPath.label(cur) + " · 点闪爆路径页可改");
                     else EmberDuckPath.offerPick(p);
                 }
                 return true;
             }
             int id = EmberDuckPath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 duckpath <auto|ask|mute|clear>");
+                p.sendMessage(P + "用法：点闪爆路径页选自动/提醒/静默/清空");
                 return true;
             }
             EmberDuckPath.applyAndReply(p, id);
