@@ -16,11 +16,18 @@ import town.sunshine.corerpg.PlayerData;
  * NEW dungeon combat loop: when a cleared room starts door_delay breath, sticky open now,
  * chat ask, or wait out the timer. Distinct from RoomPath (variety room order), Pack/Stash/Flee/Chest/Sight.
  * Chat only. Zero drop tables / AFK / sx / forge / combo sticky / enter-card / ActionBar.
+ * TIP-FH D13391: offerPick / applyAndReply / 无参 gatepath / 周要约 →开 /ember_p1_gate_path；
+ * 清 ConfirmTokens 教 gatepath 主 UI；零改伤害/CD表/掉落/体力价/D556 语义.
  */
 public final class EmberGatePath {
 
     public static final String C_PATH = "p1_gate_path";
     public static final String C_OFFER = "p1_gate_path_offer";
+
+    /** TIP-FH D13391 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_gate_path";
+    public static final String PATH_PICK_LABEL = "[开门路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -79,9 +86,16 @@ public final class EmberGatePath {
         return "点选门扇缓开节奏（改副本循环 · 不改掉落表）";
     }
 
+    /**
+     * TIP-FH D13391 · 薄页 lore 一行（无 §）：当前开门路径。
+     */
+    public static String menuLine(int id) {
+        return "开门路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8开门路径：首进/首通 Q01 后可选";
-        if (!valid(id)) return "§8开门路径：未选 · /corerpg p1 gatepath";
+        if (!valid(id)) return "§8开门路径：未选 · 点开门路径页";
         return "§e开门路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -149,7 +163,7 @@ public final class EmberGatePath {
             lastAsk.put(p.getUniqueId(), now);
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§e门扇缓缓开启… ",
                     new String[]{"[开门]", "/corerpg p1 gate", "立即开门推进", "GREEN"},
-                    new String[]{"[改路径]", "/corerpg p1 gatepath", "自动/提醒/静默", "GRAY"});
+                    new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
         }
     }
 
@@ -172,18 +186,26 @@ public final class EmberGatePath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e门扇缓缓开启… ",
                 new String[]{"[开门]", "/corerpg p1 gate", "立即开门推进", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 gatepath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选门扇缓开节奏（改循环 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 gatepath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 gatepath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 gatepath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 gatepath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FH D13391: 开选打薄页；禁 ConfirmTokens 教 gatepath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_gate_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_gate_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -238,9 +260,10 @@ public final class EmberGatePath {
         flush(p);
         p.sendMessage(P + "§a开门 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-FH D13391: 下一步→选打薄页/冒险（禁教裸 gatepath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 gatepath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
