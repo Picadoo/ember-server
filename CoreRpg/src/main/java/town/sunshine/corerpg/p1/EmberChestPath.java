@@ -16,11 +16,18 @@ import town.sunshine.corerpg.PlayerData;
  * NEW dungeon acquisition: sticky open of Extra CHEST when it spawns in a P1 run.
  * Distinct from ExtraPath (roll bias), ClaimPath, Sight/Charm/Grip/Armor/Sip/Prep.
  * Chat only. Zero drop tables / AFK / sx / forge / combo sticky / enter-card / ActionBar.
+ * TIP-FJ D13393: offerPick / applyAndReply / 无参 chestpath / 周要约 →开 /ember_p1_chest_path；
+ * 清 ConfirmTokens 教 chestpath 主 UI；零改伤害/CD表/掉落/体力价/D553 语义.
  */
 public final class EmberChestPath {
 
     public static final String C_PATH = "p1_chest_path";
     public static final String C_OFFER = "p1_chest_path_offer";
+
+    /** TIP-FJ D13393 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_chest_path";
+    public static final String PATH_PICK_LABEL = "[开箱路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -79,9 +86,16 @@ public final class EmberChestPath {
         return "点选额外宝箱开启节奏（改副本获取 · 不改掉落表）";
     }
 
+    /**
+     * TIP-FJ D13393 · 薄页 lore 一行（无 §）：当前开箱路径。
+     */
+    public static String menuLine(int id) {
+        return "开箱路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8开箱路径：首进/首通 Q01 后可选";
-        if (!valid(id)) return "§8开箱路径：未选 · /corerpg p1 chestpath";
+        if (!valid(id)) return "§8开箱路径：未选 · 点开箱路径页";
         return "§e开箱路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -138,7 +152,7 @@ public final class EmberChestPath {
             lastAsk.put(p.getUniqueId(), now);
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§e侧边出现了额外宝箱 ",
                     new String[]{"[开箱]", "/corerpg p1 chestopen", "开启并记为待结算奖励", "GREEN"},
-                    new String[]{"[改路径]", "/corerpg p1 chestpath", "自动/提醒/静默", "GRAY"});
+                    new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
         }
     }
 
@@ -160,18 +174,26 @@ public final class EmberChestPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e侧边出现了额外宝箱 ",
                 new String[]{"[开箱]", "/corerpg p1 chestopen", "开启并记为待结算奖励", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 chestpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选额外宝箱开启节奏（改获取 · 可随时改 · 不改掉落表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 chestpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 chestpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 chestpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 chestpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FJ D13393: 开选打薄页；禁 ConfirmTokens 教 chestpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_chest_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_chest_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -226,9 +248,10 @@ public final class EmberChestPath {
         flush(p);
         p.sendMessage(P + "§a开箱 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeProbe(p);
+        // TIP-FJ D13393: 下一步→选打薄页/冒险（禁教裸 chestpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[主线]", "/corerpg p1", "看进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 chestpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

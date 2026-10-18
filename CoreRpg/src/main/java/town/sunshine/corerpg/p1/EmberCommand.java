@@ -721,7 +721,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberChestPath.get(d);
-                    if (EmberChestPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberChestPath.label(cur) + " · 改路径再 /corerpg p1 chestpath");
+                    if (EmberChestPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberChestPath.label(cur) + " · 改路径再点开箱路径页");
                     else EmberChestPath.offerPick(p);
                 }
                 return true;
