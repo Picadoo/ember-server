@@ -130,6 +130,8 @@ public final class EmberRunPapi {
         if ("call_unlock".equals(key)) return Section.GATE; // TIP-FG D13390
         if ("gate_path".equals(key) || (key != null && key.startsWith("gate_path_"))) return Section.RUSH; // TIP-FH D13391
         if ("gate_unlock".equals(key)) return Section.GATE; // TIP-FH D13391
+        if ("flee_path".equals(key) || (key != null && key.startsWith("flee_path_"))) return Section.RUSH; // TIP-FI D13392
+        if ("flee_unlock".equals(key)) return Section.GATE; // TIP-FI D13392
         if (key.startsWith("pledge_")) return Section.RUSH;
         if (key.startsWith("rush_")) return Section.RUSH;
         if (key.startsWith("passd_")) return Section.ENTRY;
@@ -1120,6 +1122,16 @@ public final class EmberRunPapi {
         return "";
     }
 
+    /** TIP-FI D13392 %corerpg_p1_flee_path*% — sticky FleePath preference; zero economy. */
+    private String fleePathPref(PlayerData d, String key) {
+        int path = EmberFleePath.get(d);
+        if ("flee_path".equals(key)) return String.valueOf(path);
+        if ("flee_path_label".equals(key)) return EmberFleePath.label(path);
+        if ("flee_path_tip".equals(key)) return EmberFleePath.tip(path);
+        if ("flee_path_line".equals(key)) return EmberFleePath.menuLine(path);
+        return "";
+    }
+
     /** TIP-EZ D13383 %corerpg_p1_smash_path*% — sticky SmashPath preference; zero economy. */
     private String smashPathPref(PlayerData d, String key) {
         int path = EmberSmashPath.get(d);
@@ -1425,6 +1437,8 @@ public final class EmberRunPapi {
             return callPathPref(d, key);
         if ("gate_path".equals(key) || (key != null && key.startsWith("gate_path_"))) // TIP-FH D13391
             return gatePathPref(d, key);
+        if ("flee_path".equals(key) || (key != null && key.startsWith("flee_path_"))) // TIP-FI D13392
+            return fleePathPref(d, key);
         if (key.startsWith("pledge_")) return runs.pledgePapi(d, key.substring(7)); // D174 stage 2b 自选誓约
         EmberRunMaps.MapDef rm = maps.rush.get(key.substring(5)); // rush_<entry>
         if (rm == null) return null; // old chain: not a rush entry → per-map tail
@@ -1493,6 +1507,7 @@ public final class EmberRunPapi {
         if ("link_unlock".equals(key)) return accessBit(EmberSkillKit.linkPathUnlocked(d, runs)); // TIP-FF D13389
         if ("call_unlock".equals(key)) return accessBit(EmberSkillKit.callPathUnlocked(d, runs)); // TIP-FG D13390
         if ("gate_unlock".equals(key)) return accessBit(EmberSkillKit.gatePathUnlocked(d, runs)); // TIP-FH D13391
+        if ("flee_unlock".equals(key)) return accessBit(EmberSkillKit.fleePathUnlocked(d, runs)); // TIP-FI D13392
         if ("access_q07".equals(key)) return accessBit(EmberSkillKit.endgameUnlocked(d, runs)); // TIP-BR MG2
         if ("q07done".equals(key)) return runs.progressFlag(d, "q07") ? "1" : "0"; // D99 menu condition (post-Q07 icons)
         return runs.progressFlag(d, key.substring(0, 3)) ? "1" : "0"; // D174 stage 2b: q04done / q05done / q06done
