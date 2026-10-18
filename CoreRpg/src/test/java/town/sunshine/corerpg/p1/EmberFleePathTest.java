@@ -8,4 +8,13 @@ public class EmberFleePathTest {
         assertEquals(EmberFleePath.ASK, EmberFleePath.parse("提醒"));
         assertEquals("auto", EmberFleePath.key(EmberFleePath.AUTO));
     }
+    @Test public void tipFiOfferPickConstants() {
+        assertEquals("/ember_p1_flee_path", EmberFleePath.PATH_PICK_CMD);
+        assertEquals("[撤离路径]", EmberFleePath.PATH_PICK_LABEL);
+        assertEquals("/ember_p1_adventure", EmberFleePath.PATH_ADVENTURE_CMD);
+        assertEquals("撤离路径 · 撤离·自动", EmberFleePath.menuLine(EmberFleePath.AUTO));
+        String g = EmberFleePath.glance(EmberFleePath.NONE, true);
+        assertTrue(g.contains("点撤离路径页"));
+        assertFalse(g.contains("/corerpg p1 flepath"));
+    }
 }

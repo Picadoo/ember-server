@@ -677,7 +677,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberFleePath.get(d);
-                    if (EmberFleePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFleePath.label(cur) + " · 改路径再 /corerpg p1 flepath");
+                    if (EmberFleePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFleePath.label(cur) + " · 改路径再点撤离路径页");
                     else EmberFleePath.offerPick(p);
                 }
                 return true;
