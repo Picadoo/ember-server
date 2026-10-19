@@ -631,7 +631,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberPackPath.get(d);
-                    if (EmberPackPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPackPath.label(cur) + " · 改路径再 /corerpg p1 packpath");
+                    if (EmberPackPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPackPath.label(cur) + " · 改路径再点腾包路径页");
                     else EmberPackPath.offerPick(p);
                 }
                 return true;
