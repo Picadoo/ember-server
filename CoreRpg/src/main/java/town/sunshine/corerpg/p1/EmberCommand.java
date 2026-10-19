@@ -855,7 +855,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberGripPath.get(d);
-                    if (EmberGripPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGripPath.label(cur) + " · 改路径再 /corerpg p1 grippath");
+                    if (EmberGripPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGripPath.label(cur) + " · 改路径再点握刃路径页");
                     else EmberGripPath.offerPick(p);
                 }
                 return true;
