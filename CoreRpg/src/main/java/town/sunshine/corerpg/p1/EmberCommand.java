@@ -765,7 +765,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberSightPath.get(d);
-                    if (EmberSightPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSightPath.label(cur) + " · 改路径再 /corerpg p1 sightpath");
+                    if (EmberSightPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSightPath.label(cur) + " · 改路径再点夜视路径页");
                     else EmberSightPath.offerPick(p);
                 }
                 return true;
