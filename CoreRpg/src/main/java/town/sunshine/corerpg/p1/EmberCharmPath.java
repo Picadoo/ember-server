@@ -15,11 +15,18 @@ import town.sunshine.corerpg.PlayerData;
  * NEW dungeon→combat acquisition: sticky select of a better bag charm at hub (raises H).
  * Distinct from EquipPath (on-drop blade/charm UP_AUTO), ArmorPath (six-slot wear), Grip/Sip/Prep.
  * Chat only. Zero power table / AFK / sx / forge spend-chase / combo sticky / enter-card / ActionBar / hunger.
+ * TIP-FM D13396: offerPick / applyAndReply / 无参 charmpath / 周要约 →开 /ember_p1_charm_path；
+ * 清 ConfirmTokens 教 charmpath 主 UI；零改伤害/CD表/掉落/体力价/D551 语义.
  */
 public final class EmberCharmPath {
 
     public static final String C_PATH = "p1_charm_path";
     public static final String C_OFFER = "p1_charm_path_offer";
+
+    /** TIP-FM D13396 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_charm_path";
+    public static final String PATH_PICK_LABEL = "[护符路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -78,9 +85,16 @@ public final class EmberCharmPath {
         return "点选副本掉符选定节奏（改战斗力 · 不改表）";
     }
 
+    /**
+     * TIP-FM D13396 · 薄页 lore 一行（无 §）：当前护符路径。
+     */
+    public static String menuLine(int id) {
+        return "护符路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8护符路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8护符路径：未选 · /corerpg p1 charmpath";
+        if (!valid(id)) return "§8护符路径：未选 · 点护符路径页";
         return "§e护符路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -105,18 +119,26 @@ public final class EmberCharmPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e背包有更好的护符可选定 ",
                 new String[]{"[选符]", "/corerpg p1 charmpick", "选定更高生命护符", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 charmpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选副本掉符选定节奏（改战斗 · 可随时改 · 不改表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 charmpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 charmpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 charmpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 charmpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FM D13396: 开选打薄页；禁 ConfirmTokens 教 charmpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_charm_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_charm_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -171,9 +193,10 @@ public final class EmberCharmPath {
         flush(p);
         p.sendMessage(P + "§a护符 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeAfterProgress(p);
+        // TIP-FM D13396: 下一步→选打薄页/冒险（禁教裸 charmpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[装备]", "/corerpg p1 gear", "看刃符", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 charmpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static EmberLoadoutService loadouts() {
