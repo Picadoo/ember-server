@@ -359,6 +359,12 @@ public final class EmberSkillKit {
         return runs != null && runs.firstClearedKey(d, "q01");
     }
 
+    /** TIP-FL D13395 · SightPath thin-page grey gate (首通 Q01; matches applyAndReply). */
+    public static boolean sightPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        return runs != null && runs.progressFlag(d, "q01");
+    }
+
     public static boolean markLinkEnter(PlayerData d) {
         if (d == null) return false;
         if (d.periodCount(C_LINK_ENTER, "all") > 0) return false;
