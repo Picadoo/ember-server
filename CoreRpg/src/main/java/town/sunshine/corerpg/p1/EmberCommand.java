@@ -808,7 +808,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberCharmPath.get(d);
-                    if (EmberCharmPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberCharmPath.label(cur) + " · 改路径再 /corerpg p1 charmpath");
+                    if (EmberCharmPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberCharmPath.label(cur) + " · 改路径再点护符路径页");
                     else EmberCharmPath.offerPick(p);
                 }
                 return true;
