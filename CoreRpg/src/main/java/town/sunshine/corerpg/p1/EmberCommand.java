@@ -2444,7 +2444,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberStashPath.get(d);
-                    if (EmberStashPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberStashPath.label(cur) + " · 改路径再 /corerpg p1 stashpath");
+                    if (EmberStashPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberStashPath.label(cur) + " · 改路径再点存仓路径页");
                     else EmberStashPath.offerPick(p);
                 }
                 return true;

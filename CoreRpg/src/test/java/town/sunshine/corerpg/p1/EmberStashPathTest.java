@@ -8,4 +8,12 @@ public class EmberStashPathTest {
         assertTrue(EmberStashPath.shouldMute(EmberStashPath.MUTE));
         assertEquals(EmberStashPath.AUTO, EmberStashPath.parse("自动"));
     }
+    @Test public void tipFqOfferPickConstants() {
+        assertEquals("/ember_p1_stash_path", EmberStashPath.PATH_PICK_CMD);
+        assertEquals("[存仓路径]", EmberStashPath.PATH_PICK_LABEL);
+        assertEquals("/ember_p1_adventure", EmberStashPath.PATH_ADVENTURE_CMD);
+        assertEquals("存仓路径 · 存仓·自动", EmberStashPath.menuLine(EmberStashPath.AUTO));
+        String g = EmberStashPath.glance(EmberStashPath.NONE, true);
+        assertTrue(g.contains("点存仓路径页"));
+    }
 }
