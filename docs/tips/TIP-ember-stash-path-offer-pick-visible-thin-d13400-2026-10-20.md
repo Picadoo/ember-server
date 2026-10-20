@@ -2,7 +2,7 @@
 
 | 项 | 内容 |
 | --- | --- |
-| 状态 | OPEN |
+| 状态 | CLOSED live |
 | jar | CoreRpg 1.65.893-d13400 |
 | twin | TIP-FP SipPath |
 | 改动 | offerPick/applyAndReply/bare stashpath/weekly → `/ember_p1_stash_path`；PAPI stash_path*/stash_unlock |
