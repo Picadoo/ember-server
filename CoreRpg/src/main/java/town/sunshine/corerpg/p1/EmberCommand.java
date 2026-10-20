@@ -1459,7 +1459,7 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            boolean unlocked = runs.progressFlag(d, "q01");
+            boolean unlocked = EmberSkillKit.ticketPathUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberTicketPath.glance(EmberTicketPath.get(d), unlocked));
                 if (!unlocked) {
@@ -1476,7 +1476,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberTicketPath.get(d);
-                    if (EmberTicketPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberTicketPath.label(cur) + " · 改路径再 /corerpg p1 ticketpath");
+                    if (EmberTicketPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberTicketPath.label(cur) + " · 改路径再点旧票路径页");
                     else EmberTicketPath.offerPick(p);
                 }
                 return true;

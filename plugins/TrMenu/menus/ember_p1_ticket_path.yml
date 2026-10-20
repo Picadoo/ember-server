@@ -1,0 +1,268 @@
+# TIP-FR / D13401 · 旧票路径选打薄页 · ticket_path* · ticketpath auto|ask|mute|clear
+# 入口：TicketPath.offerPick / 无参 ticketpath / 周要约 / Q01首通 → /ember_p1_ticket_path（插件并行改开菜单）
+# 选打：corerpg p1 ticketpath auto|ask|mute|clear
+# 导航：技能组 ember_skill_kit / 冒险 / 体力
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落/折算表 · 改 pack_path / chest_path / stash_path / sip_path / armor_path / 其他已齐选打 / D536 旧票语义 / 庭内 · ≠Stash存仓 · ≠Sip喝药 · ≠Fail退票 · ≠Prep买药 · ≠Dose体力 · ≠Stamina 表
+# PAPI（插件可能后到·静态接线）：ticket_path / ticket_path_label / ticket_path_tip · ticket_unlock（灰态·首通 Q01）
+# ≠ ember_p1_flee_path · ≠ ember_p1_gate_path · ≠ ember_p1_call_path · ≠ ember_p1_link_path · ≠ ember_p1_hunt_path · ≠ ember_p1_pack_path · ≠ ember_p1_chest_path · ≠ ember_p1_duck_path · ≠ ember_p1_thaw_path · ≠ ember_p1_rally_path · ≠ ember_p1_smash_path · ≠ ember_p1_guard_path · ≠ ember_p1_hold_path · ≠ ember_p1_beacon_path · ≠ ember_p1_relay_path · ≠ ember_p1_breach_path · ≠ ember_p1_alert_path · ≠ ember_p1_stock_path · ≠ ember_p1_hurry_path · ≠ ember_p1_focus_path · ≠ ember_p1_doom_path · ≠ ember_p1_nest_path · ≠ ember_p1_save_path · ≠ ember_p1_sequel_path · ≠ ember_p1_bait_path · ≠ ember_p1_slip_path · ≠ ember_p1_crash_path · ≠ ember_p1_bolt_path · ≠ ember_p1_shift_path · ≠ ember_p1_gap_path · ≠ ember_p1_phase_path · ≠ ember_p1_wave_path · ≠ ember_p1_soak_path · ≠ ember_p1_shell_path · ≠ ember_p1_clone_path · ≠ ember_p1_press_path · ≠ ember_p1_cut_path · ≠ ember_p1_rush_path · ≠ ember_p1_clean_path · ≠ ember_p1_streak_path · ≠ ember_p1_blaze_path · ≠ ember_p1_spin_path · ≠ ember_p1_snap_path · ≠ ember_p1_veil_path · ≠ ember_p1_free_path · ≠ ember_p1_dodge_path · ≠ ember_p1_sidestep_path · ≠ ember_p1_step_path · ≠ ember_p1_flex_path · ≠ ember_p1_stride_path · ≠ ember_p1_counter_path · ≠ ember_p1_pledge_path · ≠ ember_p1_trial_path · ≠ ember_p1_abyss_path · ≠ ember_p1_short_path · ≠ ember_p1_raid_path · ≠ ember_p1_challenge_path · ≠ ember_p1_featured_path · ≠ ember_p1_sight_path · ≠ ember_p1_charm_path · ≠ ember_p1_grip_path · ≠ ember_p1_armor_path · ≠ ember_p1_sip_path · ≠ ember_p1_stash_path · ≠ ember_p1_pack_path
+
+
+Title: '§e旧票 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_ticket_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '##K#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §e旧票路径 §7· 当前 §e%corerpg_p1_ticket_path_label%'
+    - 'tell: §8点选 · 自动 / 提醒 / 静默 / 清空 · 或技能组 / 冒险 / 体力'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: paper
+      name: '§e旧票路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_ticket_path_label%'
+        - '§8%corerpg_p1_ticket_path_tip%'
+        - '§8点选 · 自动 / 提醒 / 静默 / 清空'
+        - '§8需本人首通 Q01'
+        - '§8旧票折体力节奏（≠Stash存仓 · ≠Sip喝药 · ≠Fail退票 · ≠Prep买药 · ≠Dose体力）'
+
+  # 自动 · AUTO=1 · 进服时背包旧日票自动折算成体力
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_ticket_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7自动 §8（需首通 Q01）'
+          lore:
+            - '§c需本人首通 Q01'
+            - '§7进服时背包旧日票自动折算成体力'
+            - '§8通关后再选路径'
+      - condition: 'check papi %corerpg_p1_ticket_path% == 1'
+        priority: 2
+        display:
+          material: emerald
+          shiny: true
+          name: '§a自动 §8· §f已选'
+          lore:
+            - '§7进服时背包旧日票自动折算成体力'
+            - '§8%corerpg_p1_ticket_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 ticketpath auto'
+            - 'menu: ember_p1_ticket_path'
+    display:
+      material: lime dye
+      name: '§a自动'
+      lore:
+        - '§7进服时背包旧日票自动折算成体力'
+        - '§8点选切换旧票路径'
+        - '§e➥ §f设为自动'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 ticketpath auto'
+        - 'menu: ember_p1_ticket_path'
+
+  # 提醒 · ASK=2 · 有旧票时聊天提醒，点按钮折算（默认）
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_ticket_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7提醒 §8（需首通 Q01）'
+          lore:
+            - '§c需本人首通 Q01'
+            - '§7有旧票时聊天提醒，点按钮折算（默认）'
+            - '§8通关后再选路径'
+      - condition: 'check papi %corerpg_p1_ticket_path% == 2'
+        priority: 2
+        display:
+          material: gold nugget
+          shiny: true
+          name: '§a提醒 §8· §f已选'
+          lore:
+            - '§7有旧票时聊天提醒，点按钮折算（默认）'
+            - '§8%corerpg_p1_ticket_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 ticketpath ask'
+            - 'menu: ember_p1_ticket_path'
+    display:
+      material: gold nugget
+      name: '§e提醒'
+      lore:
+        - '§7有旧票时聊天提醒，点按钮折算（默认）'
+        - '§8点选切换旧票路径'
+        - '§e➥ §f设为提醒'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 ticketpath ask'
+        - 'menu: ember_p1_ticket_path'
+
+  # 静默 · MUTE=3 · 不自动折、不提醒；可 /corerpg stamina convert
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_ticket_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7静默 §8（需首通 Q01）'
+          lore:
+            - '§c需本人首通 Q01'
+            - '§7不自动折、不提醒；可 /corerpg stamina convert'
+            - '§8通关后再选路径'
+      - condition: 'check papi %corerpg_p1_ticket_path% == 3'
+        priority: 2
+        display:
+          material: ink sac
+          shiny: true
+          name: '§a静默 §8· §f已选'
+          lore:
+            - '§7不自动折、不提醒；可 /corerpg stamina convert'
+            - '§8%corerpg_p1_ticket_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 ticketpath mute'
+            - 'menu: ember_p1_ticket_path'
+    display:
+      material: ink sac
+      name: '§7静默'
+      lore:
+        - '§7不自动折、不提醒；可 /corerpg stamina convert'
+        - '§8点选切换旧票路径'
+        - '§e➥ §f设为静默'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 ticketpath mute'
+        - 'menu: ember_p1_ticket_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_ticket_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需首通 Q01）'
+          lore:
+            - '§c需本人首通 Q01'
+            - '§8通关后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_ticket_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无旧票路径焦点'
+            - '§8先点 自动 / 提醒 / 静默'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 ticketpath clear'
+            - 'menu: ember_p1_ticket_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_ticket_path_label%'
+        - '§8清焦点 · 可重选（默认回提醒语义由插件）'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 ticketpath clear'
+        - 'menu: ember_p1_ticket_path'
+
+  # 技能组
+  K:
+    display:
+      material: book
+      name: '§6去技能组'
+      lore:
+        - '§7看按键 / 形状 / 身法方向'
+        - '§8选好后可对照手感'
+        - '§e➥ §f开技能组'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_skill_kit'
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 体力（可选）
+  F:
+    display:
+      material: paper
+      name: '§b看体力'
+      lore:
+        - '§7看当前体力与旧票折算'
+        - '§8不改折算表'
+        - '§e➥ §f打开体力'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg stamina show'
+        - 'close'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
