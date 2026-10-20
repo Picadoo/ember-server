@@ -16,11 +16,18 @@ import town.sunshine.corerpg.StaminaService;
  * NEW economy: sticky mid-day draw from 体力银行 when current < daily cost (bank otherwise only fills on day reset).
  * Distinct from DosePath (potion drink), TicketPath (ticket convert), PrepPath. Chat only.
  * Zero stamina tables / AFK / sx / forge / combo sticky / enter-card / ActionBar cue.
+ * TIP-FS D13402: offerPick / applyAndReply / 无参 bankpath / 周要约 →开 /ember_p1_bank_path；
+ * 清 ConfirmTokens 教 bankpath 主 UI；零改伤害/CD表/掉落/D540 银行上限.
  */
 public final class EmberBankPath {
 
     public static final String C_PATH = "p1_bank_path";
     public static final String C_OFFER = "p1_bank_path_offer";
+
+    /** TIP-FS D13402 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_bank_path";
+    public static final String PATH_PICK_LABEL = "[取银路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -79,9 +86,16 @@ public final class EmberBankPath {
         return "点选体力银行日中取出节奏（改进本经济 · 不改银行上限）";
     }
 
+    /**
+     * TIP-FS D13402 · 薄页 lore 一行（无 §）：当前取银路径。
+     */
+    public static String menuLine(int id) {
+        return "取银路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8取银路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8取银路径：未选 · /corerpg p1 bankpath";
+        if (!valid(id)) return "§8取银路径：未选 · 点取银路径页";
         return "§e取银路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -109,18 +123,26 @@ public final class EmberBankPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e体力不足且银行有 §f" + bank + " §e ",
                 new String[]{"[取银]", "/corerpg p1 bank", "从银行取出补到日常消耗", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 bankpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选体力银行日中取出节奏（改经济 · 可随时改 · 不改上限）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 bankpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 bankpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 bankpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 bankpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FS D13402: 开选打薄页；禁 ConfirmTokens 教 bankpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_bank_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_bank_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -156,7 +178,7 @@ public final class EmberBankPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
+        if (!EmberSkillKit.bankPathUnlocked(d, runs)) {
             p.sendMessage(EmberRunService.P + "§c取银路径需本人首通 Q01。");
             return;
         }
@@ -181,9 +203,10 @@ public final class EmberBankPath {
             p.sendActionBar("§e取银 · §f" + label(id) + " §7· 银行 §f" + bank);
         } catch (Throwable ignored) { }
         if (id == AUTO) maybeAfterProgress(p);
+        // TIP-FS D13402: 下一步→选打薄页/冒险（禁教裸 bankpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[体力]", "/corerpg stamina", "看当前/银行", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 bankpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static StaminaService stamina() {
