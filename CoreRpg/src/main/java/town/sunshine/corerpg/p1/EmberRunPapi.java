@@ -148,6 +148,8 @@ public final class EmberRunPapi {
         if ("sip_unlock".equals(key)) return Section.GATE; // TIP-FP D13399
         if ("stash_path".equals(key) || (key != null && key.startsWith("stash_path_"))) return Section.RUSH; // TIP-FQ D13400
         if ("stash_unlock".equals(key)) return Section.GATE; // TIP-FQ D13400
+        if ("ticket_path".equals(key) || (key != null && key.startsWith("ticket_path_"))) return Section.RUSH; // TIP-FR D13401
+        if ("ticket_unlock".equals(key)) return Section.GATE; // TIP-FR D13401
         if (key.startsWith("pledge_")) return Section.RUSH;
         if (key.startsWith("rush_")) return Section.RUSH;
         if (key.startsWith("passd_")) return Section.ENTRY;
@@ -1228,6 +1230,16 @@ public final class EmberRunPapi {
         return "";
     }
 
+    /** TIP-FR D13401 %corerpg_p1_ticket_path*% — sticky TicketPath preference; zero economy. */
+    private String ticketPathPref(PlayerData d, String key) {
+        int path = EmberTicketPath.get(d);
+        if ("ticket_path".equals(key)) return String.valueOf(path);
+        if ("ticket_path_label".equals(key)) return EmberTicketPath.label(path);
+        if ("ticket_path_tip".equals(key)) return EmberTicketPath.tip(path);
+        if ("ticket_path_line".equals(key)) return EmberTicketPath.menuLine(path);
+        return "";
+    }
+
     /** TIP-EZ D13383 %corerpg_p1_smash_path*% — sticky SmashPath preference; zero economy. */
     private String smashPathPref(PlayerData d, String key) {
         int path = EmberSmashPath.get(d);
@@ -1551,6 +1563,8 @@ public final class EmberRunPapi {
             return sipPathPref(d, key);
         if ("stash_path".equals(key) || (key != null && key.startsWith("stash_path_"))) // TIP-FQ D13400
             return stashPathPref(d, key);
+        if ("ticket_path".equals(key) || (key != null && key.startsWith("ticket_path_"))) // TIP-FR D13401
+            return ticketPathPref(d, key);
         if (key.startsWith("pledge_")) return runs.pledgePapi(d, key.substring(7)); // D174 stage 2b 自选誓约
         EmberRunMaps.MapDef rm = maps.rush.get(key.substring(5)); // rush_<entry>
         if (rm == null) return null; // old chain: not a rush entry → per-map tail
@@ -1628,6 +1642,7 @@ public final class EmberRunPapi {
         if ("armor_unlock".equals(key)) return accessBit(EmberSkillKit.armorPathUnlocked(d, runs)); // TIP-FO D13398
         if ("sip_unlock".equals(key)) return accessBit(EmberSkillKit.sipPathUnlocked(d, runs)); // TIP-FP D13399
         if ("stash_unlock".equals(key)) return accessBit(EmberSkillKit.stashPathUnlocked(d, runs)); // TIP-FQ D13400
+        if ("ticket_unlock".equals(key)) return accessBit(EmberSkillKit.ticketPathUnlocked(d, runs)); // TIP-FR D13401
         if ("access_q07".equals(key)) return accessBit(EmberSkillKit.endgameUnlocked(d, runs)); // TIP-BR MG2
         if ("q07done".equals(key)) return runs.progressFlag(d, "q07") ? "1" : "0"; // D99 menu condition (post-Q07 icons)
         return runs.progressFlag(d, key.substring(0, 3)) ? "1" : "0"; // D174 stage 2b: q04done / q05done / q06done
