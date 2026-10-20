@@ -19,11 +19,18 @@ import town.sunshine.corerpg.PlayerData;
  * Distinct from PrepPath (town buy), BrewPath (hub craft), DosePath (stamina), BitePath (food).
  * Chat only for ASK; MUTE suppresses low-HP ActionBar polish. Zero dmg/CD table / AFK / sx /
  * forge / combo sticky / enter-card / new ActionBar cue twin.
+ * TIP-FP D13399: offerPick / applyAndReply / 无参 sippath / 周要约 →开 /ember_p1_sip_path；
+ * 清 ConfirmTokens 教 sippath 主 UI；零改伤害/CD表/掉落/药表/D548 语义.
  */
 public final class EmberSipPath {
 
     public static final String C_PATH = "p1_sip_path";
     public static final String C_OFFER = "p1_sip_path_offer";
+
+    /** TIP-FP D13399 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_sip_path";
+    public static final String PATH_PICK_LABEL = "[喝药路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -85,9 +92,16 @@ public final class EmberSipPath {
         return "点选副本低血喝药节奏（改战斗续航 · 不改药表）";
     }
 
+    /**
+     * TIP-FP D13399 · 薄页 lore 一行（无 §）：当前喝药路径。
+     */
+    public static String menuLine(int id) {
+        return "喝药路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8喝药路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8喝药路径：未选 · /corerpg p1 sippath";
+        if (!valid(id)) return "§8喝药路径：未选 · 点喝药路径页";
         return "§e喝药路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -120,18 +134,26 @@ public final class EmberSipPath {
         lastAsk.put(p.getUniqueId(), now);
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e生命偏低，可喝回复药 ",
                 new String[]{"[喝药]", "/corerpg p1 sip", "立刻喝一瓶（冷却共享）", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 sippath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选副本低血喝药节奏（改战斗 · 可随时改 · 不改药表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 sippath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 sippath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 sippath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 sippath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FP D13399: 开选打薄页；禁 ConfirmTokens 教 sippath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_sip_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_sip_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -186,9 +208,10 @@ public final class EmberSipPath {
         flush(p);
         p.sendMessage(P + "§a喝药 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeAfterLowHp(p);
+        // TIP-FP D13399: 下一步→选打薄页/冒险（禁教裸 sippath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[补给]", "/corerpg p1 shop", "买回复药", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 sippath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static EmberSupplyService supplies() {
