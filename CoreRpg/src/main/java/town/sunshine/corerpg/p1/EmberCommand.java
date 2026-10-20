@@ -945,7 +945,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberSipPath.get(d);
-                    if (EmberSipPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSipPath.label(cur) + " · 改路径再 /corerpg p1 sippath");
+                    if (EmberSipPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSipPath.label(cur) + " · 改路径再点喝药路径页");
                     else EmberSipPath.offerPick(p);
                 }
                 return true;
