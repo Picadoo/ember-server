@@ -16,11 +16,18 @@ import town.sunshine.corerpg.PlayerData;
  * Distinct from EquipPath (blade/charm UP_AUTO), ClaimPath, Sip/Prep/Brew, life-shop family.
  * Chat only. Zero power/set_bonus table / AFK / sx / forge spend-chase / combo sticky /
  * enter-card / ActionBar cue.
+ * TIP-FO D13398: offerPick / applyAndReply / 无参 armorpath / 周要约 →开 /ember_p1_armor_path；
+ * 清 ConfirmTokens 教 armorpath 主 UI；零改伤害/CD表/掉落/体力价/D549 语义.
  */
 public final class EmberArmorPath {
 
     public static final String C_PATH = "p1_armor_path";
     public static final String C_OFFER = "p1_armor_path_offer";
+
+    /** TIP-FO D13398 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_armor_path";
+    public static final String PATH_PICK_LABEL = "[护甲路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -79,9 +86,16 @@ public final class EmberArmorPath {
         return "点选副本掉装换甲节奏（改战斗力 · 不改套装表）";
     }
 
+    /**
+     * TIP-FO D13398 · 薄页 lore 一行（无 §）：当前护甲路径。
+     */
+    public static String menuLine(int id) {
+        return "护甲路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8护甲路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8护甲路径：未选 · /corerpg p1 armorpath";
+        if (!valid(id)) return "§8护甲路径：未选 · 点护甲路径页";
         return "§e护甲路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -105,18 +119,26 @@ public final class EmberArmorPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e背包有更好的六槽护甲 ",
                 new String[]{"[换甲]", "/corerpg p1 armorwear", "全部换上更好件", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 armorpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选副本掉装换甲节奏（改战斗 · 可随时改 · 不改套装表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 armorpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 armorpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 armorpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 armorpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FO D13398: 开选打薄页；禁 ConfirmTokens 教 armorpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_armor_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_armor_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -171,9 +193,10 @@ public final class EmberArmorPath {
         flush(p);
         p.sendMessage(P + "§a护甲 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeAfterProgress(p);
+        // TIP-FO D13398: 下一步→选打薄页/冒险（禁教裸 armorpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[护甲页]", "/corerpg p1 armor", "查看部位", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 armorpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

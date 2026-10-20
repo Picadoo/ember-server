@@ -899,7 +899,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberArmorPath.get(d);
-                    if (EmberArmorPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberArmorPath.label(cur) + " · 改路径再 /corerpg p1 armorpath");
+                    if (EmberArmorPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberArmorPath.label(cur) + " · 改路径再点护甲路径页");
                     else EmberArmorPath.offerPick(p);
                 }
                 return true;
