@@ -16,11 +16,18 @@ import town.sunshine.corerpg.PlayerData;
  * NEW economy+combat sustain: sticky policy to cook backpack fish → 炭烤余烬鱼 (coin sink + food).
  * Distinct from PrepPath (heal potions), DosePath (stamina potions), Scrap/Junk. Chat only.
  * Zero cook fee tables / AFK / sx / forge / combo sticky / enter-card / ActionBar cue.
+ * TIP-FU D13404: offerPick / applyAndReply / 无参 cookpath / 周要约 →开 /ember_p1_cook_path；
+ * 清 ConfirmTokens 教 cookpath 主 UI；零改伤害/CD表/掉落/D543 烤费表.
  */
 public final class EmberCookPath {
 
     public static final String C_PATH = "p1_cook_path";
     public static final String C_OFFER = "p1_cook_path_offer";
+
+    /** TIP-FU D13404 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_cook_path";
+    public static final String PATH_PICK_LABEL = "[代烤路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -79,9 +86,16 @@ public final class EmberCookPath {
         return "点选代烤节奏（改食物获取 · 不改烤费表）";
     }
 
+    /**
+     * TIP-FU D13404 · 薄页 lore 一行（无 §）：当前代烤路径。
+     */
+    public static String menuLine(int id) {
+        return "代烤路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8代烤路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8代烤路径：未选 · /corerpg p1 cookpath";
+        if (!valid(id)) return "§8代烤路径：未选 · 点代烤路径页";
         return "§e代烤路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -118,18 +132,26 @@ public final class EmberCookPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e背包有生鱼 §f" + n + " §e条可代烤 ",
                 new String[]{"[一键代烤]", "/corerpg p1 cook", "花币烤成炭烤鱼（城内）", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 cookpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选代烤节奏（改获取 · 可随时改 · 不改烤费）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 cookpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 cookpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 cookpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 cookpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FU D13404: 开选打薄页；禁 ConfirmTokens 教 cookpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_cook_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_cook_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -165,7 +187,7 @@ public final class EmberCookPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
+        if (!EmberSkillKit.cookPathUnlocked(d, runs)) {
             p.sendMessage(EmberRunService.P + "§c代烤路径需本人首通 Q01。");
             return;
         }
@@ -184,9 +206,10 @@ public final class EmberCookPath {
         flush(p);
         p.sendMessage(P + "§a代烤 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeAfterProgress(p);
+        // TIP-FU D13404: 下一步→选打薄页/冒险（禁教裸 cookpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[生活]", "/corerpg life", "补给/代烤", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 cookpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static LifeService life() {
