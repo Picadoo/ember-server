@@ -401,6 +401,12 @@ public final class EmberSkillKit {
         return runs != null && runs.progressFlag(d, "q01");
     }
 
+    /** TIP-FT D13403 · BitePath thin-page grey gate (首通 Q01; matches applyAndReply). */
+    public static boolean bitePathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        return runs != null && runs.progressFlag(d, "q01");
+    }
+
     public static boolean markLinkEnter(PlayerData d) {
         if (d == null) return false;
         if (d.periodCount(C_LINK_ENTER, "all") > 0) return false;
