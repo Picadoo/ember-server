@@ -14,12 +14,19 @@ import town.sunshine.corerpg.PlayerData;
  * D502: potion prep path — light / full / bare.
  * NEW acquisition+play: auto top-up heal potions before run start (town shop C14).
  * Not a combo sticky-path, not variety/Extra roll bias, not forge spend-chase twin.
- * Chat buttons only. Zero dmg/CD / AFK / sx. Not enter-card / ActionBar twin.
+ * Zero dmg/CD / AFK / sx. Not enter-card / ActionBar twin.
+ * TIP-FV D13405: offerPick / applyAndReply / 无参 preppath / 周要约 →开 /ember_p1_prep_path；
+ * 清 ConfirmTokens 教 preppath 主 UI；零改伤害/CD表/掉落/药价表.
  */
 public final class EmberPrepPath {
 
     public static final String C_PATH = "p1_prep_path";
     public static final String C_OFFER = "p1_prep_path_offer";
+
+    /** TIP-FV D13405 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_prep_path";
+    public static final String PATH_PICK_LABEL = "[备药路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     /** Auto top-up to 3 bottles */
@@ -83,9 +90,16 @@ public final class EmberPrepPath {
         return "点选备药偏好（进本前城内自动补货）";
     }
 
+    /**
+     * TIP-FV D13405 · 薄页 lore 一行（无 §）：当前备药路径。
+     */
+    public static String menuLine(int id) {
+        return "备药路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8备药路径：首进/首通 Q01 后可选";
-        if (!valid(id)) return "§8备药路径：未选 · /corerpg p1 preppath";
+        if (!valid(id)) return "§8备药路径：未选 · 点备药路径页";
         return "§e备药路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -116,11 +130,19 @@ public final class EmberPrepPath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选备药偏好（进本前城内自动补回复药 · 可随时改 · 花余烬币不改价表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[轻备·3瓶]", "/corerpg p1 preppath light", tip(LIGHT), "GREEN"},
-                new String[]{"[满备·5瓶]", "/corerpg p1 preppath full", tip(FULL), "GOLD"},
-                new String[]{"[不自动备]", "/corerpg p1 preppath bare", tip(BARE), "GRAY"},
-                new String[]{"[取消]", "/corerpg p1 preppath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FV D13405: 开选打薄页；禁 ConfirmTokens 教 preppath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_prep_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_prep_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "轻备/满备/不备/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -178,10 +200,10 @@ public final class EmberPrepPath {
         EmberSupplyService supply = pl.getEmberSupplies();
         int have = supply == null ? -1 : supply.countHealPotions(p);
         if (have >= 0) p.sendMessage(P + "§7当前回复药 §f" + have + " §7瓶 · 每瓶 " + EmberSupplyService.price() + " 余烬币");
+        // TIP-FV D13405: 下一步→选打薄页/冒险（禁教裸 preppath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[补给店]", "/corerpg p1 shop", "手买也行", "AQUA"},
-                new String[]{"[打开冒险]", "/corerpg p1 runs", "进本会自动按偏好补", "GREEN"},
-                new String[]{"[换一条]", "/corerpg p1 preppath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "轻备/满备/不备/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

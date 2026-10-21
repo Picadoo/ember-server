@@ -498,6 +498,7 @@ public final class EmberSkillKit {
         return true;
     }
 
+    /** TIP-FV D13405 · PrepPath thin-page grey gate (首进/首通 Q01; matches applyAndReply). */
     public static boolean prepPathUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
         if (d.periodCount(C_PREP_ENTER, "all") > 0) return true;

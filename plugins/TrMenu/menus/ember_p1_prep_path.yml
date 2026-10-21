@@ -1,0 +1,268 @@
+# TIP-FV / D13405 · 备药路径选打薄页 · prep_path* · preppath light|full|bare|clear
+# 入口：PrepPath.offerPick / 无参 preppath / 周要约 / Q01首进或首通 → /ember_p1_prep_path（插件并行改开菜单）
+# 选打：corerpg p1 preppath light|full|bare|clear
+# 导航：技能组 ember_skill_kit / 冒险 / 代烤
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落/药价表 · 改 cook_path / bite_path / bank_path / ticket_path / sip_path / armor_path / 其他已齐选打 / D502 备药语义 / 庭内 · ≠Cook代烤 · ≠Bite果腹 · ≠Bank取银 · ≠Ticket旧票 · ≠Stash存仓 · ≠Sip喝药 · ≠Dose体力
+# PAPI（插件可能后到·静态接线）：prep_path / prep_path_label / prep_path_tip · prep_unlock（灰态·首进/首通 Q01）
+# ≠ ember_p1_bank_path · ≠ ember_p1_ticket_path · ≠ ember_p1_flee_path · ≠ ember_p1_gate_path · ≠ ember_p1_call_path · ≠ ember_p1_link_path · ≠ ember_p1_hunt_path · ≠ ember_p1_pack_path · ≠ ember_p1_chest_path · ≠ ember_p1_duck_path · ≠ ember_p1_thaw_path · ≠ ember_p1_rally_path · ≠ ember_p1_smash_path · ≠ ember_p1_guard_path · ≠ ember_p1_hold_path · ≠ ember_p1_beacon_path · ≠ ember_p1_relay_path · ≠ ember_p1_breach_path · ≠ ember_p1_alert_path · ≠ ember_p1_stock_path · ≠ ember_p1_hurry_path · ≠ ember_p1_focus_path · ≠ ember_p1_doom_path · ≠ ember_p1_nest_path · ≠ ember_p1_save_path · ≠ ember_p1_sequel_path · ≠ ember_p1_bait_path · ≠ ember_p1_slip_path · ≠ ember_p1_crash_path · ≠ ember_p1_bolt_path · ≠ ember_p1_shift_path · ≠ ember_p1_gap_path · ≠ ember_p1_phase_path · ≠ ember_p1_wave_path · ≠ ember_p1_soak_path · ≠ ember_p1_shell_path · ≠ ember_p1_clone_path · ≠ ember_p1_press_path · ≠ ember_p1_cut_path · ≠ ember_p1_rush_path · ≠ ember_p1_clean_path · ≠ ember_p1_streak_path · ≠ ember_p1_blaze_path · ≠ ember_p1_spin_path · ≠ ember_p1_snap_path · ≠ ember_p1_veil_path · ≠ ember_p1_free_path · ≠ ember_p1_dodge_path · ≠ ember_p1_sidestep_path · ≠ ember_p1_step_path · ≠ ember_p1_flex_path · ≠ ember_p1_stride_path · ≠ ember_p1_counter_path · ≠ ember_p1_pledge_path · ≠ ember_p1_trial_path · ≠ ember_p1_abyss_path · ≠ ember_p1_short_path · ≠ ember_p1_raid_path · ≠ ember_p1_challenge_path · ≠ ember_p1_featured_path · ≠ ember_p1_sight_path · ≠ ember_p1_charm_path · ≠ ember_p1_grip_path · ≠ ember_p1_armor_path · ≠ ember_p1_sip_path · ≠ ember_p1_stash_path · ≠ ember_p1_pack_path
+
+
+Title: '§e备药 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_prep_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '##K#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §e备药路径 §7· 当前 §e%corerpg_p1_prep_path_label%'
+    - 'tell: §8点选 · 轻备 / 满备 / 不备 / 清空 · 或技能组 / 冒险 / 代烤'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: paper
+      name: '§e备药路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_prep_path_label%'
+        - '§8%corerpg_p1_prep_path_tip%'
+        - '§8点选 · 轻备 / 满备 / 不备 / 清空'
+        - '§8需本人首进或首通 Q01'
+        - '§8进本前城内自动补回复药（≠Cook代烤 · ≠Bite果腹 · ≠Sip喝药 · ≠Dose体力）'
+
+  # 轻备 · LIGHT=1 · 进本前自动补到 3 瓶并按药栏重排
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_prep_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7轻备 §8（需首进/首通 Q01）'
+          lore:
+            - '§c需本人首进或首通 Q01'
+            - '§7进本前自动补到 3 瓶并按药栏重排（花余烬币）'
+            - '§8解锁后再选路径'
+      - condition: 'check papi %corerpg_p1_prep_path% == 1'
+        priority: 2
+        display:
+          material: emerald
+          shiny: true
+          name: '§a轻备 §8· §f已选'
+          lore:
+            - '§7进本前自动补到 3 瓶并按药栏重排（花余烬币）'
+            - '§8%corerpg_p1_prep_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 preppath light'
+            - 'menu: ember_p1_prep_path'
+    display:
+      material: lime dye
+      name: '§a轻备'
+      lore:
+        - '§7进本前自动补到 3 瓶并按药栏重排（花余烬币）'
+        - '§8点选切换备药路径'
+        - '§e➥ §f设为轻备'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 preppath light'
+        - 'menu: ember_p1_prep_path'
+
+  # 满备 · FULL=2 · 进本前自动补到 5 瓶并按药栏重排
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_prep_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7满备 §8（需首进/首通 Q01）'
+          lore:
+            - '§c需本人首进或首通 Q01'
+            - '§7进本前自动补到 5 瓶并按药栏重排（花余烬币）'
+            - '§8解锁后再选路径'
+      - condition: 'check papi %corerpg_p1_prep_path% == 2'
+        priority: 2
+        display:
+          material: gold nugget
+          shiny: true
+          name: '§a满备 §8· §f已选'
+          lore:
+            - '§7进本前自动补到 5 瓶并按药栏重排（花余烬币）'
+            - '§8%corerpg_p1_prep_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 preppath full'
+            - 'menu: ember_p1_prep_path'
+    display:
+      material: gold nugget
+      name: '§e满备'
+      lore:
+        - '§7进本前自动补到 5 瓶并按药栏重排（花余烬币）'
+        - '§8点选切换备药路径'
+        - '§e➥ §f设为满备'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 preppath full'
+        - 'menu: ember_p1_prep_path'
+
+  # 不备 · BARE=3 · 进本前不自动买药
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_prep_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7不备 §8（需首进/首通 Q01）'
+          lore:
+            - '§c需本人首进或首通 Q01'
+            - '§7进本前不自动买药 · 自己补'
+            - '§8解锁后再选路径'
+      - condition: 'check papi %corerpg_p1_prep_path% == 3'
+        priority: 2
+        display:
+          material: ink sac
+          shiny: true
+          name: '§a不备 §8· §f已选'
+          lore:
+            - '§7进本前不自动买药 · 自己补'
+            - '§8%corerpg_p1_prep_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 preppath bare'
+            - 'menu: ember_p1_prep_path'
+    display:
+      material: ink sac
+      name: '§7不备'
+      lore:
+        - '§7进本前不自动买药 · 自己补'
+        - '§8点选切换备药路径'
+        - '§e➥ §f设为不备'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 preppath bare'
+        - 'menu: ember_p1_prep_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_prep_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需首进/首通 Q01）'
+          lore:
+            - '§c需本人首进或首通 Q01'
+            - '§8解锁后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_prep_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无备药路径焦点'
+            - '§8先点 轻备 / 满备 / 不备'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 preppath clear'
+            - 'menu: ember_p1_prep_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_prep_path_label%'
+        - '§8清焦点 · 可重选（进本前不再自动补货）'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 preppath clear'
+        - 'menu: ember_p1_prep_path'
+
+  # 技能组
+  K:
+    display:
+      material: book
+      name: '§6去技能组'
+      lore:
+        - '§7看按键 / 形状 / 身法方向'
+        - '§8选好后可对照手感'
+        - '§e➥ §f开技能组'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_skill_kit'
+
+  # 冒险页
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 代烤（CookPath 已齐选打）
+  F:
+    display:
+      material: coal
+      name: '§b备药路径'
+      lore:
+        - '§7备药与代烤相邻'
+        - '§8不改药价/烤费表'
+        - '§e➥ §f开备药路径'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_cook_path'
+
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
