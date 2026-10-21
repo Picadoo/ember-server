@@ -3339,7 +3339,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberPrepPath.get(d);
-                    if (EmberPrepPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPrepPath.label(cur) + " · 改路径再 /corerpg p1 preppath");
+                    if (EmberPrepPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPrepPath.label(cur) + " · 改路径再点备药路径页");
                     else EmberPrepPath.offerPick(p);
                 }
                 return true;

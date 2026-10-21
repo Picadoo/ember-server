@@ -11,4 +11,12 @@ public class EmberPrepPathTest {
         assertEquals(0, EmberPrepPath.targetBottles(EmberPrepPath.BARE));
         assertTrue(EmberPrepPath.tip(EmberPrepPath.FULL).contains("5"));
     }
+    @Test public void tipFvOfferPickConstants() {
+        assertEquals("/ember_p1_prep_path", EmberPrepPath.PATH_PICK_CMD);
+        assertEquals("[备药路径]", EmberPrepPath.PATH_PICK_LABEL);
+        assertEquals("/ember_p1_adventure", EmberPrepPath.PATH_ADVENTURE_CMD);
+        assertEquals("备药路径 · 轻备药", EmberPrepPath.menuLine(EmberPrepPath.LIGHT));
+        String g = EmberPrepPath.glance(EmberPrepPath.NONE, true);
+        assertTrue(g.contains("点备药路径页"));
+    }
 }
