@@ -241,20 +241,19 @@ Icons:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - 'menu: ember_p1_adventure'
 
-  # 代烤（可选·CookPath 仍裸）
+  # 代烤（TIP-FU 选打齐）
   F:
     display:
       material: cooked fish
       name: '§b代烤路径'
       lore:
         - '§7先有烤鱼再果腹'
-        - '§8不改食物表'
+        - '§8不改烤费表'
         - '§e➥ §f开代烤路径'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
-        - 'command: corerpg p1 cookpath'
-        - 'close'
+        - 'menu: ember_p1_cook_path'
 
   Z:
     display:

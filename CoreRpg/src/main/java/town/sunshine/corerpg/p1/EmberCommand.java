@@ -1171,7 +1171,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberCookPath.get(d);
-                    if (EmberCookPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberCookPath.label(cur) + " · 改路径再 /corerpg p1 cookpath");
+                    if (EmberCookPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberCookPath.label(cur) + " · 改路径再点代烤路径页");
                     else EmberCookPath.offerPick(p);
                 }
                 return true;
