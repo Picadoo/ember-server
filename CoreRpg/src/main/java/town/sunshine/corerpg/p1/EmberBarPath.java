@@ -14,13 +14,20 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D512: heal-potion hotbar fill path — right / left / key5.
  * NEW play: chooses which hotbar slots potions land in (number-key muscle memory).
- * Distinct from D502 prep (how many to buy). Chat only. Zero shop price / AFK / sx.
+ * Distinct from D502 prep (how many to buy). Zero shop price / AFK / sx.
  * Not combo sticky, not clamp twin, not forge/enter/ActionBar cue.
+ * TIP-FX D13407: offerPick / applyAndReply / 无参 barpath / 周要约 →开 /ember_p1_bar_path；
+ * 清 ConfirmTokens 教 barpath 主 UI；零改伤害/CD表/掉落/药价表.
  */
 public final class EmberBarPath {
 
     public static final String C_PATH = "p1_bar_path";
     public static final String C_OFFER = "p1_bar_path_offer";
+
+    /** TIP-FX D13407 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_bar_path";
+    public static final String PATH_PICK_LABEL = "[药栏路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     /** Fill from slot 8 → 1 (stock) */
@@ -82,9 +89,16 @@ public final class EmberBarPath {
         return "点选回复药快捷栏落点（改手感 · 不改药价）";
     }
 
+    /**
+     * TIP-FX D13407 · 薄页 lore 一行（无 §）：当前药栏路径。
+     */
+    public static String menuLine(int id) {
+        return "药栏路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8药栏路径：首进/首通 Q01 后可选";
-        if (!valid(id)) return "§8药栏路径：未选 · /corerpg p1 barpath";
+        if (!valid(id)) return "§8药栏路径：未选 · 点药栏路径页";
         return "§e药栏路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -151,11 +165,19 @@ public final class EmberBarPath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选回复药快捷栏落点（改按键手感 · 可随时改 · 不改药价）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[右栏]", "/corerpg p1 barpath right", tip(RIGHT), "GREEN"},
-                new String[]{"[左栏]", "/corerpg p1 barpath left", tip(LEFT), "GOLD"},
-                new String[]{"[五键]", "/corerpg p1 barpath key5", tip(KEY5), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 barpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FX D13407: 开选打薄页；禁 ConfirmTokens 教 barpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_bar_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_bar_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "右栏/左栏/五键/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -211,9 +233,10 @@ public final class EmberBarPath {
         p.sendMessage(P + "§a药栏 → §f" + label(id) + " §7· " + tip(id));
         int n = repackHealPotions(p);
         if (n > 0) p.sendMessage(P + "§7已重排回复药 §f" + n + " §7组到偏好格");
+        // TIP-FX D13407: 下一步→选打薄页/冒险（禁教裸 barpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[补给店]", "/corerpg p1 shop", "新买的药用新落点", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 barpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "右栏/左栏/五键/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
