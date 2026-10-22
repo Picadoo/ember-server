@@ -1,3 +1,3 @@
-# STATUS TIP-FW D13406 OPEN CoreRpg 1.65.899-d13406
+# STATUS TIP-FW D13406 CLOSED live CoreRpg 1.65.899-d13406
 
-PR pending. Local build in progress (2026-10-22 ~08:20 CST).
+PR merged. Deployed play CoreRpg 1.65.899-d13406 + ember_p1_dose_path (2026-10-22 ~08:16 CST).
