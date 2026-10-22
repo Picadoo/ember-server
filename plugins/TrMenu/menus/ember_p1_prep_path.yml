@@ -1,8 +1,8 @@
 # TIP-FV / D13405 · 备药路径选打薄页 · prep_path* · preppath light|full|bare|clear
 # 入口：PrepPath.offerPick / 无参 preppath / 周要约 / Q01首进或首通 → /ember_p1_prep_path（插件并行改开菜单）
 # 选打：corerpg p1 preppath light|full|bare|clear
-# 导航：技能组 ember_skill_kit / 冒险 / 代烤
-# 禁：教裸指令主 UI · 抬伤害/CD表/掉落/药价表 · 改 cook_path / bite_path / bank_path / ticket_path / sip_path / armor_path / 其他已齐选打 / D502 备药语义 / 庭内 · ≠Cook代烤 · ≠Bite果腹 · ≠Bank取银 · ≠Ticket旧票 · ≠Stash存仓 · ≠Sip喝药 · ≠Dose体力
+# 导航：技能组 ember_skill_kit / 冒险 / 补体
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落/药价表 · 改 cook_path / bite_path / bank_path / ticket_path / sip_path / armor_path / 其他已齐选打 / D502 备药语义 / 庭内 · ≠Cook代烤 · ≠Bite果腹 · ≠Bank取银 · ≠Ticket旧票 · ≠Stash存仓 · ≠Sip喝药 · 含Dose补体选打
 # PAPI（插件可能后到·静态接线）：prep_path / prep_path_label / prep_path_tip · prep_unlock（灰态·首进/首通 Q01）
 # ≠ ember_p1_bank_path · ≠ ember_p1_ticket_path · ≠ ember_p1_flee_path · ≠ ember_p1_gate_path · ≠ ember_p1_call_path · ≠ ember_p1_link_path · ≠ ember_p1_hunt_path · ≠ ember_p1_pack_path · ≠ ember_p1_chest_path · ≠ ember_p1_duck_path · ≠ ember_p1_thaw_path · ≠ ember_p1_rally_path · ≠ ember_p1_smash_path · ≠ ember_p1_guard_path · ≠ ember_p1_hold_path · ≠ ember_p1_beacon_path · ≠ ember_p1_relay_path · ≠ ember_p1_breach_path · ≠ ember_p1_alert_path · ≠ ember_p1_stock_path · ≠ ember_p1_hurry_path · ≠ ember_p1_focus_path · ≠ ember_p1_doom_path · ≠ ember_p1_nest_path · ≠ ember_p1_save_path · ≠ ember_p1_sequel_path · ≠ ember_p1_bait_path · ≠ ember_p1_slip_path · ≠ ember_p1_crash_path · ≠ ember_p1_bolt_path · ≠ ember_p1_shift_path · ≠ ember_p1_gap_path · ≠ ember_p1_phase_path · ≠ ember_p1_wave_path · ≠ ember_p1_soak_path · ≠ ember_p1_shell_path · ≠ ember_p1_clone_path · ≠ ember_p1_press_path · ≠ ember_p1_cut_path · ≠ ember_p1_rush_path · ≠ ember_p1_clean_path · ≠ ember_p1_streak_path · ≠ ember_p1_blaze_path · ≠ ember_p1_spin_path · ≠ ember_p1_snap_path · ≠ ember_p1_veil_path · ≠ ember_p1_free_path · ≠ ember_p1_dodge_path · ≠ ember_p1_sidestep_path · ≠ ember_p1_step_path · ≠ ember_p1_flex_path · ≠ ember_p1_stride_path · ≠ ember_p1_counter_path · ≠ ember_p1_pledge_path · ≠ ember_p1_trial_path · ≠ ember_p1_abyss_path · ≠ ember_p1_short_path · ≠ ember_p1_raid_path · ≠ ember_p1_challenge_path · ≠ ember_p1_featured_path · ≠ ember_p1_sight_path · ≠ ember_p1_charm_path · ≠ ember_p1_grip_path · ≠ ember_p1_armor_path · ≠ ember_p1_sip_path · ≠ ember_p1_stash_path · ≠ ember_p1_pack_path
 
@@ -29,7 +29,7 @@ Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-1.1'
     - 'tell: §e备药路径 §7· 当前 §e%corerpg_p1_prep_path_label%'
-    - 'tell: §8点选 · 轻备 / 满备 / 不备 / 清空 · 或技能组 / 冒险 / 代烤'
+    - 'tell: §8点选 · 轻备 / 满备 / 不备 / 清空 · 或技能组 / 冒险 / 补体'
 
 Icons:
   '#':
@@ -47,7 +47,7 @@ Icons:
         - '§8%corerpg_p1_prep_path_tip%'
         - '§8点选 · 轻备 / 满备 / 不备 / 清空'
         - '§8需本人首进或首通 Q01'
-        - '§8进本前城内自动补回复药（≠Cook代烤 · ≠Bite果腹 · ≠Sip喝药 · ≠Dose体力）'
+        - '§8进本前城内自动补回复药（≠Cook代烤 · ≠Bite果腹 · ≠Sip喝药 · 含Dose补体选打）'
 
   # 轻备 · LIGHT=1 · 进本前自动补到 3 瓶并按药栏重排
   '1':
@@ -241,19 +241,19 @@ Icons:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - 'menu: ember_p1_adventure'
 
-  # 代烤（CookPath 已齐选打）
+  # 补体（DosePath TIP-FW 选打）
   F:
     display:
-      material: coal
-      name: '§b备药路径'
+      material: sugar
+      name: '§b补体路径'
       lore:
-        - '§7备药与代烤相邻'
-        - '§8不改药价/烤费表'
-        - '§e➥ §f开备药路径'
+        - '§7备药旁路补体'
+        - '§8不改药价/药量表'
+        - '§e➥ §f开补体路径'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
-        - 'menu: ember_p1_cook_path'
+        - 'menu: ember_p1_dose_path'
 
 
   Z:
