@@ -1345,7 +1345,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberDosePath.get(d);
-                    if (EmberDosePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberDosePath.label(cur) + " · 改路径再 /corerpg p1 dosepath");
+                    if (EmberDosePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberDosePath.label(cur) + " · 改路径再点补体路径页");
                     else EmberDosePath.offerPick(p);
                 }
                 return true;

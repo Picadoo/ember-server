@@ -15,12 +15,19 @@ import town.sunshine.corerpg.StaminaService;
  * D539: stamina potion dose path — auto / ask / mute.
  * NEW economy: sticky policy to drink backpack 体力药 when stamina < daily cost (join / tip).
  * Distinct from TicketPath (ticket→stamina), PrepPath (heal bottles), RefundPath, RestPath.
- * Chat only. Zero stamina tables / AFK / sx / forge / combo sticky / enter-card / ActionBar cue.
+ * Zero stamina tables / AFK / sx / forge / combo sticky / enter-card / ActionBar cue.
+ * TIP-FW D13406: offerPick / applyAndReply / 无参 dosepath / 周要约 →开 /ember_p1_dose_path；
+ * 清 ConfirmTokens 教 dosepath 主 UI；零改伤害/CD表/掉落/药量表.
  */
 public final class EmberDosePath {
 
     public static final String C_PATH = "p1_dose_path";
     public static final String C_OFFER = "p1_dose_path_offer";
+
+    /** TIP-FW D13406 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_dose_path";
+    public static final String PATH_PICK_LABEL = "[补体路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -79,9 +86,16 @@ public final class EmberDosePath {
         return "点选体力药补体节奏（改进本体力经济 · 不改药量表）";
     }
 
+    /**
+     * TIP-FW D13406 · 薄页 lore 一行（无 §）：当前补体路径。
+     */
+    public static String menuLine(int id) {
+        return "补体路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8补体路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8补体路径：未选 · /corerpg p1 dosepath";
+        if (!valid(id)) return "§8补体路径：未选 · 点补体路径页";
         return "§e补体路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -109,18 +123,26 @@ public final class EmberDosePath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e体力不足且有体力药 §f" + pots + " §e瓶 ",
                 new String[]{"[喝一瓶]", "/corerpg p1 dose", "消耗背包体力药回体（受今日上限）", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 dosepath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选体力药补体节奏（改经济 · 可随时改 · 不改药量表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 dosepath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 dosepath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 dosepath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 dosepath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FW D13406: 开选打薄页；禁 ConfirmTokens 教 dosepath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_dose_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_dose_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -156,7 +178,7 @@ public final class EmberDosePath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
+        if (!EmberSkillKit.dosePathUnlocked(d, runs)) {
             p.sendMessage(EmberRunService.P + "§c补体路径需本人首通 Q01。");
             return;
         }
@@ -175,9 +197,10 @@ public final class EmberDosePath {
         flush(p);
         p.sendMessage(P + "§a补体 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeAfterProgress(p);
+        // TIP-FW D13406: 下一步→选打薄页/冒险（禁教裸 dosepath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[体力]", "/corerpg stamina", "看体力/药限", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 dosepath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static StaminaService stamina() {
