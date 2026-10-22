@@ -40,7 +40,8 @@ Icons:
   I:
     update: 20
     display:
-      material: bread: '§e面包路径 · 说明'
+      material: bread
+      name: '§e面包路径 · 说明'
       lore:
         - '§7当前路径：§e%corerpg_p1_bread_path_label%'
         - '§8%corerpg_p1_bread_path_tip%'
