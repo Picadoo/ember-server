@@ -241,19 +241,19 @@ Icons:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - 'menu: ember_p1_adventure'
 
-  # 备药（PrepPath TIP-FV 选打邻页）
+  # 熬药（BrewPath TIP-FY 选打邻页）
   F:
     display:
-      material: potion
-      name: '§b备药路径'
+      material: brewing stand
+      name: '§b熬药路径'
       lore:
-        - '§7药栏旁路备药'
-        - '§8不改药价/药量表'
-        - '§e➥ §f开备药路径'
+        - '§7药栏旁路熬药'
+        - '§8不改配方表'
+        - '§e➥ §f开熬药路径'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
-        - 'menu: ember_p1_prep_path'
+        - 'menu: ember_p1_brew_path'
 
 
   Z:

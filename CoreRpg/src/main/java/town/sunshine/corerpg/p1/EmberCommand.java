@@ -1018,7 +1018,7 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            boolean unlocked = runs.progressFlag(d, "q01");
+            boolean unlocked = EmberSkillKit.brewPathUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberBrewPath.glance(EmberBrewPath.get(d), unlocked));
                 if (!unlocked) {
@@ -1035,7 +1035,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberBrewPath.get(d);
-                    if (EmberBrewPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBrewPath.label(cur) + " · 改路径再 /corerpg p1 brewpath");
+                    if (EmberBrewPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBrewPath.label(cur) + " · 改路径再点熬药路径页");
                     else EmberBrewPath.offerPick(p);
                 }
                 return true;
