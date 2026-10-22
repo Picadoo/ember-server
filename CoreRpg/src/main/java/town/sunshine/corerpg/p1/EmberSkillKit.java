@@ -425,6 +425,12 @@ public final class EmberSkillKit {
         return runs != null && runs.progressFlag(d, "q01");
     }
 
+    /** TIP-FZ D13409: bread path unlock = Q01 progress (same gate as Brew). */
+    public static boolean breadPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        return runs != null && runs.progressFlag(d, "q01");
+    }
+
     public static boolean markLinkEnter(PlayerData d) {
         if (d == null) return false;
         if (d.periodCount(C_LINK_ENTER, "all") > 0) return false;

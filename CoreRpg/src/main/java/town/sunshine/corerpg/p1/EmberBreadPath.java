@@ -14,13 +14,19 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D547: hub bread buy path — auto / ask / mute.
  * NEW economy+combat sustain: sticky buy of 余烬面包 when bag has no grilled fish and no bread.
- * Distinct from Cook/Bite/Rod/Brew (different life offer). Chat only.
- * Zero life.yml price rewrite / AFK / sx / forge / combo sticky / enter-card / ActionBar cue.
+ * Distinct from Cook/Bite/Rod/Brew (different life offer). Zero life.yml price rewrite / AFK / sx.
+ * TIP-FZ D13409: offerPick / applyAndReply / 无参 breadpath / 周要约 →开 /ember_p1_bread_path；
+ * 清 ConfirmTokens 教 breadpath 主 UI；零改伤害/CD表/掉落/标价表.
  */
 public final class EmberBreadPath {
 
     public static final String C_PATH = "p1_bread_path";
     public static final String C_OFFER = "p1_bread_path_offer";
+
+    /** TIP-FZ D13409 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_bread_path";
+    public static final String PATH_PICK_LABEL = "[面包路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -79,9 +85,16 @@ public final class EmberBreadPath {
         return "点选干粮补给节奏（改饱食经济 · 不改标价）";
     }
 
+    /**
+     * TIP-FZ D13409 · 薄页 lore 一行（无 §）：当前面包路径。
+     */
+    public static String menuLine(int id) {
+        return "面包路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8面包路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8面包路径：未选 · /corerpg p1 breadpath";
+        if (!valid(id)) return "§8面包路径：未选 · 点面包路径页";
         return "§e面包路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -104,18 +117,26 @@ public final class EmberBreadPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e背包没有烤鱼也没有面包 ",
                 new String[]{"[买面包]", "/corerpg p1 bread", "花币买一包干粮（城内）", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 breadpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选干粮补给节奏（改经济 · 可随时改 · 不改标价）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 breadpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 breadpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 breadpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 breadpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-FZ D13409: 开选打薄页；禁 ConfirmTokens 教 breadpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_bread_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_bread_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -151,7 +172,7 @@ public final class EmberBreadPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
+        if (!EmberSkillKit.breadPathUnlocked(d, runs)) {
             p.sendMessage(EmberRunService.P + "§c面包路径需本人首通 Q01。");
             return;
         }
@@ -170,9 +191,10 @@ public final class EmberBreadPath {
         flush(p);
         p.sendMessage(P + "§a面包 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeAfterProgress(p);
+        // TIP-FZ D13409: 下一步→选打薄页/冒险（禁教裸 breadpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[生活]", "/corerpg life", "补给列表", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 breadpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static LifeService life() {

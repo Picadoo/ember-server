@@ -241,19 +241,19 @@ Icons:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - 'menu: ember_p1_adventure'
 
-  # 补体（DosePath TIP-FW 选打邻页）
+  # 面包（BreadPath TIP-FZ 选打邻页）
   F:
     display:
-      material: sugar
-      name: '§b补体路径'
+      material: bread
+      name: '§b面包路径'
       lore:
-        - '§7熬药旁路补体'
-        - '§8不改药量表/配方表'
-        - '§e➥ §f开补体路径'
+        - '§7熬药旁路干粮'
+        - '§8不改标价表'
+        - '§e➥ §f开面包路径'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
-        - 'menu: ember_p1_dose_path'
+        - 'menu: ember_p1_bread_path'
 
 
   Z:
