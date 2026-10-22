@@ -2970,7 +2970,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberBarPath.get(d);
-                    if (EmberBarPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBarPath.label(cur) + " · 改路径再 /corerpg p1 barpath");
+                    if (EmberBarPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBarPath.label(cur) + " · 改路径再点药栏路径页");
                     else EmberBarPath.offerPick(p);
                 }
                 return true;
