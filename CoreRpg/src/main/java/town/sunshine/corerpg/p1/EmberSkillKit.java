@@ -502,6 +502,12 @@ public final class EmberSkillKit {
         return runs != null && runs.firstClearedKey(d, "q01");
     }
 
+    /** TIP-GC D13412 · 分解路径：本人首通 Q01（与 scrappath 门闩一致）. */
+    public static boolean scrapPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        return runs != null && runs.progressFlag(d, "q01");
+    }
+
     public static boolean markExtraEnter(PlayerData d) {
         if (d == null) return false;
         if (d.periodCount(C_EXTRA_ENTER, "all") > 0) return false;

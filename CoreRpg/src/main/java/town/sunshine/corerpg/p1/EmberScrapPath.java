@@ -16,11 +16,18 @@ import town.sunshine.corerpg.ScrapService;
  * NEW acquisition: sticky policy to scrap enhance-0 whitelist blade/charm in backpack → mats
  * after settle / on join. Distinct from JunkPath (gearlib→blanks), StashPath, DealPath.
  * Chat only. Zero scrap.yml rewrite / AFK / sx / forge spend-chase / combo sticky / enter-card / ActionBar cue.
+ * TIP-GC D13412: offerPick / applyAndReply / 无参 scrappath / 周要约 →开 /ember_p1_scrap_path；
+ * 清 ConfirmTokens 教 scrappath 主 UI；零改伤害/CD表/掉落/分解表.
  */
 public final class EmberScrapPath {
 
     public static final String C_PATH = "p1_scrap_path";
     public static final String C_OFFER = "p1_scrap_path_offer";
+
+    /** TIP-GC D13412 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_scrap_path";
+    public static final String PATH_PICK_LABEL = "[分解路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -79,9 +86,16 @@ public final class EmberScrapPath {
         return "点选背包旧件分解节奏（改材料获取 · 不改分解表）";
     }
 
+    /**
+     * TIP-GC D13412 · 薄页 lore 一行（无 §）：当前分解路径。
+     */
+    public static String menuLine(int id) {
+        return "分解路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8分解路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8分解路径：未选 · /corerpg p1 scrappath";
+        if (!valid(id)) return "§8分解路径：未选 · 点分解路径页";
         return "§e分解路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -105,18 +119,26 @@ public final class EmberScrapPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e背包有可分解旧件 §f" + n + " §e件 ",
                 new String[]{"[一键分解]", "/corerpg p1 scrap", "分解未强化白名单刃/符（留最后一把武器）", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 scrappath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选背包旧件分解节奏（改获取 · 可随时改 · 不改分解表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 scrappath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 scrappath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 scrappath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 scrappath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-GC D13412: 开选打薄页；禁 ConfirmTokens 教 scrappath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_scrap_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_scrap_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -171,9 +193,10 @@ public final class EmberScrapPath {
         flush(p);
         p.sendMessage(P + "§a分解 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeAfterProgress(p);
+        // TIP-GC D13412: 下一步→选打薄页/冒险（禁教裸 scrappath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[手持分解]", "/corerpg scrap", "预览手持刃/符", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 scrappath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static ScrapService scrap() {

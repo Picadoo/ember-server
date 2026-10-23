@@ -1394,7 +1394,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberScrapPath.get(d);
-                    if (EmberScrapPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberScrapPath.label(cur) + " · 改路径再 /corerpg p1 scrappath");
+                    if (EmberScrapPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberScrapPath.label(cur) + " · 改路径再点分解路径页");
                     else EmberScrapPath.offerPick(p);
                 }
                 return true;
