@@ -1,0 +1,263 @@
+# TIP-GD / D13413 · 纹印路径选打薄页 · seal_path* · sealpath hunt|ember|bind|clear
+# 入口：SealPath.offerPick / 无参 sealpath / 周要约 / Q03双签 → /ember_p1_seal_path（插件并行改开菜单）
+# 选打：corerpg p1 sealpath hunt|ember|bind|clear
+# 导航：技能组 ember_skill_kit / 冒险 / 可选工坊
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落 · 改 brand 价 / duallead 语义 / 其他已齐选打 / 庭内 · ≠Brand单改 · ≠DualLead单改 · ≠Scrap分解 · ≠Room房序
+# PAPI（插件可能后到·静态接线）：seal_path / seal_path_label / seal_path_tip · seal_unlock（灰态·首通 Q03 双签名）
+# ≠ ember_p1_scrap_path · ≠ ember_p1_room_path · ≠ ember_p1_rod_path · ≠ ember_p1_brand（无此页）
+
+Title: '§e纹印 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_seal_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '##K#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §e纹印路径 §7· 当前 §e%corerpg_p1_seal_path_label%'
+    - 'tell: §8点选 · 猎缀 / 余烬 / 定身 / 清空 · 或技能组 / 冒险 / 工坊'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: enchanted book
+      name: '§e纹印路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_seal_path_label%'
+        - '§8%corerpg_p1_seal_path_tip%'
+        - '§8点选 · 猎缀 / 余烬 / 定身 / 清空'
+        - '§8需本人首通 Q03（双签名）'
+        - '§8一次写入烙纹粘性 + 双签槽开关（≠单改Brand · ≠单改DualLead）'
+
+  # 猎缀 · HUNT=1
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_seal_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7猎缀纹印 §8（需 Q03）'
+          lore:
+            - '§c需本人首通 Q03（双签名）'
+            - '§7猎缀烙纹 + 只开刃签名 · 对词缀精英'
+            - '§8解锁后再选路径'
+      - condition: 'check papi %corerpg_p1_seal_path% == 1'
+        priority: 2
+        display:
+          material: gold ingot
+          shiny: true
+          name: '§a猎缀纹印 §8· §f已选'
+          lore:
+            - '§7猎缀烙纹 + 只开刃签名 · 对词缀精英'
+            - '§8%corerpg_p1_seal_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 sealpath hunt'
+            - 'menu: ember_p1_seal_path'
+    display:
+      material: gold ingot
+      name: '§6猎缀纹印'
+      lore:
+        - '§7猎缀烙纹 + 只开刃签名 · 对词缀精英'
+        - '§8点选切换纹印路径'
+        - '§e➥ §f设为猎缀'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sealpath hunt'
+        - 'menu: ember_p1_seal_path'
+
+  # 余烬 · EMBER=2
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_seal_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7余烬纹印 §8（需 Q03）'
+          lore:
+            - '§c需本人首通 Q03（双签名）'
+            - '§7余烬烙纹 + 只开刃签名 · 套装事件向'
+            - '§8解锁后再选路径'
+      - condition: 'check papi %corerpg_p1_seal_path% == 2'
+        priority: 2
+        display:
+          material: blaze powder
+          shiny: true
+          name: '§a余烬纹印 §8· §f已选'
+          lore:
+            - '§7余烬烙纹 + 只开刃签名 · 套装事件向'
+            - '§8%corerpg_p1_seal_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 sealpath ember'
+            - 'menu: ember_p1_seal_path'
+    display:
+      material: blaze powder
+      name: '§c余烬纹印'
+      lore:
+        - '§7余烬烙纹 + 只开刃签名 · 套装事件向'
+        - '§8点选切换纹印路径'
+        - '§e➥ §f设为余烬'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sealpath ember'
+        - 'menu: ember_p1_seal_path'
+
+  # 定身 · BIND=3
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_seal_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7定身纹印 §8（需 Q03）'
+          lore:
+            - '§c需本人首通 Q03（双签名）'
+            - '§7定身烙纹 + 只开护符签名 · 扛预警招'
+            - '§8解锁后再选路径'
+      - condition: 'check papi %corerpg_p1_seal_path% == 3'
+        priority: 2
+        display:
+          material: prismarine shard
+          shiny: true
+          name: '§a定身纹印 §8· §f已选'
+          lore:
+            - '§7定身烙纹 + 只开护符签名 · 扛预警招'
+            - '§8%corerpg_p1_seal_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 sealpath bind'
+            - 'menu: ember_p1_seal_path'
+    display:
+      material: prismarine shard
+      name: '§b定身纹印'
+      lore:
+        - '§7定身烙纹 + 只开护符签名 · 扛预警招'
+        - '§8点选切换纹印路径'
+        - '§e➥ §f设为定身'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sealpath bind'
+        - 'menu: ember_p1_seal_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_seal_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需 Q03）'
+          lore:
+            - '§c需本人首通 Q03（双签名）'
+            - '§8解锁后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_seal_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无纹印路径焦点'
+            - '§8先点 猎缀 / 余烬 / 定身'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 sealpath clear'
+            - 'menu: ember_p1_seal_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_seal_path_label%'
+        - '§8清烙纹 · 双签槽改两条都开'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 sealpath clear'
+        - 'menu: ember_p1_seal_path'
+
+  K:
+    display:
+      material: book
+      name: '§6去技能组'
+      lore:
+        - '§7看按键 / 形状 / 身法方向'
+        - '§8选好后可对照手感'
+        - '§e➥ §f开技能组'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_skill_kit'
+
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7烙纹预览 / 强化 / 升级'
+        - '§8纹印写入后可去定向预览'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
