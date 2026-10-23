@@ -14,13 +14,19 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D545: fishing-rod buy path — auto / ask / mute.
  * NEW economy: sticky policy to buy 余烬钓竿 from hub life vendor when backpack has none.
- * Opens fishing → cook → bite chain. Distinct from Cook/Bite/Prep/Dose. Chat only.
- * Zero life.yml price rewrite / AFK / sx / forge / combo sticky / enter-card / ActionBar cue.
+ * Opens fishing → cook → bite chain. Distinct from Cook/Bite/Prep/Dose. Zero life.yml price rewrite / AFK / sx.
+ * TIP-GA D13410: offerPick / applyAndReply / 无参 rodpath / 周要约 →开 /ember_p1_rod_path；
+ * 清 ConfirmTokens 教 rodpath 主 UI；零改伤害/CD表/掉落/标价表.
  */
 public final class EmberRodPath {
 
     public static final String C_PATH = "p1_rod_path";
     public static final String C_OFFER = "p1_rod_path_offer";
+
+    /** TIP-GA D13410 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_rod_path";
+    public static final String PATH_PICK_LABEL = "[钓竿路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int AUTO = 1;
@@ -79,9 +85,16 @@ public final class EmberRodPath {
         return "点选钓竿补给节奏（改钓鱼经济入口 · 不改标价）";
     }
 
+    /**
+     * TIP-GA D13410 · 薄页 lore 一行（无 §）：当前钓竿路径。
+     */
+    public static String menuLine(int id) {
+        return "钓竿路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8钓竿路径：首通 Q01 后可选";
-        if (!valid(id)) return "§8钓竿路径：未选 · /corerpg p1 rodpath";
+        if (!valid(id)) return "§8钓竿路径：未选 · 点钓竿路径页";
         return "§e钓竿路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -105,18 +118,26 @@ public final class EmberRodPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e背包没有余烬钓竿 ",
                 new String[]{"[买钓竿]", "/corerpg p1 rod", "花币买一把（城内）", "GREEN"},
-                new String[]{"[改路径]", "/corerpg p1 rodpath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[改路径]", PATH_PICK_CMD, "自动/提醒/静默", "GRAY"});
     }
 
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选钓竿补给节奏（改经济 · 可随时改 · 不改标价）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[自动]", "/corerpg p1 rodpath auto", tip(AUTO), "GREEN"},
-                new String[]{"[提醒]", "/corerpg p1 rodpath ask", tip(ASK), "GOLD"},
-                new String[]{"[静默]", "/corerpg p1 rodpath mute", tip(MUTE), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 rodpath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-GA D13410: 开选打薄页；禁 ConfirmTokens 教 rodpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_rod_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_rod_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -152,7 +173,7 @@ public final class EmberRodPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
+        if (!EmberSkillKit.rodPathUnlocked(d, runs)) {
             p.sendMessage(EmberRunService.P + "§c钓竿路径需本人首通 Q01。");
             return;
         }
@@ -171,9 +192,10 @@ public final class EmberRodPath {
         flush(p);
         p.sendMessage(P + "§a钓竿 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeAfterProgress(p);
+        // TIP-GA D13410: 下一步→选打薄页/冒险（禁教裸 rodpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[生活]", "/corerpg life", "补给列表", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 rodpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "自动/提醒/静默/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static LifeService life() {
