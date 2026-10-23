@@ -1,0 +1,264 @@
+# TIP-GB / D13411 · 房序路径选打薄页 · room_path* · roompath front|mid|back|clear
+# 入口：RoomPath.offerPick / 无参 roompath / 周要约 / Q02首进或首通 → /ember_p1_room_path（插件并行改开菜单）
+# 选打：corerpg p1 roompath front|mid|back|clear
+# 导航：技能组 ember_skill_kit / 冒险 / 钓竿
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落/词缀种类表 · 改 spice 种类偏置 / 其他已齐选打 / D506 房序语义 / 庭内 · ≠Spice种类偏 · ≠Rod钓竿 · 含Rod钓竿邻页
+# PAPI（插件可能后到·静态接线）：room_path / room_path_label / room_path_tip · room_unlock（灰态·首进/首通 Q02）
+# ≠ ember_p1_rod_path · ≠ ember_p1_bread_path · ≠ ember_p1_brew_path · ≠ ember_p1_press_path · ≠ ember_p1_step_path
+
+Title: '§e房序 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_room_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '##K#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §e房序路径 §7· 当前 §e%corerpg_p1_room_path_label%'
+    - 'tell: §8点选 · 前房 / 中房 / 后房 / 清空 · 或技能组 / 冒险 / 钓竿'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§e房序路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_room_path_label%'
+        - '§8%corerpg_p1_room_path_tip%'
+        - '§8点选 · 前房 / 中房 / 后房 / 清空'
+        - '§8需本人首进或首通 Q02'
+        - '§8重打本时花样词缀/事件尽量落在偏好房（≠Spice种类偏 · ≠Rod钓竿 · 不改种类表）'
+
+  # 前房 · FRONT=1
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_room_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7前房 §8（需 Q02）'
+          lore:
+            - '§c需本人首进或首通 Q02'
+            - '§7花样词缀/事件尽量落在第 1 间'
+            - '§8通关后再选路径'
+      - condition: 'check papi %corerpg_p1_room_path% == 1'
+        priority: 2
+        display:
+          material: emerald
+          shiny: true
+          name: '§a前房 §8· §f已选'
+          lore:
+            - '§7花样词缀/事件尽量落在第 1 间'
+            - '§8%corerpg_p1_room_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 roompath front'
+            - 'menu: ember_p1_room_path'
+    display:
+      material: lime dye
+      name: '§a前房'
+      lore:
+        - '§7花样词缀/事件尽量落在第 1 间'
+        - '§8点选切换房序路径'
+        - '§e➥ §f设为前房'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 roompath front'
+        - 'menu: ember_p1_room_path'
+
+  # 中房 · MID=2
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_room_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7中房 §8（需 Q02）'
+          lore:
+            - '§c需本人首进或首通 Q02'
+            - '§7花样词缀/事件尽量落在第 2 间'
+            - '§8通关后再选路径'
+      - condition: 'check papi %corerpg_p1_room_path% == 2'
+        priority: 2
+        display:
+          material: gold ingot
+          shiny: true
+          name: '§6中房 §8· §f已选'
+          lore:
+            - '§7花样词缀/事件尽量落在第 2 间'
+            - '§8%corerpg_p1_room_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 roompath mid'
+            - 'menu: ember_p1_room_path'
+    display:
+      material: orange dye
+      name: '§6中房'
+      lore:
+        - '§7花样词缀/事件尽量落在第 2 间'
+        - '§8点选切换房序路径'
+        - '§e➥ §f设为中房'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 roompath mid'
+        - 'menu: ember_p1_room_path'
+
+  # 后房 · BACK=3
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_room_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7后房 §8（需 Q02）'
+          lore:
+            - '§c需本人首进或首通 Q02'
+            - '§7花样词缀/事件尽量落在第 3 间'
+            - '§8通关后再选路径'
+      - condition: 'check papi %corerpg_p1_room_path% == 3'
+        priority: 2
+        display:
+          material: diamond
+          shiny: true
+          name: '§b后房 §8· §f已选'
+          lore:
+            - '§7花样词缀/事件尽量落在第 3 间'
+            - '§8%corerpg_p1_room_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 roompath back'
+            - 'menu: ember_p1_room_path'
+    display:
+      material: light blue dye
+      name: '§b后房'
+      lore:
+        - '§7花样词缀/事件尽量落在第 3 间'
+        - '§8点选切换房序路径'
+        - '§e➥ §f设为后房'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 roompath back'
+        - 'menu: ember_p1_room_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_room_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需 Q02）'
+          lore:
+            - '§c需本人首进或首通 Q02'
+            - '§8通关后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_room_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无房序路径焦点'
+            - '§8先点 前房 / 中房 / 后房'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 roompath clear'
+            - 'menu: ember_p1_room_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_room_path_label%'
+        - '§8清焦点 · 花样落房回随机'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 roompath clear'
+        - 'menu: ember_p1_room_path'
+
+  K:
+    display:
+      material: book
+      name: '§6去技能组'
+      lore:
+        - '§7看按键 / 形状 / 身法方向'
+        - '§8选好后可对照手感'
+        - '§e➥ §f开技能组'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_skill_kit'
+
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  # 钓竿（RodPath TIP-GA 选打邻页）
+  F:
+    display:
+      material: fishing rod
+      name: '§e钓竿路径'
+      lore:
+        - '§7房序旁路补给'
+        - '§8不改标价表'
+        - '§e➥ §f开钓竿路径'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_rod_path'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'close'

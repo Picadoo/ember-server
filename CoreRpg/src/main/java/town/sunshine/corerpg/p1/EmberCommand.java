@@ -3171,24 +3171,24 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            boolean unlocked = runs.progressFlag(d, "q02");
+            boolean unlocked = EmberSkillKit.roomPathUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberRoomPath.glance(EmberRoomPath.get(d), unlocked));
                 if (!unlocked) {
-                    p.sendMessage(P + "§c房序路径需本人首通 Q02。");
+                    p.sendMessage(P + "§c房序路径需本人首进或首通 Q02。");
                     return true;
                 }
                 EmberRoomPath.offerPick(p);
                 return true;
             }
             if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
-                if (!unlocked) { p.sendMessage(P + "§c房序路径需本人首通 Q02。"); return true; }
+                if (!unlocked) { p.sendMessage(P + "§c房序路径需本人首进或首通 Q02。"); return true; }
                 String week = EmberPlayfeelTelemetry.weekKey();
                 boolean offered = EmberRoomPath.maybeOfferWeekly(p, d, week);
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberRoomPath.get(d);
-                    if (EmberRoomPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRoomPath.label(cur) + " · 改路径再 /corerpg p1 roompath");
+                    if (EmberRoomPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRoomPath.label(cur) + " · 改路径再点房序路径页");
                     else EmberRoomPath.offerPick(p);
                 }
                 return true;
