@@ -14,11 +14,18 @@ import town.sunshine.corerpg.PlayerData;
  * D497: combat seal path — hunt / ember / bind.
  * Real play change: writes brand sticky + DualLead sig-slot on/off together.
  * Chat buttons only. Zero pin price / dmg / CD / AFK / sx. Not forge spend / enter-card / ActionBar twin.
+ * TIP-GD D13413: offerPick / applyAndReply / 无参 sealpath / 周要约 →开 /ember_p1_seal_path；
+ * 清 ConfirmTokens 教 sealpath 主 UI；零改伤害/CD表/掉落/烙纹价.
  */
 public final class EmberSealPath {
 
     public static final String C_PATH = "p1_seal_path";
     public static final String C_OFFER = "p1_seal_path_offer";
+
+    /** TIP-GD D13413 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_seal_path";
+    public static final String PATH_PICK_LABEL = "[纹印路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     /** 猎缀 · 刃签开 / 护符关 */
@@ -86,9 +93,16 @@ public final class EmberSealPath {
         return EmberDualLead.NONE;
     }
 
+    /**
+     * TIP-GD D13413 · 薄页 lore 一行（无 §）：当前纹印路径。
+     */
+    public static String menuLine(int id) {
+        return "纹印路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean dualUnlocked) {
         if (!dualUnlocked) return "§8纹印路径：首通 Q03 后可选（需双签名）";
-        if (!valid(id)) return "§8纹印路径：未选 · /corerpg p1 sealpath";
+        if (!valid(id)) return "§8纹印路径：未选 · 点纹印路径页";
         return "§e纹印路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -96,11 +110,19 @@ public final class EmberSealPath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选纹印玩法（一次写入烙纹路径+双签槽开关 · 回城可换 · 不改价/伤害表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[猎缀纹印]", "/corerpg p1 sealpath hunt", tip(HUNT), "GOLD"},
-                new String[]{"[余烬纹印]", "/corerpg p1 sealpath ember", tip(EMBER), "RED"},
-                new String[]{"[定身纹印]", "/corerpg p1 sealpath bind", tip(BIND), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 sealpath clear", "清空纹印（烙纹清 · 双签改双开）", "GRAY"});
+        // TIP-GD D13413: 开选打薄页；禁 ConfirmTokens 教 sealpath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_seal_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_seal_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "猎缀/余烬/定身/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -164,12 +186,10 @@ public final class EmberSealPath {
                 + " §8（烙纹=" + EmberBrandPath.label(brandId(id))
                 + " · 双签=" + EmberDualLead.label(leadId(id))
                 + " · blade" + (bOff ? "关" : "开") + "/charm" + (cOff ? "关" : "开") + "）");
+        // TIP-GD D13413: 下一步→选打薄页/冒险（禁教裸 sealpath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{EmberBrandPath.pinLabel(brandId(id)), EmberBrandPath.pinCmd(brandId(id)),
-                        "预览定向（不扣料直到确认）", "GREEN"},
-                new String[]{"[烙纹路径]", "/corerpg p1 brandpath", "单改烙纹粘性", "GOLD"},
-                new String[]{"[双签路径]", "/corerpg p1 duallead", "单改槽开关", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 sealpath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "猎缀/余烬/定身/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

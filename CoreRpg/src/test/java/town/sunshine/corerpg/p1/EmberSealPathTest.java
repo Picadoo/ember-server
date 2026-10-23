@@ -11,4 +11,13 @@ public class EmberSealPathTest {
         assertEquals(EmberDualLead.CHARM, EmberSealPath.leadId(EmberSealPath.BIND));
         assertTrue(EmberSealPath.tip(EmberSealPath.BIND).contains("护符"));
     }
+
+    @Test public void tipGdOfferPickConstants() {
+        assertEquals("/ember_p1_seal_path", EmberSealPath.PATH_PICK_CMD);
+        assertEquals("[纹印路径]", EmberSealPath.PATH_PICK_LABEL);
+        assertEquals("/ember_p1_adventure", EmberSealPath.PATH_ADVENTURE_CMD);
+        assertEquals("纹印路径 · 猎缀纹印", EmberSealPath.menuLine(EmberSealPath.HUNT));
+        String g = EmberSealPath.glance(EmberSealPath.NONE, true);
+        assertTrue(g.contains("点纹印路径页"));
+    }
 }

@@ -508,6 +508,11 @@ public final class EmberSkillKit {
         return runs != null && runs.progressFlag(d, "q01");
     }
 
+    /** TIP-GD D13413 · 纹印路径：本人首通 Q03 / 双签名（与 sealpath 门闩一致）. */
+    public static boolean sealPathUnlocked(PlayerData d, EmberRunService runs) {
+        return dualUnlocked(d, runs);
+    }
+
     public static boolean markExtraEnter(PlayerData d) {
         if (d == null) return false;
         if (d.periodCount(C_EXTRA_ENTER, "all") > 0) return false;
