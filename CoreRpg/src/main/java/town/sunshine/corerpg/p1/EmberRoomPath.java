@@ -13,14 +13,21 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D506: variety room-order path — front / mid / back.
  * NEW play: remaps affix/event room slots on repeat-run variety (D138).
- * Party-leader sticky after spice bias. Chat only. Zero rates/tables / AFK / sx.
+ * Party-leader sticky after spice bias. Zero rates/tables / AFK / sx.
  * Not spice kind-bias twin (rooms, not affix/event ids), not combo sticky,
  * not prep/short/twist/refund twin, not forge/enter/ActionBar cue.
+ * TIP-GB D13411: offerPick / applyAndReply / 无参 roompath / 周要约 →开 /ember_p1_room_path；
+ * 清 ConfirmTokens 教 roompath 主 UI；零改伤害/CD表/掉落/词缀种类表.
  */
 public final class EmberRoomPath {
 
     public static final String C_PATH = "p1_room_path";
     public static final String C_OFFER = "p1_room_path_offer";
+
+    /** TIP-GB D13411 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_room_path";
+    public static final String PATH_PICK_LABEL = "[房序路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int FRONT = 1; // r1
@@ -86,9 +93,16 @@ public final class EmberRoomPath {
         return "点选花样落房偏好（改节奏 · 不改种类表）";
     }
 
+    /**
+     * TIP-GB D13411 · 薄页 lore 一行（无 §）：当前房序路径。
+     */
+    public static String menuLine(int id) {
+        return "房序路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         if (!unlocked) return "§8房序路径：首进/首通 Q02 后可选（重打本花样）";
-        if (!valid(id)) return "§8房序路径：未选 · /corerpg p1 roompath";
+        if (!valid(id)) return "§8房序路径：未选 · 点房序路径页";
         return "§e房序路径：§f" + label(id) + " §8· " + tip(id);
     }
 
@@ -258,11 +272,19 @@ public final class EmberRoomPath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选花样落房（改词缀/事件出在哪间 · 可随时改 · 不改种类与数值）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[前房]", "/corerpg p1 roompath front", tip(FRONT), "GREEN"},
-                new String[]{"[中房]", "/corerpg p1 roompath mid", tip(MID), "GOLD"},
-                new String[]{"[后房]", "/corerpg p1 roompath back", tip(BACK), "AQUA"},
-                new String[]{"[取消]", "/corerpg p1 roompath clear", "清空偏好", "DARK_GRAY"});
+        // TIP-GB D13411: 开选打薄页；禁 ConfirmTokens 教 roompath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_room_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_room_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "前房/中房/后房/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -316,9 +338,10 @@ public final class EmberRoomPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a房序 → §f" + label(id) + " §7· " + tip(id));
+        // TIP-GB D13411: 下一步→选打薄页/冒险（禁教裸 roompath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[打开冒险]", "/corerpg p1 runs", "重打已通主线本时生效（队长）", "GREEN"},
-                new String[]{"[换一条]", "/corerpg p1 roompath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "前房/中房/后房/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
