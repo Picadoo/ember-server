@@ -15,11 +15,18 @@ import town.sunshine.corerpg.SkillService;
  * D490: slash-shape combat path — fan / line / ring.
  * Real play change (烬斩 geometry via {@link EmberSkillKit#setShape}); chat buttons only.
  * Zero slash dmg / CD table / AFK / sx change. Not forge chase / enter-card / ActionBar twin.
+ * TIP-GE D13414: offerPick / applyAndReply / 无参 shapepath / 周要约 →开 /ember_p1_shape_path；
+ * 清 ConfirmTokens 教 shapepath 主 UI；零改伤害/CD表/掉落.
  */
 public final class EmberShapePath {
 
     public static final String C_PATH = "p1_shape_path";
     public static final String C_OFFER = "p1_shape_path_offer";
+
+    /** TIP-GE D13414 · OpenCommand · 选打薄页 id 同名 */
+    public static final String PATH_PICK_CMD = "/ember_p1_shape_path";
+    public static final String PATH_PICK_LABEL = "[符文路径]";
+    public static final String PATH_ADVENTURE_CMD = "/ember_p1_adventure";
 
     public static final int NONE = 0;
     public static final int FAN = 1;   // → SHAPE_FAN
@@ -87,6 +94,13 @@ public final class EmberShapePath {
         return "点选烬斩几何（真改出招）";
     }
 
+    /**
+     * TIP-GE D13414 · 薄页 lore 一行（无 §）：当前符文路径。
+     */
+    public static String menuLine(int id) {
+        return "符文路径 · " + label(id);
+    }
+
     public static String glance(int id, boolean unlocked) {
         return glance(id, unlocked, false);
     }
@@ -94,7 +108,7 @@ public final class EmberShapePath {
     /** D797: locked=true when C_SHAPE_MANUAL set. */
     public static String glance(int id, boolean unlocked, boolean locked) {
         if (!unlocked) return "§8符文路径：首通 Q04 后可选";
-        if (!valid(id)) return "§8符文路径：未选 · /corerpg p1 shapepath";
+        if (!valid(id)) return "§8符文路径：未选 · 点符文路径页";
         String base = "§e符文路径：§f" + label(id) + " §8· " + tip(id);
         return locked ? base + " §a· 已锁定" : base + " §8· 可锁定防软切";
     }
@@ -117,11 +131,19 @@ public final class EmberShapePath {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选烬斩符文路径（真改出招几何 · 回城可换 · 不改伤害表）：");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[扇形]", "/corerpg p1 shapepath fan", tip(FAN), "GOLD"},
-                new String[]{"[直线穿刺]", "/corerpg p1 shapepath line", tip(LINE), "AQUA"},
-                new String[]{"[原地环斩]", "/corerpg p1 shapepath ring", tip(RING), "LIGHT_PURPLE"},
-                new String[]{"[取消]", "/corerpg p1 shapepath clear", "清空路径（符文回扇形）", "GRAY"});
+        // TIP-GE D13414: 开选打薄页；禁 ConfirmTokens 教 shapepath 为主 UI
+        openPathPick(p);
+    }
+
+    /** Open thin page /ember_p1_shape_path (TrMenu bind); fallback chat button if command fails. */
+    public static void openPathPick(Player p) {
+        if (p == null) return;
+        try {
+            p.performCommand("ember_p1_shape_path");
+        } catch (Throwable th) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P,
+                    new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "扇形/直线/环斩/清空/技能组/冒险", "GREEN"});
+        }
     }
 
     public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
@@ -246,10 +268,10 @@ public final class EmberShapePath {
             else if (id == RING) p.sendActionBar("§d原地环斩 · 身边 3.5格");
             else p.sendActionBar("§e扇形 · 前方宽扇 ≥110°");
         } catch (Throwable ignored) { }
+        // TIP-GE D13414: 下一步→选打薄页/冒险（禁教裸 shapepath 为主 UI）
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{enterLabel(id), enterCmd(id), "进图体感这种几何", "GREEN"},
-                new String[]{"[技能组]", "trmenu open ember_skill_kit", "看按键与符文", "GOLD"},
-                new String[]{"[换一条]", "/corerpg p1 shapepath", "重选", "GRAY"});
+                new String[]{PATH_PICK_LABEL, PATH_PICK_CMD, "扇形/直线/环斩/清空/技能组/冒险", "GREEN"},
+                new String[]{"[冒险]", PATH_ADVENTURE_CMD, "回冒险", "AQUA"});
     }
 
     /** Delegate to SkillService so CD/X1 behaviour stays single-sourced. */

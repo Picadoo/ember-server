@@ -3759,7 +3759,7 @@ public final class EmberCommand {
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
                 if (!offered) {
                     int cur = EmberShapePath.get(d);
-                    if (EmberShapePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberShapePath.label(cur) + " · 改路径再 /corerpg p1 shapepath");
+                    if (EmberShapePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberShapePath.label(cur) + " · 改路径再点符文路径页");
                     else EmberShapePath.offerPick(p);
                 }
                 return true;
