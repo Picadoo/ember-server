@@ -513,6 +513,11 @@ public final class EmberSkillKit {
         return dualUnlocked(d, runs);
     }
 
+    /** TIP-GE D13414 · 符文路径：本人首通 Q04（与 shapepath / shapeUnlocked 门闩一致）. */
+    public static boolean shapePathUnlocked(PlayerData d, EmberRunService runs) {
+        return shapeUnlocked(d, runs);
+    }
+
     public static boolean markExtraEnter(PlayerData d) {
         if (d == null) return false;
         if (d.periodCount(C_EXTRA_ENTER, "all") > 0) return false;

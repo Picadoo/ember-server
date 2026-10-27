@@ -1,0 +1,263 @@
+# TIP-GE / D13414 · 符文路径选打薄页 · shape_path* · shapepath fan|line|ring|clear
+# 入口：ShapePath.offerPick / 无参 shapepath / 周要约 / Q04 → /ember_p1_shape_path（插件并行改开菜单）
+# 选打：corerpg p1 shapepath fan|line|ring|clear|lock
+# 导航：技能组 ember_skill_kit / 冒险 / 可选工坊
+# 禁：教裸指令主 UI · 抬伤害/CD表/掉落 · 其他已齐选打 / 庭内 · ≠Seal纹印 · ≠Scrap分解 · ≠Room房序
+# PAPI（插件可能后到·静态接线）：shape_path / shape_path_label / shape_path_tip · shape_unlock（灰态·首通 Q04）
+# ≠ ember_p1_seal_path · ≠ ember_p1_scrap_path · ≠ ember_p1_room_path
+
+Title: '§e符文 · 路径'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_shape_path'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#1#2#3#C#'
+  - '##K#A#F##'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §e符文路径 §7· 当前 §e%corerpg_p1_shape_path_label%'
+    - 'tell: §8点选 · 扇形 / 直线 / 环斩 / 清空 · 或技能组 / 冒险 / 工坊'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: enchanted book
+      name: '§e符文路径 · 说明'
+      lore:
+        - '§7当前路径：§e%corerpg_p1_shape_path_label%'
+        - '§8%corerpg_p1_shape_path_tip%'
+        - '§8点选 · 扇形 / 直线 / 环斩 / 清空'
+        - '§8需本人首通 Q04'
+        - '§8真改烬斩出招几何（不改伤害表）'
+
+  # 扇形 · FAN=1
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_shape_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7扇形 §8（需 Q04）'
+          lore:
+            - '§c需本人首通 Q04'
+            - '§7扇面略宽 · 近距清杂'
+            - '§8解锁后再选路径'
+      - condition: 'check papi %corerpg_p1_shape_path% == 1'
+        priority: 2
+        display:
+          material: gold ingot
+          shiny: true
+          name: '§a扇形 §8· §f已选'
+          lore:
+            - '§7扇面略宽 · 近距清杂'
+            - '§8%corerpg_p1_shape_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 shapepath fan'
+            - 'menu: ember_p1_shape_path'
+    display:
+      material: gold ingot
+      name: '§6扇形'
+      lore:
+        - '§7扇面略宽 · 近距清杂'
+        - '§8点选切换符文路径'
+        - '§e➥ §f设为扇形'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 shapepath fan'
+        - 'menu: ember_p1_shape_path'
+
+  # 直线 · LINE=2
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_shape_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7直线穿刺 §8（需 Q04）'
+          lore:
+            - '§c需本人首通 Q04'
+            - '§7更长更窄直线 · 走廊点杀'
+            - '§8解锁后再选路径'
+      - condition: 'check papi %corerpg_p1_shape_path% == 2'
+        priority: 2
+        display:
+          material: diamond
+          shiny: true
+          name: '§a直线穿刺 §8· §f已选'
+          lore:
+            - '§7更长更窄直线 · 走廊点杀 · 缓速略久'
+            - '§8%corerpg_p1_shape_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 shapepath line'
+            - 'menu: ember_p1_shape_path'
+    display:
+      material: diamond
+      name: '§b直线穿刺'
+      lore:
+        - '§7更长更窄直线 · 走廊点杀 · 缓速略久'
+        - '§8点选切换符文路径'
+        - '§e➥ §f设为直线'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 shapepath line'
+        - 'menu: ember_p1_shape_path'
+
+  # 环斩 · RING=3
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_shape_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7原地环斩 §8（需 Q04）'
+          lore:
+            - '§c需本人首通 Q04'
+            - '§7环身略大 · 被围可多命中'
+            - '§8解锁后再选路径'
+      - condition: 'check papi %corerpg_p1_shape_path% == 3'
+        priority: 2
+        display:
+          material: ender pearl
+          shiny: true
+          name: '§a原地环斩 §8· §f已选'
+          lore:
+            - '§7环身略大 · 被围可多命中 · 微疗略增'
+            - '§8%corerpg_p1_shape_path_tip%'
+            - '§a当前路径焦点'
+            - '§8再点可重选同路径'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - 'command: corerpg p1 shapepath ring'
+            - 'menu: ember_p1_shape_path'
+    display:
+      material: ender pearl
+      name: '§d原地环斩'
+      lore:
+        - '§7环身略大 · 被围可多命中 · 微疗略增'
+        - '§8点选切换符文路径'
+        - '§e➥ §f设为环斩'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 shapepath ring'
+        - 'menu: ember_p1_shape_path'
+
+  # 清空 · NONE=0
+  C:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_shape_unlock% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7清空路径 §8（需 Q04）'
+          lore:
+            - '§c需本人首通 Q04'
+            - '§8解锁后再清 / 重选'
+      - condition: 'check papi %corerpg_p1_shape_path% < 1'
+        priority: 2
+        display:
+          material: gray dye
+          name: '§7已清空 §8· §f未选'
+          lore:
+            - '§7当前无符文路径焦点（烬斩默认扇形）'
+            - '§8先点 扇形 / 直线 / 环斩'
+        actions:
+          all:
+            - 'sound: UI_BUTTON_CLICK-1-0.8'
+            - 'command: corerpg p1 shapepath clear'
+            - 'menu: ember_p1_shape_path'
+    display:
+      material: barrier
+      name: '§7清空路径'
+      lore:
+        - '§7当前：§e%corerpg_p1_shape_path_label%'
+        - '§8清空路径 · 烬斩回扇形'
+        - '§e➥ §f清空'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 shapepath clear'
+        - 'menu: ember_p1_shape_path'
+
+  K:
+    display:
+      material: book
+      name: '§6去技能组'
+      lore:
+        - '§7看按键 / 形状 / 身法方向'
+        - '§8选好后可对照手感'
+        - '§e➥ §f开技能组'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_skill_kit'
+
+  A:
+    display:
+      material: compass
+      name: '§e回冒险'
+      lore:
+        - '§7主线 / 挑战 / 深渊 / 短征'
+        - '§8换一条内容再冲'
+        - '§e➥ §f开冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'
+
+  F:
+    display:
+      material: anvil
+      name: '§6去工坊'
+      lore:
+        - '§7强化 / 升级 / 养成'
+        - '§8几何手感定后再养成'
+        - '§e➥ §f开工坊'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§7关闭'
+      lore:
+        - '§8关掉本页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - close
